@@ -1,0 +1,9 @@
+name = "red-letter-advisor"
+main = "worker/index.js"
+compatibility_date = "2024-09-23"
+
+# ANTHROPIC_API_KEY must be added as a secret (never put it here):
+#   npx wrangler secret put ANTHROPIC_API_KEY
+
+# Optional: set an account subdomain or route below if needed.
+# See: https://developers.cloudflare.com/workers/configuration/routing/
