@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Red Letter Advisor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --crimson:      #8B1A1A;
+      --crimson-dark: #5C1010;
+      --crimson-soft: #C0392B;
+      --parchment:    #FDF6EC;
+      --parchment-2:  #F5ECD8;
+      --ink:          #2C2416;
+      --ink-light:    #5C4F3A;
+      --border:       #D4B896;
+      --shadow:       rgba(44, 36, 22, 0.12);
+      --radius:       16px;
+      --font-serif:   Georgia, 'Times New Roman', serif;
+      --font-sans:    'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body { height: 100%; background: var(--parchment); color: var(--ink); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; }
+
+    .app { display: flex; flex-direction: column; height: 100dvh; max-width: 760px; margin: 0 auto; background: var(--parchment); border-left: 1px solid var(--border); border-right: 1px solid var(--border); box-shadow: 0 0 40px var(--shadow); }
+
+    /* Header */
+    .header { background: linear-gradient(135deg, var(--crimson-dark) 0%, var(--crimson) 100%); color: #FFF; padding: 20px 24px 16px; text-align: center; flex-shrink: 0; border-bottom: 3px solid var(--crimson-soft); }
+    .header-cross { font-size: 1.4rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 4px; }
+    .header h1 { font-family: var(--font-serif); font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .header-subtitle { font-size: 0.78rem; opacity: 0.85; margin-top: 4px; font-style: italic; }
+
+    /* API Key Banner */
+    .api-banner { background: #FFF8E1; border-bottom: 1px solid #F0C040; padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .api-banner label { font-size: 0.8rem; color: #5A4A00; white-space: nowrap; font-weight: 600; }
+    .api-banner input { flex: 1; padding: 6px 10px; border: 1.5px solid #D4B800; border-radius: 8px; font-size: 0.8rem; font-family: monospace; background: #FFF; color: var(--ink); outline: none; }
+    .api-banner input:focus { border-color: var(--crimson); }
+    .api-save { padding: 6px 14px; background: var(--crimson); color: #FFF; border: none; border-radius: 8px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; }
+    .api-save:hover { background: var(--crimson-dark); }
+    .api-ok { color: #2E7D32; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+
+    /* Welcome */
+    .welcome { background: var(--parchment-2); border-bottom: 1px solid var(--border); padding: 16px 20px; flex-shrink: 0; }
+    .welcome h2 { font-family: var(--font-serif); font-size: 0.95rem; color: var(--crimson); margin-bottom: 6px; }
+    .welcome p { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
+    .disclaimer { margin-top: 8px; font-size: 0.75rem; color: #7A6A55; border-top: 1px solid var(--border); padding-top: 8px; font-style: italic; }
+    .welcome-toggle { background: none; border: none; color: var(--crimson); font-size: 0.78rem; cursor: pointer; padding: 4px 0; text-decoration: underline; display: block; margin-top: 6px; }
+
+    /* Chat */
+    .chat-area { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+    .chat-area::-webkit-scrollbar { width: 5px; }
+    .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    .message { display: flex; gap: 10px; max-width: 100%; animation: fadeSlide 0.25s ease; }
+    @keyframes fadeSlide { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .message.user { flex-direction: row-reverse; }
+    .message.assistant { flex-direction: row; }
+
+    .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .message.user .avatar { background: var(--crimson); color: #FFF; }
+    .message.assistant .avatar { background: var(--parchment-2); border: 2px solid var(--border); color: var(--crimson); font-size: 1.1rem; }
+
+    .bubble { max-width: min(80%, 560px); padding: 12px 16px; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.65; word-break: break-word; }
+    .message.user .bubble { background: var(--crimson); color: #FFF; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(139,26,26,0.25); }
+    .message.assistant .bubble { background: #FFF; color: var(--ink); border: 1px solid var(--border); border-bottom-left-radius: 4px; box-shadow: 0 2px 8px var(--shadow); }
+    .bubble .citation { color: var(--crimson); font-weight: 600; font-style: italic; }
+
+    /* Typing */
+    .typing-indicator { display: flex; align-items: center; gap: 10px; animation: fadeSlide 0.25s ease; }
+    .typing-dots { display: flex; gap: 4px; padding: 12px 16px; background: #FFF; border: 1px solid var(--border); border-radius: var(--radius); border-bottom-left-radius: 4px; box-shadow: 0 2px 8px var(--shadow); }
+    .typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--border); animation: bounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0);background:var(--border);}30%{transform:translateY(-6px);background:var(--crimson);} }
+
+    /* Empty state */
+    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--ink-light); padding: 24px; gap: 12px; }
+    .empty-state .cross-large { font-size: 3rem; color: var(--crimson); opacity: 0.35; }
+    .empty-state p { font-size: 0.88rem; font-style: italic; max-width: 320px; }
+    .suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
+    .chip { background: var(--parchment-2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 0.78rem; color: var(--crimson-dark); cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+    .chip:hover { background: var(--crimson); color: #FFF; border-color: var(--crimson); }
+
+    /* Input */
+    .input-bar { background: var(--parchment-2); border-top: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
+    .input-wrapper { flex: 1; }
+    textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 12px; background: #FFF; color: var(--ink); font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.5; resize: none; outline: none; transition: border-color 0.15s, box-shadow 0.15s; max-height: 140px; min-height: 44px; overflow-y: auto; }
+    textarea::placeholder { color: #9E8E78; }
+    textarea:focus { border-color: var(--crimson); box-shadow: 0 0 0 3px rgba(139,26,26,0.1); }
+    textarea:disabled { background: var(--parchment); opacity: 0.7; }
+    .send-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--crimson); color: #FFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.1s; box-shadow: 0 2px 8px rgba(139,26,26,0.3); }
+    .send-btn:hover:not(:disabled) { background: var(--crimson-dark); transform: scale(1.05); }
+    .send-btn:active:not(:disabled) { transform: scale(0.95); }
+    .send-btn:disabled { background: var(--border); cursor: not-allowed; box-shadow: none; }
+    .send-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .error-msg { background: #FFF0F0; border: 1px solid #F5C6C6; color: #8B1A1A; border-radius: var(--radius); padding: 10px 14px; font-size: 0.83rem; text-align: center; }
+
+    .footer { text-align: center; padding: 6px 16px 10px; font-size: 0.68rem; color: #9E8E78; flex-shrink: 0; background: var(--parchment-2); border-top: 1px solid var(--border); }
+
+    @media (max-width: 480px) {
+      .header { padding: 14px 16px 12px; }
+      .chat-area { padding: 14px 10px; gap: 12px; }
+      .bubble { font-size: 0.875rem; padding: 10px 13px; }
+      .input-bar { padding: 10px 10px; gap: 8px; }
+      .app { border-left: none; border-right: none; }
+    }
+
+    .bubble strong { font-weight: 600; }
+    .bubble em { font-style: italic; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="header-cross">&#10012;</div>
+    <h1>The Red Letter Advisor</h1>
+    <p class="header-subtitle">Guidance from the words of Jesus &bull; Matthew &bull; Mark &bull; Luke &bull; John</p>
+  </header>
+
+  <!-- API Key entry -->
+  <div class="api-banner" id="apiBanner">
+    <label for="apiKeyInput">&#128273; Anthropic API Key:</label>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off" />
+    <button class="api-save" onclick="saveKey()">Save</button>
+    <span class="api-ok" id="apiOk" style="display:none">&#10003; Set</span>
+  </div>
+
+  <div class="welcome" id="welcomeBanner">
+    <h2>&#128214; What is this?</h2>
+    <p id="welcomeText">Ask any life question or moral dilemma, and receive a thoughtful response drawn exclusively from the direct words of Jesus Christ as recorded in the four Gospels — the passages traditionally printed in <strong style="color:var(--crimson)">red letters</strong> in many Bible editions. Every response cites the specific verse it draws from.</p>
+    <p class="disclaimer">&#9432; This is reflective guidance for thought and prayer — not a substitute for personal faith, pastoral counsel, or professional advice. It is offered with humility, not authority.</p>
+    <button class="welcome-toggle" id="welcomeToggle" onclick="toggleWelcome()">Hide introduction</button>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <div class="empty-state" id="emptyState">
+      <div class="cross-large">&#10012;</div>
+      <p>"Ask, and it will be given to you; seek, and you will find." &mdash; Matthew 7:7</p>
+      <p style="margin-top:4px;font-size:0.8rem;">What is weighing on your heart today?</p>
+      <div class="suggestion-chips">
+        <button class="chip" onclick="useSuggestion(this)">How should I treat my enemies?</button>
+        <button class="chip" onclick="useSuggestion(this)">I'm struggling with anxiety and fear</button>
+        <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
+        <button class="chip" onclick="useSuggestion(this)">What does Jesus say about wealth?</button>
+        <button class="chip" onclick="useSuggestion(this)">How should I handle conflict?</button>
+        <button class="chip" onclick="useSuggestion(this)">What is the greatest commandment?</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-wrapper">
+      <textarea id="userInput" placeholder="Ask a life question or share a dilemma..." rows="1"
+        onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send" disabled>
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+
+  <footer class="footer">
+    Responses reflect the red-letter words of Jesus in the four Gospels &bull; Always check the cited scripture yourself
+  </footer>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are "The Red Letter Advisor" — a thoughtful, warm, and humble guide who responds to life questions and moral dilemmas exclusively using the direct words of Jesus Christ as recorded in the four Gospels: Matthew, Mark, Luke, and John. These are the passages traditionally printed in red letters in many Bible editions, representing only the direct speech attributed to Jesus.
+
+CORE PRINCIPLES:
+1. Source restriction: Draw guidance ONLY from Jesus's direct words in the four Gospels. Do not quote other biblical authors (Paul, Peter, James, etc.), Old Testament passages (unless Jesus himself quoted them), or external sources.
+2. Citation required: Every response must cite the specific verse(s) you are drawing from (e.g., "Matthew 5:44", "John 13:34-35"). Place citations inline or at the end of relevant guidance.
+3. Humbly presented: Use phrases like "Jesus's words suggest...", "In the Gospel of [book], Jesus says...", "Reflecting on what Jesus taught in..." rather than "You must..." or "God commands you to..."
+4. Acknowledge complexity: When a question involves genuine theological complexity or interpretive debates, say so honestly and offer the range of thoughtful interpretations.
+5. Warmth and accessibility: Speak warmly, without judgment. Be accessible to people of any background.
+6. Non-contradictory: Never contradict, undermine, or reinterpret the red letter text itself.
+7. Scope awareness: If a question cannot be meaningfully addressed through Jesus's recorded words, say so gently and honestly.
+8. No pastoral pretense: You are a reflective guide, not a pastor, priest, therapist, or doctrinal authority.
+
+TONE: Warm, gentle, scholarly but accessible, humble, non-judgmental.
+FORMAT: Respond conversationally in paragraphs. Quote Jesus's words directly using quotation marks, then provide the reference in parentheses. Keep responses 150–350 words unless depth is warranted.`;
+
+let conversationHistory = [];
+let isLoading = false;
+let apiKey = localStorage.getItem('rla_api_key') || '';
+let welcomeVisible = true;
+
+// Restore saved key on load
+window.addEventListener('DOMContentLoaded', () => {
+  if (apiKey) {
+    document.getElementById('apiKeyInput').value = apiKey;
+    showKeySet();
+  }
+  document.getElementById('userInput').focus();
+});
+
+function saveKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val) return;
+  apiKey = val;
+  localStorage.setItem('rla_api_key', val);
+  showKeySet();
+}
+
+function showKeySet() {
+  document.getElementById('apiOk').style.display = '';
+  document.getElementById('apiKeyInput').value = '•'.repeat(20);
+  document.getElementById('apiKeyInput').disabled = true;
+  document.querySelector('.api-save').textContent = 'Change';
+  document.querySelector('.api-save').onclick = resetKey;
+}
+
+function resetKey() {
+  apiKey = '';
+  localStorage.removeItem('rla_api_key');
+  const input = document.getElementById('apiKeyInput');
+  input.value = '';
+  input.disabled = false;
+  document.getElementById('apiOk').style.display = 'none';
+  document.querySelector('.api-save').textContent = 'Save';
+  document.querySelector('.api-save').onclick = saveKey;
+  input.focus();
+}
+
+function toggleWelcome() {
+  const text = document.getElementById('welcomeText');
+  const disc = document.querySelector('.disclaimer');
+  const btn  = document.getElementById('welcomeToggle');
+  welcomeVisible = !welcomeVisible;
+  text.style.display = welcomeVisible ? '' : 'none';
+  disc.style.display = welcomeVisible ? '' : 'none';
+  btn.textContent = welcomeVisible ? 'Hide introduction' : 'Show introduction';
+}
+
+const textarea = document.getElementById('userInput');
+const sendBtn  = document.getElementById('sendBtn');
+textarea.addEventListener('input', () => { sendBtn.disabled = !textarea.value.trim() || isLoading; });
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) sendMessage(); }
+}
+
+function useSuggestion(btn) {
+  textarea.value = btn.textContent.trim();
+  autoResize(textarea);
+  sendBtn.disabled = false;
+  sendMessage();
+}
+
+function scrollToBottom() {
+  const area = document.getElementById('chatArea');
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeEmptyState() {
+  const el = document.getElementById('emptyState');
+  if (el) el.remove();
+}
+
+function appendMessage(role, content) {
+  removeEmptyState();
+  const area = document.getElementById('chatArea');
+  const wrapper = document.createElement('div');
+  wrapper.className = `message ${role}`;
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = role === 'user' ? '✦' : '✝';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (role === 'assistant') bubble.innerHTML = formatResponse(content);
+  else bubble.textContent = content;
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(bubble);
+  area.appendChild(wrapper);
+  scrollToBottom();
+}
+
+function showTypingIndicator() {
+  removeEmptyState();
+  const area = document.getElementById('chatArea');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'typing-indicator';
+  wrapper.id = 'typingIndicator';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = '✝';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(dots);
+  area.appendChild(wrapper);
+  scrollToBottom();
+}
+
+function removeTypingIndicator() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function showError(msg) {
+  removeTypingIndicator();
+  const area = document.getElementById('chatArea');
+  const el = document.createElement('div');
+  el.className = 'error-msg';
+  el.textContent = msg;
+  area.appendChild(el);
+  scrollToBottom();
+  setTimeout(() => el.remove(), 7000);
+}
+
+function formatResponse(text) {
+  const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const withCitations = escaped.replace(
+    /\b(Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?(?:,\s*\d+(?:[–\-]\d+)?)*/g,
+    '<span class="citation">$&</span>'
+  );
+  const withBold = withCitations.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  const withItalic = withBold.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  return withItalic.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
+    .map(p => `<p style="margin-bottom:0.6em">${p.replace(/\n/g,'<br>')}</p>`).join('');
+}
+
+async function sendMessage() {
+  const text = textarea.value.trim();
+  if (!text || isLoading) return;
+
+  if (!apiKey) {
+    showError('Please enter your Anthropic API key at the top of the page.');
+    return;
+  }
+
+  textarea.value = '';
+  textarea.style.height = '';
+  sendBtn.disabled = true;
+  isLoading = true;
+
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  showTypingIndicator();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-6',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: conversationHistory,
+      }),
+    });
+
+    removeTypingIndicator();
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      if (res.status === 401) throw new Error('Invalid API key. Please check and re-enter your key.');
+      if (res.status === 429) throw new Error('Rate limited — please wait a moment and try again.');
+      throw new Error(err.error?.message || `API error (${res.status})`);
+    }
+
+    const data = await res.json();
+    const reply = data.content[0].text;
+    conversationHistory.push({ role: 'assistant', content: reply });
+    appendMessage('assistant', reply);
+  } catch (err) {
+    showError(err.message || 'Something went wrong. Please try again.');
+    conversationHistory.pop();
+  } finally {
+    isLoading = false;
+    sendBtn.disabled = !textarea.value.trim();
+    textarea.focus();
+  }
+}
+</script>
+</body>
+</html>
