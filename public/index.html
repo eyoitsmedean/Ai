@@ -486,7 +486,13 @@
     </footer>
   </div>
 
+  <script src="config.js"></script>
   <script>
+    // ── Backend URL (set in config.js) ─────────────────────────────────────
+    // Defaults to '' so fetch('/api/chat') works in local dev.
+    // On GitHub Pages, config.js sets window.BACKEND_URL to the Worker URL.
+    const API_BASE = (window.BACKEND_URL || '').replace(/\/$/, '');
+
     // ── State ──────────────────────────────────────────────────────────────
     let conversationHistory = [];
     let isLoading = false;
@@ -658,7 +664,7 @@
       showTypingIndicator();
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(API_BASE + '/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: conversationHistory }),
