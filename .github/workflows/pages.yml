@@ -3,9 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - copilot/optimize-github-pages-hosting
-      - claude/jesus-teachings-chatbot-bSBhF
       - main
+      - claude/jesus-teachings-chatbot-bSBhF
   workflow_dispatch:
 
 permissions:
