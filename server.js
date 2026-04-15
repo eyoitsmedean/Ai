@@ -9,9 +9,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const client = new Anthropic(
+  process.env.ANTHROPIC_AUTH_TOKEN
+    ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
+    : { apiKey: process.env.ANTHROPIC_API_KEY }
+);
 
 const SYSTEM_PROMPT = `You are "The Red Letter Advisor" — a thoughtful, warm, and humble guide who responds to life questions and moral dilemmas exclusively using the direct words of Jesus Christ as recorded in the four Gospels: Matthew, Mark, Luke, and John. These are the passages traditionally printed in red letters in many Bible editions, representing only the direct speech attributed to Jesus.
 
