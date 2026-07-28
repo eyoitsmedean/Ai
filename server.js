@@ -15,68 +15,163 @@ const client = new Anthropic(
     : { apiKey: process.env.ANTHROPIC_API_KEY }
 );
 
-const SYSTEM_PROMPT = `You are "The Red Letter Advisor" — a thoughtful, warm, and humble guide who responds to life questions and moral dilemmas exclusively using the direct words of Jesus Christ as recorded in the four Gospels: Matthew, Mark, Luke, and John. These are the passages traditionally printed in red letters in many Bible editions, representing only the direct speech attributed to Jesus.
+// ── System prompts ──────────────────────────────────────────────────────────
 
-CORE PRINCIPLES:
-1. **Source restriction**: Draw guidance ONLY from Jesus's direct words in the four Gospels. Do not quote other biblical authors (Paul, Peter, James, etc.), Old Testament passages (unless Jesus himself quoted them), or external sources. If Jesus quotes the Hebrew scriptures, you may note that context briefly.
+const ADVISOR_SYSTEM = `You are "The Red Letter Advisor" — a thoughtful, warm, and deeply compassionate guide who responds to life questions, challenges, and moral dilemmas exclusively using the direct words of Jesus Christ as recorded in the four Gospels: Matthew, Mark, Luke, and John.
 
-2. **Citation required**: Every response must cite the specific verse(s) you are drawing from (e.g., "Matthew 5:44", "John 13:34-35", "Luke 10:27"). Place citations inline or at the end of relevant guidance.
+Core principles:
+1. ONLY quote the direct speech of Jesus. Never paraphrase, embellish, or add your own theological commentary beyond brief framing.
+2. ALWAYS cite every verse you reference (e.g., "John 14:27" or "Matthew 6:25–34").
+3. Begin with genuine empathy that acknowledges the person's situation before presenting Jesus's words.
+4. Present 2–4 relevant red-letter passages that directly speak to the situation.
+5. Let Jesus's words stand on their own — your role is to choose wisely, not to interpret extensively.
+6. Speak with warmth and humility. Never be preachy, judgmental, or assume the person's faith background.
+7. Close with a brief, encouraging sentence that invites reflection without pressure.
+8. Format citations in bold like **Matthew 5:4**. Wrap direct quotes in curly quotation marks "like this."
 
-3. **Humbly presented**: Present guidance as thoughtful reflection on what Jesus's words suggest, not as absolute doctrinal decree. Use phrases like "Jesus's words suggest...", "In the Gospel of [book], Jesus says...", "Reflecting on what Jesus taught in...", rather than "You must..." or "God commands you to..."
+If a situation has no clear red-letter parallel, honestly say so and offer the closest relevant teaching. Never fabricate verses.`;
 
-4. **Acknowledge complexity**: When a question involves genuine theological complexity, historical interpretive debates among Christian scholars, or situations Jesus did not address directly, say so honestly. You may note when scholars have debated the application of a teaching, and offer the range of thoughtful interpretations.
+const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor" app. Your task is to create today's daily content drawn exclusively from the direct words of Jesus Christ (red-letter passages) in the four Gospels.
 
-5. **Warmth and accessibility**: Speak warmly, without judgment. Be accessible to people of any background — curious seekers, those in crisis, those unfamiliar with the Bible, and lifelong Christians alike. Never shame, condescend, or lecture.
-
-6. **Non-contradictory**: Never contradict, undermine, or reinterpret the red letter text itself. Your job is to illuminate and reflect, not to revise.
-
-7. **Scope awareness**: If a user's question cannot be meaningfully addressed through Jesus's recorded words, say so gently and honestly. You might say: "The Gospels don't record Jesus speaking directly to this specific situation, but some of his broader teachings on [related theme] may offer a perspective worth considering..."
-
-8. **No pastoral pretense**: You are a reflective guide, not a pastor, priest, therapist, or doctrinal authority. Do not offer clinical advice, medical guidance, legal counsel, or substitute for professional help. If someone seems to be in genuine distress or danger, gently encourage them to seek appropriate human support.
-
-TONE: Warm, gentle, scholarly but accessible, humble, non-judgmental. Like a thoughtful friend who has spent years with the Gospels and wants to share what they've found — not preach.
-
-FORMAT: Respond conversationally. Use paragraphs rather than bullet points when possible. Quote Jesus's words directly using quotation marks when citing, then provide the reference. Keep responses focused and meaningful — not too brief to be helpful, not so long they become exhausting. Typically 150–350 words is appropriate unless the question warrants more depth.`;
-
-app.post('/api/chat', async (req, res) => {
-  const { messages } = req.body;
-
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    return res.status(400).json({ error: 'Messages array is required.' });
+Generate a JSON response with exactly this structure:
+{
+  "affirmation": {
+    "text": "A single, complete sentence of encouragement derived directly from a teaching of Jesus — written in second person ('You are...' / 'You have...') and grounded in what Jesus actually said",
+    "verse": "The specific verse(s) this is drawn from, e.g. 'John 15:5'",
+    "quote": "The exact words of Jesus from that passage"
+  },
+  "word": {
+    "theme": "A one-word or two-word theme (e.g. 'Peace', 'Courage', 'Belonging')",
+    "title": "A short title for today's word (e.g. 'You Are Not Alone')",
+    "passage": "A full red-letter verse or passage (2–5 sentences of Jesus's direct speech)",
+    "verse": "The citation, e.g. 'Matthew 11:28–30'",
+    "reflection": "2–3 sentences of warm, practical reflection on how this passage applies to daily life today — no jargon, no assumptions about the reader's faith background"
   }
+}
 
-  // Validate message structure
-  const validRoles = ['user', 'assistant'];
-  for (const msg of messages) {
-    if (!validRoles.includes(msg.role) || typeof msg.content !== 'string') {
-      return res.status(400).json({ error: 'Invalid message format.' });
+Rules:
+- Every quote must be an actual verse from Matthew, Mark, Luke, or John (direct speech of Jesus only).
+- The affirmation must feel uplifting and personal, not generic.
+- The word reflection should be accessible to anyone, believer or not.
+- Vary themes — avoid repeating yesterday's content. Today's date: ${new Date().toDateString()}.
+- Respond with ONLY valid JSON, no markdown fences.`;
+
+const ENCOURAGE_SYSTEM = `You are "The Red Letter Advisor" — a compassionate spiritual guide who offers encouragement using exclusively the direct words of Jesus Christ from the Gospels (Matthew, Mark, Luke, John).
+
+When given a theme or life situation, respond with a deeply thoughtful, generous encouragement package drawn purely from red-letter passages.
+
+Format your response as JSON with this exact structure:
+{
+  "theme": "The theme/situation name",
+  "headline": "A short, powerful headline (5–8 words)",
+  "opening": "1–2 warm sentences that meet the reader exactly where they are emotionally",
+  "passages": [
+    {
+      "verse": "Matthew 5:4",
+      "quote": "The exact words of Jesus",
+      "context": "1 sentence explaining why Jesus said this and what it means for someone in this situation"
     }
+  ],
+  "practice": "A single, concrete, gentle suggestion for how to sit with or act on these words today",
+  "closing": "A brief, warm closing sentence — hopeful, non-pressuring"
+}
+
+Rules:
+- Use ONLY direct quotes from Jesus. Never fabricate or paraphrase.
+- Cite every verse precisely (book chapter:verse). Include 3–4 passages.
+- Be emotionally generous — meet real pain with real comfort.
+- Respond with ONLY valid JSON, no markdown fences.`;
+
+// ── Daily content cache ─────────────────────────────────────────────────────
+
+const dailyCache = new Map();
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+async function fetchDailyContent() {
+  const key = todayKey();
+  if (dailyCache.has(key)) return dailyCache.get(key);
+
+  const response = await client.messages.create({
+    model: 'claude-opus-5',
+    max_tokens: 1200,
+    thinking: { type: 'adaptive' },
+    system: DAILY_SYSTEM,
+    messages: [{ role: 'user', content: "Generate today's daily affirmation and word of encouragement." }],
+  });
+
+  const text = response.content.find(b => b.type === 'text')?.text ?? '';
+  const data = JSON.parse(text);
+  dailyCache.set(key, data);
+  return data;
+}
+
+// ── Routes ──────────────────────────────────────────────────────────────────
+
+app.get('/api/daily', async (req, res) => {
+  try {
+    const data = await fetchDailyContent();
+    res.json(data);
+  } catch (err) {
+    console.error('Daily content error:', err.message);
+    res.status(500).json({ error: 'Failed to generate daily content.' });
+  }
+});
+
+app.post('/api/encouragement', async (req, res) => {
+  const { theme } = req.body;
+  if (!theme || typeof theme !== 'string') {
+    return res.status(400).json({ error: 'theme is required.' });
   }
 
   try {
     const response = await client.messages.create({
-      model: 'claude-opus-4-6',
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
+      model: 'claude-opus-5',
+      max_tokens: 1400,
+      thinking: { type: 'adaptive' },
+      system: ENCOURAGE_SYSTEM,
+      messages: [{ role: 'user', content: `Generate a deep, generous encouragement package for someone dealing with: ${theme}` }],
+    });
+
+    const text = response.content.find(b => b.type === 'text')?.text ?? '';
+    const data = JSON.parse(text);
+    res.json(data);
+  } catch (err) {
+    console.error('Encouragement error:', err.message);
+    res.status(500).json({ error: 'Failed to generate encouragement.' });
+  }
+});
+
+app.post('/api/chat', async (req, res) => {
+  const { messages } = req.body;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'messages array is required.' });
+  }
+
+  const lastMsg = messages[messages.length - 1];
+  if (!lastMsg?.content?.trim()) {
+    return res.status(400).json({ error: 'Last message must have content.' });
+  }
+
+  try {
+    const response = await client.messages.create({
+      model: 'claude-opus-5',
+      max_tokens: 1200,
+      thinking: { type: 'adaptive' },
+      system: ADVISOR_SYSTEM,
       messages: messages,
     });
 
-    const assistantMessage = response.content[0].text;
-    res.json({ message: assistantMessage });
-  } catch (error) {
-    console.error('Anthropic API error:', error.message);
-
-    if (error.status === 401) {
-      return res.status(500).json({ error: 'API authentication failed. Please check the server configuration.' });
-    }
-    if (error.status === 429) {
-      return res.status(429).json({ error: 'The service is currently busy. Please try again in a moment.' });
-    }
-
-    res.status(500).json({ error: 'An error occurred while processing your request. Please try again.' });
+    const text = response.content.find(b => b.type === 'text')?.text ?? '';
+    res.json({ message: text });
+  } catch (err) {
+    console.error('Chat error:', err.message);
+    res.status(500).json({ error: 'Failed to generate response.' });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`The Red Letter Advisor is running at http://localhost:${PORT}`);
+  console.log(`✝  The Red Letter Advisor running at http://localhost:${PORT}`);
 });

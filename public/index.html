@@ -4,691 +4,1092 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Red Letter Advisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ---------- Reset & Base ---------- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --crimson:      #8B1A1A;
-      --crimson-dark: #5C1010;
-      --crimson-soft: #C0392B;
-      --parchment:    #FDF6EC;
-      --parchment-2:  #F5ECD8;
-      --ink:          #2C2416;
-      --ink-light:    #5C4F3A;
-      --border:       #D4B896;
-      --bubble-user:  #8B1A1A;
-      --bubble-ai:    #FFFFFF;
-      --shadow:       rgba(44, 36, 22, 0.12);
-      --radius:       16px;
-      --font-serif:   Georgia, 'Times New Roman', serif;
-      --font-sans:    'Segoe UI', system-ui, -apple-system, sans-serif;
+      --crimson: #8B1A1A;
+      --crimson-light: #C0392B;
+      --crimson-pale: #FDF0EE;
+      --gold: #B8860B;
+      --gold-light: #D4A017;
+      --gold-pale: #FEF9EC;
+      --parchment: #FAF6EF;
+      --parchment-dark: #F0EAE0;
+      --ink: #2C2416;
+      --ink-soft: #5C4A32;
+      --ink-muted: #8A7460;
+      --white: #FFFFFF;
+      --border: #E8D9C8;
+      --shadow-sm: 0 2px 8px rgba(44,36,22,0.08);
+      --shadow-md: 0 4px 20px rgba(44,36,22,0.12);
+      --shadow-lg: 0 8px 40px rgba(44,36,22,0.16);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --nav-height: 72px;
+      --header-height: 64px;
     }
 
     html, body {
       height: 100%;
+      font-family: 'Inter', sans-serif;
       background: var(--parchment);
       color: var(--ink);
-      font-family: var(--font-sans);
-      font-size: 16px;
-      line-height: 1.6;
+      overscroll-behavior: none;
     }
 
-    /* ---------- Layout ---------- */
+    /* ─── Layout ─────────────────────────────────────────────── */
+
     .app {
       display: flex;
       flex-direction: column;
       height: 100dvh;
-      max-width: 760px;
+      max-width: 480px;
       margin: 0 auto;
       background: var(--parchment);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      box-shadow: 0 0 40px var(--shadow);
+      position: relative;
+      box-shadow: var(--shadow-lg);
     }
 
-    /* ---------- Header ---------- */
     .header {
-      background: linear-gradient(135deg, var(--crimson-dark) 0%, var(--crimson) 100%);
-      color: #FFF;
-      padding: 20px 24px 16px;
-      text-align: center;
+      height: var(--header-height);
+      background: var(--crimson);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
       flex-shrink: 0;
-      border-bottom: 3px solid var(--crimson-soft);
       position: relative;
+      z-index: 10;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .header-cross {
-      font-size: 1.4rem;
-      opacity: 0.7;
-      margin-bottom: 4px;
-      letter-spacing: 4px;
+      font-size: 20px;
+      line-height: 1;
     }
 
-    .header h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(1.25rem, 4vw, 1.75rem);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .header-subtitle {
-      font-size: 0.78rem;
-      opacity: 0.85;
-      margin-top: 4px;
-      font-style: italic;
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
       letter-spacing: 0.3px;
     }
 
-    /* ---------- Welcome Banner ---------- */
-    .welcome {
-      background: var(--parchment-2);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      flex-shrink: 0;
+    .header-subtitle {
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
-    .welcome-inner {
-      max-width: 100%;
-    }
-
-    .welcome h2 {
-      font-family: var(--font-serif);
-      font-size: 0.95rem;
-      color: var(--crimson);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .welcome p {
-      font-size: 0.82rem;
-      color: var(--ink-light);
-      line-height: 1.55;
-    }
-
-    .disclaimer {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: #7A6A55;
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
-      font-style: italic;
-    }
-
-    .welcome-toggle {
-      background: none;
-      border: none;
-      color: var(--crimson);
-      font-size: 0.78rem;
-      cursor: pointer;
-      padding: 4px 0;
-      text-decoration: underline;
-      display: block;
-      margin-top: 6px;
-    }
-
-    .welcome-toggle:hover { color: var(--crimson-dark); }
-
-    /* ---------- Chat Area ---------- */
-    .chat-area {
+    .pages {
       flex: 1;
-      overflow-y: auto;
-      padding: 20px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      scroll-behavior: smooth;
-    }
-
-    .chat-area::-webkit-scrollbar { width: 5px; }
-    .chat-area::-webkit-scrollbar-track { background: transparent; }
-    .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-    /* ---------- Message Bubbles ---------- */
-    .message {
-      display: flex;
-      gap: 10px;
-      max-width: 100%;
-      animation: fadeSlide 0.25s ease;
-    }
-
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .message.user { flex-direction: row-reverse; }
-    .message.assistant { flex-direction: row; }
-
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .message.user .avatar {
-      background: var(--crimson);
-      color: #FFF;
-    }
-
-    .message.assistant .avatar {
-      background: var(--parchment-2);
-      border: 2px solid var(--border);
-      color: var(--crimson);
-      font-size: 1.1rem;
-    }
-
-    .bubble {
-      max-width: min(80%, 560px);
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      line-height: 1.65;
-      word-break: break-word;
-    }
-
-    .message.user .bubble {
-      background: var(--bubble-user);
-      color: #FFF;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 2px 8px rgba(139,26,26,0.25);
-    }
-
-    .message.assistant .bubble {
-      background: var(--bubble-ai);
-      color: var(--ink);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 2px 8px var(--shadow);
-    }
-
-    /* Scripture citations rendered in red */
-    .bubble .citation {
-      color: var(--crimson);
-      font-weight: 600;
-      font-style: italic;
-    }
-
-    /* ---------- Typing Indicator ---------- */
-    .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: fadeSlide 0.25s ease;
-    }
-
-    .typing-dots {
-      display: flex;
-      gap: 4px;
-      padding: 12px 16px;
-      background: var(--bubble-ai);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 2px 8px var(--shadow);
-    }
-
-    .typing-dots span {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--border);
-      animation: bounce 1.2s infinite;
-    }
-
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 60%, 100% { transform: translateY(0); background: var(--border); }
-      30% { transform: translateY(-6px); background: var(--crimson); }
-    }
-
-    /* ---------- Empty State ---------- */
-    .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--ink-light);
-      padding: 24px;
-      gap: 12px;
-    }
-
-    .empty-state .cross-large {
-      font-size: 3rem;
-      color: var(--crimson);
-      opacity: 0.35;
-    }
-
-    .empty-state p {
-      font-size: 0.88rem;
-      font-style: italic;
-      max-width: 320px;
-    }
-
-    .suggestion-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 8px;
-    }
-
-    .chip {
-      background: var(--parchment-2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.78rem;
-      color: var(--crimson-dark);
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-
-    .chip:hover {
-      background: var(--crimson);
-      color: #FFF;
-      border-color: var(--crimson);
-    }
-
-    /* ---------- Input Bar ---------- */
-    .input-bar {
-      background: var(--parchment-2);
-      border-top: 1px solid var(--border);
-      padding: 12px 16px;
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      flex-shrink: 0;
-    }
-
-    .input-wrapper {
-      flex: 1;
+      overflow: hidden;
       position: relative;
     }
 
-    textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      background: #FFF;
+    .page {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding-bottom: calc(var(--nav-height) + 16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      scroll-behavior: smooth;
+    }
+
+    .page.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ─── Bottom Nav ─────────────────────────────────────────── */
+
+    .nav {
+      height: var(--nav-height);
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 4px;
+      transition: all 0.2s ease;
+      color: var(--ink-muted);
+    }
+
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-btn span {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .nav-btn.active {
+      color: var(--crimson);
+    }
+
+    .nav-btn.active svg {
+      transform: scale(1.1);
+    }
+
+    /* ─── Section headers ────────────────────────────────────── */
+
+    .page-header {
+      padding: 24px 20px 16px;
+    }
+
+    .greeting {
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
       color: var(--ink);
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      line-height: 1.5;
+      line-height: 1.2;
+    }
+
+    .page-title em {
+      color: var(--crimson);
+      font-style: italic;
+    }
+
+    /* ─── Cards ──────────────────────────────────────────────── */
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin: 0 16px 16px;
+      overflow: hidden;
+    }
+
+    .card-crimson {
+      background: linear-gradient(135deg, var(--crimson) 0%, #6B1414 100%);
+      color: white;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    /* ─── Affirmation card ───────────────────────────────────── */
+
+    .affirmation-card .card-body {
+      padding: 24px 20px;
+    }
+
+    .affirmation-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      color: white;
+    }
+
+    .affirmation-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.25);
+      margin-bottom: 14px;
+    }
+
+    .card-quote {
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      line-height: 1.6;
+      font-style: italic;
+      margin-bottom: 6px;
+      opacity: 0.92;
+    }
+
+    .card-verse {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── Word of the day ────────────────────────────────────── */
+
+    .word-theme-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--crimson-pale);
+      color: var(--crimson);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .word-passage {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      line-height: 1.7;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      padding: 14px 16px;
+      background: var(--gold-pale);
+      border-left: 3px solid var(--gold-light);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .word-verse {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+
+    .word-reflection {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    /* ─── Theme grid ─────────────────────────────────────────── */
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 16px 16px;
+    }
+
+    .theme-btn {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-btn:hover {
+      border-color: var(--crimson);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .theme-btn:active {
+      transform: translateY(0);
+    }
+
+    .theme-icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .theme-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.2px;
+    }
+
+    /* ─── Encouragement result ───────────────────────────────── */
+
+    .encourage-result {
+      display: none;
+      padding: 0 16px 16px;
+    }
+
+    .encourage-result.visible {
+      display: block;
+    }
+
+    .result-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--crimson);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 12px 0 16px;
+    }
+
+    .result-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .result-opening {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      margin-bottom: 20px;
+    }
+
+    .passage-block {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--crimson);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .passage-verse {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--crimson);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .passage-quote {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      line-height: 1.65;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .passage-context {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+    }
+
+    .result-practice {
+      background: var(--gold-pale);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .result-practice-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .result-practice-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .result-closing {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    /* ─── Chat ───────────────────────────────────────────────── */
+
+    .chat-welcome-card {
+      background: var(--crimson-pale);
+      border: 1px solid rgba(139,26,26,0.15);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 0 16px 12px;
+    }
+
+    .chat-welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--crimson);
+      margin-bottom: 6px;
+    }
+
+    .chat-welcome-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--ink-soft);
+    }
+
+    .chat-messages {
+      padding: 0 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .msg-user {
+      align-items: flex-end;
+    }
+
+    .msg-bubble {
+      max-width: 85%;
+      border-radius: 18px;
+      padding: 12px 16px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .msg-user .msg-bubble {
+      background: var(--crimson);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-ai .msg-bubble {
+      background: var(--white);
+      color: var(--ink);
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+      font-family: 'Lora', serif;
+      font-size: 15px;
+    }
+
+    .msg-ai .msg-bubble .verse-cite {
+      font-weight: 700;
+      color: var(--crimson);
+      font-style: normal;
+    }
+
+    .chat-typing {
+      display: none;
+      padding: 0 16px 8px;
+    }
+
+    .chat-typing.visible {
+      display: block;
+    }
+
+    .typing-bubble {
+      background: var(--white);
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      display: inline-flex;
+      gap: 5px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--ink-muted);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    .chat-input-area {
+      padding: 12px 16px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      padding: 10px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
       resize: none;
       outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      max-height: 140px;
+      max-height: 120px;
       min-height: 44px;
-      overflow-y: auto;
+      line-height: 1.5;
+      transition: border-color 0.2s;
     }
 
-    textarea::placeholder { color: #9E8E78; }
-
-    textarea:focus {
+    .chat-input:focus {
       border-color: var(--crimson);
-      box-shadow: 0 0 0 3px rgba(139,26,26,0.1);
     }
 
-    textarea:disabled {
-      background: var(--parchment);
-      opacity: 0.7;
-      cursor: not-allowed;
+    .chat-input::placeholder {
+      color: var(--ink-muted);
     }
 
-    .send-btn {
+    .chat-send {
       width: 44px;
       height: 44px;
       border-radius: 50%;
       background: var(--crimson);
-      color: #FFF;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: background 0.15s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(139,26,26,0.3);
+      transition: all 0.2s ease;
     }
 
-    .send-btn:hover:not(:disabled) {
-      background: var(--crimson-dark);
+    .chat-send:hover {
+      background: var(--crimson-light);
       transform: scale(1.05);
     }
 
-    .send-btn:active:not(:disabled) { transform: scale(0.95); }
-
-    .send-btn:disabled {
-      background: var(--border);
-      cursor: not-allowed;
-      box-shadow: none;
+    .chat-send:active {
+      transform: scale(0.96);
     }
 
-    .send-btn svg {
+    .chat-send svg {
       width: 18px;
       height: 18px;
-      fill: currentColor;
+      fill: white;
     }
 
-    /* ---------- Error Message ---------- */
-    .error-msg {
-      background: #FFF0F0;
-      border: 1px solid #F5C6C6;
-      color: #8B1A1A;
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      font-size: 0.83rem;
-      text-align: center;
+    .chat-suggestions {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
 
-    /* ---------- Footer ---------- */
-    .footer {
-      text-align: center;
-      padding: 6px 16px 10px;
-      font-size: 0.68rem;
-      color: #9E8E78;
+    .chat-suggestions::-webkit-scrollbar { display: none; }
+
+    .suggestion-chip {
+      white-space: nowrap;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.2s;
       flex-shrink: 0;
-      background: var(--parchment-2);
-      border-top: 1px solid var(--border);
     }
 
-    /* ---------- Responsive ---------- */
-    @media (max-width: 480px) {
-      .header { padding: 14px 16px 12px; }
-      .welcome { padding: 12px 14px; }
-      .chat-area { padding: 14px 10px; gap: 12px; }
-      .bubble { font-size: 0.875rem; padding: 10px 13px; }
-      .input-bar { padding: 10px 10px; gap: 8px; }
-      .app { border-left: none; border-right: none; }
+    .suggestion-chip:hover {
+      border-color: var(--crimson);
+      color: var(--crimson);
     }
 
-    /* ---------- Formatted response styles ---------- */
-    .bubble strong { font-weight: 600; }
-    .bubble em { font-style: italic; }
+    /* ─── Skeleton loading ───────────────────────────────────── */
+
+    .skeleton {
+      background: linear-gradient(90deg, var(--parchment-dark) 25%, var(--border) 50%, var(--parchment-dark) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skel-line { height: 16px; margin-bottom: 10px; }
+    .skel-line.short { width: 40%; }
+    .skel-line.med { width: 70%; }
+    .skel-line.long { width: 92%; }
+    .skel-line.full { width: 100%; }
+
+    /* ─── Section label ──────────────────────────────────────── */
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 20px 20px 10px;
+    }
+
+    /* ─── Scrollbar ──────────────────────────────────────────── */
+
+    .page::-webkit-scrollbar { width: 4px; }
+    .page::-webkit-scrollbar-track { background: transparent; }
+    .page::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ─── Desktop ────────────────────────────────────────────── */
+
+    @media (min-width: 481px) {
+      body { background: #E8DDD0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+      .app { border-radius: 24px; height: min(860px, 95vh); }
+    }
   </style>
 </head>
 <body>
-  <div class="app">
+<div class="app">
 
-    <!-- Header -->
-    <header class="header">
-      <div class="header-cross">&#10012;</div>
-      <h1>The Red Letter Advisor</h1>
-      <p class="header-subtitle">Guidance from the words of Jesus &bull; Matthew &bull; Mark &bull; Luke &bull; John</p>
-    </header>
-
-    <!-- Welcome Banner -->
-    <div class="welcome" id="welcomeBanner">
-      <div class="welcome-inner">
-        <h2>&#128214; What is this?</h2>
-        <p id="welcomeText">
-          Ask any life question or moral dilemma, and receive a thoughtful response drawn exclusively from the direct words of Jesus Christ as recorded in the four Gospels — the passages traditionally printed in <strong style="color:var(--crimson)">red letters</strong> in many Bible editions. Every response cites the specific verse it draws from.
-        </p>
-        <p class="disclaimer">
-          &#9432; This is reflective guidance for thought and prayer — not a substitute for personal faith, pastoral counsel, or professional advice. It is offered with humility, not authority.
-        </p>
-        <button class="welcome-toggle" id="welcomeToggle" onclick="toggleWelcome()">Hide introduction</button>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <span class="header-cross">✝</span>
+      <div>
+        <div class="header-title">The Red Letter Advisor</div>
+        <div class="header-subtitle">Words of Jesus · Every Answer</div>
       </div>
     </div>
+  </header>
 
-    <!-- Chat Area -->
-    <div class="chat-area" id="chatArea">
-      <div class="empty-state" id="emptyState">
-        <div class="cross-large">&#10012;</div>
-        <p>"Ask, and it will be given to you; seek, and you will find." &mdash; Matthew 7:7</p>
-        <p style="margin-top:4px; font-size:0.8rem;">What is weighing on your heart today?</p>
-        <div class="suggestion-chips">
-          <button class="chip" onclick="useSuggestion(this)">How should I treat my enemies?</button>
-          <button class="chip" onclick="useSuggestion(this)">I'm struggling with anxiety and fear</button>
-          <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
-          <button class="chip" onclick="useSuggestion(this)">What does Jesus say about wealth?</button>
-          <button class="chip" onclick="useSuggestion(this)">How should I handle conflict?</button>
-          <button class="chip" onclick="useSuggestion(this)">What is the greatest commandment?</button>
+  <!-- Pages -->
+  <div class="pages">
+
+    <!-- TODAY PAGE -->
+    <div class="page active" id="today-page">
+      <div class="page-header">
+        <div class="greeting" id="greeting">Good morning</div>
+        <h1 class="page-title">Today's <em>Light</em></h1>
+      </div>
+
+      <div class="section-label">Daily Affirmation</div>
+      <div class="card card-crimson affirmation-card">
+        <div class="card-body">
+          <div class="card-tag">✦ Affirmation for Today</div>
+          <div id="affirmation-skeleton">
+            <div class="skeleton skel-line long"></div>
+            <div class="skeleton skel-line full"></div>
+            <div class="skeleton skel-line med" style="margin-bottom:16px"></div>
+            <div class="affirmation-divider"></div>
+            <div class="skeleton skel-line short" style="margin-top:14px;background:rgba(255,255,255,0.2)"></div>
+          </div>
+          <div id="affirmation-content" style="display:none">
+            <div class="affirmation-text" id="affirmation-text"></div>
+            <div class="affirmation-divider"></div>
+            <div class="card-quote" id="affirmation-quote"></div>
+            <div class="card-verse" id="affirmation-verse"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Input Bar -->
-    <div class="input-bar">
-      <div class="input-wrapper">
-        <textarea
-          id="userInput"
-          placeholder="Ask a life question or share a dilemma..."
-          rows="1"
-          onkeydown="handleKeyDown(event)"
-          oninput="autoResize(this)"
-        ></textarea>
+      <div class="section-label">Word of the Day</div>
+      <div class="card">
+        <div class="card-body">
+          <div id="word-skeleton">
+            <div class="skeleton skel-line short" style="height:24px;border-radius:20px;width:80px;margin-bottom:12px"></div>
+            <div class="skeleton skel-line med" style="height:22px;margin-bottom:14px"></div>
+            <div class="skeleton skel-line full"></div>
+            <div class="skeleton skel-line full"></div>
+            <div class="skeleton skel-line long" style="margin-bottom:14px"></div>
+            <div class="skeleton skel-line short" style="height:14px;margin-bottom:14px"></div>
+            <div class="skeleton skel-line full"></div>
+            <div class="skeleton skel-line long"></div>
+          </div>
+          <div id="word-content" style="display:none">
+            <div class="word-theme-badge" id="word-theme">✦ Theme</div>
+            <div class="card-title" id="word-title"></div>
+            <div class="word-passage" id="word-passage"></div>
+            <div class="word-verse" id="word-verse"></div>
+            <div class="word-reflection" id="word-reflection"></div>
+          </div>
+        </div>
       </div>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send" disabled>
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
-      </button>
+
+      <div class="section-label">Explore More</div>
+      <div style="display:flex;gap:10px;padding:0 16px 24px">
+        <button onclick="switchTab('chat')" style="flex:1;background:var(--crimson);color:white;border:none;border-radius:var(--radius-sm);padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Ask the Advisor</button>
+        <button onclick="switchTab('encourage')" style="flex:1;background:var(--white);color:var(--ink);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Find Encouragement</button>
+      </div>
     </div>
 
-    <footer class="footer">
-      Responses reflect the red-letter words of Jesus in the four Gospels &bull; Always check the cited scripture yourself
-    </footer>
-  </div>
+    <!-- ENCOURAGEMENT PAGE -->
+    <div class="page" id="encourage-page">
+      <div class="page-header">
+        <div class="greeting">Choose a theme</div>
+        <h1 class="page-title">Words of <em>Encouragement</em></h1>
+      </div>
 
-  <script>
-    // ── State ──────────────────────────────────────────────────────────────
-    let conversationHistory = [];
-    let isLoading = false;
-    let welcomeVisible = true;
+      <div id="theme-grid-section">
+        <div class="theme-grid">
+          <button class="theme-btn" onclick="loadEncouragement('Anxiety & Worry')"><div class="theme-icon">🌊</div><div class="theme-name">Anxiety & Worry</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Grief & Loss')"><div class="theme-icon">🕊</div><div class="theme-name">Grief & Loss</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Forgiveness')"><div class="theme-icon">🤍</div><div class="theme-name">Forgiveness</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Loneliness')"><div class="theme-icon">🌿</div><div class="theme-name">Loneliness</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Conflict & Relationships')"><div class="theme-icon">🌱</div><div class="theme-name">Conflict</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Fear')"><div class="theme-icon">🕯</div><div class="theme-name">Fear</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Purpose & Direction')"><div class="theme-icon">🧭</div><div class="theme-name">Purpose</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Faith & Doubt')"><div class="theme-icon">⚓</div><div class="theme-name">Faith & Doubt</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Suffering & Pain')"><div class="theme-icon">🌅</div><div class="theme-name">Suffering & Pain</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Shame & Guilt')"><div class="theme-icon">🌸</div><div class="theme-name">Shame & Guilt</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Peace')"><div class="theme-icon">☮️</div><div class="theme-name">Peace</div></button>
+          <button class="theme-btn" onclick="loadEncouragement('Hope')"><div class="theme-icon">✨</div><div class="theme-name">Hope</div></button>
+        </div>
+      </div>
 
-    // ── Welcome toggle ─────────────────────────────────────────────────────
-    function toggleWelcome() {
-      const text = document.getElementById('welcomeText');
-      const disc = document.querySelector('.disclaimer');
-      const btn  = document.getElementById('welcomeToggle');
-      welcomeVisible = !welcomeVisible;
-      text.style.display = welcomeVisible ? '' : 'none';
-      disc.style.display = welcomeVisible ? '' : 'none';
-      btn.textContent = welcomeVisible ? 'Hide introduction' : 'Show introduction';
-    }
+      <!-- Loading state -->
+      <div id="encourage-loading" style="display:none;padding:0 16px">
+        <div style="padding:12px 0 16px">
+          <div class="skeleton skel-line short" style="height:24px;margin-bottom:6px"></div>
+          <div class="skeleton skel-line med" style="height:28px"></div>
+        </div>
+        <div class="skeleton skel-line full" style="margin-bottom:8px"></div>
+        <div class="skeleton skel-line long" style="margin-bottom:20px"></div>
+        <div style="background:var(--white);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border-left:3px solid var(--border)">
+          <div class="skeleton skel-line short" style="height:12px;margin-bottom:10px"></div>
+          <div class="skeleton skel-line full"></div>
+          <div class="skeleton skel-line long"></div>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border-left:3px solid var(--border)">
+          <div class="skeleton skel-line short" style="height:12px;margin-bottom:10px"></div>
+          <div class="skeleton skel-line full"></div>
+          <div class="skeleton skel-line med"></div>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius-sm);padding:16px;border-left:3px solid var(--border)">
+          <div class="skeleton skel-line short" style="height:12px;margin-bottom:10px"></div>
+          <div class="skeleton skel-line full"></div>
+          <div class="skeleton skel-line long"></div>
+        </div>
+      </div>
 
-    // ── Input helpers ──────────────────────────────────────────────────────
-    const textarea = document.getElementById('userInput');
-    const sendBtn  = document.getElementById('sendBtn');
+      <!-- Result -->
+      <div class="encourage-result" id="encourage-result">
+        <button class="result-back" onclick="showThemeGrid()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Choose another theme
+        </button>
+        <div class="result-headline" id="result-headline"></div>
+        <div class="result-opening" id="result-opening"></div>
+        <div id="result-passages"></div>
+        <div class="result-practice">
+          <div class="result-practice-label">✦ Practice for Today</div>
+          <div class="result-practice-text" id="result-practice"></div>
+        </div>
+        <div class="result-closing" id="result-closing"></div>
+      </div>
+    </div>
 
-    textarea.addEventListener('input', () => {
-      sendBtn.disabled = !textarea.value.trim() || isLoading;
+    <!-- CHAT PAGE -->
+    <div class="page" id="chat-page">
+      <div class="page-header">
+        <div class="greeting">Ask anything</div>
+        <h1 class="page-title">The <em>Advisor</em></h1>
+      </div>
+      <div class="chat-welcome-card">
+        <div class="chat-welcome-title">Only the Words of Jesus</div>
+        <div class="chat-welcome-text">Every response draws exclusively from the direct words of Jesus in Matthew, Mark, Luke, and John. All quotes are cited by verse.</div>
+      </div>
+      <div class="chat-suggestions" id="chat-suggestions">
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">I feel overwhelmed</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">How do I forgive someone?</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">I'm afraid of the future</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">How to treat my enemies</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">I feel lost in life</button>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-typing" id="chat-typing">
+        <div class="typing-bubble">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="chat-input" placeholder="Share what's on your heart…" rows="1"></textarea>
+        <button class="chat-send" id="chat-send" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- Bottom Nav -->
+  <nav class="nav">
+    <button class="nav-btn active" id="nav-today" onclick="switchTab('today')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <span>Today</span>
+    </button>
+    <button class="nav-btn" id="nav-encourage" onclick="switchTab('encourage')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <span>Encourage</span>
+    </button>
+    <button class="nav-btn" id="nav-chat" onclick="switchTab('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span>Advisor</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+const conversationHistory = [];
+let isTyping = false;
+const encouragementCache = {};
+
+// Greeting by time of day
+(function() {
+  const h = new Date().getHours();
+  document.getElementById('greeting').textContent =
+    h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+})();
+
+// Tab navigation
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab + '-page').classList.add('active');
+  document.getElementById('nav-' + tab).classList.add('active');
+}
+
+// Daily content
+async function loadDailyContent() {
+  try {
+    const res = await fetch('/api/daily');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    document.getElementById('affirmation-text').textContent = data.affirmation.text;
+    document.getElementById('affirmation-quote').textContent = '“' + data.affirmation.quote + '”';
+    document.getElementById('affirmation-verse').textContent = '— ' + data.affirmation.verse;
+    document.getElementById('affirmation-skeleton').style.display = 'none';
+    document.getElementById('affirmation-content').style.display = 'block';
+
+    document.getElementById('word-theme').textContent = '✦ ' + data.word.theme;
+    document.getElementById('word-title').textContent = data.word.title;
+    document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
+    document.getElementById('word-verse').textContent = data.word.verse;
+    document.getElementById('word-reflection').textContent = data.word.reflection;
+    document.getElementById('word-skeleton').style.display = 'none';
+    document.getElementById('word-content').style.display = 'block';
+  } catch (err) {
+    console.error('Daily content failed:', err);
+  }
+}
+loadDailyContent();
+
+// Encouragement
+async function loadEncouragement(theme) {
+  if (encouragementCache[theme]) {
+    displayEncouragement(encouragementCache[theme]);
+    return;
+  }
+  document.getElementById('theme-grid-section').style.display = 'none';
+  document.getElementById('encourage-result').classList.remove('visible');
+  document.getElementById('encourage-loading').style.display = 'block';
+  document.getElementById('encourage-page').scrollTop = 0;
+
+  try {
+    const res = await fetch('/api/encouragement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme })
     });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    encouragementCache[theme] = data;
+    displayEncouragement(data);
+  } catch (err) {
+    document.getElementById('encourage-loading').style.display = 'none';
+    document.getElementById('theme-grid-section').style.display = 'block';
+    alert('Could not load encouragement. Please try again.');
+  }
+}
 
-    function autoResize(el) {
-      el.style.height = 'auto';
-      el.style.height = Math.min(el.scrollHeight, 140) + 'px';
-    }
+function displayEncouragement(data) {
+  document.getElementById('encourage-loading').style.display = 'none';
+  document.getElementById('result-headline').textContent = data.headline;
+  document.getElementById('result-opening').textContent = data.opening;
 
-    function handleKeyDown(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        if (!sendBtn.disabled) sendMessage();
-      }
-    }
+  const passagesEl = document.getElementById('result-passages');
+  passagesEl.innerHTML = '';
+  (data.passages || []).forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'passage-block';
+    d.innerHTML =
+      '<div class="passage-verse">' + esc(p.verse) + '</div>' +
+      '<div class="passage-quote">“' + esc(p.quote) + '”</div>' +
+      '<div class="passage-context">' + esc(p.context) + '</div>';
+    passagesEl.appendChild(d);
+  });
 
-    function useSuggestion(btn) {
-      textarea.value = btn.textContent.trim();
-      autoResize(textarea);
-      sendBtn.disabled = false;
-      textarea.focus();
-      sendMessage();
-    }
+  document.getElementById('result-practice').textContent = data.practice;
+  document.getElementById('result-closing').textContent = data.closing;
+  document.getElementById('encourage-result').classList.add('visible');
+  document.getElementById('encourage-page').scrollTop = 0;
+}
 
-    // ── DOM helpers ────────────────────────────────────────────────────────
-    function scrollToBottom() {
-      const area = document.getElementById('chatArea');
-      area.scrollTop = area.scrollHeight;
-    }
+function showThemeGrid() {
+  document.getElementById('encourage-result').classList.remove('visible');
+  document.getElementById('encourage-loading').style.display = 'none';
+  document.getElementById('theme-grid-section').style.display = 'block';
+  document.getElementById('encourage-page').scrollTop = 0;
+}
 
-    function removeEmptyState() {
-      const el = document.getElementById('emptyState');
-      if (el) el.remove();
-    }
+// Chat
+const chatInput = document.getElementById('chat-input');
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+});
 
-    function appendMessage(role, content) {
-      removeEmptyState();
-      const area = document.getElementById('chatArea');
+function sendSuggestion(btn) {
+  chatInput.value = btn.textContent;
+  document.getElementById('chat-suggestions').style.display = 'none';
+  sendMessage();
+}
 
-      const wrapper = document.createElement('div');
-      wrapper.className = `message ${role}`;
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text || isTyping) return;
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  document.getElementById('chat-suggestions').style.display = 'none';
 
-      const avatar = document.createElement('div');
-      avatar.className = 'avatar';
-      avatar.textContent = role === 'user' ? '✦' : '✝';
+  addMsg('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  isTyping = true;
+  document.getElementById('chat-typing').classList.add('visible');
+  document.getElementById('chat-send').disabled = true;
+  scrollChat();
 
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversationHistory })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    conversationHistory.push({ role: 'assistant', content: data.message });
+    document.getElementById('chat-typing').classList.remove('visible');
+    addMsg('ai', data.message);
+  } catch (err) {
+    document.getElementById('chat-typing').classList.remove('visible');
+    addMsg('ai', 'Unable to connect right now. Please try again in a moment.');
+  } finally {
+    isTyping = false;
+    document.getElementById('chat-send').disabled = false;
+  }
+}
 
-      if (role === 'assistant') {
-        bubble.innerHTML = formatResponse(content);
-      } else {
-        bubble.textContent = content;
-      }
+function addMsg(role, text) {
+  const msgs = document.getElementById('chat-messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-' + role;
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (role === 'ai') {
+    bubble.innerHTML = formatAi(text);
+  } else {
+    bubble.textContent = text;
+  }
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  scrollChat();
+}
 
-      wrapper.appendChild(avatar);
-      wrapper.appendChild(bubble);
-      area.appendChild(wrapper);
-      scrollToBottom();
-      return bubble;
-    }
+function scrollChat() {
+  const page = document.getElementById('chat-page');
+  setTimeout(() => { page.scrollTop = page.scrollHeight; }, 50);
+}
 
-    function showTypingIndicator() {
-      removeEmptyState();
-      const area = document.getElementById('chatArea');
-      const wrapper = document.createElement('div');
-      wrapper.className = 'typing-indicator';
-      wrapper.id = 'typingIndicator';
+function formatAi(text) {
+  return esc(text)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong class="verse-cite">$1</strong>')
+    .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="verse-cite">$1</strong>')
+    .replace(/\n\n/g, '</p><p style="margin-top:10px">')
+    .replace(/\n/g, '<br>');
+}
 
-      const avatar = document.createElement('div');
-      avatar.className = 'avatar';
-      avatar.textContent = '✝';
-
-      const dots = document.createElement('div');
-      dots.className = 'typing-dots';
-      dots.innerHTML = '<span></span><span></span><span></span>';
-
-      wrapper.appendChild(avatar);
-      wrapper.appendChild(dots);
-      area.appendChild(wrapper);
-      scrollToBottom();
-    }
-
-    function removeTypingIndicator() {
-      const el = document.getElementById('typingIndicator');
-      if (el) el.remove();
-    }
-
-    function showError(msg) {
-      removeTypingIndicator();
-      const area = document.getElementById('chatArea');
-      const el = document.createElement('div');
-      el.className = 'error-msg';
-      el.textContent = msg;
-      area.appendChild(el);
-      scrollToBottom();
-      // Remove error after 6 seconds
-      setTimeout(() => el.remove(), 6000);
-    }
-
-    // ── Response formatting ────────────────────────────────────────────────
-    // Highlights scripture references like "Matthew 5:44", "John 3:16-17", etc.
-    function formatResponse(text) {
-      // Escape HTML first
-      const escaped = text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-
-      // Highlight Bible references
-      const withCitations = escaped.replace(
-        /\b(Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?(?:,\s*\d+(?:[–\-]\d+)?)*/g,
-        '<span class="citation">$&</span>'
-      );
-
-      // Convert **bold**
-      const withBold = withCitations.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-      // Convert *italic*
-      const withItalic = withBold.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-      // Convert line breaks to paragraphs
-      const paragraphs = withItalic
-        .split(/\n\n+/)
-        .map(p => p.trim())
-        .filter(Boolean)
-        .map(p => `<p style="margin-bottom:0.6em">${p.replace(/\n/g, '<br>')}</p>`)
-        .join('');
-
-      return paragraphs || `<p>${withItalic}</p>`;
-    }
-
-    // ── Send message ───────────────────────────────────────────────────────
-    async function sendMessage() {
-      const text = textarea.value.trim();
-      if (!text || isLoading) return;
-
-      // Clear input
-      textarea.value = '';
-      textarea.style.height = '';
-      sendBtn.disabled = true;
-      isLoading = true;
-
-      // Append user message to UI and history
-      appendMessage('user', text);
-      conversationHistory.push({ role: 'user', content: text });
-
-      // Show typing
-      showTypingIndicator();
-
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: conversationHistory }),
-        });
-
-        removeTypingIndicator();
-
-        if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || `Server error (${response.status})`);
-        }
-
-        const data = await response.json();
-        const reply = data.message;
-
-        conversationHistory.push({ role: 'assistant', content: reply });
-        appendMessage('assistant', reply);
-      } catch (err) {
-        showError(err.message || 'Something went wrong. Please try again.');
-        // Remove the user message from history on failure so conversation stays clean
-        conversationHistory.pop();
-      } finally {
-        isLoading = false;
-        sendBtn.disabled = !textarea.value.trim();
-        textarea.focus();
-      }
-    }
-
-    // ── Init ───────────────────────────────────────────────────────────────
-    textarea.focus();
-  </script>
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
 </body>
 </html>
