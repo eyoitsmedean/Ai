@@ -786,6 +786,37 @@ textarea { font-family: var(--font-ui); }
 }
 .bubble .vcite { font-weight: 700; color: var(--crimson); font-style: normal; }
 
+.scripture-block {
+  background: var(--gold-pale);
+  border-left: 3px solid var(--gold-border);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 11px 13px;
+  margin: 8px 0 4px;
+}
+.scripture-verse {
+  font-size: calc(10px * var(--scale));
+  font-weight: 700;
+  color: var(--crimson);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 6px;
+}
+.scripture-quote {
+  font-family: var(--font-body);
+  font-size: calc(14.5px * var(--scale));
+  font-style: italic;
+  line-height: 1.62;
+  color: var(--text-2);
+}
+.scripture-ctx {
+  font-size: calc(12px * var(--scale));
+  line-height: 1.55;
+  color: var(--text-3);
+  margin-top: 5px;
+}
+.ai-p { margin-bottom: 6px; line-height: 1.65; }
+.ai-p:last-child { margin-bottom: 0; }
+
 .msg-save-btn {
   margin-top: 5px;
   background: none;
@@ -1964,11 +1995,48 @@ function esc(s) {
 }
 
 function formatAI(text) {
-  return esc(text)
-    .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
-    .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>')
-    .replace(/\n\n+/g, '</p><p style="margin-top:10px">')
-    .replace(/\n/g, '<br>');
+  const lines = text.split('\n');
+  const parts = [];
+  let i = 0;
+  while (i < lines.length) {
+    const trimmed = lines[i].trim();
+    // Detect **Book Chapter:Verse** on its own line
+    const vm = trimmed.match(/^\*\*((?:Matthew|Mark|Luke|John)[^*\n]+)\*\*\s*$/);
+    if (vm) {
+      const verse = vm[1].trim();
+      let j = i + 1;
+      while (j < lines.length && !lines[j].trim()) j++;
+      if (j < lines.length) {
+        const nl = lines[j].trim();
+        // Complete quote: starts AND ends with a quote char (or ends with ." or ,")
+        const isQuote = nl.length > 10 && /^["“”]/.test(nl) &&
+          (/["“”]['.,]?\s*$/.test(nl) || /\.\s*$/.test(nl));
+        if (isQuote) {
+          const q = nl.replace(/^["“”]+/, '').replace(/["“”]+$/, '');
+          j++;
+          while (j < lines.length && !lines[j].trim()) j++;
+          let ctx = '';
+          if (j < lines.length) {
+            const cl = lines[j].trim();
+            if (cl && !/^\*\*/.test(cl) && !/^["“]/.test(cl)) { ctx = cl; j++; }
+          }
+          parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
+            '</div><div class="scripture-quote">“' + esc(q) + '”</div>' +
+            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
+          i = j; continue;
+        }
+      }
+      parts.push('<p class="ai-p"><strong class="vcite">' + esc(verse) + '</strong></p>');
+      i++; continue;
+    }
+    if (!trimmed) { parts.push('<div style="height:6px"></div>'); i++; continue; }
+    const html = esc(trimmed)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
+      .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>');
+    parts.push('<p class="ai-p">' + html + '</p>');
+    i++;
+  }
+  return parts.join('');
 }
 
 function extractFirstVerse(text) {
