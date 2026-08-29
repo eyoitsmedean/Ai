@@ -39,8 +39,9 @@ Research → gaps → build targets for The Red Letter Advisor.
 
 ## Follow-ups (next iterations)
 
+- Lectio divina (Read / Reflect / Rest / Respond) is the daily ritual — shipped.
 - Wire live Anthropic key in production and tune prompts against real traffic.
-- Add push / local reminder for daily red letter.
+- Add push / local reminder for daily red letter / lectio.
 - Soft freemium paywall + annual plan.
 - Scripture license path for modern translations beyond KJV curated set.
 - Native iOS/Android shell (Expo) for store distribution.

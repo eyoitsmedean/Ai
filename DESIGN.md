@@ -115,6 +115,7 @@ A cream page. One rubricated sentence from Matthew 11:28. Four quiet intents (Pe
 Running head. Date in small caps. A greeting, then a title with one italic word.  
 The **letterpress plate** (affirmation).  
 Then the Word — a page of type, not a widget.  
+**Take this slowly** opens lectio: Read → Reflect → Rest → Respond.  
 A grace line. Two verbs: *Ask* / *Seek*.  
 Disclaimer in the voice of a colophon.
 
@@ -138,7 +139,7 @@ These are the ideas that keep a studio busy for years. Each one stays simple to 
 
 1. **Seasonal paper.** Advent: cooler night indigo, one candle rule. Lent: stripped chrome, more silence. Easter: a single lift in the plate. The app changes clothes; the type does not panic.
 2. **Verse atelier.** YouVersion’s share craft, our restraint: three papers, two type sizes, no stock sunsets. Export 1080 and 4:5. A “send a blessing” that arrives as an image, not a screenshot of UI.
-3. **Lectio in four taps.** Read / Reflect / Rest / Respond — one red-letter per step. No timer guilt. Optional chime.
+3. **Lectio in four taps.** **Shipped.** Read / Reflect / Rest / Respond — one red-letter per step. Rest is twenty seconds. Respond writes the commonplace. No timer guilt.
 4. **Commonplace book.** Notion-like: pages you title, verses you drop in, a backlink to the day you saved them. Local-first. Export Markdown.
 5. **Margin conversations.** Small-group rooms that are just a shared page + a verse. No feed. No likes.
 6. **Audio as typesetting.** A single human voice (or your own) reading the day’s red letters. Waveform as a thin rule, not a DJ deck.

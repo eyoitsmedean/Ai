@@ -1544,7 +1544,8 @@ body::before {
   width: 0;
   background: #8F1D1D;
 }
-.sit-overlay.on .sit-progress i {
+.sit-overlay.on .sit-progress i,
+#lectio-progress.on i {
   animation: sitFill 20s linear forwards;
 }
 @keyframes sitFill { to { width: 100%; } }
@@ -1575,9 +1576,111 @@ body::before {
   0%, 100% { transform: scale(.86); opacity: .45; }
   50% { transform: scale(1.08); opacity: 1; }
 }
+.lectio-overlay {
+  position: fixed; inset: 0; z-index: 92;
+  background: #F6F3EC;
+  display: none;
+  flex-direction: column;
+  padding: 20px 28px 36px;
+}
+.lectio-overlay.on { display: flex; }
+:root[data-theme="dark"] .lectio-overlay { background: #1F1A16; }
+.lectio-rail {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 42px 0 8px;
+}
+.lectio-rail button {
+  background: none; border: none; padding: 0;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  cursor: pointer;
+}
+.lectio-rail button.on { color: var(--crimson); }
+.lectio-room {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 0;
+  overflow-y: auto;
+}
+.lectio-room.on { display: flex; }
+.lectio-kicker {
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 18px;
+}
+.lectio-question {
+  font-family: var(--font-disp);
+  font-size: clamp(22px, 5vw, 30px);
+  letter-spacing: -.025em;
+  line-height: 1.3;
+  max-width: 20ch;
+  color: var(--text-1);
+  margin-bottom: 18px;
+}
+.lectio-reflection {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-2);
+  max-width: 36ch;
+}
+.lectio-next {
+  margin-top: 36px;
+  background: #8F1D1D;
+  color: #F6F3EC;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 26px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+}
+.lectio-skip {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 13px;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+#lectio-note {
+  width: min(420px, 100%);
+  min-height: 96px;
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text-1);
+  resize: none;
+}
+#lectio-note:focus { outline: none; border-color: rgba(143,29,29,.4); }
+.lectio-done {
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-3);
+}
+.journal-tools { padding: 0 4px 12px; }
 @media (prefers-reduced-motion: reduce) {
   .sit-breath { animation: none; }
   .sit-overlay.on .sit-progress i { animation: none; width: 100%; }
+  .lectio-overlay.on .sit-progress i { animation: none; width: 100%; }
   .page { transition: none; }
 }
 
@@ -1715,7 +1818,8 @@ body::before {
             <div class="blockquote" id="word-passage"></div>
             <div class="word-verse-label" id="word-verse"></div>
             <div class="word-reflection" id="word-reflection"></div>
-            <button class="sit-verb" type="button" onclick="openSit()">Sit with this</button>
+            <button class="sit-verb" type="button" onclick="openLectio()">Take this slowly</button>
+            <p class="lectio-done" id="lectio-done" hidden>You sat with these words today.</p>
             <div class="card-actions dark-sep">
               <button class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
                 <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -1795,7 +1899,7 @@ body::before {
           <div class="practice-text" id="enc-practice"></div>
         </div>
         <div class="enc-closing" id="enc-closing"></div>
-        <button class="sit-verb" type="button" onclick="openSit('enc')">Sit with this</button>
+        <button class="sit-verb" type="button" onclick="openLectio('enc')">Take this slowly</button>
         <div style="margin-top:16px;display:flex;gap:8px">
           <button class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
             <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -1853,6 +1957,9 @@ body::before {
       <div class="page-hd">
         <div class="page-hd-eyebrow">Saved passages</div>
         <h1 class="page-hd-title">Commonplace</h1>
+      </div>
+      <div class="journal-tools" id="journal-tools" hidden>
+        <button type="button" class="chat-tool-btn" onclick="exportCommonplace()">Export Markdown</button>
       </div>
       <div id="journal-list"></div>
     </div>
@@ -1943,6 +2050,44 @@ body::before {
   <div class="sit-breath" aria-hidden="true"></div>
   <p class="sit-hint">Twenty seconds. Stay with the sentence.</p>
   <div class="sit-progress" aria-hidden="true"><i></i></div>
+</div>
+
+<div class="lectio-overlay" id="lectio-overlay" aria-label="Lectio">
+  <button type="button" class="sit-close" onclick="closeLectio()">Close</button>
+  <div class="lectio-rail" id="lectio-rail">
+    <button type="button" class="on" onclick="lectioGo(0)">Read</button>
+    <button type="button" onclick="lectioGo(1)">Reflect</button>
+    <button type="button" onclick="lectioGo(2)">Rest</button>
+    <button type="button" onclick="lectioGo(3)">Respond</button>
+  </div>
+  <div class="lectio-room on" id="lectio-room-0">
+    <p class="lectio-kicker">Read</p>
+    <p class="sit-quote" id="lectio-quote"></p>
+    <p class="sit-ref" id="lectio-ref"></p>
+    <button type="button" class="lectio-next" onclick="lectioGo(1)">Continue</button>
+  </div>
+  <div class="lectio-room" id="lectio-room-1">
+    <p class="lectio-kicker">Reflect</p>
+    <p class="lectio-question" id="lectio-question"></p>
+    <p class="lectio-reflection" id="lectio-reflection"></p>
+    <button type="button" class="lectio-next" onclick="lectioGo(2)">Rest with this</button>
+  </div>
+  <div class="lectio-room" id="lectio-room-2">
+    <p class="lectio-kicker">Rest</p>
+    <p class="sit-quote" id="lectio-rest-quote"></p>
+    <p class="sit-ref" id="lectio-rest-ref"></p>
+    <div class="sit-breath" aria-hidden="true"></div>
+    <p class="sit-hint">Twenty seconds. Nothing else is required.</p>
+    <button type="button" class="lectio-next" id="lectio-rest-next" onclick="lectioGo(3)" style="visibility:hidden">Respond</button>
+    <div class="sit-progress" id="lectio-progress" aria-hidden="true"><i></i></div>
+  </div>
+  <div class="lectio-room" id="lectio-room-3">
+    <p class="lectio-kicker">Respond</p>
+    <p class="lectio-question">What will you keep?</p>
+    <textarea id="lectio-note" placeholder="A word, a sentence, a prayer…" maxlength="400"></textarea>
+    <button type="button" class="lectio-next" onclick="finishLectio()">Keep this</button>
+    <button type="button" class="lectio-skip" onclick="finishLectio(true)">Leave it on the page</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -2309,16 +2454,21 @@ function renderJournal() {
   const items = getJournal();
 
   if (items.length === 0) {
+    const tools = document.getElementById('journal-tools');
+    if (tools) tools.hidden = true;
     list.innerHTML = `
       <div class="journal-empty">
         <div class="journal-empty-title">A commonplace waits</div>
-        <div class="journal-empty-text">Keep a line from Today, Seek, or Advisor. The page stays quiet until you do.</div>
+        <div class="journal-empty-text">Keep a line from lectio, Today, Seek, or Advisor. The page stays quiet until you do.</div>
       </div>`;
     return;
   }
 
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor' };
-  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold' };
+  const tools = document.getElementById('journal-tools');
+  if (tools) tools.hidden = items.length === 0;
+
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio' };
+  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson' };
 
   list.innerHTML = items.map(item => {
     const typeKey = item.type || (item.key.startsWith('aff') ? 'aff' : item.key.startsWith('word') ? 'word' : item.key.startsWith('enc') ? 'enc' : 'chat');
@@ -2573,7 +2723,8 @@ function applyDailyToUI(data) {
   document.getElementById('aff-content').style.display = 'block';
   if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
 
-  document.getElementById('word-theme').textContent = '✦ ' + data.word.theme;
+  document.getElementById('word-theme').textContent = data.word.theme;
+  markLectioDone();
   document.getElementById('word-title').textContent = data.word.title;
   document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
   document.getElementById('word-verse').textContent = data.word.verse;
@@ -2891,8 +3042,147 @@ function closeSit() {
   document.getElementById('sit-overlay').classList.remove('on');
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSit();
+  if (e.key !== 'Escape') return;
+  closeSit();
+  closeLectio();
 });
+
+const LECTIO_Q = {
+  Worth: 'Where have you felt forgotten?',
+  Peace: 'What tomorrow are you still carrying?',
+  Rest: 'What weight are you still wearing?',
+  Light: 'Where does the path feel dark?',
+  Love: 'Whom is it hard to love this week?',
+  Seeking: 'What have you stopped asking for?',
+  Forgiveness: 'What would mercy look like here?',
+  'Anxiety & Worry': 'What tomorrow are you still carrying?',
+  'Grief & Loss': 'What grief needs a witness?',
+  Loneliness: 'Where have you felt unseen?',
+  'Conflict & Relationships': 'Whom is it hard to love this week?',
+  Fear: 'What are you afraid to name?',
+  'Purpose & Direction': 'What step is in front of you, not ahead?',
+  'Faith & Doubt': 'What question are you allowed to keep asking?',
+  'Suffering & Pain': 'Where does it hurt — and can that be spoken?',
+  'Shame & Guilt': 'What would it mean to be clean here?',
+  Hope: 'What small light is still in the room?',
+  Guidance: 'What is the next faithful step, not the whole map?'
+};
+
+let lectioCtx = null;
+let lectioRestTimer = null;
+
+function lectioQuestion(theme) {
+  if (!theme) return 'What word in this sentence stays with you?';
+  if (LECTIO_Q[theme]) return LECTIO_Q[theme];
+  const hit = Object.keys(LECTIO_Q).find(k => theme.toLowerCase().includes(k.toLowerCase()));
+  return (hit && LECTIO_Q[hit]) || 'What word in this sentence stays with you?';
+}
+
+function lectioKey() { return 'rla-lectio-' + todayStr(); }
+
+function markLectioDone() {
+  const el = document.getElementById('lectio-done');
+  if (el) el.hidden = !ls(lectioKey());
+}
+
+function openLectio(source) {
+  let quote = '', verse = '', reflection = '', theme = '';
+  if (source === 'enc' && currentEncData) {
+    const p = currentEncData.passages && currentEncData.passages[0];
+    quote = (p && p.quote) || currentEncData.opening || '';
+    verse = (p && p.verse) || '';
+    reflection = currentEncData.opening || (p && p.context) || '';
+    theme = currentEncTheme || currentEncData.headline || '';
+  } else if (dailyData && dailyData.word) {
+    quote = dailyData.word.passage || '';
+    verse = dailyData.word.verse || '';
+    reflection = dailyData.word.reflection || '';
+    theme = dailyData.word.theme || '';
+  }
+  if (!quote) return;
+  lectioCtx = { quote, verse, reflection, theme, source: source || 'word' };
+  document.getElementById('lectio-quote').textContent = '“' + quote + '”';
+  document.getElementById('lectio-ref').textContent = verse;
+  document.getElementById('lectio-rest-quote').textContent = '“' + quote + '”';
+  document.getElementById('lectio-rest-ref').textContent = verse;
+  document.getElementById('lectio-question').textContent = lectioQuestion(theme);
+  document.getElementById('lectio-reflection').textContent = reflection;
+  document.getElementById('lectio-note').value = '';
+  const ov = document.getElementById('lectio-overlay');
+  ov.classList.add('on');
+  lectioGo(0);
+}
+
+function lectioGo(n) {
+  document.querySelectorAll('.lectio-room').forEach((el, i) => el.classList.toggle('on', i === n));
+  document.querySelectorAll('#lectio-rail button').forEach((el, i) => el.classList.toggle('on', i === n));
+  if (n === 2) startLectioRest();
+  else {
+    clearTimeout(lectioRestTimer);
+    const bar = document.getElementById('lectio-progress');
+    if (bar) bar.classList.remove('on');
+  }
+}
+
+function startLectioRest() {
+  const bar = document.getElementById('lectio-progress');
+  const next = document.getElementById('lectio-rest-next');
+  if (bar) {
+    bar.classList.remove('on');
+    void bar.offsetWidth;
+    bar.classList.add('on');
+  }
+  if (next) next.style.visibility = 'hidden';
+  clearTimeout(lectioRestTimer);
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  lectioRestTimer = setTimeout(() => {
+    if (next) next.style.visibility = 'visible';
+  }, reduced ? 0 : 20000);
+}
+
+function closeLectio() {
+  clearTimeout(lectioRestTimer);
+  const ov = document.getElementById('lectio-overlay');
+  if (ov) ov.classList.remove('on');
+  const bar = document.getElementById('lectio-progress');
+  if (bar) bar.classList.remove('on');
+}
+
+function finishLectio(skip) {
+  const note = (document.getElementById('lectio-note').value || '').trim();
+  lsSet(lectioKey(), '1');
+  markLectioDone();
+  if (!skip && note && lectioCtx) {
+    const key = 'lectio-' + todayStr() + '-' + (lectioCtx.verse || 'word').replace(/\s+/g, '');
+    saveJournalItem({
+      id: key,
+      key,
+      type: 'lectio',
+      title: note,
+      body: lectioCtx.quote,
+      verse: lectioCtx.verse
+    });
+    showToast('Kept in your commonplace');
+  } else {
+    showToast('That is enough for today');
+  }
+  closeLectio();
+}
+
+function exportCommonplace() {
+  const items = getJournal();
+  if (!items.length) return;
+  const md = ['# Commonplace', ''].concat(items.map(i => {
+    const d = i.savedAt ? new Date(i.savedAt).toISOString().slice(0, 10) : '';
+    const label = i.type || 'saved';
+    return '## ' + (i.title || 'Untitled') + '\n\n*' + label + (d ? ' · ' + d : '') + '*\n\n' + (i.body || '') + (i.verse ? '\n\n— ' + i.verse : '') + '\n';
+  })).join('\n---\n\n');
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'commonplace.md';
+  a.click();
+}
 </script>
 </body>
 </html>
