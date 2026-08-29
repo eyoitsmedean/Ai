@@ -1,4 +1,4 @@
-const CACHE = 'rla-v8-chapel';
+const CACHE = 'rla-v9-chapel';
 const PRECACHE = [
   '/manifest.json',
   '/css/app.css',

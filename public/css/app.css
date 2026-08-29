@@ -3986,3 +3986,6 @@ body::before {
 .share-card-picker .plus-dismiss {
   margin-top: 4px;
 }
+
+.app[hidden] { display: none !important; }
+.app.is-live { display: flex !important; }

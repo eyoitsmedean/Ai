@@ -173,7 +173,7 @@
     const onboarding = id('onboarding');
     if (onboarding) onboarding.classList.remove('hidden');
     const app = id('app');
-    if (app) app.setAttribute('aria-hidden', 'true');
+    if (app) app.hidden = true; app.classList.remove('is-live'); app.setAttribute('aria-hidden', 'true');
 
     const steps = onboarding ? Array.from(onboarding.querySelectorAll('.ob-step')) : [];
     if (steps.length && !steps.some((step) => step.classList.contains('active'))) {
@@ -187,7 +187,7 @@
     const onboarding = id('onboarding');
     if (onboarding) onboarding.classList.add('hidden');
     const app = id('app');
-    if (app) app.removeAttribute('aria-hidden');
+    if (app) { app.hidden = false; app.classList.add('is-live'); app.removeAttribute('aria-hidden'); }
     startApp();
     switchTab(destination);
   }
@@ -201,7 +201,7 @@
     if (onboarding) onboarding.classList.add('hidden');
     const app = id('app');
     if (app) {
-      app.style.display = '';
+      app.hidden = false; app.classList.add('is-live');
       app.removeAttribute('aria-hidden');
     }
     if (started) return;
