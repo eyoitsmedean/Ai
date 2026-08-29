@@ -1,4 +1,4 @@
-const CACHE = 'rla-v2';
+const CACHE = 'rla-v4';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -22,7 +22,25 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  if (url.pathname.startsWith('/api/')) return; // network-only for API
+  if (url.pathname.startsWith('/api/')) return;
+
+  const isDocument = e.request.mode === 'navigate' ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('.html');
+
+  if (isDocument) {
+    e.respondWith(
+      fetch(e.request).then(res => {
+        if (res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, copy));
+        }
+        return res;
+      }).catch(() => caches.match(e.request).then(c => c || caches.match('/index.html')))
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then(cached => {
       const network = fetch(e.request).then(res => {

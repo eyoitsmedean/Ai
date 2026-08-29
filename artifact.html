@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#8B1A1A" />
+  <meta name="theme-color" content="#F6F3EC" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Life guidance, daily affirmations, and encouragement drawn exclusively from the direct words of Jesus Christ." />
@@ -11,7 +11,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 /* ═══════════════════════════════════════════════════════════════════════════
    RESET + BASE
@@ -23,14 +23,14 @@ html { -webkit-text-size-adjust: 100%; }
    DESIGN TOKENS — LIGHT MODE
 ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --bg:          #FAF6EF;
-  --bg-2:        #F3EDE2;
-  --surface:     #FFFFFF;
-  --surface-2:   #FDF9F3;
-  --border:      #E5D9C8;
-  --border-2:    #D4C4B0;
+  --bg:          #F6F3EC;
+  --bg-2:        #EFEBE3;
+  --surface:     #FBF8F2;
+  --surface-2:   #F3EFE6;
+  --border:      rgba(28,22,18,.10);
+  --border-2:    rgba(28,22,18,.16);
 
-  --crimson:     #8B1A1A;
+  --crimson:     #8F1D1D;
   --crimson-dk:  #641212;
   --crimson-lt:  #B02020;
   --crimson-pale:#FDF0EE;
@@ -42,26 +42,26 @@ html { -webkit-text-size-adjust: 100%; }
 
   --streak:      #D4620A;
 
-  --text-1:      #1A1208;
-  --text-2:      #4A3C2A;
-  --text-3:      #7A6A55;
-  --text-4:      #A09080;
+  --text-1:      #1C1612;
+  --text-2:      #4A433C;
+  --text-3:      #6A6258;
+  --text-4:      #9A9288;
 
   --shadow-1: 0 1px 3px rgba(26,18,8,.06), 0 2px 6px rgba(26,18,8,.04);
   --shadow-2: 0 2px 8px rgba(26,18,8,.08), 0 4px 16px rgba(26,18,8,.05);
   --shadow-3: 0 4px 20px rgba(26,18,8,.10), 0 8px 32px rgba(26,18,8,.07);
 
-  --r:      16px;
+  --r:      14px;
   --r-sm:   10px;
   --r-lg:   22px;
   --ease:   cubic-bezier(0.4, 0, 0.2, 1);
 
-  --nav-h:    68px;
-  --header-h: 58px;
+  --nav-h:    64px;
+  --header-h: 56px;
 
-  --font-disp: 'Playfair Display', Georgia, serif;
-  --font-body: 'Lora', Georgia, serif;
-  --font-ui:   'Inter', system-ui, sans-serif;
+  --font-disp: 'Fraunces', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-ui:   'Figtree', system-ui, sans-serif;
   --scale: 1;
 }
 
@@ -69,12 +69,12 @@ html { -webkit-text-size-adjust: 100%; }
    DARK MODE
 ═══════════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"] {
-  --bg:          #0E0B07;
-  --bg-2:        #171210;
-  --surface:     #1C1812;
-  --surface-2:   #231E17;
-  --border:      #2C2620;
-  --border-2:    #3A3228;
+  --bg:          #1F1A16;
+  --bg-2:        #261F1A;
+  --surface:     #2A231C;
+  --surface-2:   #322A22;
+  --border:      rgba(240,232,216,.10);
+  --border-2:    rgba(240,232,216,.16);
 
   --crimson:     #C84040;
   --crimson-dk:  #5A1010;
@@ -100,12 +100,12 @@ html { -webkit-text-size-adjust: 100%; }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg:          #0E0B07;
-    --bg-2:        #171210;
-    --surface:     #1C1812;
-    --surface-2:   #231E17;
-    --border:      #2C2620;
-    --border-2:    #3A3228;
+    --bg:          #1F1A16;
+    --bg-2:        #261F1A;
+    --surface:     #2A231C;
+    --surface-2:   #322A22;
+    --border:      rgba(240,232,216,.10);
+    --border-2:    rgba(240,232,216,.16);
     --crimson:     #C84040;
     --crimson-dk:  #5A1010;
     --crimson-lt:  #E05050;
@@ -1244,30 +1244,376 @@ textarea { font-family: var(--font-ui); }
   line-height: 1.45;
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE QUIET PAGE — atelier
+═══════════════════════════════════════════════════════════════════════════ */
+html, body { font-feature-settings: "liga" 1, "kern" 1; }
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(143,29,29,.05), transparent 55%),
+    var(--bg);
+}
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed; inset: 0; z-index: 200;
+  opacity: .03;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.app { max-width: 460px; }
+:root[data-theme="dark"] body::before {
+  mix-blend-mode: overlay;
+  opacity: .05;
+}
+:root[data-theme="dark"] .sit-overlay { background: #1F1A16; }
+
+.header {
+  background: transparent;
+  color: var(--text-1);
+  border-bottom: 1px solid var(--border);
+  height: auto;
+  min-height: var(--header-h);
+  padding: 10px 18px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+.header-mark {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(143,29,29,.35);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-disp);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--crimson);
+  background: var(--crimson-pale);
+  flex-shrink: 0;
+}
+.header-name {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--text-1);
+}
+.header-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: .02em;
+  font-weight: 400;
+}
+.streak-badge {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-weight: 500;
+}
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+}
+.icon-btn:hover { background: var(--bg-2); color: var(--text-1); }
+
+.page-hd-eyebrow { letter-spacing: .16em; font-size: 10px; font-weight: 600; }
+.page-hd-title {
+  font-optical-sizing: auto;
+  font-weight: 550;
+  letter-spacing: -.03em;
+  font-size: calc(28px * var(--scale));
+}
+.page-hd-title em { font-style: italic; font-weight: 500; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  border-radius: 16px;
+}
+.card-crimson {
+  background:
+    radial-gradient(80% 80% at 100% 0%, rgba(255,255,255,.08), transparent 50%),
+    linear-gradient(165deg, #6E1616 0%, #4A0F0F 100%);
+  border: none;
+  position: relative;
+}
+.card-crimson::after {
+  content: "";
+  position: absolute; inset: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  pointer-events: none;
+}
+.aff-text {
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.blockquote {
+  border-left: 2px solid var(--crimson);
+  background: transparent;
+  padding: 4px 0 4px 14px;
+  color: var(--crimson);
+  font-family: var(--font-body);
+  font-style: italic;
+}
+
+.nav {
+  background: color-mix(in srgb, var(--bg) 88%, var(--surface));
+  backdrop-filter: blur(12px);
+}
+.nav::before { height: 1px; }
+.nav-btn span {
+  text-transform: none;
+  letter-spacing: .02em;
+  font-weight: 500;
+  font-size: 11px;
+}
+
+.onboarding {
+  background:
+    radial-gradient(900px 500px at 50% 0%, rgba(143,29,29,.10), transparent 60%),
+    #F6F3EC;
+  color: #1C1612;
+}
+.ob-mark {
+  width: 56px; height: 56px;
+  border: 1px solid rgba(143,29,29,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-disp);
+  font-style: italic;
+  font-size: 28px;
+  color: #8F1D1D;
+  margin-bottom: 28px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.ob-eyebrow {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #6A6258;
+  margin-bottom: 10px;
+  animation: fadeUp .7s .06s var(--ease) both;
+}
+.ob-title {
+  color: #1C1612;
+  font-weight: 550;
+  letter-spacing: -.03em;
+  font-size: clamp(28px, 7vw, 40px);
+}
+.ob-sub { color: #5C534A; max-width: 36ch; }
+.ob-quote {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.55;
+  color: #8F1D1D;
+  max-width: 28ch;
+  margin: 0 auto 28px;
+  animation: fadeUp .7s .2s var(--ease) both;
+}
+.ob-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #6A6258;
+}
+.ob-features { display: none; }
+.ob-btn {
+  background: #8F1D1D;
+  color: #F6F3EC;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.ob-note { color: #8A8278 !important; }
+.intent-chip {
+  background: transparent;
+  border: 1px solid rgba(28,22,18,.12);
+  color: #1C1612;
+  border-radius: 999px;
+}
+.intent-chip:hover, .intent-chip.selected {
+  background: #8F1D1D;
+  color: #F6F3EC;
+  border-color: #8F1D1D;
+}
+
+.theme-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  text-align: left;
+}
+.theme-card:hover {
+  transform: none;
+  border-color: rgba(143,29,29,.35);
+  box-shadow: none;
+}
+.theme-initial {
+  display: block;
+  font-family: var(--font-disp);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--crimson);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.theme-icon { display: none; }
+.theme-name { font-weight: 500; }
+
+.passage-card {
+  background: transparent;
+  box-shadow: none;
+  border-left: 2px solid var(--crimson);
+  border-radius: 0;
+  padding: 8px 0 8px 14px;
+}
+.passage-quote, .scripture-quote { color: var(--crimson); }
+.scripture-block { background: transparent; border-left: 2px solid var(--crimson); }
+
+.cta-btn-primary, .cta-btn-secondary { border-radius: 999px; }
+.cta-btn-secondary { background: transparent; }
+
+.crisis-bar {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+.msg-ai .bubble {
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+.sit-overlay {
+  position: fixed; inset: 0; z-index: 90;
+  background: #F6F3EC;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  text-align: center;
+}
+.sit-overlay.on { display: flex; }
+:root[data-theme="dark"] .sit-overlay { background: #14110E; }
+.sit-close {
+  position: absolute; top: 18px; right: 18px;
+  background: none; border: 1px solid var(--border);
+  border-radius: 999px; padding: 6px 12px;
+  font-size: 12px; color: var(--text-2);
+}
+.sit-quote {
+  font-family: var(--font-disp);
+  font-style: italic;
+  font-size: clamp(22px, 5vw, 32px);
+  line-height: 1.4;
+  color: var(--crimson);
+  max-width: 22ch;
+  margin-bottom: 16px;
+}
+.sit-ref {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 40px;
+}
+.sit-breath {
+  width: 72px; height: 72px;
+  border: 1px solid rgba(143,29,29,.35);
+  border-radius: 50%;
+  animation: sitBreath 8s ease-in-out infinite;
+}
+.sit-hint { margin-top: 22px; font-size: 12px; color: var(--text-3); letter-spacing: .06em; }
+.sit-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: rgba(143,29,29,.12);
+}
+.sit-progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #8F1D1D;
+}
+.sit-overlay.on .sit-progress i {
+  animation: sitFill 20s linear forwards;
+}
+@keyframes sitFill { to { width: 100%; } }
+.sit-verb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  cursor: pointer;
+}
+.sit-verb::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(143,29,29,.4);
+  border-radius: 50%;
+}
+.sit-verb:hover { opacity: .72; }
+@keyframes sitBreath {
+  0%, 100% { transform: scale(.86); opacity: .45; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sit-breath { animation: none; }
+  .sit-overlay.on .sit-progress i { animation: none; width: 100%; }
+  .page { transition: none; }
+}
+
+@media (min-width: 431px) {
+  body {
+    background:
+      radial-gradient(900px 480px at 50% 0%, rgba(143,29,29,.06), transparent 50%),
+      #E8E2D6;
+  }
+  :root[data-theme="dark"] body {
+    background:
+      radial-gradient(900px 480px at 50% 0%, rgba(143,29,29,.10), transparent 50%),
+      #16120F;
+  }
+  .app {
+    max-width: 480px;
+    height: min(900px, 96vh);
+    border-radius: 20px;
+    box-shadow:
+      0 0 0 1px rgba(28,22,18,.06),
+      0 30px 80px rgba(28,22,18,.12);
+  }
+}
+
 </style>
 </head>
 <body>
 
 <!-- ════════ ONBOARDING ════════ -->
 <div id="onboarding" class="onboarding">
-  <div class="ob-cross">✝</div>
-  <h1 class="ob-title">The Red Letter Advisor</h1>
-  <p class="ob-sub">Life wisdom drawn from the exact words<br>Jesus spoke in the four Gospels</p>
-  <div class="ob-features">
-    <div class="ob-feature">
-      <span class="ob-feature-icon">☀️</span>
-      <div class="ob-feature-text"><strong>Daily Affirmation</strong>A fresh word of light every morning, grounded in scripture</div>
-    </div>
-    <div class="ob-feature">
-      <span class="ob-feature-icon">🤍</span>
-      <div class="ob-feature-text"><strong>Encouragement by Theme</strong>12 life situations — grief, fear, purpose, peace and more</div>
-    </div>
-    <div class="ob-feature">
-      <span class="ob-feature-icon">💬</span>
-      <div class="ob-feature-text"><strong>Personal Advisor</strong>Ask any question and receive guidance in his words</div>
-    </div>
-  </div>
-    <p class="ob-note" style="margin-bottom:10px;opacity:.8">What brings you here?</p>
+  <div class="ob-mark">R</div>
+  <p class="ob-eyebrow">The red letters</p>
+  <h1 class="ob-title">A quiet page<br>for His words</h1>
+  <p class="ob-sub">Guidance, encouragement, and a daily sentence drawn only from what Jesus said.</p>
+  <blockquote class="ob-quote">“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”<cite>Matthew 11:28</cite></blockquote>
+  <p class="ob-note" style="margin-bottom:10px">What brings you here?</p>
   <div class="intent-grid" id="intent-grid">
     <button type="button" class="intent-chip" data-intent="peace" onclick="selectIntent(this)">Peace</button>
     <button type="button" class="intent-chip" data-intent="guidance" onclick="selectIntent(this)">Guidance</button>
@@ -1284,14 +1630,14 @@ textarea { font-family: var(--font-ui); }
   <!-- Header -->
   <header class="header">
     <div class="header-left">
-      <span class="header-cross">✝</span>
+      <span class="header-mark" aria-hidden="true">R</span>
       <div>
-        <div class="header-name">Red Letter Advisor</div>
+        <div class="header-name">Red Letter</div>
         <div class="header-sub" id="header-sub">Daily Words of Life</div>
       </div>
     </div>
     <div class="header-right">
-      <div class="streak-badge" id="streak-badge">🔥 <span id="streak-num">1</span></div>
+      <div class="streak-badge" id="streak-badge"><span id="streak-num">1</span></div>
       <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
@@ -1311,13 +1657,13 @@ textarea { font-family: var(--font-ui); }
       </div>
       <div class="page-hd" style="padding-top:6px">
         <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
-        <h1 class="page-hd-title">Today's <em>Light</em></h1>
+        <h1 class="page-hd-title">Today’s <em>light</em></h1>
       </div>
 
       <div class="section-label">Daily Affirmation</div>
       <div class="card card-crimson" id="aff-card">
         <div class="card-body">
-          <div class="badge badge-white" style="margin-bottom:12px">✦ For You Today</div>
+          <div class="badge badge-white" style="margin-bottom:12px">For this day</div>
           <!-- skeleton -->
           <div id="aff-skel">
             <div class="skel skel-wh sl h f"></div>
@@ -1369,6 +1715,7 @@ textarea { font-family: var(--font-ui); }
             <div class="blockquote" id="word-passage"></div>
             <div class="word-verse-label" id="word-verse"></div>
             <div class="word-reflection" id="word-reflection"></div>
+            <button class="sit-verb" type="button" onclick="openSit()">Sit with this</button>
             <div class="card-actions dark-sep">
               <button class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
                 <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -1395,22 +1742,22 @@ textarea { font-family: var(--font-ui); }
     <div class="page" id="seek-page">
       <div class="page-hd">
         <div class="page-hd-eyebrow">Choose a theme</div>
-        <h1 class="page-hd-title">Words of <em>Encouragement</em></h1>
+        <h1 class="page-hd-title">Words of <em>comfort</em></h1>
       </div>
       <div id="theme-grid">
         <div class="theme-grid">
-          <button class="theme-card" data-theme="Anxiety & Worry" onclick="loadEnc('Anxiety & Worry')"><span class="theme-icon">🌊</span><span class="theme-name">Anxiety &amp; Worry</span></button>
-          <button class="theme-card" data-theme="Grief & Loss" onclick="loadEnc('Grief & Loss')"><span class="theme-icon">🕊️</span><span class="theme-name">Grief &amp; Loss</span></button>
-          <button class="theme-card" data-theme="Forgiveness" onclick="loadEnc('Forgiveness')"><span class="theme-icon">🤍</span><span class="theme-name">Forgiveness</span></button>
-          <button class="theme-card" data-theme="Loneliness" onclick="loadEnc('Loneliness')"><span class="theme-icon">🌿</span><span class="theme-name">Loneliness</span></button>
-          <button class="theme-card" data-theme="Conflict & Relationships" onclick="loadEnc('Conflict & Relationships')"><span class="theme-icon">🌱</span><span class="theme-name">Conflict</span></button>
-          <button class="theme-card" data-theme="Fear" onclick="loadEnc('Fear')"><span class="theme-icon">🕯️</span><span class="theme-name">Fear</span></button>
-          <button class="theme-card" data-theme="Purpose & Direction" onclick="loadEnc('Purpose & Direction')"><span class="theme-icon">🧭</span><span class="theme-name">Purpose</span></button>
-          <button class="theme-card" data-theme="Faith & Doubt" onclick="loadEnc('Faith & Doubt')"><span class="theme-icon">⚓</span><span class="theme-name">Faith &amp; Doubt</span></button>
-          <button class="theme-card" data-theme="Suffering & Pain" onclick="loadEnc('Suffering & Pain')"><span class="theme-icon">🌅</span><span class="theme-name">Suffering</span></button>
-          <button class="theme-card" data-theme="Shame & Guilt" onclick="loadEnc('Shame & Guilt')"><span class="theme-icon">🌸</span><span class="theme-name">Shame &amp; Guilt</span></button>
-          <button class="theme-card" data-theme="Peace" onclick="loadEnc('Peace')"><span class="theme-icon">☮️</span><span class="theme-name">Peace</span></button>
-          <button class="theme-card" data-theme="Hope" onclick="loadEnc('Hope')"><span class="theme-icon">✨</span><span class="theme-name">Hope</span></button>
+          <button class="theme-card" data-theme="Anxiety & Worry" onclick="loadEnc('Anxiety & Worry')"><span class="theme-initial" aria-hidden="true">A</span><span class="theme-name">Anxiety &amp; Worry</span></button>
+          <button class="theme-card" data-theme="Grief & Loss" onclick="loadEnc('Grief & Loss')"><span class="theme-initial" aria-hidden="true">G</span><span class="theme-name">Grief &amp; Loss</span></button>
+          <button class="theme-card" data-theme="Forgiveness" onclick="loadEnc('Forgiveness')"><span class="theme-initial" aria-hidden="true">F</span><span class="theme-name">Forgiveness</span></button>
+          <button class="theme-card" data-theme="Loneliness" onclick="loadEnc('Loneliness')"><span class="theme-initial" aria-hidden="true">L</span><span class="theme-name">Loneliness</span></button>
+          <button class="theme-card" data-theme="Conflict & Relationships" onclick="loadEnc('Conflict & Relationships')"><span class="theme-initial" aria-hidden="true">C</span><span class="theme-name">Conflict</span></button>
+          <button class="theme-card" data-theme="Fear" onclick="loadEnc('Fear')"><span class="theme-initial" aria-hidden="true">F</span><span class="theme-name">Fear</span></button>
+          <button class="theme-card" data-theme="Purpose & Direction" onclick="loadEnc('Purpose & Direction')"><span class="theme-initial" aria-hidden="true">P</span><span class="theme-name">Purpose</span></button>
+          <button class="theme-card" data-theme="Faith & Doubt" onclick="loadEnc('Faith & Doubt')"><span class="theme-initial" aria-hidden="true">F</span><span class="theme-name">Faith &amp; Doubt</span></button>
+          <button class="theme-card" data-theme="Suffering & Pain" onclick="loadEnc('Suffering & Pain')"><span class="theme-initial" aria-hidden="true">S</span><span class="theme-name">Suffering</span></button>
+          <button class="theme-card" data-theme="Shame & Guilt" onclick="loadEnc('Shame & Guilt')"><span class="theme-initial" aria-hidden="true">S</span><span class="theme-name">Shame &amp; Guilt</span></button>
+          <button class="theme-card" data-theme="Peace" onclick="loadEnc('Peace')"><span class="theme-initial" aria-hidden="true">P</span><span class="theme-name">Peace</span></button>
+          <button class="theme-card" data-theme="Hope" onclick="loadEnc('Hope')"><span class="theme-initial" aria-hidden="true">H</span><span class="theme-name">Hope</span></button>
         </div>
       </div>
       <!-- Loading -->
@@ -1444,10 +1791,11 @@ textarea { font-family: var(--font-ui); }
         <div class="enc-opening" id="enc-opening"></div>
         <div id="enc-passages"></div>
         <div class="practice-card">
-          <div class="practice-label">✦ Practice for Today</div>
+          <div class="practice-label">Practice for today</div>
           <div class="practice-text" id="enc-practice"></div>
         </div>
         <div class="enc-closing" id="enc-closing"></div>
+        <button class="sit-verb" type="button" onclick="openSit('enc')">Sit with this</button>
         <div style="margin-top:16px;display:flex;gap:8px">
           <button class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
             <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -1466,7 +1814,7 @@ textarea { font-family: var(--font-ui); }
       <div class="chat-scroll" id="chat-scroll">
         <div class="page-hd" style="padding-bottom:10px">
           <div class="page-hd-eyebrow">Ask anything</div>
-          <h1 class="page-hd-title">The <em>Advisor</em></h1>
+          <h1 class="page-hd-title">Ask <em>Him</em></h1>
         </div>
         <div class="crisis-bar">In crisis? Call or text <a href="tel:988">988</a> (US). This app offers reflection — not pastoral counseling or emergency care.</div>
         <div class="advisor-welcome">
@@ -1504,7 +1852,7 @@ textarea { font-family: var(--font-ui); }
     <div class="page" id="journal-page">
       <div class="page-hd">
         <div class="page-hd-eyebrow">Saved passages</div>
-        <h1 class="page-hd-title">My <em>Journal</em></h1>
+        <h1 class="page-hd-title">Commonplace</h1>
       </div>
       <div id="journal-list"></div>
     </div>
@@ -1552,8 +1900,8 @@ textarea { font-family: var(--font-ui); }
   <div class="sheet-title">Settings</div>
   <div class="setting-row">
     <div>
-      <div class="setting-label">Dark Mode</div>
-      <div class="setting-sub">Easier on the eyes at night</div>
+      <div class="setting-label">Night paper</div>
+      <div class="setting-sub">A lamp after vespers — warm, not black</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
@@ -1587,6 +1935,16 @@ textarea { font-family: var(--font-ui); }
   </div>
 </div>
 <!-- Toast -->
+
+<div class="sit-overlay" id="sit-overlay">
+  <button type="button" class="sit-close" onclick="closeSit()">Close</button>
+  <p class="sit-quote" id="sit-quote"></p>
+  <p class="sit-ref" id="sit-ref"></p>
+  <div class="sit-breath" aria-hidden="true"></div>
+  <p class="sit-hint">Twenty seconds. Stay with the sentence.</p>
+  <div class="sit-progress" aria-hidden="true"><i></i></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="/data/curated.js"></script>
@@ -1666,7 +2024,7 @@ function updateStreak() {
   }
   lsSet('rla-streak', JSON.stringify({ date: today, count }));
   document.getElementById('streak-num').textContent = count;
-  document.getElementById('today-streak-label').textContent = count > 1 ? '🔥 ' + count + '-day streak' : '';
+  document.getElementById('today-streak-label').textContent = count > 1 ? count + ' days of quiet' : '';
 }
 
 function updateDateUI() {
@@ -1953,9 +2311,8 @@ function renderJournal() {
   if (items.length === 0) {
     list.innerHTML = `
       <div class="journal-empty">
-        <div class="journal-empty-icon">📖</div>
-        <div class="journal-empty-title">Your journal is empty</div>
-        <div class="journal-empty-text">Save affirmations, encouragement, and Advisor responses here using the save button on any card.</div>
+        <div class="journal-empty-title">A commonplace waits</div>
+        <div class="journal-empty-text">Keep a line from Today, Seek, or Advisor. The page stays quiet until you do.</div>
       </div>`;
     return;
   }
@@ -2362,31 +2719,34 @@ function drawShareCard(quote, verse, title) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const grd = ctx.createLinearGradient(0, 0, W, H);
-  grd.addColorStop(0, '#5C1010');
-  grd.addColorStop(0.55, '#8B1A1A');
-  grd.addColorStop(1, '#2A0808');
+  grd.addColorStop(0, '#6E1616');
+  grd.addColorStop(1, '#3D0C0C');
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, W, H);
-  // subtle vignette
-  ctx.fillStyle = 'rgba(0,0,0,0.18)';
-  ctx.fillRect(0, H * 0.72, W, H * 0.28);
+  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(56, 56, W - 112, H - 112);
 
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.font = '600 36px Georgia, serif';
+  ctx.fillStyle = 'rgba(255,245,230,0.72)';
+  ctx.font = '600 28px Figtree, system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('✝  RED LETTER', W / 2, 120);
+  ctx.letterSpacing = '0.28em';
+  ctx.fillText('RED LETTER', W / 2, 160);
 
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'italic 52px Georgia, serif';
-  wrapText(ctx, '“' + quote + '”', W / 2, H * 0.32, W - 160, 66);
+  ctx.letterSpacing = '0';
+  ctx.fillStyle = '#F6F3EC';
+  ctx.font = 'italic 54px Fraunces, Georgia, serif';
+  wrapText(ctx, '“' + quote + '”', W / 2, H * 0.42, W - 200, 70);
 
-  ctx.font = '600 34px Inter, system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(255,230,200,0.9)';
-  ctx.fillText(verse, W / 2, H * 0.78);
+  ctx.font = '600 26px Figtree, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,230,200,0.88)';
+  ctx.letterSpacing = '0.16em';
+  ctx.fillText(String(verse || '').toUpperCase(), W / 2, H * 0.78);
 
-  ctx.font = '500 28px Inter, system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.55)';
-  ctx.fillText('the Red Letter Advisor', W / 2, H - 80);
+  ctx.letterSpacing = '0';
+  ctx.font = '500 24px Figtree, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(246,243,236,0.5)';
+  ctx.fillText('The Red Letter Advisor', W / 2, H - 100);
 }
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split(' ');
@@ -2504,6 +2864,35 @@ startApp = function() {
 };
 
 
+
+let sitTimer = null;
+function openSit(source) {
+  let q = '', v = '';
+  if (source === 'enc' && currentEncData && currentEncData.passages && currentEncData.passages[0]) {
+    q = currentEncData.passages[0].quote || '';
+    v = currentEncData.passages[0].verse || '';
+  } else {
+    q = (dailyData && dailyData.word && dailyData.word.passage) || '';
+    v = (dailyData && dailyData.word && dailyData.word.verse) || '';
+  }
+  if (!q) return;
+  document.getElementById('sit-quote').textContent = '“' + q + '”';
+  document.getElementById('sit-ref').textContent = v;
+  const ov = document.getElementById('sit-overlay');
+  ov.classList.remove('on');
+  void ov.offsetWidth;
+  ov.classList.add('on');
+  clearTimeout(sitTimer);
+  sitTimer = setTimeout(closeSit, 20000);
+}
+function closeSit() {
+  clearTimeout(sitTimer);
+  sitTimer = null;
+  document.getElementById('sit-overlay').classList.remove('on');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSit();
+});
 </script>
 </body>
 </html>
