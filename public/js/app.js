@@ -173,7 +173,11 @@
     const onboarding = id('onboarding');
     if (onboarding) onboarding.classList.remove('hidden');
     const app = id('app');
-    if (app) app.hidden = true; app.classList.remove('is-live'); app.setAttribute('aria-hidden', 'true');
+    if (app) {
+      app.hidden = true;
+      app.classList.remove('is-live');
+      app.setAttribute('aria-hidden', 'true');
+    }
 
     const steps = onboarding ? Array.from(onboarding.querySelectorAll('.ob-step')) : [];
     if (steps.length && !steps.some((step) => step.classList.contains('active'))) {
@@ -698,7 +702,12 @@
         createMessage('user', message.content);
       } else {
         const rendered = createMessage('assistant', message.content);
-        if (rendered) addChatSaveButton(rendered, message.content, lastQuestion);
+        if (rendered) {
+          addChatSaveButton(rendered, message.content, lastQuestion);
+          if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
+            global.RedLetterTrust.sealAdvisorMessage(rendered.content, message.content);
+          }
+        }
       }
     });
     const suggestions = id('suggestions');
@@ -875,6 +884,9 @@
             setTyping(false);
             rendered = createMessage('assistant', offline, false);
             addChatSaveButton(rendered, offline, text);
+            if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
+              global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline);
+            }
             chatHistory.push({ role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
@@ -896,6 +908,9 @@
 
         updateStreamMessage(rendered, fullText, false);
         addChatSaveButton(rendered, fullText, text);
+        if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
+          global.RedLetterTrust.sealAdvisorMessage(rendered.content, fullText);
+        }
         chatHistory.push({ role: 'assistant', content: fullText });
         persistChat();
         incrementChatCount();
@@ -907,6 +922,9 @@
             if (!rendered) rendered = createMessage('assistant', offline, false);
             else updateStreamMessage(rendered, offline, false);
             addChatSaveButton(rendered, offline, text);
+            if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
+              global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline);
+            }
             chatHistory.push({ role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
@@ -947,6 +965,7 @@
       if (payloadText === '[DONE]') return true;
       const payload = JSON.parse(payloadText);
       if (payload.error) throw new Error(payload.error);
+      if (payload.verify && typeof onText._onVerify === 'function') onText._onVerify(payload.verify);
       if (typeof payload.text === 'string') onText(payload.text);
       return false;
     };
@@ -1600,6 +1619,8 @@
       if (event.key === 'Escape') {
         closeSettings();
         closePlus();
+        if (typeof global.closeBlessing === 'function') global.closeBlessing();
+        if (typeof global.closeAmen === 'function') global.closeAmen();
       }
     });
 

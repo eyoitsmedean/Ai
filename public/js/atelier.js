@@ -82,6 +82,7 @@
     { label: 'Find encouragement', hint: 'Seek', run: () => global.switchTab && global.switchTab('seek') },
     { label: 'Ask the Advisor', hint: 'Counsel', run: () => global.switchTab && global.switchTab('advisor') },
     { label: 'Open Journal', hint: 'Saved', run: () => global.switchTab && global.switchTab('journal') },
+    { label: 'Send a blessing', hint: 'Share', run: () => global.openBlessing && global.openBlessing() },
     { label: 'Anxiety & Worry', hint: 'Encouragement', run: () => { global.switchTab && global.switchTab('seek'); setTimeout(() => global.loadEnc && global.loadEnc('Anxiety & Worry'), 120); } },
     { label: 'Grief & Loss', hint: 'Encouragement', run: () => { global.switchTab && global.switchTab('seek'); setTimeout(() => global.loadEnc && global.loadEnc('Grief & Loss'), 120); } },
     { label: 'Forgiveness', hint: 'Encouragement', run: () => { global.switchTab && global.switchTab('seek'); setTimeout(() => global.loadEnc && global.loadEnc('Forgiveness'), 120); } },

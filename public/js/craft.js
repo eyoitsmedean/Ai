@@ -290,6 +290,9 @@
         theme: 'Lectio',
       };
     }
+    if (type === 'blessing' && global.__blessingPayload) {
+      return global.__blessingPayload;
+    }
     return null;
   }
 
