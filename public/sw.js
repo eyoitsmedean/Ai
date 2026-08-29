@@ -1,7 +1,5 @@
-const CACHE = 'rla-v4-chapel';
+const CACHE = 'rla-v5-chapel';
 const PRECACHE = [
-  '/',
-  '/index.html',
   '/manifest.json',
   '/css/app.css',
   '/js/app.js',
@@ -33,7 +31,6 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
 
-  // Network-first for API; fall through if offline
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
       fetch(e.request).catch(() =>
@@ -46,7 +43,29 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Cache-first for app shell + corpus
+  // Network-first for HTML navigations so redesigns ship immediately
+  const isHTML =
+    e.request.mode === 'navigate' ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('.html') ||
+    (e.request.headers.get('accept') || '').includes('text/html');
+
+  if (isHTML) {
+    e.respondWith(
+      fetch(e.request)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(e.request, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(e.request).then((c) => c || caches.match('/index.html')))
+    );
+    return;
+  }
+
+  // Cache-first for hashed/static assets
   e.respondWith(
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request)
@@ -57,7 +76,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => cached || caches.match('/index.html'));
+        .catch(() => cached);
       return cached || network;
     })
   );
