@@ -2,20 +2,87 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
+const {
+  corpus,
+  verifyPassage,
+  verifyPassages,
+  annotateAdvisorText,
+  offlineDaily,
+  offlineEncouragement,
+  detectCrisis,
+} = require('./data/scripture');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
+const FREE_CHAT_LIMIT = Number(process.env.FREE_CHAT_LIMIT || 5);
 
-app.use(express.json());
+app.use(express.json({ limit: '256kb' }));
+app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const client = new Anthropic(
-  process.env.ANTHROPIC_AUTH_TOKEN
-    ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
-    : { apiKey: process.env.ANTHROPIC_API_KEY }
-);
+const hasAuth = !!(process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY);
+const ai = hasAuth
+  ? new Anthropic(
+      process.env.ANTHROPIC_AUTH_TOKEN
+        ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
+        : { apiKey: process.env.ANTHROPIC_API_KEY }
+    )
+  : null;
 
-// ── System prompts ──────────────────────────────────────────────────────────
+const chatQuota = new Map();
+const dailyCache = new Map();
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getClientId(req) {
+  return String(req.headers['x-client-id'] || req.ip || 'anon').slice(0, 80);
+}
+
+function getQuota(id) {
+  const key = `${todayKey()}:${id}`;
+  const used = chatQuota.get(key) || 0;
+  return { used, remaining: Math.max(0, FREE_CHAT_LIMIT - used), limit: FREE_CHAT_LIMIT };
+}
+
+function bumpQuota(id) {
+  const key = `${todayKey()}:${id}`;
+  chatQuota.set(key, (chatQuota.get(key) || 0) + 1);
+  return getQuota(id);
+}
+
+function parseJsonLoose(text) {
+  return JSON.parse(
+    String(text || '')
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim()
+  );
+}
+
+function guessTheme(text) {
+  const t = String(text).toLowerCase();
+  const map = [
+    [/anxi|worr|stress|overwhelm/, 'Anxiety & Worry'],
+    [/grief|mourn|loss|died|death|funeral/, 'Grief & Loss'],
+    [/forgiv/, 'Forgiveness'],
+    [/lonely|alone|abandon/, 'Loneliness'],
+    [/conflict|enemy|anger|argue|relationship/, 'Conflict & Relationships'],
+    [/fear|afraid|scared|terrified/, 'Fear'],
+    [/purpose|direction|calling|lost/, 'Purpose & Direction'],
+    [/doubt|faith|believe/, 'Faith & Doubt'],
+    [/suffer|pain|sick|hurt/, 'Suffering & Pain'],
+    [/shame|guilt|ashamed|regret/, 'Shame & Guilt'],
+    [/peace|rest|calm/, 'Peace'],
+    [/hope|despair|hopeless/, 'Hope'],
+  ];
+  for (const [re, theme] of map) {
+    if (re.test(t)) return theme;
+  }
+  return 'Hope';
+}
 
 const ADVISOR_SYSTEM = `You are "The Red Letter Advisor" — a deeply compassionate guide who helps people with life's real struggles using exclusively the direct words of Jesus Christ from the four Gospels: Matthew, Mark, Luke, and John.
 
@@ -38,9 +105,11 @@ STRICT RULES:
 • Put the exact Jesus quote on the next line, in curly quotes "like this."
 • Put the one-sentence context on the line after the quote.
 • Separate each passage block with a blank line.
+• Prefer well-known dominical sayings (Sermon on the Mount, John 14–16, parables Jesus told, etc.).
 • If no direct red-letter parallel exists, say so honestly and offer the closest relevant teaching.
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
-• The scripture passages carry the weight. Keep your own framing minimal.`;
+• The scripture passages carry the weight. Keep your own framing minimal.
+• Never claim to be Jesus, a pastor, a therapist, or a crisis counselor.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -84,87 +153,236 @@ Return ONLY valid JSON (no markdown fences) with this structure:
   "closing": "One warm, non-pressuring closing line"
 }
 
-Include 3–4 passages. Use only real, verifiable red-letter verses. Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
+Include 3–4 passages. Use only real, verifiable red-letter verses. Be emotionally generous — meet real pain with real comfort.`;
 
-// ── Daily content cache (keyed by date) ────────────────────────────────────
+const CRISIS_REPLY = `I hear how heavy this is, and I'm glad you said something. I am a reflective guide using the words of Jesus — not a crisis counselor, and not a substitute for real human help.
 
-const dailyCache = new Map();
+If you are in immediate danger or thinking about hurting yourself, please reach out now:
+• In the US & Canada, call or text **988** (Suicide & Crisis Lifeline)
+• Or go to https://www.iasp.info/suicidalthoughts/ for local resources worldwide
 
-function todayKey() { return new Date().toISOString().slice(0, 10); }
+You are not alone. People are ready to help you through this moment.
 
-async function fetchDailyContent() {
+If you want, after you are safe, we can sit with words Jesus spoke about weariness and rest — but your safety comes first.`;
+
+async function getDaily() {
   const key = todayKey();
   if (dailyCache.has(key)) return dailyCache.get(key);
 
-  const response = await client.messages.create({
-    model: 'claude-opus-5',
-    max_tokens: 1400,
-    thinking: { type: 'adaptive' },
-    system: DAILY_SYSTEM,
-    messages: [{ role: 'user', content: "Generate today's daily affirmation and word." }],
-  });
+  if (!ai) {
+    const offline = offlineDaily(key);
+    dailyCache.set(key, offline);
+    return offline;
+  }
 
-  const text = response.content.find(b => b.type === 'text')?.text ?? '';
-  const data = JSON.parse(text);
-  dailyCache.set(key, data);
-  return data;
+  try {
+    const response = await ai.messages.create({
+      model: MODEL,
+      max_tokens: 1400,
+      thinking: { type: 'adaptive' },
+      system: DAILY_SYSTEM,
+      messages: [{ role: 'user', content: "Generate today's daily affirmation and word." }],
+    });
+    const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+    const data = parseJsonLoose(text);
+    const aff = await verifyPassage({ verse: data.affirmation?.verse, quote: data.affirmation?.quote });
+    const word = await verifyPassage({ verse: data.word?.verse, quote: data.word?.passage });
+    const fallback = offlineDaily(key);
+    const out = {
+      affirmation: {
+        text: data.affirmation?.text || fallback.affirmation.text,
+        verse: aff.verse,
+        quote: aff.quote,
+        verified: aff.verified,
+      },
+      word: {
+        theme: data.word?.theme || fallback.word.theme || 'Presence',
+        title: data.word?.title || fallback.word.title,
+        passage: word.quote,
+        verse: word.verse,
+        reflection: data.word?.reflection || fallback.word.reflection,
+        verified: word.verified,
+      },
+      verified: !!(aff.verified && word.verified),
+    };
+    dailyCache.set(key, out);
+    return out;
+  } catch (err) {
+    console.error('Daily LLM error:', err.message);
+    const offline = offlineDaily(key);
+    dailyCache.set(key, offline);
+    return offline;
+  }
 }
 
-// ── Routes ──────────────────────────────────────────────────────────────────
+app.get('/api/health', (_req, res) => {
+  res.json({
+    ok: true,
+    hasAuth,
+    corpusPassages: corpus.passages.length,
+    themes: corpus.THEMES.length,
+    freeChatLimit: FREE_CHAT_LIMIT,
+  });
+});
 
-app.get('/api/daily', async (req, res) => {
+app.get('/api/quota', (req, res) => {
+  res.json(getQuota(getClientId(req)));
+});
+
+app.get('/api/library', (req, res) => {
+  const theme = req.query.theme;
+  let passages = corpus.passages;
+  if (theme) passages = corpus.byTheme(String(theme));
+  res.json({
+    translation: corpus.translation,
+    translationName: corpus.translationName,
+    themes: corpus.THEMES,
+    passages: passages.map((p) => ({
+      id: p.id,
+      verse: corpus.cite(p),
+      book: p.book,
+      chapter: p.chapter,
+      theme: p.theme,
+      text: p.text,
+      note: p.note || null,
+    })),
+  });
+});
+
+app.get('/api/daily', async (_req, res) => {
   try {
-    res.json(await fetchDailyContent());
+    res.json(await getDaily());
   } catch (err) {
     console.error('Daily error:', err.message);
-    res.status(500).json({ error: 'Failed to generate daily content.' });
+    res.json(offlineDaily(todayKey()));
   }
 });
 
 app.post('/api/encouragement', async (req, res) => {
-  const { theme } = req.body;
-  if (!theme || typeof theme !== 'string') return res.status(400).json({ error: 'theme required.' });
+  const { theme } = req.body || {};
+  if (!theme || typeof theme !== 'string') {
+    return res.status(400).json({ error: 'theme required.' });
+  }
+  if (!ai) return res.json(offlineEncouragement(theme));
 
   try {
-    const response = await client.messages.create({
-      model: 'claude-opus-5',
+    const response = await ai.messages.create({
+      model: MODEL,
       max_tokens: 1600,
       thinking: { type: 'adaptive' },
       system: ENCOURAGE_SYSTEM,
       messages: [{ role: 'user', content: `Generate encouragement for: ${theme}` }],
     });
-    const text = response.content.find(b => b.type === 'text')?.text ?? '';
-    res.json(JSON.parse(text));
+    const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+    const data = parseJsonLoose(text);
+    const passages = await verifyPassages(data.passages || []);
+    res.json({
+      theme: data.theme || theme,
+      headline: data.headline,
+      opening: data.opening,
+      passages,
+      practice: data.practice,
+      closing: data.closing,
+      verified: passages.every((p) => p.verified),
+    });
   } catch (err) {
     console.error('Encouragement error:', err.message);
-    res.status(500).json({ error: 'Failed to generate encouragement.' });
+    res.json(offlineEncouragement(theme));
   }
 });
 
-// Streaming chat endpoint
 app.post('/api/chat', async (req, res) => {
-  const { messages } = req.body;
-  if (!Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'messages required.' });
-  if (!messages[messages.length - 1]?.content?.trim()) return res.status(400).json({ error: 'Empty message.' });
+  const { messages } = req.body || {};
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'messages required.' });
+  }
+  if (!messages[messages.length - 1]?.content?.trim()) {
+    return res.status(400).json({ error: 'Empty message.' });
+  }
+
+  const id = getClientId(req);
+  const quota = getQuota(id);
+  if (quota.remaining <= 0) {
+    return res.status(402).json({
+      error: 'daily_limit',
+      message:
+        'You have used today’s free Advisor conversations. Come back tomorrow, or unlock Plus for unlimited guidance.',
+      ...quota,
+    });
+  }
+
+  const lastUser = messages.filter((m) => m.role === 'user').pop()?.content || '';
+  if (detectCrisis(lastUser)) {
+    bumpQuota(id);
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.write(`data: ${JSON.stringify({ text: CRISIS_REPLY, crisis: true })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ done: true, crisis: true, citations: [], quota: getQuota(id) })}\n\n`
+    );
+    res.write('data: [DONE]\n\n');
+    return res.end();
+  }
+
+  if (!ai) {
+    bumpQuota(id);
+    const pack = offlineEncouragement(guessTheme(lastUser));
+    const text = [
+      'I hear you. Here are words Jesus actually spoke that speak into what you shared — drawn from our verified red-letter library (offline mode).',
+      '',
+      ...pack.passages.slice(0, 3).flatMap((p) => [`**${p.verse}**`, `"${p.quote}"`, p.context, '']),
+      pack.closing,
+    ].join('\n');
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    for (const chunk of text.match(/.{1,48}/gs) || [text]) {
+      res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
+    }
+    const annotated = await annotateAdvisorText(text);
+    res.write(
+      `data: ${JSON.stringify({
+        done: true,
+        citations: annotated.citations,
+        quota: getQuota(id),
+        offline: true,
+      })}\n\n`
+    );
+    res.write('data: [DONE]\n\n');
+    return res.end();
+  }
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
   try {
-    const stream = client.messages.stream({
-      model: 'claude-opus-5',
+    bumpQuota(id);
+    const stream = ai.messages.stream({
+      model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },
       system: ADVISOR_SYSTEM,
       messages,
     });
 
+    let full = '';
     stream.on('text', (text) => {
+      full += text;
       res.write(`data: ${JSON.stringify({ text })}\n\n`);
     });
 
     await stream.finalMessage();
+    const annotated = await annotateAdvisorText(full);
+    res.write(
+      `data: ${JSON.stringify({
+        done: true,
+        citations: annotated.citations,
+        quota: getQuota(id),
+      })}\n\n`
+    );
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (err) {
@@ -177,4 +395,7 @@ app.post('/api/chat', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`✝  The Red Letter Advisor → http://localhost:${PORT}`);
+  console.log(`   Auth: ${hasAuth ? 'configured' : 'offline corpus mode'}`);
+  console.log(`   Corpus: ${corpus.passages.length} verified red-letter passages`);
+  console.log(`   Landing: http://localhost:${PORT}/welcome`);
 });

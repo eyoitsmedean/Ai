@@ -1,11 +1,11 @@
 {
-  "name": "The Red Letter Advisor",
+  "name": "Red Letter",
   "short_name": "Red Letter",
-  "description": "Daily affirmations, encouragement, and life guidance from the direct words of Jesus Christ.",
+  "description": "Daily guidance from the direct words of Jesus Christ in the four Gospels.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAF6EF",
-  "theme_color": "#8B1A1A",
+  "background_color": "#EDE8E0",
+  "theme_color": "#9F1239",
   "orientation": "portrait",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
