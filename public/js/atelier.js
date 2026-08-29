@@ -243,6 +243,45 @@
     });
   }
 
+  function bindHeroScroll() {
+    const page = id('today-page');
+    const hero = id('aff-card');
+    if (!page || !hero) return;
+    const onScroll = () => {
+      const y = page.scrollTop;
+      const fade = Math.max(0, 1 - y / 220);
+      hero.style.setProperty('--hero-fade', String(fade));
+      hero.classList.toggle('is-scrolled', y > 40);
+    };
+    page.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  function celebratePractice() {
+    const complete = id('practice-complete');
+    if (!complete || complete.hidden) return;
+    complete.classList.remove('ritual');
+    // reflow
+    void complete.offsetWidth;
+    complete.classList.add('ritual');
+    document.documentElement.classList.add('practice-done');
+    setTimeout(() => document.documentElement.classList.remove('practice-done'), 1600);
+  }
+
+  function watchPracticeComplete() {
+    const complete = id('practice-complete');
+    if (!complete || typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(() => {
+      if (!complete.hidden && complete.classList.contains('on')) celebratePractice();
+    });
+    observer.observe(complete, { attributes: true, attributeFilter: ['hidden', 'class'] });
+  }
+
+  function onDailyRendered() {
+    enhanceDailyReveal();
+    bindHeroScroll();
+  }
+
   function bootAtelier() {
     // Failsafe: never leave the void empty if boot race-hides both shells
     setTimeout(() => {
@@ -258,6 +297,8 @@
     setInterval(setHourAtmosphere, 10 * 60 * 1000);
     bindKeys();
     watchDailyContent();
+    watchPracticeComplete();
+    bindHeroScroll();
   }
 
   Object.assign(global, {
@@ -268,6 +309,7 @@
     openCommandPalette,
     closeCommandPalette,
     revealWords,
+    onDailyRendered,
   });
 
   if (document.readyState === 'loading') {

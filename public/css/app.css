@@ -3707,3 +3707,130 @@ body::before {
   color: var(--ink-4);
   flex-shrink: 0;
 }
+
+/* ── Build layer: breath, ordinals, ritual, scroll fade ─────────────────── */
+
+.theme-ordinal {
+  flex: 0 0 auto;
+  width: 28px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-4);
+}
+
+.theme-card::before { display: none; }
+
+.theme-card:hover .theme-ordinal {
+  color: var(--crimson);
+}
+
+.lectio-breath {
+  width: 10px;
+  height: 10px;
+  margin: 0 auto 28px;
+  border-radius: 50%;
+  background: rgba(196, 30, 30, 0.55);
+  box-shadow: 0 0 0 0 rgba(196, 30, 30, 0.35);
+  animation: lectioBreath 4.8s var(--ease) infinite;
+}
+
+@keyframes lectioBreath {
+  0%, 100% { transform: scale(1); opacity: 0.55; box-shadow: 0 0 0 0 rgba(196, 30, 30, 0.28); }
+  50% { transform: scale(1.55); opacity: 1; box-shadow: 0 0 0 14px rgba(196, 30, 30, 0); }
+}
+
+.lectio-hint {
+  position: relative;
+  margin-top: 36px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: rgba(246, 239, 230, 0.38);
+}
+
+.hero-letter {
+  opacity: var(--hero-fade, 1);
+  transition: opacity 180ms linear;
+}
+
+.hero-letter.is-scrolled {
+  filter: saturate(0.92);
+}
+
+.practice-complete.ritual {
+  animation: fadeRise 700ms var(--ease) both;
+}
+
+:root.practice-done .practice-track {
+  animation: inkBleed 900ms var(--ease) both;
+}
+
+.journal-empty {
+  text-align: center;
+  padding: 56px 28px 40px;
+}
+
+.journal-empty-mark {
+  font-size: 28px;
+  color: var(--crimson);
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.journal-empty-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.journal-empty-text {
+  font-family: var(--font-read);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 28ch;
+  margin: 0 auto;
+}
+
+.journal-empty-icon { display: none; }
+
+.manuscript-rest {
+  font-family: inherit;
+  font-style: inherit;
+  color: inherit;
+}
+
+.action-btn,
+.action-btn-dark,
+.cta-btn,
+.chip,
+.theme-card,
+.ob-intent,
+.ob-btn,
+.send-btn,
+.nav-btn {
+  transition: transform 160ms var(--ease), opacity 160ms var(--ease), background 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+}
+
+.action-btn:active,
+.action-btn-dark:active,
+.cta-btn:active,
+.chip:active,
+.ob-intent:active,
+.ob-btn:active,
+.send-btn:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lectio-breath { animation: none; }
+  .hero-letter { transition: none; }
+  .action-btn:active,
+  .action-btn-dark:active,
+  .cta-btn:active { transform: none; }
+}

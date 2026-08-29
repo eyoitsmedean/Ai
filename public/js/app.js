@@ -378,9 +378,8 @@
       'aff-text': affirmation.text,
       'aff-quote': `“${affirmation.quote}”`,
       'aff-verse': `— ${affirmation.verse}`,
-      'word-theme': `✦ ${word.theme || 'Reflection'}`,
+      'word-theme': word.theme || 'Reflection',
       'word-title': word.title,
-      'word-passage': `“${word.passage}”`,
       'word-verse': word.verse,
       'word-reflection': word.reflection || '',
     };
@@ -388,6 +387,20 @@
       const element = id(elementId);
       if (element) element.textContent = value;
     });
+
+    const passageEl = id('word-passage');
+    if (passageEl) {
+      const raw = String(word.passage || '').replace(/^["“]|["”]$/g, '');
+      const first = raw.charAt(0);
+      const rest = raw.slice(1);
+      if (first && /[A-Za-z]/.test(first)) {
+        passageEl.innerHTML =
+          `<span class="drop-cap" aria-hidden="true">${esc(first)}</span>` +
+          `<span class="manuscript-rest">“${esc(rest)}”</span>`;
+      } else {
+        passageEl.textContent = `“${raw}”`;
+      }
+    }
 
     const affSkeleton = id('aff-skel');
     const affContent = id('aff-content');
@@ -403,6 +416,7 @@
     renderPractice(data.practice || getPractice());
     markPractice('aff');
     watchWordReading();
+    if (typeof global.onDailyRendered === 'function') global.onDailyRendered(data);
   }
 
   function renderDailyError() {
@@ -492,19 +506,18 @@
     host.innerHTML = '';
     const grid = document.createElement('div');
     grid.className = 'theme-grid';
-    THEMES.forEach(([theme, icon]) => {
+    THEMES.forEach(([theme], index) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'theme-card';
       button.setAttribute('aria-label', `Find encouragement for ${theme}`);
-      const iconEl = document.createElement('span');
-      iconEl.className = 'theme-icon';
-      iconEl.setAttribute('aria-hidden', 'true');
-      iconEl.textContent = icon;
+      const ordinal = document.createElement('span');
+      ordinal.className = 'theme-ordinal';
+      ordinal.textContent = String(index + 1).padStart(2, '0');
       const name = document.createElement('span');
       name.className = 'theme-name';
       name.textContent = theme;
-      button.append(iconEl, name);
+      button.append(ordinal, name);
       button.addEventListener('click', () => loadEnc(theme));
       grid.appendChild(button);
     });
@@ -1042,9 +1055,9 @@
     if (!items.length) {
       list.innerHTML = [
         '<div class="journal-empty">',
-        '<div class="journal-empty-icon" aria-hidden="true">📖</div>',
-        '<div class="journal-empty-title">Your journal is ready</div>',
-        '<div class="journal-empty-text">Save an affirmation, passage, encouragement, or Advisor response when you want to return to it.</div>',
+        '<div class="journal-empty-mark" aria-hidden="true">✝</div>',
+        '<div class="journal-empty-title">A quiet shelf</div>',
+        '<div class="journal-empty-text">Save a saying when it finds you. Affirmations, encouragement, and Advisor replies live here.</div>',
         '</div>',
       ].join('');
       return;
