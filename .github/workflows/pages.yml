@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - claude/jesus-teachings-chatbot-bSBhF
-      - cursor/**
   workflow_dispatch:
 
 permissions:
@@ -29,12 +28,24 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
+        id: pages-setup
 
       - name: Upload artifact
+        if: steps.pages-setup.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
 
       - name: Deploy to GitHub Pages
+        if: steps.pages-setup.outcome == 'success'
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Pages not enabled
+        if: steps.pages-setup.outcome != 'success'
+        run: |
+          echo "::notice::GitHub Pages is not enabled for this repo (Settings → Pages → GitHub Actions)."
+          echo "Skipping deploy. Feature branches do not require Pages."

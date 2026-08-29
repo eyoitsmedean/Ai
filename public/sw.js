@@ -1,4 +1,4 @@
-const CACHE = 'rla-v3';
+const CACHE = 'rla-v4';
 const PRECACHE = ['/', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (e) => {

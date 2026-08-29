@@ -122,11 +122,19 @@ function offlineDaily(dateSeed) {
   const day = Math.abs(hash(dateSeed || new Date().toISOString().slice(0, 10)));
   const a = list[day % list.length];
   const b = list[(day + 7) % list.length];
+  const affirmations = [
+    'You are held in the same care Jesus named for the sparrows — seen, known, and valued.',
+    'You do not have to carry tomorrow’s weight today. His words give you this hour.',
+    'You are invited to rest under a yoke that is light — not to prove yourself, but to receive Him.',
+    'You are not forgotten. The One who spoke peace still speaks it over anxious hearts.',
+    'You can return to His words whenever the day grows loud. They remain.',
+  ];
   return {
     affirmation: {
-      text: `You are held in the same care Jesus named for the sparrows — seen, known, and valued.`,
+      text: affirmations[day % affirmations.length],
       verse: corpus.cite(a),
       quote: a.text,
+      verified: true,
     },
     word: {
       theme: a.theme[0],
@@ -134,6 +142,7 @@ function offlineDaily(dateSeed) {
       passage: b.text,
       verse: corpus.cite(b),
       reflection: 'Sit with these words without rushing. Let one phrase stay with you through the next thing you must do.',
+      verified: true,
     },
     offline: true,
     verified: true,
