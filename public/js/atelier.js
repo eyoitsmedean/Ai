@@ -60,6 +60,7 @@
     root.classList.remove('on');
     root.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (typeof global.stopListening === 'function') global.stopListening();
   }
 
   function openLectioFromAff() {

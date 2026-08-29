@@ -85,6 +85,7 @@
         <div class="practice-step" id="ps-word"><span class="practice-step-num">2</span> Word</div>
         <div class="practice-step" id="ps-reflect"><span class="practice-step-num">3</span> Reflect</div>
       </div>
+      <div class="week-ribbon" id="week-ribbon" aria-label="This week’s practice"></div>
       <div class="practice-complete" id="practice-complete" hidden>Today’s practice is complete. Rest here.</div>
 
       <!-- HERO: brand + one red letter — first viewport -->
@@ -105,7 +106,7 @@
               <button type="button" class="action-btn" id="aff-save-btn" onclick="toggleSave('aff');markPractice('aff')">
                 <span id="aff-save-label">Save</span>
               </button>
-              <button type="button" class="action-btn" onclick="shareItem('aff');markPractice('aff')">Share</button>
+              <button type="button" class="action-btn" onclick="openShareSheet('aff');markPractice('aff')">Share</button>
               <button type="button" class="action-btn" onclick="openLectioFromAff()">Sit with this</button>
             </div>
           </div>
@@ -133,7 +134,7 @@
               <button type="button" class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
                 <span id="word-save-label">Save</span>
               </button>
-              <button type="button" class="action-btn-dark" onclick="shareItem('word')">Share</button>
+              <button type="button" class="action-btn-dark" onclick="openShareSheet('word')">Share</button>
               <button type="button" class="action-btn-dark" onclick="discussToday()">Discuss</button>
             </div>
           </div>
@@ -156,6 +157,7 @@
         <div class="page-hd-eyebrow">When life is heavy</div>
         <h1 class="page-hd-title">Words of <em>encouragement</em></h1>
       </div>
+      <div id="emotion-strip" class="emotion-strip"></div>
       <div id="theme-grid"></div>
       <div id="enc-loading" style="display:none;padding:0 14px">
         <div class="skel sl m h" style="margin:14px 0"></div>
@@ -176,7 +178,7 @@
           <button type="button" class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
             <span id="enc-save-label">Save</span>
           </button>
-          <button type="button" class="action-btn-dark" onclick="shareItem('enc')">Share</button>
+          <button type="button" class="action-btn-dark" onclick="openShareSheet('enc')">Share</button>
         </div>
       </div>
     </div>
@@ -258,10 +260,14 @@
 
 <!-- Lectio focus -->
 <div class="lectio" id="lectio" aria-hidden="true" role="dialog" aria-label="Focus reading">
-  <button type="button" class="lectio-close" onclick="closeLectio()" aria-label="Close">Close</button>
+  <button type="button" class="lectio-close" onclick="closeLectio();stopListening()" aria-label="Close">Close</button>
   <div class="lectio-breath" aria-hidden="true"></div>
   <div class="lectio-quote" id="lectio-quote"></div>
   <div class="lectio-cite" id="lectio-cite"></div>
+  <div class="lectio-actions">
+    <button type="button" class="lectio-listen" id="lectio-listen" onclick="toggleListen()" aria-pressed="false">Listen</button>
+    <button type="button" class="lectio-listen" onclick="openShareSheet('lectio')">Share</button>
+  </div>
   <p class="lectio-hint">Breathe. Stay as long as you need.</p>
 </div>
 
@@ -273,7 +279,7 @@
   </div>
 </div>
 
-<div class="sheet-overlay" id="overlay" onclick="closeSettings();closePlus()"></div>
+<div class="sheet-overlay" id="overlay" onclick="closeSettings();closePlus();closeShareSheet()"></div>
 
 <div class="settings-sheet" id="settings-sheet" role="dialog" aria-label="Settings">
   <div class="sheet-handle"></div>
@@ -301,6 +307,16 @@
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Morning reminder</div>
+      <div class="setting-sub">A gentle nudge around 8:00 if you haven’t practiced</div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="reminder-toggle" />
+      <div class="toggle-track"></div>
+    </label>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">Clear Advisor chat</div>
       <div class="setting-sub">Removes local history</div>
     </div>
@@ -309,6 +325,19 @@
   <div class="sheet-about">
     <p><strong>Red Letter</strong> draws only from the direct words of Jesus in Matthew, Mark, Luke, and John. Offline text uses the World English Bible (public domain).</p>
     <p style="margin-top:10px">Crisis? Call or text <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a></p>
+  </div>
+</div>
+
+<div class="plus-sheet" id="share-sheet" aria-hidden="true" role="dialog" aria-label="Share card style">
+  <div class="plus-card share-card-picker">
+    <div class="plus-title">Share a Red Letter card</div>
+    <p class="share-picker-sub">Choose a quiet style</p>
+    <div class="share-styles">
+      <button type="button" class="share-style" onclick="shareWithTheme('void')"><span class="swatch swatch-void"></span>Void</button>
+      <button type="button" class="share-style" onclick="shareWithTheme('dawn')"><span class="swatch swatch-dawn"></span>Dawn</button>
+      <button type="button" class="share-style" onclick="shareWithTheme('manuscript')"><span class="swatch swatch-manuscript"></span>Manuscript</button>
+    </div>
+    <button type="button" class="plus-dismiss" onclick="closeShareSheet()">Cancel</button>
   </div>
 </div>
 
@@ -327,9 +356,10 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="/js/share-card.js?v=7"></script>
-<script src="/js/crisis.js?v=7"></script>
-<script src="/js/app.js?v=7"></script>
-<script src="/js/atelier.js?v=7"></script>
+<script src="/js/share-card.js?v=8"></script>
+<script src="/js/crisis.js?v=8"></script>
+<script src="/js/app.js?v=8"></script>
+<script src="/js/atelier.js?v=8"></script>
+<script src="/js/craft.js?v=8"></script>
 </body>
 </html>

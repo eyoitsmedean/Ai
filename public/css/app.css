@@ -3834,3 +3834,155 @@ body::before {
   .action-btn-dark:active,
   .cta-btn:active { transform: none; }
 }
+
+/* ── Research build: week ribbon, emotions, listen, share styles ───────── */
+
+.week-ribbon {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  padding: 4px 18px 14px;
+}
+
+.week-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.week-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.week-cell.done .week-dot {
+  background: var(--crimson);
+  box-shadow: 0 0 0 3px var(--crimson-soft);
+}
+
+.week-cell.today .week-dot {
+  outline: 1px solid var(--crimson);
+  outline-offset: 2px;
+}
+
+.week-cell.future .week-dot {
+  opacity: 0.35;
+}
+
+.week-lab {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.emotion-strip {
+  padding: 4px 18px 18px;
+}
+
+.emotion-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 10px;
+}
+
+.emotion-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.emotion-chip {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.emotion-chip:hover {
+  border-color: var(--crimson);
+  color: var(--crimson);
+}
+
+.lectio-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+  position: relative;
+}
+
+.lectio-listen {
+  border: 1px solid rgba(246, 239, 230, 0.22);
+  background: transparent;
+  color: rgba(246, 239, 230, 0.82);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lectio-listen[aria-pressed="true"],
+.lectio-listen:hover {
+  border-color: rgba(246, 239, 230, 0.5);
+  color: #F6EFE6;
+}
+
+.share-picker-sub {
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  margin: -6px 0 16px;
+}
+
+.share-styles {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.share-style {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #F6EFE6;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.share-style:hover {
+  border-color: rgba(196, 30, 30, 0.55);
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.swatch-void { background: linear-gradient(145deg, #3B0C0C, #0E0C0B); }
+.swatch-dawn { background: linear-gradient(145deg, #F7E8D4, #C45A3A); }
+.swatch-manuscript { background: linear-gradient(145deg, #EDE6D8, #C41E1E); }
+
+.share-card-picker .plus-dismiss {
+  margin-top: 4px;
+}

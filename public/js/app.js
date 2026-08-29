@@ -261,27 +261,17 @@
   }
 
   function updateStreak() {
-    const saved = parseJSON(ls('rla-streak'), {});
-    const today = todayStr();
-    let count = 1;
-    if (saved.date === today) {
-      count = Math.max(1, Number(saved.count) || 1);
-    } else if (saved.date === previousDayStr()) {
-      count = Math.max(0, Number(saved.count) || 0) + 1;
+    // Display only — practice completion (craft.js) earns the streak with grace days.
+    if (typeof global.renderStreakUI === 'function') {
+      global.renderStreakUI();
+      return;
     }
-    lsSet('rla-streak', JSON.stringify({ date: today, count }));
-
+    const saved = parseJSON(ls('rla-streak-v2'), parseJSON(ls('rla-streak'), { count: 1 }));
+    const count = Math.max(1, Number(saved.count) || 1);
     const countEl = id('streak-num');
     if (countEl) countEl.textContent = String(count);
-    const badge = countEl && countEl.parentElement;
-    if (badge) {
-      const prefix = Array.from(badge.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
-      if (prefix) prefix.textContent = '✦ ';
-    }
     const label = id('today-streak-label');
-    if (label) {
-      label.textContent = count === 1 ? '✦ Day 1' : `✦ ${count}-day practice`;
-    }
+    if (label) label.textContent = count === 1 ? '✦ Day 1' : `✦ ${count}-day practice`;
     return count;
   }
 
