@@ -13,7 +13,13 @@ const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
 
 app.use(express.json({ limit: '32kb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders(res, filePath) {
+    if (/\.(html|js)$/.test(filePath) || filePath.endsWith('sw.js')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 
 function usableSecret(value) {
   if (!value) return false;
@@ -340,6 +346,7 @@ app.post('/api/chat', async (req, res) => {
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
+  res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
