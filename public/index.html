@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#F4EFE4" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="description" content="A quiet reading room for the words Jesus actually spoke." />
@@ -328,15 +329,16 @@ textarea { font-family: var(--body); }
   flex: 1;
   border: none;
   background: none;
-  color: var(--ink-4);
+  color: var(--ink-3);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 10px;
-  letter-spacing: .14em;
+  letter-spacing: .08em;
   text-transform: uppercase;
+  font-weight: 500;
 }
 .nav-btn svg { width: 18px; height: 18px; }
 .nav-btn.active { color: var(--crimson); }
@@ -678,7 +680,8 @@ textarea { font-family: var(--body); }
 }
 .settings-sheet.on { transform: none; }
 .sheet-handle { display: none; }
-.sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; margin-bottom: 20px; }
+.sheet-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--rule); }
 .setting-label { font-size: 15px; }
 .setting-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
@@ -946,7 +949,10 @@ textarea { font-family: var(--body); }
 <div class="sheet-overlay" id="overlay" onclick="closeSettings()"></div>
 <aside class="settings-sheet" id="settings-sheet">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">The room</div>
+  <div class="sheet-title-row">
+    <div class="sheet-title">The room</div>
+    <button class="ghost" type="button" onclick="closeSettings()">Close</button>
+  </div>
   <div class="setting-row">
     <div>
       <div class="setting-label">Lamp</div>
@@ -1227,6 +1233,7 @@ async function sendMsg() {
       body: JSON.stringify({ messages: chatHistory })
     });
     if (res.status === 429) throw new Error('slow');
+    if (!res.ok && !res.body) throw new Error('fail');
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
@@ -1242,15 +1249,28 @@ async function sendMsg() {
         if (raw === '[DONE]') break;
         try {
           const p = JSON.parse(raw);
-          if (p.error) throw new Error(p.error);
           if (p.text) { fullText += p.text; updateStreamBubble(aiBubble, fullText); scrollChat(); }
         } catch (_) {}
       }
     }
+    if (!fullText.trim()) throw new Error('empty');
     chatHistory.push({ role: 'assistant', content: fullText });
     addSaveToChatBubble(aiBubble, fullText, text);
   } catch (err) {
-    updateStreamBubble(aiBubble, 'The letter could not be finished. Sit with Today, or try again in a moment.');
+    const fallback = [
+      'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
+      '',
+      '**John 14:27**',
+      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
+      'A troubled heart is the intended reader of this line.',
+      '',
+      '**Matthew 11:28**',
+      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
+      'Rest is offered to the exhausted, not the already-composed.',
+    ].join('\n');
+    updateStreamBubble(aiBubble, fallback);
+    chatHistory.push({ role: 'assistant', content: fallback });
+    addSaveToChatBubble(aiBubble, fallback, text);
   } finally {
     isChatBusy = false;
     document.getElementById('send-btn').disabled = false;

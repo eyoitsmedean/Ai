@@ -14,7 +14,15 @@ const THEME_SET = new Set(themeNames());
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+function usableSecret(value) {
+  if (!value) return false;
+  const v = String(value).trim();
+  if (!v) return false;
+  if (/your_api_key|changeme|placeholder|xxx|example/i.test(v)) return false;
+  return true;
+}
+
+const hasAnthropic = usableSecret(process.env.ANTHROPIC_API_KEY) || usableSecret(process.env.ANTHROPIC_AUTH_TOKEN);
 const client = hasAnthropic
   ? new Anthropic(
       process.env.ANTHROPIC_AUTH_TOKEN
@@ -212,6 +220,20 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
+const FALLBACK_LETTER = [
+  'I am here with you, and I will not rush past what you just named.',
+  '',
+  '**John 14:27**',
+  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
+  'These words meet a troubled heart without asking it to perform calm first.',
+  '',
+  '**Matthew 11:28**',
+  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
+  'The invitation is for the exhausted — including this moment.',
+  '',
+  'Sit with these two sentences. You do not have to solve the whole day.',
+].join('\n');
+
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -252,20 +274,7 @@ app.post('/api/chat', async (req, res) => {
   };
 
   if (!client) {
-    const fallback = [
-      'I am here with you, and I will not rush past what you just named.',
-      '',
-      '**John 14:27**',
-      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-      'These words meet a troubled heart without asking it to perform calm first.',
-      '',
-      '**Matthew 11:28**',
-      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-      'The invitation is for the exhausted — including this moment.',
-      '',
-      'Sit with these two sentences. You do not have to solve the whole day.',
-    ].join('\n');
-    streamText(verifyAdvisorText(fallback));
+    streamText(verifyAdvisorText(FALLBACK_LETTER));
     res.write('data: [DONE]\n\n');
     return res.end();
   }
@@ -290,8 +299,13 @@ app.post('/api/chat', async (req, res) => {
     res.end();
   } catch (err) {
     console.error('Chat error:', err.message);
-    if (!res.headersSent) return res.status(500).json({ error: 'Failed to respond.' });
-    write({ error: 'Failed to respond.' });
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
+      res.setHeader('X-Accel-Buffering', 'no');
+    }
+    streamText(verifyAdvisorText(FALLBACK_LETTER));
+    res.write('data: [DONE]\n\n');
     res.end();
   }
 });
