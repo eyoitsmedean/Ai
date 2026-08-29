@@ -255,3 +255,21 @@ This codebase already implements the wedge:
 
 **Category thesis:**  
 *YouVersion made the Bible accessible. Hallow made prayer a subscription habit. Bible Chat made Scripture conversational. The open throne is making the red words of Jesus the product — guidance, encouragement, and daily presence from what He actually said.*
+
+---
+
+## 9. 2026 research update (product implications)
+
+Sources synthesized Aug 2026: ScreensDesign Bible UX patterns, Hallow/Glorify comparisons (Learn of Christ, Warm Peach), YouVersion feature surface, Bible Chat prayer-tracking notes, Apologist Project / Lattice citation accuracy.
+
+| Pattern from winners | Implication for Red Letter |
+| --- | --- |
+| **Finished daily session** (YouVersion / Duomo / ScreensDesign) | Not an endless feed — a clear loop: read → sit → reflect → receive. We ship **Sit** (60s lectio-lite) + **Reflect** prompt + presence check-in. |
+| **Grace over streak shame** (Glorify, ScreensDesign recovery design) | Presence week dots and cumulative “Day N with Him” — never wipe identity for a missed day. |
+| **One journal prompt tied to the day’s word** (Glorify) | Reflect box after receiving today’s word; saved into Journal with verse context. |
+| **Prayer intentions** (Hallow community / Bible Chat prayer tab) | Lightweight local “Praying for…” list; optional pair with today’s red letter + share as blessing. |
+| **Guided pause / Lectio** (Hallow) | Sit overlay keeps eyes on one verified quote for one minute — companionship without audio production budget. |
+| **Scripture must not be hallucinated** (Lattice / Apologist Project) | Output-transform grounding: replace model quotes with WEB corpus text; surface ✓ WEB badges. |
+| **Share formats for IG + Stories + wallpaper** (Church Canvas / Verses) | Feed 4:5, Stories 9:16, Square 1:1 × Night/Crimson/Parchment. |
+
+**Still later (Phase 1+):** native store apps, live Stripe/IAP, seasonal Lent challenge UA, full audio production, small-group mode.

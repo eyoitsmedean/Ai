@@ -236,6 +236,34 @@ textarea,input{font-family:var(--font-ui)}
 .lib-search-wrap{padding:0 14px 10px}
 .lib-search{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:calc(14px * var(--scale))}
 .lib-search::placeholder{color:var(--ink-muted)}
+
+.sit-overlay{position:fixed;inset:0;z-index:450;background:var(--chrome);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
+.sit-overlay.open{display:flex;animation:fadeUp .4s var(--ease) both}
+.sit-ring{width:140px;height:140px;border-radius:50%;border:3px solid rgba(237,232,224,.15);display:flex;align-items:center;justify-content:center;margin-bottom:28px;position:relative}
+.sit-ring::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:var(--crimson);animation:spin 1.2s linear infinite;opacity:.85}
+.sit-ring.done::before{animation:none;border-color:var(--crimson)}
+.sit-count{font-family:var(--font-disp);font-size:42px;font-weight:700;color:#EDE8E0}
+.sit-quote{font-family:var(--font-body);font-size:calc(18px * var(--scale));color:var(--crimson-words);line-height:1.55;max-width:320px;margin-bottom:12px;font-style:italic}
+.sit-cite{font-size:calc(12px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:28px}
+.sit-hint{font-size:calc(13px * var(--scale));color:rgba(237,232,224,.55);margin-bottom:24px}
+.sit-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+.reflect-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.reflect-box.hidden{display:none!important}
+.reflect-prompt{font-size:calc(13px * var(--scale));color:var(--ink-soft);margin-bottom:10px;line-height:1.45}
+.reflect-input{width:100%;min-height:72px;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(14px * var(--scale));resize:vertical;margin-bottom:10px}
+.reflect-actions{display:flex;gap:8px}
+
+.pray-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.pray-hd{font-family:var(--font-disp);font-size:calc(16px * var(--scale));font-weight:700;margin-bottom:6px}
+.pray-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
+.pray-form{display:flex;gap:8px;margin-bottom:12px}
+.pray-form input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(13px * var(--scale))}
+.pray-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--border)}
+.pray-item p{font-size:calc(13px * var(--scale));line-height:1.4;flex:1}
+.pray-item .pray-meta{font-size:11px;color:var(--ink-muted);margin-top:4px}
+.pray-item.done p{text-decoration:line-through;color:var(--ink-muted)}
+.pray-item-actions{display:flex;gap:6px;flex-shrink:0}
 .trust-note{margin:0 14px 12px;padding:10px 12px;font-size:calc(11px * var(--scale));color:var(--ink-muted);line-height:1.45;border-left:2px solid var(--border)}
 
 .share-styles{display:flex;gap:8px;padding:0 14px 10px}
@@ -373,9 +401,18 @@ textarea,input{font-family:var(--font-ui)}
         <div class="card-actions">
           <button type="button" class="action-btn" onclick="listenWord()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
           <button type="button" class="action-btn" onclick="shareWord()" aria-label="Share word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
+          <button type="button" class="action-btn" onclick="startSit()" aria-label="Sit with this word">Sit</button>
           <button type="button" class="action-btn" onclick="carryWord()" aria-label="Carry phrase">Carry</button>
           <button type="button" class="action-btn" id="save-word-btn" onclick="saveWord()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
         </div></div></div>
+      <div class="reflect-box hidden" id="reflect-box">
+        <p class="reflect-prompt" id="reflect-prompt">What one phrase from His words stays with you?</p>
+        <textarea class="reflect-input" id="reflect-input" maxlength="480" placeholder="Write a sentence…" aria-label="Reflection"></textarea>
+        <div class="reflect-actions">
+          <button type="button" class="action-btn" onclick="saveReflection()">Save reflection</button>
+          <button type="button" class="action-btn" onclick="hideReflect()">Not now</button>
+        </div>
+      </div>
       <div class="presence-card" id="presence-card">
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
@@ -420,6 +457,15 @@ textarea,input{font-family:var(--font-ui)}
     </section>
     <section class="page" id="journal-page" data-tab="journal">
       <div class="page-hd"><div class="page-hd-eyebrow">Your collection</div><h1 class="page-hd-title">Journal</h1></div>
+      <div class="pray-box" id="pray-box">
+        <div class="pray-hd">Praying for…</div>
+        <p class="pray-sub">Name what’s on your heart. Pair it with His words when you’re ready — no streak, no scoreboard.</p>
+        <form class="pray-form" onsubmit="addPrayer(event)">
+          <input type="text" id="pray-input" maxlength="160" placeholder="Someone or something to hold in prayer…" aria-label="Prayer intention" required />
+          <button type="submit" class="action-btn">Add</button>
+        </form>
+        <div id="pray-list"></div>
+      </div>
       <div id="journal-list"></div>
     </section>
   </div>
@@ -484,6 +530,16 @@ textarea,input{font-family:var(--font-ui)}
     </div></div></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sit-overlay" id="sit-overlay" role="dialog" aria-label="Sit with His words" aria-hidden="true">
+  <div class="sit-ring" id="sit-ring"><span class="sit-count" id="sit-count">60</span></div>
+  <p class="sit-quote" id="sit-quote"></p>
+  <p class="sit-cite" id="sit-cite"></p>
+  <p class="sit-hint" id="sit-hint">Breathe slowly. Let one phrase rest with you.</p>
+  <div class="sit-actions">
+    <button type="button" class="ob-btn" id="sit-done-btn" style="display:none;width:auto;padding:12px 22px" onclick="finishSit()">Amen — I received it</button>
+    <button type="button" class="action-btn" onclick="closeSit()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
 <div class="install-banner hidden" id="install-banner">
   <p><strong>Add Red Letter</strong>Keep His words one tap away</p>
   <div class="ib-actions">
@@ -711,6 +767,149 @@ function markPresence() {
   }
   renderPresence();
   showToast('Received. Carry one phrase with you.');
+  showReflect();
+}
+
+/* ═══ SIT WITH HIM (lectio-lite minute) ═══ */
+let sitTimer = null;
+let sitLeft = 60;
+function startSit() {
+  if (!dailyData?.word) return;
+  const overlay = document.getElementById('sit-overlay');
+  const ring = document.getElementById('sit-ring');
+  const doneBtn = document.getElementById('sit-done-btn');
+  document.getElementById('sit-quote').textContent = '"' + (dailyData.word.passage || '') + '"';
+  document.getElementById('sit-cite').textContent = dailyData.word.verse || '';
+  document.getElementById('sit-hint').textContent = 'Breathe slowly. Let one phrase rest with you.';
+  sitLeft = 60;
+  document.getElementById('sit-count').textContent = String(sitLeft);
+  ring.classList.remove('done');
+  doneBtn.style.display = 'none';
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  clearInterval(sitTimer);
+  sitTimer = setInterval(() => {
+    sitLeft -= 1;
+    document.getElementById('sit-count').textContent = String(Math.max(0, sitLeft));
+    if (sitLeft <= 0) {
+      clearInterval(sitTimer);
+      sitTimer = null;
+      ring.classList.add('done');
+      document.getElementById('sit-hint').textContent = 'The minute is complete. Rest a breath longer if you wish.';
+      doneBtn.style.display = 'inline-flex';
+    }
+  }, 1000);
+}
+function closeSit() {
+  clearInterval(sitTimer);
+  sitTimer = null;
+  const overlay = document.getElementById('sit-overlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+}
+function finishSit() {
+  closeSit();
+  markPresence();
+}
+
+/* ═══ REFLECT (Glorify-style one prompt) ═══ */
+function showReflect() {
+  const box = document.getElementById('reflect-box');
+  if (!box) return;
+  const prompts = [
+    'What one phrase from His words stays with you?',
+    'Where do you need these words to meet you today?',
+    'What would it look like to live this word in one small way?',
+  ];
+  const day = hashDay(todayISO());
+  document.getElementById('reflect-prompt').textContent = prompts[day % prompts.length];
+  box.classList.remove('hidden');
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function hideReflect() {
+  document.getElementById('reflect-box')?.classList.add('hidden');
+}
+function saveReflection() {
+  const text = document.getElementById('reflect-input')?.value.trim();
+  if (!text) { showToast('Write a short reflection first'); return; }
+  const verse = dailyData?.word?.verse || '';
+  const quote = dailyData?.word?.passage || '';
+  const entry = 'Reflection: ' + text + (quote ? '\n\n“' + pickCarryPhrase(quote) + '”' : '');
+  saveJournal(entry, verse || 'Reflection', 'Reflection');
+  document.getElementById('reflect-input').value = '';
+  hideReflect();
+  showToast('Reflection saved to Journal');
+}
+
+/* ═══ PRAYER INTENTIONS (Hallow/Bible Chat pattern, gentle) ═══ */
+function getPrayers() { return lsJSON('rla-prayers', []); }
+function setPrayers(items) { lsSetJSON('rla-prayers', items.slice(0, 50)); }
+
+function renderPrayers() {
+  const list = document.getElementById('pray-list');
+  if (!list) return;
+  const items = getPrayers();
+  if (!items.length) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--ink-muted)">No intentions yet. Add one when someone comes to mind.</p>';
+    return;
+  }
+  list.innerHTML = items.map((p, i) =>
+    '<div class="pray-item' + (p.done ? ' done' : '') + '"><div><p>' + esc(p.text) + '</p>' +
+    '<div class="pray-meta">' + (p.done ? 'Held in prayer' : 'Open') +
+    (p.verse ? ' · ' + esc(p.verse) : '') + '</div></div>' +
+    '<div class="pray-item-actions">' +
+    (!p.done ? '<button type="button" class="action-btn" onclick="attachPrayerWords(' + i + ')">Words</button>' : '') +
+    '<button type="button" class="action-btn" onclick="togglePrayer(' + i + ')">' + (p.done ? 'Reopen' : 'Done') + '</button>' +
+    '<button type="button" class="action-btn" onclick="removePrayer(' + i + ')">Remove</button>' +
+    '</div></div>'
+  ).join('');
+}
+
+function addPrayer(e) {
+  e.preventDefault();
+  const input = document.getElementById('pray-input');
+  const text = input?.value.trim();
+  if (!text) return;
+  const items = getPrayers();
+  items.unshift({ text, done: false, createdAt: Date.now(), verse: '' });
+  setPrayers(items);
+  input.value = '';
+  renderPrayers();
+  showToast('Intention added');
+}
+
+function togglePrayer(i) {
+  const items = getPrayers();
+  if (!items[i]) return;
+  items[i].done = !items[i].done;
+  setPrayers(items);
+  renderPrayers();
+}
+
+function removePrayer(i) {
+  const items = getPrayers();
+  items.splice(i, 1);
+  setPrayers(items);
+  renderPrayers();
+}
+
+function attachPrayerWords(i) {
+  const items = getPrayers();
+  if (!items[i]) return;
+  // Attach today's carry phrase or daily word
+  const carry = lsJSON('rla-carry', null);
+  const verse = (carry?.day === todayISO() && carry.verse) || dailyData?.word?.verse || '';
+  const quote = (carry?.day === todayISO() && carry.phrase) || dailyData?.word?.passage || '';
+  if (!verse && !quote) {
+    goTab('seek');
+    showToast('Seek a theme, then return to pair His words');
+    return;
+  }
+  items[i].verse = verse;
+  items[i].quote = pickCarryPhrase(quote);
+  setPrayers(items);
+  renderPrayers();
+  if (items[i].quote) openShareCard({ verse, quote: items[i].quote, theme: 'Praying for ' + items[i].text.slice(0, 28) });
 }
 
 /* ═══ CARRY THIS PHRASE ═══ */
@@ -820,7 +1019,7 @@ function goTab(tab) {
   const w = nav.offsetWidth / TABS.length;
   document.getElementById('nav-indicator').style.width = w + 'px';
   document.getElementById('nav-indicator').style.transform = 'translateX(' + (idx * w) + 'px)';
-  if (tab === 'journal') renderJournal();
+  if (tab === 'journal') { renderJournal(); renderPrayers(); }
   if (tab === 'library' && !libData) loadLibrary();
 }
 
@@ -1715,7 +1914,10 @@ if ('serviceWorker' in navigator) {
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeShareCard();
+  if (e.key === 'Escape') {
+    closeShareCard();
+    closeSit();
+  }
 });
 
 </script>

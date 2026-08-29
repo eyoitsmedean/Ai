@@ -100,6 +100,7 @@ async function main() {
     assert(appHtml.includes('share-modal') && appHtml.includes('presence-btn'), 'app missing core UI');
     assert(appHtml.includes('lib-search') && appHtml.includes('carry-card'), 'missing search/carry');
     assert(appHtml.includes('Stories 9:16') && appHtml.includes('Square 1:1'), 'missing share ratios');
+    assert(appHtml.includes('sit-overlay') && appHtml.includes('reflect-box') && appHtml.includes('pray-box'), 'missing sit/reflect/pray');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 
