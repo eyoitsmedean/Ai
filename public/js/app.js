@@ -583,11 +583,17 @@
         )
         .slice(-MAX_STORED_MESSAGES)
       : [];
+    while (chatHistory[0] && chatHistory[0].role === 'assistant') {
+      chatHistory.shift();
+    }
     renderChatHistory();
   }
 
   function persistChat() {
     chatHistory = chatHistory.slice(-MAX_STORED_MESSAGES);
+    while (chatHistory[0] && chatHistory[0].role === 'assistant') {
+      chatHistory.shift();
+    }
     lsSet('rla-chat', JSON.stringify(chatHistory));
   }
 
