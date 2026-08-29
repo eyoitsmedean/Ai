@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
-const { parseModelJson, verifyAdvisorText, verifyJsonQuotes } = require('./lib/scripture');
+const { parseModelJson, verifyAdvisorText, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 
 const app = express();
@@ -35,6 +35,11 @@ const buckets = new Map();
 
 function rateLimit(key, limit, windowMs) {
   const now = Date.now();
+  if (buckets.size > 4000) {
+    for (const [k, slot] of buckets) {
+      if (now > slot.reset) buckets.delete(k);
+    }
+  }
   const slot = buckets.get(key) || { count: 0, reset: now + windowMs };
   if (now > slot.reset) {
     slot.count = 0;
@@ -46,12 +51,12 @@ function rateLimit(key, limit, windowMs) {
 }
 
 function clientKey(req) {
-  return req.ip || req.headers['x-forwarded-for'] || 'local';
+  return req.ip || 'local';
 }
 
 function gate(req, res, next) {
   if (!ACCESS_KEY) return next();
-  const sent = req.get('x-api-key') || req.query.key;
+  const sent = req.get('x-api-key');
   if (sent !== ACCESS_KEY) return res.status(401).json({ error: 'Unauthorized.' });
   next();
 }
@@ -82,7 +87,8 @@ STRICT RULES:
 • If no direct red-letter parallel exists, say so honestly and offer the closest relevant teaching.
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
-• Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).`;
+• Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
+• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -177,6 +183,9 @@ app.get('/api/health', (req, res) => {
 });
 
 app.get('/api/daily', async (req, res) => {
+  if (!rateLimit(`daily:${clientKey(req)}`, 60, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later for the morning page.' });
+  }
   try {
     res.json(await fetchDailyContent());
   } catch (err) {
@@ -199,7 +208,7 @@ app.post('/api/encouragement', async (req, res) => {
 
   const curated = encouragementFor(theme);
 
-  if (!client || req.query.curated === '1') {
+  if (!client) {
     return res.json(curated);
   }
 
@@ -273,10 +282,22 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  if (!client) {
-    streamText(verifyAdvisorText(FALLBACK_LETTER));
+  const crisis = looksLikeCrisis(last.content);
+  const finish = (body) => {
+    const verified = verifyAdvisorText(body);
+    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
-    return res.end();
+    res.end();
+  };
+
+  req.on('close', () => {
+    if (!res.writableEnded) {
+      try { res.end(); } catch (_) {}
+    }
+  });
+
+  if (!client) {
+    return finish(FALLBACK_LETTER);
   }
 
   try {
@@ -294,9 +315,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     await stream.finalMessage();
-    streamText(verifyAdvisorText(raw));
-    res.write('data: [DONE]\n\n');
-    res.end();
+    finish(raw);
   } catch (err) {
     console.error('Chat error:', err.message);
     if (!res.headersSent) {
@@ -304,9 +323,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    streamText(verifyAdvisorText(FALLBACK_LETTER));
-    res.write('data: [DONE]\n\n');
-    res.end();
+    finish(FALLBACK_LETTER);
   }
 });
 

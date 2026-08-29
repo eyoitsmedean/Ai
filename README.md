@@ -13,7 +13,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 
 Quoted verses are checked against the public-domain **King James Version** (1769). If the model paraphrases, the page prints the canonical text instead.
 
-This is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US) · [IASP](https://www.iasp.info/suicidalthoughts/).
+This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 
 ## Run it
 

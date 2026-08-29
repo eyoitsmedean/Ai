@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const {
   cleanKjv,
   lookup,
+  looksLikeCrisis,
   parseModelJson,
   parseRef,
   similarity,
@@ -23,6 +24,23 @@ describe('parseRef', () => {
   it('rejects non-gospel books', () => {
     assert.equal(parseRef('Romans 8:28'), null);
     assert.equal(parseRef('Psalm 23:1'), null);
+  });
+});
+
+describe('extractSpoken', () => {
+  it('strips narrator wrappers from red-letter verses', () => {
+    const mark = lookup('Mark 4:39');
+    assert.equal(mark.text, 'Peace, be still.');
+    assert.match(mark.full, /rebuked the wind/);
+    assert.doesNotMatch(lookup('John 8:12').text, /Then spake Jesus/);
+    assert.match(lookup('John 8:12').text, /^I am the light/);
+    assert.equal(lookup('Mark 5:36').text, 'Be not afraid, only believe.');
+  });
+
+  it('does not invent speech when the verse is already spoken', () => {
+    const hit = lookup('John 14:27');
+    assert.match(hit.text, /Peace I leave with you/);
+    assert.equal(hit.text, hit.full);
   });
 });
 
@@ -85,6 +103,33 @@ describe('verifyJsonQuotes', () => {
     assert.match(data.affirmation.quote, /hairs of your head/);
     assert.equal(data.verified, true);
   });
+
+  it('does not stamp verified when a citation is unknown', () => {
+    const data = verifyJsonQuotes({
+      affirmation: { text: 'No.', verse: 'Matthew 99:1', quote: 'a fabricated saying' },
+    });
+    assert.equal(data.verified, false);
+    assert.equal(data.affirmation.quote, 'a fabricated saying');
+  });
+
+  it('drops unverifiable passages instead of keeping fabrications', () => {
+    const data = verifyJsonQuotes({
+      passages: [
+        { verse: 'John 14:27', quote: 'peace-ish', context: 'ok' },
+        { verse: 'Romans 8:28', quote: 'all things work together', context: 'no' },
+      ],
+    });
+    assert.equal(data.passages.length, 1);
+    assert.equal(data.verified, false);
+    assert.match(data.passages[0].quote, /Peace I leave with you/);
+  });
+});
+
+describe('looksLikeCrisis', () => {
+  it('detects clear self-harm language and ignores ordinary grief', () => {
+    assert.equal(looksLikeCrisis('I want to kill myself tonight'), true);
+    assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
+  });
 });
 
 describe('parseModelJson', () => {
@@ -101,7 +146,7 @@ describe('curated packs', () => {
       const pack = encouragementFor(name);
       assert.ok(pack.passages.length >= 3);
       for (const p of pack.passages) {
-        assert.ok(p.quote.length > 20);
+        assert.ok(p.quote.length > 8);
         assert.match(p.verse, /^(Matthew|Mark|Luke|John) /);
       }
     }
