@@ -325,6 +325,34 @@ module.exports = {
       theme: ['Shame & Guilt', 'Hope', 'Suffering & Pain'],
       text: "Those who are healthy have no need for a physician, but those who are sick do. But you go and learn what this means: ‘I desire mercy, and not sacrifice,’ for I came not to call the righteous, but sinners to repentance.",
     },
+    {
+      id: 'mt13-31-32',
+      book: 'Matthew', chapter: 13, verseStart: 31, verseEnd: 32,
+      theme: ['Hope', 'Faith & Doubt', 'Purpose & Direction'],
+      text: "The Kingdom of Heaven is like a grain of mustard seed which a man took, and sowed in his field, which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs and becomes a tree, so that the birds of the air come and lodge in its branches.",
+      note: 'Parable of the Mustard Seed',
+    },
+    {
+      id: 'mt18-12-14',
+      book: 'Matthew', chapter: 18, verseStart: 12, verseEnd: 14,
+      theme: ['Loneliness', 'Hope', 'Shame & Guilt'],
+      text: "What do you think? If a man has one hundred sheep, and one of them goes astray, doesn’t he leave the ninety-nine, go to the mountains, and seek that which has gone astray? If he finds it, most certainly I tell you, he rejoices over it more than over the ninety-nine which have not gone astray. Even so it is not the will of your Father who is in heaven that one of these little ones should perish.",
+      note: 'Parable of the Lost Sheep',
+    },
+    {
+      id: 'lk10-33-37',
+      book: 'Luke', chapter: 10, verseStart: 33, verseEnd: 37,
+      theme: ['Conflict & Relationships', 'Purpose & Direction', 'Suffering & Pain'],
+      text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him. On the next day, when he departed, he took out two denarii, gave them to the host, and said to him, ‘Take care of him. Whatever you spend beyond that, I will repay you when I return.’ Now which of these three do you think seemed to be a neighbor to him who fell among the robbers?” He said, “He who showed mercy on him.” Then Jesus said to him, “Go and do likewise.”",
+      note: 'Parable of the Good Samaritan',
+    },
+    {
+      id: 'jn10-11-14',
+      book: 'John', chapter: 10, verseStart: 11, verseEnd: 14,
+      theme: ['Loneliness', 'Hope', 'Fear'],
+      text: "I am the good shepherd. The good shepherd lays down his life for the sheep. He who is a hired hand and not a shepherd, who doesn’t own the sheep, sees the wolf coming, leaves the sheep, and flees. The wolf snatches the sheep and scatters them. The hired hand flees because he is a hired hand and doesn’t care for the sheep. I am the good shepherd. I know my own, and I’m known by my own.",
+      note: 'Parable / figure of the Good Shepherd',
+    },
   ],
 };
 

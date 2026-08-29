@@ -221,6 +221,21 @@ textarea,input{font-family:var(--font-ui)}
 .presence-btn:hover{transform:translateY(-1px)}
 .presence-btn:disabled{opacity:.85;cursor:default;transform:none;background:var(--chrome)}
 .presence-note{margin-top:10px;font-size:calc(12px * var(--scale));color:var(--ink-muted);line-height:1.45}
+.presence-week{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.presence-dot{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--ink-muted);background:var(--surface-2)}
+.presence-dot.on{background:var(--crimson);border-color:var(--crimson);color:#fff;animation:badgePulse .7s ease 1}
+.presence-dot.today{box-shadow:0 0 0 2px rgba(185,28,28,.25)}
+
+.carry-card{margin:0 14px 14px;padding:14px 16px;border-radius:var(--r);background:linear-gradient(135deg,rgba(185,28,28,.12),var(--surface));border:1px solid rgba(185,28,28,.22);animation:fadeUp .5s .05s var(--ease) both}
+.carry-card.hidden{display:none!important}
+.carry-label{font-size:calc(10px * var(--scale));font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.carry-phrase{font-family:var(--font-body);font-size:calc(16px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.45}
+.carry-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-top:8px}
+.carry-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+.lib-search-wrap{padding:0 14px 10px}
+.lib-search{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:calc(14px * var(--scale))}
+.lib-search::placeholder{color:var(--ink-muted)}
 .trust-note{margin:0 14px 12px;padding:10px 12px;font-size:calc(11px * var(--scale));color:var(--ink-muted);line-height:1.45;border-left:2px solid var(--border)}
 
 .share-styles{display:flex;gap:8px;padding:0 14px 10px}
@@ -333,6 +348,15 @@ textarea,input{font-family:var(--font-ui)}
     <section class="page active" id="today-page" data-tab="today">
       <div class="page-hd"><div class="page-hd-eyebrow" id="today-date"></div><h1 class="page-hd-title" id="today-greeting">Good morning</h1></div>
       <div id="offline-banner" class="offline-banner hidden">You're offline — showing verified passages from our library.</div>
+      <div class="carry-card hidden" id="carry-card">
+        <div class="carry-label">Carry this today</div>
+        <p class="carry-phrase" id="carry-phrase"></p>
+        <p class="carry-cite" id="carry-cite"></p>
+        <div class="carry-actions">
+          <button type="button" class="action-btn" onclick="shareCarry()">Share</button>
+          <button type="button" class="action-btn" onclick="clearCarry()">Clear</button>
+        </div>
+      </div>
       <div class="card card-crimson" id="affirmation-card"><div class="card-body">
         <div class="section-label" style="padding:0 0 8px;color:rgba(255,255,255,.6)">Daily Affirmation</div>
         <p class="red-quote" id="affirmation-text">Loading…</p><p class="verse-cite" id="affirmation-verse"></p><div id="affirmation-verified"></div>
@@ -349,11 +373,13 @@ textarea,input{font-family:var(--font-ui)}
         <div class="card-actions">
           <button type="button" class="action-btn" onclick="listenWord()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
           <button type="button" class="action-btn" onclick="shareWord()" aria-label="Share word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
+          <button type="button" class="action-btn" onclick="carryWord()" aria-label="Carry phrase">Carry</button>
           <button type="button" class="action-btn" id="save-word-btn" onclick="saveWord()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
         </div></div></div>
       <div class="presence-card" id="presence-card">
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
+        <div class="presence-week" id="presence-week" aria-label="This week's presence"></div>
       </div>
       <div class="cta-row">
         <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
@@ -388,6 +414,7 @@ textarea,input{font-family:var(--font-ui)}
     </section>
     <section class="page" id="library-page" data-tab="library">
       <div class="page-hd"><div class="page-hd-eyebrow">Verified library</div><h1 class="page-hd-title">His words, preserved</h1></div>
+      <div class="lib-search-wrap"><input type="search" class="lib-search" id="lib-search" placeholder="Search His words or a verse…" aria-label="Search library" oninput="onLibSearch(this.value)" /></div>
       <div class="gospel-chips" id="lib-books"></div>
       <div class="filter-chips" id="lib-filters"></div><div id="lib-list"></div>
     </section>
@@ -447,6 +474,7 @@ textarea,input{font-family:var(--font-ui)}
     <div class="share-ratios" role="group" aria-label="Format">
       <button type="button" class="share-ratio active" data-ratio="feed" onclick="setShareRatio('feed')">Feed 4:5</button>
       <button type="button" class="share-ratio" data-ratio="story" onclick="setShareRatio('story')">Stories 9:16</button>
+      <button type="button" class="share-ratio" data-ratio="square" onclick="setShareRatio('square')">Square 1:1</button>
     </div>
     <div class="share-actions">
       <button type="button" class="action-btn" onclick="downloadShareCard()" aria-label="Download">Download</button>
@@ -553,7 +581,9 @@ let dailyData = null;
 let libData = null;
 let libFilter = '';
 let libBook = '';
+let libQuery = '';
 let libPassages = [];
+let libAllPassages = [];
 let journalItems = [];
 let chatMessages = [];
 let chatStreaming = false;
@@ -567,6 +597,7 @@ let advisorOffline = false;
 const SHARE_SIZES = {
   feed: { W: 1080, H: 1350 },
   story: { W: 1080, H: 1920 },
+  square: { W: 1080, H: 1080 },
 };
 
 const SHARE_STYLES = {
@@ -647,6 +678,28 @@ function renderPresence() {
       ? 'A quiet check-in — ' + n + ' days of presence so far. No streaks, no shame.'
       : 'A quiet check-in — no streaks, no shame. Just showing up for His words.';
   }
+  renderPresenceWeek(days, today);
+}
+
+function renderPresenceWeek(days, today) {
+  const el = document.getElementById('presence-week');
+  if (!el) return;
+  const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const now = new Date(today + 'T12:00:00');
+  const dow = now.getDay(); // 0 Sun
+  const start = new Date(now);
+  start.setDate(now.getDate() - dow);
+  const set = new Set(days);
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    const on = set.has(iso);
+    const isToday = iso === today;
+    html += '<span class="presence-dot' + (on ? ' on' : '') + (isToday ? ' today' : '') + '" title="' + iso + '">' + labels[i] + '</span>';
+  }
+  el.innerHTML = html;
 }
 
 function markPresence() {
@@ -658,6 +711,48 @@ function markPresence() {
   }
   renderPresence();
   showToast('Received. Carry one phrase with you.');
+}
+
+/* ═══ CARRY THIS PHRASE ═══ */
+function pickCarryPhrase(text) {
+  const clean = String(text || '').replace(/^["“]|["”]$/g, '').trim();
+  if (!clean) return '';
+  const parts = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const short = parts.find(p => p.length >= 24 && p.length <= 110) || parts[0] || clean;
+  return short.length > 120 ? short.slice(0, 117).replace(/\s+\S*$/, '') + '…' : short;
+}
+
+function carryWord() {
+  if (!dailyData?.word) return;
+  const phrase = pickCarryPhrase(dailyData.word.passage);
+  const payload = { phrase, verse: dailyData.word.verse, day: todayISO() };
+  lsSetJSON('rla-carry', payload);
+  renderCarry();
+  showToast('Carrying this phrase today');
+}
+
+function renderCarry() {
+  const card = document.getElementById('carry-card');
+  if (!card) return;
+  const data = lsJSON('rla-carry', null);
+  if (!data?.phrase || data.day !== todayISO()) {
+    card.classList.add('hidden');
+    return;
+  }
+  document.getElementById('carry-phrase').textContent = '"' + data.phrase + '"';
+  document.getElementById('carry-cite').textContent = data.verse || '';
+  card.classList.remove('hidden');
+}
+
+function shareCarry() {
+  const data = lsJSON('rla-carry', null);
+  if (!data?.phrase) return;
+  openShareCard({ verse: data.verse, quote: data.phrase, theme: 'Carry this today' });
+}
+
+function clearCarry() {
+  try { localStorage.removeItem('rla-carry'); } catch {}
+  renderCarry();
 }
 
 /* ═══ ONBOARDING ═══ */
@@ -862,6 +957,7 @@ async function loadDaily() {
   dailyData = data;
   document.getElementById('offline-banner').classList.toggle('hidden', !offline && !data.offline);
   document.getElementById('today-date').textContent = formatDate();
+  renderCarry();
   document.getElementById('today-greeting').textContent = greeting();
   const aff = data.affirmation;
   document.getElementById('affirmation-text').textContent = aff.text;
@@ -1101,31 +1197,65 @@ async function loadLibrary() {
   const list = document.getElementById('lib-list');
   list.innerHTML = '<div style="text-align:center;padding:32px"><span class="spinner"></span></div>';
   try {
-    const qs = [];
-    if (libFilter) qs.push('theme=' + encodeURIComponent(libFilter));
-    if (libBook) qs.push('book=' + encodeURIComponent(libBook));
-    const res = await api('/api/library' + (qs.length ? '?' + qs.join('&') : ''));
+    // Fetch full corpus (no filters) for client search + offline cache, then filter locally
+    const res = await api('/api/library');
     if (!res.ok) throw new Error('fail');
     libData = await res.json();
+    libAllPassages = libData.passages || [];
+    lsSetJSON('rla-lib-cache', { themes: libData.themes, books: libData.books, passages: libAllPassages, cachedAt: Date.now() });
   } catch {
-    let passages = CORPUS.map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: p.themes[0], text: p.text, book: (p.verse || '').split(' ')[0] }));
-    if (libBook) passages = passages.filter(p => p.book === libBook);
-    if (libFilter) passages = passages.filter(p => {
-      const src = CORPUS.find(c => c.verse === p.verse);
-      return src && src.themes.includes(libFilter);
-    });
-    libData = { themes: THEMES, books: ['Matthew', 'Mark', 'Luke', 'John'], passages, offline: true };
+    const cached = lsJSON('rla-lib-cache', null);
+    if (cached?.passages?.length) {
+      libData = { ...cached, offline: true };
+      libAllPassages = cached.passages;
+    } else {
+      libAllPassages = CORPUS.map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: p.themes[0], text: p.text, book: (p.verse || '').split(' ')[0] }));
+      libData = { themes: THEMES, books: ['Matthew', 'Mark', 'Luke', 'John'], passages: libAllPassages, offline: true };
+    }
   }
   renderLibBooks();
   renderLibFilters();
+  applyLibFilters();
+}
+
+function applyLibFilters() {
+  let passages = libAllPassages.slice();
+  if (libBook === '__parables__') {
+    passages = passages.filter(p => /parable/i.test(p.note || ''));
+  } else if (libBook) {
+    passages = passages.filter(p => p.book === libBook);
+  }
+  if (libFilter) {
+    passages = passages.filter(p => {
+      const themes = Array.isArray(p.theme) ? p.theme : [p.theme];
+      return themes.includes(libFilter);
+    });
+  }
+  if (libQuery) {
+    const q = libQuery.toLowerCase();
+    passages = passages.filter(p =>
+      (p.verse || '').toLowerCase().includes(q) ||
+      (p.text || '').toLowerCase().includes(q) ||
+      (Array.isArray(p.theme) ? p.theme.join(' ') : String(p.theme || '')).toLowerCase().includes(q)
+    );
+  }
+  libData = { ...(libData || {}), passages };
   renderLibList();
+}
+
+function onLibSearch(val) {
+  libQuery = String(val || '').trim();
+  applyLibFilters();
 }
 
 function renderLibBooks() {
   const books = libData?.books || ['Matthew', 'Mark', 'Luke', 'John'];
   const el = document.getElementById('lib-books');
   if (!el) return;
-  const chips = ['<button type="button" class="filter-chip' + (!libBook ? ' active' : '') + '" onclick="setLibBook(\'\')">All Gospels</button>'];
+  const chips = [
+    '<button type="button" class="filter-chip' + (!libBook ? ' active' : '') + '" onclick="setLibBook(\'\')">All Gospels</button>',
+    '<button type="button" class="filter-chip' + (libBook === '__parables__' ? ' active' : '') + '" onclick="setLibBook(\'__parables__\')">Parables</button>',
+  ];
   books.forEach(b => {
     chips.push('<button type="button" class="filter-chip' + (libBook === b ? ' active' : '') + '" onclick="setLibBook(\'' + esc(b) + '\')">' + esc(b) + '</button>');
   });
@@ -1134,7 +1264,8 @@ function renderLibBooks() {
 
 function setLibBook(book) {
   libBook = book;
-  loadLibrary();
+  renderLibBooks();
+  applyLibFilters();
 }
 
 function renderLibFilters() {
@@ -1148,7 +1279,8 @@ function renderLibFilters() {
 
 function setLibFilter(theme) {
   libFilter = theme;
-  loadLibrary();
+  renderLibFilters();
+  applyLibFilters();
 }
 
 function renderLibList() {
@@ -1163,9 +1295,11 @@ function renderLibList() {
     const theme = Array.isArray(p.theme) ? (p.theme[0] || '') : (p.theme || '');
     return '<details class="lib-item card" style="margin:0 14px 8px"><summary><div><div class="lib-verse">' + esc(p.verse) + '</div><div class="lib-theme">' + esc(theme) + (p.book ? ' · ' + esc(p.book) : '') + '</div></div></summary>' +
       '<div class="lib-expand"><p class="red-quote">"' + esc(p.text) + '"</p>' + verifiedBadge() +
+      (p.note ? '<p style="font-size:12px;color:var(--ink-muted);margin-top:8px">' + esc(p.note) + '</p>' : '') +
       '<div class="card-actions">' +
       '<button type="button" class="action-btn" data-lib-action="share" data-lib-idx="' + idx + '">Share</button>' +
       '<button type="button" class="action-btn" data-lib-action="save" data-lib-idx="' + idx + '">Save</button>' +
+      '<button type="button" class="action-btn" data-lib-action="carry" data-lib-idx="' + idx + '">Carry</button>' +
       '</div></div></details>';
   }).join('');
 }
@@ -1198,7 +1332,18 @@ document.getElementById('lib-list')?.addEventListener('click', (e) => {
   if (Number.isNaN(idx)) return;
   if (btn.getAttribute('data-lib-action') === 'share') shareLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'save') saveLibByIndex(idx);
+  else if (btn.getAttribute('data-lib-action') === 'carry') carryLibByIndex(idx);
 });
+
+function carryLibByIndex(idx) {
+  const p = libPassages[idx];
+  if (!p?.text) return;
+  const phrase = pickCarryPhrase(p.text);
+  lsSetJSON('rla-carry', { phrase, verse: p.verse, day: todayISO() });
+  renderCarry();
+  showToast('Carrying this phrase today');
+  goTab('today');
+}
 
 /* ═══ JOURNAL ═══ */
 function getJournal() { return lsJSON('rla-journal', []); }
@@ -1329,9 +1474,9 @@ function drawShareCard() {
   canvas.width = W;
   canvas.height = H;
   const pal = SHARE_STYLES[shareStyle] || SHARE_STYLES.night;
-  const quoteBudget = shareRatio === 'story' ? 820 : 620;
-  const quoteTop = shareRatio === 'story' ? 360 : 260;
-  const bottomPad = shareRatio === 'story' ? 320 : 260;
+  const quoteBudget = shareRatio === 'story' ? 820 : shareRatio === 'square' ? 420 : 620;
+  const quoteTop = shareRatio === 'story' ? 360 : shareRatio === 'square' ? 220 : 260;
+  const bottomPad = shareRatio === 'story' ? 320 : shareRatio === 'square' ? 200 : 260;
 
   ctx.fillStyle = pal.bg;
   ctx.fillRect(0, 0, W, H);
@@ -1412,7 +1557,7 @@ async function blessShareCard() {
 function downloadShareCard() {
   const canvas = document.getElementById('share-canvas');
   const a = document.createElement('a');
-  const suffix = shareRatio === 'story' ? 'story' : 'feed';
+  const suffix = shareRatio === 'story' ? 'story' : shareRatio === 'square' ? 'square' : 'feed';
   a.download = 'red-letter-' + suffix + '-' + (shareState.verse || 'verse').replace(/[:\s]/g, '-') + '.png';
   a.href = canvas.toDataURL('image/png');
   a.click();
@@ -1546,6 +1691,7 @@ function initApp() {
   loadQuota();
   loadAdvisorMode();
   loadDaily();
+  renderCarry();
   renderThemeGrid();
   goTab('today');
   const nav = document.getElementById('bottom-nav');
