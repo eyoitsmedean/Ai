@@ -1622,7 +1622,7 @@ body::before {
   50% { transform: scale(1.08); opacity: 1; }
 }
 .lectio-overlay {
-  position: fixed; inset: 0; z-index: 92;
+  position: fixed; inset: 0; z-index: 120;
   background: #F6F3EC;
   display: none;
   flex-direction: column;
@@ -2183,6 +2183,11 @@ function completeOnboarding() {
   lsSet('rla-first-lectio', 'pending');
   document.getElementById('onboarding').classList.add('hidden');
   startApp();
+  let tries = 0;
+  const tick = setInterval(function () {
+    openFirstLectio();
+    if (ls('rla-first-lectio') !== 'pending' || ++tries > 50) clearInterval(tick);
+  }, 80);
 }
 
 function startApp() {
@@ -2785,7 +2790,6 @@ function applyDailyToUI(data) {
   document.getElementById('word-theme').textContent = data.word.theme;
   applySeason();
   markLectioDone();
-  maybeOpenFirstLectio();
   document.getElementById('word-title').textContent = data.word.title;
   document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
   document.getElementById('word-verse').textContent = data.word.verse;
@@ -2801,6 +2805,7 @@ function applyDailyToUI(data) {
       ? ('A quiet ' + streak.count + '-day rhythm — missing a day never erases your place here.')
       : 'Welcome. One quiet moment with his words is enough for today.';
   }
+  openFirstLectio();
 }
 
 const _origLoadDaily = typeof loadDailyContent === 'function' ? loadDailyContent : null;
@@ -3167,10 +3172,11 @@ function markLectioDone() {
   if (wait) wait.hidden = done || ls('rla-first-lectio') === 'pending';
 }
 
-function maybeOpenFirstLectio() {
+function openFirstLectio() {
   if (ls('rla-first-lectio') !== 'pending') return;
+  if (!(dailyData && dailyData.word && dailyData.word.passage)) return;
   lsSet('rla-first-lectio', 'opened');
-  setTimeout(function () { openLectio(); }, 480);
+  openLectio();
 }
 
 function easterDate(y) {
