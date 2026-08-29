@@ -222,8 +222,14 @@
     }
     const settings = id('settings-sheet');
     const plus = id('plus-sheet');
+    const blessing = id('blessing-sheet');
     const overlay = id('overlay');
-    if (overlay && (!settings || !settings.classList.contains('on')) && (!plus || !plus.classList.contains('on'))) {
+    if (
+      overlay &&
+      (!settings || !settings.classList.contains('on')) &&
+      (!plus || !plus.classList.contains('on')) &&
+      (!blessing || !blessing.classList.contains('on'))
+    ) {
       overlay.classList.remove('on');
     }
   }
