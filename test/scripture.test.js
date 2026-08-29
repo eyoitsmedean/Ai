@@ -8,6 +8,7 @@ const {
   parseRef,
   similarity,
   verifyAdvisorText,
+  verifyAndSubstitute,
   verifyJsonQuotes,
   verifyQuote,
   isRedLetter,
@@ -95,6 +96,7 @@ describe('verifyAdvisorText', () => {
     assert.match(out, /Peace I leave with you/);
     assert.doesNotMatch(out, /warm blanket/);
     assert.match(out, /This meets the fear directly/);
+    assert.equal(verifyAndSubstitute(input), out);
   });
 });
 

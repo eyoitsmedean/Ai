@@ -1,5 +1,6 @@
-const CACHE = 'rla-editorial-v5';
+const CACHE = 'rla-phase0-v6';
 const PRECACHE = [
+  '/index.html',
   '/manifest.json',
   '/curated.json',
   '/library.json',

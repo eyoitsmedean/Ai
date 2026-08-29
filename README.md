@@ -9,10 +9,10 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 - **Today** — a morning affirmation and word of the day, quoted in crimson
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying in the four Gospels
 - **Sit** — read a saying, rest one minute, reply with one sentence
-- **Advisor** — a short correspondence that writes as it arrives; scripture is then settled against a Gospel corpus
+- **Advisor** — a short correspondence; scripture is verified against a Gospel corpus before the letter is written on the page
 - **Journal** — a commonplace book kept on this device
 
-Quoted verses are checked against the public-domain **King James Version** (1769). A red-letter map plus spoken-text extraction keeps narrator frames out of the quote. If the model paraphrases, the page prints the canonical speech instead.
+Quoted verses are checked against the public-domain **King James Version** (1769). A red-letter map plus spoken-text extraction keeps narrator frames out of the quote. Daily and encouragement JSON are requested as structured output, then every citation is substituted from the corpus. Advisor letters are buffered, verified, and then written to the page. If the model paraphrases, the page prints the canonical speech instead.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 

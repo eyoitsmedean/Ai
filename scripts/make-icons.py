@@ -53,7 +53,7 @@ def paint(size: int) -> bytes:
 
 
 def main() -> None:
-    public = pathlib.Path("/workspace/public")
+    public = pathlib.Path(__file__).resolve().parent.parent / "public"
     for size, name in ((192, "icon-192.png"), (512, "icon-512.png"), (180, "apple-touch-icon.png")):
         (public / name).write_bytes(paint(size))
         print("wrote", name)

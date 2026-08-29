@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
-const { parseModelJson, verifyAdvisorText, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
+const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -147,14 +148,34 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+async function generateStructured(system, user, schema, maxTokens) {
+  try {
+    return await client.messages.create({
+      model: MODEL,
+      max_tokens: maxTokens,
+      system,
+      messages: [{ role: 'user', content: user }],
+      ...structuredFormat(schema),
+    });
+  } catch (err) {
+    console.error('Structured output fallback:', err.message);
+    return client.messages.create({
+      model: MODEL,
+      max_tokens: maxTokens,
+      thinking: { type: 'adaptive' },
+      system,
+      messages: [{ role: 'user', content: user }],
+    });
+  }
+}
+
 async function generateDailyFromModel() {
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 1400,
-    thinking: { type: 'adaptive' },
-    system: DAILY_SYSTEM,
-    messages: [{ role: 'user', content: "Generate today's daily affirmation and word." }],
-  });
+  const response = await generateStructured(
+    DAILY_SYSTEM,
+    "Generate today's daily affirmation and word.",
+    DAILY_SCHEMA,
+    1400
+  );
   const text = response.content.find((b) => b.type === 'text')?.text ?? '';
   return verifyJsonQuotes(parseModelJson(text));
 }
@@ -220,7 +241,7 @@ app.post('/api/encouragement', async (req, res) => {
   const theme = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
   if (!theme || theme.length > 80) return res.status(400).json({ error: 'theme required.' });
   if (!THEME_SET.has(theme)) return res.status(400).json({ error: 'Unknown theme.' });
-  if (!rateLimit(`enc:${clientKey(req)}`, 30, 60 * 60 * 1000)) {
+  if (!rateLimit(`enc:${clientKey(req)}`, 20, 60 * 60 * 1000)) {
     return res.status(429).json({ error: 'Please return later for more encouragement.' });
   }
 
@@ -231,13 +252,12 @@ app.post('/api/encouragement', async (req, res) => {
   }
 
   try {
-    const response = await client.messages.create({
-      model: MODEL,
-      max_tokens: 1600,
-      thinking: { type: 'adaptive' },
-      system: ENCOURAGE_SYSTEM,
-      messages: [{ role: 'user', content: `Generate encouragement for: ${theme}` }],
-    });
+    const response = await generateStructured(
+      ENCOURAGE_SYSTEM,
+      `Generate encouragement for: ${theme}`,
+      ENCOURAGE_SCHEMA,
+      1600
+    );
     const text = response.content.find((b) => b.type === 'text')?.text ?? '';
     const data = verifyJsonQuotes({ ...parseModelJson(text), theme });
     res.json(data);
@@ -279,7 +299,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 12, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -301,15 +321,9 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
-  const finish = (body, { live = false } = {}) => {
-    const verified = verifyAdvisorText(body);
-    const out = crisis ? `${CRISIS_NOTICE}${verified}` : verified;
-    const already = (crisis ? CRISIS_NOTICE : '') + body;
-    if (live) {
-      if (out !== already) write({ replace: out });
-    } else {
-      streamText(out);
-    }
+  const finish = (body) => {
+    const verified = verifyAndSubstitute(body);
+    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
@@ -334,14 +348,12 @@ app.post('/api/chat', async (req, res) => {
     });
 
     let raw = '';
-    if (crisis) write({ text: CRISIS_NOTICE });
     stream.on('text', (text) => {
       raw += text;
-      write({ text });
     });
 
     await stream.finalMessage();
-    finish(raw, { live: true });
+    finish(raw);
   } catch (err) {
     console.error('Chat error:', err.message);
     if (!res.headersSent) {
@@ -359,6 +371,10 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
