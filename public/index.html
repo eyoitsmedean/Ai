@@ -346,13 +346,13 @@ textarea,input{font-family:var(--font-ui)}
           <button type="button" class="action-btn" onclick="shareWord()" aria-label="Share word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
           <button type="button" class="action-btn" id="save-word-btn" onclick="saveWord()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
         </div></div></div>
-      <div class="cta-row">
-        <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
-        <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
-      </div>
       <div class="presence-card" id="presence-card">
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
+      </div>
+      <div class="cta-row">
+        <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
+        <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
       </div>
     </section>
     <section class="page" id="seek-page" data-tab="seek">
