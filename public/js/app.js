@@ -675,7 +675,7 @@
     const key = `chat-${stableHash(`${question}\n${answer}`)}`;
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'msg-save-btn';
+    button.className = 'msg-save-btn action-btn-dark';
     button.dataset.journalKey = key;
 
     const update = () => {
