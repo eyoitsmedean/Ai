@@ -355,16 +355,21 @@ svg.grain-filter {
 #install-btn {
   display: none;
   align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 0;
+  height: 34px;
+  padding: 0 12px;
   gap: 5px;
   background: rgba(255, 255, 255, 0.92);
   color: var(--crimson);
   border: none;
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: calc(11px * var(--scale));
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.03em;
-  text-transform: uppercase;
+  text-transform: none;
+  white-space: nowrap;
   transition: background 0.18s var(--ease), transform 0.15s var(--ease);
 }
 
@@ -1269,6 +1274,13 @@ svg.grain-filter {
   border-color: var(--crimson);
   color: var(--crimson);
   background: var(--crimson-pale);
+}
+.library-chip:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 2px;
+}
+.library-chip::after {
+  content: '';
 }
 
 .library-panel {

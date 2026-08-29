@@ -418,6 +418,61 @@
     }
   }
 
+  async function buildOfflineAdvisorReply(question) {
+    const corpus = await loadCorpus();
+    const q = String(question || '').toLowerCase();
+    const themeHints = [
+      [/anx|worr|stress|overwhelm/, 'Anxiety & Worry'],
+      [/grief|mourn|loss|died|death|miss /, 'Grief & Loss'],
+      [/forgiv/, 'Forgiveness'],
+      [/lonely|alone|isolat/, 'Loneliness'],
+      [/conflict|argument|relationship|enemy|enemies/, 'Conflict & Relationships'],
+      [/afraid|fear|scared|terror/, 'Fear'],
+      [/purpose|direction|lost|calling/, 'Purpose & Direction'],
+      [/doubt|faith|believe|unbelief/, 'Faith & Doubt'],
+      [/suffer|pain|hurt|sick/, 'Suffering & Pain'],
+      [/shame|guilt|condemn|regret/, 'Shame & Guilt'],
+      [/peace|calm|rest/, 'Peace'],
+      [/hope|future|despair/, 'Hope'],
+    ];
+    let theme = null;
+    for (const [re, name] of themeHints) {
+      if (re.test(q)) {
+        theme = name;
+        break;
+      }
+    }
+    const pack = (theme && corpus.encouragement && corpus.encouragement[theme])
+      || (corpus.encouragement && corpus.encouragement.Peace)
+      || null;
+    const libraryHit = (corpus.library || []).find((item) => {
+      const themeName = String(item.theme || '').toLowerCase();
+      return q.includes(themeName) ||
+        (item.quote && q.split(/\s+/).some((w) => w.length > 4 && String(item.quote).toLowerCase().includes(w)));
+    });
+    const passages = (pack && pack.passages && pack.passages.slice(0, 3)) || (libraryHit ? [{
+      verse: libraryHit.verse,
+      quote: libraryHit.quote,
+      context: 'A word from the red letters for this moment.',
+    }] : []);
+    if (!passages.length) return null;
+
+    const lines = [
+      'I hear you. While the live Advisor is resting, here are words Jesus actually spoke that meet this kind of moment:',
+      '',
+    ];
+    passages.forEach((p) => {
+      lines.push(`**${p.verse}**`);
+      lines.push(`"${p.quote}"`);
+      if (p.context) lines.push(p.context);
+      lines.push('');
+    });
+    lines.push((pack && pack.closing) || 'Sit with these words — they are enough for this hour.');
+    lines.push('');
+    lines.push('_Offline guidance from the Red Letter library (World English Bible)._');
+    return lines.join('\n');
+  }
+
   function discussToday(shouldSend = true) {
     if (!dailyData || !dailyData.word) {
       showToast('Today’s word is still loading');
@@ -794,7 +849,6 @@
       const suggestions = id('suggestions');
       if (suggestions) suggestions.style.display = 'none';
 
-      incrementChatCount();
       chatHistory.push({ role: 'user', content: text });
       persistChat();
       createMessage('user', text);
@@ -812,7 +866,20 @@
           },
           body: JSON.stringify({ messages: chatHistory }),
         });
-        if (!response.ok) throw new Error(`Chat request failed (${response.status})`);
+        if (!response.ok) {
+          const offline = await buildOfflineAdvisorReply(text);
+          if (offline) {
+            setTyping(false);
+            rendered = createMessage('assistant', offline, false);
+            addChatSaveButton(rendered, offline, text);
+            chatHistory.push({ role: 'assistant', content: offline });
+            persistChat();
+            incrementChatCount();
+            showToast('Showing saved Gospel words (offline)');
+            return;
+          }
+          throw new Error(`Chat request failed (${response.status})`);
+        }
         if (!response.body) throw new Error('Streaming is not supported by this browser');
 
         setTyping(false);
@@ -828,15 +895,29 @@
         addChatSaveButton(rendered, fullText, text);
         chatHistory.push({ role: 'assistant', content: fullText });
         persistChat();
+        incrementChatCount();
       } catch (error) {
         setTyping(false);
+        try {
+          const offline = await buildOfflineAdvisorReply(text);
+          if (offline) {
+            if (!rendered) rendered = createMessage('assistant', offline, false);
+            else updateStreamMessage(rendered, offline, false);
+            addChatSaveButton(rendered, offline, text);
+            chatHistory.push({ role: 'assistant', content: offline });
+            persistChat();
+            incrementChatCount();
+            showToast('Showing saved Gospel words (offline)');
+            return;
+          }
+        } catch (_) { /* fall through */ }
         if (!rendered) rendered = createMessage('assistant', '', false);
         updateStreamMessage(
           rendered,
-          'I could not connect right now. Your question is still here whenever you are ready to try again.',
+          'I could not reach the live Advisor just now. Your question is saved — try again when you are connected, or open Seek for encouragement by theme.',
           false
         );
-        showToast('The Advisor is unavailable right now');
+        showToast('Advisor unavailable — try Seek themes');
         console.error('Chat request failed', error);
       }
     } finally {
