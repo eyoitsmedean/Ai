@@ -1274,6 +1274,7 @@ let libLoaded = false;
 let staticLibrary = null;
 let libTheme = '';
 let libTimer = null;
+let libReq = 0;
 let sitPayload = null;
 let sitStep = 1;
 let sitTimer = null;
@@ -1521,8 +1522,11 @@ function setLibTheme(theme) {
 
 function openThemeInLetters(theme) {
   if (!theme) return;
+  libTheme = theme;
+  const sel = document.getElementById('lib-theme');
+  if (sel) sel.value = theme;
   setSeekMode('letters');
-  setLibTheme(theme);
+  loadLibraryPage(true);
 }
 
 function excerptSaying(text) {
@@ -1587,6 +1591,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
 }
 
 async function loadLibraryPage(reset) {
+  const req = ++libReq;
   if (reset) {
     libOffset = 0;
     document.getElementById('lib-list').innerHTML = '';
@@ -1596,6 +1601,7 @@ async function loadLibraryPage(reset) {
   document.getElementById('lib-tools').style.display = 'block';
   try {
     const data = await fetchLibraryPage({ book: libBook, q: libQuery, theme: libTheme, limit: 40, offset: libOffset });
+    if (req !== libReq) return;
     libTotal = data.total || 0;
     const verses = data.verses || 0;
     const shown = libOffset + (data.sayings || []).length;
@@ -1606,10 +1612,11 @@ async function loadLibraryPage(reset) {
     libOffset = shown;
     libLoaded = true;
   } catch (_) {
+    if (req !== libReq) return;
     document.getElementById('lib-meta').textContent = '';
     document.getElementById('lib-list').innerHTML = '<p class="lib-empty">The letters could not be fetched. Refresh when you have a connection.</p>';
   } finally {
-    document.getElementById('lib-loading').style.display = 'none';
+    if (req === libReq) document.getElementById('lib-loading').style.display = 'none';
   }
 }
 
