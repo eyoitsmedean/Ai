@@ -15,18 +15,18 @@
     journal: 'Your Saved Passages',
   };
   const THEMES = [
-    ['Anxiety & Worry', '🌊'],
-    ['Grief & Loss', '🕊️'],
-    ['Forgiveness', '🤍'],
-    ['Loneliness', '🌿'],
-    ['Conflict & Relationships', '🌱'],
-    ['Fear', '🕯️'],
-    ['Purpose & Direction', '🧭'],
-    ['Faith & Doubt', '⚓'],
-    ['Suffering & Pain', '🌅'],
-    ['Shame & Guilt', '🌸'],
-    ['Peace', '☮️'],
-    ['Hope', '✨'],
+    ['Anxiety & Worry', ''],
+    ['Grief & Loss', ''],
+    ['Forgiveness', ''],
+    ['Loneliness', ''],
+    ['Conflict & Relationships', ''],
+    ['Fear', ''],
+    ['Purpose & Direction', ''],
+    ['Faith & Doubt', ''],
+    ['Suffering & Pain', ''],
+    ['Shame & Guilt', ''],
+    ['Peace', ''],
+    ['Hope', ''],
   ];
   const CHAT_DAILY_LIMIT = 5;
   const MAX_STORED_MESSAGES = 60;

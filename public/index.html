@@ -3,60 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#8B1A1A" />
+  <meta name="theme-color" content="#0E0C0B" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Daily guidance from the words Jesus actually spoke — affirmations, encouragement, and counsel drawn only from the red letters of the Gospels." />
-  <meta property="og:title" content="The Red Letter Advisor" />
-  <meta property="og:description" content="Not every verse — His words. Daily guidance from the Gospels." />
+  <meta name="description" content="Daily guidance from the words Jesus actually spoke — only the red letters of the Gospels." />
+  <meta property="og:title" content="Red Letter" />
+  <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
-  <title>The Red Letter Advisor</title>
+  <title>Red Letter</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/app.css" />
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
-
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — saved readings remain available.</div>
 
-<!-- Onboarding -->
+<!-- Onboarding: brand-first full composition -->
 <div id="onboarding" class="onboarding hidden" aria-label="Welcome">
   <div class="ob-step active" data-step="1">
-    <div class="ob-cross">✝</div>
-    <h1 class="ob-title">Red Letter</h1>
-    <p class="ob-sub">Daily guidance from the words Jesus actually spoke in the four Gospels.</p>
-    <div class="ob-features">
-      <div class="ob-feature">
-        <span class="ob-feature-icon" aria-hidden="true">✦</span>
-        <div class="ob-feature-text"><strong>Today’s Light</strong>One affirmation and teaching, grounded in His speech</div>
-      </div>
-      <div class="ob-feature">
-        <span class="ob-feature-icon" aria-hidden="true">♡</span>
-        <div class="ob-feature-text"><strong>Encouragement</strong>Twelve life themes — anxiety, grief, forgiveness, hope</div>
-      </div>
-      <div class="ob-feature">
-        <span class="ob-feature-icon" aria-hidden="true">†</span>
-        <div class="ob-feature-text"><strong>The Advisor</strong>Ask anything — answers cite only red-letter verses</div>
-      </div>
-    </div>
-    <button type="button" class="ob-btn" onclick="document.querySelector('.ob-step[data-step=&quot;1&quot;]').classList.remove('active');document.querySelector('.ob-step[data-step=&quot;2&quot;]').classList.add('active')">Continue</button>
-    <p class="ob-note">Reflective guidance for prayer — not a substitute for pastoral care, therapy, or crisis help.</p>
+    <p class="hero-kicker" style="color:rgba(255,255,255,.45);margin-bottom:18px">Only His words</p>
+    <h1 class="ob-title" style="font-size:clamp(42px,12vw,64px);letter-spacing:-0.03em;line-height:0.95">Red<br>Letter</h1>
+    <p class="ob-sub" style="max-width:320px;margin:28px auto 36px;font-family:var(--font-read);font-size:1.15rem;font-style:italic;color:rgba(255,230,230,.82)">
+      “Come to me, all you who labor and are heavily burdened, and I will give you rest.”
+      <span style="display:block;margin-top:12px;font-size:0.78rem;font-style:normal;letter-spacing:0.08em;text-transform:uppercase;opacity:.55;font-family:var(--font-ui)">Matthew 11:28</span>
+    </p>
+    <button type="button" class="ob-btn" onclick="document.querySelector('.ob-step[data-step=&quot;1&quot;]').classList.remove('active');document.querySelector('.ob-step[data-step=&quot;2&quot;]').classList.add('active')">Enter</button>
+    <p class="ob-note">Guidance for prayer — not a substitute for pastoral care, therapy, or crisis help.</p>
   </div>
   <div class="ob-step" data-step="2">
-    <div class="ob-cross">✝</div>
-    <h1 class="ob-title">Where should we begin?</h1>
-    <p class="ob-sub">One choice. We’ll take you straight to value.</p>
+    <p class="hero-kicker" style="color:rgba(255,255,255,.45);margin-bottom:12px">Begin</p>
+    <h1 class="ob-title" style="font-size:clamp(28px,8vw,40px)">Where now?</h1>
+    <p class="ob-sub">One quiet choice.</p>
     <div class="ob-intents">
-      <button type="button" class="ob-intent" onclick="selectIntent('today')"><strong>Today’s word</strong><span>A quiet daily reading</span></button>
-      <button type="button" class="ob-intent" onclick="selectIntent('seek')"><strong>I need encouragement</strong><span>Comfort for a real situation</span></button>
-      <button type="button" class="ob-intent" onclick="selectIntent('advisor')"><strong>I have a question</strong><span>Ask the Advisor</span></button>
+      <button type="button" class="ob-intent" onclick="selectIntent('today')"><strong>Today’s word</strong><span>A single reading</span></button>
+      <button type="button" class="ob-intent" onclick="selectIntent('seek')"><strong>I need encouragement</strong><span>For a real situation</span></button>
+      <button type="button" class="ob-intent" onclick="selectIntent('advisor')"><strong>I have a question</strong><span>Ask from the red letters</span></button>
     </div>
-    <button type="button" class="ob-btn" onclick="completeOnboarding('today')" style="margin-top:20px;background:transparent;color:rgba(255,255,255,.75);box-shadow:none;border:1px solid rgba(255,255,255,.2)">Just begin</button>
+    <button type="button" class="ob-btn" onclick="completeOnboarding('today')" style="margin-top:28px;background:transparent;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.15);box-shadow:none">Just begin</button>
   </div>
 </div>
 
@@ -71,6 +59,9 @@
     </div>
     <div class="header-right">
       <button type="button" id="install-btn" hidden aria-label="Install app">Install</button>
+      <button type="button" class="icon-btn" onclick="openCommandPalette()" aria-label="Search" title="Search (⌘K)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+      </button>
       <div class="streak-badge" id="streak-badge" title="Practice streak"><span id="streak-num">1</span></div>
       <button type="button" class="icon-btn" onclick="openSettings()" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -81,15 +72,11 @@
   </header>
 
   <div class="pages">
-    <!-- TODAY -->
-    <div class="page active" id="today-page">
+    <!-- TODAY — reading room -->
+    <div class="page active reading-room" id="today-page">
       <div class="today-meta">
         <span class="today-date" id="today-date"></span>
         <span class="today-streak" id="today-streak-label"></span>
-      </div>
-      <div class="page-hd" style="padding-top:6px">
-        <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
-        <h1 class="page-hd-title">Today’s <em>Light</em></h1>
       </div>
 
       <div class="practice-track" aria-label="Today’s practice">
@@ -97,68 +84,55 @@
         <div class="practice-step" id="ps-word"><span class="practice-step-num">2</span> Word</div>
         <div class="practice-step" id="ps-reflect"><span class="practice-step-num">3</span> Reflect</div>
       </div>
-      <div class="practice-complete" id="practice-complete" hidden>Today’s practice is complete. Rest here — return tomorrow.</div>
+      <div class="practice-complete" id="practice-complete" hidden>Today’s practice is complete. Rest here.</div>
 
-      <div class="section-label">Daily Affirmation</div>
-      <div class="card card-crimson" id="aff-card">
+      <!-- HERO: brand + one red letter — first viewport -->
+      <div class="card card-crimson hero-letter" id="aff-card">
         <div class="card-body">
-          <div class="badge badge-white" style="margin-bottom:12px">✦ For You Today</div>
+          <div class="hero-kicker" id="today-greeting">Good morning</div>
+          <div class="hero-brand" aria-hidden="true">Red Letter</div>
           <div id="aff-skel">
             <div class="skel skel-wh sl h f"></div>
-            <div class="skel skel-wh sl l" style="margin-top:2px"></div>
-            <div class="skel skel-wh sl m" style="margin-bottom:14px"></div>
-            <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:14px"></div>
-            <div class="skel skel-wh sl s" style="height:12px"></div>
+            <div class="skel skel-wh sl l" style="margin-top:8px"></div>
+            <div class="skel skel-wh sl m" style="margin-top:8px"></div>
           </div>
           <div id="aff-content" style="display:none">
-            <div class="aff-text" id="aff-text"></div>
-            <div class="aff-divider"></div>
-            <div class="aff-quote" id="aff-quote"></div>
-            <div class="aff-verse" id="aff-verse"></div>
+            <p class="aff-text" id="aff-text" hidden></p>
+            <div class="hero-quote aff-quote word-reveal" id="aff-quote"></div>
+            <div class="hero-cite aff-verse" id="aff-verse"></div>
             <div class="card-actions">
               <button type="button" class="action-btn" id="aff-save-btn" onclick="toggleSave('aff');markPractice('aff')">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 <span id="aff-save-label">Save</span>
               </button>
-              <button type="button" class="action-btn" onclick="shareItem('aff');markPractice('aff')">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share card
-              </button>
+              <button type="button" class="action-btn" onclick="shareItem('aff');markPractice('aff')">Share</button>
+              <button type="button" class="action-btn" onclick="openLectioFromAff()">Sit with this</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="section-label">Word of the Day</div>
-      <div class="card" id="word-card">
+      <!-- Manuscript: word of the day -->
+      <div class="section-label">Word of the day</div>
+      <div class="card manuscript" id="word-card">
         <div class="card-body">
           <div id="word-skel">
-            <div class="skel sl s b" style="border-radius:20px;width:72px;margin-bottom:10px"></div>
+            <div class="skel sl s b" style="width:72px;margin-bottom:10px"></div>
             <div class="skel sl h l" style="margin-bottom:12px"></div>
-            <div style="background:var(--bg-2);border-radius:8px;padding:12px;margin-bottom:10px">
-              <div class="skel sl f"></div>
-              <div class="skel sl l"></div>
-              <div class="skel sl m"></div>
-            </div>
-            <div class="skel sl s" style="height:12px;margin-bottom:12px"></div>
             <div class="skel sl f"></div>
             <div class="skel sl l"></div>
+            <div class="skel sl m"></div>
           </div>
           <div id="word-content" style="display:none">
             <div class="badge badge-crimson" id="word-theme" style="margin-bottom:8px"></div>
             <div class="word-title" id="word-title"></div>
-            <div class="blockquote" id="word-passage"></div>
+            <div class="blockquote" id="word-passage" role="button" tabindex="0" onclick="openLectioFromWord()" onkeydown="if(event.key==='Enter')openLectioFromWord()" title="Open focus reading"></div>
             <div class="word-verse-label" id="word-verse"></div>
             <div class="word-reflection" id="word-reflection"></div>
             <div class="card-actions dark-sep">
               <button type="button" class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 <span id="word-save-label">Save</span>
               </button>
-              <button type="button" class="action-btn-dark" onclick="shareItem('word')">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share card
-              </button>
+              <button type="button" class="action-btn-dark" onclick="shareItem('word')">Share</button>
               <button type="button" class="action-btn-dark" onclick="discussToday()">Discuss</button>
             </div>
           </div>
@@ -167,10 +141,10 @@
 
       <div class="cta-row">
         <button type="button" class="cta-btn cta-btn-primary" onclick="discussToday()">Ask about today’s word</button>
-        <button type="button" class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find encouragement</button>
+        <button type="button" class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Encouragement</button>
       </div>
 
-      <div class="section-label">Red Letter Library</div>
+      <div class="section-label">Browse His words</div>
       <div class="library-scroll" id="library-scroll" aria-label="Browse sayings"></div>
       <div class="library-panel" id="library-panel" hidden></div>
     </div>
@@ -178,41 +152,30 @@
     <!-- SEEK -->
     <div class="page" id="seek-page">
       <div class="page-hd">
-        <div class="page-hd-eyebrow">Choose a theme</div>
-        <h1 class="page-hd-title">Words of <em>Encouragement</em></h1>
+        <div class="page-hd-eyebrow">When life is heavy</div>
+        <h1 class="page-hd-title">Words of <em>encouragement</em></h1>
       </div>
       <div id="theme-grid"></div>
       <div id="enc-loading" style="display:none;padding:0 14px">
-        <div style="padding:14px 0">
-          <div class="skel sl s b" style="margin-bottom:6px"></div>
-          <div class="skel sl m h"></div>
-        </div>
-        <div class="skel sl f" style="margin-bottom:7px"></div>
-        <div class="skel sl l" style="margin-bottom:18px"></div>
-        <div class="passage-card" style="background:var(--surface-2)">
-          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
-          <div class="skel sl f"></div><div class="skel sl l"></div>
-        </div>
+        <div class="skel sl m h" style="margin:14px 0"></div>
+        <div class="skel sl f"></div>
+        <div class="skel sl l"></div>
       </div>
       <div class="enc-result" id="enc-result">
-        <button type="button" class="back-btn" onclick="showThemeGrid()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          All themes
-        </button>
+        <button type="button" class="back-btn" onclick="showThemeGrid()">All themes</button>
         <div class="enc-headline" id="enc-headline"></div>
         <div class="enc-opening" id="enc-opening"></div>
         <div id="enc-passages"></div>
         <div class="practice-card">
-          <div class="practice-label">✦ Practice for Today</div>
+          <div class="practice-label">A practice</div>
           <div class="practice-text" id="enc-practice"></div>
         </div>
         <div class="enc-closing" id="enc-closing"></div>
         <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-            <span id="enc-save-label">Save this</span>
+            <span id="enc-save-label">Save</span>
           </button>
-          <button type="button" class="action-btn-dark" onclick="shareItem('enc')">Share card</button>
+          <button type="button" class="action-btn-dark" onclick="shareItem('enc')">Share</button>
         </div>
       </div>
     </div>
@@ -221,12 +184,12 @@
     <div class="page" id="advisor-page">
       <div class="chat-scroll" id="chat-scroll">
         <div class="page-hd" style="padding-bottom:10px">
-          <div class="page-hd-eyebrow">Ask anything</div>
+          <div class="page-hd-eyebrow">Counsel</div>
           <h1 class="page-hd-title">The <em>Advisor</em></h1>
         </div>
         <div class="advisor-welcome">
-          <div class="advisor-welcome-title">Only the Words of Jesus</div>
-          <div class="advisor-welcome-text">Every response draws from His direct speech in Matthew, Mark, Luke, and John — every verse cited. Not pastoral care or crisis support.</div>
+          <div class="advisor-welcome-title">Only the words He spoke</div>
+          <div class="advisor-welcome-text">Answers cite Matthew, Mark, Luke, and John — never invented sayings. Not pastoral care or crisis support.</div>
         </div>
         <div class="suggestions" id="suggestions">
           <button type="button" class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
@@ -243,7 +206,7 @@
       </div>
       <div class="chat-limit-note" id="chat-limit-note"></div>
       <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chat-input" placeholder="Share what’s on your heart…" rows="1" aria-label="Message"></textarea>
+        <textarea class="chat-input" id="chat-input" placeholder="What’s on your heart…" rows="1" aria-label="Message"></textarea>
         <button type="button" class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -253,14 +216,14 @@
     <!-- JOURNAL -->
     <div class="page" id="journal-page">
       <div class="page-hd">
-        <div class="page-hd-eyebrow">Saved passages</div>
+        <div class="page-hd-eyebrow">Kept close</div>
         <h1 class="page-hd-title">My <em>Journal</em></h1>
       </div>
       <div id="journal-list"></div>
     </div>
   </div>
 
-  <nav class="nav" id="nav" aria-label="Primary">
+  <nav class="nav dock" id="nav" aria-label="Primary">
     <button type="button" class="nav-btn active" id="nav-today" onclick="switchTab('today')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
         <circle cx="12" cy="12" r="4.5"/>
@@ -292,6 +255,21 @@
   </nav>
 </div>
 
+<!-- Lectio focus -->
+<div class="lectio" id="lectio" aria-hidden="true" role="dialog" aria-label="Focus reading">
+  <button type="button" class="lectio-close" onclick="closeLectio()" aria-label="Close">Close</button>
+  <div class="lectio-quote" id="lectio-quote"></div>
+  <div class="lectio-cite" id="lectio-cite"></div>
+</div>
+
+<!-- Command palette -->
+<div class="cmdk" id="cmdk" aria-hidden="true" role="dialog" aria-label="Command palette">
+  <div class="cmdk-box">
+    <input class="cmdk-input" id="cmdk-input" type="search" placeholder="Ask, seek, or open a word…" autocomplete="off" />
+    <div class="cmdk-list" id="cmdk-list"></div>
+  </div>
+</div>
+
 <div class="sheet-overlay" id="overlay" onclick="closeSettings();closePlus()"></div>
 
 <div class="settings-sheet" id="settings-sheet" role="dialog" aria-label="Settings">
@@ -300,7 +278,7 @@
   <div class="setting-row">
     <div>
       <div class="setting-label">Dark Mode</div>
-      <div class="setting-sub">Easier on the eyes at night</div>
+      <div class="setting-sub">A quieter room at night</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
@@ -310,7 +288,7 @@
   <div class="setting-row">
     <div>
       <div class="setting-label">Text Size</div>
-      <div class="setting-sub">Adjust reading comfort</div>
+      <div class="setting-sub">Reading comfort</div>
     </div>
     <div class="fs-control">
       <button type="button" class="fs-btn" id="fs-sm" onclick="setFs('sm')" style="font-size:12px">A−</button>
@@ -321,13 +299,13 @@
   <div class="setting-row">
     <div>
       <div class="setting-label">Clear Advisor chat</div>
-      <div class="setting-sub">Removes local conversation history</div>
+      <div class="setting-sub">Removes local history</div>
     </div>
     <button type="button" class="action-btn-dark" onclick="clearChat();closeSettings()">Clear</button>
   </div>
   <div class="sheet-about">
-    <p><strong>The Red Letter Advisor</strong> answers from the direct words of Jesus in Matthew, Mark, Luke, and John (red-letter passages). Scripture shown offline uses the World English Bible (public domain).</p>
-    <p style="margin-top:10px">If you are in crisis, call or text <a href="tel:988">988</a> (US) or visit <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP resources</a>.</p>
+    <p><strong>Red Letter</strong> draws only from the direct words of Jesus in Matthew, Mark, Luke, and John. Offline text uses the World English Bible (public domain).</p>
+    <p style="margin-top:10px">Crisis? Call or text <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a></p>
   </div>
 </div>
 
@@ -336,7 +314,7 @@
     <div class="plus-title">You’ve used today’s free conversations</div>
     <ul class="plus-list">
       <li>Unlimited Advisor guidance</li>
-      <li>All encouragement themes unlocked</li>
+      <li>All encouragement themes</li>
       <li>Support spreading His words</li>
     </ul>
     <button type="button" class="plus-cta">Notify me about Plus</button>
@@ -349,5 +327,6 @@
 <script src="/js/share-card.js"></script>
 <script src="/js/crisis.js"></script>
 <script src="/js/app.js"></script>
+<script src="/js/atelier.js"></script>
 </body>
 </html>

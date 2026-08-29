@@ -1,4 +1,4 @@
-const CACHE = 'rla-v3';
+const CACHE = 'rla-v4-chapel';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -7,6 +7,7 @@ const PRECACHE = [
   '/js/app.js',
   '/js/share-card.js',
   '/js/crisis.js',
+  '/js/atelier.js',
   '/data/corpus.json',
   '/icon-192.png',
   '/icon-512.png',
