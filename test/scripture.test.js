@@ -10,8 +10,11 @@ const {
   verifyAdvisorText,
   verifyJsonQuotes,
   verifyQuote,
+  isRedLetter,
+  spokenAt,
 } = require('../lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
+const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
 
 describe('parseRef', () => {
   it('parses full names and ranges', () => {
@@ -165,5 +168,32 @@ describe('similarity', () => {
     const canon = lookup('John 14:1').text;
     assert.ok(similarity(canon, canon) > 0.99);
     assert.ok(similarity(canon, 'try not to be sad, believe more') < 0.5);
+  });
+});
+
+describe('spoken corpus', () => {
+  it('treats genealogy as narrator, not red-letter', () => {
+    assert.equal(isRedLetter('Matthew 1:1'), false);
+    const v = verifyQuote('Matthew 1:1', lookup('Matthew 1:1').text);
+    assert.equal(v.ok, false);
+    assert.equal(v.reason, 'not-red-letter');
+  });
+
+  it('uses the spoken span for Mark 4:39 and John 8:12', () => {
+    assert.match(spokenAt('Mark', 4, 39), /Peace, be still/i);
+    assert.doesNotMatch(spokenAt('Mark', 4, 39), /he arose/i);
+    assert.match(spokenAt('John', 8, 12), /^I am the light of the world/i);
+    assert.equal(lookup('Mark 4:39').redLetter, true);
+  });
+
+  it('groups sayings and can be searched', () => {
+    assert.ok(verseCount() > 1800);
+    assert.ok(sayingCount() > 500);
+    const beatitudes = searchLibrary({ q: 'blessed are the poor', limit: 5 });
+    assert.ok(beatitudes.sayings.length >= 1);
+    assert.match(beatitudes.sayings[0].text, /Blessed are the poor/i);
+    const john = searchLibrary({ book: 'John', q: 'I am the way', limit: 3 });
+    assert.ok(john.sayings.length >= 1);
+    assert.match(john.sayings[0].citation, /^John /);
   });
 });

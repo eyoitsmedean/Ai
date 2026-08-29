@@ -7,11 +7,11 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 ## The room
 
 - **Today** — a morning affirmation and word of the day, quoted in crimson
-- **Seek** — twelve encouragement rooms (anxiety, grief, forgiveness…)
+- **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying in the four Gospels
 - **Advisor** — a short correspondence; scripture is verified against a Gospel corpus
 - **Journal** — a commonplace book kept on this device
 
-Quoted verses are checked against the public-domain **King James Version** (1769). If the model paraphrases, the page prints the canonical text instead.
+Quoted verses are checked against the public-domain **King James Version** (1769). A red-letter map plus spoken-text extraction keeps narrator frames out of the quote. If the model paraphrases, the page prints the canonical speech instead.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 
@@ -34,7 +34,10 @@ API_ACCESS_KEY=        # optional gate for /api/*
 
 ```bash
 npm test
+npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
+
+The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
 
 ## Design
 

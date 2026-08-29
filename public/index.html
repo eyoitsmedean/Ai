@@ -84,6 +84,17 @@ html, body {
 button { font-family: inherit; cursor: pointer; color: inherit; }
 textarea { font-family: var(--body); }
 :focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .grain {
   pointer-events: none;
@@ -515,6 +526,108 @@ textarea { font-family: var(--body); }
 .enc-result { display: none; }
 .enc-result.on { display: block; animation: rise .4s var(--ease); }
 
+.mode-switch {
+  display: flex;
+  gap: 0;
+  margin: 8px 0 28px;
+  border-bottom: 1px solid var(--rule);
+}
+.mode-btn {
+  background: none;
+  border: none;
+  padding: 10px 0 12px;
+  margin-right: 22px;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+}
+.mode-btn.on { color: var(--crimson); border-bottom-color: var(--crimson); }
+.seek-pane[hidden] { display: none !important; }
+
+.lib-tools { margin-bottom: 8px; }
+.lib-search {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  padding: 10px 2px 12px;
+  font-family: var(--body);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink);
+  outline: none;
+}
+.lib-search:focus { border-bottom-color: var(--crimson); }
+.lib-search::placeholder { color: var(--ink-4); }
+.lib-books { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 6px; }
+.lib-book {
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 6px 10px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.lib-book.on, .lib-book:hover { border-color: var(--crimson); color: var(--crimson); }
+.lib-meta {
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin: 8px 0 4px;
+}
+.saying-row {
+  display: grid;
+  grid-template-columns: minmax(92px, 120px) 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+  background: none;
+  border-left: 0; border-right: 0; border-bottom: 0;
+  text-align: left;
+  width: 100%;
+}
+.saying-row:last-child { border-bottom: 1px solid var(--rule); }
+.saying-row:hover .saying-cite { color: var(--crimson); }
+.saying-cite {
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.saying-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lib-more, .lib-empty {
+  margin: 18px 0;
+  font-family: var(--body);
+  color: var(--ink-3);
+  font-style: italic;
+}
+.lib-folio { display: none; }
+.lib-folio.on { display: block; animation: rise .4s var(--ease); }
+.lib-folio-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(22px, 3.6vw, 30px);
+  line-height: 1.4;
+  color: var(--crimson);
+  max-width: 28ch;
+}
+
 /* Advisor */
 .letter-head { margin-bottom: 22px; }
 .welcome {
@@ -866,26 +979,63 @@ textarea { font-family: var(--body); }
       </div>
 
       <div class="page" id="seek-page">
-        <p class="eyebrow">A small hymnal</p>
-        <h1 class="display">Words of <em>encouragement</em></h1>
-        <p class="lede" style="margin:14px 0 28px">Twelve rooms. Each one opened with the sentences He actually said.</p>
-        <div id="theme-grid"></div>
-        <div id="enc-loading" style="display:none;padding-top:12px">
-          <div class="skel h m"></div><div class="skel f"></div><div class="skel l"></div>
+        <p class="eyebrow" id="seek-eyebrow">A small hymnal</p>
+        <h1 class="display" id="seek-title">Words of <em>encouragement</em></h1>
+        <p class="lede" id="seek-lede" style="margin:14px 0 8px">Twelve rooms. Each one opened with the sentences He actually said.</p>
+        <div class="mode-switch" role="tablist" aria-label="Seek">
+          <button class="mode-btn on" id="mode-rooms" role="tab" aria-selected="true" onclick="setSeekMode('rooms')">Rooms</button>
+          <button class="mode-btn" id="mode-letters" role="tab" aria-selected="false" onclick="setSeekMode('letters')">The letters</button>
         </div>
-        <div class="enc-result" id="enc-result">
-          <button class="back-btn" onclick="showThemeGrid()">All rooms</button>
-          <h2 class="enc-headline" id="enc-headline"></h2>
-          <p class="enc-opening" id="enc-opening"></p>
-          <div id="enc-passages"></div>
-          <div class="practice">
-            <div class="practice-label">A practice</div>
-            <div class="practice-text" id="enc-practice"></div>
+
+        <div class="seek-pane" id="rooms-pane">
+          <div id="theme-grid"></div>
+          <div id="enc-loading" style="display:none;padding-top:12px">
+            <div class="skel h m"></div><div class="skel f"></div><div class="skel l"></div>
           </div>
-          <p class="enc-closing" id="enc-closing"></p>
-          <div class="actions">
-            <button class="ghost" id="enc-save-btn" onclick="toggleSave('enc')"><span id="enc-save-label">Keep this</span></button>
-            <button class="ghost" onclick="shareItem('enc')">Share card</button>
+          <div class="enc-result" id="enc-result">
+            <button class="back-btn" onclick="showThemeGrid()">All rooms</button>
+            <h2 class="enc-headline" id="enc-headline"></h2>
+            <p class="enc-opening" id="enc-opening"></p>
+            <div id="enc-passages"></div>
+            <div class="practice">
+              <div class="practice-label">A practice</div>
+              <div class="practice-text" id="enc-practice"></div>
+            </div>
+            <p class="enc-closing" id="enc-closing"></p>
+            <div class="actions">
+              <button class="ghost" id="enc-save-btn" onclick="toggleSave('enc')"><span id="enc-save-label">Keep this</span></button>
+              <button class="ghost" onclick="shareItem('enc')">Share card</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="seek-pane" id="letters-pane" hidden>
+          <div class="lib-tools" id="lib-tools">
+            <label class="sr-only" for="lib-q">Search the spoken words</label>
+            <input class="lib-search" id="lib-q" type="search" placeholder="Search the spoken words…" autocomplete="off" />
+            <div class="lib-books" id="lib-books" role="group" aria-label="Gospel">
+              <button class="lib-book on" type="button" data-book="" onclick="setLibBook('')">All</button>
+              <button class="lib-book" type="button" data-book="Matthew" onclick="setLibBook('Matthew')">Matthew</button>
+              <button class="lib-book" type="button" data-book="Mark" onclick="setLibBook('Mark')">Mark</button>
+              <button class="lib-book" type="button" data-book="Luke" onclick="setLibBook('Luke')">Luke</button>
+              <button class="lib-book" type="button" data-book="John" onclick="setLibBook('John')">John</button>
+            </div>
+            <p class="lib-meta" id="lib-meta"></p>
+          </div>
+          <div id="lib-loading" style="display:none;padding-top:12px">
+            <div class="skel h m"></div><div class="skel f"></div><div class="skel l"></div>
+          </div>
+          <div id="lib-list"></div>
+          <div class="lib-folio" id="lib-folio">
+            <button class="back-btn" onclick="closeLibFolio()">All sayings</button>
+            <p class="eyebrow" id="lib-folio-book"></p>
+            <p class="cite" id="lib-folio-cite" style="margin:8px 0 22px"></p>
+            <p class="lib-folio-quote" id="lib-folio-quote"></p>
+            <div class="actions">
+              <button class="ghost" id="lib-save-btn" onclick="toggleSave('lib')"><span id="lib-save-label">Keep</span></button>
+              <button class="ghost" onclick="shareItem('lib')">Share card</button>
+              <button class="ghost" onclick="askAboutSaying()">Ask about this</button>
+            </div>
           </div>
         </div>
       </div>
@@ -976,7 +1126,7 @@ textarea { font-family: var(--body); }
     </div>
   </div>
   <div class="sheet-about">
-    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
   </div>
 </aside>
 <div class="toast" id="toast"></div>
@@ -1001,6 +1151,15 @@ const THEMES = [
 let dailyData = null;
 let currentEncData = null;
 let currentEncTheme = null;
+let currentSaying = null;
+let seekMode = 'rooms';
+let libBook = '';
+let libQuery = '';
+let libOffset = 0;
+let libTotal = 0;
+let libLoaded = false;
+let staticLibrary = null;
+let libTimer = null;
 let chatHistory = [];
 let isChatBusy = false;
 let curatedPacks = null;
@@ -1055,6 +1214,7 @@ function switchTab(tab) {
   const subs = { today: 'Today', seek: 'Seek', advisor: 'Advisor', journal: 'Journal' };
   document.getElementById('header-sub').textContent = subs[tab];
   if (tab === 'journal') renderJournal();
+  if (tab === 'seek' && seekMode === 'letters' && !libLoaded) loadLibraryPage(true);
 }
 
 function padDate(d) {
@@ -1193,6 +1353,163 @@ function showThemeGrid() {
   document.getElementById('theme-grid').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
 }
+
+function setSeekMode(mode) {
+  seekMode = mode === 'letters' ? 'letters' : 'rooms';
+  const rooms = seekMode === 'rooms';
+  document.getElementById('mode-rooms').classList.toggle('on', rooms);
+  document.getElementById('mode-letters').classList.toggle('on', !rooms);
+  document.getElementById('mode-rooms').setAttribute('aria-selected', rooms ? 'true' : 'false');
+  document.getElementById('mode-letters').setAttribute('aria-selected', rooms ? 'false' : 'true');
+  document.getElementById('rooms-pane').hidden = !rooms;
+  document.getElementById('letters-pane').hidden = rooms;
+  document.getElementById('seek-eyebrow').textContent = rooms ? 'A small hymnal' : 'The spoken corpus';
+  document.getElementById('seek-title').innerHTML = rooms ? 'Words of <em>encouragement</em>' : 'The <em>letters</em>';
+  document.getElementById('seek-lede').textContent = rooms
+    ? 'Twelve rooms. Each one opened with the sentences He actually said.'
+    : 'Every saying in Matthew, Mark, Luke, and John — His speech only, not the narrator.';
+  document.getElementById('seek-page').scrollTop = 0;
+  if (!rooms) {
+    closeLibFolio();
+    if (!libLoaded) loadLibraryPage(true);
+  }
+}
+
+function setLibBook(book) {
+  libBook = book || '';
+  document.querySelectorAll('.lib-book').forEach((btn) => {
+    btn.classList.toggle('on', (btn.dataset.book || '') === libBook);
+  });
+  loadLibraryPage(true);
+}
+
+function excerptSaying(text) {
+  const clean = String(text || '').trim();
+  return clean.length > 160 ? clean.slice(0, 157).replace(/\s+\S*$/, '') + '…' : clean;
+}
+
+function filterStaticLibrary({ book, q, limit, offset }) {
+  const all = staticLibrary?.sayings || [];
+  const query = String(q || '').trim().toLowerCase();
+  let rows = all;
+  if (book) rows = rows.filter((s) => s.book === book);
+  if (query) {
+    rows = rows.filter((s) => s.text.toLowerCase().includes(query) || s.citation.toLowerCase().includes(query));
+  }
+  const start = Math.max(0, Number(offset) || 0);
+  const take = Math.min(120, Math.max(1, Number(limit) || 60));
+  return { total: rows.length, verses: staticLibrary?.verses || 0, sayings: rows.slice(start, start + take) };
+}
+
+async function loadStaticLibrary() {
+  if (staticLibrary) return staticLibrary;
+  const res = await fetch('/library.json');
+  if (!res.ok) throw new Error('library missing');
+  staticLibrary = await res.json();
+  return staticLibrary;
+}
+
+async function fetchLibraryPage({ book, q, limit, offset }) {
+  try {
+    const params = new URLSearchParams();
+    if (book) params.set('book', book);
+    if (q) params.set('q', q);
+    params.set('limit', String(limit));
+    params.set('offset', String(offset));
+    const res = await fetch('/api/library?' + params.toString());
+    if (!res.ok) throw new Error('api');
+    return await res.json();
+  } catch (_) {
+    await loadStaticLibrary();
+    return filterStaticLibrary({ book, q, limit, offset });
+  }
+}
+
+async function loadLibraryPage(reset) {
+  if (reset) {
+    libOffset = 0;
+    document.getElementById('lib-list').innerHTML = '';
+    closeLibFolio();
+  }
+  document.getElementById('lib-loading').style.display = 'block';
+  document.getElementById('lib-tools').style.display = 'block';
+  try {
+    const data = await fetchLibraryPage({ book: libBook, q: libQuery, limit: 40, offset: libOffset });
+    libTotal = data.total || 0;
+    const verses = data.verses || 0;
+    const shown = libOffset + (data.sayings || []).length;
+    document.getElementById('lib-meta').textContent = libQuery || libBook
+      ? `${libTotal} sayings` + (verses ? `  ·  ${verses} spoken verses` : '')
+      : `${verses || libTotal} spoken verses  ·  ${libTotal} sayings`;
+    appendSayings(data.sayings || [], shown < libTotal);
+    libOffset = shown;
+    libLoaded = true;
+  } catch (_) {
+    document.getElementById('lib-meta').textContent = '';
+    document.getElementById('lib-list').innerHTML = '<p class="lib-empty">The letters could not be fetched. Refresh when you have a connection.</p>';
+  } finally {
+    document.getElementById('lib-loading').style.display = 'none';
+  }
+}
+
+function appendSayings(sayings, hasMore) {
+  const list = document.getElementById('lib-list');
+  const more = list.querySelector('.lib-more-btn');
+  if (more) more.remove();
+  if (!libOffset && !sayings.length) {
+    list.innerHTML = '<p class="lib-empty">No saying matches that search.</p>';
+    return;
+  }
+  sayings.forEach((s) => {
+    const btn = document.createElement('button');
+    btn.className = 'saying-row';
+    btn.type = 'button';
+    btn.innerHTML = '<span class="saying-cite">' + esc(s.citation) + '</span><span class="saying-text">' + esc(excerptSaying(s.text)) + '</span>';
+    btn.addEventListener('click', () => openLibFolio(s));
+    list.appendChild(btn);
+  });
+  if (hasMore) {
+    const moreBtn = document.createElement('button');
+    moreBtn.className = 'back-btn lib-more-btn';
+    moreBtn.type = 'button';
+    moreBtn.textContent = 'More sayings';
+    moreBtn.addEventListener('click', () => loadLibraryPage(false));
+    list.appendChild(moreBtn);
+  }
+}
+
+function openLibFolio(saying) {
+  currentSaying = saying;
+  document.getElementById('lib-tools').style.display = 'none';
+  document.getElementById('lib-list').style.display = 'none';
+  document.getElementById('lib-folio-book').textContent = saying.book;
+  document.getElementById('lib-folio-cite').textContent = saying.citation + '  ·  KJV';
+  document.getElementById('lib-folio-quote').textContent = saying.text;
+  setSaveBtnState('lib', isSaved('lib-' + saying.id));
+  document.getElementById('lib-folio').classList.add('on');
+  document.getElementById('seek-page').scrollTop = 0;
+}
+
+function closeLibFolio() {
+  currentSaying = null;
+  document.getElementById('lib-folio').classList.remove('on');
+  document.getElementById('lib-tools').style.display = 'block';
+  document.getElementById('lib-list').style.display = 'block';
+}
+
+function askAboutSaying() {
+  if (!currentSaying) return;
+  const clip = currentSaying.text.length > 180 ? currentSaying.text.slice(0, 177) + '…' : currentSaying.text;
+  switchTab('advisor');
+  chatInput.value = 'Sit with me in ' + currentSaying.citation + ': “' + clip + '”';
+  chatInput.focus();
+}
+
+document.getElementById('lib-q').addEventListener('input', (e) => {
+  libQuery = e.target.value.slice(0, 80);
+  clearTimeout(libTimer);
+  libTimer = setTimeout(() => loadLibraryPage(true), 220);
+});
 
 const chatInput = document.getElementById('chat-input');
 chatInput.addEventListener('keydown', e => {
@@ -1377,10 +1694,10 @@ function renderJournal() {
   const list = document.getElementById('journal-list');
   const items = getJournal();
   if (!items.length) {
-    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a room, or a letter. They will wait here, on this paper, on this device.</div></div>`;
+    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -1403,7 +1720,12 @@ function deleteJournalItem(key) {
 }
 
 function toggleSave(type) {
-  const keyMap = { aff: 'aff-' + todayStr(), word: 'word-' + todayStr(), enc: 'enc-' + slugify(currentEncTheme || '') };
+  const keyMap = {
+    aff: 'aff-' + todayStr(),
+    word: 'word-' + todayStr(),
+    enc: 'enc-' + slugify(currentEncTheme || ''),
+    lib: currentSaying ? 'lib-' + currentSaying.id : '',
+  };
   const key = keyMap[type];
   if (!key) return;
   if (isSaved(key)) {
@@ -1416,6 +1738,7 @@ function toggleSave(type) {
   if (type === 'aff' && dailyData) item = { id: key, key, type: 'aff', title: dailyData.affirmation.text.slice(0, 80), body: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
   else if (type === 'word' && dailyData) item = { id: key, key, type: 'word', title: dailyData.word.title, body: dailyData.word.passage, verse: dailyData.word.verse };
   else if (type === 'enc' && currentEncData) item = { id: key, key, type: 'enc', title: currentEncData.headline, body: currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
+  else if (type === 'lib' && currentSaying) item = { id: key, key, type: 'lib', title: currentSaying.citation, body: currentSaying.text, verse: currentSaying.citation };
   if (item) { saveJournalItem(item); setSaveBtnState(type, true); showToast('Kept in the journal'); }
 }
 
@@ -1431,6 +1754,7 @@ function sharePayload(type) {
   if (type === 'aff' && dailyData) return { kicker: 'Today', title: dailyData.affirmation.text, quote: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
   if (type === 'word' && dailyData) return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse };
   if (type === 'enc' && currentEncData) return { kicker: currentEncTheme, title: currentEncData.headline, quote: currentEncData.passages?.[0]?.quote || currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
+  if (type === 'lib' && currentSaying) return { kicker: currentSaying.book, title: currentSaying.citation, quote: currentSaying.text, verse: currentSaying.citation };
   return null;
 }
 

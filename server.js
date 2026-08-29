@@ -4,6 +4,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
 const { parseModelJson, verifyAdvisorText, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
+const { searchLibrary } = require('./lib/library');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -196,6 +197,16 @@ app.get('/api/daily', async (req, res) => {
 
 app.get('/api/themes', (req, res) => {
   res.json({ themes: themeNames() });
+});
+
+app.get('/api/library', (req, res) => {
+  if (!rateLimit(`lib:${clientKey(req)}`, 120, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const rawBook = typeof req.query.book === 'string' ? req.query.book.trim() : '';
+  const book = ['Matthew', 'Mark', 'Luke', 'John'].includes(rawBook) ? rawBook : '';
+  const q = typeof req.query.q === 'string' ? req.query.q.slice(0, 80) : '';
+  res.json(searchLibrary({ book, q, limit: req.query.limit, offset: req.query.offset }));
 });
 
 app.post('/api/encouragement', async (req, res) => {

@@ -1,7 +1,8 @@
-const CACHE = 'rla-editorial-v3';
+const CACHE = 'rla-editorial-v4';
 const PRECACHE = [
   '/manifest.json',
   '/curated.json',
+  '/library.json',
   '/icon-192.png',
   '/icon-512.png',
   '/apple-touch-icon.png',
