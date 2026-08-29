@@ -15,6 +15,7 @@ const {
 } = require('../lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
 const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
+const { themesForSaying, isKnownTheme } = require('../lib/themes');
 
 describe('parseRef', () => {
   it('parses full names and ranges', () => {
@@ -195,5 +196,13 @@ describe('spoken corpus', () => {
     const john = searchLibrary({ book: 'John', q: 'I am the way', limit: 3 });
     assert.ok(john.sayings.length >= 1);
     assert.match(john.sayings[0].citation, /^John /);
+  });
+
+  it('filters the library by encouragement room', () => {
+    assert.equal(isKnownTheme('Peace'), true);
+    const peace = searchLibrary({ theme: 'Peace', limit: 20 });
+    assert.ok(peace.sayings.some((s) => /14:27|4:39|16:33/.test(s.citation)));
+    const still = themesForSaying({ book: 'Mark', chapter: 4, start: 39, end: 39, text: 'Peace, be still.' });
+    assert.ok(still.includes('Peace'));
   });
 });

@@ -212,7 +212,8 @@ app.get('/api/library', (req, res) => {
   const rawBook = typeof req.query.book === 'string' ? req.query.book.trim() : '';
   const book = ['Matthew', 'Mark', 'Luke', 'John'].includes(rawBook) ? rawBook : '';
   const q = typeof req.query.q === 'string' ? req.query.q.slice(0, 80) : '';
-  res.json(searchLibrary({ book, q, limit: req.query.limit, offset: req.query.offset }));
+  const theme = typeof req.query.theme === 'string' ? req.query.theme.slice(0, 80) : '';
+  res.json(searchLibrary({ book, q, theme, limit: req.query.limit, offset: req.query.offset }));
 });
 
 app.post('/api/encouragement', async (req, res) => {
@@ -300,9 +301,15 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
-  const finish = (body) => {
+  const finish = (body, { live = false } = {}) => {
     const verified = verifyAdvisorText(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    const out = crisis ? `${CRISIS_NOTICE}${verified}` : verified;
+    const already = (crisis ? CRISIS_NOTICE : '') + body;
+    if (live) {
+      if (out !== already) write({ replace: out });
+    } else {
+      streamText(out);
+    }
     res.write('data: [DONE]\n\n');
     res.end();
   };
@@ -327,12 +334,14 @@ app.post('/api/chat', async (req, res) => {
     });
 
     let raw = '';
+    if (crisis) write({ text: CRISIS_NOTICE });
     stream.on('text', (text) => {
       raw += text;
+      write({ text });
     });
 
     await stream.finalMessage();
-    finish(raw);
+    finish(raw, { live: true });
   } catch (err) {
     console.error('Chat error:', err.message);
     if (!res.headersSent) {

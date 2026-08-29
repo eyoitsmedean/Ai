@@ -1,4 +1,4 @@
-const CACHE = 'rla-editorial-v4';
+const CACHE = 'rla-editorial-v5';
 const PRECACHE = [
   '/manifest.json',
   '/curated.json',
