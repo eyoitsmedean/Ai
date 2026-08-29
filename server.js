@@ -349,10 +349,15 @@ app.post('/api/chat', async (req, res) => {
       res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
     }
     const annotated = await annotateAdvisorText(text);
+    if (annotated.text && annotated.text !== text) {
+      res.write(`data: ${JSON.stringify({ replace: annotated.text })}\n\n`);
+    }
     res.write(
       `data: ${JSON.stringify({
         done: true,
         citations: annotated.citations,
+        grounded: annotated.grounded,
+        unverified: annotated.unverified,
         quota: getQuota(id),
         offline: true,
       })}\n\n`
@@ -383,10 +388,15 @@ app.post('/api/chat', async (req, res) => {
 
     await stream.finalMessage();
     const annotated = await annotateAdvisorText(full);
+    if (annotated.text && annotated.text !== full) {
+      res.write(`data: ${JSON.stringify({ replace: annotated.text })}\n\n`);
+    }
     res.write(
       `data: ${JSON.stringify({
         done: true,
         citations: annotated.citations,
+        grounded: annotated.grounded,
+        unverified: annotated.unverified,
         quota: getQuota(id),
       })}\n\n`
     );

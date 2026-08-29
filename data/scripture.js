@@ -107,13 +107,91 @@ function extractCitations(text) {
   return [...new Set(found)];
 }
 
-async function annotateAdvisorText(text) {
-  const cites = extractCitations(text);
-  const checks = await Promise.all(cites.map(async c => {
+/**
+ * Lattice / Apologist-style grounding:
+ * After each **Citation**, replace the following quoted line with verified corpus
+ * (or bible-api) text when available. Unverifiable citations stay flagged.
+ */
+async function groundAdvisorText(text) {
+  const lines = String(text || '').split('\n');
+  const citations = [];
+  const out = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const vm = line.trim().match(/^\*\*((?:Matthew|Mark|Luke|John|[1-3]?\s?[A-Za-z]+)\s+\d+:\d+(?:\s*[–-]\s*\d+)?)\*\*\s*$/i);
+    if (!vm) {
+      out.push(line);
+      continue;
+    }
+
+    const citation = vm[1].trim();
+    out.push(line);
+
+    // Skip blank lines after citation
+    let j = i + 1;
+    while (j < lines.length && !lines[j].trim()) {
+      out.push(lines[j]);
+      j++;
+    }
+
+    if (j >= lines.length) {
+      citations.push({ citation, verified: false, quote: '', verse: citation });
+      i = j - 1;
+      continue;
+    }
+
+    const quoteLine = lines[j];
+    const trimmed = quoteLine.trim();
+    const isQuote = trimmed.length > 8 && (/^["“]/.test(trimmed) || /^[A-Z]/.test(trimmed));
+    const modelQuote = trimmed.replace(/^["“]+/, '').replace(/["”]+$/, '');
+    const verified = await verifyPassage({ verse: citation, quote: modelQuote });
+
+    citations.push({
+      citation,
+      verified: verified.verified,
+      quote: verified.quote,
+      verse: verified.verse || citation,
+      similarity: verified.similarity,
+      source: verified.source,
+      modelDiverged: !!verified.modelDiverged || (verified.verified && modelQuote && verified.similarity < 0.55),
+    });
+
+    if (verified.verified && verified.quote) {
+      out.push(`"${verified.quote}"`);
+      i = j; // consume original quote line
+      continue;
+    }
+
+    out.push(quoteLine);
+    i = j;
+  }
+
+  // Also annotate any bold citations that had no quote block
+  const allCites = extractCitations(text);
+  for (const c of allCites) {
+    if (citations.some((x) => x.citation === c)) continue;
     const v = await verifyPassage({ verse: c, quote: '' });
-    return { citation: c, verified: v.verified, quote: v.quote, verse: v.verse };
-  }));
-  return { text, citations: checks };
+    citations.push({
+      citation: c,
+      verified: v.verified,
+      quote: v.quote,
+      verse: v.verse || c,
+      similarity: v.similarity,
+      source: v.source,
+    });
+  }
+
+  return {
+    text: out.join('\n'),
+    citations,
+    grounded: citations.filter((c) => c.verified).length,
+    unverified: citations.filter((c) => !c.verified).length,
+  };
+}
+
+async function annotateAdvisorText(text) {
+  return groundAdvisorText(text);
 }
 
 /** Build offline daily content from corpus (no LLM). */
@@ -196,6 +274,7 @@ module.exports = {
   verifyPassage,
   verifyPassages,
   annotateAdvisorText,
+  groundAdvisorText,
   extractCitations,
   offlineDaily,
   offlineEncouragement,

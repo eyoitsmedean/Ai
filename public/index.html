@@ -186,6 +186,8 @@ textarea,input{font-family:var(--font-ui)}
 .cite-badge{font-size:calc(10px * var(--scale));padding:3px 8px;border-radius:6px;font-weight:600}
 .cite-badge.ok{background:rgba(34,120,60,.12);color:#166534;border:1px solid rgba(34,120,60,.25)}
 .cite-badge.warn{background:rgba(146,100,10,.12);color:var(--gold);border:1px solid rgba(146,100,10,.25)}
+.ground-note{font-size:calc(11px * var(--scale));color:var(--ink-muted);margin-top:8px;line-height:1.4;width:100%}
+:root[data-theme="dark"] .cite-badge.ok,:root.theme-dark .cite-badge.ok{background:rgba(74,222,128,.12);color:#86EFAC;border-color:rgba(74,222,128,.3)}
 .scripture-block{margin:10px 0;padding:12px;background:var(--stone);border-left:3px solid var(--crimson);border-radius:0 var(--r-sm) var(--r-sm) 0}
 .scripture-verse{font-size:calc(11px * var(--scale));font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .scripture-quote{font-family:var(--font-body);font-size:calc(15px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.6}
@@ -224,6 +226,9 @@ textarea,input{font-family:var(--font-ui)}
 .share-styles{display:flex;gap:8px;padding:0 14px 10px}
 .share-style{flex:1;padding:8px 6px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);font-size:calc(11px * var(--scale));font-weight:700;color:var(--ink-muted)}
 .share-style.active{border-color:var(--crimson);color:var(--crimson);background:rgba(185,28,28,.08)}
+.share-ratios{display:flex;gap:8px;padding:0 14px 8px}
+.share-ratio{flex:1;padding:7px 6px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);font-size:calc(11px * var(--scale));font-weight:600;color:var(--ink-muted)}
+.share-ratio.active{border-color:var(--gold);color:var(--gold)}
 
 /* Journal */
 .journal-empty{text-align:center;padding:48px 24px;color:var(--ink-muted)}
@@ -257,8 +262,8 @@ textarea,input{font-family:var(--font-ui)}
 .paywall-btn{width:100%;padding:14px;background:var(--crimson);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:calc(14px * var(--scale))}
 
 /* Share modal */
-.share-modal{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}
-.share-modal.open{opacity:1;pointer-events:all}
+.share-modal{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s,visibility .3s}
+.share-modal.open{opacity:1;pointer-events:all;visibility:visible}
 .share-modal-bg{position:absolute;inset:0;background:rgba(20,18,16,.7)}
 .share-modal-inner{position:relative;width:100%;max-width:360px;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-lg);transform:scale(.95);transition:transform .3s var(--ease)}
 .share-modal.open .share-modal-inner{transform:scale(1)}
@@ -439,10 +444,15 @@ textarea,input{font-family:var(--font-ui)}
       <button type="button" class="share-style" data-style="field" onclick="setShareStyle('field')">Crimson</button>
       <button type="button" class="share-style" data-style="parchment" onclick="setShareStyle('parchment')">Parchment</button>
     </div>
+    <div class="share-ratios" role="group" aria-label="Format">
+      <button type="button" class="share-ratio active" data-ratio="feed" onclick="setShareRatio('feed')">Feed 4:5</button>
+      <button type="button" class="share-ratio" data-ratio="story" onclick="setShareRatio('story')">Stories 9:16</button>
+    </div>
     <div class="share-actions">
       <button type="button" class="action-btn" onclick="downloadShareCard()" aria-label="Download">Download</button>
       <button type="button" class="action-btn" onclick="nativeShareCard()" aria-label="Share">Share</button>
       <button type="button" class="action-btn" onclick="copyShareText()" aria-label="Copy">Copy</button>
+      <button type="button" class="action-btn" onclick="blessShareCard()" aria-label="Send a blessing">Bless</button>
     </div></div></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -551,7 +561,13 @@ let obStep = 0;
 let commitOn = false;
 let shareState = { verse: '', quote: '', theme: '' };
 let shareStyle = 'night';
+let shareRatio = 'feed';
 let advisorOffline = false;
+
+const SHARE_SIZES = {
+  feed: { W: 1080, H: 1350 },
+  story: { W: 1080, H: 1920 },
+};
 
 const SHARE_STYLES = {
   night: {
@@ -884,6 +900,12 @@ function renderThemeGrid() {
 }
 
 async function loadEncouragement(theme, btn) {
+  const used = lsJSON('rla-seek-' + todayISO(), []);
+  if (used.length >= 2 && !used.includes(theme)) {
+    openPaywall();
+    showToast('Free includes 2 themes today — unlock Plus for all');
+    return;
+  }
   if (btn) btn.classList.add('loading');
   const box = document.getElementById('seek-result');
   box.classList.remove('hidden');
@@ -895,6 +917,10 @@ async function loadEncouragement(theme, btn) {
     data = await res.json();
   } catch {
     data = fallbackEncouragement(theme);
+  }
+  if (!used.includes(theme)) {
+    used.push(theme);
+    lsSetJSON('rla-seek-' + todayISO(), used);
   }
   if (btn) btn.classList.remove('loading');
   let html = '<h2 class="seek-headline">' + esc(data.headline) + '</h2>';
@@ -992,14 +1018,20 @@ async function sendChat() {
         try {
           const ev = JSON.parse(payload);
           if (ev.text) { full += ev.text; crisis = ev.crisis || crisis; bubble.innerHTML = formatAI(full) + '<span style="opacity:.5">▋</span>'; scrollChat(); }
+          if (ev.replace) { full = ev.replace; bubble.innerHTML = formatAI(full) + '<span style="opacity:.5">▋</span>'; scrollChat(); }
           if (ev.done) {
             crisis = ev.crisis || crisis;
             if (ev.crisis) assistantWrap.classList.add('crisis');
             let badges = '';
             if (ev.citations?.length) {
               badges = '<div class="cite-badges">' + ev.citations.map(c =>
-                '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '">' + esc(c.citation || c.verse) + (c.verified ? ' ✓' : '') + '</span>'
+                '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + esc(c.source || '') + '">' +
+                esc(c.citation || c.verse) + (c.verified ? ' ✓ WEB' : ' check') + '</span>'
               ).join('') + '</div>';
+              if (ev.grounded != null) {
+                badges += '<p class="ground-note">' + ev.grounded + ' citation' + (ev.grounded === 1 ? '' : 's') +
+                  ' grounded to verified text' + (ev.unverified ? ' · ' + ev.unverified + ' unverified' : '') + '</p>';
+              }
             }
             bubble.innerHTML = formatAI(full) + badges;
             if (ev.quota) updateQuotaUI(ev.quota);
@@ -1238,10 +1270,20 @@ function setShareStyle(style) {
   if (shareState.quote) drawShareCard();
 }
 
+function setShareRatio(ratio) {
+  if (!SHARE_SIZES[ratio]) return;
+  shareRatio = ratio;
+  lsSet('rla-share-ratio', ratio);
+  document.querySelectorAll('.share-ratio').forEach(b => b.classList.toggle('active', b.dataset.ratio === ratio));
+  if (shareState.quote) drawShareCard();
+}
+
 function openShareCard({ verse, quote, theme }) {
   try {
     shareStyle = ls('rla-share-style') || shareStyle || 'night';
+    shareRatio = ls('rla-share-ratio') || shareRatio || 'feed';
     document.querySelectorAll('.share-style').forEach(b => b.classList.toggle('active', b.dataset.style === shareStyle));
+    document.querySelectorAll('.share-ratio').forEach(b => b.classList.toggle('active', b.dataset.ratio === shareRatio));
     shareState = { verse: String(verse || ''), quote: String(quote || ''), theme: String(theme || '') };
     if (!shareState.quote) {
       showToast('Nothing to share yet');
@@ -1282,8 +1324,15 @@ function drawShareCard() {
   const canvas = document.getElementById('share-canvas');
   if (!canvas) throw new Error('share canvas missing');
   const ctx = canvas.getContext('2d');
-  const W = 1080, H = 1350;
+  const size = SHARE_SIZES[shareRatio] || SHARE_SIZES.feed;
+  const W = size.W, H = size.H;
+  canvas.width = W;
+  canvas.height = H;
   const pal = SHARE_STYLES[shareStyle] || SHARE_STYLES.night;
+  const quoteBudget = shareRatio === 'story' ? 820 : 620;
+  const quoteTop = shareRatio === 'story' ? 360 : 260;
+  const bottomPad = shareRatio === 'story' ? 320 : 260;
+
   ctx.fillStyle = pal.bg;
   ctx.fillRect(0, 0, W, H);
   const grd = ctx.createRadialGradient(W * 0.5, H * 0.35, 0, W * 0.5, H * 0.35, W * 0.7);
@@ -1301,23 +1350,23 @@ function drawShareCard() {
     ctx.fillStyle = pal.theme;
     ctx.textAlign = 'center';
     const themeLabel = String(shareState.theme).toUpperCase();
-    ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, 140);
+    ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, shareRatio === 'story' ? 180 : 140);
   }
 
   const q = '"' + String(shareState.quote || '') + '"';
-  let fontSize = 52;
-  let lineH = 72;
+  let fontSize = shareRatio === 'story' ? 56 : 52;
+  let lineH = Math.round(fontSize * 1.38);
   let lines = [];
   const maxW = W - 180;
   do {
     ctx.font = '500 ' + fontSize + 'px "Source Serif 4", Georgia, serif';
     lines = wrapCanvasText(ctx, q, maxW);
-    if (lines.length * lineH <= 620 || fontSize <= 28) break;
+    if (lines.length * lineH <= quoteBudget || fontSize <= 28) break;
     fontSize -= 4;
     lineH = Math.round(fontSize * 1.38);
   } while (fontSize > 28);
 
-  const maxLines = Math.max(1, Math.floor(620 / Math.max(lineH, 1)));
+  const maxLines = Math.max(1, Math.floor(quoteBudget / Math.max(lineH, 1)));
   if (lines.length > maxLines) {
     lines = lines.slice(0, maxLines);
     let last = (lines[lines.length - 1] || '').replace(/["”]?$/, '');
@@ -1328,20 +1377,20 @@ function drawShareCard() {
 
   ctx.fillStyle = pal.quote;
   ctx.textAlign = 'center';
-  let y = 260 + Math.max(0, (maxLines - lines.length) * (lineH / 2));
+  let y = quoteTop + Math.max(0, (maxLines - lines.length) * (lineH / 2));
   lines.forEach(ln => { ctx.fillText(ln, W / 2, y); y += lineH; });
 
   ctx.font = '700 36px Figtree, sans-serif';
   ctx.fillStyle = pal.verse;
   const verse = String(shareState.verse || '');
-  ctx.fillText(verse.length > 48 ? verse.slice(0, 46) + '…' : verse, W / 2, H - 260);
+  ctx.fillText(verse.length > 48 ? verse.slice(0, 46) + '…' : verse, W / 2, H - bottomPad);
 
   ctx.font = '800 54px Fraunces, Georgia, serif';
   ctx.fillStyle = pal.brand;
-  ctx.fillText('RED LETTER', W / 2, H - 160);
+  ctx.fillText('RED LETTER', W / 2, H - (bottomPad - 100));
   ctx.font = '400 26px Figtree, sans-serif';
   ctx.fillStyle = pal.tag;
-  ctx.fillText('the words Jesus spoke', W / 2, H - 110);
+  ctx.fillText('the words Jesus spoke', W / 2, H - (bottomPad - 150));
 }
 
 function copyShareText() {
@@ -1349,10 +1398,22 @@ function copyShareText() {
   navigator.clipboard?.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => showToast('Copy failed'));
 }
 
+async function blessShareCard() {
+  const text = 'A blessing for you from His words:\n\n"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'A red-letter blessing', text });
+      return;
+    }
+  } catch {}
+  navigator.clipboard?.writeText(text).then(() => showToast('Blessing copied — paste to send')).catch(() => showToast('Copy failed'));
+}
+
 function downloadShareCard() {
   const canvas = document.getElementById('share-canvas');
   const a = document.createElement('a');
-  a.download = 'red-letter-' + (shareState.verse || 'verse').replace(/[:\s]/g, '-') + '.png';
+  const suffix = shareRatio === 'story' ? 'story' : 'feed';
+  a.download = 'red-letter-' + suffix + '-' + (shareState.verse || 'verse').replace(/[:\s]/g, '-') + '.png';
   a.href = canvas.toDataURL('image/png');
   a.click();
   showToast('Card downloaded');
