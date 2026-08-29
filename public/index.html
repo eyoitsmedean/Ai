@@ -347,6 +347,7 @@ textarea,input{font-family:var(--font-ui)}
           <span><strong id="quota-bar-num">5</strong> free conversations left today</span>
           <button type="button" onclick="openPaywall()">Unlock Plus</button>
         </div>
+        <div id="advisor-mode-banner" class="offline-banner hidden">Corpus mode — verified red-letter passages (AI advisor offline).</div>
         <div class="chat-welcome" id="chat-welcome"><h3>Speak what's on your heart</h3><p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John.</p></div>
         <div class="suggestions" id="suggestions">
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm anxious about tomorrow</button>
@@ -410,7 +411,7 @@ textarea,input{font-family:var(--font-ui)}
   <input type="email" class="paywall-input" id="waitlist-email" placeholder="your@email.com" aria-label="Email" />
   <button type="button" class="paywall-btn" onclick="joinWaitlist()">Join waitlist</button>
 </div></div>
-<div class="share-modal" id="share-modal" role="dialog" aria-label="Share card">
+<div class="share-modal" id="share-modal" role="dialog" aria-label="Share card" aria-hidden="true">
   <div class="share-modal-bg" onclick="closeShareCard()"></div>
   <div class="share-modal-inner"><div class="share-preview"><canvas id="share-canvas" width="1080" height="1350"></canvas></div>
     <div class="share-actions">
@@ -516,11 +517,14 @@ const THEME_ICONS = {
 let dailyData = null;
 let libData = null;
 let libFilter = '';
+let libPassages = [];
+let journalItems = [];
 let chatMessages = [];
 let chatStreaming = false;
 let obStep = 0;
 let commitOn = false;
 let shareState = { verse: '', quote: '', theme: '' };
+let advisorOffline = false;
 
 /* ═══ UTILS ═══ */
 function esc(s) {
@@ -717,6 +721,18 @@ async function loadQuota() {
     const q = await res.json();
     updateQuotaUI(q);
   } catch {}
+}
+
+async function loadAdvisorMode() {
+  try {
+    const res = await api('/api/health');
+    const h = await res.json();
+    advisorOffline = !h.hasAuth;
+  } catch {
+    advisorOffline = true;
+  }
+  const banner = document.getElementById('advisor-mode-banner');
+  if (banner) banner.classList.toggle('hidden', !advisorOffline);
 }
 
 function updateQuotaUI(q) {
@@ -1011,6 +1027,7 @@ function renderLibList() {
   if (libFilter && libData?.offline) {
     passages = CORPUS.filter(p => p.themes.includes(libFilter)).map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: libFilter, text: p.text }));
   }
+  libPassages = passages;
   const list = document.getElementById('lib-list');
   if (!passages.length) {
     list.innerHTML = '<p style="padding:24px;text-align:center;color:var(--ink-muted)">No passages found.</p>';
@@ -1020,25 +1037,42 @@ function renderLibList() {
     const theme = Array.isArray(p.theme) ? (p.theme[0] || '') : (p.theme || '');
     return '<details class="lib-item card" style="margin:0 14px 8px"><summary><div><div class="lib-verse">' + esc(p.verse) + '</div><div class="lib-theme">' + esc(theme) + '</div></div></summary>' +
       '<div class="lib-expand"><p class="red-quote">"' + esc(p.text) + '"</p>' + verifiedBadge() +
-      '<div class="card-actions"><button type="button" class="action-btn" data-lib-idx="' + idx + '" onclick="shareLibPassage(this)">Share</button>' +
-      '<button type="button" class="action-btn" data-lib-idx="' + idx + '" onclick="saveLibPassage(this)">Save</button></div></div></details>';
+      '<div class="card-actions">' +
+      '<button type="button" class="action-btn" data-lib-action="share" data-lib-idx="' + idx + '">Share</button>' +
+      '<button type="button" class="action-btn" data-lib-action="save" data-lib-idx="' + idx + '">Save</button>' +
+      '</div></div></details>';
   }).join('');
-  list._passages = passages;
 }
 
-function shareLibPassage(btn) {
-  const p = document.getElementById('lib-list')._passages?.[+btn.dataset.libIdx];
-  if (!p) return;
-  const theme = Array.isArray(p.theme) ? (p.theme[0] || '') : (p.theme || '');
-  openShareCard({ verse: p.verse, quote: p.text, theme });
+function passageTheme(p) {
+  return Array.isArray(p?.theme) ? (p.theme[0] || '') : (p?.theme || '');
 }
 
-function saveLibPassage(btn) {
-  const p = document.getElementById('lib-list')._passages?.[+btn.dataset.libIdx];
-  if (!p) return;
-  const theme = Array.isArray(p.theme) ? (p.theme[0] || '') : (p.theme || '');
-  saveJournal(p.text, p.verse, theme);
+function shareLibByIndex(idx) {
+  const p = libPassages[idx];
+  if (!p || !p.text) {
+    showToast('Could not load that passage');
+    return;
+  }
+  openShareCard({ verse: p.verse, quote: p.text, theme: passageTheme(p) });
 }
+
+function saveLibByIndex(idx) {
+  const p = libPassages[idx];
+  if (!p || !p.text) return;
+  saveJournal(p.text, p.verse, passageTheme(p));
+}
+
+document.getElementById('lib-list')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-lib-action]');
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const idx = Number(btn.getAttribute('data-lib-idx'));
+  if (Number.isNaN(idx)) return;
+  if (btn.getAttribute('data-lib-action') === 'share') shareLibByIndex(idx);
+  else if (btn.getAttribute('data-lib-action') === 'save') saveLibByIndex(idx);
+});
 
 /* ═══ JOURNAL ═══ */
 function getJournal() { return lsJSON('rla-journal', []); }
@@ -1063,25 +1097,36 @@ function flashSaved() {
 }
 
 function renderJournal() {
-  const items = getJournal();
+  journalItems = getJournal();
   const list = document.getElementById('journal-list');
-  if (!items.length) {
+  if (!journalItems.length) {
     list.innerHTML = '<div class="journal-empty"><p>No saved words yet.</p><p>Tap Save on any passage to collect it here.</p><button type="button" class="cta-btn cta-primary" style="margin-top:16px;display:inline-flex;width:auto;padding:12px 18px" onclick="goTab(\'library\')">Browse the Library</button></div>';
     return;
   }
-  list._items = items;
-  list.innerHTML = items.map((j, i) =>
+  list.innerHTML = journalItems.map((j, i) =>
     '<div class="journal-item"><p class="red-quote">"' + esc(j.quote) + '"</p><p class="verse-cite">' + esc(j.verse) + '</p>' +
     (j.theme ? '<p style="font-size:11px;color:var(--ink-muted);margin-top:4px">' + esc(j.theme) + '</p>' : '') +
-    '<div class="card-actions"><button type="button" class="action-btn" data-j-idx="' + i + '" onclick="shareJournalItem(this)">Share</button>' +
-    '<button type="button" class="action-btn" data-j-idx="' + i + '" onclick="removeJournal(+this.dataset.jIdx)">Remove</button></div></div>'
+    '<div class="card-actions">' +
+    '<button type="button" class="action-btn" data-j-action="share" data-j-idx="' + i + '">Share</button>' +
+    '<button type="button" class="action-btn" data-j-action="remove" data-j-idx="' + i + '">Remove</button>' +
+    '</div></div>'
   ).join('');
 }
 
-function shareJournalItem(btn) {
-  const j = document.getElementById('journal-list')._items?.[+btn.dataset.jIdx];
-  if (j) openShareCard({ verse: j.verse, quote: j.quote, theme: j.theme || 'Journal' });
-}
+document.getElementById('journal-list')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-j-action]');
+  if (!btn) return;
+  e.preventDefault();
+  const idx = Number(btn.getAttribute('data-j-idx'));
+  if (Number.isNaN(idx)) return;
+  const action = btn.getAttribute('data-j-action');
+  if (action === 'share') {
+    const j = journalItems[idx];
+    if (j) openShareCard({ verse: j.verse, quote: j.quote, theme: j.theme || 'Journal' });
+  } else if (action === 'remove') {
+    removeJournal(idx);
+  }
+});
 
 function removeJournal(i) {
   const items = getJournal();
@@ -1092,13 +1137,28 @@ function removeJournal(i) {
 
 /* ═══ SHARE CARD ═══ */
 function openShareCard({ verse, quote, theme }) {
-  shareState = { verse: verse || '', quote: quote || '', theme: theme || '' };
-  drawShareCard();
-  document.getElementById('share-modal').classList.add('open');
+  try {
+    shareState = { verse: String(verse || ''), quote: String(quote || ''), theme: String(theme || '') };
+    if (!shareState.quote) {
+      showToast('Nothing to share yet');
+      return;
+    }
+    drawShareCard();
+    const modal = document.getElementById('share-modal');
+    if (!modal) throw new Error('share modal missing');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  } catch (err) {
+    console.error('openShareCard', err);
+    showToast('Could not create share card');
+  }
 }
 
 function closeShareCard() {
-  document.getElementById('share-modal').classList.remove('open');
+  const modal = document.getElementById('share-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
 }
 
 function wrapCanvasText(ctx, text, maxW) {
@@ -1116,6 +1176,7 @@ function wrapCanvasText(ctx, text, maxW) {
 
 function drawShareCard() {
   const canvas = document.getElementById('share-canvas');
+  if (!canvas) throw new Error('share canvas missing');
   const ctx = canvas.getContext('2d');
   const W = 1080, H = 1350;
   ctx.fillStyle = '#141210';
@@ -1132,13 +1193,14 @@ function drawShareCard() {
   ctx.strokeRect(64, 64, W - 128, H - 128);
 
   if (shareState.theme) {
-    ctx.font = '600 32px Figtree, sans-serif';
+    ctx.font = '600 28px Figtree, sans-serif';
     ctx.fillStyle = 'rgba(237,232,224,0.45)';
     ctx.textAlign = 'center';
-    ctx.fillText(String(shareState.theme).toUpperCase(), W / 2, 140);
+    const themeLabel = String(shareState.theme).toUpperCase();
+    ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, 140);
   }
 
-  const q = '"' + shareState.quote + '"';
+  const q = '"' + String(shareState.quote || '') + '"';
   let fontSize = 52;
   let lineH = 72;
   let lines = [];
@@ -1146,28 +1208,30 @@ function drawShareCard() {
   do {
     ctx.font = '500 ' + fontSize + 'px "Source Serif 4", Georgia, serif';
     lines = wrapCanvasText(ctx, q, maxW);
-    if (lines.length * lineH <= 620 || fontSize <= 32) break;
+    if (lines.length * lineH <= 620 || fontSize <= 28) break;
     fontSize -= 4;
     lineH = Math.round(fontSize * 1.38);
-  } while (fontSize > 32);
+  } while (fontSize > 28);
 
   // Truncate extremely long quotes with ellipsis on last visible line
-  const maxLines = Math.floor(620 / lineH);
+  const maxLines = Math.max(1, Math.floor(620 / Math.max(lineH, 1)));
   if (lines.length > maxLines) {
     lines = lines.slice(0, maxLines);
-    let last = lines[lines.length - 1].replace(/["”]?$/, '');
+    let last = (lines[lines.length - 1] || '').replace(/["”]?$/, '');
     while (ctx.measureText(last + '…"').width > maxW && last.length > 8) last = last.slice(0, -1);
     lines[lines.length - 1] = last + '…"';
   }
+  if (!lines.length) lines = ['"…"'];
 
   ctx.fillStyle = '#B91C1C';
   ctx.textAlign = 'center';
   let y = 260 + Math.max(0, (maxLines - lines.length) * (lineH / 2));
   lines.forEach(ln => { ctx.fillText(ln, W / 2, y); y += lineH; });
 
-  ctx.font = '700 38px Figtree, sans-serif';
+  ctx.font = '700 36px Figtree, sans-serif';
   ctx.fillStyle = '#C4A35A';
-  ctx.fillText(shareState.verse, W / 2, H - 260);
+  const verse = String(shareState.verse || '');
+  ctx.fillText(verse.length > 48 ? verse.slice(0, 46) + '…' : verse, W / 2, H - 260);
 
   ctx.font = '800 54px Fraunces, Georgia, serif';
   ctx.fillStyle = '#EDE8E0';
@@ -1316,6 +1380,7 @@ function initApp() {
   updateDayCount();
   applySettings();
   loadQuota();
+  loadAdvisorMode();
   loadDaily();
   renderThemeGrid();
   goTab('today');
@@ -1336,8 +1401,12 @@ if (!ls('rla-onboarded')) {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('/sw.js').then((reg) => reg.update()).catch(() => {});
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeShareCard();
+});
 
 </script>
 
