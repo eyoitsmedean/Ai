@@ -244,6 +244,16 @@
   }
 
   function bootAtelier() {
+    // Failsafe: never leave the void empty if boot race-hides both shells
+    setTimeout(() => {
+      const onboarding = document.getElementById('onboarding');
+      const app = document.getElementById('app');
+      const onboardingHidden = !onboarding || onboarding.classList.contains('hidden');
+      const appHidden = !app || app.style.display === 'none' || getComputedStyle(app).display === 'none';
+      if (onboardingHidden && appHidden && onboarding) {
+        onboarding.classList.remove('hidden');
+      }
+    }, 120);
     setHourAtmosphere();
     setInterval(setHourAtmosphere, 10 * 60 * 1000);
     bindKeys();
