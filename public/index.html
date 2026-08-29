@@ -1233,6 +1233,51 @@ textarea { font-family: var(--font-ui); }
 }
 .share-primary { background: var(--crimson); color: #fff; }
 .share-secondary { background: var(--bg-2); color: var(--text-1); border: 1px solid var(--border) !important; }
+.atelier-papers {
+  display: flex; gap: 8px; margin: 0 0 12px;
+}
+.atelier-papers button {
+  flex: 1; border: 1px solid var(--border); background: transparent;
+  border-radius: 999px; padding: 7px 8px;
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-2); cursor: pointer;
+}
+.atelier-papers button.on {
+  border-color: var(--crimson); color: var(--crimson);
+}
+.compose {
+  margin: 0 4px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--surface);
+}
+.compose textarea {
+  width: 100%; border: none; background: transparent; resize: none;
+  font-family: var(--font-body); font-size: 16px; color: var(--text-1);
+  min-height: 56px; outline: none;
+}
+.compose-row { display: flex; justify-content: flex-end; margin-top: 6px; }
+.compose button {
+  background: none; border: none; color: var(--crimson);
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; padding: 0;
+}
+.season-colophon {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--text-4); padding: 0 18px 10px;
+}
+.waiting-slip {
+  font-family: var(--font-body); font-style: italic;
+  font-size: 14px; color: var(--text-3); margin-top: 8px;
+}
+:root[data-season="advent"] { --bg: #EEEAF2; --bg-2: #E4DFEA; }
+:root[data-season="lent"] { --bg: #F3EFE8; --bg-2: #E8E2D8; }
+:root[data-season="easter"] {
+  --bg: #F7F4EC;
+  --bg-2: #F1EBDD;
+}
+:root[data-season="christmas"] { --bg: #F6F0EA; --bg-2: #EFE4DA; }
 .grace-note {
   font-size: calc(11.5px * var(--scale));
   color: var(--text-3); padding: 0 18px 8px; line-height: 1.4;
@@ -1820,6 +1865,7 @@ body::before {
             <div class="word-reflection" id="word-reflection"></div>
             <button class="sit-verb" type="button" onclick="openLectio()">Take this slowly</button>
             <p class="lectio-done" id="lectio-done" hidden>You sat with these words today.</p>
+            <p class="waiting-slip" id="waiting-slip" hidden>The page is still here when you are ready.</p>
             <div class="card-actions dark-sep">
               <button class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
                 <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -1839,6 +1885,7 @@ body::before {
         <button class="cta-btn cta-btn-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
         <button class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find Encouragement</button>
       </div>
+      <p class="season-colophon" id="season-colophon"></p>
       <p class="disclaimer-foot">Drawn only from the red-letter words of Jesus in Matthew, Mark, Luke, and John. Not a substitute for pastoral care, therapy, or emergency help.</p>
     </div>
 
@@ -1958,6 +2005,12 @@ body::before {
         <div class="page-hd-eyebrow">Saved passages</div>
         <h1 class="page-hd-title">Commonplace</h1>
       </div>
+      <form class="compose" id="compose-form" onsubmit="return keepLine(event)">
+        <textarea id="compose-line" placeholder="A word you want to keep…" maxlength="400"></textarea>
+        <div class="compose-row">
+          <button type="submit">Keep</button>
+        </div>
+      </form>
       <div class="journal-tools" id="journal-tools" hidden>
         <button type="button" class="chat-tool-btn" onclick="exportCommonplace()">Export Markdown</button>
       </div>
@@ -2034,6 +2087,11 @@ body::before {
 <div class="share-modal" id="share-modal" onclick="if(event.target===this)closeShareModal()">
   <div class="share-panel">
     <h3>Share a Red Letter</h3>
+    <div class="atelier-papers" id="atelier-papers">
+      <button type="button" data-paper="rubric" class="on" onclick="setSharePaper('rubric')">Rubric</button>
+      <button type="button" data-paper="paper" onclick="setSharePaper('paper')">Paper</button>
+      <button type="button" data-paper="lamp" onclick="setSharePaper('lamp')">Lamp</button>
+    </div>
     <canvas id="share-canvas" width="1080" height="1080" style="width:100%;border-radius:12px;display:block"></canvas>
     <div class="share-actions">
       <button type="button" class="share-secondary" onclick="closeShareModal()">Close</button>
@@ -2122,6 +2180,7 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
 
 function completeOnboarding() {
   lsSet('rla-onboarded', '1');
+  lsSet('rla-first-lectio', 'pending');
   document.getElementById('onboarding').classList.add('hidden');
   startApp();
 }
@@ -2467,8 +2526,8 @@ function renderJournal() {
   const tools = document.getElementById('journal-tools');
   if (tools) tools.hidden = items.length === 0;
 
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio' };
-  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson', note: 'badge-gold' };
 
   list.innerHTML = items.map(item => {
     const typeKey = item.type || (item.key.startsWith('aff') ? 'aff' : item.key.startsWith('word') ? 'word' : item.key.startsWith('enc') ? 'enc' : 'chat');
@@ -2724,7 +2783,9 @@ function applyDailyToUI(data) {
   if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
 
   document.getElementById('word-theme').textContent = data.word.theme;
+  applySeason();
   markLectioDone();
+  maybeOpenFirstLectio();
   document.getElementById('word-title').textContent = data.word.title;
   document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
   document.getElementById('word-verse').textContent = data.word.verse;
@@ -2865,38 +2926,56 @@ function openShareCard(type) {
 function closeShareModal() {
   document.getElementById('share-modal').classList.remove('on');
 }
-function drawShareCard(quote, verse, title) {
+let shareDraft = { quote: '', verse: '', title: '', paper: 'rubric' };
+
+function setSharePaper(paper) {
+  shareDraft.paper = paper;
+  document.querySelectorAll('#atelier-papers button').forEach(b => {
+    b.classList.toggle('on', b.dataset.paper === paper);
+  });
+  if (shareDraft.quote) drawShareCard(shareDraft.quote, shareDraft.verse, shareDraft.title, paper);
+}
+
+function drawShareCard(quote, verse, title, paper) {
+  paper = paper || shareDraft.paper || 'rubric';
+  shareDraft = { quote, verse, title, paper };
   const canvas = document.getElementById('share-canvas');
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
+  const papers = {
+    rubric: { bg1: '#6E1616', bg2: '#3D0C0C', ink: '#F6F3EC', mute: 'rgba(255,245,230,0.72)', verse: 'rgba(255,230,200,0.88)', rule: 'rgba(255,255,255,0.16)', foot: 'rgba(246,243,236,0.5)' },
+    paper: { bg1: '#F6F3EC', bg2: '#EFE8DC', ink: '#8F1D1D', mute: '#6A6258', verse: '#1C1612', rule: 'rgba(28,22,18,0.16)', foot: '#8A8278' },
+    lamp: { bg1: '#1F1A16', bg2: '#14110E', ink: '#F0E8D8', mute: 'rgba(240,232,216,0.55)', verse: '#C84040', rule: 'rgba(240,232,216,0.14)', foot: 'rgba(240,232,216,0.4)' }
+  };
+  const p = papers[paper] || papers.rubric;
   const grd = ctx.createLinearGradient(0, 0, W, H);
-  grd.addColorStop(0, '#6E1616');
-  grd.addColorStop(1, '#3D0C0C');
+  grd.addColorStop(0, p.bg1);
+  grd.addColorStop(1, p.bg2);
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, W, H);
-  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.strokeStyle = p.rule;
   ctx.lineWidth = 2;
   ctx.strokeRect(56, 56, W - 112, H - 112);
 
-  ctx.fillStyle = 'rgba(255,245,230,0.72)';
+  ctx.fillStyle = p.mute;
   ctx.font = '600 28px Figtree, system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.letterSpacing = '0.28em';
   ctx.fillText('RED LETTER', W / 2, 160);
 
   ctx.letterSpacing = '0';
-  ctx.fillStyle = '#F6F3EC';
+  ctx.fillStyle = p.ink;
   ctx.font = 'italic 54px Fraunces, Georgia, serif';
   wrapText(ctx, '“' + quote + '”', W / 2, H * 0.42, W - 200, 70);
 
   ctx.font = '600 26px Figtree, system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(255,230,200,0.88)';
+  ctx.fillStyle = p.verse;
   ctx.letterSpacing = '0.16em';
   ctx.fillText(String(verse || '').toUpperCase(), W / 2, H * 0.78);
 
   ctx.letterSpacing = '0';
   ctx.font = '500 24px Figtree, system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(246,243,236,0.5)';
+  ctx.fillStyle = p.foot;
   ctx.fillText('The Red Letter Advisor', W / 2, H - 100);
 }
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -3081,8 +3160,60 @@ function lectioQuestion(theme) {
 function lectioKey() { return 'rla-lectio-' + todayStr(); }
 
 function markLectioDone() {
+  const done = !!ls(lectioKey());
   const el = document.getElementById('lectio-done');
-  if (el) el.hidden = !ls(lectioKey());
+  if (el) el.hidden = !done;
+  const wait = document.getElementById('waiting-slip');
+  if (wait) wait.hidden = done || ls('rla-first-lectio') === 'pending';
+}
+
+function maybeOpenFirstLectio() {
+  if (ls('rla-first-lectio') !== 'pending') return;
+  lsSet('rla-first-lectio', 'opened');
+  setTimeout(function () { openLectio(); }, 480);
+}
+
+function easterDate(y) {
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100;
+  const d = Math.floor(b / 4), e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(y, month - 1, day);
+}
+
+function liturgicalSeason(now) {
+  const d = now || new Date();
+  const y = d.getFullYear();
+  const t = new Date(y, d.getMonth(), d.getDate()).getTime();
+  const md = (d.getMonth() + 1) * 100 + d.getDate();
+  if (md >= 1225 || md <= 105) return 'christmas';
+  if (md >= 1127 && md <= 1224) return 'advent';
+  const easter = easterDate(y);
+  const lentStart = new Date(easter.getTime() - 46 * 86400000);
+  const easterEnd = new Date(easter.getTime() + 49 * 86400000);
+  if (t >= lentStart.getTime() && t < easter.getTime()) return 'lent';
+  if (t >= easter.getTime() && t <= easterEnd.getTime()) return 'easter';
+  return 'ordinary';
+}
+
+function applySeason() {
+  const s = liturgicalSeason();
+  document.documentElement.setAttribute('data-season', s);
+  const labels = {
+    ordinary: 'Ordinary time',
+    advent: 'Advent',
+    christmas: 'Christmastide',
+    lent: 'Lent',
+    easter: 'Eastertide'
+  };
+  const el = document.getElementById('season-colophon');
+  if (el) el.textContent = labels[s] || '';
 }
 
 function openLectio(source) {
@@ -3167,6 +3298,18 @@ function finishLectio(skip) {
     showToast('That is enough for today');
   }
   closeLectio();
+}
+
+function keepLine(e) {
+  if (e) e.preventDefault();
+  const note = (document.getElementById('compose-line').value || '').trim();
+  if (!note) return false;
+  const key = 'note-' + Date.now();
+  saveJournalItem({ id: key, key, type: 'note', title: note, body: '', verse: '' });
+  document.getElementById('compose-line').value = '';
+  renderJournal();
+  showToast('Kept in your commonplace');
+  return false;
 }
 
 function exportCommonplace() {

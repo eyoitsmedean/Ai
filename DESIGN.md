@@ -137,10 +137,10 @@ A square as careful as a title page: crimson field, Fraunces quote, verse in sma
 
 These are the ideas that keep a studio busy for years. Each one stays simple to *use*.
 
-1. **Seasonal paper.** Advent: cooler night indigo, one candle rule. Lent: stripped chrome, more silence. Easter: a single lift in the plate. The app changes clothes; the type does not panic.
-2. **Verse atelier.** YouVersion’s share craft, our restraint: three papers, two type sizes, no stock sunsets. Export 1080 and 4:5. A “send a blessing” that arrives as an image, not a screenshot of UI.
+1. **Seasonal paper.** **Shipped as a church-year engine.** Advent cools. Lent strips. Easter lifts. Christmas warms. Ordinary time stays the Quiet Page. A colophon names the season; the type does not panic.
+2. **Verse atelier.** **Shipped.** Three papers — Rubric, Paper, Lamp — no stock sunsets. A blessing that arrives as an image, not a screenshot of UI.
 3. **Lectio in four taps.** **Shipped.** Read / Reflect / Rest / Respond — one red-letter per step. Rest is twenty seconds. Respond writes the commonplace. No timer guilt.
-4. **Commonplace book.** Notion-like: pages you title, verses you drop in, a backlink to the day you saved them. Local-first. Export Markdown.
+4. **Commonplace book.** **Begun.** Compose a line anytime. Lectio, Today, Seek, and Advisor all keep slips. Local-first. Export Markdown. Titled pages and backlinks can still grow.
 5. **Margin conversations.** Small-group rooms that are just a shared page + a verse. No feed. No likes.
 6. **Audio as typesetting.** A single human voice (or your own) reading the day’s red letters. Waveform as a thin rule, not a DJ deck.
 7. **Watch / lock screen.** One sentence. Crimson on paper. Nothing else.
