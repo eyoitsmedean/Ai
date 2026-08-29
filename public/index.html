@@ -1167,6 +1167,83 @@ textarea { font-family: var(--font-ui); }
   }
   .toast { bottom: calc(var(--nav-h) + 20px); }
 }
+
+/* Crisis + share card */
+.crisis-bar {
+  margin: 10px 14px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #F8EFE8;
+  border: 1px solid #E8D2C0;
+  color: var(--text-2);
+  font-size: calc(12px * var(--scale));
+  line-height: 1.45;
+}
+:root[data-theme="dark"] .crisis-bar {
+  background: #241810;
+  border-color: #3A2A20;
+}
+.crisis-bar a { color: var(--crimson); font-weight: 600; text-decoration: underline; }
+.intent-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  width: 100%; max-width: 320px; margin: 0 auto 22px;
+}
+.intent-chip {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: #fff; border-radius: 12px; padding: 12px 10px;
+  font-size: 13px; font-weight: 500; text-align: center;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.intent-chip:hover, .intent-chip.selected {
+  background: rgba(255,255,255,.16);
+  border-color: rgba(255,255,255,.4);
+}
+.intent-chip.selected { transform: scale(1.02); }
+.chat-toolbar {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 0 14px 8px;
+}
+.chat-tool-btn {
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-2); border-radius: 999px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600;
+}
+.chat-tool-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+.share-modal {
+  position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,.55);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.share-modal.on { display: flex; }
+.share-panel {
+  background: var(--surface); border-radius: 20px;
+  padding: 16px; width: min(360px, 100%);
+  box-shadow: var(--shadow-3);
+}
+.share-panel h3 {
+  font-family: var(--font-disp); font-size: 18px;
+  margin-bottom: 12px; color: var(--text-1);
+}
+.share-actions { display: flex; gap: 8px; margin-top: 12px; }
+.share-actions button {
+  flex: 1; border: none; border-radius: 12px; padding: 12px;
+  font-weight: 700; font-size: 14px;
+}
+.share-primary { background: var(--crimson); color: #fff; }
+.share-secondary { background: var(--bg-2); color: var(--text-1); border: 1px solid var(--border) !important; }
+.grace-note {
+  font-size: calc(11.5px * var(--scale));
+  color: var(--text-3); padding: 0 18px 8px; line-height: 1.4;
+}
+.disclaimer-foot {
+  font-size: calc(11px * var(--scale));
+  color: var(--text-4);
+  padding: 8px 18px 18px;
+  line-height: 1.45;
+}
+
 </style>
 </head>
 <body>
@@ -1189,6 +1266,13 @@ textarea { font-family: var(--font-ui); }
       <span class="ob-feature-icon">💬</span>
       <div class="ob-feature-text"><strong>Personal Advisor</strong>Ask any question and receive guidance in his words</div>
     </div>
+  </div>
+    <p class="ob-note" style="margin-bottom:10px;opacity:.8">What brings you here?</p>
+  <div class="intent-grid" id="intent-grid">
+    <button type="button" class="intent-chip" data-intent="peace" onclick="selectIntent(this)">Peace</button>
+    <button type="button" class="intent-chip" data-intent="guidance" onclick="selectIntent(this)">Guidance</button>
+    <button type="button" class="intent-chip" data-intent="encouragement" onclick="selectIntent(this)">Encouragement</button>
+    <button type="button" class="intent-chip" data-intent="jesus-words" onclick="selectIntent(this)">Jesus&rsquo; Words</button>
   </div>
   <button class="ob-btn" onclick="completeOnboarding()">Begin My Journey</button>
   <p class="ob-note">"Red letters" are the passages printed in red in many Bibles,<br>marking the direct speech of Jesus.</p>
@@ -1253,7 +1337,7 @@ textarea { font-family: var(--font-ui); }
                 <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 <span id="aff-save-label">Save</span>
               </button>
-              <button class="action-btn" onclick="shareItem('aff')">
+              <button class="action-btn" onclick="openShareCard('aff')">
                 <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
                 Share
               </button>
@@ -1290,7 +1374,7 @@ textarea { font-family: var(--font-ui); }
                 <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
                 <span id="word-save-label">Save</span>
               </button>
-              <button class="action-btn-dark" onclick="shareItem('word')">
+              <button class="action-btn-dark" onclick="openShareCard('word')">
                 <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
                 Share
               </button>
@@ -1299,10 +1383,12 @@ textarea { font-family: var(--font-ui); }
         </div>
       </div>
 
+      <p class="grace-note" id="grace-note"></p>
       <div class="cta-row">
         <button class="cta-btn cta-btn-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
         <button class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find Encouragement</button>
       </div>
+      <p class="disclaimer-foot">Drawn only from the red-letter words of Jesus in Matthew, Mark, Luke, and John. Not a substitute for pastoral care, therapy, or emergency help.</p>
     </div>
 
     <!-- ── SEEK ── -->
@@ -1313,18 +1399,18 @@ textarea { font-family: var(--font-ui); }
       </div>
       <div id="theme-grid">
         <div class="theme-grid">
-          <button class="theme-card" onclick="loadEnc('Anxiety & Worry')"><span class="theme-icon">🌊</span><span class="theme-name">Anxiety &amp; Worry</span></button>
-          <button class="theme-card" onclick="loadEnc('Grief & Loss')"><span class="theme-icon">🕊️</span><span class="theme-name">Grief &amp; Loss</span></button>
-          <button class="theme-card" onclick="loadEnc('Forgiveness')"><span class="theme-icon">🤍</span><span class="theme-name">Forgiveness</span></button>
-          <button class="theme-card" onclick="loadEnc('Loneliness')"><span class="theme-icon">🌿</span><span class="theme-name">Loneliness</span></button>
-          <button class="theme-card" onclick="loadEnc('Conflict & Relationships')"><span class="theme-icon">🌱</span><span class="theme-name">Conflict</span></button>
-          <button class="theme-card" onclick="loadEnc('Fear')"><span class="theme-icon">🕯️</span><span class="theme-name">Fear</span></button>
-          <button class="theme-card" onclick="loadEnc('Purpose & Direction')"><span class="theme-icon">🧭</span><span class="theme-name">Purpose</span></button>
-          <button class="theme-card" onclick="loadEnc('Faith & Doubt')"><span class="theme-icon">⚓</span><span class="theme-name">Faith &amp; Doubt</span></button>
-          <button class="theme-card" onclick="loadEnc('Suffering & Pain')"><span class="theme-icon">🌅</span><span class="theme-name">Suffering</span></button>
-          <button class="theme-card" onclick="loadEnc('Shame & Guilt')"><span class="theme-icon">🌸</span><span class="theme-name">Shame &amp; Guilt</span></button>
-          <button class="theme-card" onclick="loadEnc('Peace')"><span class="theme-icon">☮️</span><span class="theme-name">Peace</span></button>
-          <button class="theme-card" onclick="loadEnc('Hope')"><span class="theme-icon">✨</span><span class="theme-name">Hope</span></button>
+          <button class="theme-card" data-theme="Anxiety & Worry" onclick="loadEnc('Anxiety & Worry')"><span class="theme-icon">🌊</span><span class="theme-name">Anxiety &amp; Worry</span></button>
+          <button class="theme-card" data-theme="Grief & Loss" onclick="loadEnc('Grief & Loss')"><span class="theme-icon">🕊️</span><span class="theme-name">Grief &amp; Loss</span></button>
+          <button class="theme-card" data-theme="Forgiveness" onclick="loadEnc('Forgiveness')"><span class="theme-icon">🤍</span><span class="theme-name">Forgiveness</span></button>
+          <button class="theme-card" data-theme="Loneliness" onclick="loadEnc('Loneliness')"><span class="theme-icon">🌿</span><span class="theme-name">Loneliness</span></button>
+          <button class="theme-card" data-theme="Conflict & Relationships" onclick="loadEnc('Conflict & Relationships')"><span class="theme-icon">🌱</span><span class="theme-name">Conflict</span></button>
+          <button class="theme-card" data-theme="Fear" onclick="loadEnc('Fear')"><span class="theme-icon">🕯️</span><span class="theme-name">Fear</span></button>
+          <button class="theme-card" data-theme="Purpose & Direction" onclick="loadEnc('Purpose & Direction')"><span class="theme-icon">🧭</span><span class="theme-name">Purpose</span></button>
+          <button class="theme-card" data-theme="Faith & Doubt" onclick="loadEnc('Faith & Doubt')"><span class="theme-icon">⚓</span><span class="theme-name">Faith &amp; Doubt</span></button>
+          <button class="theme-card" data-theme="Suffering & Pain" onclick="loadEnc('Suffering & Pain')"><span class="theme-icon">🌅</span><span class="theme-name">Suffering</span></button>
+          <button class="theme-card" data-theme="Shame & Guilt" onclick="loadEnc('Shame & Guilt')"><span class="theme-icon">🌸</span><span class="theme-name">Shame &amp; Guilt</span></button>
+          <button class="theme-card" data-theme="Peace" onclick="loadEnc('Peace')"><span class="theme-icon">☮️</span><span class="theme-name">Peace</span></button>
+          <button class="theme-card" data-theme="Hope" onclick="loadEnc('Hope')"><span class="theme-icon">✨</span><span class="theme-name">Hope</span></button>
         </div>
       </div>
       <!-- Loading -->
@@ -1367,7 +1453,7 @@ textarea { font-family: var(--font-ui); }
             <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
             <span id="enc-save-label">Save this</span>
           </button>
-          <button class="action-btn-dark" onclick="shareItem('enc')">
+          <button class="action-btn-dark" onclick="openShareCard('enc')">
             <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
             Share
           </button>
@@ -1382,9 +1468,14 @@ textarea { font-family: var(--font-ui); }
           <div class="page-hd-eyebrow">Ask anything</div>
           <h1 class="page-hd-title">The <em>Advisor</em></h1>
         </div>
+        <div class="crisis-bar">In crisis? Call or text <a href="tel:988">988</a> (US). This app offers reflection — not pastoral counseling or emergency care.</div>
         <div class="advisor-welcome">
           <div class="advisor-welcome-title">Only the Words of Jesus</div>
           <div class="advisor-welcome-text">Every response is drawn from his direct speech in Matthew, Mark, Luke, and John — every verse cited.</div>
+        </div>
+        <div class="chat-toolbar">
+          <button type="button" class="chat-tool-btn" onclick="newChat()">New conversation</button>
+          <button type="button" class="chat-tool-btn" id="stop-btn" onclick="stopChat()" style="display:none">Stop</button>
         </div>
         <div class="suggestions" id="suggestions">
           <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
@@ -1485,9 +1576,20 @@ textarea { font-family: var(--font-ui); }
   </div>
 </div>
 
+<div class="share-modal" id="share-modal" onclick="if(event.target===this)closeShareModal()">
+  <div class="share-panel">
+    <h3>Share a Red Letter</h3>
+    <canvas id="share-canvas" width="1080" height="1080" style="width:100%;border-radius:12px;display:block"></canvas>
+    <div class="share-actions">
+      <button type="button" class="share-secondary" onclick="closeShareModal()">Close</button>
+      <button type="button" class="share-primary" onclick="downloadShareCard()">Save Image</button>
+    </div>
+  </div>
+</div>
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<script src="/data/curated.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
    STATE
@@ -1505,11 +1607,13 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
    INIT
 ═══════════════════════════════════════════════════════════════════════════ */
 (function init() {
-  // Onboarding check
-  if (!ls('rla-onboarded')) {
-    document.getElementById('onboarding').classList.remove('hidden');
+  const onboarded = ls('rla-onboarded');
+  const ob = document.getElementById('onboarding');
+  if (!onboarded) {
+    ob.classList.remove('hidden');
     return;
   }
+  ob.classList.add('hidden');
   startApp();
 })();
 
@@ -1639,38 +1743,49 @@ async function loadEnc(theme) {
 }
 
 function showEnc(data, theme) {
-  document.getElementById('enc-loading').style.display = 'none';
-  currentEncData = data;
-  currentEncTheme = theme;
+  try {
+    document.getElementById('enc-loading').style.display = 'none';
+    document.getElementById('theme-grid').style.display = 'none';
+    currentEncData = data;
+    currentEncTheme = theme;
 
-  document.getElementById('enc-headline').textContent = data.headline;
-  document.getElementById('enc-opening').textContent  = data.opening;
+    document.getElementById('enc-headline').textContent = data.headline || theme;
+    document.getElementById('enc-opening').textContent  = data.opening || '';
 
-  const pEl = document.getElementById('enc-passages');
-  pEl.innerHTML = '';
-  (data.passages || []).forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'passage-card';
-    d.innerHTML =
-      '<div class="passage-verse-tag">' + esc(p.verse) + '</div>' +
-      '<div class="passage-quote">“' + esc(p.quote) + '”</div>' +
-      '<div class="passage-context">' + esc(p.context) + '</div>';
-    pEl.appendChild(d);
-  });
+    const pEl = document.getElementById('enc-passages');
+    pEl.innerHTML = '';
+    (data.passages || []).forEach(p => {
+      const d = document.createElement('div');
+      d.className = 'passage-card';
+      d.innerHTML =
+        '<div class="passage-verse-tag">' + esc(p.verse || '') + '</div>' +
+        '<div class="passage-quote">“' + esc(p.quote || '') + '”</div>' +
+        '<div class="passage-context">' + esc(p.context || '') + '</div>';
+      pEl.appendChild(d);
+    });
 
-  document.getElementById('enc-practice').textContent = data.practice;
-  document.getElementById('enc-closing').textContent  = data.closing;
+    document.getElementById('enc-practice').textContent = data.practice || '';
+    document.getElementById('enc-closing').textContent  = data.closing || '';
 
-  const key = 'enc-' + slugify(theme);
-  if (isSaved(key)) setSaveBtnState('enc', true);
-  else setSaveBtnState('enc', false);
+    const key = 'enc-' + slugify(theme);
+    if (isSaved(key)) setSaveBtnState('enc', true);
+    else setSaveBtnState('enc', false);
 
-  document.getElementById('enc-result').classList.add('on');
-  document.getElementById('seek-page').scrollTop = 0;
+    const result = document.getElementById('enc-result');
+    result.classList.add('on');
+    result.style.display = 'block';
+    document.getElementById('seek-page').scrollTop = 0;
+  } catch (err) {
+    console.error('showEnc failed', err);
+    showToast('Unable to display encouragement.');
+    showThemeGrid();
+  }
 }
 
 function showThemeGrid() {
-  document.getElementById('enc-result').classList.remove('on');
+  const result = document.getElementById('enc-result');
+  result.classList.remove('on');
+  result.style.display = '';
   document.getElementById('enc-loading').style.display = 'none';
   document.getElementById('theme-grid').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
@@ -2048,6 +2163,347 @@ function extractFirstVerse(text) {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WORLD-CLASS ENHANCEMENTS
+
+/* Theme grid delegation — robust clicks on icon/label */
+document.getElementById('theme-grid')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.theme-card');
+  if (!btn) return;
+  const theme = btn.dataset.theme || (btn.getAttribute('onclick') || '').match(/loadEnc\('([^']+)'\)/)?.[1];
+  if (theme) {
+    e.preventDefault();
+    loadEnc(theme);
+  }
+});
+
+/* WORLD-CLASS ENHANCEMENTS
+═══════════════════════════════════════════════════════════════════════════ */
+let chatAbort = null;
+let selectedIntent = ls('rla-intent') || '';
+
+function selectIntent(btn) {
+  document.querySelectorAll('.intent-chip').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedIntent = btn.dataset.intent;
+  lsSet('rla-intent', selectedIntent);
+}
+
+function curatedDailyFallback() {
+  const list = (window.RLA_CURATED && window.RLA_CURATED.daily) || [];
+  if (!list.length) return null;
+  const start = new Date(new Date().getFullYear(), 0, 0);
+  const day = Math.floor((Date.now() - start) / 86400000);
+  return { ...list[day % list.length], source: 'curated' };
+}
+
+function curatedEncFallback(theme) {
+  const map = (window.RLA_CURATED && window.RLA_CURATED.encouragement) || {};
+  const aliases = window.RLA_THEME_ALIASES || {};
+  const key = aliases[theme] || theme;
+  const data = map[key] || map['Hope'] || Object.values(map)[0];
+  if (!data) return null;
+  return { ...data, theme, source: 'curated' };
+}
+
+function applyDailyToUI(data) {
+  dailyData = data;
+  document.getElementById('aff-text').textContent = data.affirmation.text;
+  document.getElementById('aff-quote').textContent = '“' + data.affirmation.quote + '”';
+  document.getElementById('aff-verse').textContent = '— ' + data.affirmation.verse;
+  document.getElementById('aff-skel').style.display = 'none';
+  document.getElementById('aff-content').style.display = 'block';
+  if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
+
+  document.getElementById('word-theme').textContent = '✦ ' + data.word.theme;
+  document.getElementById('word-title').textContent = data.word.title;
+  document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
+  document.getElementById('word-verse').textContent = data.word.verse;
+  document.getElementById('word-reflection').textContent = data.word.reflection;
+  document.getElementById('word-skel').style.display = 'none';
+  document.getElementById('word-content').style.display = 'block';
+  if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+
+  const grace = document.getElementById('grace-note');
+  if (grace) {
+    const streak = JSON.parse(ls('rla-streak') || '{"count":1}');
+    grace.textContent = streak.count > 1
+      ? ('A quiet ' + streak.count + '-day rhythm — missing a day never erases your place here.')
+      : 'Welcome. One quiet moment with his words is enough for today.';
+  }
+}
+
+const _origLoadDaily = typeof loadDailyContent === 'function' ? loadDailyContent : null;
+async function loadDailyContent() {
+  try {
+    const res = await fetch('/api/daily');
+    const data = await res.json();
+    if (data.error || !data.affirmation) throw new Error(data.error || 'bad payload');
+    applyDailyToUI(data);
+  } catch (e) {
+    console.warn('Daily API failed, using curated', e);
+    const fb = curatedDailyFallback();
+    if (fb) applyDailyToUI(fb);
+    else document.getElementById('aff-skel').innerHTML = '<p style="color:rgba(255,255,255,.65);font-size:14px">Unable to load. Please refresh.</p>';
+  }
+}
+
+const _origLoadEnc = typeof loadEnc === 'function' ? loadEnc : null;
+async function loadEnc(theme) {
+  if (encCache[theme]) { showEnc(encCache[theme], theme); return; }
+  document.getElementById('theme-grid').style.display = 'none';
+  document.getElementById('enc-result').classList.remove('on');
+  document.getElementById('enc-loading').style.display = 'block';
+  document.getElementById('seek-page').scrollTop = 0;
+  try {
+    const res = await fetch('/api/encouragement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme })
+    });
+    const data = await res.json();
+    if (data.error || !data.headline) throw new Error(data.error || 'bad payload');
+    encCache[theme] = data;
+    showEnc(data, theme);
+  } catch (e) {
+    console.warn('Enc API failed, using curated', e);
+    const fb = curatedEncFallback(theme);
+    if (fb) {
+      // normalize curated shape to UI shape
+      const normalized = {
+        headline: fb.headline,
+        opening: fb.opening,
+        passages: fb.passages,
+        practice: fb.practice,
+        closing: fb.closing,
+        source: 'curated'
+      };
+      encCache[theme] = normalized;
+      showEnc(normalized, theme);
+    } else {
+      document.getElementById('enc-loading').style.display = 'none';
+      document.getElementById('theme-grid').style.display = 'block';
+      showToast('Unable to load. Please try again.');
+    }
+  }
+}
+
+function newChat() {
+  if (isChatBusy) stopChat();
+  chatHistory = [];
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  const sug = document.getElementById('suggestions');
+  if (sug) sug.style.display = '';
+  lsSet('rla-chat', '[]');
+  showToast('New conversation started');
+}
+
+function stopChat() {
+  if (chatAbort) { chatAbort.abort(); chatAbort = null; }
+  isChatBusy = false;
+  const stop = document.getElementById('stop-btn');
+  if (stop) stop.style.display = 'none';
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('typing').classList.remove('on');
+}
+
+function persistChat() {
+  try { lsSet('rla-chat', JSON.stringify(chatHistory.slice(-40))); } catch(_) {}
+}
+
+function restoreChat() {
+  try {
+    const raw = ls('rla-chat');
+    if (!raw) return;
+    const hist = JSON.parse(raw);
+    if (!Array.isArray(hist) || !hist.length) return;
+    chatHistory = hist;
+    const sug = document.getElementById('suggestions');
+    if (sug) sug.style.display = 'none';
+    hist.forEach(m => {
+      if (m.role === 'user') addBubble('user', m.content);
+      else {
+        const b = createStreamBubble();
+        updateStreamBubble(b, m.content);
+        b.bubble.innerHTML = formatAI(m.content);
+      }
+    });
+  } catch(_) {}
+}
+
+/* Share card */
+function openShareCard(type) {
+  let quote = '', verse = '', title = 'Red Letter Advisor';
+  if (type === 'aff' && dailyData) {
+    quote = dailyData.affirmation.quote;
+    verse = dailyData.affirmation.verse;
+    title = dailyData.affirmation.text.slice(0, 80);
+  } else if (type === 'word' && dailyData) {
+    quote = dailyData.word.passage;
+    verse = dailyData.word.verse;
+    title = dailyData.word.title;
+  } else if (type === 'enc' && currentEncData) {
+    const p = currentEncData.passages && currentEncData.passages[0];
+    quote = p ? p.quote : currentEncData.opening;
+    verse = p ? p.verse : '';
+    title = currentEncData.headline;
+  }
+  if (!quote) { shareItem(type); return; }
+  drawShareCard(quote, verse, title);
+  document.getElementById('share-modal').classList.add('on');
+}
+function closeShareModal() {
+  document.getElementById('share-modal').classList.remove('on');
+}
+function drawShareCard(quote, verse, title) {
+  const canvas = document.getElementById('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const grd = ctx.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, '#5C1010');
+  grd.addColorStop(0.55, '#8B1A1A');
+  grd.addColorStop(1, '#2A0808');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+  // subtle vignette
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  ctx.fillRect(0, H * 0.72, W, H * 0.28);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '600 36px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✝  RED LETTER', W / 2, 120);
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'italic 52px Georgia, serif';
+  wrapText(ctx, '“' + quote + '”', W / 2, H * 0.32, W - 160, 66);
+
+  ctx.font = '600 34px Inter, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,230,200,0.9)';
+  ctx.fillText(verse, W / 2, H * 0.78);
+
+  ctx.font = '500 28px Inter, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillText('the Red Letter Advisor', W / 2, H - 80);
+}
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  const lines = [];
+  for (let n = 0; n < words.length; n++) {
+    const test = line + words[n] + ' ';
+    if (ctx.measureText(test).width > maxWidth && n > 0) {
+      lines.push(line.trim());
+      line = words[n] + ' ';
+    } else line = test;
+  }
+  lines.push(line.trim());
+  const startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.slice(0, 10).forEach((ln, i) => ctx.fillText(ln, x, startY + i * lineHeight));
+}
+function downloadShareCard() {
+  const canvas = document.getElementById('share-canvas');
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], 'red-letter.png', { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Red Letter' }); return; } catch(_) {}
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'red-letter.png';
+    a.click();
+    showToast('Image saved');
+  });
+}
+
+/* Patch sendMsg to support abort + persist */
+const _sendMsgOriginal = sendMsg;
+async function sendMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isChatBusy) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('suggestions').style.display = 'none';
+  isChatBusy = true;
+  document.getElementById('send-btn').disabled = true;
+  const stop = document.getElementById('stop-btn');
+  if (stop) stop.style.display = '';
+
+  chatHistory.push({ role: 'user', content: text });
+  addBubble('user', text);
+  document.getElementById('typing').classList.add('on');
+  scrollChat();
+
+  const aiBubble = createStreamBubble();
+  document.getElementById('typing').classList.remove('on');
+  let fullText = '';
+  chatAbort = new AbortController();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory }),
+      signal: chatAbort.signal
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const p = JSON.parse(raw);
+          if (p.error) throw new Error(p.error);
+          if (p.text) { fullText += p.text; updateStreamBubble(aiBubble, fullText); scrollChat(); }
+        } catch(_) {}
+      }
+    }
+    chatHistory.push({ role: 'assistant', content: fullText });
+    persistChat();
+    addSaveToChatBubble(aiBubble, fullText, text);
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      updateStreamBubble(aiBubble, fullText || 'Unable to connect right now. Please try again.');
+    } else {
+      updateStreamBubble(aiBubble, fullText || '_Response stopped._');
+      if (fullText) {
+        chatHistory.push({ role: 'assistant', content: fullText });
+        persistChat();
+      }
+    }
+  } finally {
+    isChatBusy = false;
+    chatAbort = null;
+    document.getElementById('send-btn').disabled = false;
+    if (stop) stop.style.display = 'none';
+    scrollChat();
+  }
+}
+
+/* Restore chat after start */
+const _startApp = startApp;
+startApp = function() {
+  _startApp();
+  restoreChat();
+  // restore intent selection visual if present
+  if (selectedIntent) {
+    document.querySelectorAll('.intent-chip').forEach(b => {
+      b.classList.toggle('selected', b.dataset.intent === selectedIntent);
+    });
+  }
+};
+
+
 </script>
 </body>
 </html>

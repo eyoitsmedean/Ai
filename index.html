@@ -2,390 +2,2508 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#8B1A1A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Life guidance, daily affirmations, and encouragement drawn exclusively from the direct words of Jesus Christ." />
   <title>The Red Letter Advisor</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
 
-    :root {
-      --crimson:      #8B1A1A;
-      --crimson-dark: #5C1010;
-      --crimson-soft: #C0392B;
-      --parchment:    #FDF6EC;
-      --parchment-2:  #F5ECD8;
-      --ink:          #2C2416;
-      --ink-light:    #5C4F3A;
-      --border:       #D4B896;
-      --shadow:       rgba(44, 36, 22, 0.12);
-      --radius:       16px;
-      --font-serif:   Georgia, 'Times New Roman', serif;
-      --font-sans:    'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — LIGHT MODE
+═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --bg:          #FAF6EF;
+  --bg-2:        #F3EDE2;
+  --surface:     #FFFFFF;
+  --surface-2:   #FDF9F3;
+  --border:      #E5D9C8;
+  --border-2:    #D4C4B0;
 
-    html, body { height: 100%; background: var(--parchment); color: var(--ink); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; }
+  --crimson:     #8B1A1A;
+  --crimson-dk:  #641212;
+  --crimson-lt:  #B02020;
+  --crimson-pale:#FDF0EE;
 
-    .app { display: flex; flex-direction: column; height: 100dvh; max-width: 760px; margin: 0 auto; background: var(--parchment); border-left: 1px solid var(--border); border-right: 1px solid var(--border); box-shadow: 0 0 40px var(--shadow); }
+  --gold:        #8B6914;
+  --gold-lt:     #C8981A;
+  --gold-pale:   #FEF9EC;
+  --gold-border: #D4A844;
 
-    /* Header */
-    .header { background: linear-gradient(135deg, var(--crimson-dark) 0%, var(--crimson) 100%); color: #FFF; padding: 20px 24px 16px; text-align: center; flex-shrink: 0; border-bottom: 3px solid var(--crimson-soft); }
-    .header-cross { font-size: 1.4rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 4px; }
-    .header h1 { font-family: var(--font-serif); font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-    .header-subtitle { font-size: 0.78rem; opacity: 0.85; margin-top: 4px; font-style: italic; }
+  --streak:      #D4620A;
 
-    /* API Key Banner */
-    .api-banner { background: #FFF8E1; border-bottom: 1px solid #F0C040; padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .api-banner label { font-size: 0.8rem; color: #5A4A00; white-space: nowrap; font-weight: 600; }
-    .api-banner input { flex: 1; padding: 6px 10px; border: 1.5px solid #D4B800; border-radius: 8px; font-size: 0.8rem; font-family: monospace; background: #FFF; color: var(--ink); outline: none; }
-    .api-banner input:focus { border-color: var(--crimson); }
-    .api-save { padding: 6px 14px; background: var(--crimson); color: #FFF; border: none; border-radius: 8px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; }
-    .api-save:hover { background: var(--crimson-dark); }
-    .api-ok { color: #2E7D32; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+  --text-1:      #1A1208;
+  --text-2:      #4A3C2A;
+  --text-3:      #7A6A55;
+  --text-4:      #A09080;
 
-    /* Welcome */
-    .welcome { background: var(--parchment-2); border-bottom: 1px solid var(--border); padding: 16px 20px; flex-shrink: 0; }
-    .welcome h2 { font-family: var(--font-serif); font-size: 0.95rem; color: var(--crimson); margin-bottom: 6px; }
-    .welcome p { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
-    .disclaimer { margin-top: 8px; font-size: 0.75rem; color: #7A6A55; border-top: 1px solid var(--border); padding-top: 8px; font-style: italic; }
-    .welcome-toggle { background: none; border: none; color: var(--crimson); font-size: 0.78rem; cursor: pointer; padding: 4px 0; text-decoration: underline; display: block; margin-top: 6px; }
+  --shadow-1: 0 1px 3px rgba(26,18,8,.06), 0 2px 6px rgba(26,18,8,.04);
+  --shadow-2: 0 2px 8px rgba(26,18,8,.08), 0 4px 16px rgba(26,18,8,.05);
+  --shadow-3: 0 4px 20px rgba(26,18,8,.10), 0 8px 32px rgba(26,18,8,.07);
 
-    /* Chat */
-    .chat-area { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
-    .chat-area::-webkit-scrollbar { width: 5px; }
-    .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  --r:      16px;
+  --r-sm:   10px;
+  --r-lg:   22px;
+  --ease:   cubic-bezier(0.4, 0, 0.2, 1);
 
-    .message { display: flex; gap: 10px; max-width: 100%; animation: fadeSlide 0.25s ease; }
-    @keyframes fadeSlide { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    .message.user { flex-direction: row-reverse; }
-    .message.assistant { flex-direction: row; }
+  --nav-h:    68px;
+  --header-h: 58px;
 
-    .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
-    .message.user .avatar { background: var(--crimson); color: #FFF; }
-    .message.assistant .avatar { background: var(--parchment-2); border: 2px solid var(--border); color: var(--crimson); font-size: 1.1rem; }
+  --font-disp: 'Playfair Display', Georgia, serif;
+  --font-body: 'Lora', Georgia, serif;
+  --font-ui:   'Inter', system-ui, sans-serif;
+  --scale: 1;
+}
 
-    .bubble { max-width: min(80%, 560px); padding: 12px 16px; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.65; word-break: break-word; }
-    .message.user .bubble { background: var(--crimson); color: #FFF; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(139,26,26,0.25); }
-    .message.assistant .bubble { background: #FFF; color: var(--ink); border: 1px solid var(--border); border-bottom-left-radius: 4px; box-shadow: 0 2px 8px var(--shadow); }
-    .bubble .citation { color: var(--crimson); font-weight: 600; font-style: italic; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE
+═══════════════════════════════════════════════════════════════════════════ */
+:root[data-theme="dark"] {
+  --bg:          #0E0B07;
+  --bg-2:        #171210;
+  --surface:     #1C1812;
+  --surface-2:   #231E17;
+  --border:      #2C2620;
+  --border-2:    #3A3228;
 
-    /* Typing */
-    .typing-indicator { display: flex; align-items: center; gap: 10px; animation: fadeSlide 0.25s ease; }
-    .typing-dots { display: flex; gap: 4px; padding: 12px 16px; background: #FFF; border: 1px solid var(--border); border-radius: var(--radius); border-bottom-left-radius: 4px; box-shadow: 0 2px 8px var(--shadow); }
-    .typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--border); animation: bounce 1.2s infinite; }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce { 0%,60%,100%{transform:translateY(0);background:var(--border);}30%{transform:translateY(-6px);background:var(--crimson);} }
+  --crimson:     #C84040;
+  --crimson-dk:  #5A1010;
+  --crimson-lt:  #E05050;
+  --crimson-pale:#1C1010;
 
-    /* Empty state */
-    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--ink-light); padding: 24px; gap: 12px; }
-    .empty-state .cross-large { font-size: 3rem; color: var(--crimson); opacity: 0.35; }
-    .empty-state p { font-size: 0.88rem; font-style: italic; max-width: 320px; }
-    .suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
-    .chip { background: var(--parchment-2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 0.78rem; color: var(--crimson-dark); cursor: pointer; transition: background 0.15s, border-color 0.15s; }
-    .chip:hover { background: var(--crimson); color: #FFF; border-color: var(--crimson); }
+  --gold:        #C8981A;
+  --gold-lt:     #E0B030;
+  --gold-pale:   #181408;
+  --gold-border: #8B6914;
 
-    /* Input */
-    .input-bar { background: var(--parchment-2); border-top: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
-    .input-wrapper { flex: 1; }
-    textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 12px; background: #FFF; color: var(--ink); font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.5; resize: none; outline: none; transition: border-color 0.15s, box-shadow 0.15s; max-height: 140px; min-height: 44px; overflow-y: auto; }
-    textarea::placeholder { color: #9E8E78; }
-    textarea:focus { border-color: var(--crimson); box-shadow: 0 0 0 3px rgba(139,26,26,0.1); }
-    textarea:disabled { background: var(--parchment); opacity: 0.7; }
-    .send-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--crimson); color: #FFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.1s; box-shadow: 0 2px 8px rgba(139,26,26,0.3); }
-    .send-btn:hover:not(:disabled) { background: var(--crimson-dark); transform: scale(1.05); }
-    .send-btn:active:not(:disabled) { transform: scale(0.95); }
-    .send-btn:disabled { background: var(--border); cursor: not-allowed; box-shadow: none; }
-    .send-btn svg { width: 18px; height: 18px; fill: currentColor; }
+  --streak:      #E07020;
 
-    .error-msg { background: #FFF0F0; border: 1px solid #F5C6C6; color: #8B1A1A; border-radius: var(--radius); padding: 10px 14px; font-size: 0.83rem; text-align: center; }
+  --text-1:      #F0E8D8;
+  --text-2:      #C0B09A;
+  --text-3:      #8A7A68;
+  --text-4:      #6A5A4A;
 
-    .footer { text-align: center; padding: 6px 16px 10px; font-size: 0.68rem; color: #9E8E78; flex-shrink: 0; background: var(--parchment-2); border-top: 1px solid var(--border); }
+  --shadow-1: 0 1px 3px rgba(0,0,0,.3);
+  --shadow-2: 0 2px 8px rgba(0,0,0,.35);
+  --shadow-3: 0 4px 20px rgba(0,0,0,.4);
+}
 
-    @media (max-width: 480px) {
-      .header { padding: 14px 16px 12px; }
-      .chat-area { padding: 14px 10px; gap: 12px; }
-      .bubble { font-size: 0.875rem; padding: 10px 13px; }
-      .input-bar { padding: 10px 10px; gap: 8px; }
-      .app { border-left: none; border-right: none; }
-    }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #0E0B07;
+    --bg-2:        #171210;
+    --surface:     #1C1812;
+    --surface-2:   #231E17;
+    --border:      #2C2620;
+    --border-2:    #3A3228;
+    --crimson:     #C84040;
+    --crimson-dk:  #5A1010;
+    --crimson-lt:  #E05050;
+    --crimson-pale:#1C1010;
+    --gold:        #C8981A;
+    --gold-lt:     #E0B030;
+    --gold-pale:   #181408;
+    --gold-border: #8B6914;
+    --streak:      #E07020;
+    --text-1:      #F0E8D8;
+    --text-2:      #C0B09A;
+    --text-3:      #8A7A68;
+    --text-4:      #6A5A4A;
+    --shadow-1: 0 1px 3px rgba(0,0,0,.3);
+    --shadow-2: 0 2px 8px rgba(0,0,0,.35);
+    --shadow-3: 0 4px 20px rgba(0,0,0,.4);
+  }
+}
 
-    .bubble strong { font-weight: 600; }
-    .bubble em { font-style: italic; }
-  </style>
+/* Font size scale */
+:root[data-fs="sm"] { --scale: 0.88; }
+:root[data-fs="lg"] { --scale: 1.13; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL
+═══════════════════════════════════════════════════════════════════════════ */
+html, body {
+  height: 100%;
+  font-family: var(--font-ui);
+  font-size: calc(16px * var(--scale));
+  background: var(--bg);
+  color: var(--text-1);
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button { font-family: var(--font-ui); cursor: pointer; }
+textarea { font-family: var(--font-ui); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════════════════════════════════ */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  height: var(--header-h);
+  background: var(--crimson);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  flex-shrink: 0;
+  z-index: 20;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.header-left { display: flex; align-items: center; gap: 10px; }
+.header-cross { font-size: 18px; line-height: 1; opacity: .9; }
+.header-name {
+  font-family: var(--font-disp);
+  font-size: calc(16px * var(--scale));
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: .2px;
+}
+.header-sub {
+  font-size: calc(10px * var(--scale));
+  color: rgba(255,255,255,.65);
+  font-weight: 300;
+  letter-spacing: .5px;
+  margin-top: 1px;
+}
+.header-right { display: flex; align-items: center; gap: 10px; }
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,.18);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: calc(11px * var(--scale));
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: .3px;
+}
+
+.icon-btn {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.15);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  transition: background .15s;
+}
+.icon-btn:hover { background: rgba(255,255,255,.25); }
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* ── Pages ── */
+.pages { flex: 1; position: relative; overflow: hidden; }
+
+.page {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--nav-h) + 20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s var(--ease);
+  scroll-behavior: smooth;
+}
+.page::-webkit-scrollbar { width: 3px; }
+.page::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.page.active { opacity: 1; pointer-events: all; }
+
+/* Chat page needs flex layout for sticky input */
+#advisor-page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+}
+
+/* ── Bottom Nav ── */
+.nav {
+  height: var(--nav-h);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  z-index: 20;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  position: relative;
+}
+
+.nav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 2px;
+  width: 25%;
+  background: var(--crimson);
+  border-radius: 0 0 2px 2px;
+  transition: transform .28s var(--ease);
+  transform: translateX(var(--nav-x, 0px));
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: var(--text-4);
+  padding: 6px 4px;
+  transition: color .2s;
+  position: relative;
+}
+.nav-btn svg { width: 20px; height: 20px; transition: transform .2s var(--ease); }
+.nav-btn span { font-size: calc(9.5px * var(--scale)); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.nav-btn.active { color: var(--crimson); }
+.nav-btn.active svg { transform: scale(1.08); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ONBOARDING
+═══════════════════════════════════════════════════════════════════════════ */
+.onboarding {
+  position: fixed; inset: 0;
+  background: linear-gradient(160deg, #5C0F0F 0%, #2A0606 50%, #1A0404 100%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  text-align: center;
+}
+.onboarding.hidden { display: none; }
+
+.ob-cross {
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 24px;
+  animation: fadeUp .7s var(--ease) both;
+}
+.ob-title {
+  font-family: var(--font-disp);
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  animation: fadeUp .7s .1s var(--ease) both;
+}
+.ob-sub {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: rgba(255,255,255,.7);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 36px;
+  animation: fadeUp .7s .18s var(--ease) both;
+}
+.ob-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 44px;
+  width: 100%;
+  max-width: 300px;
+  animation: fadeUp .7s .26s var(--ease) both;
+}
+.ob-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: left;
+}
+.ob-feature-icon { font-size: 22px; flex-shrink: 0; }
+.ob-feature-text { font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.4; }
+.ob-feature-text strong { color: #fff; display: block; font-size: 13px; margin-bottom: 2px; }
+
+.ob-btn {
+  width: 100%;
+  max-width: 300px;
+  background: #fff;
+  color: var(--crimson);
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  transition: all .18s;
+  animation: fadeUp .7s .34s var(--ease) both;
+  -webkit-font-smoothing: antialiased;
+}
+.ob-btn:hover { background: #f5f5f5; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.ob-btn:active { transform: translateY(0); }
+
+.ob-note {
+  margin-top: 18px;
+  font-size: 12px;
+  color: rgba(255,255,255,.4);
+  line-height: 1.5;
+  animation: fadeUp .7s .4s var(--ease) both;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* Section heading */
+.section-label {
+  font-size: calc(10.5px * var(--scale));
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 20px 18px 10px;
+}
+
+/* Page header */
+.page-hd { padding: 20px 18px 4px; }
+.page-hd-eyebrow {
+  font-size: calc(11px * var(--scale));
+  font-weight: 500;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.page-hd-title {
+  font-family: var(--font-disp);
+  font-size: calc(24px * var(--scale));
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+.page-hd-title em { color: var(--crimson); font-style: italic; }
+
+/* Card */
+.card {
+  background: var(--surface);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-2);
+  margin: 0 14px 14px;
+  overflow: hidden;
+}
+.card-body { padding: 18px; }
+
+/* Crimson gradient card */
+.card-crimson {
+  background: linear-gradient(140deg, var(--crimson) 0%, var(--crimson-dk) 100%);
+}
+.card-crimson .card-body { padding: 22px 20px; }
+
+/* Gold accent card */
+.card-body .blockquote {
+  font-family: var(--font-body);
+  font-size: calc(16px * var(--scale));
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-2);
+  padding: 14px 16px;
+  background: var(--gold-pale);
+  border-left: 3px solid var(--gold-border);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  margin-bottom: 10px;
+}
+
+/* Tag / badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 20px;
+  padding: 4px 11px;
+  font-size: calc(11px * var(--scale));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+.badge-crimson { background: var(--crimson-pale); color: var(--crimson); }
+.badge-gold    { background: var(--gold-pale); color: var(--gold); border: 1px solid var(--gold-border); }
+.badge-white   { background: rgba(255,255,255,.2); color: rgba(255,255,255,.9); }
+
+/* Save + Share action row */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.15);
+}
+.card-actions.dark-sep { border-top-color: var(--border); }
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,.14);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: calc(12px * var(--scale));
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  transition: all .15s;
+}
+.action-btn:hover { background: rgba(255,255,255,.24); }
+.action-btn:active { transform: scale(.95); }
+.action-btn svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+.action-btn.saved { background: rgba(255,255,255,.28); color: #fff; }
+
+.action-btn-dark {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: calc(12px * var(--scale));
+  font-weight: 600;
+  color: var(--text-2);
+  transition: all .15s;
+}
+.action-btn-dark:hover { border-color: var(--crimson); color: var(--crimson); }
+.action-btn-dark:active { transform: scale(.95); }
+.action-btn-dark svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+.action-btn-dark.saved { background: var(--crimson-pale); border-color: var(--crimson); color: var(--crimson); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TODAY PAGE
+═══════════════════════════════════════════════════════════════════════════ */
+.today-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 4px;
+}
+.today-date {
+  font-size: calc(13px * var(--scale));
+  font-weight: 500;
+  color: var(--text-3);
+}
+.today-streak {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: calc(12px * var(--scale));
+  font-weight: 600;
+  color: var(--streak);
+}
+
+/* Affirmation card text */
+.aff-text {
+  font-family: var(--font-disp);
+  font-size: calc(20px * var(--scale));
+  font-weight: 600;
+  line-height: 1.42;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.aff-divider { height: 1px; background: rgba(255,255,255,.2); margin-bottom: 14px; }
+.aff-quote {
+  font-family: var(--font-body);
+  font-size: calc(13.5px * var(--scale));
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(255,255,255,.82);
+  margin-bottom: 6px;
+}
+.aff-verse {
+  font-size: calc(12px * var(--scale));
+  font-weight: 600;
+  color: rgba(255,255,255,.65);
+  letter-spacing: .3px;
+}
+
+/* Word of day */
+.word-title {
+  font-family: var(--font-disp);
+  font-size: calc(20px * var(--scale));
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.3;
+  margin: 10px 0 12px;
+}
+.word-verse-label {
+  font-size: calc(11.5px * var(--scale));
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+}
+.word-reflection {
+  font-size: calc(14px * var(--scale));
+  line-height: 1.72;
+  color: var(--text-2);
+}
+
+/* CTA row */
+.cta-row {
+  display: flex;
+  gap: 10px;
+  padding: 4px 14px 24px;
+}
+.cta-btn {
+  flex: 1;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 14px 10px;
+  font-size: calc(13.5px * var(--scale));
+  font-weight: 600;
+  transition: all .18s;
+  letter-spacing: .1px;
+}
+.cta-btn-primary { background: var(--crimson); color: white; }
+.cta-btn-primary:hover { background: var(--crimson-lt); transform: translateY(-1px); box-shadow: var(--shadow-2); }
+.cta-btn-secondary { background: var(--surface); color: var(--text-1); border: 1.5px solid var(--border); }
+.cta-btn-secondary:hover { border-color: var(--crimson); color: var(--crimson); }
+.cta-btn:active { transform: scale(.97); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEEK PAGE (Encouragement)
+═══════════════════════════════════════════════════════════════════════════ */
+.theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 4px 14px 20px;
+}
+.theme-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 12px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s var(--ease);
+  box-shadow: var(--shadow-1);
+}
+.theme-card:hover {
+  border-color: var(--crimson);
+  box-shadow: var(--shadow-3);
+  transform: translateY(-2px);
+}
+.theme-card:active { transform: scale(.96); }
+.theme-icon { font-size: 28px; line-height: 1; margin-bottom: 8px; display: block; }
+.theme-name { font-size: calc(12.5px * var(--scale)); font-weight: 600; color: var(--text-1); }
+
+/* Encouragement result */
+.enc-result { display: none; padding: 0 14px 20px; }
+.enc-result.on { display: block; animation: fadeUp .25s var(--ease); }
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--crimson);
+  font-size: calc(14px * var(--scale));
+  font-weight: 500;
+  padding: 14px 0 16px;
+  transition: opacity .15s;
+}
+.back-btn:hover { opacity: .7; }
+.back-btn svg { width: 16px; height: 16px; }
+
+.enc-headline {
+  font-family: var(--font-disp);
+  font-size: calc(22px * var(--scale));
+  font-weight: 700;
+  line-height: 1.28;
+  color: var(--text-1);
+  margin-bottom: 8px;
+}
+.enc-opening {
+  font-size: calc(15px * var(--scale));
+  line-height: 1.72;
+  color: var(--text-2);
+  margin-bottom: 20px;
+}
+.passage-card {
+  background: var(--surface);
+  border-left: 3px solid var(--crimson);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-1);
+}
+.passage-verse-tag {
+  font-size: calc(10.5px * var(--scale));
+  font-weight: 700;
+  color: var(--crimson);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 7px;
+}
+.passage-quote {
+  font-family: var(--font-body);
+  font-size: calc(15.5px * var(--scale));
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-2);
+  margin-bottom: 7px;
+}
+.passage-context {
+  font-size: calc(12.5px * var(--scale));
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.practice-card {
+  background: var(--gold-pale);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 16px;
+  margin: 14px 0;
+}
+.practice-label {
+  font-size: calc(10.5px * var(--scale));
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+}
+.practice-text { font-size: calc(14px * var(--scale)); line-height: 1.7; color: var(--text-2); }
+.enc-closing {
+  font-family: var(--font-body);
+  font-size: calc(14.5px * var(--scale));
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-3);
+  text-align: center;
+  padding: 6px 0 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ADVISOR PAGE
+═══════════════════════════════════════════════════════════════════════════ */
+.advisor-welcome {
+  background: var(--crimson-pale);
+  border: 1px solid rgba(139,26,26,.12);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  margin: 0 14px 12px;
+}
+.advisor-welcome-title {
+  font-family: var(--font-disp);
+  font-size: calc(15px * var(--scale));
+  font-weight: 600;
+  color: var(--crimson);
+  margin-bottom: 5px;
+}
+.advisor-welcome-text { font-size: calc(13px * var(--scale)); line-height: 1.65; color: var(--text-2); }
+
+.suggestions {
+  display: flex;
+  gap: 7px;
+  padding: 0 14px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.suggestions::-webkit-scrollbar { display: none; }
+.chip {
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-size: calc(13px * var(--scale));
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all .15s;
+}
+.chip:hover { border-color: var(--crimson); color: var(--crimson); }
+.chip:active { transform: scale(.95); }
+
+.chat-messages { display: flex; flex-direction: column; gap: 14px; padding: 0 14px 12px; }
+
+.msg { display: flex; flex-direction: column; animation: fadeUp .2s var(--ease); }
+.msg-user { align-items: flex-end; }
+.msg-ai  { align-items: flex-start; }
+
+.bubble {
+  max-width: 86%;
+  border-radius: 18px;
+  padding: 11px 15px;
+  font-size: calc(15px * var(--scale));
+  line-height: 1.62;
+  word-break: break-word;
+}
+.msg-user .bubble {
+  background: var(--crimson);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.msg-ai .bubble {
+  background: var(--surface);
+  color: var(--text-1);
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow-1);
+  font-family: var(--font-body);
+}
+.bubble .vcite { font-weight: 700; color: var(--crimson); font-style: normal; }
+
+.scripture-block {
+  background: var(--gold-pale);
+  border-left: 3px solid var(--gold-border);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 11px 13px;
+  margin: 8px 0 4px;
+}
+.scripture-verse {
+  font-size: calc(10px * var(--scale));
+  font-weight: 700;
+  color: var(--crimson);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 6px;
+}
+.scripture-quote {
+  font-family: var(--font-body);
+  font-size: calc(14.5px * var(--scale));
+  font-style: italic;
+  line-height: 1.62;
+  color: var(--text-2);
+}
+.scripture-ctx {
+  font-size: calc(12px * var(--scale));
+  line-height: 1.55;
+  color: var(--text-3);
+  margin-top: 5px;
+}
+.ai-p { margin-bottom: 6px; line-height: 1.65; }
+.ai-p:last-child { margin-bottom: 0; }
+
+.msg-save-btn {
+  margin-top: 5px;
+  background: none;
+  border: none;
+  font-size: calc(11.5px * var(--scale));
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+  transition: color .15s;
+}
+.msg-save-btn:hover { color: var(--crimson); }
+.msg-save-btn svg { width: 11px; height: 11px; fill: currentColor; }
+
+.typing-indicator {
+  display: none;
+  padding: 0 14px 10px;
+}
+.typing-indicator.on { display: block; }
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+  padding: 11px 15px;
+  background: var(--surface);
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow-1);
+}
+.dot {
+  width: 7px; height: 7px;
+  background: var(--text-4);
+  border-radius: 50%;
+  animation: dotBounce 1.2s infinite;
+}
+.dot:nth-child(2) { animation-delay: .18s; }
+.dot:nth-child(3) { animation-delay: .36s; }
+
+.chat-input-wrap {
+  padding: 10px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.chat-input {
+  flex: 1;
+  background: var(--bg-2);
+  border: 1.5px solid var(--border);
+  border-radius: 22px;
+  padding: 10px 15px;
+  font-size: calc(15px * var(--scale));
+  color: var(--text-1);
+  resize: none;
+  outline: none;
+  min-height: 44px;
+  max-height: 110px;
+  line-height: 1.5;
+  transition: border-color .18s;
+}
+.chat-input:focus { border-color: var(--crimson); }
+.chat-input::placeholder { color: var(--text-4); }
+
+.send-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--crimson);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.send-btn:hover { background: var(--crimson-lt); transform: scale(1.05); }
+.send-btn:active { transform: scale(.94); }
+.send-btn svg { width: 17px; height: 17px; fill: white; }
+.send-btn:disabled { opacity: .5; pointer-events: none; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JOURNAL PAGE
+═══════════════════════════════════════════════════════════════════════════ */
+.journal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 32px 40px;
+  text-align: center;
+}
+.journal-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
+.journal-empty-title {
+  font-family: var(--font-disp);
+  font-size: calc(20px * var(--scale));
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+.journal-empty-text { font-size: calc(14px * var(--scale)); color: var(--text-3); line-height: 1.65; max-width: 260px; }
+
+.journal-item {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: 16px;
+  margin: 0 14px 10px;
+  box-shadow: var(--shadow-1);
+  position: relative;
+  animation: fadeUp .2s var(--ease);
+}
+.journal-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+.journal-date { font-size: calc(11px * var(--scale)); color: var(--text-4); }
+.journal-title {
+  font-family: var(--font-disp);
+  font-size: calc(16px * var(--scale));
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.journal-body {
+  font-size: calc(13.5px * var(--scale));
+  line-height: 1.65;
+  color: var(--text-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.journal-verse { font-size: calc(11.5px * var(--scale)); font-weight: 600; color: var(--crimson); }
+
+.journal-delete {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-4);
+  border-radius: 50%;
+  transition: all .15s;
+}
+.journal-delete:hover { background: var(--crimson-pale); color: var(--crimson); }
+.journal-delete svg { width: 14px; height: 14px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SETTINGS SHEET
+═══════════════════════════════════════════════════════════════════════════ */
+.sheet-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease);
+}
+.sheet-overlay.on { opacity: 1; pointer-events: all; }
+
+.settings-sheet {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translate(-50%, 100%);
+  width: 100%;
+  max-width: 430px;
+  background: var(--surface);
+  border-radius: 22px 22px 0 0;
+  z-index: 51;
+  padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -8px 40px rgba(0,0,0,.2);
+  transition: transform .3s var(--ease);
+}
+.settings-sheet.on { transform: translate(-50%, 0); }
+
+.sheet-handle {
+  width: 36px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 20px;
+}
+.sheet-title {
+  font-family: var(--font-disp);
+  font-size: calc(18px * var(--scale));
+  font-weight: 700;
+  color: var(--text-1);
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+.setting-label {
+  font-size: calc(15px * var(--scale));
+  font-weight: 500;
+  color: var(--text-1);
+}
+.setting-sub {
+  font-size: calc(12px * var(--scale));
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+/* Toggle switch */
+.toggle {
+  position: relative;
+  width: 48px; height: 28px;
+  flex-shrink: 0;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute; inset: 0;
+  background: var(--border-2);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 22px; height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .2s var(--ease);
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle input:checked + .toggle-track { background: var(--crimson); }
+.toggle input:checked + .toggle-track::after { transform: translateX(20px); }
+
+/* Font size control */
+.fs-control {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.fs-btn {
+  background: var(--bg-2);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  color: var(--text-2);
+  transition: all .15s;
+}
+.fs-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+.fs-btn.active { background: var(--crimson); border-color: var(--crimson); color: white; }
+
+.sheet-about {
+  padding: 16px 20px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+.sheet-about p {
+  font-size: calc(12.5px * var(--scale));
+  color: var(--text-3);
+  line-height: 1.6;
+}
+.sheet-about strong { color: var(--text-2); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text-1);
+  color: var(--bg);
+  padding: 10px 20px;
+  border-radius: 22px;
+  font-size: calc(13.5px * var(--scale));
+  font-weight: 500;
+  z-index: 60;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s var(--ease);
+  box-shadow: var(--shadow-3);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKELETON
+═══════════════════════════════════════════════════════════════════════════ */
+.skel {
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--border) 50%, var(--bg-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+.skel-wh { background: linear-gradient(90deg, rgba(255,255,255,.1) 25%, rgba(255,255,255,.2) 50%, rgba(255,255,255,.1) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+.sl { height: 15px; margin-bottom: 9px; }
+.sl.s { width: 38%; }
+.sl.m { width: 68%; }
+.sl.l { width: 90%; }
+.sl.f { width: 100%; }
+.sl.h { height: 19px; }
+.sl.b { height: 24px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: .4; }
+  40%            { transform: translateY(-5px); opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — DESKTOP
+═══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 431px) {
+  body {
+    background: color-mix(in srgb, var(--bg) 60%, var(--border) 40%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .app {
+    border-radius: 28px;
+    height: min(860px, 94vh);
+    box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.05);
+  }
+  .toast { bottom: calc(var(--nav-h) + 20px); }
+}
+
+/* Crisis + share card */
+.crisis-bar {
+  margin: 10px 14px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #F8EFE8;
+  border: 1px solid #E8D2C0;
+  color: var(--text-2);
+  font-size: calc(12px * var(--scale));
+  line-height: 1.45;
+}
+:root[data-theme="dark"] .crisis-bar {
+  background: #241810;
+  border-color: #3A2A20;
+}
+.crisis-bar a { color: var(--crimson); font-weight: 600; text-decoration: underline; }
+.intent-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  width: 100%; max-width: 320px; margin: 0 auto 22px;
+}
+.intent-chip {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: #fff; border-radius: 12px; padding: 12px 10px;
+  font-size: 13px; font-weight: 500; text-align: center;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.intent-chip:hover, .intent-chip.selected {
+  background: rgba(255,255,255,.16);
+  border-color: rgba(255,255,255,.4);
+}
+.intent-chip.selected { transform: scale(1.02); }
+.chat-toolbar {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 0 14px 8px;
+}
+.chat-tool-btn {
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-2); border-radius: 999px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600;
+}
+.chat-tool-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+.share-modal {
+  position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,.55);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.share-modal.on { display: flex; }
+.share-panel {
+  background: var(--surface); border-radius: 20px;
+  padding: 16px; width: min(360px, 100%);
+  box-shadow: var(--shadow-3);
+}
+.share-panel h3 {
+  font-family: var(--font-disp); font-size: 18px;
+  margin-bottom: 12px; color: var(--text-1);
+}
+.share-actions { display: flex; gap: 8px; margin-top: 12px; }
+.share-actions button {
+  flex: 1; border: none; border-radius: 12px; padding: 12px;
+  font-weight: 700; font-size: 14px;
+}
+.share-primary { background: var(--crimson); color: #fff; }
+.share-secondary { background: var(--bg-2); color: var(--text-1); border: 1px solid var(--border) !important; }
+.grace-note {
+  font-size: calc(11.5px * var(--scale));
+  color: var(--text-3); padding: 0 18px 8px; line-height: 1.4;
+}
+.disclaimer-foot {
+  font-size: calc(11px * var(--scale));
+  color: var(--text-4);
+  padding: 8px 18px 18px;
+  line-height: 1.45;
+}
+
+</style>
 </head>
 <body>
-<div class="app">
 
-  <header class="header">
-    <div class="header-cross">&#10012;</div>
-    <h1>The Red Letter Advisor</h1>
-    <p class="header-subtitle">Guidance from the words of Jesus &bull; Matthew &bull; Mark &bull; Luke &bull; John</p>
-  </header>
-
-  <!-- API Key entry -->
-  <div class="api-banner" id="apiBanner">
-    <label for="apiKeyInput">&#128273; Anthropic API Key:</label>
-    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off" />
-    <button class="api-save" onclick="saveKey()">Save</button>
-    <span class="api-ok" id="apiOk" style="display:none">&#10003; Set</span>
-  </div>
-
-  <div class="welcome" id="welcomeBanner">
-    <h2>&#128214; What is this?</h2>
-    <p id="welcomeText">Ask any life question or moral dilemma, and receive a thoughtful response drawn exclusively from the direct words of Jesus Christ as recorded in the four Gospels — the passages traditionally printed in <strong style="color:var(--crimson)">red letters</strong> in many Bible editions. Every response cites the specific verse it draws from.</p>
-    <p class="disclaimer">&#9432; This is reflective guidance for thought and prayer — not a substitute for personal faith, pastoral counsel, or professional advice. It is offered with humility, not authority.</p>
-    <button class="welcome-toggle" id="welcomeToggle" onclick="toggleWelcome()">Hide introduction</button>
-  </div>
-
-  <div class="chat-area" id="chatArea">
-    <div class="empty-state" id="emptyState">
-      <div class="cross-large">&#10012;</div>
-      <p>"Ask, and it will be given to you; seek, and you will find." &mdash; Matthew 7:7</p>
-      <p style="margin-top:4px;font-size:0.8rem;">What is weighing on your heart today?</p>
-      <div class="suggestion-chips">
-        <button class="chip" onclick="useSuggestion(this)">How should I treat my enemies?</button>
-        <button class="chip" onclick="useSuggestion(this)">I'm struggling with anxiety and fear</button>
-        <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
-        <button class="chip" onclick="useSuggestion(this)">What does Jesus say about wealth?</button>
-        <button class="chip" onclick="useSuggestion(this)">How should I handle conflict?</button>
-        <button class="chip" onclick="useSuggestion(this)">What is the greatest commandment?</button>
-      </div>
+<!-- ════════ ONBOARDING ════════ -->
+<div id="onboarding" class="onboarding">
+  <div class="ob-cross">✝</div>
+  <h1 class="ob-title">The Red Letter Advisor</h1>
+  <p class="ob-sub">Life wisdom drawn from the exact words<br>Jesus spoke in the four Gospels</p>
+  <div class="ob-features">
+    <div class="ob-feature">
+      <span class="ob-feature-icon">☀️</span>
+      <div class="ob-feature-text"><strong>Daily Affirmation</strong>A fresh word of light every morning, grounded in scripture</div>
+    </div>
+    <div class="ob-feature">
+      <span class="ob-feature-icon">🤍</span>
+      <div class="ob-feature-text"><strong>Encouragement by Theme</strong>12 life situations — grief, fear, purpose, peace and more</div>
+    </div>
+    <div class="ob-feature">
+      <span class="ob-feature-icon">💬</span>
+      <div class="ob-feature-text"><strong>Personal Advisor</strong>Ask any question and receive guidance in his words</div>
     </div>
   </div>
-
-  <div class="input-bar">
-    <div class="input-wrapper">
-      <textarea id="userInput" placeholder="Ask a life question or share a dilemma..." rows="1"
-        onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
-    </div>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send" disabled>
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
+    <p class="ob-note" style="margin-bottom:10px;opacity:.8">What brings you here?</p>
+  <div class="intent-grid" id="intent-grid">
+    <button type="button" class="intent-chip" data-intent="peace" onclick="selectIntent(this)">Peace</button>
+    <button type="button" class="intent-chip" data-intent="guidance" onclick="selectIntent(this)">Guidance</button>
+    <button type="button" class="intent-chip" data-intent="encouragement" onclick="selectIntent(this)">Encouragement</button>
+    <button type="button" class="intent-chip" data-intent="jesus-words" onclick="selectIntent(this)">Jesus&rsquo; Words</button>
   </div>
-
-  <footer class="footer">
-    Responses reflect the red-letter words of Jesus in the four Gospels &bull; Always check the cited scripture yourself
-  </footer>
+  <button class="ob-btn" onclick="completeOnboarding()">Begin My Journey</button>
+  <p class="ob-note">"Red letters" are the passages printed in red in many Bibles,<br>marking the direct speech of Jesus.</p>
 </div>
 
+<!-- ════════ APP ════════ -->
+<div class="app" id="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <span class="header-cross">✝</span>
+      <div>
+        <div class="header-name">Red Letter Advisor</div>
+        <div class="header-sub" id="header-sub">Daily Words of Life</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="streak-badge" id="streak-badge">🔥 <span id="streak-num">1</span></div>
+      <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Pages -->
+  <div class="pages">
+
+    <!-- ── TODAY ── -->
+    <div class="page active" id="today-page">
+      <div class="today-meta">
+        <span class="today-date" id="today-date"></span>
+        <span class="today-streak" id="today-streak-label"></span>
+      </div>
+      <div class="page-hd" style="padding-top:6px">
+        <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
+        <h1 class="page-hd-title">Today's <em>Light</em></h1>
+      </div>
+
+      <div class="section-label">Daily Affirmation</div>
+      <div class="card card-crimson" id="aff-card">
+        <div class="card-body">
+          <div class="badge badge-white" style="margin-bottom:12px">✦ For You Today</div>
+          <!-- skeleton -->
+          <div id="aff-skel">
+            <div class="skel skel-wh sl h f"></div>
+            <div class="skel skel-wh sl l" style="margin-top:2px"></div>
+            <div class="skel skel-wh sl m" style="margin-bottom:14px"></div>
+            <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:14px"></div>
+            <div class="skel skel-wh sl s" style="height:12px"></div>
+          </div>
+          <!-- content -->
+          <div id="aff-content" style="display:none">
+            <div class="aff-text" id="aff-text"></div>
+            <div class="aff-divider"></div>
+            <div class="aff-quote" id="aff-quote"></div>
+            <div class="aff-verse" id="aff-verse"></div>
+            <div class="card-actions">
+              <button class="action-btn" id="aff-save-btn" onclick="toggleSave('aff')">
+                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                <span id="aff-save-label">Save</span>
+              </button>
+              <button class="action-btn" onclick="openShareCard('aff')">
+                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Word of the Day</div>
+      <div class="card" id="word-card">
+        <div class="card-body">
+          <!-- skeleton -->
+          <div id="word-skel">
+            <div class="skel sl s b" style="border-radius:20px;width:72px;margin-bottom:10px"></div>
+            <div class="skel sl h l" style="margin-bottom:12px"></div>
+            <div style="background:var(--bg-2);border-radius:8px;padding:12px;margin-bottom:10px">
+              <div class="skel sl f"></div>
+              <div class="skel sl l"></div>
+              <div class="skel sl m"></div>
+            </div>
+            <div class="skel sl s" style="height:12px;margin-bottom:12px"></div>
+            <div class="skel sl f"></div>
+            <div class="skel sl l"></div>
+          </div>
+          <!-- content -->
+          <div id="word-content" style="display:none">
+            <div class="badge badge-crimson" id="word-theme" style="margin-bottom:8px"></div>
+            <div class="word-title" id="word-title"></div>
+            <div class="blockquote" id="word-passage"></div>
+            <div class="word-verse-label" id="word-verse"></div>
+            <div class="word-reflection" id="word-reflection"></div>
+            <div class="card-actions dark-sep">
+              <button class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
+                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                <span id="word-save-label">Save</span>
+              </button>
+              <button class="action-btn-dark" onclick="openShareCard('word')">
+                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="grace-note" id="grace-note"></p>
+      <div class="cta-row">
+        <button class="cta-btn cta-btn-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
+        <button class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find Encouragement</button>
+      </div>
+      <p class="disclaimer-foot">Drawn only from the red-letter words of Jesus in Matthew, Mark, Luke, and John. Not a substitute for pastoral care, therapy, or emergency help.</p>
+    </div>
+
+    <!-- ── SEEK ── -->
+    <div class="page" id="seek-page">
+      <div class="page-hd">
+        <div class="page-hd-eyebrow">Choose a theme</div>
+        <h1 class="page-hd-title">Words of <em>Encouragement</em></h1>
+      </div>
+      <div id="theme-grid">
+        <div class="theme-grid">
+          <button class="theme-card" data-theme="Anxiety & Worry" onclick="loadEnc('Anxiety & Worry')"><span class="theme-icon">🌊</span><span class="theme-name">Anxiety &amp; Worry</span></button>
+          <button class="theme-card" data-theme="Grief & Loss" onclick="loadEnc('Grief & Loss')"><span class="theme-icon">🕊️</span><span class="theme-name">Grief &amp; Loss</span></button>
+          <button class="theme-card" data-theme="Forgiveness" onclick="loadEnc('Forgiveness')"><span class="theme-icon">🤍</span><span class="theme-name">Forgiveness</span></button>
+          <button class="theme-card" data-theme="Loneliness" onclick="loadEnc('Loneliness')"><span class="theme-icon">🌿</span><span class="theme-name">Loneliness</span></button>
+          <button class="theme-card" data-theme="Conflict & Relationships" onclick="loadEnc('Conflict & Relationships')"><span class="theme-icon">🌱</span><span class="theme-name">Conflict</span></button>
+          <button class="theme-card" data-theme="Fear" onclick="loadEnc('Fear')"><span class="theme-icon">🕯️</span><span class="theme-name">Fear</span></button>
+          <button class="theme-card" data-theme="Purpose & Direction" onclick="loadEnc('Purpose & Direction')"><span class="theme-icon">🧭</span><span class="theme-name">Purpose</span></button>
+          <button class="theme-card" data-theme="Faith & Doubt" onclick="loadEnc('Faith & Doubt')"><span class="theme-icon">⚓</span><span class="theme-name">Faith &amp; Doubt</span></button>
+          <button class="theme-card" data-theme="Suffering & Pain" onclick="loadEnc('Suffering & Pain')"><span class="theme-icon">🌅</span><span class="theme-name">Suffering</span></button>
+          <button class="theme-card" data-theme="Shame & Guilt" onclick="loadEnc('Shame & Guilt')"><span class="theme-icon">🌸</span><span class="theme-name">Shame &amp; Guilt</span></button>
+          <button class="theme-card" data-theme="Peace" onclick="loadEnc('Peace')"><span class="theme-icon">☮️</span><span class="theme-name">Peace</span></button>
+          <button class="theme-card" data-theme="Hope" onclick="loadEnc('Hope')"><span class="theme-icon">✨</span><span class="theme-name">Hope</span></button>
+        </div>
+      </div>
+      <!-- Loading -->
+      <div id="enc-loading" style="display:none;padding:0 14px">
+        <div style="padding:14px 0">
+          <div class="skel sl s b" style="margin-bottom:6px"></div>
+          <div class="skel sl m h"></div>
+        </div>
+        <div class="skel sl f" style="margin-bottom:7px"></div>
+        <div class="skel sl l" style="margin-bottom:18px"></div>
+        <div class="passage-card" style="background:var(--surface-2)">
+          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
+          <div class="skel sl f"></div><div class="skel sl l"></div>
+        </div>
+        <div class="passage-card" style="background:var(--surface-2)">
+          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
+          <div class="skel sl f"></div><div class="skel sl m"></div>
+        </div>
+        <div class="passage-card" style="background:var(--surface-2)">
+          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
+          <div class="skel sl f"></div><div class="skel sl l"></div>
+        </div>
+      </div>
+      <!-- Result -->
+      <div class="enc-result" id="enc-result">
+        <button class="back-btn" onclick="showThemeGrid()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          All themes
+        </button>
+        <div class="enc-headline" id="enc-headline"></div>
+        <div class="enc-opening" id="enc-opening"></div>
+        <div id="enc-passages"></div>
+        <div class="practice-card">
+          <div class="practice-label">✦ Practice for Today</div>
+          <div class="practice-text" id="enc-practice"></div>
+        </div>
+        <div class="enc-closing" id="enc-closing"></div>
+        <div style="margin-top:16px;display:flex;gap:8px">
+          <button class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
+            <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+            <span id="enc-save-label">Save this</span>
+          </button>
+          <button class="action-btn-dark" onclick="openShareCard('enc')">
+            <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADVISOR ── -->
+    <div class="page" id="advisor-page">
+      <div class="chat-scroll" id="chat-scroll">
+        <div class="page-hd" style="padding-bottom:10px">
+          <div class="page-hd-eyebrow">Ask anything</div>
+          <h1 class="page-hd-title">The <em>Advisor</em></h1>
+        </div>
+        <div class="crisis-bar">In crisis? Call or text <a href="tel:988">988</a> (US). This app offers reflection — not pastoral counseling or emergency care.</div>
+        <div class="advisor-welcome">
+          <div class="advisor-welcome-title">Only the Words of Jesus</div>
+          <div class="advisor-welcome-text">Every response is drawn from his direct speech in Matthew, Mark, Luke, and John — every verse cited.</div>
+        </div>
+        <div class="chat-toolbar">
+          <button type="button" class="chat-tool-btn" onclick="newChat()">New conversation</button>
+          <button type="button" class="chat-tool-btn" id="stop-btn" onclick="stopChat()" style="display:none">Stop</button>
+        </div>
+        <div class="suggestions" id="suggestions">
+          <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
+          <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
+          <button class="chip" onclick="useSuggestion(this)">I'm afraid of the future</button>
+          <button class="chip" onclick="useSuggestion(this)">How should I love my enemies?</button>
+          <button class="chip" onclick="useSuggestion(this)">I feel lost and without purpose</button>
+          <button class="chip" onclick="useSuggestion(this)">Can I be forgiven for what I've done?</button>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="typing-indicator" id="typing">
+          <div class="typing-dots">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <textarea class="chat-input" id="chat-input" placeholder="Share what's on your heart…" rows="1"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── JOURNAL ── -->
+    <div class="page" id="journal-page">
+      <div class="page-hd">
+        <div class="page-hd-eyebrow">Saved passages</div>
+        <h1 class="page-hd-title">My <em>Journal</em></h1>
+      </div>
+      <div id="journal-list"></div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- Bottom Nav -->
+  <nav class="nav" id="nav">
+    <button class="nav-btn active" id="nav-today" onclick="switchTab('today')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <circle cx="12" cy="12" r="4.5"/>
+        <line x1="12" y1="2" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="5.81" y2="5.81"/><line x1="18.19" y1="18.19" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.81" y2="18.19"/><line x1="18.19" y1="5.81" x2="19.78" y2="4.22"/>
+      </svg>
+      <span>Today</span>
+    </button>
+    <button class="nav-btn" id="nav-seek" onclick="switchTab('seek')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+      <span>Seek</span>
+    </button>
+    <button class="nav-btn" id="nav-advisor" onclick="switchTab('advisor')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </svg>
+      <span>Advisor</span>
+    </button>
+    <button class="nav-btn" id="nav-journal" onclick="switchTab('journal')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+      </svg>
+      <span>Journal</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- Settings sheet -->
+<div class="sheet-overlay" id="overlay" onclick="closeSettings()"></div>
+<div class="settings-sheet" id="settings-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Settings</div>
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Dark Mode</div>
+      <div class="setting-sub">Easier on the eyes at night</div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
+      <div class="toggle-track"></div>
+    </label>
+  </div>
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Text Size</div>
+      <div class="setting-sub">Adjust reading comfort</div>
+    </div>
+    <div class="fs-control">
+      <button class="fs-btn" id="fs-sm" onclick="setFs('sm')" style="font-size:12px">A−</button>
+      <button class="fs-btn active" id="fs-md" onclick="setFs('md')" style="font-size:15px">A</button>
+      <button class="fs-btn" id="fs-lg" onclick="setFs('lg')" style="font-size:17px">A+</button>
+    </div>
+  </div>
+  <div class="sheet-about">
+    <p><strong>The Red Letter Advisor</strong> answers every question exclusively from the direct words of Jesus Christ as recorded in Matthew, Mark, Luke, and John — the passages printed in red in many Bible editions. No other scripture, no outside commentary.</p>
+  </div>
+</div>
+
+<div class="share-modal" id="share-modal" onclick="if(event.target===this)closeShareModal()">
+  <div class="share-panel">
+    <h3>Share a Red Letter</h3>
+    <canvas id="share-canvas" width="1080" height="1080" style="width:100%;border-radius:12px;display:block"></canvas>
+    <div class="share-actions">
+      <button type="button" class="share-secondary" onclick="closeShareModal()">Close</button>
+      <button type="button" class="share-primary" onclick="downloadShareCard()">Save Image</button>
+    </div>
+  </div>
+</div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="/data/curated.js"></script>
 <script>
-const SYSTEM_PROMPT = `You are "The Red Letter Advisor" — a thoughtful, warm, and humble guide who responds to life questions and moral dilemmas exclusively using the direct words of Jesus Christ as recorded in the four Gospels: Matthew, Mark, Luke, and John. These are the passages traditionally printed in red letters in many Bible editions, representing only the direct speech attributed to Jesus.
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════════════════ */
+let dailyData = null;
+let currentEncData = null;
+let currentEncTheme = null;
+let chatHistory = [];
+let isChatBusy = false;
+const encCache = {};
+const TAB_ORDER = ['today', 'seek', 'advisor', 'journal'];
+const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
 
-CORE PRINCIPLES:
-1. Source restriction: Draw guidance ONLY from Jesus's direct words in the four Gospels. Do not quote other biblical authors (Paul, Peter, James, etc.), Old Testament passages (unless Jesus himself quoted them), or external sources.
-2. Citation required: Every response must cite the specific verse(s) you are drawing from (e.g., "Matthew 5:44", "John 13:34-35"). Place citations inline or at the end of relevant guidance.
-3. Humbly presented: Use phrases like "Jesus's words suggest...", "In the Gospel of [book], Jesus says...", "Reflecting on what Jesus taught in..." rather than "You must..." or "God commands you to..."
-4. Acknowledge complexity: When a question involves genuine theological complexity or interpretive debates, say so honestly and offer the range of thoughtful interpretations.
-5. Warmth and accessibility: Speak warmly, without judgment. Be accessible to people of any background.
-6. Non-contradictory: Never contradict, undermine, or reinterpret the red letter text itself.
-7. Scope awareness: If a question cannot be meaningfully addressed through Jesus's recorded words, say so gently and honestly.
-8. No pastoral pretense: You are a reflective guide, not a pastor, priest, therapist, or doctrinal authority.
-
-TONE: Warm, gentle, scholarly but accessible, humble, non-judgmental.
-FORMAT: Respond conversationally in paragraphs. Quote Jesus's words directly using quotation marks, then provide the reference in parentheses. Keep responses 150–350 words unless depth is warranted.`;
-
-let conversationHistory = [];
-let isLoading = false;
-let apiKey = localStorage.getItem('rla_api_key') || '';
-let welcomeVisible = true;
-
-// Restore saved key on load
-window.addEventListener('DOMContentLoaded', () => {
-  if (apiKey) {
-    document.getElementById('apiKeyInput').value = apiKey;
-    showKeySet();
+/* ═══════════════════════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════════════════════ */
+(function init() {
+  const onboarded = ls('rla-onboarded');
+  const ob = document.getElementById('onboarding');
+  if (!onboarded) {
+    ob.classList.remove('hidden');
+    return;
   }
-  document.getElementById('userInput').focus();
+  ob.classList.add('hidden');
+  startApp();
+})();
+
+function completeOnboarding() {
+  lsSet('rla-onboarded', '1');
+  document.getElementById('onboarding').classList.add('hidden');
+  startApp();
+}
+
+function startApp() {
+  document.getElementById('app').style.display = '';
+  applySettings();
+  updateStreak();
+  updateDateUI();
+  loadDailyContent();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB NAVIGATION
+═══════════════════════════════════════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab + '-page').classList.add('active');
+  document.getElementById('nav-' + tab).classList.add('active');
+  document.getElementById('nav').style.setProperty('--nav-x', NAV_X[tab]);
+
+  const subs = { today: 'Daily Words of Life', seek: 'Encouragement by Theme', advisor: 'Guided by the Gospels', journal: 'Your Saved Passages' };
+  document.getElementById('header-sub').textContent = subs[tab];
+
+  if (tab === 'journal') renderJournal();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATE + STREAK
+═══════════════════════════════════════════════════════════════════════════ */
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+function updateStreak() {
+  const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
+  const today = todayStr();
+  const yest  = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  let count;
+  if (raw.date === today) {
+    count = raw.count;
+  } else if (raw.date === yest) {
+    count = raw.count + 1;
+  } else {
+    count = 1;
+  }
+  lsSet('rla-streak', JSON.stringify({ date: today, count }));
+  document.getElementById('streak-num').textContent = count;
+  document.getElementById('today-streak-label').textContent = count > 1 ? '🔥 ' + count + '-day streak' : '';
+}
+
+function updateDateUI() {
+  const now = new Date();
+  const h = now.getHours();
+  const greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('today-greeting').textContent = greeting;
+
+  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  document.getElementById('today-date').textContent = dateStr;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DAILY CONTENT
+═══════════════════════════════════════════════════════════════════════════ */
+async function loadDailyContent() {
+  try {
+    const res = await fetch('/api/daily');
+    dailyData = await res.json();
+    if (dailyData.error) throw new Error(dailyData.error);
+
+    // Affirmation
+    document.getElementById('aff-text').textContent = dailyData.affirmation.text;
+    document.getElementById('aff-quote').textContent = '“' + dailyData.affirmation.quote + '”';
+    document.getElementById('aff-verse').textContent = '— ' + dailyData.affirmation.verse;
+    document.getElementById('aff-skel').style.display = 'none';
+    document.getElementById('aff-content').style.display = 'block';
+
+    // Update save button state
+    if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
+
+    // Word
+    document.getElementById('word-theme').textContent = '✦ ' + dailyData.word.theme;
+    document.getElementById('word-title').textContent = dailyData.word.title;
+    document.getElementById('word-passage').textContent = '“' + dailyData.word.passage + '”';
+    document.getElementById('word-verse').textContent = dailyData.word.verse;
+    document.getElementById('word-reflection').textContent = dailyData.word.reflection;
+    document.getElementById('word-skel').style.display = 'none';
+    document.getElementById('word-content').style.display = 'block';
+
+    if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+  } catch (e) {
+    console.error(e);
+    document.getElementById('aff-skel').innerHTML = '<p style="color:rgba(255,255,255,.6);font-size:14px">Unable to load. Please check your connection and refresh.</p>';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ENCOURAGEMENT
+═══════════════════════════════════════════════════════════════════════════ */
+async function loadEnc(theme) {
+  if (encCache[theme]) { showEnc(encCache[theme], theme); return; }
+
+  document.getElementById('theme-grid').style.display = 'none';
+  document.getElementById('enc-result').classList.remove('on');
+  document.getElementById('enc-loading').style.display = 'block';
+  document.getElementById('seek-page').scrollTop = 0;
+
+  try {
+    const res = await fetch('/api/encouragement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    encCache[theme] = data;
+    showEnc(data, theme);
+  } catch (e) {
+    document.getElementById('enc-loading').style.display = 'none';
+    document.getElementById('theme-grid').style.display = 'block';
+    showToast('Unable to load. Please try again.');
+  }
+}
+
+function showEnc(data, theme) {
+  try {
+    document.getElementById('enc-loading').style.display = 'none';
+    document.getElementById('theme-grid').style.display = 'none';
+    currentEncData = data;
+    currentEncTheme = theme;
+
+    document.getElementById('enc-headline').textContent = data.headline || theme;
+    document.getElementById('enc-opening').textContent  = data.opening || '';
+
+    const pEl = document.getElementById('enc-passages');
+    pEl.innerHTML = '';
+    (data.passages || []).forEach(p => {
+      const d = document.createElement('div');
+      d.className = 'passage-card';
+      d.innerHTML =
+        '<div class="passage-verse-tag">' + esc(p.verse || '') + '</div>' +
+        '<div class="passage-quote">“' + esc(p.quote || '') + '”</div>' +
+        '<div class="passage-context">' + esc(p.context || '') + '</div>';
+      pEl.appendChild(d);
+    });
+
+    document.getElementById('enc-practice').textContent = data.practice || '';
+    document.getElementById('enc-closing').textContent  = data.closing || '';
+
+    const key = 'enc-' + slugify(theme);
+    if (isSaved(key)) setSaveBtnState('enc', true);
+    else setSaveBtnState('enc', false);
+
+    const result = document.getElementById('enc-result');
+    result.classList.add('on');
+    result.style.display = 'block';
+    document.getElementById('seek-page').scrollTop = 0;
+  } catch (err) {
+    console.error('showEnc failed', err);
+    showToast('Unable to display encouragement.');
+    showThemeGrid();
+  }
+}
+
+function showThemeGrid() {
+  const result = document.getElementById('enc-result');
+  result.classList.remove('on');
+  result.style.display = '';
+  document.getElementById('enc-loading').style.display = 'none';
+  document.getElementById('theme-grid').style.display = 'block';
+  document.getElementById('seek-page').scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CHAT
+═══════════════════════════════════════════════════════════════════════════ */
+const chatInput = document.getElementById('chat-input');
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+});
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 110) + 'px';
 });
 
-function saveKey() {
-  const val = document.getElementById('apiKeyInput').value.trim();
-  if (!val) return;
-  apiKey = val;
-  localStorage.setItem('rla_api_key', val);
-  showKeySet();
-}
-
-function showKeySet() {
-  document.getElementById('apiOk').style.display = '';
-  document.getElementById('apiKeyInput').value = '•'.repeat(20);
-  document.getElementById('apiKeyInput').disabled = true;
-  document.querySelector('.api-save').textContent = 'Change';
-  document.querySelector('.api-save').onclick = resetKey;
-}
-
-function resetKey() {
-  apiKey = '';
-  localStorage.removeItem('rla_api_key');
-  const input = document.getElementById('apiKeyInput');
-  input.value = '';
-  input.disabled = false;
-  document.getElementById('apiOk').style.display = 'none';
-  document.querySelector('.api-save').textContent = 'Save';
-  document.querySelector('.api-save').onclick = saveKey;
-  input.focus();
-}
-
-function toggleWelcome() {
-  const text = document.getElementById('welcomeText');
-  const disc = document.querySelector('.disclaimer');
-  const btn  = document.getElementById('welcomeToggle');
-  welcomeVisible = !welcomeVisible;
-  text.style.display = welcomeVisible ? '' : 'none';
-  disc.style.display = welcomeVisible ? '' : 'none';
-  btn.textContent = welcomeVisible ? 'Hide introduction' : 'Show introduction';
-}
-
-const textarea = document.getElementById('userInput');
-const sendBtn  = document.getElementById('sendBtn');
-textarea.addEventListener('input', () => { sendBtn.disabled = !textarea.value.trim() || isLoading; });
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
-}
-
-function handleKeyDown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) sendMessage(); }
-}
-
 function useSuggestion(btn) {
-  textarea.value = btn.textContent.trim();
-  autoResize(textarea);
-  sendBtn.disabled = false;
-  sendMessage();
+  chatInput.value = btn.textContent.trim();
+  document.getElementById('suggestions').style.display = 'none';
+  sendMsg();
 }
 
-function scrollToBottom() {
-  const area = document.getElementById('chatArea');
-  area.scrollTop = area.scrollHeight;
+async function sendMsg() {
+  const text = chatInput.value.trim();
+  if (!text || isChatBusy) return;
+  chatInput.value = ''; chatInput.style.height = 'auto';
+  document.getElementById('suggestions').style.display = 'none';
+  isChatBusy = true;
+  document.getElementById('send-btn').disabled = true;
+
+  chatHistory.push({ role: 'user', content: text });
+  addBubble('user', text);
+
+  document.getElementById('typing').classList.add('on');
+  scrollChat();
+
+  // Create AI bubble that we'll stream into
+  const aiBubble = createStreamBubble();
+  document.getElementById('typing').classList.remove('on');
+
+  let fullText = '';
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory })
+    });
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const p = JSON.parse(raw);
+          if (p.error) throw new Error(p.error);
+          if (p.text) { fullText += p.text; updateStreamBubble(aiBubble, fullText); scrollChat(); }
+        } catch (_) {}
+      }
+    }
+
+    chatHistory.push({ role: 'assistant', content: fullText });
+    // Add save button under AI bubble
+    addSaveToChatBubble(aiBubble, fullText, text);
+  } catch (err) {
+    updateStreamBubble(aiBubble, 'Unable to connect right now. Please try again.');
+  } finally {
+    isChatBusy = false;
+    document.getElementById('send-btn').disabled = false;
+    scrollChat();
+  }
 }
 
-function removeEmptyState() {
-  const el = document.getElementById('emptyState');
-  if (el) el.remove();
-}
-
-function appendMessage(role, content) {
-  removeEmptyState();
-  const area = document.getElementById('chatArea');
-  const wrapper = document.createElement('div');
-  wrapper.className = `message ${role}`;
-  const avatar = document.createElement('div');
-  avatar.className = 'avatar';
-  avatar.textContent = role === 'user' ? '✦' : '✝';
+function addBubble(role, text) {
+  const msgs = document.getElementById('chat-messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-' + role;
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  if (role === 'assistant') bubble.innerHTML = formatResponse(content);
-  else bubble.textContent = content;
-  wrapper.appendChild(avatar);
-  wrapper.appendChild(bubble);
-  area.appendChild(wrapper);
-  scrollToBottom();
+  bubble.textContent = text;
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  scrollChat();
+  return wrap;
 }
 
-function showTypingIndicator() {
-  removeEmptyState();
-  const area = document.getElementById('chatArea');
-  const wrapper = document.createElement('div');
-  wrapper.className = 'typing-indicator';
-  wrapper.id = 'typingIndicator';
-  const avatar = document.createElement('div');
-  avatar.className = 'avatar';
-  avatar.textContent = '✝';
-  const dots = document.createElement('div');
-  dots.className = 'typing-dots';
-  dots.innerHTML = '<span></span><span></span><span></span>';
-  wrapper.appendChild(avatar);
-  wrapper.appendChild(dots);
-  area.appendChild(wrapper);
-  scrollToBottom();
+function createStreamBubble() {
+  const msgs = document.getElementById('chat-messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-ai';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<span class="text-cursor">▋</span>';
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  scrollChat();
+  return { wrap, bubble };
 }
 
-function removeTypingIndicator() {
-  const el = document.getElementById('typingIndicator');
-  if (el) el.remove();
+function updateStreamBubble({ bubble }, text) {
+  bubble.innerHTML = formatAI(text) + '<span class="text-cursor" style="opacity:.6;animation:dotBounce .8s infinite">▋</span>';
 }
 
-function showError(msg) {
-  removeTypingIndicator();
-  const area = document.getElementById('chatArea');
-  const el = document.createElement('div');
-  el.className = 'error-msg';
-  el.textContent = msg;
-  area.appendChild(el);
-  scrollToBottom();
-  setTimeout(() => el.remove(), 7000);
+function addSaveToChatBubble({ wrap }, text, question) {
+  // Remove cursor
+  wrap.querySelector('.bubble').innerHTML = formatAI(text);
+  // Add save button
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'msg-save-btn';
+  saveBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Journal';
+  saveBtn.onclick = () => {
+    const id = 'chat-' + Date.now();
+    saveJournalItem({
+      id, key: id,
+      type: 'chat',
+      title: question.length > 60 ? question.slice(0, 60) + '…' : question,
+      body: text,
+      verse: extractFirstVerse(text),
+    });
+    saveBtn.textContent = '✓ Saved';
+    saveBtn.style.color = 'var(--crimson)';
+    saveBtn.disabled = true;
+  };
+  wrap.appendChild(saveBtn);
 }
 
-function formatResponse(text) {
-  const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const withCitations = escaped.replace(
-    /\b(Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?(?:,\s*\d+(?:[–\-]\d+)?)*/g,
-    '<span class="citation">$&</span>'
-  );
-  const withBold = withCitations.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  const withItalic = withBold.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  return withItalic.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
-    .map(p => `<p style="margin-bottom:0.6em">${p.replace(/\n/g,'<br>')}</p>`).join('');
+function scrollChat() {
+  const el = document.getElementById('chat-scroll');
+  setTimeout(() => { el.scrollTop = el.scrollHeight; }, 30);
 }
 
-async function sendMessage() {
-  const text = textarea.value.trim();
-  if (!text || isLoading) return;
+/* ═══════════════════════════════════════════════════════════════════════════
+   JOURNAL
+═══════════════════════════════════════════════════════════════════════════ */
+function getJournal() { return JSON.parse(ls('rla-journal') || '[]'); }
+function setJournal(items) { lsSet('rla-journal', JSON.stringify(items)); }
 
-  if (!apiKey) {
-    showError('Please enter your Anthropic API key at the top of the page.');
+function saveJournalItem(item) {
+  const items = getJournal().filter(i => i.key !== item.key);
+  items.unshift({ ...item, savedAt: new Date().toISOString() });
+  setJournal(items);
+}
+
+function removeJournalItem(key) {
+  setJournal(getJournal().filter(i => i.key !== key));
+}
+
+function isSaved(key) { return getJournal().some(i => i.key === key); }
+
+function renderJournal() {
+  const list = document.getElementById('journal-list');
+  const items = getJournal();
+
+  if (items.length === 0) {
+    list.innerHTML = `
+      <div class="journal-empty">
+        <div class="journal-empty-icon">📖</div>
+        <div class="journal-empty-title">Your journal is empty</div>
+        <div class="journal-empty-text">Save affirmations, encouragement, and Advisor responses here using the save button on any card.</div>
+      </div>`;
     return;
   }
 
-  textarea.value = '';
-  textarea.style.height = '';
-  sendBtn.disabled = true;
-  isLoading = true;
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor' };
+  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold' };
 
-  appendMessage('user', text);
-  conversationHistory.push({ role: 'user', content: text });
-  showTypingIndicator();
+  list.innerHTML = items.map(item => {
+    const typeKey = item.type || (item.key.startsWith('aff') ? 'aff' : item.key.startsWith('word') ? 'word' : item.key.startsWith('enc') ? 'enc' : 'chat');
+    const label = TYPE_LABELS[typeKey] || 'Saved';
+    const cls   = TYPE_COLORS[typeKey] || 'badge-crimson';
+    const date  = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `
+      <div class="journal-item">
+        <button class="journal-delete" onclick="deleteJournalItem('${esc(item.key)}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+        </button>
+        <div class="journal-type-row">
+          <span class="badge ${cls}">${label}</span>
+          <span class="journal-date">${date}</span>
+        </div>
+        <div class="journal-title">${esc(item.title)}</div>
+        <div class="journal-body">${esc(item.body)}</div>
+        ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
+      </div>`;
+  }).join('');
+}
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-opus-4-6',
-        max_tokens: 1024,
-        system: SYSTEM_PROMPT,
-        messages: conversationHistory,
-      }),
-    });
+function deleteJournalItem(key) {
+  removeJournalItem(key);
+  renderJournal();
+  showToast('Removed from Journal');
+}
 
-    removeTypingIndicator();
+/* ═══════════════════════════════════════════════════════════════════════════
+   SAVE / SHARE
+═══════════════════════════════════════════════════════════════════════════ */
+function toggleSave(type) {
+  const keyMap = {
+    aff:  'aff-' + todayStr(),
+    word: 'word-' + todayStr(),
+    enc:  'enc-' + slugify(currentEncTheme || ''),
+  };
+  const key = keyMap[type];
+  if (!key) return;
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      if (res.status === 401) throw new Error('Invalid API key. Please check and re-enter your key.');
-      if (res.status === 429) throw new Error('Rate limited — please wait a moment and try again.');
-      throw new Error(err.error?.message || `API error (${res.status})`);
+  if (isSaved(key)) {
+    removeJournalItem(key);
+    setSaveBtnState(type, false);
+    showToast('Removed from Journal');
+  } else {
+    let item;
+    if (type === 'aff' && dailyData) {
+      item = { id: key, key, type: 'aff', title: dailyData.affirmation.text.slice(0, 80), body: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
+    } else if (type === 'word' && dailyData) {
+      item = { id: key, key, type: 'word', title: dailyData.word.title, body: dailyData.word.passage, verse: dailyData.word.verse };
+    } else if (type === 'enc' && currentEncData) {
+      item = { id: key, key, type: 'enc', title: currentEncData.headline, body: currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
     }
-
-    const data = await res.json();
-    const reply = data.content[0].text;
-    conversationHistory.push({ role: 'assistant', content: reply });
-    appendMessage('assistant', reply);
-  } catch (err) {
-    showError(err.message || 'Something went wrong. Please try again.');
-    conversationHistory.pop();
-  } finally {
-    isLoading = false;
-    sendBtn.disabled = !textarea.value.trim();
-    textarea.focus();
+    if (item) { saveJournalItem(item); setSaveBtnState(type, true); showToast('Saved to Journal ✦'); }
   }
 }
+
+function setSaveBtnState(type, saved) {
+  const btn  = document.getElementById(type + '-save-btn');
+  const lbl  = document.getElementById(type + '-save-label');
+  if (!btn) return;
+  if (saved) { btn.classList.add('saved'); lbl.textContent = 'Saved ✓'; }
+  else        { btn.classList.remove('saved'); lbl.textContent = type === 'enc' ? 'Save this' : 'Save'; }
+}
+
+function shareItem(type) {
+  let text = '', title = 'The Red Letter Advisor';
+  if (type === 'aff' && dailyData) {
+    text = dailyData.affirmation.text + '\n\n“' + dailyData.affirmation.quote + '”\n— ' + dailyData.affirmation.verse;
+  } else if (type === 'word' && dailyData) {
+    text = dailyData.word.title + '\n\n“' + dailyData.word.passage + '”\n— ' + dailyData.word.verse;
+  } else if (type === 'enc' && currentEncData) {
+    text = currentEncData.headline + '\n\n' + currentEncData.opening + '\n\n' + (currentEncData.passages?.[0] ? '“' + currentEncData.passages[0].quote + '”\n— ' + currentEncData.passages[0].verse : '');
+  }
+  if (!text) return;
+  if (navigator.share) {
+    navigator.share({ title, text, url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard'));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════════════════════════════════════════ */
+function openSettings() {
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('settings-sheet').classList.add('on');
+}
+function closeSettings() {
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('settings-sheet').classList.remove('on');
+}
+
+function toggleDark(on) {
+  document.documentElement.dataset.theme = on ? 'dark' : 'light';
+  lsSet('rla-dark', on ? '1' : '0');
+}
+
+function setFs(size) {
+  document.documentElement.dataset.fs = size;
+  lsSet('rla-fs', size);
+  ['sm', 'md', 'lg'].forEach(s => {
+    document.getElementById('fs-' + s).classList.toggle('active', s === size);
+  });
+}
+
+function applySettings() {
+  // Dark mode
+  const dark = ls('rla-dark');
+  if (dark !== null) {
+    document.documentElement.dataset.theme = dark === '1' ? 'dark' : 'light';
+    document.getElementById('dark-toggle').checked = dark === '1';
+  }
+  // Font size
+  const fs = ls('rla-fs') || 'md';
+  document.documentElement.dataset.fs = fs;
+  ['sm', 'md', 'lg'].forEach(s => {
+    const btn = document.getElementById('fs-' + s);
+    if (btn) btn.classList.toggle('active', s === fs);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════════════════════════ */
+function ls(key)        { try { return localStorage.getItem(key); } catch(_) { return null; } }
+function lsSet(k, v)    { try { localStorage.setItem(k, v); } catch(_) {} }
+function slugify(str)   { return str.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatAI(text) {
+  const lines = text.split('\n');
+  const parts = [];
+  let i = 0;
+  while (i < lines.length) {
+    const trimmed = lines[i].trim();
+    // Detect **Book Chapter:Verse** on its own line
+    const vm = trimmed.match(/^\*\*((?:Matthew|Mark|Luke|John)[^*\n]+)\*\*\s*$/);
+    if (vm) {
+      const verse = vm[1].trim();
+      let j = i + 1;
+      while (j < lines.length && !lines[j].trim()) j++;
+      if (j < lines.length) {
+        const nl = lines[j].trim();
+        // Complete quote: starts AND ends with a quote char (or ends with ." or ,")
+        const isQuote = nl.length > 10 && /^["“”]/.test(nl) &&
+          (/["“”]['.,]?\s*$/.test(nl) || /\.\s*$/.test(nl));
+        if (isQuote) {
+          const q = nl.replace(/^["“”]+/, '').replace(/["“”]+$/, '');
+          j++;
+          while (j < lines.length && !lines[j].trim()) j++;
+          let ctx = '';
+          if (j < lines.length) {
+            const cl = lines[j].trim();
+            if (cl && !/^\*\*/.test(cl) && !/^["“]/.test(cl)) { ctx = cl; j++; }
+          }
+          parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
+            '</div><div class="scripture-quote">“' + esc(q) + '”</div>' +
+            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
+          i = j; continue;
+        }
+      }
+      parts.push('<p class="ai-p"><strong class="vcite">' + esc(verse) + '</strong></p>');
+      i++; continue;
+    }
+    if (!trimmed) { parts.push('<div style="height:6px"></div>'); i++; continue; }
+    const html = esc(trimmed)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
+      .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>');
+    parts.push('<p class="ai-p">' + html + '</p>');
+    i++;
+  }
+  return parts.join('');
+}
+
+function extractFirstVerse(text) {
+  const m = text.match(/(Matthew|Mark|Luke|John)\s+\d+:\d+/);
+  return m ? m[0] : '';
+}
+
+/* ── PWA service worker ── */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WORLD-CLASS ENHANCEMENTS
+
+/* Theme grid delegation — robust clicks on icon/label */
+document.getElementById('theme-grid')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.theme-card');
+  if (!btn) return;
+  const theme = btn.dataset.theme || (btn.getAttribute('onclick') || '').match(/loadEnc\('([^']+)'\)/)?.[1];
+  if (theme) {
+    e.preventDefault();
+    loadEnc(theme);
+  }
+});
+
+/* WORLD-CLASS ENHANCEMENTS
+═══════════════════════════════════════════════════════════════════════════ */
+let chatAbort = null;
+let selectedIntent = ls('rla-intent') || '';
+
+function selectIntent(btn) {
+  document.querySelectorAll('.intent-chip').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedIntent = btn.dataset.intent;
+  lsSet('rla-intent', selectedIntent);
+}
+
+function curatedDailyFallback() {
+  const list = (window.RLA_CURATED && window.RLA_CURATED.daily) || [];
+  if (!list.length) return null;
+  const start = new Date(new Date().getFullYear(), 0, 0);
+  const day = Math.floor((Date.now() - start) / 86400000);
+  return { ...list[day % list.length], source: 'curated' };
+}
+
+function curatedEncFallback(theme) {
+  const map = (window.RLA_CURATED && window.RLA_CURATED.encouragement) || {};
+  const aliases = window.RLA_THEME_ALIASES || {};
+  const key = aliases[theme] || theme;
+  const data = map[key] || map['Hope'] || Object.values(map)[0];
+  if (!data) return null;
+  return { ...data, theme, source: 'curated' };
+}
+
+function applyDailyToUI(data) {
+  dailyData = data;
+  document.getElementById('aff-text').textContent = data.affirmation.text;
+  document.getElementById('aff-quote').textContent = '“' + data.affirmation.quote + '”';
+  document.getElementById('aff-verse').textContent = '— ' + data.affirmation.verse;
+  document.getElementById('aff-skel').style.display = 'none';
+  document.getElementById('aff-content').style.display = 'block';
+  if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
+
+  document.getElementById('word-theme').textContent = '✦ ' + data.word.theme;
+  document.getElementById('word-title').textContent = data.word.title;
+  document.getElementById('word-passage').textContent = '“' + data.word.passage + '”';
+  document.getElementById('word-verse').textContent = data.word.verse;
+  document.getElementById('word-reflection').textContent = data.word.reflection;
+  document.getElementById('word-skel').style.display = 'none';
+  document.getElementById('word-content').style.display = 'block';
+  if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+
+  const grace = document.getElementById('grace-note');
+  if (grace) {
+    const streak = JSON.parse(ls('rla-streak') || '{"count":1}');
+    grace.textContent = streak.count > 1
+      ? ('A quiet ' + streak.count + '-day rhythm — missing a day never erases your place here.')
+      : 'Welcome. One quiet moment with his words is enough for today.';
+  }
+}
+
+const _origLoadDaily = typeof loadDailyContent === 'function' ? loadDailyContent : null;
+async function loadDailyContent() {
+  try {
+    const res = await fetch('/api/daily');
+    const data = await res.json();
+    if (data.error || !data.affirmation) throw new Error(data.error || 'bad payload');
+    applyDailyToUI(data);
+  } catch (e) {
+    console.warn('Daily API failed, using curated', e);
+    const fb = curatedDailyFallback();
+    if (fb) applyDailyToUI(fb);
+    else document.getElementById('aff-skel').innerHTML = '<p style="color:rgba(255,255,255,.65);font-size:14px">Unable to load. Please refresh.</p>';
+  }
+}
+
+const _origLoadEnc = typeof loadEnc === 'function' ? loadEnc : null;
+async function loadEnc(theme) {
+  if (encCache[theme]) { showEnc(encCache[theme], theme); return; }
+  document.getElementById('theme-grid').style.display = 'none';
+  document.getElementById('enc-result').classList.remove('on');
+  document.getElementById('enc-loading').style.display = 'block';
+  document.getElementById('seek-page').scrollTop = 0;
+  try {
+    const res = await fetch('/api/encouragement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme })
+    });
+    const data = await res.json();
+    if (data.error || !data.headline) throw new Error(data.error || 'bad payload');
+    encCache[theme] = data;
+    showEnc(data, theme);
+  } catch (e) {
+    console.warn('Enc API failed, using curated', e);
+    const fb = curatedEncFallback(theme);
+    if (fb) {
+      // normalize curated shape to UI shape
+      const normalized = {
+        headline: fb.headline,
+        opening: fb.opening,
+        passages: fb.passages,
+        practice: fb.practice,
+        closing: fb.closing,
+        source: 'curated'
+      };
+      encCache[theme] = normalized;
+      showEnc(normalized, theme);
+    } else {
+      document.getElementById('enc-loading').style.display = 'none';
+      document.getElementById('theme-grid').style.display = 'block';
+      showToast('Unable to load. Please try again.');
+    }
+  }
+}
+
+function newChat() {
+  if (isChatBusy) stopChat();
+  chatHistory = [];
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  const sug = document.getElementById('suggestions');
+  if (sug) sug.style.display = '';
+  lsSet('rla-chat', '[]');
+  showToast('New conversation started');
+}
+
+function stopChat() {
+  if (chatAbort) { chatAbort.abort(); chatAbort = null; }
+  isChatBusy = false;
+  const stop = document.getElementById('stop-btn');
+  if (stop) stop.style.display = 'none';
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('typing').classList.remove('on');
+}
+
+function persistChat() {
+  try { lsSet('rla-chat', JSON.stringify(chatHistory.slice(-40))); } catch(_) {}
+}
+
+function restoreChat() {
+  try {
+    const raw = ls('rla-chat');
+    if (!raw) return;
+    const hist = JSON.parse(raw);
+    if (!Array.isArray(hist) || !hist.length) return;
+    chatHistory = hist;
+    const sug = document.getElementById('suggestions');
+    if (sug) sug.style.display = 'none';
+    hist.forEach(m => {
+      if (m.role === 'user') addBubble('user', m.content);
+      else {
+        const b = createStreamBubble();
+        updateStreamBubble(b, m.content);
+        b.bubble.innerHTML = formatAI(m.content);
+      }
+    });
+  } catch(_) {}
+}
+
+/* Share card */
+function openShareCard(type) {
+  let quote = '', verse = '', title = 'Red Letter Advisor';
+  if (type === 'aff' && dailyData) {
+    quote = dailyData.affirmation.quote;
+    verse = dailyData.affirmation.verse;
+    title = dailyData.affirmation.text.slice(0, 80);
+  } else if (type === 'word' && dailyData) {
+    quote = dailyData.word.passage;
+    verse = dailyData.word.verse;
+    title = dailyData.word.title;
+  } else if (type === 'enc' && currentEncData) {
+    const p = currentEncData.passages && currentEncData.passages[0];
+    quote = p ? p.quote : currentEncData.opening;
+    verse = p ? p.verse : '';
+    title = currentEncData.headline;
+  }
+  if (!quote) { shareItem(type); return; }
+  drawShareCard(quote, verse, title);
+  document.getElementById('share-modal').classList.add('on');
+}
+function closeShareModal() {
+  document.getElementById('share-modal').classList.remove('on');
+}
+function drawShareCard(quote, verse, title) {
+  const canvas = document.getElementById('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const grd = ctx.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, '#5C1010');
+  grd.addColorStop(0.55, '#8B1A1A');
+  grd.addColorStop(1, '#2A0808');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+  // subtle vignette
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  ctx.fillRect(0, H * 0.72, W, H * 0.28);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '600 36px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✝  RED LETTER', W / 2, 120);
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'italic 52px Georgia, serif';
+  wrapText(ctx, '“' + quote + '”', W / 2, H * 0.32, W - 160, 66);
+
+  ctx.font = '600 34px Inter, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,230,200,0.9)';
+  ctx.fillText(verse, W / 2, H * 0.78);
+
+  ctx.font = '500 28px Inter, system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillText('the Red Letter Advisor', W / 2, H - 80);
+}
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  const lines = [];
+  for (let n = 0; n < words.length; n++) {
+    const test = line + words[n] + ' ';
+    if (ctx.measureText(test).width > maxWidth && n > 0) {
+      lines.push(line.trim());
+      line = words[n] + ' ';
+    } else line = test;
+  }
+  lines.push(line.trim());
+  const startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.slice(0, 10).forEach((ln, i) => ctx.fillText(ln, x, startY + i * lineHeight));
+}
+function downloadShareCard() {
+  const canvas = document.getElementById('share-canvas');
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], 'red-letter.png', { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Red Letter' }); return; } catch(_) {}
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'red-letter.png';
+    a.click();
+    showToast('Image saved');
+  });
+}
+
+/* Patch sendMsg to support abort + persist */
+const _sendMsgOriginal = sendMsg;
+async function sendMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isChatBusy) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('suggestions').style.display = 'none';
+  isChatBusy = true;
+  document.getElementById('send-btn').disabled = true;
+  const stop = document.getElementById('stop-btn');
+  if (stop) stop.style.display = '';
+
+  chatHistory.push({ role: 'user', content: text });
+  addBubble('user', text);
+  document.getElementById('typing').classList.add('on');
+  scrollChat();
+
+  const aiBubble = createStreamBubble();
+  document.getElementById('typing').classList.remove('on');
+  let fullText = '';
+  chatAbort = new AbortController();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory }),
+      signal: chatAbort.signal
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const p = JSON.parse(raw);
+          if (p.error) throw new Error(p.error);
+          if (p.text) { fullText += p.text; updateStreamBubble(aiBubble, fullText); scrollChat(); }
+        } catch(_) {}
+      }
+    }
+    chatHistory.push({ role: 'assistant', content: fullText });
+    persistChat();
+    addSaveToChatBubble(aiBubble, fullText, text);
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      updateStreamBubble(aiBubble, fullText || 'Unable to connect right now. Please try again.');
+    } else {
+      updateStreamBubble(aiBubble, fullText || '_Response stopped._');
+      if (fullText) {
+        chatHistory.push({ role: 'assistant', content: fullText });
+        persistChat();
+      }
+    }
+  } finally {
+    isChatBusy = false;
+    chatAbort = null;
+    document.getElementById('send-btn').disabled = false;
+    if (stop) stop.style.display = 'none';
+    scrollChat();
+  }
+}
+
+/* Restore chat after start */
+const _startApp = startApp;
+startApp = function() {
+  _startApp();
+  restoreChat();
+  // restore intent selection visual if present
+  if (selectedIntent) {
+    document.querySelectorAll('.intent-chip').forEach(b => {
+      b.classList.toggle('selected', b.dataset.intent === selectedIntent);
+    });
+  }
+};
+
+
 </script>
 </body>
 </html>
