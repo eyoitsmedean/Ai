@@ -209,6 +209,27 @@ textarea { font-family: var(--body); }
 .tp-open:disabled { opacity: .38; cursor: not-allowed; }
 .tp-open:not(:disabled):hover { transform: translateY(-1px); }
 .tp-note { margin-top: 16px; font-size: 12px; color: var(--ink-4); line-height: 1.5; }
+.tp-need { display: none; margin-top: 8px; }
+.tp-need.on { display: block; animation: rise .4s var(--ease); }
+.tp-needs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 8px 0 18px; }
+.tp-need-btn {
+  background: none;
+  border: 1px solid var(--rule-2);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-2);
+}
+.tp-need-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+.tp-skip {
+  background: none;
+  border: none;
+  color: var(--ink-4);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .tp-note a { color: var(--crimson); }
 
 /* ── Shell ── */
@@ -951,8 +972,21 @@ textarea { font-family: var(--body); }
       <input type="checkbox" id="ob-ack" onchange="document.getElementById('ob-open').disabled = !this.checked" />
       <span>This is not a person, and it is not therapy, medical care, or pastoral counseling. If you are in crisis, call or text <a href="tel:988">988</a> in the U.S., or find a local helpline at <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</span>
     </label>
-    <button class="tp-open" id="ob-open" disabled onclick="completeOnboarding()">Open the room</button>
-    <p class="tp-note">Red letters mark the direct speech of Jesus in many printed Bibles.</p>
+    <div id="ob-ack-block">
+      <button class="tp-open" id="ob-open" disabled onclick="showNeedStep()">Open the room</button>
+      <p class="tp-note">Red letters mark the direct speech of Jesus in many printed Bibles.</p>
+    </div>
+    <div class="tp-need" id="ob-need">
+      <p class="tp-deck" style="margin:0 0 16px">What do you need a word for?</p>
+      <div class="tp-needs">
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('Anxiety & Worry')">Anxiety</button>
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('Grief & Loss')">Grief</button>
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('Fear')">Fear</button>
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('Peace')">Peace</button>
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('ask')">To ask</button>
+      </div>
+      <button class="tp-skip" type="button" onclick="chooseNeed('')">Just the morning page</button>
+    </div>
   </div>
 </section>
 
@@ -1303,12 +1337,24 @@ function setWatch() {
   document.documentElement.dataset.watch = watch;
 }
 
-function completeOnboarding() {
+function showNeedStep() {
   if (!document.getElementById('ob-ack').checked) return;
+  document.getElementById('ob-ack-block').style.display = 'none';
+  document.querySelector('.tp-trust').style.display = 'none';
+  document.getElementById('ob-need').classList.add('on');
+}
+
+function chooseNeed(kind) {
   lsSet('rla-onboarded', '1');
+  if (kind) lsSet('rla-need', kind);
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('app').removeAttribute('aria-hidden');
   startApp();
+  if (kind === 'ask') switchTab('advisor');
+  else if (kind) {
+    switchTab('seek');
+    loadEnc(kind);
+  }
 }
 
 function startApp() {
@@ -1764,6 +1810,10 @@ function keepSitReply() {
   });
   closeSit();
   showToast('Kept in the journal');
+  if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
+    lsSet('rla-install-hint', '1');
+    setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
+  }
 }
 
 function closeSit() {

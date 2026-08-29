@@ -96,6 +96,14 @@ describe('smoke routes', () => {
     assert.match(res.raw, /\[DONE\]/);
   });
 
+  it('accepts a waitlist email and rejects a bad one', async () => {
+    const bad = await request('POST', '/api/waitlist', { email: 'not-an-email' });
+    assert.equal(bad.status, 400);
+    const ok = await request('POST', '/api/waitlist', { email: 'reader@example.com' });
+    assert.equal(ok.status, 200);
+    assert.equal(JSON.parse(ok.raw).ok, true);
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

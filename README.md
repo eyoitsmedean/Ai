@@ -12,7 +12,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 - **Advisor** — a short correspondence; scripture is verified against a Gospel corpus before the letter is written on the page
 - **Journal** — a commonplace book kept on this device
 
-Quoted verses are checked against the public-domain **King James Version** (1769). A red-letter map plus spoken-text extraction keeps narrator frames out of the quote. Daily and encouragement JSON are requested as structured output, then every citation is substituted from the corpus. Advisor letters are buffered, verified, and then written to the page. If the model paraphrases, the page prints the canonical speech instead.
+Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts the spoken corpus text, so the model never types the verse. Daily and encouragement JSON are requested as structured output, then verified the same way.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 

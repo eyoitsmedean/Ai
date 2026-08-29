@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Red Letter — The words He actually spoke</title>
-  <meta name="description" content="A quiet reading room for the direct words of Jesus. Not another Bible app." />
+  <meta name="description" content="Daily guidance from the words Jesus actually spoke. Not every verse — His words. Not another Bible app." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
@@ -13,30 +13,70 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { min-height: 100%; background: var(--paper); color: var(--ink); font-family: 'Instrument Sans', system-ui, sans-serif; }
     .grain { pointer-events:none; position:fixed; inset:0; opacity:.04; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-    main { min-height: 100dvh; display:flex; align-items:center; justify-content:center; padding: 48px 24px; text-align:center; }
+    main { max-width: 720px; margin: 0 auto; padding: 64px 24px 80px; text-align: center; }
     .kicker { letter-spacing:.28em; text-transform:uppercase; font-size:11px; color:var(--mute); margin-bottom:16px; }
     h1 { font-family: Fraunces, Georgia, serif; font-weight:500; font-size: clamp(48px, 10vw, 84px); letter-spacing:-.03em; line-height:.95; }
     h1 em { font-style:italic; color:var(--crimson); }
-    .deck { font-family: 'Source Serif 4', Georgia, serif; font-style:italic; font-size:20px; color:#4A4034; max-width:28ch; margin: 22px auto 36px; line-height:1.5; }
+    .deck { font-family: 'Source Serif 4', Georgia, serif; font-style:italic; font-size:20px; color:#4A4034; max-width:28ch; margin: 22px auto 28px; line-height:1.5; }
     .quote { font-family: Fraunces, Georgia, serif; font-style:italic; font-size: clamp(22px, 4vw, 28px); color:var(--crimson); max-width:22ch; margin: 0 auto 12px; line-height:1.4; }
-    .cite { letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:var(--mute); margin-bottom:40px; }
+    .cite { letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:var(--mute); margin-bottom:36px; }
+    .pillars { text-align:left; margin: 0 auto 40px; max-width: 420px; }
+    .pillar { padding: 14px 0; border-top: 1px solid rgba(27,22,16,.1); display:grid; grid-template-columns: 72px 1fr; gap: 12px; }
+    .pillar:last-child { border-bottom: 1px solid rgba(27,22,16,.1); }
+    .pillar strong { color: var(--crimson); font-size: 12px; letter-spacing:.12em; text-transform:uppercase; }
+    .pillar span { font-family: 'Source Serif 4', Georgia, serif; color:#4A4034; line-height:1.5; }
     a.btn { display:inline-block; background:var(--crimson); color:#FBF7EE; text-decoration:none; padding:14px 22px; letter-spacing:.06em; text-transform:uppercase; font-size:13px; }
+    form { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin: 28px 0 8px; }
+    input[type=email] { border:none; border-bottom:1px solid rgba(27,22,16,.2); background:transparent; padding:10px 4px; font: inherit; font-size:16px; min-width:220px; color:var(--ink); outline:none; }
+    input[type=email]:focus { border-bottom-color: var(--crimson); }
+    button.send { border:none; background:transparent; color:var(--crimson); letter-spacing:.08em; text-transform:uppercase; font-size:12px; padding:10px 0; }
     p.note { margin-top:20px; font-size:13px; color:var(--mute); line-height:1.55; }
     p.note a { color:var(--crimson); }
+    #wait-msg { font-size:14px; color:var(--crimson); min-height:1.4em; }
+    .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
   </style>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
   <main>
-    <div>
-      <div class="kicker">A reading room</div>
-      <h1>Red <em>Letter</em></h1>
-      <p class="deck">Daily guidance from the words Jesus actually spoke. Sit with a sentence. Ask. Keep what stays.</p>
-      <p class="quote">Peace I leave with you, my peace I give unto you.</p>
-      <p class="cite">John 14:27  ·  KJV</p>
-      <a class="btn" href="./public/">Open the room</a>
-      <p class="note">The full Advisor is a small Node app. Run <code>npm start</code>.<br>Not a person, and not therapy. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com">findahelpline.com</a>.</p>
+    <div class="kicker">Not every verse — His words</div>
+    <h1>Red <em>Letter</em></h1>
+    <p class="deck">Daily guidance from the words Jesus actually spoke. Sit with a sentence. Ask. Keep what stays.</p>
+    <p class="quote">Peace I leave with you, my peace I give unto you.</p>
+    <p class="cite">John 14:27  ·  KJV</p>
+    <div class="pillars">
+      <div class="pillar"><strong>Clarity</strong><span>Only Matthew, Mark, Luke, and John — and only what He said.</span></div>
+      <div class="pillar"><strong>Comfort</strong><span>Anxiety, grief, fear, and loneliness answered from the red letters.</span></div>
+      <div class="pillar"><strong>Trust</strong><span>Quotes are inserted from a Gospel corpus. The model never types the verse.</span></div>
     </div>
+    <a class="btn" href="/">Open the room</a>
+    <form id="wait" onsubmit="return joinWait(event)">
+      <label class="sr" for="email">Email</label>
+      <input id="email" type="email" required placeholder="Leave an email for Plus" autocomplete="email" />
+      <button class="send" type="submit">Hold my place</button>
+    </form>
+    <p id="wait-msg"></p>
+    <p class="note">Not a person, and not therapy. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com">findahelpline.com</a>.<br>Run the room with <code>npm start</code>. GitHub Pages opens the reading room from <code>public/</code>.</p>
   </main>
+  <script>
+    async function joinWait(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const msg = document.getElementById('wait-msg');
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Could not save that.');
+        msg.textContent = 'You are on the list. The room is open now.';
+      } catch (err) {
+        msg.textContent = 'The list could not be reached. Open the room anyway.';
+      }
+      return false;
+    }
+  </script>
 </body>
 </html>

@@ -13,7 +13,9 @@ const {
   verifyQuote,
   isRedLetter,
   spokenAt,
+  fillPlaceholders,
 } = require('../lib/scripture');
+const { retrieveSayings, guessThemes } = require('../lib/retrieve');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
 const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
 const { themesForSaying, isKnownTheme } = require('../lib/themes');
@@ -97,6 +99,15 @@ describe('verifyAdvisorText', () => {
     assert.doesNotMatch(out, /warm blanket/);
     assert.match(out, /This meets the fear directly/);
     assert.equal(verifyAndSubstitute(input), out);
+  });
+
+  it('fills placeholders from the spoken corpus and drops unknown books', () => {
+    const filled = fillPlaceholders('Hold this.\n{{John 14:27}}\nStay.');
+    assert.match(filled, /Peace I leave with you/);
+    assert.match(filled, /\*\*John 14:27\*\*/);
+    assert.doesNotMatch(fillPlaceholders('See {{Romans 8:28}}.'), /Romans/);
+    const via = verifyAndSubstitute('{{QUOTE:Mark 4:39}}');
+    assert.match(via, /Peace, be still/);
   });
 });
 
@@ -206,5 +217,12 @@ describe('spoken corpus', () => {
     assert.ok(peace.sayings.some((s) => /14:27|4:39|16:33/.test(s.citation)));
     const still = themesForSaying({ book: 'Mark', chapter: 4, start: 39, end: 39, text: 'Peace, be still.' });
     assert.ok(still.includes('Peace'));
+  });
+
+  it('retrieves fear sayings for a frightened writer', () => {
+    assert.ok(guessThemes('I am afraid of the future').includes('Fear'));
+    const hit = retrieveSayings('I am afraid of the future', { limit: 8 });
+    assert.ok(hit.sayings.length >= 3);
+    assert.ok(hit.sayings.some((s) => /fear not|be not afraid|troubled/i.test(s.text)));
   });
 });

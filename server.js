@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
+const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
+const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -77,22 +79,19 @@ RESPONSE STRUCTURE — follow this exactly every time:
 
 1. EMPATHY (2–3 sentences): Open by truly meeting the person where they are. Name what they're feeling specifically. Make them feel genuinely heard before offering anything. Keep this conversational, not theological.
 
-2. SCRIPTURE (2–4 passages): For each passage, use this exact format with a blank line between passages:
+2. SCRIPTURE (2–4 passages): For each passage, emit ONLY a placeholder citation on its own line, then one sentence of context. Never write the words of the verse yourself.
 
-**Book Chapter:Verse**
-"Exact words Jesus spoke — verbatim, no paraphrase, no additions."
+{{John 14:27}}
 One sentence explaining why this speaks directly to their situation.
 
 3. CLOSING (1 sentence): A gentle, hopeful line that invites reflection without pressure.
 
 STRICT RULES:
-• Only quote the direct words of Jesus in Matthew, Mark, Luke, and John. Never quote Paul, prophets, or other authors.
-• Every quote must be verbatim scripture — never fabricate or paraphrase a single word.
-• Cite every verse in bold on its own line: **Matthew 5:44**
-• Put the exact Jesus quote on the next line, in curly quotes "like this."
-• Put the one-sentence context on the line after the quote.
-• Separate each passage block with a blank line.
-• If no direct red-letter parallel exists, say so honestly and offer the closest relevant teaching.
+• Only cite sayings from the ALLOWED SAYINGS list attached to the user's message.
+• Never invent, paraphrase, or type out a verse. The page will insert the exact KJV speech from the placeholder.
+• Use the exact marker form {{Book Chapter:Verse}} on its own line.
+• Never quote Paul, prophets, or other authors.
+• If no allowed saying fits, say so honestly and use the closest allowed marker.
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
@@ -339,12 +338,22 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
+    const retrieved = retrieveSayings(last.content);
+    const allow = formatAllowList(retrieved.sayings);
+    const modelMessages = messages.map((m, i) => {
+      if (i !== messages.length - 1) return { role: m.role, content: m.content };
+      return {
+        role: 'user',
+        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}`,
+      };
+    });
+
     const stream = client.messages.stream({
       model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },
       system: ADVISOR_SYSTEM,
-      messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      messages: modelMessages,
     });
 
     let raw = '';
@@ -363,6 +372,30 @@ app.post('/api/chat', async (req, res) => {
     }
     finish(FALLBACK_LETTER);
   }
+});
+
+app.post('/api/waitlist', (req, res) => {
+  const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
+    return res.status(400).json({ error: 'A real email is needed.' });
+  }
+  if (!rateLimit(`wait:${clientKey(req)}`, 6, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const dest = path.join(__dirname, 'data', 'waitlist.json');
+  let rows = [];
+  try { rows = JSON.parse(fs.readFileSync(dest, 'utf8')); } catch (_) {}
+  if (!Array.isArray(rows)) rows = [];
+  if (!rows.some((r) => r.email === email)) {
+    rows.push({ email, at: new Date().toISOString() });
+    fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
+  }
+  res.json({ ok: true });
+});
+
+app.get('/welcome', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('*', (req, res, next) => {
