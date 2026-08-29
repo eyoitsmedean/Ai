@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node --test test/*.test.js",
+    "icons": "python3 scripts/make-icons.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

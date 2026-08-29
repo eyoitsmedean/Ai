@@ -3,1466 +3,954 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#8B1A1A" />
+  <meta name="theme-color" content="#F4EFE4" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Life guidance, daily affirmations, and encouragement drawn exclusively from the direct words of Jesus Christ." />
-  <title>The Red Letter Advisor</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="A quiet reading room for the words Jesus actually spoke." />
+  <title>Red Letter — The Advisor</title>
   <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESET + BASE
-═══════════════════════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DESIGN TOKENS — LIGHT MODE
-═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --bg:          #FAF6EF;
-  --bg-2:        #F3EDE2;
-  --surface:     #FFFFFF;
-  --surface-2:   #FDF9F3;
-  --border:      #E5D9C8;
-  --border-2:    #D4C4B0;
-
-  --crimson:     #8B1A1A;
-  --crimson-dk:  #641212;
-  --crimson-lt:  #B02020;
-  --crimson-pale:#FDF0EE;
-
-  --gold:        #8B6914;
-  --gold-lt:     #C8981A;
-  --gold-pale:   #FEF9EC;
-  --gold-border: #D4A844;
-
-  --streak:      #D4620A;
-
-  --text-1:      #1A1208;
-  --text-2:      #4A3C2A;
-  --text-3:      #7A6A55;
-  --text-4:      #A09080;
-
-  --shadow-1: 0 1px 3px rgba(26,18,8,.06), 0 2px 6px rgba(26,18,8,.04);
-  --shadow-2: 0 2px 8px rgba(26,18,8,.08), 0 4px 16px rgba(26,18,8,.05);
-  --shadow-3: 0 4px 20px rgba(26,18,8,.10), 0 8px 32px rgba(26,18,8,.07);
-
-  --r:      16px;
-  --r-sm:   10px;
-  --r-lg:   22px;
-  --ease:   cubic-bezier(0.4, 0, 0.2, 1);
-
-  --nav-h:    68px;
-  --header-h: 58px;
-
-  --font-disp: 'Playfair Display', Georgia, serif;
-  --font-body: 'Lora', Georgia, serif;
-  --font-ui:   'Inter', system-ui, sans-serif;
+  --paper: #F4EFE4;
+  --paper-2: #EBE4D4;
+  --folio: #FBF7EE;
+  --ink: #1B1610;
+  --ink-2: #4A4034;
+  --ink-3: #7A6E5E;
+  --ink-4: #A39686;
+  --rule: rgba(27, 22, 16, 0.10);
+  --rule-2: rgba(27, 22, 16, 0.16);
+  --crimson: #8F1D1D;
+  --crimson-deep: #6B1414;
+  --crimson-soft: #F3E4DC;
+  --gold: #8A6A28;
+  --gold-soft: #F3EBD4;
+  --wash: rgba(201, 148, 72, 0.05);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --body: 'Source Serif 4', 'Palatino Linotype', Palatino, serif;
+  --ui: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --rail: 232px;
+  --dock: 64px;
+  --mast: 56px;
   --scale: 1;
+  --shadow: 0 1px 0 rgba(27,22,16,.04), 0 12px 40px rgba(27,22,16,.05);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DARK MODE
-═══════════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"] {
-  --bg:          #0E0B07;
-  --bg-2:        #171210;
-  --surface:     #1C1812;
-  --surface-2:   #231E17;
-  --border:      #2C2620;
-  --border-2:    #3A3228;
-
-  --crimson:     #C84040;
-  --crimson-dk:  #5A1010;
-  --crimson-lt:  #E05050;
-  --crimson-pale:#1C1010;
-
-  --gold:        #C8981A;
-  --gold-lt:     #E0B030;
-  --gold-pale:   #181408;
-  --gold-border: #8B6914;
-
-  --streak:      #E07020;
-
-  --text-1:      #F0E8D8;
-  --text-2:      #C0B09A;
-  --text-3:      #8A7A68;
-  --text-4:      #6A5A4A;
-
-  --shadow-1: 0 1px 3px rgba(0,0,0,.3);
-  --shadow-2: 0 2px 8px rgba(0,0,0,.35);
-  --shadow-3: 0 4px 20px rgba(0,0,0,.4);
+  --paper: #14110D;
+  --paper-2: #1C1813;
+  --folio: #1A1612;
+  --ink: #F3EBDD;
+  --ink-2: #C9BDAA;
+  --ink-3: #8E8272;
+  --ink-4: #6A5F52;
+  --rule: rgba(243, 235, 221, 0.10);
+  --rule-2: rgba(243, 235, 221, 0.16);
+  --crimson: #D15A54;
+  --crimson-deep: #8F1D1D;
+  --crimson-soft: #2A1614;
+  --gold: #C4A35A;
+  --gold-soft: #241E12;
+  --wash: rgba(209, 90, 84, 0.04);
+  --shadow: 0 1px 0 rgba(0,0,0,.2), 0 18px 50px rgba(0,0,0,.28);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:          #0E0B07;
-    --bg-2:        #171210;
-    --surface:     #1C1812;
-    --surface-2:   #231E17;
-    --border:      #2C2620;
-    --border-2:    #3A3228;
-    --crimson:     #C84040;
-    --crimson-dk:  #5A1010;
-    --crimson-lt:  #E05050;
-    --crimson-pale:#1C1010;
-    --gold:        #C8981A;
-    --gold-lt:     #E0B030;
-    --gold-pale:   #181408;
-    --gold-border: #8B6914;
-    --streak:      #E07020;
-    --text-1:      #F0E8D8;
-    --text-2:      #C0B09A;
-    --text-3:      #8A7A68;
-    --text-4:      #6A5A4A;
-    --shadow-1: 0 1px 3px rgba(0,0,0,.3);
-    --shadow-2: 0 2px 8px rgba(0,0,0,.35);
-    --shadow-3: 0 4px 20px rgba(0,0,0,.4);
-  }
-}
+:root[data-watch="dawn"] { --wash: rgba(201, 148, 72, 0.09); }
+:root[data-watch="vespers"] { --wash: rgba(92, 40, 40, 0.07); }
+:root[data-watch="night"] { --wash: rgba(20, 16, 12, 0.04); }
+:root[data-fs="sm"] { --scale: 0.9; }
+:root[data-fs="lg"] { --scale: 1.12; }
 
-/* Font size scale */
-:root[data-fs="sm"] { --scale: 0.88; }
-:root[data-fs="lg"] { --scale: 1.13; }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   GLOBAL
-═══════════════════════════════════════════════════════════════════════════ */
 html, body {
-  height: 100%;
-  font-family: var(--font-ui);
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
   font-size: calc(16px * var(--scale));
-  background: var(--bg);
-  color: var(--text-1);
-  overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+::selection { background: rgba(143, 29, 29, 0.16); color: var(--ink); }
+button { font-family: inherit; cursor: pointer; color: inherit; }
+textarea { font-family: var(--body); }
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  opacity: .045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+.wash {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(1200px 700px at 12% -10%, var(--wash), transparent 55%);
 }
 
-button { font-family: var(--font-ui); cursor: pointer; }
-textarea { font-family: var(--font-ui); }
+/* ── Title page ── */
+.titlepage {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: var(--paper);
+}
+.titlepage.hidden { display: none; }
+.tp-inner {
+  width: min(440px, 100%);
+  text-align: center;
+  animation: rise .9s var(--ease) both;
+}
+.tp-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--crimson);
+  letter-spacing: .38em;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.tp-ornament::before, .tp-ornament::after {
+  content: '';
+  width: 42px;
+  height: 1px;
+  background: var(--crimson);
+  opacity: .45;
+}
+.tp-kicker {
+  font-family: var(--ui);
+  font-size: 11px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+.tp-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(42px, 9vw, 64px);
+  letter-spacing: -0.03em;
+  line-height: .95;
+}
+.tp-title em { font-style: italic; color: var(--crimson); font-weight: 500; }
+.tp-deck {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 22px auto 36px;
+  max-width: 28ch;
+}
+.tp-points { text-align: left; margin: 0 auto 32px; max-width: 320px; }
+.tp-point {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.tp-point:last-child { border-bottom: 1px solid var(--rule); }
+.tp-num { font-family: var(--display); color: var(--crimson); font-style: italic; }
+.tp-trust {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin-bottom: 22px;
+}
+.tp-trust input { margin-top: 3px; accent-color: var(--crimson); }
+.tp-open {
+  width: 100%;
+  border: none;
+  background: var(--crimson);
+  color: #FBF7EE;
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  transition: transform .2s var(--ease), opacity .2s;
+}
+.tp-open:disabled { opacity: .38; cursor: not-allowed; }
+.tp-open:not(:disabled):hover { transform: translateY(-1px); }
+.tp-note { margin-top: 16px; font-size: 12px; color: var(--ink-4); line-height: 1.5; }
+.tp-note a { color: var(--crimson); }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   APP SHELL
-═══════════════════════════════════════════════════════════════════════════ */
-.app {
+/* ── Shell ── */
+.shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.rail {
+  display: none;
+  flex-direction: column;
+  padding: 28px 22px 22px;
+  border-right: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 82%, var(--paper-2));
+}
+.brand {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  max-width: 430px;
-  margin: 0 auto;
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
+  gap: 4px;
+  margin-bottom: 36px;
+  text-decoration: none;
+  color: inherit;
 }
+.brand-mark {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.brand-mark span { color: var(--crimson); font-style: italic; }
+.brand-sub { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.rail-nav { display: flex; flex-direction: column; gap: 4px; }
+.rail-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 10px 8px;
+  text-align: left;
+  color: var(--ink-3);
+  border-radius: 6px;
+  transition: background .15s, color .15s;
+}
+.rail-btn .idx { font-family: var(--display); font-style: italic; width: 18px; color: var(--ink-4); }
+.rail-btn .lbl { font-size: 15px; font-weight: 500; }
+.rail-btn:hover { color: var(--ink); background: color-mix(in srgb, var(--folio) 70%, transparent); }
+.rail-btn.active { color: var(--ink); }
+.rail-btn.active .idx { color: var(--crimson); }
+.rail-foot { margin-top: auto; padding-top: 24px; }
+.streak-quiet {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.quiet-btn {
+  background: none;
+  border: 1px solid var(--rule-2);
+  padding: 8px 12px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  width: 100%;
+}
+.quiet-btn:hover { border-color: var(--crimson); color: var(--crimson); }
 
-/* ── Header ── */
-.header {
-  height: var(--header-h);
-  background: var(--crimson);
+.folio {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--folio);
+}
+.mast {
+  height: calc(var(--mast) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 18px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
-  flex-shrink: 0;
-  z-index: 20;
-  padding-top: env(safe-area-inset-top, 0px);
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--folio) 88%, transparent);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(10px);
 }
-
-.header-left { display: flex; align-items: center; gap: 10px; }
-.header-cross { font-size: 18px; line-height: 1; opacity: .9; }
-.header-name {
-  font-family: var(--font-disp);
-  font-size: calc(16px * var(--scale));
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: .2px;
-}
-.header-sub {
-  font-size: calc(10px * var(--scale));
-  color: rgba(255,255,255,.65);
-  font-weight: 300;
-  letter-spacing: .5px;
-  margin-top: 1px;
-}
-.header-right { display: flex; align-items: center; gap: 10px; }
-
-.streak-badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255,255,255,.18);
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: calc(11px * var(--scale));
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: .3px;
-}
-
+.mast-name { font-family: var(--display); font-size: 16px; letter-spacing: -0.02em; }
+.mast-name em { font-style: italic; color: var(--crimson); }
+.mast-sub { font-size: 11px; color: var(--ink-3); letter-spacing: .12em; text-transform: uppercase; }
 .icon-btn {
-  width: 34px; height: 34px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,.15);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  transition: background .15s;
+  width: 36px; height: 36px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  display: grid;
+  place-items: center;
 }
-.icon-btn:hover { background: rgba(255,255,255,.25); }
-.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn svg { width: 15px; height: 15px; }
 
-/* ── Pages ── */
 .pages { flex: 1; position: relative; overflow: hidden; }
-
 .page {
   position: absolute;
   inset: 0;
   overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(var(--nav-h) + 20px);
+  padding: 28px 22px calc(var(--dock) + 28px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .22s var(--ease);
-  scroll-behavior: smooth;
+  transition: opacity .28s var(--ease);
 }
-.page::-webkit-scrollbar { width: 3px; }
-.page::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 .page.active { opacity: 1; pointer-events: all; }
+.page::-webkit-scrollbar { width: 6px; }
+.page::-webkit-scrollbar-thumb { background: var(--rule-2); }
 
-/* Chat page needs flex layout for sticky input */
-#advisor-page {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-bottom: 0;
-}
-.chat-scroll {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
-}
+#advisor-page { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 0; }
+.chat-scroll { flex: 1; overflow-y: auto; padding: 28px 22px 12px; }
 
-/* ── Bottom Nav ── */
-.nav {
-  height: var(--nav-h);
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: stretch;
-  flex-shrink: 0;
-  z-index: 20;
+.dock {
+  height: calc(var(--dock) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  position: relative;
+  border-top: 1px solid var(--rule);
+  background: var(--folio);
+  display: flex;
+  z-index: 12;
 }
-
-.nav::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  height: 2px;
-  width: 25%;
-  background: var(--crimson);
-  border-radius: 0 0 2px 2px;
-  transition: transform .28s var(--ease);
-  transform: translateX(var(--nav-x, 0px));
-}
-
 .nav-btn {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
+  border: none;
   background: none;
-  border: none;
-  color: var(--text-4);
-  padding: 6px 4px;
-  transition: color .2s;
-  position: relative;
-}
-.nav-btn svg { width: 20px; height: 20px; transition: transform .2s var(--ease); }
-.nav-btn span { font-size: calc(9.5px * var(--scale)); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
-.nav-btn.active { color: var(--crimson); }
-.nav-btn.active svg { transform: scale(1.08); }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ONBOARDING
-═══════════════════════════════════════════════════════════════════════════ */
-.onboarding {
-  position: fixed; inset: 0;
-  background: linear-gradient(160deg, #5C0F0F 0%, #2A0606 50%, #1A0404 100%);
-  z-index: 100;
+  color: var(--ink-4);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 32px;
-  text-align: center;
-}
-.onboarding.hidden { display: none; }
-
-.ob-cross {
-  font-size: 52px;
-  line-height: 1;
-  margin-bottom: 24px;
-  animation: fadeUp .7s var(--ease) both;
-}
-.ob-title {
-  font-family: var(--font-disp);
-  font-size: 30px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.2;
-  margin-bottom: 10px;
-  animation: fadeUp .7s .1s var(--ease) both;
-}
-.ob-sub {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: rgba(255,255,255,.7);
-  font-style: italic;
-  line-height: 1.6;
-  margin-bottom: 36px;
-  animation: fadeUp .7s .18s var(--ease) both;
-}
-.ob-features {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 44px;
-  width: 100%;
-  max-width: 300px;
-  animation: fadeUp .7s .26s var(--ease) both;
-}
-.ob-feature {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,.08);
-  border-radius: 12px;
-  padding: 12px 16px;
-  text-align: left;
-}
-.ob-feature-icon { font-size: 22px; flex-shrink: 0; }
-.ob-feature-text { font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.4; }
-.ob-feature-text strong { color: #fff; display: block; font-size: 13px; margin-bottom: 2px; }
-
-.ob-btn {
-  width: 100%;
-  max-width: 300px;
-  background: #fff;
-  color: var(--crimson);
-  border: none;
-  border-radius: 14px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: .3px;
-  transition: all .18s;
-  animation: fadeUp .7s .34s var(--ease) both;
-  -webkit-font-smoothing: antialiased;
-}
-.ob-btn:hover { background: #f5f5f5; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
-.ob-btn:active { transform: translateY(0); }
-
-.ob-note {
-  margin-top: 18px;
-  font-size: 12px;
-  color: rgba(255,255,255,.4);
-  line-height: 1.5;
-  animation: fadeUp .7s .4s var(--ease) both;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   SHARED COMPONENTS
-═══════════════════════════════════════════════════════════════════════════ */
-
-/* Section heading */
-.section-label {
-  font-size: calc(10.5px * var(--scale));
-  font-weight: 700;
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 20px 18px 10px;
-}
-
-/* Page header */
-.page-hd { padding: 20px 18px 4px; }
-.page-hd-eyebrow {
-  font-size: calc(11px * var(--scale));
-  font-weight: 500;
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.page-hd-title {
-  font-family: var(--font-disp);
-  font-size: calc(24px * var(--scale));
-  font-weight: 700;
-  color: var(--text-1);
-  line-height: 1.2;
-}
-.page-hd-title em { color: var(--crimson); font-style: italic; }
-
-/* Card */
-.card {
-  background: var(--surface);
-  border-radius: var(--r);
-  box-shadow: var(--shadow-2);
-  margin: 0 14px 14px;
-  overflow: hidden;
-}
-.card-body { padding: 18px; }
-
-/* Crimson gradient card */
-.card-crimson {
-  background: linear-gradient(140deg, var(--crimson) 0%, var(--crimson-dk) 100%);
-}
-.card-crimson .card-body { padding: 22px 20px; }
-
-/* Gold accent card */
-.card-body .blockquote {
-  font-family: var(--font-body);
-  font-size: calc(16px * var(--scale));
-  font-style: italic;
-  line-height: 1.7;
-  color: var(--text-2);
-  padding: 14px 16px;
-  background: var(--gold-pale);
-  border-left: 3px solid var(--gold-border);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  margin-bottom: 10px;
-}
-
-/* Tag / badge */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 20px;
-  padding: 4px 11px;
-  font-size: calc(11px * var(--scale));
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .7px;
-}
-.badge-crimson { background: var(--crimson-pale); color: var(--crimson); }
-.badge-gold    { background: var(--gold-pale); color: var(--gold); border: 1px solid var(--gold-border); }
-.badge-white   { background: rgba(255,255,255,.2); color: rgba(255,255,255,.9); }
-
-/* Save + Share action row */
-.card-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,.15);
-}
-.card-actions.dark-sep { border-top-color: var(--border); }
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255,255,255,.14);
-  border: none;
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: calc(12px * var(--scale));
-  font-weight: 600;
-  color: rgba(255,255,255,.85);
-  transition: all .15s;
-}
-.action-btn:hover { background: rgba(255,255,255,.24); }
-.action-btn:active { transform: scale(.95); }
-.action-btn svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
-.action-btn.saved { background: rgba(255,255,255,.28); color: #fff; }
-
-.action-btn-dark {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: calc(12px * var(--scale));
-  font-weight: 600;
-  color: var(--text-2);
-  transition: all .15s;
-}
-.action-btn-dark:hover { border-color: var(--crimson); color: var(--crimson); }
-.action-btn-dark:active { transform: scale(.95); }
-.action-btn-dark svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
-.action-btn-dark.saved { background: var(--crimson-pale); border-color: var(--crimson); color: var(--crimson); }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   TODAY PAGE
-═══════════════════════════════════════════════════════════════════════════ */
-.today-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 18px 4px;
-}
-.today-date {
-  font-size: calc(13px * var(--scale));
-  font-weight: 500;
-  color: var(--text-3);
-}
-.today-streak {
-  display: flex;
-  align-items: center;
   gap: 4px;
-  font-size: calc(12px * var(--scale));
-  font-weight: 600;
-  color: var(--streak);
-}
-
-/* Affirmation card text */
-.aff-text {
-  font-family: var(--font-disp);
-  font-size: calc(20px * var(--scale));
-  font-weight: 600;
-  line-height: 1.42;
-  color: #fff;
-  margin-bottom: 16px;
-}
-.aff-divider { height: 1px; background: rgba(255,255,255,.2); margin-bottom: 14px; }
-.aff-quote {
-  font-family: var(--font-body);
-  font-size: calc(13.5px * var(--scale));
-  font-style: italic;
-  line-height: 1.6;
-  color: rgba(255,255,255,.82);
-  margin-bottom: 6px;
-}
-.aff-verse {
-  font-size: calc(12px * var(--scale));
-  font-weight: 600;
-  color: rgba(255,255,255,.65);
-  letter-spacing: .3px;
-}
-
-/* Word of day */
-.word-title {
-  font-family: var(--font-disp);
-  font-size: calc(20px * var(--scale));
-  font-weight: 700;
-  color: var(--text-1);
-  line-height: 1.3;
-  margin: 10px 0 12px;
-}
-.word-verse-label {
-  font-size: calc(11.5px * var(--scale));
-  font-weight: 700;
-  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  letter-spacing: .5px;
-  margin-bottom: 12px;
 }
-.word-reflection {
-  font-size: calc(14px * var(--scale));
-  line-height: 1.72;
-  color: var(--text-2);
-}
+.nav-btn svg { width: 18px; height: 18px; }
+.nav-btn.active { color: var(--crimson); }
 
-/* CTA row */
-.cta-row {
-  display: flex;
-  gap: 10px;
-  padding: 4px 14px 24px;
-}
-.cta-btn {
-  flex: 1;
-  border: none;
-  border-radius: var(--r-sm);
-  padding: 14px 10px;
-  font-size: calc(13.5px * var(--scale));
-  font-weight: 600;
-  transition: all .18s;
-  letter-spacing: .1px;
-}
-.cta-btn-primary { background: var(--crimson); color: white; }
-.cta-btn-primary:hover { background: var(--crimson-lt); transform: translateY(-1px); box-shadow: var(--shadow-2); }
-.cta-btn-secondary { background: var(--surface); color: var(--text-1); border: 1.5px solid var(--border); }
-.cta-btn-secondary:hover { border-color: var(--crimson); color: var(--crimson); }
-.cta-btn:active { transform: scale(.97); }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   SEEK PAGE (Encouragement)
-═══════════════════════════════════════════════════════════════════════════ */
-.theme-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 4px 14px 20px;
-}
-.theme-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 12px 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .18s var(--ease);
-  box-shadow: var(--shadow-1);
-}
-.theme-card:hover {
-  border-color: var(--crimson);
-  box-shadow: var(--shadow-3);
-  transform: translateY(-2px);
-}
-.theme-card:active { transform: scale(.96); }
-.theme-icon { font-size: 28px; line-height: 1; margin-bottom: 8px; display: block; }
-.theme-name { font-size: calc(12.5px * var(--scale)); font-weight: 600; color: var(--text-1); }
-
-/* Encouragement result */
-.enc-result { display: none; padding: 0 14px 20px; }
-.enc-result.on { display: block; animation: fadeUp .25s var(--ease); }
-
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  color: var(--crimson);
-  font-size: calc(14px * var(--scale));
-  font-weight: 500;
-  padding: 14px 0 16px;
-  transition: opacity .15s;
-}
-.back-btn:hover { opacity: .7; }
-.back-btn svg { width: 16px; height: 16px; }
-
-.enc-headline {
-  font-family: var(--font-disp);
-  font-size: calc(22px * var(--scale));
-  font-weight: 700;
-  line-height: 1.28;
-  color: var(--text-1);
+/* ── Type ── */
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
   margin-bottom: 8px;
 }
-.enc-opening {
-  font-size: calc(15px * var(--scale));
-  line-height: 1.72;
-  color: var(--text-2);
+.display {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(28px, 6vw, 40px);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+.display em { font-style: italic; color: var(--crimson); font-weight: 500; }
+.lede {
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+.today-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+.today-date { font-family: var(--display); font-style: italic; color: var(--ink-3); font-size: 15px; }
+.today-streak { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+
+.movement { margin-bottom: 48px; }
+.rule { height: 1px; background: var(--rule); margin: 22px 0; }
+.rule-double { border-top: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); height: 4px; background: none; margin: 28px 0; }
+
+.aff-text {
+  font-family: var(--display);
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  max-width: 18ch;
+}
+.red-letter {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 3.4vw, 26px);
+  line-height: 1.45;
+  color: var(--crimson);
+  max-width: 28ch;
+}
+.cite {
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.actions { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.ghost {
+  background: none;
+  border: 1px solid var(--rule-2);
+  padding: 8px 12px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ghost:hover, .ghost.saved { border-color: var(--crimson); color: var(--crimson); }
+
+.word-title {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 8px 0 16px;
+}
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.reflection {
+  font-family: var(--body);
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  max-width: 48ch;
+}
+.reflection::first-letter {
+  font-family: var(--display);
+  font-size: 2.6em;
+  float: left;
+  line-height: .78;
+  padding: 6px 8px 0 0;
+  color: var(--crimson);
+}
+
+.cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.cta {
+  border: none;
+  padding: 13px 16px;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.cta-primary { background: var(--crimson); color: #FBF7EE; }
+.cta-ghost { background: transparent; border: 1px solid var(--rule-2); color: var(--ink); }
+.cta:hover { transform: translateY(-1px); }
+
+/* Seek */
+.index-list { display: flex; flex-direction: column; margin-top: 12px; }
+.index-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+  background: none;
+  border-left: 0; border-right: 0; border-bottom: 0;
+  text-align: left;
+  width: 100%;
+}
+.index-row:last-child { border-bottom: 1px solid var(--rule); }
+.index-row:hover .index-name { color: var(--crimson); }
+.index-num { font-family: var(--display); font-style: italic; color: var(--crimson); }
+.index-name { font-family: var(--display); font-size: 20px; letter-spacing: -0.02em; }
+.index-hint { font-size: 12px; color: var(--ink-4); letter-spacing: .08em; text-transform: uppercase; }
+
+.back-btn {
+  background: none; border: none;
+  color: var(--crimson);
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   margin-bottom: 20px;
 }
-.passage-card {
-  background: var(--surface);
-  border-left: 3px solid var(--crimson);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow-1);
+.enc-headline {
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 12px;
 }
-.passage-verse-tag {
-  font-size: calc(10.5px * var(--scale));
-  font-weight: 700;
-  color: var(--crimson);
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  margin-bottom: 7px;
+.enc-opening { font-family: var(--body); font-size: 17px; line-height: 1.7; color: var(--ink-2); margin-bottom: 28px; max-width: 48ch; }
+.passage {
+  padding: 18px 0 18px 16px;
+  border-left: 1px solid var(--crimson);
+  margin-bottom: 8px;
 }
-.passage-quote {
-  font-family: var(--font-body);
-  font-size: calc(15.5px * var(--scale));
-  font-style: italic;
+.passage-verse { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--crimson); margin-bottom: 8px; }
+.passage-quote { font-family: var(--display); font-style: italic; font-size: 20px; line-height: 1.45; color: var(--crimson); }
+.passage-context { font-family: var(--body); font-size: 14.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.6; }
+.practice {
+  margin: 28px 0 16px;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--rule);
+}
+.practice-label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.practice-text { font-family: var(--body); font-size: 16px; line-height: 1.65; color: var(--ink-2); }
+.enc-closing { font-family: var(--display); font-style: italic; color: var(--ink-3); margin: 8px 0 20px; }
+.enc-result { display: none; }
+.enc-result.on { display: block; animation: rise .4s var(--ease); }
+
+/* Advisor */
+.letter-head { margin-bottom: 22px; }
+.welcome {
+  font-family: var(--body);
+  font-size: 16px;
   line-height: 1.65;
-  color: var(--text-2);
-  margin-bottom: 7px;
+  color: var(--ink-2);
+  max-width: 46ch;
+  margin-bottom: 8px;
 }
-.passage-context {
-  font-size: calc(12.5px * var(--scale));
-  line-height: 1.6;
-  color: var(--text-3);
-}
-.practice-card {
-  background: var(--gold-pale);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 16px;
-  margin: 14px 0;
-}
-.practice-label {
-  font-size: calc(10.5px * var(--scale));
-  font-weight: 700;
-  color: var(--gold);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 7px;
-}
-.practice-text { font-size: calc(14px * var(--scale)); line-height: 1.7; color: var(--text-2); }
-.enc-closing {
-  font-family: var(--font-body);
-  font-size: calc(14.5px * var(--scale));
-  font-style: italic;
-  line-height: 1.7;
-  color: var(--text-3);
-  text-align: center;
-  padding: 6px 0 4px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ADVISOR PAGE
-═══════════════════════════════════════════════════════════════════════════ */
-.advisor-welcome {
-  background: var(--crimson-pale);
-  border: 1px solid rgba(139,26,26,.12);
-  border-radius: var(--r-sm);
-  padding: 14px 16px;
-  margin: 0 14px 12px;
-}
-.advisor-welcome-title {
-  font-family: var(--font-disp);
-  font-size: calc(15px * var(--scale));
-  font-weight: 600;
-  color: var(--crimson);
-  margin-bottom: 5px;
-}
-.advisor-welcome-text { font-size: calc(13px * var(--scale)); line-height: 1.65; color: var(--text-2); }
-
-.suggestions {
-  display: flex;
-  gap: 7px;
-  padding: 0 14px 12px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.suggestions::-webkit-scrollbar { display: none; }
+.trust-line { font-size: 12.5px; color: var(--ink-3); line-height: 1.55; max-width: 52ch; }
+.trust-line a { color: var(--crimson); }
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
 .chip {
-  white-space: nowrap;
-  flex-shrink: 0;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
-  padding: 7px 13px;
-  font-size: calc(13px * var(--scale));
-  color: var(--text-2);
-  cursor: pointer;
-  transition: all .15s;
+  background: none;
+  border: 1px solid var(--rule-2);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--ink-2);
+  font-family: var(--body);
+  font-style: italic;
 }
 .chip:hover { border-color: var(--crimson); color: var(--crimson); }
-.chip:active { transform: scale(.95); }
 
-.chat-messages { display: flex; flex-direction: column; gap: 14px; padding: 0 14px 12px; }
-
-.msg { display: flex; flex-direction: column; animation: fadeUp .2s var(--ease); }
-.msg-user { align-items: flex-end; }
-.msg-ai  { align-items: flex-start; }
-
-.bubble {
-  max-width: 86%;
-  border-radius: 18px;
-  padding: 11px 15px;
-  font-size: calc(15px * var(--scale));
-  line-height: 1.62;
-  word-break: break-word;
-}
-.msg-user .bubble {
-  background: var(--crimson);
-  color: #fff;
-  border-bottom-right-radius: 4px;
-}
-.msg-ai .bubble {
-  background: var(--surface);
-  color: var(--text-1);
-  border-bottom-left-radius: 4px;
-  box-shadow: var(--shadow-1);
-  font-family: var(--font-body);
-}
-.bubble .vcite { font-weight: 700; color: var(--crimson); font-style: normal; }
-
-.scripture-block {
-  background: var(--gold-pale);
-  border-left: 3px solid var(--gold-border);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  padding: 11px 13px;
-  margin: 8px 0 4px;
-}
-.scripture-verse {
-  font-size: calc(10px * var(--scale));
-  font-weight: 700;
-  color: var(--crimson);
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  margin-bottom: 6px;
-}
-.scripture-quote {
-  font-family: var(--font-body);
-  font-size: calc(14.5px * var(--scale));
-  font-style: italic;
-  line-height: 1.62;
-  color: var(--text-2);
-}
-.scripture-ctx {
-  font-size: calc(12px * var(--scale));
+.chat-messages { display: flex; flex-direction: column; gap: 22px; padding: 8px 0 16px; }
+.msg { animation: rise .35s var(--ease); }
+.msg-user { display: flex; justify-content: flex-end; }
+.note {
+  max-width: min(420px, 86%);
+  font-family: var(--body);
+  font-size: 15.5px;
   line-height: 1.55;
-  color: var(--text-3);
-  margin-top: 5px;
+  padding: 12px 0;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
 }
-.ai-p { margin-bottom: 6px; line-height: 1.65; }
-.ai-p:last-child { margin-bottom: 0; }
-
+.letter {
+  max-width: 640px;
+  font-family: var(--body);
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+.scripture-block { margin: 16px 0; padding-left: 14px; border-left: 1px solid var(--crimson); }
+.scripture-verse { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--crimson); margin-bottom: 6px; }
+.scripture-quote { font-family: var(--display); font-style: italic; font-size: 20px; line-height: 1.45; color: var(--crimson); }
+.scripture-ctx { font-size: 14px; color: var(--ink-3); margin-top: 6px; }
+.ai-p { margin-bottom: 10px; }
+.vcite { color: var(--crimson); font-weight: 600; }
 .msg-save-btn {
-  margin-top: 5px;
-  background: none;
-  border: none;
-  font-size: calc(11.5px * var(--scale));
-  color: var(--text-3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 0;
-  transition: color .15s;
+  background: none; border: none;
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
 }
 .msg-save-btn:hover { color: var(--crimson); }
-.msg-save-btn svg { width: 11px; height: 11px; fill: currentColor; }
-
-.typing-indicator {
-  display: none;
-  padding: 0 14px 10px;
-}
+.typing-indicator { display: none; padding: 4px 0 16px; }
 .typing-indicator.on { display: block; }
-.typing-dots {
-  display: inline-flex;
-  gap: 4px;
-  padding: 11px 15px;
-  background: var(--surface);
-  border-radius: 18px;
-  border-bottom-left-radius: 4px;
-  box-shadow: var(--shadow-1);
+.ink-wait {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+  font-size: 15px;
 }
-.dot {
-  width: 7px; height: 7px;
-  background: var(--text-4);
-  border-radius: 50%;
-  animation: dotBounce 1.2s infinite;
-}
-.dot:nth-child(2) { animation-delay: .18s; }
-.dot:nth-child(3) { animation-delay: .36s; }
+.ink-wait::after { content: ''; animation: ellipsis 1.4s infinite; }
 
-.chat-input-wrap {
-  padding: 10px 14px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
+.composer {
   display: flex;
   gap: 8px;
   align-items: flex-end;
-  flex-shrink: 0;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--rule);
+  background: var(--folio);
 }
 .chat-input {
   flex: 1;
-  background: var(--bg-2);
-  border: 1.5px solid var(--border);
-  border-radius: 22px;
-  padding: 10px 15px;
-  font-size: calc(15px * var(--scale));
-  color: var(--text-1);
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  padding: 10px 2px;
+  font-size: 16px;
+  color: var(--ink);
   resize: none;
   outline: none;
-  min-height: 44px;
-  max-height: 110px;
-  line-height: 1.5;
-  transition: border-color .18s;
+  min-height: 42px;
+  max-height: 120px;
 }
-.chat-input:focus { border-color: var(--crimson); }
-.chat-input::placeholder { color: var(--text-4); }
-
+.chat-input:focus { border-bottom-color: var(--crimson); }
 .send-btn {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--crimson);
+  width: 42px; height: 42px;
   border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all .15s;
+  background: var(--crimson);
+  color: #FBF7EE;
+  display: grid;
+  place-items: center;
 }
-.send-btn:hover { background: var(--crimson-lt); transform: scale(1.05); }
-.send-btn:active { transform: scale(.94); }
-.send-btn svg { width: 17px; height: 17px; fill: white; }
-.send-btn:disabled { opacity: .5; pointer-events: none; }
+.send-btn svg { width: 15px; height: 15px; fill: currentColor; }
+.send-btn:disabled { opacity: .4; }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   JOURNAL PAGE
-═══════════════════════════════════════════════════════════════════════════ */
-.journal-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 32px 40px;
-  text-align: center;
+.gate {
+  display: none;
+  margin: 8px 0 18px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
 }
-.journal-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
-.journal-empty-title {
-  font-family: var(--font-disp);
-  font-size: calc(20px * var(--scale));
-  font-weight: 600;
-  color: var(--text-2);
-  margin-bottom: 10px;
-}
-.journal-empty-text { font-size: calc(14px * var(--scale)); color: var(--text-3); line-height: 1.65; max-width: 260px; }
+.gate.on { display: block; }
+.gate h3 { font-family: var(--display); font-size: 22px; font-weight: 500; margin-bottom: 8px; }
+.gate p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; }
 
+/* Journal */
+.journal-empty { padding: 48px 8px; max-width: 36ch; }
+.journal-empty-title { font-family: var(--display); font-size: 28px; font-weight: 500; margin-bottom: 8px; }
+.journal-empty-text { font-family: var(--body); color: var(--ink-3); line-height: 1.65; }
 .journal-item {
-  background: var(--surface);
-  border-radius: var(--r);
-  padding: 16px;
-  margin: 0 14px 10px;
-  box-shadow: var(--shadow-1);
   position: relative;
-  animation: fadeUp .2s var(--ease);
+  padding: 20px 8px 20px 0;
+  border-top: 1px solid var(--rule);
 }
-.journal-type-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 9px;
-}
-.journal-date { font-size: calc(11px * var(--scale)); color: var(--text-4); }
-.journal-title {
-  font-family: var(--font-disp);
-  font-size: calc(16px * var(--scale));
-  font-weight: 600;
-  color: var(--text-1);
-  line-height: 1.35;
-  margin-bottom: 6px;
-}
+.journal-item:last-child { border-bottom: 1px solid var(--rule); }
+.journal-type-row { display: flex; justify-content: space-between; margin-bottom: 8px; padding-right: 36px; }
+.journal-date { font-size: 12px; color: var(--ink-4); }
+.journal-title { font-family: var(--display); font-size: 20px; letter-spacing: -0.02em; margin-bottom: 6px; }
 .journal-body {
-  font-size: calc(13.5px * var(--scale));
-  line-height: 1.65;
-  color: var(--text-2);
+  font-family: var(--body);
+  color: var(--ink-2);
+  line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 8px;
 }
-.journal-verse { font-size: calc(11.5px * var(--scale)); font-weight: 600; color: var(--crimson); }
-
+.journal-verse { margin-top: 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--crimson); }
 .journal-delete {
-  position: absolute;
-  top: 14px; right: 14px;
+  position: absolute; top: 18px; right: 0;
   width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  background: none;
-  border: none;
-  color: var(--text-4);
-  border-radius: 50%;
-  transition: all .15s;
+  border: none; background: none; color: var(--ink-4);
 }
-.journal-delete:hover { background: var(--crimson-pale); color: var(--crimson); }
+.journal-delete:hover { color: var(--crimson); }
 .journal-delete svg { width: 14px; height: 14px; }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SETTINGS SHEET
-═══════════════════════════════════════════════════════════════════════════ */
+/* Settings */
 .sheet-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,.45);
+  background: rgba(20, 16, 12, .28);
   z-index: 50;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s var(--ease);
+  transition: opacity .25s;
 }
 .sheet-overlay.on { opacity: 1; pointer-events: all; }
-
 .settings-sheet {
   position: fixed;
-  bottom: 0; left: 50%;
-  transform: translate(-50%, 100%);
-  width: 100%;
-  max-width: 430px;
-  background: var(--surface);
-  border-radius: 22px 22px 0 0;
+  top: 0; right: 0; bottom: 0;
+  width: min(400px, 100%);
+  background: var(--folio);
   z-index: 51;
-  padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -8px 40px rgba(0,0,0,.2);
-  transition: transform .3s var(--ease);
+  transform: translateX(100%);
+  transition: transform .35s var(--ease);
+  padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  border-left: 1px solid var(--rule);
 }
-.settings-sheet.on { transform: translate(-50%, 0); }
-
-.sheet-handle {
-  width: 36px; height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin: 12px auto 20px;
-}
-.sheet-title {
-  font-family: var(--font-disp);
-  font-size: calc(18px * var(--scale));
-  font-weight: 700;
-  color: var(--text-1);
-  padding: 0 20px 16px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-
-.setting-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-}
-.setting-label {
-  font-size: calc(15px * var(--scale));
-  font-weight: 500;
-  color: var(--text-1);
-}
-.setting-sub {
-  font-size: calc(12px * var(--scale));
-  color: var(--text-3);
-  margin-top: 2px;
-}
-
-/* Toggle switch */
-.toggle {
-  position: relative;
-  width: 48px; height: 28px;
-  flex-shrink: 0;
-}
+.settings-sheet.on { transform: none; }
+.sheet-handle { display: none; }
+.sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; margin-bottom: 20px; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--rule); }
+.setting-label { font-size: 15px; }
+.setting-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+.toggle { position: relative; width: 44px; height: 26px; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
-.toggle-track {
-  position: absolute; inset: 0;
-  background: var(--border-2);
-  border-radius: 14px;
-  cursor: pointer;
-  transition: background .2s;
-}
+.toggle-track { position: absolute; inset: 0; background: var(--paper-2); border: 1px solid var(--rule-2); cursor: pointer; }
 .toggle-track::after {
   content: '';
-  position: absolute;
-  left: 3px; top: 3px;
-  width: 22px; height: 22px;
-  background: #fff;
-  border-radius: 50%;
+  position: absolute; left: 3px; top: 3px;
+  width: 18px; height: 18px; background: var(--crimson);
   transition: transform .2s var(--ease);
-  box-shadow: 0 1px 3px rgba(0,0,0,.2);
 }
-.toggle input:checked + .toggle-track { background: var(--crimson); }
-.toggle input:checked + .toggle-track::after { transform: translateX(20px); }
+.toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+.fs-control { display: flex; gap: 6px; }
+.fs-btn { width: 36px; height: 36px; border: 1px solid var(--rule); background: none; }
+.fs-btn.active { border-color: var(--crimson); color: var(--crimson); }
+.sheet-about { padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13.5px; line-height: 1.65; color: var(--ink-3); }
+.sheet-about strong { color: var(--ink-2); }
+.sheet-about a { color: var(--crimson); }
 
-/* Font size control */
-.fs-control {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.fs-btn {
-  background: var(--bg-2);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700;
-  color: var(--text-2);
-  transition: all .15s;
-}
-.fs-btn:hover { border-color: var(--crimson); color: var(--crimson); }
-.fs-btn.active { background: var(--crimson); border-color: var(--crimson); color: white; }
-
-.sheet-about {
-  padding: 16px 20px 0;
-  border-top: 1px solid var(--border);
-  margin-top: 4px;
-}
-.sheet-about p {
-  font-size: calc(12.5px * var(--scale));
-  color: var(--text-3);
-  line-height: 1.6;
-}
-.sheet-about strong { color: var(--text-2); }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════════════════════════════════ */
 .toast {
   position: fixed;
-  bottom: calc(var(--nav-h) + 12px);
+  bottom: calc(var(--dock) + 16px);
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--text-1);
-  color: var(--bg);
-  padding: 10px 20px;
-  border-radius: 22px;
-  font-size: calc(13.5px * var(--scale));
-  font-weight: 500;
-  z-index: 60;
-  white-space: nowrap;
+  transform: translate(-50%, 12px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 16px;
+  font-size: 13px;
+  letter-spacing: .04em;
+  z-index: 70;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .2s, transform .2s var(--ease);
-  box-shadow: var(--shadow-3);
+  transition: .25s var(--ease);
 }
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SKELETON
-═══════════════════════════════════════════════════════════════════════════ */
 .skel {
-  background: linear-gradient(90deg, var(--bg-2) 25%, var(--border) 50%, var(--bg-2) 75%);
+  background: linear-gradient(90deg, var(--paper-2) 25%, var(--rule) 50%, var(--paper-2) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 6px;
+  animation: shimmer 1.6s infinite;
+  height: 14px;
+  margin-bottom: 10px;
 }
-.skel-wh { background: linear-gradient(90deg, rgba(255,255,255,.1) 25%, rgba(255,255,255,.2) 50%, rgba(255,255,255,.1) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
-.sl { height: 15px; margin-bottom: 9px; }
-.sl.s { width: 38%; }
-.sl.m { width: 68%; }
-.sl.l { width: 90%; }
-.sl.f { width: 100%; }
-.sl.h { height: 19px; }
-.sl.b { height: 24px; }
+.skel.h { height: 28px; }
+.skel.s { width: 30%; } .skel.m { width: 62%; } .skel.l { width: 88%; } .skel.f { width: 100%; }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════════════════════════════════════════════ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes dotBounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: .4; }
-  40%            { transform: translateY(-5px); opacity: 1; }
-}
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes ellipsis { 0% { content: ''; } 33% { content: '.'; } 66% { content: '..'; } 100% { content: '...'; } }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE — DESKTOP
-═══════════════════════════════════════════════════════════════════════════ */
-@media (min-width: 431px) {
-  body {
-    background: color-mix(in srgb, var(--bg) 60%, var(--border) 40%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+@media (min-width: 880px) {
+  .shell { grid-template-columns: var(--rail) 1fr; }
+  .rail { display: flex; min-height: 100dvh; position: sticky; top: 0; }
+  .mast { display: none; }
+  .dock { display: none; }
+  .folio { min-height: 100dvh; }
+  .page { padding: 56px 72px 72px; }
+  .chat-scroll { padding: 56px 72px 16px; }
+  .composer { padding: 16px 72px 28px; }
+  .toast { bottom: 28px; }
+}
+@media (max-width: 879px) {
+  .settings-sheet {
+    top: auto; left: 0; right: 0; width: 100%;
+    transform: translateY(110%);
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    max-height: 86dvh;
   }
-  .app {
-    border-radius: 28px;
-    height: min(860px, 94vh);
-    box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.05);
-  }
-  .toast { bottom: calc(var(--nav-h) + 20px); }
+  .settings-sheet.on { transform: none; }
+  .sheet-handle { display: block; width: 36px; height: 3px; background: var(--rule-2); margin: 0 auto 18px; }
 }
 </style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
+<div class="wash" aria-hidden="true"></div>
 
-<!-- ════════ ONBOARDING ════════ -->
-<div id="onboarding" class="onboarding">
-  <div class="ob-cross">✝</div>
-  <h1 class="ob-title">The Red Letter Advisor</h1>
-  <p class="ob-sub">Life wisdom drawn from the exact words<br>Jesus spoke in the four Gospels</p>
-  <div class="ob-features">
-    <div class="ob-feature">
-      <span class="ob-feature-icon">☀️</span>
-      <div class="ob-feature-text"><strong>Daily Affirmation</strong>A fresh word of light every morning, grounded in scripture</div>
+<section id="onboarding" class="titlepage hidden">
+  <div class="tp-inner">
+    <div class="tp-ornament">Est. in the Gospels</div>
+    <div class="tp-kicker">A reading room</div>
+    <h1 class="tp-title">Red <em>Letter</em></h1>
+    <p class="tp-deck">Daily guidance from the words Jesus actually spoke.</p>
+    <div class="tp-points">
+      <div class="tp-point"><span class="tp-num">01</span><span>A morning word, set in red.</span></div>
+      <div class="tp-point"><span class="tp-num">02</span><span>Encouragement for the life you are in.</span></div>
+      <div class="tp-point"><span class="tp-num">03</span><span>A quiet advisor — Matthew to John only.</span></div>
     </div>
-    <div class="ob-feature">
-      <span class="ob-feature-icon">🤍</span>
-      <div class="ob-feature-text"><strong>Encouragement by Theme</strong>12 life situations — grief, fear, purpose, peace and more</div>
-    </div>
-    <div class="ob-feature">
-      <span class="ob-feature-icon">💬</span>
-      <div class="ob-feature-text"><strong>Personal Advisor</strong>Ask any question and receive guidance in his words</div>
-    </div>
+    <label class="tp-trust">
+      <input type="checkbox" id="ob-ack" onchange="document.getElementById('ob-open').disabled = !this.checked" />
+      <span>This is not therapy, medical care, or pastoral counseling. If you are in crisis, call <a href="tel:988">988</a> in the U.S. or find local help at <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noreferrer">iasp.info</a>.</span>
+    </label>
+    <button class="tp-open" id="ob-open" disabled onclick="completeOnboarding()">Open the room</button>
+    <p class="tp-note">Red letters mark the direct speech of Jesus in many printed Bibles.</p>
   </div>
-  <button class="ob-btn" onclick="completeOnboarding()">Begin My Journey</button>
-  <p class="ob-note">"Red letters" are the passages printed in red in many Bibles,<br>marking the direct speech of Jesus.</p>
+</section>
+
+<div class="shell" id="app">
+  <aside class="rail">
+    <a class="brand" href="#today" onclick="switchTab('today'); return false;">
+      <div class="brand-mark">Red <span>Letter</span></div>
+      <div class="brand-sub">The Advisor</div>
+    </a>
+    <nav class="rail-nav">
+      <button class="rail-btn active" id="rail-today" onclick="switchTab('today')"><span class="idx">I</span><span class="lbl">Today</span></button>
+      <button class="rail-btn" id="rail-seek" onclick="switchTab('seek')"><span class="idx">II</span><span class="lbl">Seek</span></button>
+      <button class="rail-btn" id="rail-advisor" onclick="switchTab('advisor')"><span class="idx">III</span><span class="lbl">Advisor</span></button>
+      <button class="rail-btn" id="rail-journal" onclick="switchTab('journal')"><span class="idx">IV</span><span class="lbl">Journal</span></button>
+    </nav>
+    <div class="rail-foot">
+      <div class="streak-quiet" id="rail-streak">A first morning</div>
+      <button class="quiet-btn" onclick="openSettings()">Room settings</button>
+    </div>
+  </aside>
+
+  <div class="folio">
+    <header class="mast">
+      <div>
+        <div class="mast-name">Red <em>Letter</em></div>
+        <div class="mast-sub" id="header-sub">Today</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="today-streak" id="streak-num">1</span>
+        <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="pages">
+      <div class="page active" id="today-page">
+        <div class="today-top">
+          <span class="today-date" id="today-date"></span>
+          <span class="today-streak" id="today-streak-label"></span>
+        </div>
+        <p class="eyebrow" id="today-greeting">Morning</p>
+        <h1 class="display" style="margin-bottom:36px">Today’s <em>light</em></h1>
+
+        <section class="movement" id="aff-card">
+          <p class="eyebrow">Affirmation</p>
+          <div id="aff-skel">
+            <div class="skel h l"></div><div class="skel m"></div><div class="skel s"></div>
+          </div>
+          <div id="aff-content" style="display:none">
+            <p class="aff-text" id="aff-text"></p>
+            <div class="rule-double"></div>
+            <p class="red-letter" id="aff-quote"></p>
+            <p class="cite" id="aff-verse"></p>
+            <div class="actions">
+              <button class="ghost" id="aff-save-btn" onclick="toggleSave('aff')"><span id="aff-save-label">Keep</span></button>
+              <button class="ghost" onclick="shareItem('aff')">Share card</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="movement" id="word-card">
+          <p class="eyebrow">Word of the day</p>
+          <div id="word-skel">
+            <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
+          </div>
+          <div id="word-content" style="display:none">
+            <div class="badge" id="word-theme"></div>
+            <h2 class="word-title" id="word-title"></h2>
+            <p class="red-letter" id="word-passage"></p>
+            <p class="cite" id="word-verse"></p>
+            <div class="rule"></div>
+            <p class="reflection" id="word-reflection"></p>
+            <div class="actions">
+              <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
+              <button class="ghost" onclick="shareItem('word')">Share card</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="cta-row">
+          <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
+          <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
+        </div>
+      </div>
+
+      <div class="page" id="seek-page">
+        <p class="eyebrow">A small hymnal</p>
+        <h1 class="display">Words of <em>encouragement</em></h1>
+        <p class="lede" style="margin:14px 0 28px">Twelve rooms. Each one opened with the sentences He actually said.</p>
+        <div id="theme-grid"></div>
+        <div id="enc-loading" style="display:none;padding-top:12px">
+          <div class="skel h m"></div><div class="skel f"></div><div class="skel l"></div>
+        </div>
+        <div class="enc-result" id="enc-result">
+          <button class="back-btn" onclick="showThemeGrid()">All rooms</button>
+          <h2 class="enc-headline" id="enc-headline"></h2>
+          <p class="enc-opening" id="enc-opening"></p>
+          <div id="enc-passages"></div>
+          <div class="practice">
+            <div class="practice-label">A practice</div>
+            <div class="practice-text" id="enc-practice"></div>
+          </div>
+          <p class="enc-closing" id="enc-closing"></p>
+          <div class="actions">
+            <button class="ghost" id="enc-save-btn" onclick="toggleSave('enc')"><span id="enc-save-label">Keep this</span></button>
+            <button class="ghost" onclick="shareItem('enc')">Share card</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="advisor-page">
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="letter-head">
+            <p class="eyebrow">Correspondence</p>
+            <h1 class="display">The <em>Advisor</em></h1>
+            <p class="welcome">Write what is true. The reply will meet you, then set His words on the page — verified against the Gospels.</p>
+            <p class="trust-line">Not a pastor and not a clinician. If you are in danger, call <a href="tel:988">988</a> or visit <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noreferrer">IASP</a>.</p>
+          </div>
+          <div class="suggestions" id="suggestions">
+            <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
+            <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
+            <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
+            <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
+          </div>
+          <div class="gate" id="chat-gate">
+            <h3>Five letters for today</h3>
+            <p>You have used today’s free counsel. The room is still open — sit with Today, or return in the morning. Unlimited conversation is coming with Plus.</p>
+          </div>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
+        </div>
+        <div class="composer">
+          <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="page" id="journal-page">
+        <p class="eyebrow">A commonplace book</p>
+        <h1 class="display">Your <em>journal</em></h1>
+        <div id="journal-list"></div>
+      </div>
+    </div>
+
+    <nav class="dock" id="nav">
+      <button class="nav-btn active" id="nav-today" onclick="switchTab('today')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        Today
+      </button>
+      <button class="nav-btn" id="nav-seek" onclick="switchTab('seek')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Seek
+      </button>
+      <button class="nav-btn" id="nav-advisor" onclick="switchTab('advisor')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 3a2.8 2.8 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Ask
+      </button>
+      <button class="nav-btn" id="nav-journal" onclick="switchTab('journal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Keep
+      </button>
+    </nav>
+  </div>
 </div>
 
-<!-- ════════ APP ════════ -->
-<div class="app" id="app">
-
-  <!-- Header -->
-  <header class="header">
-    <div class="header-left">
-      <span class="header-cross">✝</span>
-      <div>
-        <div class="header-name">Red Letter Advisor</div>
-        <div class="header-sub" id="header-sub">Daily Words of Life</div>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="streak-badge" id="streak-badge">🔥 <span id="streak-num">1</span></div>
-      <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- Pages -->
-  <div class="pages">
-
-    <!-- ── TODAY ── -->
-    <div class="page active" id="today-page">
-      <div class="today-meta">
-        <span class="today-date" id="today-date"></span>
-        <span class="today-streak" id="today-streak-label"></span>
-      </div>
-      <div class="page-hd" style="padding-top:6px">
-        <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
-        <h1 class="page-hd-title">Today's <em>Light</em></h1>
-      </div>
-
-      <div class="section-label">Daily Affirmation</div>
-      <div class="card card-crimson" id="aff-card">
-        <div class="card-body">
-          <div class="badge badge-white" style="margin-bottom:12px">✦ For You Today</div>
-          <!-- skeleton -->
-          <div id="aff-skel">
-            <div class="skel skel-wh sl h f"></div>
-            <div class="skel skel-wh sl l" style="margin-top:2px"></div>
-            <div class="skel skel-wh sl m" style="margin-bottom:14px"></div>
-            <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:14px"></div>
-            <div class="skel skel-wh sl s" style="height:12px"></div>
-          </div>
-          <!-- content -->
-          <div id="aff-content" style="display:none">
-            <div class="aff-text" id="aff-text"></div>
-            <div class="aff-divider"></div>
-            <div class="aff-quote" id="aff-quote"></div>
-            <div class="aff-verse" id="aff-verse"></div>
-            <div class="card-actions">
-              <button class="action-btn" id="aff-save-btn" onclick="toggleSave('aff')">
-                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-                <span id="aff-save-label">Save</span>
-              </button>
-              <button class="action-btn" onclick="shareItem('aff')">
-                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-label">Word of the Day</div>
-      <div class="card" id="word-card">
-        <div class="card-body">
-          <!-- skeleton -->
-          <div id="word-skel">
-            <div class="skel sl s b" style="border-radius:20px;width:72px;margin-bottom:10px"></div>
-            <div class="skel sl h l" style="margin-bottom:12px"></div>
-            <div style="background:var(--bg-2);border-radius:8px;padding:12px;margin-bottom:10px">
-              <div class="skel sl f"></div>
-              <div class="skel sl l"></div>
-              <div class="skel sl m"></div>
-            </div>
-            <div class="skel sl s" style="height:12px;margin-bottom:12px"></div>
-            <div class="skel sl f"></div>
-            <div class="skel sl l"></div>
-          </div>
-          <!-- content -->
-          <div id="word-content" style="display:none">
-            <div class="badge badge-crimson" id="word-theme" style="margin-bottom:8px"></div>
-            <div class="word-title" id="word-title"></div>
-            <div class="blockquote" id="word-passage"></div>
-            <div class="word-verse-label" id="word-verse"></div>
-            <div class="word-reflection" id="word-reflection"></div>
-            <div class="card-actions dark-sep">
-              <button class="action-btn-dark" id="word-save-btn" onclick="toggleSave('word')">
-                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-                <span id="word-save-label">Save</span>
-              </button>
-              <button class="action-btn-dark" onclick="shareItem('word')">
-                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cta-row">
-        <button class="cta-btn cta-btn-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
-        <button class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find Encouragement</button>
-      </div>
-    </div>
-
-    <!-- ── SEEK ── -->
-    <div class="page" id="seek-page">
-      <div class="page-hd">
-        <div class="page-hd-eyebrow">Choose a theme</div>
-        <h1 class="page-hd-title">Words of <em>Encouragement</em></h1>
-      </div>
-      <div id="theme-grid">
-        <div class="theme-grid">
-          <button class="theme-card" onclick="loadEnc('Anxiety & Worry')"><span class="theme-icon">🌊</span><span class="theme-name">Anxiety &amp; Worry</span></button>
-          <button class="theme-card" onclick="loadEnc('Grief & Loss')"><span class="theme-icon">🕊️</span><span class="theme-name">Grief &amp; Loss</span></button>
-          <button class="theme-card" onclick="loadEnc('Forgiveness')"><span class="theme-icon">🤍</span><span class="theme-name">Forgiveness</span></button>
-          <button class="theme-card" onclick="loadEnc('Loneliness')"><span class="theme-icon">🌿</span><span class="theme-name">Loneliness</span></button>
-          <button class="theme-card" onclick="loadEnc('Conflict & Relationships')"><span class="theme-icon">🌱</span><span class="theme-name">Conflict</span></button>
-          <button class="theme-card" onclick="loadEnc('Fear')"><span class="theme-icon">🕯️</span><span class="theme-name">Fear</span></button>
-          <button class="theme-card" onclick="loadEnc('Purpose & Direction')"><span class="theme-icon">🧭</span><span class="theme-name">Purpose</span></button>
-          <button class="theme-card" onclick="loadEnc('Faith & Doubt')"><span class="theme-icon">⚓</span><span class="theme-name">Faith &amp; Doubt</span></button>
-          <button class="theme-card" onclick="loadEnc('Suffering & Pain')"><span class="theme-icon">🌅</span><span class="theme-name">Suffering</span></button>
-          <button class="theme-card" onclick="loadEnc('Shame & Guilt')"><span class="theme-icon">🌸</span><span class="theme-name">Shame &amp; Guilt</span></button>
-          <button class="theme-card" onclick="loadEnc('Peace')"><span class="theme-icon">☮️</span><span class="theme-name">Peace</span></button>
-          <button class="theme-card" onclick="loadEnc('Hope')"><span class="theme-icon">✨</span><span class="theme-name">Hope</span></button>
-        </div>
-      </div>
-      <!-- Loading -->
-      <div id="enc-loading" style="display:none;padding:0 14px">
-        <div style="padding:14px 0">
-          <div class="skel sl s b" style="margin-bottom:6px"></div>
-          <div class="skel sl m h"></div>
-        </div>
-        <div class="skel sl f" style="margin-bottom:7px"></div>
-        <div class="skel sl l" style="margin-bottom:18px"></div>
-        <div class="passage-card" style="background:var(--surface-2)">
-          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
-          <div class="skel sl f"></div><div class="skel sl l"></div>
-        </div>
-        <div class="passage-card" style="background:var(--surface-2)">
-          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
-          <div class="skel sl f"></div><div class="skel sl m"></div>
-        </div>
-        <div class="passage-card" style="background:var(--surface-2)">
-          <div class="skel sl s" style="height:11px;margin-bottom:8px"></div>
-          <div class="skel sl f"></div><div class="skel sl l"></div>
-        </div>
-      </div>
-      <!-- Result -->
-      <div class="enc-result" id="enc-result">
-        <button class="back-btn" onclick="showThemeGrid()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          All themes
-        </button>
-        <div class="enc-headline" id="enc-headline"></div>
-        <div class="enc-opening" id="enc-opening"></div>
-        <div id="enc-passages"></div>
-        <div class="practice-card">
-          <div class="practice-label">✦ Practice for Today</div>
-          <div class="practice-text" id="enc-practice"></div>
-        </div>
-        <div class="enc-closing" id="enc-closing"></div>
-        <div style="margin-top:16px;display:flex;gap:8px">
-          <button class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
-            <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-            <span id="enc-save-label">Save this</span>
-          </button>
-          <button class="action-btn-dark" onclick="shareItem('enc')">
-            <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-            Share
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── ADVISOR ── -->
-    <div class="page" id="advisor-page">
-      <div class="chat-scroll" id="chat-scroll">
-        <div class="page-hd" style="padding-bottom:10px">
-          <div class="page-hd-eyebrow">Ask anything</div>
-          <h1 class="page-hd-title">The <em>Advisor</em></h1>
-        </div>
-        <div class="advisor-welcome">
-          <div class="advisor-welcome-title">Only the Words of Jesus</div>
-          <div class="advisor-welcome-text">Every response is drawn from his direct speech in Matthew, Mark, Luke, and John — every verse cited.</div>
-        </div>
-        <div class="suggestions" id="suggestions">
-          <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
-          <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
-          <button class="chip" onclick="useSuggestion(this)">I'm afraid of the future</button>
-          <button class="chip" onclick="useSuggestion(this)">How should I love my enemies?</button>
-          <button class="chip" onclick="useSuggestion(this)">I feel lost and without purpose</button>
-          <button class="chip" onclick="useSuggestion(this)">Can I be forgiven for what I've done?</button>
-        </div>
-        <div class="chat-messages" id="chat-messages"></div>
-        <div class="typing-indicator" id="typing">
-          <div class="typing-dots">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chat-input" placeholder="Share what's on your heart…" rows="1"></textarea>
-        <button class="send-btn" id="send-btn" onclick="sendMsg()">
-          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- ── JOURNAL ── -->
-    <div class="page" id="journal-page">
-      <div class="page-hd">
-        <div class="page-hd-eyebrow">Saved passages</div>
-        <h1 class="page-hd-title">My <em>Journal</em></h1>
-      </div>
-      <div id="journal-list"></div>
-    </div>
-
-  </div><!-- /pages -->
-
-  <!-- Bottom Nav -->
-  <nav class="nav" id="nav">
-    <button class="nav-btn active" id="nav-today" onclick="switchTab('today')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <circle cx="12" cy="12" r="4.5"/>
-        <line x1="12" y1="2" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22"/>
-        <line x1="4.22" y1="4.22" x2="5.81" y2="5.81"/><line x1="18.19" y1="18.19" x2="19.78" y2="19.78"/>
-        <line x1="2" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.81" y2="18.19"/><line x1="18.19" y1="5.81" x2="19.78" y2="4.22"/>
-      </svg>
-      <span>Today</span>
-    </button>
-    <button class="nav-btn" id="nav-seek" onclick="switchTab('seek')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-      </svg>
-      <span>Seek</span>
-    </button>
-    <button class="nav-btn" id="nav-advisor" onclick="switchTab('advisor')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-      </svg>
-      <span>Advisor</span>
-    </button>
-    <button class="nav-btn" id="nav-journal" onclick="switchTab('journal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
-      </svg>
-      <span>Journal</span>
-    </button>
-  </nav>
-
-</div><!-- /app -->
-
-<!-- Settings sheet -->
 <div class="sheet-overlay" id="overlay" onclick="closeSettings()"></div>
-<div class="settings-sheet" id="settings-sheet">
+<aside class="settings-sheet" id="settings-sheet">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">Settings</div>
+  <div class="sheet-title">The room</div>
   <div class="setting-row">
     <div>
-      <div class="setting-label">Dark Mode</div>
-      <div class="setting-sub">Easier on the eyes at night</div>
+      <div class="setting-label">Lamp</div>
+      <div class="setting-sub">A darker paper for night</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
@@ -1471,41 +959,50 @@ textarea { font-family: var(--font-ui); }
   </div>
   <div class="setting-row">
     <div>
-      <div class="setting-label">Text Size</div>
-      <div class="setting-sub">Adjust reading comfort</div>
+      <div class="setting-label">Type size</div>
+      <div class="setting-sub">Comfort for long reading</div>
     </div>
     <div class="fs-control">
-      <button class="fs-btn" id="fs-sm" onclick="setFs('sm')" style="font-size:12px">A−</button>
-      <button class="fs-btn active" id="fs-md" onclick="setFs('md')" style="font-size:15px">A</button>
-      <button class="fs-btn" id="fs-lg" onclick="setFs('lg')" style="font-size:17px">A+</button>
+      <button class="fs-btn" id="fs-sm" onclick="setFs('sm')">A−</button>
+      <button class="fs-btn active" id="fs-md" onclick="setFs('md')">A</button>
+      <button class="fs-btn" id="fs-lg" onclick="setFs('lg')">A+</button>
     </div>
   </div>
   <div class="sheet-about">
-    <p><strong>The Red Letter Advisor</strong> answers every question exclusively from the direct words of Jesus Christ as recorded in Matthew, Mark, Luke, and John — the passages printed in red in many Bible editions. No other scripture, no outside commentary.</p>
+    <p><strong>Red Letter</strong> answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noreferrer">IASP</a>.</p>
   </div>
-</div>
-
-<!-- Toast -->
+</aside>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════════════════════════════════════ */
+const FREE_CHATS = 5;
+const THEMES = [
+  ['Anxiety & Worry', 'The unquiet mind'],
+  ['Grief & Loss', 'When love has nowhere to stand'],
+  ['Forgiveness', 'Mercy with its work clothes on'],
+  ['Loneliness', 'The orphan story, rewritten'],
+  ['Conflict & Relationships', 'Love that costs something'],
+  ['Fear', 'Little flock'],
+  ['Purpose & Direction', 'A city that cannot hide'],
+  ['Faith & Doubt', 'Blessed are those who have not seen'],
+  ['Suffering & Pain', 'Tribulation is not the last sentence'],
+  ['Shame & Guilt', 'Heaven still knows how to rejoice'],
+  ['Peace', 'Not as the world giveth'],
+  ['Hope', 'Joy no one can take'],
+];
+
 let dailyData = null;
 let currentEncData = null;
 let currentEncTheme = null;
 let chatHistory = [];
 let isChatBusy = false;
+let curatedPacks = null;
 const encCache = {};
-const TAB_ORDER = ['today', 'seek', 'advisor', 'journal'];
 const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════════════════════════════ */
 (function init() {
-  // Onboarding check
+  setWatch();
+  paintThemeIndex();
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     return;
@@ -1513,114 +1010,111 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
   startApp();
 })();
 
+function setWatch() {
+  const h = new Date().getHours();
+  const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
+  document.documentElement.dataset.watch = watch;
+}
+
 function completeOnboarding() {
+  if (!document.getElementById('ob-ack').checked) return;
   lsSet('rla-onboarded', '1');
   document.getElementById('onboarding').classList.add('hidden');
   startApp();
 }
 
 function startApp() {
-  document.getElementById('app').style.display = '';
   applySettings();
   updateStreak();
   updateDateUI();
   loadDailyContent();
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TAB NAVIGATION
-═══════════════════════════════════════════════════════════════════════════ */
 function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn, .rail-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(tab + '-page').classList.add('active');
   document.getElementById('nav-' + tab).classList.add('active');
-  document.getElementById('nav').style.setProperty('--nav-x', NAV_X[tab]);
-
-  const subs = { today: 'Daily Words of Life', seek: 'Encouragement by Theme', advisor: 'Guided by the Gospels', journal: 'Your Saved Passages' };
+  const rail = document.getElementById('rail-' + tab);
+  if (rail) rail.classList.add('active');
+  const subs = { today: 'Today', seek: 'Seek', advisor: 'Advisor', journal: 'Journal' };
   document.getElementById('header-sub').textContent = subs[tab];
-
   if (tab === 'journal') renderJournal();
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DATE + STREAK
-═══════════════════════════════════════════════════════════════════════════ */
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
 function updateStreak() {
   const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
   const today = todayStr();
-  const yest  = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-  let count;
-  if (raw.date === today) {
-    count = raw.count;
-  } else if (raw.date === yest) {
-    count = raw.count + 1;
-  } else {
-    count = 1;
-  }
+  const yest = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  let count = raw.date === today ? raw.count : raw.date === yest ? raw.count + 1 : 1;
   lsSet('rla-streak', JSON.stringify({ date: today, count }));
   document.getElementById('streak-num').textContent = count;
-  document.getElementById('today-streak-label').textContent = count > 1 ? '🔥 ' + count + '-day streak' : '';
+  document.getElementById('today-streak-label').textContent = count > 1 ? count + ' mornings' : '';
+  const rail = document.getElementById('rail-streak');
+  if (rail) rail.textContent = count > 1 ? count + ' mornings in this room' : 'A first morning';
 }
 
 function updateDateUI() {
   const now = new Date();
   const h = now.getHours();
-  const greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-  document.getElementById('today-greeting').textContent = greeting;
-
-  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  document.getElementById('today-date').textContent = dateStr;
+  document.getElementById('today-greeting').textContent = h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening';
+  document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DAILY CONTENT
-═══════════════════════════════════════════════════════════════════════════ */
+function paintThemeIndex() {
+  const wrap = document.getElementById('theme-grid');
+  wrap.innerHTML = '<div class="index-list">' + THEMES.map((t, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    return `<button class="index-row" onclick="loadEnc('${t[0].replace(/'/g, "\\'")}')"><span class="index-num">${n}</span><span class="index-name">${esc(t[0])}</span><span class="index-hint">${esc(t[1])}</span></button>`;
+  }).join('') + '</div>';
+}
+
+async function loadCurated() {
+  if (curatedPacks) return curatedPacks;
+  const res = await fetch('/curated.json');
+  curatedPacks = await res.json();
+  return curatedPacks;
+}
+
 async function loadDailyContent() {
   try {
     const res = await fetch('/api/daily');
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
-
-    // Affirmation
-    document.getElementById('aff-text').textContent = dailyData.affirmation.text;
-    document.getElementById('aff-quote').textContent = '“' + dailyData.affirmation.quote + '”';
-    document.getElementById('aff-verse').textContent = '— ' + dailyData.affirmation.verse;
-    document.getElementById('aff-skel').style.display = 'none';
-    document.getElementById('aff-content').style.display = 'block';
-
-    // Update save button state
-    if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
-
-    // Word
-    document.getElementById('word-theme').textContent = '✦ ' + dailyData.word.theme;
-    document.getElementById('word-title').textContent = dailyData.word.title;
-    document.getElementById('word-passage').textContent = '“' + dailyData.word.passage + '”';
-    document.getElementById('word-verse').textContent = dailyData.word.verse;
-    document.getElementById('word-reflection').textContent = dailyData.word.reflection;
-    document.getElementById('word-skel').style.display = 'none';
-    document.getElementById('word-content').style.display = 'block';
-
-    if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
   } catch (e) {
-    console.error(e);
-    document.getElementById('aff-skel').innerHTML = '<p style="color:rgba(255,255,255,.6);font-size:14px">Unable to load. Please check your connection and refresh.</p>';
+    try {
+      const cur = await loadCurated();
+      dailyData = cur.daily;
+    } catch (_) {
+      document.getElementById('aff-skel').innerHTML = '<p class="lede">The morning page could not be fetched. Refresh when you have a connection.</p>';
+      return;
+    }
   }
+  document.getElementById('aff-text').textContent = dailyData.affirmation.text;
+  document.getElementById('aff-quote').textContent = dailyData.affirmation.quote;
+  document.getElementById('aff-verse').textContent = dailyData.affirmation.verse + '  ·  KJV';
+  document.getElementById('aff-skel').style.display = 'none';
+  document.getElementById('aff-content').style.display = 'block';
+  if (isSaved('aff-' + todayStr())) setSaveBtnState('aff', true);
+
+  document.getElementById('word-theme').textContent = dailyData.word.theme;
+  document.getElementById('word-title').textContent = dailyData.word.title;
+  document.getElementById('word-passage').textContent = dailyData.word.passage;
+  document.getElementById('word-verse').textContent = dailyData.word.verse + '  ·  KJV';
+  document.getElementById('word-reflection').textContent = dailyData.word.reflection;
+  document.getElementById('word-skel').style.display = 'none';
+  document.getElementById('word-content').style.display = 'block';
+  if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   ENCOURAGEMENT
-═══════════════════════════════════════════════════════════════════════════ */
 async function loadEnc(theme) {
   if (encCache[theme]) { showEnc(encCache[theme], theme); return; }
-
   document.getElementById('theme-grid').style.display = 'none';
   document.getElementById('enc-result').classList.remove('on');
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
-
   try {
     const res = await fetch('/api/encouragement', {
       method: 'POST',
@@ -1628,13 +1122,21 @@ async function loadEnc(theme) {
       body: JSON.stringify({ theme })
     });
     const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    if (!res.ok || data.error) throw new Error(data.error || 'fail');
     encCache[theme] = data;
     showEnc(data, theme);
   } catch (e) {
-    document.getElementById('enc-loading').style.display = 'none';
-    document.getElementById('theme-grid').style.display = 'block';
-    showToast('Unable to load. Please try again.');
+    try {
+      const cur = await loadCurated();
+      const pack = cur.packs[theme];
+      if (!pack) throw new Error('missing');
+      encCache[theme] = pack;
+      showEnc(pack, theme);
+    } catch (_) {
+      document.getElementById('enc-loading').style.display = 'none';
+      document.getElementById('theme-grid').style.display = 'block';
+      showToast('Unable to open that room.');
+    }
   }
 }
 
@@ -1642,29 +1144,22 @@ function showEnc(data, theme) {
   document.getElementById('enc-loading').style.display = 'none';
   currentEncData = data;
   currentEncTheme = theme;
-
   document.getElementById('enc-headline').textContent = data.headline;
-  document.getElementById('enc-opening').textContent  = data.opening;
-
+  document.getElementById('enc-opening').textContent = data.opening;
   const pEl = document.getElementById('enc-passages');
   pEl.innerHTML = '';
   (data.passages || []).forEach(p => {
     const d = document.createElement('div');
-    d.className = 'passage-card';
+    d.className = 'passage';
     d.innerHTML =
-      '<div class="passage-verse-tag">' + esc(p.verse) + '</div>' +
-      '<div class="passage-quote">“' + esc(p.quote) + '”</div>' +
+      '<div class="passage-verse">' + esc(p.verse) + '  ·  KJV</div>' +
+      '<div class="passage-quote">' + esc(p.quote) + '</div>' +
       '<div class="passage-context">' + esc(p.context) + '</div>';
     pEl.appendChild(d);
   });
-
   document.getElementById('enc-practice').textContent = data.practice;
-  document.getElementById('enc-closing').textContent  = data.closing;
-
-  const key = 'enc-' + slugify(theme);
-  if (isSaved(key)) setSaveBtnState('enc', true);
-  else setSaveBtnState('enc', false);
-
+  document.getElementById('enc-closing').textContent = data.closing;
+  setSaveBtnState('enc', isSaved('enc-' + slugify(theme)));
   document.getElementById('enc-result').classList.add('on');
   document.getElementById('seek-page').scrollTop = 0;
 }
@@ -1676,17 +1171,25 @@ function showThemeGrid() {
   document.getElementById('seek-page').scrollTop = 0;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CHAT
-═══════════════════════════════════════════════════════════════════════════ */
 const chatInput = document.getElementById('chat-input');
 chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
 });
 chatInput.addEventListener('input', () => {
   chatInput.style.height = 'auto';
-  chatInput.style.height = Math.min(chatInput.scrollHeight, 110) + 'px';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
 });
+
+function chatsToday() {
+  const raw = JSON.parse(ls('rla-chats') || '{"d":"","n":0}');
+  if (raw.d !== todayStr()) return { d: todayStr(), n: 0 };
+  return raw;
+}
+function bumpChat() {
+  const next = { d: todayStr(), n: chatsToday().n + 1 };
+  lsSet('rla-chats', JSON.stringify(next));
+  return next.n;
+}
 
 function useSuggestion(btn) {
   chatInput.value = btn.textContent.trim();
@@ -1697,21 +1200,24 @@ function useSuggestion(btn) {
 async function sendMsg() {
   const text = chatInput.value.trim();
   if (!text || isChatBusy) return;
-  chatInput.value = ''; chatInput.style.height = 'auto';
+  if (chatsToday().n >= FREE_CHATS) {
+    document.getElementById('chat-gate').classList.add('on');
+    document.getElementById('suggestions').style.display = 'none';
+    return;
+  }
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
   document.getElementById('suggestions').style.display = 'none';
   isChatBusy = true;
   document.getElementById('send-btn').disabled = true;
+  bumpChat();
 
   chatHistory.push({ role: 'user', content: text });
   addBubble('user', text);
-
   document.getElementById('typing').classList.add('on');
   scrollChat();
-
-  // Create AI bubble that we'll stream into
   const aiBubble = createStreamBubble();
   document.getElementById('typing').classList.remove('on');
-
   let fullText = '';
 
   try {
@@ -1720,11 +1226,10 @@ async function sendMsg() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
     });
-
+    if (res.status === 429) throw new Error('slow');
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
-
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -1742,15 +1247,14 @@ async function sendMsg() {
         } catch (_) {}
       }
     }
-
     chatHistory.push({ role: 'assistant', content: fullText });
-    // Add save button under AI bubble
     addSaveToChatBubble(aiBubble, fullText, text);
   } catch (err) {
-    updateStreamBubble(aiBubble, 'Unable to connect right now. Please try again.');
+    updateStreamBubble(aiBubble, 'The letter could not be finished. Sit with Today, or try again in a moment.');
   } finally {
     isChatBusy = false;
     document.getElementById('send-btn').disabled = false;
+    if (chatsToday().n >= FREE_CHATS) document.getElementById('chat-gate').classList.add('on');
     scrollChat();
   }
 }
@@ -1760,7 +1264,7 @@ function addBubble(role, text) {
   const wrap = document.createElement('div');
   wrap.className = 'msg msg-' + role;
   const bubble = document.createElement('div');
-  bubble.className = 'bubble';
+  bubble.className = role === 'user' ? 'note' : 'letter';
   bubble.textContent = text;
   wrap.appendChild(bubble);
   msgs.appendChild(wrap);
@@ -1773,36 +1277,25 @@ function createStreamBubble() {
   const wrap = document.createElement('div');
   wrap.className = 'msg msg-ai';
   const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.innerHTML = '<span class="text-cursor">▋</span>';
+  bubble.className = 'letter';
   wrap.appendChild(bubble);
   msgs.appendChild(wrap);
-  scrollChat();
   return { wrap, bubble };
 }
 
 function updateStreamBubble({ bubble }, text) {
-  bubble.innerHTML = formatAI(text) + '<span class="text-cursor" style="opacity:.6;animation:dotBounce .8s infinite">▋</span>';
+  bubble.innerHTML = formatAI(text);
 }
 
 function addSaveToChatBubble({ wrap }, text, question) {
-  // Remove cursor
-  wrap.querySelector('.bubble').innerHTML = formatAI(text);
-  // Add save button
+  wrap.querySelector('.letter').innerHTML = formatAI(text);
   const saveBtn = document.createElement('button');
   saveBtn.className = 'msg-save-btn';
-  saveBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Journal';
+  saveBtn.textContent = 'Keep in the journal';
   saveBtn.onclick = () => {
     const id = 'chat-' + Date.now();
-    saveJournalItem({
-      id, key: id,
-      type: 'chat',
-      title: question.length > 60 ? question.slice(0, 60) + '…' : question,
-      body: text,
-      verse: extractFirstVerse(text),
-    });
-    saveBtn.textContent = '✓ Saved';
-    saveBtn.style.color = 'var(--crimson)';
+    saveJournalItem({ id, key: id, type: 'chat', title: question.length > 60 ? question.slice(0, 60) + '…' : question, body: text, verse: extractFirstVerse(text) });
+    saveBtn.textContent = 'Kept';
     saveBtn.disabled = true;
   };
   wrap.appendChild(saveBtn);
@@ -1810,128 +1303,159 @@ function addSaveToChatBubble({ wrap }, text, question) {
 
 function scrollChat() {
   const el = document.getElementById('chat-scroll');
-  setTimeout(() => { el.scrollTop = el.scrollHeight; }, 30);
+  setTimeout(() => { el.scrollTop = el.scrollHeight; }, 20);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   JOURNAL
-═══════════════════════════════════════════════════════════════════════════ */
 function getJournal() { return JSON.parse(ls('rla-journal') || '[]'); }
 function setJournal(items) { lsSet('rla-journal', JSON.stringify(items)); }
-
 function saveJournalItem(item) {
   const items = getJournal().filter(i => i.key !== item.key);
   items.unshift({ ...item, savedAt: new Date().toISOString() });
   setJournal(items);
 }
-
-function removeJournalItem(key) {
-  setJournal(getJournal().filter(i => i.key !== key));
-}
-
+function removeJournalItem(key) { setJournal(getJournal().filter(i => i.key !== key)); }
 function isSaved(key) { return getJournal().some(i => i.key === key); }
 
 function renderJournal() {
   const list = document.getElementById('journal-list');
   const items = getJournal();
-
-  if (items.length === 0) {
-    list.innerHTML = `
-      <div class="journal-empty">
-        <div class="journal-empty-icon">📖</div>
-        <div class="journal-empty-title">Your journal is empty</div>
-        <div class="journal-empty-text">Save affirmations, encouragement, and Advisor responses here using the save button on any card.</div>
-      </div>`;
+  if (!items.length) {
+    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a room, or a letter. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor' };
-  const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold' };
-
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter' };
   list.innerHTML = items.map(item => {
-    const typeKey = item.type || (item.key.startsWith('aff') ? 'aff' : item.key.startsWith('word') ? 'word' : item.key.startsWith('enc') ? 'enc' : 'chat');
-    const label = TYPE_LABELS[typeKey] || 'Saved';
-    const cls   = TYPE_COLORS[typeKey] || 'badge-crimson';
-    const date  = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    return `
-      <div class="journal-item">
-        <button class="journal-delete" onclick="deleteJournalItem('${esc(item.key)}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
-        </button>
-        <div class="journal-type-row">
-          <span class="badge ${cls}">${label}</span>
-          <span class="journal-date">${date}</span>
-        </div>
-        <div class="journal-title">${esc(item.title)}</div>
-        <div class="journal-body">${esc(item.body)}</div>
-        ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
-      </div>`;
+    const typeKey = item.type || 'chat';
+    const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `<div class="journal-item">
+      <button class="journal-delete" onclick="deleteJournalItem('${esc(item.key)}')" aria-label="Remove">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+      </button>
+      <div class="journal-type-row"><span class="badge">${TYPE_LABELS[typeKey] || 'Kept'}</span><span class="journal-date">${date}</span></div>
+      <div class="journal-title">${esc(item.title)}</div>
+      <div class="journal-body">${esc(item.body)}</div>
+      ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
+    </div>`;
   }).join('');
 }
 
 function deleteJournalItem(key) {
   removeJournalItem(key);
   renderJournal();
-  showToast('Removed from Journal');
+  showToast('Lifted from the journal');
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SAVE / SHARE
-═══════════════════════════════════════════════════════════════════════════ */
 function toggleSave(type) {
-  const keyMap = {
-    aff:  'aff-' + todayStr(),
-    word: 'word-' + todayStr(),
-    enc:  'enc-' + slugify(currentEncTheme || ''),
-  };
+  const keyMap = { aff: 'aff-' + todayStr(), word: 'word-' + todayStr(), enc: 'enc-' + slugify(currentEncTheme || '') };
   const key = keyMap[type];
   if (!key) return;
-
   if (isSaved(key)) {
     removeJournalItem(key);
     setSaveBtnState(type, false);
-    showToast('Removed from Journal');
-  } else {
-    let item;
-    if (type === 'aff' && dailyData) {
-      item = { id: key, key, type: 'aff', title: dailyData.affirmation.text.slice(0, 80), body: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
-    } else if (type === 'word' && dailyData) {
-      item = { id: key, key, type: 'word', title: dailyData.word.title, body: dailyData.word.passage, verse: dailyData.word.verse };
-    } else if (type === 'enc' && currentEncData) {
-      item = { id: key, key, type: 'enc', title: currentEncData.headline, body: currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
-    }
-    if (item) { saveJournalItem(item); setSaveBtnState(type, true); showToast('Saved to Journal ✦'); }
+    showToast('Lifted from the journal');
+    return;
   }
+  let item;
+  if (type === 'aff' && dailyData) item = { id: key, key, type: 'aff', title: dailyData.affirmation.text.slice(0, 80), body: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
+  else if (type === 'word' && dailyData) item = { id: key, key, type: 'word', title: dailyData.word.title, body: dailyData.word.passage, verse: dailyData.word.verse };
+  else if (type === 'enc' && currentEncData) item = { id: key, key, type: 'enc', title: currentEncData.headline, body: currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
+  if (item) { saveJournalItem(item); setSaveBtnState(type, true); showToast('Kept in the journal'); }
 }
 
 function setSaveBtnState(type, saved) {
-  const btn  = document.getElementById(type + '-save-btn');
-  const lbl  = document.getElementById(type + '-save-label');
+  const btn = document.getElementById(type + '-save-btn');
+  const lbl = document.getElementById(type + '-save-label');
   if (!btn) return;
-  if (saved) { btn.classList.add('saved'); lbl.textContent = 'Saved ✓'; }
-  else        { btn.classList.remove('saved'); lbl.textContent = type === 'enc' ? 'Save this' : 'Save'; }
+  btn.classList.toggle('saved', saved);
+  lbl.textContent = saved ? 'Kept' : (type === 'enc' ? 'Keep this' : 'Keep');
 }
 
-function shareItem(type) {
-  let text = '', title = 'The Red Letter Advisor';
-  if (type === 'aff' && dailyData) {
-    text = dailyData.affirmation.text + '\n\n“' + dailyData.affirmation.quote + '”\n— ' + dailyData.affirmation.verse;
-  } else if (type === 'word' && dailyData) {
-    text = dailyData.word.title + '\n\n“' + dailyData.word.passage + '”\n— ' + dailyData.word.verse;
-  } else if (type === 'enc' && currentEncData) {
-    text = currentEncData.headline + '\n\n' + currentEncData.opening + '\n\n' + (currentEncData.passages?.[0] ? '“' + currentEncData.passages[0].quote + '”\n— ' + currentEncData.passages[0].verse : '');
+function sharePayload(type) {
+  if (type === 'aff' && dailyData) return { kicker: 'Today', title: dailyData.affirmation.text, quote: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
+  if (type === 'word' && dailyData) return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse };
+  if (type === 'enc' && currentEncData) return { kicker: currentEncTheme, title: currentEncData.headline, quote: currentEncData.passages?.[0]?.quote || currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
+  return null;
+}
+
+function wrapLines(ctx, text, maxWidth) {
+  const words = String(text || '').split(/\s+/);
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const trial = line ? line + ' ' + w : w;
+    if (ctx.measureText(trial).width > maxWidth && line) { lines.push(line); line = w; }
+    else line = trial;
   }
-  if (!text) return;
+  if (line) lines.push(line);
+  return lines.slice(0, 10);
+}
+
+function renderShareCard(payload) {
+  const w = 1080, h = 1350;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#F4EFE4';
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(143,29,29,0.06)';
+  ctx.fillRect(0, 0, w, 18);
+  ctx.strokeStyle = 'rgba(27,22,16,0.14)';
+  ctx.strokeRect(48, 48, w - 96, h - 96);
+  ctx.strokeRect(56, 56, w - 112, h - 112);
+  ctx.fillStyle = '#8F1D1D';
+  ctx.font = '500 28px "Instrument Sans", sans-serif';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('RED LETTER', 96, 160);
+  ctx.letterSpacing = '0px';
+  ctx.fillStyle = '#7A6E5E';
+  ctx.font = 'italic 28px Fraunces, serif';
+  ctx.fillText(payload.kicker || 'The Gospels', 96, 220);
+  ctx.fillStyle = '#1B1610';
+  ctx.font = '500 54px Fraunces, serif';
+  let y = 320;
+  wrapLines(ctx, payload.title, w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 66; });
+  y += 24;
+  ctx.fillStyle = '#8F1D1D';
+  ctx.font = 'italic 42px Fraunces, serif';
+  wrapLines(ctx, payload.quote, w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 56; });
+  y += 20;
+  ctx.fillStyle = '#7A6E5E';
+  ctx.font = '500 24px "Instrument Sans", sans-serif';
+  ctx.fillText((payload.verse || '') + '   ·   KJV', 96, Math.min(y + 20, h - 140));
+  ctx.fillStyle = '#8F1D1D';
+  ctx.font = 'italic 26px Fraunces, serif';
+  ctx.fillText('The words He actually spoke.', 96, h - 110);
+  return new Promise(resolve => c.toBlob(resolve, 'image/png'));
+}
+
+async function shareItem(type) {
+  const payload = sharePayload(type);
+  if (!payload) return;
+  const text = payload.title + '\n\n' + payload.quote + '\n— ' + payload.verse;
+  try {
+    const blob = await renderShareCard(payload);
+    const file = new File([blob], 'red-letter.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Red Letter', text });
+      return;
+    }
+  } catch (_) {}
   if (navigator.share) {
-    navigator.share({ title, text, url: window.location.href }).catch(() => {});
+    navigator.share({ title: 'Red Letter', text }).catch(() => {});
   } else {
-    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard'));
+    try {
+      const blob = await renderShareCard(payload);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'red-letter.png';
+      a.click();
+      showToast('Card saved');
+    } catch (_) {
+      navigator.clipboard.writeText(text).then(() => showToast('Copied'));
+    }
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SETTINGS
-═══════════════════════════════════════════════════════════════════════════ */
 function openSettings() {
   document.getElementById('overlay').classList.add('on');
   document.getElementById('settings-sheet').classList.add('on');
@@ -1940,28 +1464,25 @@ function closeSettings() {
   document.getElementById('overlay').classList.remove('on');
   document.getElementById('settings-sheet').classList.remove('on');
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSettings(); });
 
 function toggleDark(on) {
   document.documentElement.dataset.theme = on ? 'dark' : 'light';
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', on ? '#14110D' : '#F4EFE4');
   lsSet('rla-dark', on ? '1' : '0');
 }
-
 function setFs(size) {
   document.documentElement.dataset.fs = size;
   lsSet('rla-fs', size);
-  ['sm', 'md', 'lg'].forEach(s => {
-    document.getElementById('fs-' + s).classList.toggle('active', s === size);
-  });
+  ['sm', 'md', 'lg'].forEach(s => document.getElementById('fs-' + s).classList.toggle('active', s === size));
 }
-
 function applySettings() {
-  // Dark mode
   const dark = ls('rla-dark');
   if (dark !== null) {
     document.documentElement.dataset.theme = dark === '1' ? 'dark' : 'light';
     document.getElementById('dark-toggle').checked = dark === '1';
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', dark === '1' ? '#14110D' : '#F4EFE4');
   }
-  // Font size
   const fs = ls('rla-fs') || 'md';
   document.documentElement.dataset.fs = fs;
   ['sm', 'md', 'lg'].forEach(s => {
@@ -1970,28 +1491,20 @@ function applySettings() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════════════════════════════════ */
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════════════════════════ */
-function ls(key)        { try { return localStorage.getItem(key); } catch(_) { return null; } }
-function lsSet(k, v)    { try { localStorage.setItem(k, v); } catch(_) {} }
-function slugify(str)   { return str.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
-
+function ls(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+function slugify(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
 function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function formatAI(text) {
@@ -2000,7 +1513,6 @@ function formatAI(text) {
   let i = 0;
   while (i < lines.length) {
     const trimmed = lines[i].trim();
-    // Detect **Book Chapter:Verse** on its own line
     const vm = trimmed.match(/^\*\*((?:Matthew|Mark|Luke|John)[^*\n]+)\*\*\s*$/);
     if (vm) {
       const verse = vm[1].trim();
@@ -2008,9 +1520,7 @@ function formatAI(text) {
       while (j < lines.length && !lines[j].trim()) j++;
       if (j < lines.length) {
         const nl = lines[j].trim();
-        // Complete quote: starts AND ends with a quote char (or ends with ." or ,")
-        const isQuote = nl.length > 10 && /^["“”]/.test(nl) &&
-          (/["“”]['.,]?\s*$/.test(nl) || /\.\s*$/.test(nl));
+        const isQuote = nl.length > 10 && /^["“”]/.test(nl);
         if (isQuote) {
           const q = nl.replace(/^["“”]+/, '').replace(/["“”]+$/, '');
           j++;
@@ -2021,7 +1531,7 @@ function formatAI(text) {
             if (cl && !/^\*\*/.test(cl) && !/^["“]/.test(cl)) { ctx = cl; j++; }
           }
           parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
-            '</div><div class="scripture-quote">“' + esc(q) + '”</div>' +
+            '</div><div class="scripture-quote">' + esc(q) + '</div>' +
             (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
           i = j; continue;
         }
@@ -2029,7 +1539,7 @@ function formatAI(text) {
       parts.push('<p class="ai-p"><strong class="vcite">' + esc(verse) + '</strong></p>');
       i++; continue;
     }
-    if (!trimmed) { parts.push('<div style="height:6px"></div>'); i++; continue; }
+    if (!trimmed) { parts.push('<div style="height:8px"></div>'); i++; continue; }
     const html = esc(trimmed)
       .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
       .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>');
@@ -2044,7 +1554,6 @@ function extractFirstVerse(text) {
   return m ? m[0] : '';
 }
 
-/* ── PWA service worker ── */
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
