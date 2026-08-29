@@ -23,9 +23,9 @@ const client = hasKey
 /* ── Curated fallbacks (single source: public/data/curated.js) ──────── */
 const vm = require('vm');
 function loadCurated() {
-  const src = fs.readFileSync(path.join(__dirname, 'public/data/curated.js'), 'utf8');
   const ctx = { window: {} };
-  vm.runInNewContext(src, ctx);
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, 'public/data/curated.js'), 'utf8'), ctx);
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, 'public/data/advisor.js'), 'utf8'), ctx);
   return ctx.window;
 }
 const curatedBrowser = loadCurated();
@@ -234,16 +234,10 @@ app.post('/api/chat', async (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
-    let fallback =
-      'I hear you. Without a live connection I can still point you to Jesus’ words:\n\n' +
-      '**Matthew 11:28**\n' +
-      '"Come unto me, all ye that labour and are heavy laden, and I will give you rest."\n' +
-      'Bring what is heavy — you are invited, not required to fix yourself first.\n\n' +
-      '**John 14:27**\n' +
-      '"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid."\n' +
-      'His peace is offered as a gift in troubled moments.\n\n' +
-      'Add an API key on the server to unlock full live guidance.';
-    if (crisis) {
+    let fallback = typeof curatedBrowser.RLA_advise === 'function'
+      ? curatedBrowser.RLA_advise(lastUser)
+      : 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.';
+    if (crisis && fallback && fallback.indexOf('988') === -1) {
       fallback =
         'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call/text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n' +
         fallback;

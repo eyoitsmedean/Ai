@@ -1271,6 +1271,33 @@ textarea { font-family: var(--font-ui); }
   font-family: var(--font-body); font-style: italic;
   font-size: 14px; color: var(--text-3); margin-top: 8px;
 }
+.path-rail {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.path-rail strong { color: var(--crimson); font-weight: 600; }
+.bless-lead {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.bless-name {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+.bless-name:focus { outline: none; border-color: rgba(143,29,29,.4); }
 :root[data-season="advent"] { --bg: #EEEAF2; --bg-2: #E4DFEA; }
 :root[data-season="lent"] { --bg: #F3EFE8; --bg-2: #E8E2D8; }
 :root[data-season="easter"] {
@@ -1806,6 +1833,7 @@ body::before {
       <div class="page-hd" style="padding-top:6px">
         <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
         <h1 class="page-hd-title">Today’s <em>light</em></h1>
+        <p class="path-rail" id="path-rail" hidden></p>
       </div>
 
       <div class="section-label">Daily Affirmation</div>
@@ -1875,6 +1903,7 @@ body::before {
                 <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
                 Share
               </button>
+              <button class="action-btn-dark" type="button" onclick="openBlessing('word')">Bless someone</button>
             </div>
           </div>
         </div>
@@ -1956,6 +1985,7 @@ body::before {
             <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
             Share
           </button>
+          <button class="action-btn-dark" type="button" onclick="openBlessing('enc')">Bless someone</button>
         </div>
       </div>
     </div>
@@ -2099,6 +2129,18 @@ body::before {
     </div>
   </div>
 </div>
+
+<div class="share-modal" id="bless-modal" onclick="if(event.target===this)closeBlessing()">
+  <div class="share-panel">
+    <h3>Send a blessing</h3>
+    <p class="bless-lead">A card of His words, for one person. No feed. No likes.</p>
+    <input class="bless-name" id="bless-name" type="text" maxlength="40" placeholder="Their name (optional)" />
+    <div class="share-actions">
+      <button type="button" class="share-secondary" onclick="closeBlessing()">Close</button>
+      <button type="button" class="share-primary" onclick="sendBlessing()">Send</button>
+    </div>
+  </div>
+</div>
 <!-- Toast -->
 
 <div class="sit-overlay" id="sit-overlay">
@@ -2151,6 +2193,7 @@ body::before {
 <div class="toast" id="toast"></div>
 
 <script src="/data/curated.js"></script>
+<script src="/data/advisor.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
    STATE
@@ -2181,6 +2224,7 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
 function completeOnboarding() {
   lsSet('rla-onboarded', '1');
   lsSet('rla-first-lectio', 'pending');
+  if (!ls('rla-path-start')) lsSet('rla-path-start', todayStr());
   document.getElementById('onboarding').classList.add('hidden');
   startApp();
   let tries = 0;
@@ -2778,7 +2822,54 @@ function curatedEncFallback(theme) {
   return { ...data, theme, source: 'curated' };
 }
 
+let lastDailyRaw = null;
+
+function pathDayNumber() {
+  const start = ls('rla-path-start');
+  if (!start) return 0;
+  const a = new Date(start + 'T12:00:00').getTime();
+  const b = new Date(todayStr() + 'T12:00:00').getTime();
+  return Math.floor((b - a) / 86400000) + 1;
+}
+
+function beginSevenDays() {
+  lsSet('rla-path-start', todayStr());
+  if (lastDailyRaw) applyDailyToUI(lastDailyRaw);
+}
+
+function applyPathOverlay(data) {
+  const seven = window.RLA_SEVEN;
+  const rail = document.getElementById('path-rail');
+  if (!seven) { if (rail) rail.hidden = true; return data; }
+  if (!ls('rla-path-start')) {
+    if (rail) {
+      rail.hidden = false;
+      rail.innerHTML = '<button type="button" class="sit-verb" style="margin-top:4px" onclick="beginSevenDays()">Begin Seven Days with His words</button>';
+    }
+    return data;
+  }
+  const n = pathDayNumber();
+  if (n >= 1 && n <= 7) {
+    const day = seven[n - 1];
+    data = {
+      affirmation: data.affirmation,
+      word: { theme: day.theme, title: day.title, passage: day.passage, verse: day.verse, reflection: day.reflection },
+      source: data.source
+    };
+    if (rail) {
+      rail.hidden = false;
+      rail.innerHTML = 'Seven Days · <strong>Day ' + n + '</strong> — ' + day.title;
+    }
+  } else if (rail) {
+    rail.hidden = false;
+    rail.innerHTML = 'You kept seven days. <button type="button" class="sit-verb" style="margin:0 0 0 8px" onclick="beginSevenDays()">Begin again</button>';
+  }
+  return data;
+}
+
 function applyDailyToUI(data) {
+  lastDailyRaw = data;
+  data = applyPathOverlay(data);
   dailyData = data;
   document.getElementById('aff-text').textContent = data.affirmation.text;
   document.getElementById('aff-quote').textContent = '“' + data.affirmation.quote + '”';
@@ -3063,12 +3154,24 @@ async function sendMsg() {
         } catch(_) {}
       }
     }
+    if (!fullText || /Without a live connection|Add an API key/i.test(fullText)) {
+      const local = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+      if (local) fullText = local;
+    }
+    updateStreamBubble(aiBubble, fullText);
     chatHistory.push({ role: 'assistant', content: fullText });
     persistChat();
     addSaveToChatBubble(aiBubble, fullText, text);
   } catch (err) {
     if (err.name !== 'AbortError') {
-      updateStreamBubble(aiBubble, fullText || 'Unable to connect right now. Please try again.');
+      const local = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+      const out = fullText || local || 'Unable to connect right now. Please try again.';
+      updateStreamBubble(aiBubble, out);
+      if (local || fullText) {
+        chatHistory.push({ role: 'assistant', content: out });
+        persistChat();
+        addSaveToChatBubble(aiBubble, out, text);
+      }
     } else {
       updateStreamBubble(aiBubble, fullText || '_Response stopped._');
       if (fullText) {
@@ -3304,6 +3407,56 @@ function finishLectio(skip) {
     showToast('That is enough for today');
   }
   closeLectio();
+}
+
+let blessType = 'word';
+function quoteForShare(type) {
+  let quote = '', verse = '', title = '';
+  if (type === 'aff' && dailyData) {
+    quote = dailyData.affirmation.quote; verse = dailyData.affirmation.verse; title = dailyData.affirmation.text;
+  } else if (type === 'enc' && currentEncData) {
+    const p = currentEncData.passages && currentEncData.passages[0];
+    quote = p ? p.quote : currentEncData.opening; verse = p ? p.verse : ''; title = currentEncData.headline;
+  } else if (dailyData && dailyData.word) {
+    quote = dailyData.word.passage; verse = dailyData.word.verse; title = dailyData.word.title;
+  }
+  return { quote, verse, title };
+}
+function openBlessing(type) {
+  blessType = type || 'word';
+  document.getElementById('bless-name').value = '';
+  document.getElementById('bless-modal').classList.add('on');
+}
+function closeBlessing() {
+  document.getElementById('bless-modal').classList.remove('on');
+}
+async function sendBlessing() {
+  const { quote, verse, title } = quoteForShare(blessType);
+  if (!quote) return;
+  const name = (document.getElementById('bless-name').value || '').trim();
+  drawShareCard(quote, verse, title, shareDraft.paper || 'rubric');
+  const canvas = document.getElementById('share-canvas');
+  const text = (name ? name + ' — ' : '') + 'I kept these words for you.\n\n“' + quote + '”\n— ' + verse;
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], 'blessing.png', { type: 'image/png' });
+    closeBlessing();
+    if (navigator.share) {
+      try {
+        const payload = { title: 'A red letter', text };
+        if (navigator.canShare && navigator.canShare({ files: [file] })) payload.files = [file];
+        await navigator.share(payload);
+        showToast('Blessing sent');
+        return;
+      } catch (e) {
+        if (e && e.name === 'AbortError') return;
+      }
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'blessing.png';
+    a.click();
+    showToast('Card saved — send it to them');
+  });
 }
 
 function keepLine(e) {

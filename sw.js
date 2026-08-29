@@ -1,9 +1,10 @@
-const CACHE = 'rla-v7';
+const CACHE = 'rla-v8';
 const PRECACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/data/curated.js',
+  '/data/advisor.js',
   '/icon-192.png',
   '/icon-512.png'
 ];
