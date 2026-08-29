@@ -1057,18 +1057,20 @@ function switchTab(tab) {
   if (tab === 'journal') renderJournal();
 }
 
-function todayStr() {
+function padDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function todayStr() { return padDate(new Date()); }
+function yestStr() {
   const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  d.setDate(d.getDate() - 1);
+  return padDate(d);
 }
 
 function updateStreak() {
   const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
   const today = todayStr();
-  const yest = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const yest = yestStr();
   let count = raw.date === today ? raw.count : raw.date === yest ? raw.count + 1 : 1;
   lsSet('rla-streak', JSON.stringify({ date: today, count }));
   document.getElementById('streak-num').textContent = count;
