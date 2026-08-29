@@ -254,6 +254,46 @@ textarea,input{font-family:var(--font-ui)}
 .reflect-input{width:100%;min-height:72px;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(14px * var(--scale));resize:vertical;margin-bottom:10px}
 .reflect-actions{display:flex;gap:8px}
 
+.plan-card{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .45s .08s var(--ease) both}
+.plan-hd{font-family:var(--font-disp);font-size:calc(16px * var(--scale));font-weight:700;margin-bottom:4px}
+.plan-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
+.plan-days{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.plan-day{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-muted);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s var(--ease),background .2s}
+.plan-day:hover{transform:translateY(-1px)}
+.plan-day.on{background:var(--crimson);border-color:var(--crimson);color:#fff}
+.plan-day.today{box-shadow:0 0 0 2px rgba(185,28,28,.28)}
+.plan-day.done:not(.on){background:rgba(185,28,28,.12);border-color:rgba(185,28,28,.35);color:var(--crimson)}
+.plan-body{padding-top:4px}
+.plan-focus{font-size:calc(10px * var(--scale));font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.plan-quote{font-family:var(--font-body);font-size:calc(15px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.5;margin-bottom:6px}
+.plan-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:10px}
+.plan-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.mem-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.mem-box.hidden{display:none!important}
+.mem-hd{font-family:var(--font-disp);font-size:calc(15px * var(--scale));font-weight:700;margin-bottom:6px}
+.mem-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
+.mem-line{font-family:var(--font-body);font-size:calc(16px * var(--scale));line-height:1.65;color:var(--ink);min-height:3.2em;margin-bottom:12px}
+.mem-blank{display:inline-block;min-width:2.4em;border-bottom:2px solid var(--crimson);color:transparent;user-select:none;margin:0 1px}
+.mem-blank.revealed{color:var(--crimson-words);border-bottom-color:transparent;font-style:italic}
+.mem-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:10px}
+.mem-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.examen-box{margin:0 14px 16px;padding:16px;background:linear-gradient(180deg,rgba(26,20,16,.04),var(--surface));border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .45s .1s var(--ease) both}
+.examen-box.evening{border-color:rgba(185,28,28,.28);background:linear-gradient(180deg,rgba(185,28,28,.06),var(--surface))}
+.examen-hd{font-family:var(--font-disp);font-size:calc(16px * var(--scale));font-weight:700;margin-bottom:4px}
+.examen-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
+.examen-word{padding:12px;background:var(--surface-2);border-radius:var(--r-sm);margin-bottom:12px}
+.examen-quote{font-family:var(--font-body);font-size:calc(14px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.5}
+.examen-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-top:6px}
+.examen-step{margin-bottom:12px}
+.examen-label{font-size:calc(12px * var(--scale));font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.examen-input{width:100%;min-height:56px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:calc(13px * var(--scale));resize:vertical}
+.examen-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.examen-done{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-top:8px;display:none}
+.examen-box.done .examen-done{display:block}
+.examen-box.done .examen-actions button:first-child{opacity:.7}
+
 .pray-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
 .pray-hd{font-family:var(--font-disp);font-size:calc(16px * var(--scale));font-weight:700;margin-bottom:6px}
 .pray-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
@@ -381,8 +421,21 @@ textarea,input{font-family:var(--font-ui)}
         <p class="carry-phrase" id="carry-phrase"></p>
         <p class="carry-cite" id="carry-cite"></p>
         <div class="carry-actions">
+          <button type="button" class="action-btn" onclick="openMemorize()">Practice</button>
           <button type="button" class="action-btn" onclick="shareCarry()">Share</button>
           <button type="button" class="action-btn" onclick="clearCarry()">Clear</button>
+        </div>
+      </div>
+      <div class="mem-box hidden" id="mem-box" aria-label="Practice this phrase">
+        <div class="mem-hd">Hold it in memory</div>
+        <p class="mem-sub">Fill what you can. Reveal when you need grace — no score.</p>
+        <p class="mem-line" id="mem-line"></p>
+        <p class="mem-cite" id="mem-cite"></p>
+        <div class="mem-actions">
+          <button type="button" class="action-btn" onclick="memHarder()">Hide more</button>
+          <button type="button" class="action-btn" onclick="memReveal()">Reveal</button>
+          <button type="button" class="action-btn" onclick="memCheck()">I remembered</button>
+          <button type="button" class="action-btn" onclick="closeMemorize()">Done</button>
         </div>
       </div>
       <div class="card card-crimson" id="affirmation-card"><div class="card-body">
@@ -417,6 +470,37 @@ textarea,input{font-family:var(--font-ui)}
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
         <div class="presence-week" id="presence-week" aria-label="This week's presence"></div>
+      </div>
+      <div class="plan-card" id="plan-card">
+        <div class="plan-hd">7 days with His words</div>
+        <p class="plan-sub">A gentle first week — one verified saying a day. Missed a day? Return without shame.</p>
+        <div class="plan-days" id="plan-days" role="tablist" aria-label="Plan days"></div>
+        <div class="plan-body" id="plan-body"></div>
+      </div>
+      <div class="examen-box" id="examen-box">
+        <div class="examen-hd">Evening with Him</div>
+        <p class="examen-sub">Close the day over His words — rejoice, review, release, rest. Inspired by the Examen; grounded only in verified red letters.</p>
+        <div class="examen-word">
+          <p class="examen-quote" id="examen-quote"></p>
+          <p class="examen-cite" id="examen-cite"></p>
+        </div>
+        <div class="examen-step">
+          <div class="examen-label">Rejoice — where did His peace touch you?</div>
+          <textarea class="examen-input" id="examen-rejoice" maxlength="320" placeholder="One moment of grace…" aria-label="Rejoice"></textarea>
+        </div>
+        <div class="examen-step">
+          <div class="examen-label">Review — where do you still need His words?</div>
+          <textarea class="examen-input" id="examen-review" maxlength="320" placeholder="Name it honestly…" aria-label="Review"></textarea>
+        </div>
+        <div class="examen-step">
+          <div class="examen-label">Release — what will you entrust to Him tonight?</div>
+          <textarea class="examen-input" id="examen-release" maxlength="320" placeholder="Lay it down…" aria-label="Release"></textarea>
+        </div>
+        <div class="examen-actions">
+          <button type="button" class="action-btn" onclick="saveExamen()">Rest · Amen</button>
+          <button type="button" class="action-btn" onclick="listenExamen()">Listen</button>
+        </div>
+        <p class="examen-done" id="examen-done">Tonight’s examen is held in your Journal. Sleep in His peace.</p>
       </div>
       <div class="cta-row">
         <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
@@ -572,6 +656,7 @@ const CORPUS = [
   { verse: 'Matthew 28:20', text: 'Behold, I am with you always, even to the end of the age.', themes: ['Loneliness', 'Hope', 'Faith & Doubt'] },
   { verse: 'Matthew 5:4', text: 'Blessed are those who mourn, for they shall be comforted.', themes: ['Grief & Loss', 'Hope'] },
   { verse: 'Luke 12:32', text: "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom.", themes: ['Fear', 'Hope'] },
+  { verse: 'John 13:34-35', text: 'A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another. By this everyone will know that you are my disciples, if you have love for one another.', themes: ['Conflict & Relationships', 'Loneliness'] },
   { verse: 'John 11:25-26', text: 'I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?', themes: ['Grief & Loss', 'Faith & Doubt'] },
   { verse: 'Matthew 6:14-15', text: "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don't forgive men their trespasses, neither will your Father forgive your trespasses.", themes: ['Forgiveness', 'Shame & Guilt'] },
   { verse: 'Luke 15:7', text: 'I tell you that even so there will be more joy in heaven over one sinner who repents, than over ninety-nine righteous people who need no repentance.', themes: ['Shame & Guilt', 'Hope'] },
@@ -758,7 +843,7 @@ function renderPresenceWeek(days, today) {
   el.innerHTML = html;
 }
 
-function markPresence() {
+function markPresence(opts) {
   const today = todayISO();
   const days = getPresenceDays();
   if (!days.includes(today)) {
@@ -767,7 +852,7 @@ function markPresence() {
   }
   renderPresence();
   showToast('Received. Carry one phrase with you.');
-  showReflect();
+  if (!opts?.skipReflect) showReflect();
 }
 
 /* ═══ SIT WITH HIM (lectio-lite minute) ═══ */
@@ -936,6 +1021,7 @@ function renderCarry() {
   const data = lsJSON('rla-carry', null);
   if (!data?.phrase || data.day !== todayISO()) {
     card.classList.add('hidden');
+    closeMemorize();
     return;
   }
   document.getElementById('carry-phrase').textContent = '"' + data.phrase + '"';
@@ -951,7 +1037,233 @@ function shareCarry() {
 
 function clearCarry() {
   try { localStorage.removeItem('rla-carry'); } catch {}
+  closeMemorize();
   renderCarry();
+}
+
+/* ═══ MEMORIZE (grace fill-in — Altar / Bearing Fruit pattern) ═══ */
+let memLevel = 1;
+let memTokens = [];
+function openMemorize() {
+  const data = lsJSON('rla-carry', null);
+  if (!data?.phrase || data.day !== todayISO()) {
+    showToast('Carry a phrase from today’s word first');
+    return;
+  }
+  memLevel = 1;
+  memTokens = String(data.phrase).split(/\s+/).filter(Boolean);
+  document.getElementById('mem-cite').textContent = data.verse || '';
+  document.getElementById('mem-box').classList.remove('hidden');
+  renderMemLine(false);
+  document.getElementById('mem-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function closeMemorize() {
+  document.getElementById('mem-box')?.classList.add('hidden');
+}
+function renderMemLine(revealAll) {
+  const el = document.getElementById('mem-line');
+  if (!el || !memTokens.length) return;
+  const hideEvery = memLevel === 1 ? 3 : memLevel === 2 ? 2 : 1;
+  let html = '';
+  memTokens.forEach((tok, i) => {
+    const hide = !revealAll && ((i + 1) % hideEvery === 0);
+    if (hide) html += '<span class="mem-blank" data-i="' + i + '">' + esc(tok) + '</span> ';
+    else html += esc(tok) + ' ';
+  });
+  el.innerHTML = html.trim();
+}
+function memHarder() {
+  memLevel = Math.min(3, memLevel + 1);
+  renderMemLine(false);
+  showToast(memLevel === 3 ? 'Most words hidden — grace if you need Reveal' : 'A little harder');
+}
+function memReveal() {
+  const blanks = document.querySelectorAll('#mem-line .mem-blank');
+  if (!blanks.length) { renderMemLine(true); return; }
+  blanks.forEach((b) => b.classList.add('revealed'));
+}
+function memCheck() {
+  renderMemLine(true);
+  showToast('Well held. Carry it into the next hour.');
+  markPresence({ skipReflect: true });
+}
+
+/* ═══ 7-DAY PLAN (YouVersion-shaped, red-letter only) ═══ */
+const WEEK_PLAN = [
+  { day: 1, title: 'Enough for today', focus: 'Anxiety', verse: 'Matthew 6:34' },
+  { day: 2, title: 'My peace', focus: 'Peace', verse: 'John 14:27' },
+  { day: 3, title: 'Come to me', focus: 'Rest', verse: 'Matthew 11:28-30' },
+  { day: 4, title: 'Little flock', focus: 'Fear', verse: 'Luke 12:32' },
+  { day: 5, title: 'I am with you', focus: 'Loneliness', verse: 'Matthew 28:20' },
+  { day: 6, title: 'Overcome', focus: 'Hope', verse: 'John 16:33' },
+  { day: 7, title: 'Love one another', focus: 'Love', verse: 'John 13:34-35' },
+];
+let planViewDay = 1;
+
+function getPlanProgress() {
+  return lsJSON('rla-plan', { started: null, done: {} });
+}
+function setPlanProgress(p) {
+  lsSetJSON('rla-plan', p);
+}
+function ensurePlanStarted() {
+  const p = getPlanProgress();
+  if (!p.started) {
+    p.started = todayISO();
+    p.done = p.done || {};
+    setPlanProgress(p);
+  }
+  return p;
+}
+function planDayNumber() {
+  const p = ensurePlanStarted();
+  const start = new Date(p.started + 'T12:00:00');
+  const now = new Date(todayISO() + 'T12:00:00');
+  const diff = Math.floor((now - start) / 86400000) + 1;
+  return Math.min(7, Math.max(1, diff));
+}
+function findPlanPassage(verse) {
+  const hit = CORPUS.find((c) => c.verse === verse);
+  if (hit) return hit;
+  return CORPUS.find((c) => verse.startsWith(c.verse.split('-')[0])) || CORPUS[0];
+}
+function renderPlan() {
+  const daysEl = document.getElementById('plan-days');
+  const body = document.getElementById('plan-body');
+  if (!daysEl || !body) return;
+  const progress = ensurePlanStarted();
+  const todayN = planDayNumber();
+  if (!planViewDay) planViewDay = todayN;
+  let chips = '';
+  for (let d = 1; d <= 7; d++) {
+    const done = !!progress.done[d];
+    chips += '<button type="button" class="plan-day' +
+      (d === planViewDay ? ' on' : '') +
+      (d === todayN ? ' today' : '') +
+      (done ? ' done' : '') +
+      '" onclick="selectPlanDay(' + d + ')" aria-label="Day ' + d + '">' + d + '</button>';
+  }
+  daysEl.innerHTML = chips;
+  const step = WEEK_PLAN[planViewDay - 1];
+  const pass = findPlanPassage(step.verse);
+  const done = !!progress.done[planViewDay];
+  body.innerHTML =
+    '<div class="plan-focus">Day ' + step.day + ' · ' + esc(step.focus) + '</div>' +
+    '<p class="plan-quote">"' + esc(pass.text) + '"</p>' +
+    '<p class="plan-cite">' + esc(pass.verse) + ' · WEB</p>' +
+    '<div class="plan-actions">' +
+      (done
+        ? '<button type="button" class="action-btn" disabled>Received</button>'
+        : '<button type="button" class="action-btn" onclick="receivePlanDay()">I received this</button>') +
+      '<button type="button" class="action-btn" onclick="carryPlanDay()">Carry</button>' +
+      '<button type="button" class="action-btn" onclick="practicePlanDay()">Practice</button>' +
+      '<button type="button" class="action-btn" onclick="sharePlanDay()">Share</button>' +
+      '<button type="button" class="action-btn" onclick="sitPlanDay()">Sit</button>' +
+    '</div>';
+}
+function selectPlanDay(d) {
+  planViewDay = d;
+  renderPlan();
+}
+function receivePlanDay() {
+  const p = ensurePlanStarted();
+  p.done[planViewDay] = todayISO();
+  setPlanProgress(p);
+  renderPlan();
+  markPresence();
+  showToast('Day ' + planViewDay + ' received');
+}
+function currentPlanPass() {
+  const step = WEEK_PLAN[planViewDay - 1];
+  return findPlanPassage(step.verse);
+}
+function carryPlanDay() {
+  const pass = currentPlanPass();
+  const phrase = pickCarryPhrase(pass.text);
+  lsSetJSON('rla-carry', { phrase, verse: pass.verse, day: todayISO() });
+  renderCarry();
+  showToast('Carrying Day ' + planViewDay + ' phrase');
+}
+function practicePlanDay() {
+  carryPlanDay();
+  openMemorize();
+}
+function sharePlanDay() {
+  const pass = currentPlanPass();
+  const step = WEEK_PLAN[planViewDay - 1];
+  openShareCard({ verse: pass.verse, quote: pickCarryPhrase(pass.text), theme: 'Day ' + step.day + ' · ' + step.title });
+}
+function sitPlanDay() {
+  const pass = currentPlanPass();
+  if (!dailyData) dailyData = {};
+  dailyData.word = {
+    theme: WEEK_PLAN[planViewDay - 1].focus,
+    title: WEEK_PLAN[planViewDay - 1].title,
+    passage: pass.text,
+    verse: pass.verse,
+    reflection: 'Sit with these words without rushing.',
+    verified: true,
+  };
+  startSit();
+}
+
+/* ═══ EVENING EXAMEN (Lectio 365–shaped, red-letter only) ═══ */
+const EXAMEN_WORDS = [
+  { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful." },
+  { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
+  { verse: 'John 16:33', text: "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world." },
+  { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient." },
+];
+function examenWordForToday() {
+  const i = hashDay(todayISO()) % EXAMEN_WORDS.length;
+  return EXAMEN_WORDS[i];
+}
+function renderExamen() {
+  const box = document.getElementById('examen-box');
+  if (!box) return;
+  const w = examenWordForToday();
+  document.getElementById('examen-quote').textContent = '"' + w.text + '"';
+  document.getElementById('examen-cite').textContent = w.verse + ' · WEB';
+  const evening = new Date().getHours() >= 17;
+  box.classList.toggle('evening', evening);
+  const done = ls('rla-examen-day') === todayISO();
+  box.classList.toggle('done', done);
+  if (done) {
+    const saved = lsJSON('rla-examen-draft', null);
+    if (saved?.day === todayISO()) {
+      document.getElementById('examen-rejoice').value = saved.rejoice || '';
+      document.getElementById('examen-review').value = saved.review || '';
+      document.getElementById('examen-release').value = saved.release || '';
+    }
+  }
+}
+function listenExamen() {
+  const w = examenWordForToday();
+  speakText(w.text + '. ' + w.verse);
+}
+function saveExamen() {
+  const rejoice = document.getElementById('examen-rejoice')?.value.trim() || '';
+  const review = document.getElementById('examen-review')?.value.trim() || '';
+  const release = document.getElementById('examen-release')?.value.trim() || '';
+  if (!rejoice && !review && !release) {
+    showToast('Write one short line, or rest in the word above');
+    return;
+  }
+  const w = examenWordForToday();
+  const entry = [
+    'Evening Examen',
+    rejoice ? 'Rejoice: ' + rejoice : '',
+    review ? 'Review: ' + review : '',
+    release ? 'Release: ' + release : '',
+    '',
+    '“' + pickCarryPhrase(w.text) + '”',
+  ].filter(Boolean).join('\n');
+  saveJournal(entry, w.verse, 'Examen');
+  lsSet('rla-examen-day', todayISO());
+  lsSetJSON('rla-examen-draft', { day: todayISO(), rejoice, review, release });
+  document.getElementById('examen-box')?.classList.add('done');
+  markPresence({ skipReflect: true });
+  showToast('Amen. Rest in His peace.');
 }
 
 /* ═══ ONBOARDING ═══ */
@@ -1891,6 +2203,8 @@ function initApp() {
   loadAdvisorMode();
   loadDaily();
   renderCarry();
+  renderPlan();
+  renderExamen();
   renderThemeGrid();
   goTab('today');
   const nav = document.getElementById('bottom-nav');

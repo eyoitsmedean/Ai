@@ -273,3 +273,19 @@ Sources synthesized Aug 2026: ScreensDesign Bible UX patterns, Hallow/Glorify co
 | **Share formats for IG + Stories + wallpaper** (Church Canvas / Verses) | Feed 4:5, Stories 9:16, Square 1:1 × Night/Crimson/Parchment. |
 
 **Still later (Phase 1+):** native store apps, live Stripe/IAP, seasonal Lent challenge UA, full audio production, small-group mode.
+
+---
+
+## 10. 2026 rhythm research (Examen · memory · plans)
+
+Sources: Lectio 365 / 24-7 Prayer (P.R.A.Y + evening Examen), Bearing Fruit (grace-based habits + memory), Altar (Examen + flashcards + plans), ScreensDesign habit recovery patterns.
+
+| Pattern | Why it retains | Red Letter response |
+| --- | --- | --- |
+| **Morning / evening poles** (Lectio 365) | D7 retention rises when the day has two soft anchors, not one endless feed | Morning: Word → Sit → Reflect. Evening: **Examen** over a verified peace saying — rejoice, review, release, rest. |
+| **Examen without therapy cosplay** | Users want to close the day with God, not a chatbot diagnosis | Four short prompts + one WEB red-letter; optional Journal save; crisis links stay in Settings. |
+| **Scripture memory** (Altar, Bearing Fruit) | Carry phrases stick when practiced, not only shared | **Practice** on Carry: progressive blank-out of the phrase; reveal / check — no scores, no shame. |
+| **Short reading plans** (YouVersion DNA, Altar) | First-week structure beats “open and wander” | **7 days with His words** — one curated Gospel saying per day; grace progress (missed days don’t reset identity). |
+| **Grace over streak** (Bearing Fruit garden) | Guilt resets kill return | Plan marks “received” per day; unfinished days stay open; presence week never wipes. |
+
+**Product rule:** Every new habit surface still cites only verified Jesus speech (WEB corpus). No invented quotes in Examen, memory, or plans.
