@@ -261,6 +261,70 @@ module.exports = {
       theme: ['Hope', 'Purpose & Direction', 'Suffering & Pain'],
       text: "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven. Blessed are those who mourn, for they shall be comforted. Blessed are the gentle, for they shall inherit the earth. Blessed are those who hunger and thirst for righteousness, for they shall be filled.",
     },
+    // Mark — storm, faith, children
+    {
+      id: 'mk4-39',
+      book: 'Mark', chapter: 4, verseStart: 39, verseEnd: 39,
+      theme: ['Fear', 'Peace', 'Anxiety & Worry'],
+      text: "He awoke and rebuked the wind, and said to the sea, “Peace! Be still!” The wind ceased and there was a great calm.",
+      note: 'Jesus speaks to the storm — narrative with His command',
+    },
+    {
+      id: 'mk5-36',
+      book: 'Mark', chapter: 5, verseStart: 36, verseEnd: 36,
+      theme: ['Fear', 'Faith & Doubt', 'Grief & Loss'],
+      text: "Don’t be afraid, only believe.",
+    },
+    {
+      id: 'mk10-14-15',
+      book: 'Mark', chapter: 10, verseStart: 14, verseEnd: 15,
+      theme: ['Hope', 'Faith & Doubt', 'Purpose & Direction'],
+      text: "Allow the little children to come to me! Don’t forbid them, for God’s Kingdom belongs to such as these. Most certainly I tell you, whoever will not receive God’s Kingdom like a little child, he will in no way enter into it.",
+    },
+    // Luke — Martha, enemies
+    {
+      id: 'lk10-41-42',
+      book: 'Luke', chapter: 10, verseStart: 41, verseEnd: 42,
+      theme: ['Anxiety & Worry', 'Peace', 'Purpose & Direction'],
+      text: "Martha, Martha, you are anxious and troubled about many things, but one thing is needed. Mary has chosen the good part, which will not be taken away from her.",
+    },
+    {
+      id: 'lk6-27-28',
+      book: 'Luke', chapter: 6, verseStart: 27, verseEnd: 28,
+      theme: ['Conflict & Relationships', 'Forgiveness'],
+      text: "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
+    },
+    // John — life, light, abide
+    {
+      id: 'jn3-16-17',
+      book: 'John', chapter: 3, verseStart: 16, verseEnd: 17,
+      theme: ['Hope', 'Faith & Doubt', 'Shame & Guilt'],
+      text: "For God so loved the world, that he gave his only born Son, that whoever believes in him should not perish, but have eternal life. For God didn’t send his Son into the world to judge the world, but that the world should be saved through him.",
+    },
+    {
+      id: 'jn6-35',
+      book: 'John', chapter: 6, verseStart: 35, verseEnd: 35,
+      theme: ['Hope', 'Loneliness', 'Purpose & Direction'],
+      text: "I am the bread of life. He who comes to me will not be hungry, and he who believes in me will never be thirsty.",
+    },
+    {
+      id: 'jn8-12',
+      book: 'John', chapter: 8, verseStart: 12, verseEnd: 12,
+      theme: ['Hope', 'Fear', 'Purpose & Direction'],
+      text: "I am the light of the world. He who follows me will not walk in the darkness, but will have the light of life.",
+    },
+    {
+      id: 'jn15-4-5',
+      book: 'John', chapter: 15, verseStart: 4, verseEnd: 5,
+      theme: ['Purpose & Direction', 'Faith & Doubt', 'Loneliness'],
+      text: "Remain in me, and I in you. As the branch can’t bear fruit by itself unless it remains in the vine, so neither can you, unless you remain in me. I am the vine. You are the branches. He who remains in me and I in him bears much fruit, for apart from me you can do nothing.",
+    },
+    {
+      id: 'mt9-12-13',
+      book: 'Matthew', chapter: 9, verseStart: 12, verseEnd: 13,
+      theme: ['Shame & Guilt', 'Hope', 'Suffering & Pain'],
+      text: "Those who are healthy have no need for a physician, but those who are sick do. But you go and learn what this means: ‘I desire mercy, and not sacrifice,’ for I came not to call the righteous, but sinners to repentance.",
+    },
   ],
 };
 
@@ -287,6 +351,14 @@ module.exports.cite = function cite(p) {
 module.exports.byTheme = function byTheme(theme) {
   return module.exports.passages.filter(p => p.theme.includes(theme));
 };
+
+module.exports.byBook = function byBook(book) {
+  const b = String(book || '').trim();
+  if (!b) return module.exports.passages;
+  return module.exports.passages.filter(p => p.book === b);
+};
+
+module.exports.BOOKS = ['Matthew', 'Mark', 'Luke', 'John'];
 
 module.exports.findByRef = function findByRef(ref) {
   // Accept "Matthew 6:34", "Matt 6:34-35", "John 14:1–3"

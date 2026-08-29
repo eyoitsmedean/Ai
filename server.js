@@ -231,12 +231,19 @@ app.get('/api/quota', (req, res) => {
 
 app.get('/api/library', (req, res) => {
   const theme = req.query.theme;
+  const book = req.query.book;
   let passages = corpus.passages;
-  if (theme) passages = corpus.byTheme(String(theme));
+  if (book) passages = corpus.byBook(String(book));
+  if (theme) {
+    passages = passages.filter((p) =>
+      Array.isArray(p.theme) ? p.theme.includes(String(theme)) : p.theme === String(theme)
+    );
+  }
   res.json({
     translation: corpus.translation,
     translationName: corpus.translationName,
     themes: corpus.THEMES,
+    books: corpus.BOOKS || ['Matthew', 'Mark', 'Luke', 'John'],
     passages: passages.map((p) => ({
       id: p.id,
       verse: corpus.cite(p),

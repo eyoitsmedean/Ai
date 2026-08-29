@@ -210,6 +210,20 @@ textarea,input{font-family:var(--font-ui)}
 .lib-verse{font-family:var(--font-ui);font-size:calc(12px * var(--scale));font-weight:700;color:var(--gold)}
 .lib-theme{font-size:calc(11px * var(--scale));color:var(--ink-muted);margin-top:2px}
 .lib-expand{padding:0 16px 16px}
+.gospel-chips{display:flex;gap:8px;padding:0 14px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gospel-chips::-webkit-scrollbar{display:none}
+
+.presence-card{margin:0 14px 16px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);text-align:center;animation:fadeUp .45s var(--ease) both}
+.presence-card.done{border-color:rgba(185,28,28,.35);background:linear-gradient(180deg,rgba(185,28,28,.08),var(--surface))}
+.presence-btn{width:100%;padding:14px 16px;border:none;border-radius:var(--r-sm);background:var(--crimson);color:#fff;font-weight:700;font-size:calc(14px * var(--scale));transition:transform .15s var(--ease),opacity .2s}
+.presence-btn:hover{transform:translateY(-1px)}
+.presence-btn:disabled{opacity:.85;cursor:default;transform:none;background:var(--chrome)}
+.presence-note{margin-top:10px;font-size:calc(12px * var(--scale));color:var(--ink-muted);line-height:1.45}
+.trust-note{margin:0 14px 12px;padding:10px 12px;font-size:calc(11px * var(--scale));color:var(--ink-muted);line-height:1.45;border-left:2px solid var(--border)}
+
+.share-styles{display:flex;gap:8px;padding:0 14px 10px}
+.share-style{flex:1;padding:8px 6px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);font-size:calc(11px * var(--scale));font-weight:700;color:var(--ink-muted)}
+.share-style.active{border-color:var(--crimson);color:var(--crimson);background:rgba(185,28,28,.08)}
 
 /* Journal */
 .journal-empty{text-align:center;padding:48px 24px;color:var(--ink-muted)}
@@ -336,6 +350,10 @@ textarea,input{font-family:var(--font-ui)}
         <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
         <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
       </div>
+      <div class="presence-card" id="presence-card">
+        <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
+        <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
+      </div>
     </section>
     <section class="page" id="seek-page" data-tab="seek">
       <div class="page-hd"><div class="page-hd-eyebrow">Find comfort</div><h1 class="page-hd-title">What do you need today?</h1></div>
@@ -349,6 +367,7 @@ textarea,input{font-family:var(--font-ui)}
         </div>
         <div id="advisor-mode-banner" class="offline-banner hidden">Corpus mode — verified red-letter passages (AI advisor offline).</div>
         <div class="chat-welcome" id="chat-welcome"><h3>Speak what's on your heart</h3><p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John.</p></div>
+        <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
         <div class="suggestions" id="suggestions">
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm anxious about tomorrow</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I need to forgive someone</button>
@@ -364,6 +383,7 @@ textarea,input{font-family:var(--font-ui)}
     </section>
     <section class="page" id="library-page" data-tab="library">
       <div class="page-hd"><div class="page-hd-eyebrow">Verified library</div><h1 class="page-hd-title">His words, preserved</h1></div>
+      <div class="gospel-chips" id="lib-books"></div>
       <div class="filter-chips" id="lib-filters"></div><div id="lib-list"></div>
     </section>
     <section class="page" id="journal-page" data-tab="journal">
@@ -414,6 +434,11 @@ textarea,input{font-family:var(--font-ui)}
 <div class="share-modal" id="share-modal" role="dialog" aria-label="Share card" aria-hidden="true">
   <div class="share-modal-bg" onclick="closeShareCard()"></div>
   <div class="share-modal-inner"><div class="share-preview"><canvas id="share-canvas" width="1080" height="1350"></canvas></div>
+    <div class="share-styles" id="share-styles" role="group" aria-label="Card style">
+      <button type="button" class="share-style active" data-style="night" onclick="setShareStyle('night')">Night</button>
+      <button type="button" class="share-style" data-style="field" onclick="setShareStyle('field')">Crimson</button>
+      <button type="button" class="share-style" data-style="parchment" onclick="setShareStyle('parchment')">Parchment</button>
+    </div>
     <div class="share-actions">
       <button type="button" class="action-btn" onclick="downloadShareCard()" aria-label="Download">Download</button>
       <button type="button" class="action-btn" onclick="nativeShareCard()" aria-label="Share">Share</button>
@@ -517,6 +542,7 @@ const THEME_ICONS = {
 let dailyData = null;
 let libData = null;
 let libFilter = '';
+let libBook = '';
 let libPassages = [];
 let journalItems = [];
 let chatMessages = [];
@@ -524,7 +550,23 @@ let chatStreaming = false;
 let obStep = 0;
 let commitOn = false;
 let shareState = { verse: '', quote: '', theme: '' };
+let shareStyle = 'night';
 let advisorOffline = false;
+
+const SHARE_STYLES = {
+  night: {
+    bg: '#141210', glow: 'rgba(185,28,28,0.22)', frame: 'rgba(237,232,224,0.12)',
+    theme: 'rgba(237,232,224,0.45)', quote: '#B91C1C', verse: '#C4A35A', brand: '#EDE8E0', tag: 'rgba(237,232,224,0.5)',
+  },
+  field: {
+    bg: '#7F0F2E', glow: 'rgba(0,0,0,0.28)', frame: 'rgba(247,244,239,0.18)',
+    theme: 'rgba(247,244,239,0.55)', quote: '#F7F4EF', verse: '#E8C98A', brand: '#F7F4EF', tag: 'rgba(247,244,239,0.55)',
+  },
+  parchment: {
+    bg: '#EDE8E0', glow: 'rgba(185,28,28,0.1)', frame: 'rgba(26,20,16,0.14)',
+    theme: 'rgba(26,20,16,0.45)', quote: '#9F1239', verse: '#7A5C28', brand: '#1A1410', tag: 'rgba(26,20,16,0.45)',
+  },
+};
 
 /* ═══ UTILS ═══ */
 function esc(s) {
@@ -548,23 +590,58 @@ function formatDate() {
   return new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
-/* ═══ DAY COUNT ═══ */
+/* ═══ DAY COUNT (gentle presence — never resets for missed days) ═══ */
 function updateDayCount() {
   const today = todayISO();
   let day = parseInt(ls('rla-day-num') || '0', 10);
   const last = ls('rla-last-visit');
   if (last !== today) {
-    if (!last) day = 1;
-    else {
-      const prev = new Date(last);
-      const now = new Date(today);
-      const diff = Math.round((now - prev) / 86400000);
-      day = diff === 1 ? day + 1 : 1;
-    }
+    day = Math.max(1, day + 1);
     lsSet('rla-day-num', String(day));
     lsSet('rla-last-visit', today);
   }
-  document.getElementById('day-label').textContent = 'Day ' + day + ' with Him';
+  if (day < 1) day = 1;
+  const el = document.getElementById('day-label');
+  if (el) el.textContent = 'Day ' + day + ' with Him';
+  renderPresence();
+}
+
+function getPresenceDays() {
+  return lsJSON('rla-presence', []);
+}
+
+function renderPresence() {
+  const card = document.getElementById('presence-card');
+  const btn = document.getElementById('presence-btn');
+  const note = document.getElementById('presence-note');
+  if (!card || !btn || !note) return;
+  const days = getPresenceDays();
+  const today = todayISO();
+  const done = days.includes(today);
+  card.classList.toggle('done', done);
+  btn.disabled = done;
+  btn.textContent = done ? 'Received · rest in His words' : "I received today's word";
+  const n = days.length;
+  if (done) {
+    note.textContent = n === 1
+      ? 'You made space for His words today.'
+      : 'You have received His words on ' + n + ' days. Keep returning gently.';
+  } else {
+    note.textContent = n
+      ? 'A quiet check-in — ' + n + ' days of presence so far. No streaks, no shame.'
+      : 'A quiet check-in — no streaks, no shame. Just showing up for His words.';
+  }
+}
+
+function markPresence() {
+  const today = todayISO();
+  const days = getPresenceDays();
+  if (!days.includes(today)) {
+    days.push(today);
+    lsSetJSON('rla-presence', days.slice(-400));
+  }
+  renderPresence();
+  showToast('Received. Carry one phrase with you.');
 }
 
 /* ═══ ONBOARDING ═══ */
@@ -863,6 +940,8 @@ function appendMsg(role, html, extra) {
   document.getElementById('chat-messages').appendChild(wrap);
   document.getElementById('chat-welcome').style.display = 'none';
   document.getElementById('suggestions').style.display = 'none';
+  const trust = document.getElementById('advisor-trust');
+  if (trust) trust.style.display = 'none';
   scrollChat();
   return wrap;
 }
@@ -990,23 +1069,45 @@ async function loadLibrary() {
   const list = document.getElementById('lib-list');
   list.innerHTML = '<div style="text-align:center;padding:32px"><span class="spinner"></span></div>';
   try {
-    const res = await api('/api/library' + (libFilter ? '?theme=' + encodeURIComponent(libFilter) : ''));
+    const qs = [];
+    if (libFilter) qs.push('theme=' + encodeURIComponent(libFilter));
+    if (libBook) qs.push('book=' + encodeURIComponent(libBook));
+    const res = await api('/api/library' + (qs.length ? '?' + qs.join('&') : ''));
     if (!res.ok) throw new Error('fail');
     libData = await res.json();
   } catch {
-    libData = {
-      themes: THEMES,
-      passages: CORPUS.map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: p.themes[0], text: p.text })),
-      offline: true,
-    };
+    let passages = CORPUS.map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: p.themes[0], text: p.text, book: (p.verse || '').split(' ')[0] }));
+    if (libBook) passages = passages.filter(p => p.book === libBook);
+    if (libFilter) passages = passages.filter(p => {
+      const src = CORPUS.find(c => c.verse === p.verse);
+      return src && src.themes.includes(libFilter);
+    });
+    libData = { themes: THEMES, books: ['Matthew', 'Mark', 'Luke', 'John'], passages, offline: true };
   }
+  renderLibBooks();
   renderLibFilters();
   renderLibList();
 }
 
+function renderLibBooks() {
+  const books = libData?.books || ['Matthew', 'Mark', 'Luke', 'John'];
+  const el = document.getElementById('lib-books');
+  if (!el) return;
+  const chips = ['<button type="button" class="filter-chip' + (!libBook ? ' active' : '') + '" onclick="setLibBook(\'\')">All Gospels</button>'];
+  books.forEach(b => {
+    chips.push('<button type="button" class="filter-chip' + (libBook === b ? ' active' : '') + '" onclick="setLibBook(\'' + esc(b) + '\')">' + esc(b) + '</button>');
+  });
+  el.innerHTML = chips.join('');
+}
+
+function setLibBook(book) {
+  libBook = book;
+  loadLibrary();
+}
+
 function renderLibFilters() {
   const themes = libData?.themes || THEMES;
-  const chips = ['<button type="button" class="filter-chip' + (!libFilter ? ' active' : '') + '" onclick="setLibFilter(\'\')">All</button>'];
+  const chips = ['<button type="button" class="filter-chip' + (!libFilter ? ' active' : '') + '" onclick="setLibFilter(\'\')">All themes</button>'];
   themes.forEach(t => {
     chips.push('<button type="button" class="filter-chip' + (libFilter === t ? ' active' : '') + '" onclick="setLibFilter(\'' + esc(t).replace(/'/g, "\\'") + '\')">' + esc(t) + '</button>');
   });
@@ -1015,18 +1116,11 @@ function renderLibFilters() {
 
 function setLibFilter(theme) {
   libFilter = theme;
-  if (libData && !libData.offline) loadLibrary();
-  else {
-    renderLibFilters();
-    renderLibList();
-  }
+  loadLibrary();
 }
 
 function renderLibList() {
-  let passages = libData?.passages || [];
-  if (libFilter && libData?.offline) {
-    passages = CORPUS.filter(p => p.themes.includes(libFilter)).map((p, i) => ({ id: 'c' + i, verse: p.verse, theme: libFilter, text: p.text }));
-  }
+  const passages = libData?.passages || [];
   libPassages = passages;
   const list = document.getElementById('lib-list');
   if (!passages.length) {
@@ -1035,7 +1129,7 @@ function renderLibList() {
   }
   list.innerHTML = passages.map((p, idx) => {
     const theme = Array.isArray(p.theme) ? (p.theme[0] || '') : (p.theme || '');
-    return '<details class="lib-item card" style="margin:0 14px 8px"><summary><div><div class="lib-verse">' + esc(p.verse) + '</div><div class="lib-theme">' + esc(theme) + '</div></div></summary>' +
+    return '<details class="lib-item card" style="margin:0 14px 8px"><summary><div><div class="lib-verse">' + esc(p.verse) + '</div><div class="lib-theme">' + esc(theme) + (p.book ? ' · ' + esc(p.book) : '') + '</div></div></summary>' +
       '<div class="lib-expand"><p class="red-quote">"' + esc(p.text) + '"</p>' + verifiedBadge() +
       '<div class="card-actions">' +
       '<button type="button" class="action-btn" data-lib-action="share" data-lib-idx="' + idx + '">Share</button>' +
@@ -1136,8 +1230,18 @@ function removeJournal(i) {
 }
 
 /* ═══ SHARE CARD ═══ */
+function setShareStyle(style) {
+  if (!SHARE_STYLES[style]) return;
+  shareStyle = style;
+  lsSet('rla-share-style', style);
+  document.querySelectorAll('.share-style').forEach(b => b.classList.toggle('active', b.dataset.style === style));
+  if (shareState.quote) drawShareCard();
+}
+
 function openShareCard({ verse, quote, theme }) {
   try {
+    shareStyle = ls('rla-share-style') || shareStyle || 'night';
+    document.querySelectorAll('.share-style').forEach(b => b.classList.toggle('active', b.dataset.style === shareStyle));
     shareState = { verse: String(verse || ''), quote: String(quote || ''), theme: String(theme || '') };
     if (!shareState.quote) {
       showToast('Nothing to share yet');
@@ -1179,22 +1283,22 @@ function drawShareCard() {
   if (!canvas) throw new Error('share canvas missing');
   const ctx = canvas.getContext('2d');
   const W = 1080, H = 1350;
-  ctx.fillStyle = '#141210';
+  const pal = SHARE_STYLES[shareStyle] || SHARE_STYLES.night;
+  ctx.fillStyle = pal.bg;
   ctx.fillRect(0, 0, W, H);
   const grd = ctx.createRadialGradient(W * 0.5, H * 0.35, 0, W * 0.5, H * 0.35, W * 0.7);
-  grd.addColorStop(0, 'rgba(185,28,28,0.22)');
-  grd.addColorStop(1, 'rgba(20,18,16,0)');
+  grd.addColorStop(0, pal.glow);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, W, H);
 
-  // Soft parchment frame
-  ctx.strokeStyle = 'rgba(237,232,224,0.12)';
+  ctx.strokeStyle = pal.frame;
   ctx.lineWidth = 2;
   ctx.strokeRect(64, 64, W - 128, H - 128);
 
   if (shareState.theme) {
     ctx.font = '600 28px Figtree, sans-serif';
-    ctx.fillStyle = 'rgba(237,232,224,0.45)';
+    ctx.fillStyle = pal.theme;
     ctx.textAlign = 'center';
     const themeLabel = String(shareState.theme).toUpperCase();
     ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, 140);
@@ -1213,7 +1317,6 @@ function drawShareCard() {
     lineH = Math.round(fontSize * 1.38);
   } while (fontSize > 28);
 
-  // Truncate extremely long quotes with ellipsis on last visible line
   const maxLines = Math.max(1, Math.floor(620 / Math.max(lineH, 1)));
   if (lines.length > maxLines) {
     lines = lines.slice(0, maxLines);
@@ -1223,21 +1326,21 @@ function drawShareCard() {
   }
   if (!lines.length) lines = ['"…"'];
 
-  ctx.fillStyle = '#B91C1C';
+  ctx.fillStyle = pal.quote;
   ctx.textAlign = 'center';
   let y = 260 + Math.max(0, (maxLines - lines.length) * (lineH / 2));
   lines.forEach(ln => { ctx.fillText(ln, W / 2, y); y += lineH; });
 
   ctx.font = '700 36px Figtree, sans-serif';
-  ctx.fillStyle = '#C4A35A';
+  ctx.fillStyle = pal.verse;
   const verse = String(shareState.verse || '');
   ctx.fillText(verse.length > 48 ? verse.slice(0, 46) + '…' : verse, W / 2, H - 260);
 
   ctx.font = '800 54px Fraunces, Georgia, serif';
-  ctx.fillStyle = '#EDE8E0';
+  ctx.fillStyle = pal.brand;
   ctx.fillText('RED LETTER', W / 2, H - 160);
   ctx.font = '400 26px Figtree, sans-serif';
-  ctx.fillStyle = 'rgba(237,232,224,0.5)';
+  ctx.fillStyle = pal.tag;
   ctx.fillText('the words Jesus spoke', W / 2, H - 110);
 }
 
