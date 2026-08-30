@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -101,32 +101,7 @@ html { -webkit-text-size-adjust: 100%; }
   --shadow-3: 0 4px 20px rgba(0,0,0,.4);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:          #1F1A16;
-    --bg-2:        #261F1A;
-    --surface:     #2A231C;
-    --surface-2:   #322A22;
-    --border:      rgba(240,232,216,.10);
-    --border-2:    rgba(240,232,216,.16);
-    --crimson:     #C84040;
-    --crimson-dk:  #5A1010;
-    --crimson-lt:  #E05050;
-    --crimson-pale:#1C1010;
-    --gold:        #C8981A;
-    --gold-lt:     #E0B030;
-    --gold-pale:   #181408;
-    --gold-border: #8B6914;
-    --streak:      #E07020;
-    --text-1:      #F0E8D8;
-    --text-2:      #C0B09A;
-    --text-3:      #8A7A68;
-    --text-4:      #6A5A4A;
-    --shadow-1: 0 1px 3px rgba(0,0,0,.3);
-    --shadow-2: 0 2px 8px rgba(0,0,0,.35);
-    --shadow-3: 0 4px 20px rgba(0,0,0,.4);
-  }
-}
+/* Night paper is opt-in (Settings). OS dark mode must not turn the Quiet Page into a chapel. */
 
 /* Font size scale */
 :root[data-fs="sm"] { --scale: 0.88; }
@@ -300,7 +275,8 @@ textarea { font-family: var(--font-ui); }
 ═══════════════════════════════════════════════════════════════════════════ */
 .onboarding {
   position: fixed; inset: 0;
-  background: linear-gradient(160deg, #5C0F0F 0%, #2A0606 50%, #1A0404 100%);
+  background: #F6F3EC;
+  color: #1C1612;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -2161,7 +2137,7 @@ body::before {
   <h1 class="ob-title">A quiet page<br>for His words</h1>
   <p class="ob-sub">Guidance, encouragement, and a daily sentence drawn only from what Jesus said.</p>
   <blockquote class="ob-quote">“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”<cite>Matthew 11:28</cite></blockquote>
-  <p class="ob-note" style="margin-bottom:10px">What brings you here?</p>
+  <p class="ob-note" style="margin-bottom:10px">What brings you here? Optional.</p>
   <div class="intent-grid" id="intent-grid">
     <button type="button" class="intent-chip" data-intent="peace" onclick="selectIntent(this)">Peace</button>
     <button type="button" class="intent-chip" data-intent="guidance" onclick="selectIntent(this)">Guidance</button>
@@ -2384,12 +2360,12 @@ body::before {
       <div class="chat-scroll" id="chat-scroll">
         <div class="page-hd" style="padding-bottom:10px">
           <div class="page-hd-eyebrow">Ask anything</div>
-          <h1 class="page-hd-title">Ask <em>Him</em></h1>
+          <h1 class="page-hd-title">Ask for <em>His words</em></h1>
         </div>
         <div class="crisis-bar">In crisis? Call or text <a href="tel:988">988</a> (US). This app offers reflection — not pastoral counseling or emergency care.</div>
         <div class="advisor-welcome">
-          <div class="advisor-welcome-title">Only the Words of Jesus</div>
-          <div class="advisor-welcome-text">Every response is drawn from his direct speech in Matthew, Mark, Luke, and John — every verse cited.</div>
+          <div class="advisor-welcome-title">A guide, not His voice</div>
+          <div class="advisor-welcome-text">Every response is drawn from His direct speech in Matthew, Mark, Luke, and John — every verse cited. This page is not Jesus.</div>
         </div>
         <div class="chat-toolbar">
           <button type="button" class="chat-tool-btn" onclick="newChat()">New conversation</button>
@@ -2645,6 +2621,7 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
    INIT
 ═══════════════════════════════════════════════════════════════════════════ */
 (function init() {
+  applySettings();
   const onboarded = ls('rla-onboarded');
   const ob = document.getElementById('onboarding');
   if (!onboarded) {
@@ -2701,12 +2678,21 @@ function switchTab(tab) {
 /* ═══════════════════════════════════════════════════════════════════════════
    DATE + STREAK
 ═══════════════════════════════════════════════════════════════════════════ */
-function todayStr() { return new Date().toISOString().slice(0, 10); }
+function pad2(n) { return String(n).padStart(2, '0'); }
+function todayStr(d) {
+  const n = d || new Date();
+  return n.getFullYear() + '-' + pad2(n.getMonth() + 1) + '-' + pad2(n.getDate());
+}
+function yesterdayStr() {
+  const n = new Date();
+  n.setDate(n.getDate() - 1);
+  return todayStr(n);
+}
 
 function updateStreak() {
   const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
   const today = todayStr();
-  const yest  = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const yest  = yesterdayStr();
   let count;
   if (raw.date === today) {
     count = raw.count;
@@ -3130,12 +3116,10 @@ function setFs(size) {
 }
 
 function applySettings() {
-  // Dark mode
-  const dark = ls('rla-dark');
-  if (dark !== null) {
-    document.documentElement.dataset.theme = dark === '1' ? 'dark' : 'light';
-    document.getElementById('dark-toggle').checked = dark === '1';
-  }
+  const dark = ls('rla-dark') === '1';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const darkToggle = document.getElementById('dark-toggle');
+  if (darkToggle) darkToggle.checked = dark;
   // Font size
   const fs = ls('rla-fs') || 'md';
   document.documentElement.dataset.fs = fs;
@@ -3280,7 +3264,9 @@ function pathList() {
 }
 
 function tomorrowStr() {
-  return new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const n = new Date();
+  n.setDate(n.getDate() + 1);
+  return todayStr(n);
 }
 
 function resolvePathDay() {

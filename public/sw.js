@@ -1,4 +1,4 @@
-const CACHE = 'rla-v17-merge';
+const CACHE = 'rla-v18-qa';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -96,7 +96,8 @@ self.addEventListener('periodicsync', (e) => {
     caches.open('rla-prefs').then((c) => c.match('/__prefs')).then((res) => {
       if (!res) return;
       return res.json().then((prefs) => {
-        const today = new Date().toISOString().slice(0, 10);
+        const now = new Date();
+        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
         if (!prefs || prefs.lastLectio === today) return;
         const hour = new Date().getHours();
         if (hour < Number(prefs.quietHour || 7)) return;

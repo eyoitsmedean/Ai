@@ -1,6 +1,6 @@
 {
   "name": "red-letter-advisor",
-  "version": "1.0.0",
+  "version": "3.0.1",
   "description": "Red Letter Advisor — daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
   "main": "server.js",
   "scripts": {

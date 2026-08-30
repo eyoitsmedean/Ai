@@ -147,6 +147,15 @@ function buildVerseCatalog() {
   }
 
   (corpus.verses || []).forEach((item) => register(item.verse, item.quote, item.theme));
+  (corpus.passages || []).forEach((item) => {
+    const theme = Array.isArray(item.theme) ? item.theme[0] : item.theme;
+    register(item.verse, item.text || item.quote, theme);
+  });
+  (letters.passages || []).forEach((p) => {
+    const cite = typeof letters.cite === 'function' ? letters.cite(p) : `${p.book} ${p.chapter}:${p.verseStart}`;
+    const theme = Array.isArray(p.theme) ? p.theme[0] : p.theme;
+    register(cite, p.text, theme);
+  });
   (corpus.daily || []).forEach((day) => {
     if (day.affirmation) register(day.affirmation.verse, day.affirmation.quote, day.word && day.word.theme);
     if (day.word) register(day.word.verse, day.word.passage, day.word.theme);
@@ -388,13 +397,19 @@ app.get('/welcome', (_req, res) => {
 });
 
 app.get('/api/health', (_req, res) => {
+  const corpus = loadCorpus();
+  const chapelLoaded = Boolean(
+    (corpus.passages && corpus.passages.length) ||
+    (corpus.daily && corpus.daily.length) ||
+    (corpus.verses && corpus.verses.length)
+  );
   res.json({
     ok: true,
     model: MODEL,
     llm: !!client,
-    corpus: Boolean(loadCorpus().daily || loadCorpus().verses),
+    corpus: chapelLoaded,
     corpusPassages: (letters.passages || []).length,
-    version: '3.0.0',
+    version: require('./package.json').version,
   });
 });
 

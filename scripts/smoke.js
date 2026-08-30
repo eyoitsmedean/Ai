@@ -34,6 +34,7 @@ async function main() {
   await check('health', async () => {
     const { res, json } = await req('/api/health');
     assert(res.ok && json.ok, 'health not ok');
+    assert(json.corpus === true, 'chapel corpus should report loaded');
     assert(json.corpusPassages >= 40, 'corpus too small: ' + json.corpusPassages);
     assert(json.llm === false || json.llm === true, 'llm flag missing');
   });
@@ -69,6 +70,19 @@ async function main() {
     assert(json.results?.[0]?.verified, 'Matthew 11:28 not sealed');
   });
 
+  await check('verify WEB John 14:27', async () => {
+    const { json } = await req('/api/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        citations: [{
+          verse: 'John 14:27',
+          quote: 'Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don’t let your heart be troubled, neither let it be fearful.',
+        }],
+      }),
+    });
+    assert(json.results?.[0]?.verified, 'WEB John 14:27 not sealed');
+  });
+
   await check('library Mark filter', async () => {
     const { json } = await req('/api/library?book=Mark');
     assert(Array.isArray(json.books) && json.books.includes('Mark'), 'missing books');
@@ -94,6 +108,7 @@ async function main() {
     assert(res.ok, 'welcome not 200');
     assert(/Red Letter/i.test(text) && text.includes('988'), 'welcome missing brand/trust');
     assert(text.includes('href="/"'), 'welcome missing Open the Advisor');
+    assert(!/Plus launches|unlock Plus|Red Letter Plus/i.test(text), 'welcome must not sell a paywall');
   });
 
   await check('Quiet Page shell', async () => {
@@ -106,6 +121,9 @@ async function main() {
     assert(text.includes('id="amen"'), 'missing Amen');
     assert(text.includes('crisis.js'), 'missing crisis');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
+    assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
+    assert(/data-theme="light"/.test(text), 'paper is the default theme');
+    assert(!/prefers-color-scheme:\s*dark/.test(text), 'OS dark mode must not restyle the page');
   });
 
   if (fails.length) {
