@@ -6,11 +6,11 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 
 ## The room
 
-- **Today** — a morning affirmation and word of the day, quoted in crimson
-- **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying in the four Gospels
-- **Sit** — read a saying, rest one minute, reply with one sentence
-- **Advisor** — a short correspondence; scripture is verified against a Gospel corpus before the letter is written on the page
-- **Journal** — a commonplace book kept on this device
+- **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
+- **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
+- **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence
+- **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
+- **Journal** — a commonplace book kept on this device, with a quire of words you have sat with
 
 Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts the spoken corpus text, so the model never types the verse. Daily and encouragement JSON are requested as structured output, then verified the same way.
 

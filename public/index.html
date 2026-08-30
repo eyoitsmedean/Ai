@@ -98,6 +98,24 @@ textarea { font-family: var(--body); }
   white-space: nowrap;
   border: 0;
 }
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 100;
+  padding: 8px 12px;
+  background: var(--crimson);
+  color: #FBF7EE;
+  transform: translateY(-140%);
+}
+.skip-link:focus { transform: none; }
+.hearing .folio { filter: saturate(.92); }
+.hear-now {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+  margin: 0 0 18px;
+}
 
 .grain {
   pointer-events: none;
@@ -1254,6 +1272,7 @@ textarea { font-family: var(--body); }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#today-page">Skip to the folio</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="wash" aria-hidden="true"></div>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
@@ -1336,6 +1355,10 @@ textarea { font-family: var(--body); }
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
+        <p class="hear-now" id="hear-status" hidden>Listening</p>
+        <div class="actions" style="margin-bottom:22px">
+          <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
+        </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
 
         <aside class="epigraph" id="epigraph" hidden>
@@ -1384,7 +1407,7 @@ textarea { font-family: var(--body); }
         </section>
 
         <section class="movement vespers" id="vespers-card" hidden>
-          <p class="eyebrow">Vespers</p>
+          <p class="eyebrow" id="vespers-kicker">Vespers</p>
           <h2 class="vespers-prompt" id="vespers-prompt">What are you laying down?</h2>
           <p class="red-letter" id="vespers-quote"></p>
           <p class="cite" id="vespers-cite"></p>
@@ -1613,6 +1636,13 @@ textarea { font-family: var(--body); }
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Keep this room</div>
+      <div class="setting-sub">Add Red Letter to the home screen</div>
+    </div>
+    <button class="ghost" type="button" id="install-btn" onclick="promptInstall()">Keep</button>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">Type size</div>
       <div class="setting-sub">Comfort for long reading</div>
     </div>
@@ -1815,8 +1845,10 @@ function startApp() {
   paintCatchword();
   paintEpigraph();
   loadDailyContent();
+  restoreLetters();
   bindRituals();
   checkMorningReminder();
+  paintInstallState();
 }
 
 function switchTab(tab) {
@@ -1835,6 +1867,7 @@ function switchTab(tab) {
   }
   const subs = { today: 'Today', seek: 'Seek', advisor: 'Advisor', journal: 'Journal' };
   document.getElementById('header-sub').textContent = subs[tab];
+  document.title = 'Red Letter — ' + subs[tab];
   if (tab === 'journal') renderJournal();
   if (tab === 'seek' && seekMode === 'letters' && !libLoaded) loadLibraryPage(true);
 }
@@ -1945,16 +1978,30 @@ function renderWeekRibbon() {
   }
 }
 
+function isNightOffice() {
+  const h = new Date().getHours();
+  return h >= 21 || h < 6;
+}
 function isEveningOffice() {
   const h = new Date().getHours();
   return h >= 17 || h < 6;
 }
+function officeName() {
+  if (isNightOffice()) return 'Compline';
+  if (isEveningOffice()) return 'Vespers';
+  const h = new Date().getHours();
+  return h < 12 ? 'Morning' : 'Afternoon';
+}
 function updateDateUI() {
   const now = new Date();
-  const h = now.getHours();
   const evening = isEveningOffice();
-  document.getElementById('today-greeting').textContent = evening ? 'Vespers' : h < 12 ? 'Morning' : 'Afternoon';
-  document.getElementById('today-title').innerHTML = evening ? 'Evening <em>office</em>' : 'Today’s <em>light</em>';
+  const night = isNightOffice();
+  document.getElementById('today-greeting').textContent = officeName();
+  document.getElementById('today-title').innerHTML = night
+    ? 'Night <em>office</em>'
+    : evening
+      ? 'Evening <em>office</em>'
+      : 'Today’s <em>light</em>';
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('vespers-card').hidden = !evening;
   if (evening) paintVespers();
@@ -2324,15 +2371,13 @@ function sitWith(type) {
   sitPayload = payload;
   sitStep = 1;
   closeSettings();
+  openSheetChrome('sit-sheet');
   document.getElementById('sit-kicker').textContent = payload.kicker || 'A saying';
   document.getElementById('sit-quote').textContent = payload.quote;
   document.getElementById('sit-quote-rest').textContent = payload.quote;
   document.getElementById('sit-cite').textContent = (payload.verse || '') + '  ·  KJV';
   document.getElementById('sit-reply').value = '';
   showSitStep(1);
-  document.getElementById('overlay').classList.add('on');
-  document.getElementById('sit-sheet').classList.add('on');
-  document.getElementById('sit-sheet').focus?.();
 }
 
 function showSitStep(n) {
@@ -2423,12 +2468,34 @@ function closeSit() {
   hideOverlayIfIdle();
 }
 
+let sheetTrigger = null;
 function anySheetOn() {
   return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
     .some((id) => document.getElementById(id)?.classList.contains('on'));
 }
+function focusables(root) {
+  return [...root.querySelectorAll('button, [href], input, select, textarea')]
+    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+}
+function openSheetChrome(id) {
+  if (!sheetTrigger) sheetTrigger = document.activeElement;
+  const app = document.getElementById('app');
+  if (app) app.inert = true;
+  document.getElementById('overlay').classList.add('on');
+  const sheet = document.getElementById(id);
+  sheet.classList.add('on');
+  const first = focusables(sheet)[0];
+  if (first) setTimeout(() => first.focus(), 40);
+}
 function hideOverlayIfIdle() {
-  if (!anySheetOn()) document.getElementById('overlay').classList.remove('on');
+  if (anySheetOn()) return;
+  document.getElementById('overlay').classList.remove('on');
+  const app = document.getElementById('app');
+  if (app) app.inert = false;
+  if (sheetTrigger && typeof sheetTrigger.focus === 'function') {
+    try { sheetTrigger.focus(); } catch (_) {}
+  }
+  sheetTrigger = null;
 }
 function closeSheets() {
   closeSit();
@@ -2457,6 +2524,30 @@ function bumpChat() {
   const next = { d: todayStr(), n: chatsToday().n + 1 };
   lsSet('rla-chats', JSON.stringify(next));
   return next.n;
+}
+function persistLetters() {
+  lsSet('rla-letters-' + todayStr(), JSON.stringify({ messages: chatHistory }));
+}
+function restoreLetters() {
+  const saved = parseJSON(ls('rla-letters-' + todayStr()), null);
+  const msgs = document.getElementById('chat-messages');
+  if (!saved || !Array.isArray(saved.messages) || !saved.messages.length || !msgs) return;
+  chatHistory = saved.messages.filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+  msgs.innerHTML = '';
+  chatHistory.forEach((m) => {
+    if (m.role === 'user') addBubble('user', m.content);
+    else {
+      const stream = createStreamBubble();
+      updateStreamBubble(stream, m.content);
+      addSaveToChatBubble(stream, m.content, 'A letter');
+      sealLetter(stream.bubble);
+    }
+  });
+  document.getElementById('suggestions').style.display = 'none';
+  if (chatsToday().n >= FREE_CHATS) {
+    document.getElementById('chat-gate').classList.add('on');
+    setComposerEnabled(false);
+  }
 }
 
 function useSuggestion(btn) {
@@ -2540,6 +2631,7 @@ async function sendMsg(preset) {
     if (!fullText.trim()) throw new Error('empty');
     bumpChat();
     chatHistory.push({ role: 'assistant', content: fullText });
+    persistLetters();
     addSaveToChatBubble(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
@@ -2556,6 +2648,7 @@ async function sendMsg(preset) {
     ].join('\n');
     updateStreamBubble(aiBubble, fallback);
     chatHistory.push({ role: 'assistant', content: fallback });
+    persistLetters();
     addSaveToChatBubble(aiBubble, fallback, text);
   } finally {
     isChatBusy = false;
@@ -2699,8 +2792,7 @@ function openShareSheet(type) {
   closeSit();
   closeSettings();
   closeBlessing();
-  document.getElementById('overlay').classList.add('on');
-  document.getElementById('share-sheet').classList.add('on');
+  openSheetChrome('share-sheet');
 }
 function closeShareSheet() {
   document.getElementById('share-sheet').classList.remove('on');
@@ -2824,8 +2916,9 @@ async function shareItem(type, style) {
 
 function openSettings() {
   closeSit();
-  document.getElementById('overlay').classList.add('on');
-  document.getElementById('settings-sheet').classList.add('on');
+  closeBlessing();
+  closeShareSheet();
+  openSheetChrome('settings-sheet');
 }
 function closeSettings() {
   document.getElementById('settings-sheet').classList.remove('on');
@@ -3022,7 +3115,11 @@ function paintVespers() {
   const card = document.getElementById('vespers-card');
   if (!card || card.hidden) return;
   const saying = vespersSaying();
-  document.getElementById('vespers-prompt').textContent = vespersPrompt();
+  const night = isNightOffice();
+  document.getElementById('vespers-kicker').textContent = night ? 'Compline' : 'Vespers';
+  document.getElementById('vespers-prompt').textContent = night
+    ? 'What will you leave in His hands?'
+    : vespersPrompt();
   document.getElementById('vespers-quote').textContent = saying.quote;
   document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
 }
@@ -3111,6 +3208,7 @@ function toggleSitListen() {
     return;
   }
   if (sitSpeaking) { stopSitListen(); return; }
+  stopHearOffice();
   const quote = (sitPayload && sitPayload.quote) || '';
   const verse = (sitPayload && sitPayload.verse) || '';
   sitUtterance = new SpeechSynthesisUtterance((quote + '. ' + verse).replace(/[“”]/g, ''));
@@ -3124,6 +3222,94 @@ function toggleSitListen() {
     btn.setAttribute('aria-pressed', 'true');
   }
   window.speechSynthesis.speak(sitUtterance);
+}
+
+let officeSpeaking = false;
+function stopHearOffice() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  officeSpeaking = false;
+  sitSpeaking = false;
+  document.documentElement.classList.remove('hearing');
+  const btn = document.getElementById('hear-office');
+  const status = document.getElementById('hear-status');
+  if (btn) {
+    btn.textContent = 'Hear this office';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+  if (status) status.hidden = true;
+}
+function officeScript() {
+  const parts = [];
+  parts.push(officeName() + '.');
+  if (dailyData && dailyData.affirmation) {
+    parts.push(dailyData.affirmation.text);
+    parts.push(dailyData.affirmation.quote);
+    parts.push(dailyData.affirmation.verse);
+  }
+  if (dailyData && dailyData.word) {
+    parts.push(dailyData.word.passage);
+    parts.push(dailyData.word.verse);
+  }
+  if (isEveningOffice()) {
+    const saying = vespersSaying();
+    parts.push(isNightOffice() ? 'Compline.' : 'Vespers.');
+    parts.push(document.getElementById('vespers-prompt')?.textContent || vespersPrompt());
+    parts.push(saying.quote);
+    parts.push(saying.verse);
+  }
+  return parts.filter(Boolean).join(' ');
+}
+function toggleHearOffice() {
+  if (!window.speechSynthesis) {
+    showToast('Listening isn’t available on this device');
+    return;
+  }
+  if (officeSpeaking) { stopHearOffice(); return; }
+  stopSitListen();
+  const text = officeScript();
+  if (!text.trim()) { showToast('The office is still being set.'); return; }
+  const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
+  utter.rate = 0.88;
+  utter.onend = () => stopHearOffice();
+  utter.onerror = () => stopHearOffice();
+  officeSpeaking = true;
+  document.documentElement.classList.add('hearing');
+  const btn = document.getElementById('hear-office');
+  const status = document.getElementById('hear-status');
+  if (btn) {
+    btn.textContent = 'Pause the office';
+    btn.setAttribute('aria-pressed', 'true');
+  }
+  if (status) {
+    status.hidden = false;
+    status.textContent = 'Listening — the page can rest';
+  }
+  window.speechSynthesis.speak(utter);
+}
+
+let deferredInstall = null;
+function paintInstallState() {
+  const btn = document.getElementById('install-btn');
+  if (!btn) return;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (standalone) {
+    btn.textContent = 'Kept';
+    btn.disabled = true;
+    return;
+  }
+  btn.disabled = !deferredInstall;
+  btn.textContent = deferredInstall ? 'Keep' : 'Use the browser menu';
+}
+async function promptInstall() {
+  if (!deferredInstall) {
+    showToast('Use your browser menu to add this room to the home screen');
+    return;
+  }
+  deferredInstall.prompt();
+  const choice = await deferredInstall.userChoice;
+  deferredInstall = null;
+  paintInstallState();
+  showToast(choice.outcome === 'accepted' ? 'The room will wait on the home screen' : 'You can keep the room later');
 }
 
 async function blessingSeeds() {
@@ -3151,8 +3337,7 @@ async function openBlessing(seed) {
   blessingPick = seed || picks[0] || null;
   renderBlessingList(picks);
   updateBlessingPreview();
-  document.getElementById('overlay').classList.add('on');
-  document.getElementById('blessing-sheet').classList.add('on');
+  openSheetChrome('blessing-sheet');
 }
 function closeBlessing() {
   document.getElementById('blessing-sheet').classList.remove('on');
@@ -3205,6 +3390,7 @@ const COMMANDS = [
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
@@ -3364,6 +3550,34 @@ function bindRituals() {
   setOfflineBanner();
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
   setInterval(checkMorningReminder, 5 * 60 * 1000);
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstall = e;
+    paintInstallState();
+  });
+  window.addEventListener('appinstalled', () => {
+    deferredInstall = null;
+    paintInstallState();
+    showToast('The room is on this device');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab' || !anySheetOn()) return;
+    const open = ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
+      .map((id) => document.getElementById(id))
+      .find((el) => el && el.classList.contains('on'));
+    if (!open) return;
+    const list = focusables(open);
+    if (!list.length) return;
+    const first = list[0];
+    const last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
 }
 
 if ('serviceWorker' in navigator) {
