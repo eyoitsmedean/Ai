@@ -1775,7 +1775,7 @@ body::before {
 }
 .offline-banner.on { display: block; }
 .amen {
-  position: fixed; inset: 0; z-index: 130;
+  position: fixed; inset: 0; z-index: 400;
   display: none;
   align-items: center;
   justify-content: center;
@@ -3625,12 +3625,14 @@ function keepLine(e) {
 function showAmen() {
   const el = document.getElementById('amen');
   if (!el) return;
-  el.classList.add('on');
-  el.setAttribute('aria-hidden', 'false');
-  setTimeout(function () {
-    el.classList.remove('on');
-    el.setAttribute('aria-hidden', 'true');
-  }, 1800);
+  requestAnimationFrame(function () {
+    el.classList.add('on');
+    el.setAttribute('aria-hidden', 'false');
+    setTimeout(function () {
+      el.classList.remove('on');
+      el.setAttribute('aria-hidden', 'true');
+    }, 2400);
+  });
 }
 
 window.addEventListener('beforeinstallprompt', function (e) {
