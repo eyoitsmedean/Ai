@@ -113,9 +113,9 @@ A cream page. One rubricated sentence from Matthew 11:28. Four quiet intents (Pe
 
 ### Today
 Running head. Date in small caps. A greeting, then a title with one italic word.  
-The **letterpress plate** (affirmation).  
-Then the Word — a page of type, not a widget.  
-**Take this slowly** opens lectio: Read → Reflect → Rest → Respond.  
+**The Word is the page** — one glance, one verb: *Take this slowly*.  
+Letterpress affirmation sits underneath, not in front of the ritual.  
+A path of beads (Seven or Forty) advances only when they have sat. Missing a day never skips a room.  
 A grace line. Two verbs: *Ask* / *Seek*.  
 Disclaimer in the voice of a colophon.
 
@@ -137,7 +137,7 @@ A square as careful as a title page: crimson field, Fraunces quote, verse in sma
 
 These are the ideas that keep a studio busy for years. Each one stays simple to *use*.
 
-1. **Seasonal paper.** **Shipped as a church-year engine.** Advent cools. Lent strips. Easter lifts. Christmas warms. Ordinary time stays the Quiet Page. A colophon names the season; the type does not panic.
+1. **Seasonal paper.** **Shipped as a church-year engine.** Advent cools. Lent strips. Easter lifts. Christmas warms. Ordinary time stays the Quiet Page. A colophon names the season; the type does not panic. **Forty** is the longer named path (Lent, or after Seven). Days unlock after sitting, not after the calendar punishes you.
 2. **Verse atelier.** **Shipped.** Three papers — Rubric, Paper, Lamp — no stock sunsets. A blessing that arrives as an image, not a screenshot of UI.
 3. **Lectio in four taps.** **Shipped.** Read / Reflect / Rest / Respond — one red-letter per step. Rest is twenty seconds. Respond writes the commonplace. No timer guilt.
 4. **Commonplace book.** **Begun.** Compose a line anytime. Lectio, Today, Seek, and Advisor all keep slips. Local-first. Export Markdown. Titled pages and backlinks can still grow.

@@ -2037,6 +2037,88 @@ body::before {
   color: var(--text-3);
 }
 .trust-seal.ok { color: var(--crimson); }
+:focus-visible {
+  outline: 2px solid rgba(143,29,29,.45);
+  outline-offset: 3px;
+}
+.skip-link {
+  position: absolute;
+  left: 12px; top: 8px;
+  z-index: 600;
+  padding: 8px 12px;
+  background: var(--surface);
+  color: var(--text-1);
+  border-radius: 8px;
+  transform: translateY(-140%);
+}
+.skip-link:focus { transform: none; }
+.path-beads {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 4px 0 10px;
+}
+.path-bead {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(28,22,18,.22);
+  background: transparent;
+}
+.path-bead.done { background: rgba(143,29,29,.35); border-color: transparent; }
+.path-bead.now { background: var(--crimson); border-color: var(--crimson); }
+.path-close {
+  position: fixed; inset: 0; z-index: 145;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 28px;
+  background: #F6F3EC;
+  text-align: center;
+}
+.path-close.on { display: flex; }
+:root[data-theme="dark"] .path-close { background: #1F1A16; }
+.path-close h2 {
+  font-family: var(--font-disp);
+  font-size: clamp(28px, 7vw, 36px);
+  letter-spacing: -.03em;
+  margin: 12px 0 10px;
+}
+.path-close p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 28ch;
+  margin-bottom: 22px;
+}
+.sit-with-btn {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  color: var(--crimson);
+  cursor: pointer;
+}
+.quiet-row { display: flex; align-items: center; gap: 10px; }
+.quiet-row select {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-1);
+}
+.resume-slip {
+  margin: 0 18px 12px;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-2);
+}
 @media (prefers-reduced-motion: reduce) {
   .sit-breath { animation: none; }
   .sit-overlay.on .sit-progress i { animation: none; width: 100%; }
@@ -2069,6 +2151,7 @@ body::before {
 </style>
 </head>
 <body>
+<a class="skip-link" href="#today-page">Skip to the page</a>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — saved readings remain available.</div>
 
 <!-- ════════ ONBOARDING ════════ -->
@@ -2125,44 +2208,16 @@ body::before {
         <div class="page-hd-eyebrow" id="today-greeting">Good morning</div>
         <h1 class="page-hd-title">Today’s <em>light</em></h1>
         <p class="path-rail" id="path-rail" hidden></p>
+        <div class="path-beads" id="path-beads" hidden></div>
       </div>
+      <p class="resume-slip" id="resume-slip" hidden>
+        <button type="button" class="sit-verb" style="margin-top:0" onclick="resumeLectio()">Continue where you left the sentence</button>
+      </p>
       <aside class="flyleaf" id="flyleaf" hidden>
         <p class="flyleaf-kicker">You are carrying</p>
         <p class="flyleaf-line" id="flyleaf-line"></p>
         <p class="flyleaf-cite" id="flyleaf-cite"></p>
       </aside>
-
-      <div class="section-label">Daily Affirmation</div>
-      <div class="card card-crimson" id="aff-card">
-        <div class="card-body">
-          <div class="badge badge-white" style="margin-bottom:12px">For this day</div>
-          <!-- skeleton -->
-          <div id="aff-skel">
-            <div class="skel skel-wh sl h f"></div>
-            <div class="skel skel-wh sl l" style="margin-top:2px"></div>
-            <div class="skel skel-wh sl m" style="margin-bottom:14px"></div>
-            <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:14px"></div>
-            <div class="skel skel-wh sl s" style="height:12px"></div>
-          </div>
-          <!-- content -->
-          <div id="aff-content" style="display:none">
-            <div class="aff-text" id="aff-text"></div>
-            <div class="aff-divider"></div>
-            <div class="aff-quote" id="aff-quote"></div>
-            <div class="aff-verse" id="aff-verse"></div>
-            <div class="card-actions">
-              <button class="action-btn" id="aff-save-btn" onclick="toggleSave('aff')">
-                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-                <span id="aff-save-label">Save</span>
-              </button>
-              <button class="action-btn" onclick="openShareCard('aff')">
-                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="section-label">Word of the Day</div>
       <div class="card" id="word-card">
@@ -2204,6 +2259,36 @@ body::before {
                 Share
               </button>
               <button class="action-btn-dark" type="button" onclick="openBlessing('word')">Bless someone</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">For this day</div>
+      <div class="card card-crimson" id="aff-card">
+        <div class="card-body">
+          <div class="badge badge-white" style="margin-bottom:12px">Letterpress</div>
+          <div id="aff-skel">
+            <div class="skel skel-wh sl h f"></div>
+            <div class="skel skel-wh sl l" style="margin-top:2px"></div>
+            <div class="skel skel-wh sl m" style="margin-bottom:14px"></div>
+            <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:14px"></div>
+            <div class="skel skel-wh sl s" style="height:12px"></div>
+          </div>
+          <div id="aff-content" style="display:none">
+            <div class="aff-text" id="aff-text"></div>
+            <div class="aff-divider"></div>
+            <div class="aff-quote" id="aff-quote"></div>
+            <div class="aff-verse" id="aff-verse"></div>
+            <div class="card-actions">
+              <button class="action-btn" id="aff-save-btn" onclick="toggleSave('aff')">
+                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                <span id="aff-save-label">Save</span>
+              </button>
+              <button class="action-btn" onclick="openShareCard('aff')">
+                <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                Share
+              </button>
             </div>
           </div>
         </div>
@@ -2405,6 +2490,24 @@ body::before {
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Quiet hour</div>
+      <div class="setting-sub">The page expects you then. Missing it is never a failure.</div>
+    </div>
+    <div class="quiet-row">
+      <select id="quiet-hour-select" onchange="saveQuietHour(this.value)" aria-label="Quiet hour">
+        <option value="">Off</option>
+        <option value="6">6:00</option>
+        <option value="7">7:00</option>
+        <option value="8">8:00</option>
+        <option value="9">9:00</option>
+        <option value="12">12:00</option>
+        <option value="17">17:00</option>
+        <option value="20">20:00</option>
+      </select>
+    </div>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">Text Size</div>
       <div class="setting-sub">Adjust reading comfort</div>
     </div>
@@ -2510,10 +2613,20 @@ body::before {
   </div>
 </div>
 
+<div class="path-close" id="path-close" aria-hidden="true">
+  <div class="folio-mark" aria-hidden="true">R</div>
+  <h2 id="path-close-title">You kept seven mornings</h2>
+  <p id="path-close-body">The last word is presence, not a score. Begin again, or take the longer path.</p>
+  <button type="button" class="lectio-next" onclick="beginPath('seven'); closePathClose();">Begin Seven Days again</button>
+  <button type="button" class="hear-verb" style="margin-top:18px" onclick="beginPath('forty'); closePathClose();">Begin Forty</button>
+  <button type="button" class="lectio-skip" onclick="closePathClose()">Rest here</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
+<script src="/data/paths.js"></script>
 <script src="/js/crisis.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2546,6 +2659,8 @@ function completeOnboarding() {
   lsSet('rla-onboarded', '1');
   lsSet('rla-first-lectio', 'pending');
   if (!ls('rla-path-start')) lsSet('rla-path-start', todayStr());
+  if (!ls('rla-path-day')) lsSet('rla-path-day', '1');
+  if (!ls('rla-path-kind')) lsSet('rla-path-kind', 'seven');
   document.getElementById('onboarding').classList.add('hidden');
   startApp();
   let tries = 0;
@@ -2563,6 +2678,8 @@ function startApp() {
   updateDateUI();
   loadDailyContent();
   renderFlyleaf();
+  renderResumeSlip();
+  registerQuietSync();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2856,6 +2973,12 @@ function addSaveToChatBubble({ wrap }, text, question) {
     saveBtn.disabled = true;
   };
   wrap.appendChild(saveBtn);
+  const sit = document.createElement('button');
+  sit.className = 'sit-with-btn';
+  sit.type = 'button';
+  sit.textContent = 'Sit with this';
+  sit.onclick = function () { sitWithAdvisor(text); };
+  wrap.appendChild(sit);
 }
 
 function scrollChat() {
@@ -3020,6 +3143,8 @@ function applySettings() {
     const btn = document.getElementById('fs-' + s);
     if (btn) btn.classList.toggle('active', s === fs);
   });
+  const qh = document.getElementById('quiet-hour-select');
+  if (qh) qh.value = ls('rla-quiet-hour') || '';
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3146,33 +3271,81 @@ function curatedEncFallback(theme) {
 
 let lastDailyRaw = null;
 
-function pathDayNumber() {
-  const start = ls('rla-path-start');
-  if (!start) return 0;
-  const a = new Date(start + 'T12:00:00').getTime();
-  const b = new Date(todayStr() + 'T12:00:00').getTime();
-  return Math.floor((b - a) / 86400000) + 1;
+function pathKind() {
+  return ls('rla-path-kind') || 'seven';
 }
 
-function beginSevenDays() {
+function pathList() {
+  return (typeof window.RLA_pathList === 'function' ? window.RLA_pathList(pathKind()) : window.RLA_SEVEN) || [];
+}
+
+function tomorrowStr() {
+  return new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+}
+
+function resolvePathDay() {
+  if (!ls('rla-path-start')) return 0;
+  const list = pathList();
+  let d = parseInt(ls('rla-path-day') || '1', 10);
+  if (!Number.isFinite(d) || d < 1) d = 1;
+  const unlock = ls('rla-path-unlock');
+  if (unlock && todayStr() >= unlock && d <= list.length) {
+    d += 1;
+    lsSet('rla-path-day', String(d));
+    lsSet('rla-path-unlock', '');
+  }
+  return d;
+}
+
+function beginPath(kind) {
+  lsSet('rla-path-kind', kind || 'seven');
   lsSet('rla-path-start', todayStr());
+  lsSet('rla-path-day', '1');
+  lsSet('rla-path-unlock', '');
   if (lastDailyRaw) applyDailyToUI(lastDailyRaw);
 }
 
+function beginSevenDays() { beginPath('seven'); }
+
+function afterLectioPath() {
+  if (!ls('rla-path-start')) return;
+  const list = pathList();
+  const d = resolvePathDay();
+  lsSet('rla-path-unlock', tomorrowStr());
+  if (d === list.length) {
+    showPathClose(d, list.length);
+  }
+}
+
+function renderPathBeads(current, total) {
+  const el = document.getElementById('path-beads');
+  if (!el) return;
+  if (!total || total > 12) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  let html = '';
+  for (let i = 1; i <= total; i++) {
+    const cls = i < current ? 'done' : (i === current ? 'now' : '');
+    html += '<span class="path-bead ' + cls + '" title="Day ' + i + '"></span>';
+  }
+  el.innerHTML = html;
+}
+
 function applyPathOverlay(data) {
-  const seven = window.RLA_SEVEN;
   const rail = document.getElementById('path-rail');
-  if (!seven) { if (rail) rail.hidden = true; return data; }
+  const list = pathList();
+  if (!list.length) { if (rail) rail.hidden = true; renderPathBeads(0, 0); return data; }
   if (!ls('rla-path-start')) {
     if (rail) {
       rail.hidden = false;
       rail.innerHTML = '<button type="button" class="sit-verb" style="margin-top:4px" onclick="beginSevenDays()">Begin Seven Days with His words</button>';
     }
+    renderPathBeads(0, 0);
     return data;
   }
-  const n = pathDayNumber();
-  if (n >= 1 && n <= 7) {
-    const day = seven[n - 1];
+  const n = resolvePathDay();
+  const name = pathKind() === 'forty' ? 'Forty' : 'Seven Days';
+  if (n >= 1 && n <= list.length) {
+    const day = list[n - 1];
     data = {
       affirmation: data.affirmation,
       word: { theme: day.theme, title: day.title, passage: day.passage, verse: day.verse, reflection: day.reflection },
@@ -3180,13 +3353,149 @@ function applyPathOverlay(data) {
     };
     if (rail) {
       rail.hidden = false;
-      rail.innerHTML = 'Seven Days · <strong>Day ' + n + '</strong> — ' + day.title;
+      rail.innerHTML = name + ' · <strong>Day ' + n + '</strong> — ' + day.title;
     }
+    renderPathBeads(n, list.length);
   } else if (rail) {
     rail.hidden = false;
-    rail.innerHTML = 'You kept seven days. <button type="button" class="sit-verb" style="margin:0 0 0 8px" onclick="beginSevenDays()">Begin again</button>';
+    rail.innerHTML = 'You kept the path. <button type="button" class="sit-verb" style="margin:0 0 0 8px" onclick="beginSevenDays()">Begin again</button>'
+      + ' <button type="button" class="sit-verb" style="margin:0 0 0 8px" onclick="beginPath(\'forty\')">Begin Forty</button>';
+    renderPathBeads(list.length + 1, Math.min(list.length, 7));
   }
   return data;
+}
+
+function showPathClose(day, total) {
+  const el = document.getElementById('path-close');
+  if (!el) return;
+  const forty = pathKind() === 'forty';
+  document.getElementById('path-close-title').textContent = forty ? 'You kept forty mornings' : 'You kept seven mornings';
+  document.getElementById('path-close-body').textContent = forty
+    ? 'The longer path is finished. The words are still here tomorrow.'
+    : 'The last word is presence, not a score. Begin again, or take the longer path.';
+  el.classList.add('on');
+  el.setAttribute('aria-hidden', 'false');
+}
+
+function closePathClose() {
+  const el = document.getElementById('path-close');
+  if (!el) return;
+  el.classList.remove('on');
+  el.setAttribute('aria-hidden', 'true');
+}
+
+function sitWithAdvisor(text) {
+  const verse = extractFirstVerse(text);
+  let quote = '';
+  const m = String(text || '').match(/["“]([^"”]{12,})["”]/);
+  if (m) quote = m[1];
+  if (!quote && dailyData && dailyData.word) quote = dailyData.word.passage;
+  if (!quote) return;
+  window._sitCtx = { quote, verse: verse || (dailyData && dailyData.word && dailyData.word.verse) || '', reflection: '', theme: 'Advisor', source: 'advisor' };
+  switchTab('today');
+  openLectio('advisor');
+}
+
+function saveLectioDraft(step) {
+  if (!lectioCtx || !lectioCtx.quote) return;
+  if (ls(lectioKey())) return;
+  lsSet('rla-lectio-draft', JSON.stringify({
+    date: todayStr(),
+    step: step || 0,
+    quote: lectioCtx.quote,
+    verse: lectioCtx.verse || '',
+    reflection: lectioCtx.reflection || '',
+    theme: lectioCtx.theme || '',
+    source: lectioCtx.source || 'word',
+    note: (document.getElementById('lectio-note') && document.getElementById('lectio-note').value) || ''
+  }));
+  renderResumeSlip();
+}
+
+function clearLectioDraft() {
+  lsSet('rla-lectio-draft', '');
+  renderResumeSlip();
+}
+
+function getLectioDraft() {
+  try {
+    const d = JSON.parse(ls('rla-lectio-draft') || 'null');
+    if (!d || d.date !== todayStr() || ls(lectioKey())) return null;
+    return d;
+  } catch (e) { return null; }
+}
+
+function renderResumeSlip() {
+  const el = document.getElementById('resume-slip');
+  if (!el) return;
+  el.hidden = !getLectioDraft();
+}
+
+function resumeLectio() {
+  const d = getLectioDraft();
+  if (!d) return;
+  window._sitCtx = d;
+  openLectio('advisor');
+  if (d.note) document.getElementById('lectio-note').value = d.note;
+  lectioGo(d.step || 0);
+}
+
+function saveQuietHour(val) {
+  if (val == null) {
+    const sel = document.getElementById('quiet-hour-select');
+    val = sel ? sel.value : '';
+  }
+  lsSet('rla-quiet-hour', String(val || ''));
+  persistQuietPrefs();
+  if (val && 'Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().then(persistQuietPrefs);
+  }
+  registerQuietSync();
+}
+
+function maybeAskQuietHour() {
+  if (ls('rla-quiet-asked')) return;
+  lsSet('rla-quiet-asked', '1');
+  const sel = document.getElementById('quiet-hour-select');
+  if (sel && !sel.value) {
+    sel.value = '7';
+    saveQuietHour('7');
+    showToast('Quiet hour set for 7:00 — change it in Settings');
+  }
+}
+
+function persistQuietPrefs() {
+  const carry = getCarry();
+  const prefs = {
+    quietHour: parseInt(ls('rla-quiet-hour') || '0', 10) || 0,
+    lastLectio: ls(lectioKey()) ? todayStr() : (ls('rla-last-lectio') || ''),
+    carry: carry ? carry.line : ''
+  };
+  if (ls(lectioKey())) lsSet('rla-last-lectio', todayStr());
+  if (!('caches' in window)) return;
+  caches.open('rla-prefs').then(function (c) {
+    return c.put('/__prefs', new Response(JSON.stringify(prefs), { headers: { 'Content-Type': 'application/json' } }));
+  }).catch(function () {});
+}
+
+function registerQuietSync() {
+  if (!ls('rla-quiet-hour')) return;
+  if (!('serviceWorker' in navigator) || !navigator.serviceWorker.ready) return;
+  navigator.serviceWorker.ready.then(function (reg) {
+    if (reg.periodicSync) {
+      reg.periodicSync.register('quiet-hour', { minInterval: 24 * 60 * 60 * 1000 }).catch(function () {});
+    }
+  });
+}
+
+function applyQuietWaiting() {
+  const wait = document.getElementById('waiting-slip');
+  if (!wait || wait.hidden) return;
+  const hour = parseInt(ls('rla-quiet-hour') || '', 10);
+  if (!hour) return;
+  if (new Date().getHours() >= hour) {
+    wait.textContent = 'It is after your quiet hour. The page is still here.';
+  }
 }
 
 function applyDailyToUI(data) {
@@ -3220,6 +3529,8 @@ function applyDailyToUI(data) {
   }
   openFirstLectio();
   renderFlyleaf();
+  renderResumeSlip();
+  applyQuietWaiting();
 }
 
 const _origLoadDaily = typeof loadDailyContent === 'function' ? loadDailyContent : null;
@@ -3604,6 +3915,7 @@ function markLectioDone() {
   if (el) el.hidden = !done;
   const wait = document.getElementById('waiting-slip');
   if (wait) wait.hidden = done || ls('rla-first-lectio') === 'pending';
+  applyQuietWaiting();
 }
 
 function openFirstLectio() {
@@ -3657,6 +3969,19 @@ function applySeason() {
 }
 
 function openLectio(source) {
+  if (source === 'advisor' && window._sitCtx && window._sitCtx.quote) {
+    lectioCtx = window._sitCtx;
+    document.getElementById('lectio-quote').textContent = '“' + lectioCtx.quote + '”';
+    document.getElementById('lectio-ref').textContent = lectioCtx.verse || '';
+    document.getElementById('lectio-rest-quote').textContent = '“' + lectioCtx.quote + '”';
+    document.getElementById('lectio-rest-ref').textContent = lectioCtx.verse || '';
+    document.getElementById('lectio-question').textContent = lectioQuestion(lectioCtx.theme || '');
+    document.getElementById('lectio-reflection').textContent = lectioCtx.reflection || '';
+    if (!lectioCtx.note) document.getElementById('lectio-note').value = '';
+    document.getElementById('lectio-overlay').classList.add('on');
+    lectioGo(0);
+    return;
+  }
   let quote = '', verse = '', reflection = '', theme = '';
   if (source === 'enc' && currentEncData) {
     const p = currentEncData.passages && currentEncData.passages[0];
@@ -3693,6 +4018,7 @@ function lectioGo(n) {
     const bar = document.getElementById('lectio-progress');
     if (bar) bar.classList.remove('on');
   }
+  saveLectioDraft(n);
 }
 
 function startLectioRest() {
@@ -3746,6 +4072,10 @@ function finishLectio(skip) {
     quote: lectioCtx ? lectioCtx.quote : '',
     fromHim: !(!skip && note)
   });
+  clearLectioDraft();
+  afterLectioPath();
+  persistQuietPrefs();
+  maybeAskQuietHour();
   showAmen();
 }
 

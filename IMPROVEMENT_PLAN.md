@@ -37,6 +37,19 @@ Research → gaps → build targets for The Red Letter Advisor.
 9. Visual polish: grace streak note, share modal, theme delegation, dark mode + font size.
 10. QA loop: API smoke tests + browser QA; fixed Peace theme loading bug.
 
+## Research loop — 30 August 2026
+
+Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playbook; Hallow 2026 reviews (Pray40 finish rates, missed-day grace); Vesper (tryvesper.app) lectio product; HolyJot lectio UX 2026; Lectio 365 hours; ScreensDesign Bible app patterns; Chrome Notification Triggers discontinued; Periodic Background Sync as the only honest PWA daily ping.
+
+| Finding | What we built |
+| --- | --- |
+| Hallow’s path unlocks by sitting; missing a day must not cascade you out | Path day increments only after lectio, next calendar morning |
+| First action must be obvious; progress after value | Word is above the letterpress plate; beads mark place without shame |
+| Chat should return you to the ritual | Advisor *Sit with this* opens lectio on the sealed verse |
+| Vesper: resume, hour-following sky, no streak nag | Lectio draft + resume slip; vespers/night paper; quiet hour is opt-in |
+| Push without a server is not reliable | Quiet hour writes prefs; periodicsync may notify if installed; missing it never fails |
+| Lent is the payday; Seven is the shippable Pray40 | **Forty** — 40 red-letter rooms ready before Ash Wednesday 10 Feb 2027 |
+
 ## Follow-ups (next iterations)
 
 - Lectio divina (Read / Reflect / Rest / Respond) is the daily ritual — shipped.

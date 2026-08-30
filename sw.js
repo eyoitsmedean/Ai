@@ -1,4 +1,4 @@
-const CACHE = 'rla-v15-hear';
+const CACHE = 'rla-v16-path';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -13,6 +13,7 @@ const PRECACHE = [
   '/data/corpus.json',
   '/data/curated.js',
   '/data/advisor.js',
+  '/data/paths.js',
   '/icon-192.png',
   '/icon-512.png',
   '/favicon.png',
@@ -84,4 +85,29 @@ self.addEventListener('fetch', (e) => {
       return cached || network;
     })
   );
+});
+
+self.addEventListener('periodicsync', (e) => {
+  if (e.tag !== 'quiet-hour') return;
+  e.waitUntil(
+    caches.open('rla-prefs').then((c) => c.match('/__prefs')).then((res) => {
+      if (!res) return;
+      return res.json().then((prefs) => {
+        const today = new Date().toISOString().slice(0, 10);
+        if (!prefs || prefs.lastLectio === today) return;
+        const hour = new Date().getHours();
+        if (hour < Number(prefs.quietHour || 7)) return;
+        return self.registration.showNotification('The page is still here', {
+          body: prefs.carry || 'A quiet sentence is waiting.',
+          icon: '/icon-192.png',
+          tag: 'rla-quiet',
+        });
+      });
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(self.clients.openWindow('/'));
 });
