@@ -82,6 +82,12 @@ async function main() {
 
     const lectioQuote = await page.$eval('#lectio-quote', (el) => el.textContent);
     assert(lectioQuote && lectioQuote.length > 8, 'lectio opened without a sentence');
+    const leave = await page.$eval('.lectio-leave', (el) => el.textContent);
+    assert(/Close anytime/i.test(leave), 'first lectio must say they can leave');
+    const skip = await page.$('#lectio-rest-skip');
+    assert(skip, 'rest skip missing for guests who will not wait 20s');
+    const streakHidden = await page.$eval('#streak-badge', (el) => el.hidden);
+    assert(streakHidden, 'streak must not appear before anyone has sat');
   });
 
   await check('lectio close leaves resume; finish writes Amen + flyleaf + beads', async () => {
@@ -110,6 +116,8 @@ async function main() {
       wordBeforeAff: document.getElementById('word-card').compareDocumentPosition(document.getElementById('aff-card')) & Node.DOCUMENT_POSITION_FOLLOWING,
       quietHour: document.getElementById('quiet-hour-select').value,
       askHim: document.body.innerText.includes('Ask Him'),
+      streakHidden: document.getElementById('streak-badge').hidden,
+      grace: document.getElementById('grace-note').textContent,
     }));
     assert(today.flyleaf, 'flyleaf hidden after Keep this');
     assert(/Come/i.test(today.flyleafLine), 'flyleaf should carry the kept line');
@@ -118,6 +126,8 @@ async function main() {
     assert(today.wordBeforeAff, 'Word of the Day must sit above the letterpress card');
     assert(today.quietHour === '', 'quiet hour must stay Off');
     assert(!today.askHim, 'Ask Him leaked into the app');
+    assert(!today.streakHidden, 'streak should appear only after sitting');
+    assert(/peace/i.test(today.grace), 'intent Peace should be named on Today');
   });
 
   await check('Hear this fills the rule', async () => {
@@ -201,8 +211,25 @@ async function main() {
     await page.evaluate(() => document.getElementById('dark-toggle').click());
     const paper = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
     assert(paper === 'light', 'Night paper did not turn back off');
+    const reset = await page.$('#start-new-reader');
+    assert(reset, 'shared-device New reader control missing');
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.getElementById('settings-sheet').classList.contains('on'));
+  });
+
+  await check('Bless someone shows a card; ?fresh=1 clears the guest', async () => {
+    await page.click('#nav-today');
+    await page.click('#bless-word-btn');
+    await page.waitForSelector('#bless-modal.on');
+    const preview = await page.$eval('#bless-preview', (el) => el.width > 0);
+    assert(preview, 'blessing card has no preview');
+    await page.keyboard.press('Escape');
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'load' });
+    const clean = await page.evaluate(() => ({
+      onboarded: localStorage.getItem('rla-onboarded'),
+      onboarding: !document.getElementById('onboarding').classList.contains('hidden'),
+    }));
+    assert(!clean.onboarded && clean.onboarding, '?fresh=1 must return the next guest to onboarding');
   });
 
   await check('desktop layout still paper', async () => {
