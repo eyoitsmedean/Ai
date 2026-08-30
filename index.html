@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#F6F3EC" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Life guidance, daily affirmations, and encouragement drawn exclusively from the direct words of Jesus Christ." />
   <title>The Red Letter Advisor</title>
   <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -1749,6 +1752,137 @@ body::before {
   color: var(--text-3);
 }
 .journal-tools { padding: 0 4px 12px; }
+#install-btn {
+  display: none;
+  padding: 6px 11px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+}
+#install-btn.show { display: inline-block; }
+.offline-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 320;
+  display: none;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #F6F3EC;
+  background: #1F1A16;
+}
+.offline-banner.on { display: block; }
+.amen {
+  position: fixed; inset: 0; z-index: 130;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #1F1A16;
+  text-align: center;
+}
+.amen.on { display: flex; }
+.amen-word {
+  font-family: var(--font-disp);
+  font-size: clamp(48px, 14vw, 80px);
+  color: #F6F3EC;
+  letter-spacing: -.03em;
+}
+.disclaimer-foot a { color: var(--crimson); }
+.crisis-modal {
+  position: fixed; inset: 0; z-index: 500;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  background: rgba(31, 26, 22, .72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.crisis-modal.on { display: flex; }
+.crisis-card {
+  width: 100%; max-width: 400px; max-height: 88dvh;
+  overflow-y: auto;
+  padding: 26px 22px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(28, 22, 18, .18);
+}
+.crisis-eyebrow {
+  margin-bottom: 10px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.crisis-card h2 {
+  margin-bottom: 12px;
+  font-family: var(--font-disp);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.18;
+  color: var(--text-1);
+}
+.crisis-body {
+  margin-bottom: 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.68;
+  color: var(--text-2);
+}
+.crisis-actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.crisis-primary, .crisis-secondary {
+  display: block;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 10px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+}
+.crisis-primary { color: #FFF8F2; background: var(--crimson-dk); }
+.crisis-secondary {
+  color: var(--text-2);
+  border: 1px solid var(--border-2);
+  background: transparent;
+  font-weight: 500;
+  font-size: 13px;
+}
+.crisis-note {
+  margin-bottom: 18px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.crisis-footer {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.crisis-dismiss, .crisis-close {
+  padding: 10px 14px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+}
+.trust-seal {
+  margin-top: 12px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.trust-seal.ok { color: var(--crimson); }
 @media (prefers-reduced-motion: reduce) {
   .sit-breath { animation: none; }
   .sit-overlay.on .sit-progress i { animation: none; width: 100%; }
@@ -1780,6 +1914,7 @@ body::before {
 </style>
 </head>
 <body>
+<div id="offline-banner" class="offline-banner" role="status">You’re offline — saved readings remain available.</div>
 
 <!-- ════════ ONBOARDING ════════ -->
 <div id="onboarding" class="onboarding">
@@ -1812,6 +1947,7 @@ body::before {
       </div>
     </div>
     <div class="header-right">
+      <button type="button" id="install-btn" hidden aria-label="Install app">Install</button>
       <div class="streak-badge" id="streak-badge"><span id="streak-num">1</span></div>
       <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -1915,7 +2051,7 @@ body::before {
         <button class="cta-btn cta-btn-secondary" onclick="switchTab('seek')">Find Encouragement</button>
       </div>
       <p class="season-colophon" id="season-colophon"></p>
-      <p class="disclaimer-foot">Drawn only from the red-letter words of Jesus in Matthew, Mark, Luke, and John. Not a substitute for pastoral care, therapy, or emergency help.</p>
+      <p class="disclaimer-foot">Drawn only from the red-letter words of Jesus in Matthew, Mark, Luke, and John. Not a substitute for pastoral care, therapy, or emergency help. Crisis? Call or text <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a>.</p>
     </div>
 
     <!-- ── SEEK ── -->
@@ -2111,6 +2247,7 @@ body::before {
   </div>
   <div class="sheet-about">
     <p><strong>The Red Letter Advisor</strong> answers every question exclusively from the direct words of Jesus Christ as recorded in Matthew, Mark, Luke, and John — the passages printed in red in many Bible editions. No other scripture, no outside commentary.</p>
+    <p style="margin-top:10px">Citations are sealed against a local Gospel index (KJV curated + WEB corpus). If a line cannot be confirmed, the page will say so. Crisis help: <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a>.</p>
   </div>
 </div>
 
@@ -2190,10 +2327,15 @@ body::before {
   </div>
 </div>
 
+<div class="amen" id="amen" aria-hidden="true">
+  <div class="amen-word">Amen</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
+<script src="/js/crisis.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
    STATE
@@ -3110,6 +3252,10 @@ async function sendMsg() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text || isChatBusy) return;
+  if (window.RedLetterCrisis && window.RedLetterCrisis.detectCrisis(text)) {
+    const action = await window.RedLetterCrisis.showCrisisModal();
+    if (action === 'close') return;
+  }
   input.value = ''; input.style.height = 'auto';
   document.getElementById('suggestions').style.display = 'none';
   isChatBusy = true;
@@ -3125,6 +3271,7 @@ async function sendMsg() {
   const aiBubble = createStreamBubble();
   document.getElementById('typing').classList.remove('on');
   let fullText = '';
+  let verifyReport = null;
   chatAbort = new AbortController();
 
   try {
@@ -3150,6 +3297,7 @@ async function sendMsg() {
         try {
           const p = JSON.parse(raw);
           if (p.error) throw new Error(p.error);
+          if (p.verify) verifyReport = p.verify;
           if (p.text) { fullText += p.text; updateStreamBubble(aiBubble, fullText); scrollChat(); }
         } catch(_) {}
       }
@@ -3162,6 +3310,7 @@ async function sendMsg() {
     chatHistory.push({ role: 'assistant', content: fullText });
     persistChat();
     addSaveToChatBubble(aiBubble, fullText, text);
+    attachTrustSeal(aiBubble, verifyReport, fullText);
   } catch (err) {
     if (err.name !== 'AbortError') {
       const local = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
@@ -3171,6 +3320,7 @@ async function sendMsg() {
         chatHistory.push({ role: 'assistant', content: out });
         persistChat();
         addSaveToChatBubble(aiBubble, out, text);
+        attachTrustSeal(aiBubble, verifyReport, out);
       }
     } else {
       updateStreamBubble(aiBubble, fullText || '_Response stopped._');
@@ -3407,6 +3557,7 @@ function finishLectio(skip) {
     showToast('That is enough for today');
   }
   closeLectio();
+  showAmen();
 }
 
 let blessType = 'word';
@@ -3469,6 +3620,67 @@ function keepLine(e) {
   renderJournal();
   showToast('Kept in your commonplace');
   return false;
+}
+
+function showAmen() {
+  const el = document.getElementById('amen');
+  if (!el) return;
+  el.classList.add('on');
+  el.setAttribute('aria-hidden', 'false');
+  setTimeout(function () {
+    el.classList.remove('on');
+    el.setAttribute('aria-hidden', 'true');
+  }, 1800);
+}
+
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault();
+  window._rlaInstall = e;
+  const btn = document.getElementById('install-btn');
+  if (btn) {
+    btn.hidden = false;
+    btn.classList.add('show');
+    btn.onclick = function () {
+      if (window._rlaInstall) window._rlaInstall.prompt();
+    };
+  }
+});
+
+function syncOffline() {
+  const b = document.getElementById('offline-banner');
+  if (b) b.classList.toggle('on', !navigator.onLine);
+}
+window.addEventListener('online', syncOffline);
+window.addEventListener('offline', syncOffline);
+syncOffline();
+
+function attachTrustSeal(aiBubble, report, text) {
+  const wrap = aiBubble && aiBubble.wrap;
+  if (!wrap) return;
+  const apply = function (rep) {
+    if (!rep || !rep.total) return;
+    wrap.querySelectorAll('.trust-seal').forEach(function (n) { n.remove(); });
+    const el = document.createElement('p');
+    const allOk = rep.verified === rep.total;
+    el.className = 'trust-seal' + (allOk ? ' ok' : '');
+    el.textContent = allOk
+      ? (rep.verified === 1 ? 'Sealed against the Gospel index' : rep.verified + ' citations sealed')
+      : 'Read carefully — not every citation matched the Gospel index';
+    const bubble = wrap.querySelector('.bubble');
+    if (bubble) bubble.appendChild(el);
+  };
+  if (report && report.total) {
+    apply(report);
+    return;
+  }
+  if (!text) return;
+  fetch('/api/verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text })
+  }).then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (rep) { apply(rep); })
+    .catch(function () {});
 }
 
 function exportCommonplace() {
