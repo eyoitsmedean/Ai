@@ -947,6 +947,106 @@ textarea { font-family: var(--body); }
 .week-cell.today { color: var(--crimson); }
 .week-cell.future { opacity: .4; }
 
+.epigraph {
+  margin: 0 0 36px;
+  padding: 0 0 0 16px;
+  border-left: 1px solid var(--gold);
+  max-width: 42ch;
+}
+.epigraph[hidden] { display: none; }
+.epigraph-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.epigraph-note {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-3);
+  margin-top: 8px;
+}
+
+.vespers {
+  padding-top: 8px;
+}
+.vespers[hidden] { display: none; }
+.vespers-prompt {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 8px 0 18px;
+}
+
+.mast-catch, .rail-catch {
+  font-family: var(--display);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--crimson);
+}
+.mast-catch { margin-left: 10px; }
+.mast-catch[hidden], .rail-catch[hidden] { display: none; }
+.rail-catch { font-size: 15px; margin-bottom: 10px; }
+
+.sit-rest-word {
+  opacity: 0;
+  animation: sitWord .7s var(--ease) forwards;
+}
+@keyframes sitWord { to { opacity: 1; } }
+
+.colophon {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  color: var(--ink-4);
+}
+.colophon-catch {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+}
+
+.quire {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 28px;
+}
+.quire[hidden] { display: none; }
+.quire-chip {
+  border: 1px solid var(--rule);
+  background: none;
+  padding: 6px 10px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--crimson);
+}
+
+.folio-turn {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+}
+.folio-turn .ghost[disabled] { opacity: .35; cursor: default; }
+
+@media print {
+  .grain, .wash, .rail, .dock, .mast, .composer, .cta-row, .actions,
+  .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
+  .crisis-modal, .toast, .week-ribbon, .mode-switch, .nav-btn { display: none !important; }
+  .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
+  .folio, body { background: #fff !important; }
+}
+
 .word-reveal span {
   display: inline;
   animation: rise .55s var(--ease) both;
@@ -1204,6 +1304,7 @@ textarea { font-family: var(--body); }
       <button class="rail-btn" id="rail-journal" onclick="switchTab('journal')"><span class="idx">IV</span><span class="lbl">Journal</span></button>
     </nav>
     <div class="rail-foot">
+      <div class="rail-catch" id="rail-catch" hidden></div>
       <div class="streak-quiet" id="rail-streak">A first morning</div>
       <button class="quiet-btn" onclick="openCommandPalette()">Find a word</button>
       <button class="quiet-btn" onclick="openSettings()" style="margin-top:8px">Room settings</button>
@@ -1214,7 +1315,7 @@ textarea { font-family: var(--body); }
     <header class="mast">
       <div>
         <div class="mast-name">Red <em>Letter</em></div>
-        <div class="mast-sub" id="header-sub">Today</div>
+        <div class="mast-sub"><span id="header-sub">Today</span><span class="mast-catch" id="mast-catch" hidden></span></div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <span class="today-streak" id="streak-num">1</span>
@@ -1234,8 +1335,15 @@ textarea { font-family: var(--body); }
           <span class="today-streak" id="today-streak-label"></span>
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
-        <h1 class="display" style="margin-bottom:20px">Today’s <em>light</em></h1>
+        <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+
+        <aside class="epigraph" id="epigraph" hidden>
+          <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
+          <p class="epigraph-quote" id="epigraph-quote"></p>
+          <p class="epigraph-note" id="epigraph-note"></p>
+          <p class="cite" id="epigraph-cite"></p>
+        </aside>
 
         <section class="movement" id="aff-card">
           <p class="eyebrow">Affirmation</p>
@@ -1275,10 +1383,28 @@ textarea { font-family: var(--body); }
           </div>
         </section>
 
+        <section class="movement vespers" id="vespers-card" hidden>
+          <p class="eyebrow">Vespers</p>
+          <h2 class="vespers-prompt" id="vespers-prompt">What are you laying down?</h2>
+          <p class="red-letter" id="vespers-quote"></p>
+          <p class="cite" id="vespers-cite"></p>
+          <label class="sr-only" for="vespers-reply">What you are laying down</label>
+          <textarea class="sit-reply" id="vespers-reply" rows="2" placeholder="One thing is enough…"></textarea>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="keepVespers()">Keep the evening</button>
+            <button class="ghost" type="button" onclick="sitWith('vespers')">Sit with this</button>
+            <button class="ghost" type="button" onclick="amenVespers()">Amen</button>
+          </div>
+        </section>
+
         <div class="cta-row">
           <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
           <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
           <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
+        </div>
+        <div class="colophon">
+          <span>Set in the Gospels. Not a person.</span>
+          <span class="colophon-catch" id="folio-catch"></span>
         </div>
       </div>
 
@@ -1347,6 +1473,10 @@ textarea { font-family: var(--body); }
               <button class="ghost" onclick="sitWith('lib')">Sit with this</button>
               <button class="ghost" onclick="askAboutSaying()">Ask about this</button>
             </div>
+            <div class="folio-turn">
+              <button class="ghost" type="button" id="lib-prev" onclick="turnLibFolio(-1)">Previous leaf</button>
+              <button class="ghost" type="button" id="lib-next" onclick="turnLibFolio(1)">Next leaf</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1383,6 +1513,7 @@ textarea { font-family: var(--body); }
       <div class="page" id="journal-page">
         <p class="eyebrow">A commonplace book</p>
         <h1 class="display">Your <em>journal</em></h1>
+        <div class="quire" id="quire" hidden></div>
         <div id="journal-list"></div>
       </div>
     </div>
@@ -1655,6 +1786,8 @@ function startApp() {
   updateStreak();
   renderWeekRibbon();
   updateDateUI();
+  paintCatchword();
+  paintEpigraph();
   loadDailyContent();
   bindRituals();
   checkMorningReminder();
@@ -1786,11 +1919,19 @@ function renderWeekRibbon() {
   }
 }
 
+function isEveningOffice() {
+  const h = new Date().getHours();
+  return h >= 17 || h < 6;
+}
 function updateDateUI() {
   const now = new Date();
   const h = now.getHours();
-  document.getElementById('today-greeting').textContent = h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening';
+  const evening = isEveningOffice();
+  document.getElementById('today-greeting').textContent = evening ? 'Vespers' : h < 12 ? 'Morning' : 'Afternoon';
+  document.getElementById('today-title').innerHTML = evening ? 'Evening <em>office</em>' : 'Today’s <em>light</em>';
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  document.getElementById('vespers-card').hidden = !evening;
+  if (evening) paintVespers();
 }
 
 function paintThemeIndex() {
@@ -1846,6 +1987,12 @@ async function loadDailyContent() {
   document.getElementById('word-skel').style.display = 'none';
   document.getElementById('word-content').style.display = 'block';
   if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+  paintVespers();
+  const catchEl = document.getElementById('folio-catch');
+  if (catchEl) {
+    const word = (getCatchword() || firstCatchword(dailyData.word.passage) || 'Peace');
+    catchEl.textContent = word;
+  }
 }
 
 async function loadEnc(theme) {
@@ -2046,15 +2193,18 @@ async function loadLibraryPage(reset) {
   }
 }
 
+let libShown = [];
 function appendSayings(sayings, hasMore) {
   const list = document.getElementById('lib-list');
   const more = list.querySelector('.lib-more-btn');
   if (more) more.remove();
+  if (!libOffset) libShown = [];
   if (!libOffset && !sayings.length) {
     list.innerHTML = '<p class="lib-empty">No saying matches that search.</p>';
     return;
   }
   sayings.forEach((s) => {
+    libShown.push(s);
     const btn = document.createElement('button');
     btn.className = 'saying-row';
     btn.type = 'button';
@@ -2082,6 +2232,22 @@ function openLibFolio(saying) {
   setSaveBtnState('lib', isSaved('lib-' + saying.id));
   document.getElementById('lib-folio').classList.add('on');
   document.getElementById('seek-page').scrollTop = 0;
+  syncLibTurn();
+}
+
+function turnLibFolio(dir) {
+  if (!currentSaying || !libShown.length) return;
+  const i = libShown.findIndex((s) => s.id === currentSaying.id || s.citation === currentSaying.citation);
+  const next = libShown[i + dir];
+  if (!next) return;
+  openLibFolio(next);
+}
+function syncLibTurn() {
+  const i = libShown.findIndex((s) => currentSaying && (s.id === currentSaying.id || s.citation === currentSaying.citation));
+  const prev = document.getElementById('lib-prev');
+  const next = document.getElementById('lib-next');
+  if (prev) prev.disabled = i <= 0;
+  if (next) next.disabled = i < 0 || i >= libShown.length - 1;
 }
 
 function closeLibFolio() {
@@ -2119,6 +2285,10 @@ function sitPayloadFor(type) {
   if (type === 'lib' && currentSaying) {
     return { kicker: currentSaying.book, title: currentSaying.citation, quote: currentSaying.text, verse: currentSaying.citation };
   }
+  if (type === 'vespers') {
+    const v = vespersSaying();
+    return { kicker: 'Vespers', title: vespersPrompt(), quote: v.quote, verse: v.verse };
+  }
   return null;
 }
 
@@ -2149,6 +2319,7 @@ function showSitStep(n) {
 
 function startSitRest() {
   showSitStep(2);
+  paceSitRest((sitPayload && sitPayload.quote) || '');
   sitEndsAt = Date.now() + SIT_SECONDS * 1000;
   const ring = document.getElementById('sit-progress');
   ring.style.strokeDasharray = String(SIT_RING);
@@ -2156,6 +2327,24 @@ function startSitRest() {
   clearInterval(sitTimer);
   paintSitClock();
   sitTimer = setInterval(paintSitClock, 200);
+}
+function paceSitRest(quote) {
+  const el = document.getElementById('sit-quote-rest');
+  if (!el) return;
+  const words = String(quote || '').split(/\s+/).filter(Boolean);
+  if (!words.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = quote || '';
+    return;
+  }
+  const step = Math.max(280, (SIT_SECONDS * 900) / words.length);
+  el.innerHTML = '';
+  words.forEach((word, index) => {
+    const span = document.createElement('span');
+    span.className = 'sit-rest-word';
+    span.textContent = word + (index === words.length - 1 ? '' : ' ');
+    span.style.animationDelay = (index * step) + 'ms';
+    el.appendChild(span);
+  });
 }
 
 function paintSitClock() {
@@ -2190,6 +2379,7 @@ function keepSitReply() {
   });
   const quote = sitPayload.quote;
   const verse = sitPayload.verse;
+  rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
@@ -2420,6 +2610,7 @@ function isSaved(key) { return getJournal().some(i => i.key === key); }
 function renderJournal() {
   const list = document.getElementById('journal-list');
   const items = getJournal();
+  paintQuire(items);
   if (!items.length) {
     list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a sitting, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
     return;
@@ -2730,6 +2921,129 @@ function extractFirstVerse(text) {
   return m ? m[0] : '';
 }
 
+const STOP_WORDS = new Set('the a an and or but for with from that this you your i we they to of in on as is be my our not'.split(' '));
+function firstCatchword(text) {
+  const words = String(text || '').replace(/[“”"'.,;:!?]/g, '').split(/\s+/).filter(Boolean);
+  return words.find((w) => w.length > 3 && !STOP_WORDS.has(w.toLowerCase())) || words[0] || '';
+}
+function getLastSit() {
+  return parseJSON(ls('rla-last-sit'), null);
+}
+function getCatchword() {
+  const saved = parseJSON(ls('rla-catchword'), null);
+  if (!saved || !saved.word) return '';
+  if (saved.until && saved.until < todayStr()) return '';
+  return saved.word;
+}
+function rememberSitting({ quote, verse, note, office }) {
+  const catchword = firstCatchword(note) || firstCatchword(quote);
+  const until = todayStr();
+  lsSet('rla-last-sit', JSON.stringify({ date: until, quote, verse, note, office, catchword }));
+  if (catchword) lsSet('rla-catchword', JSON.stringify({ word: catchword, until }));
+  paintCatchword();
+  paintEpigraph();
+  const catchEl = document.getElementById('folio-catch');
+  if (catchEl && catchword) catchEl.textContent = catchword;
+}
+function paintCatchword() {
+  const word = getCatchword();
+  ['mast-catch', 'rail-catch'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.hidden = !word;
+    el.textContent = word ? '— ' + word : '';
+  });
+}
+function paintEpigraph() {
+  const sit = getLastSit();
+  const root = document.getElementById('epigraph');
+  const fresh = sit && sit.quote && (sit.date === todayStr() || sit.date === yestStr());
+  if (!root || !fresh) {
+    if (root) root.hidden = true;
+    return;
+  }
+  const sameDay = sit.date === todayStr();
+  document.getElementById('epigraph-kicker').textContent = sameDay ? 'Earlier you sat with' : 'Yesterday you sat with';
+  document.getElementById('epigraph-quote').textContent = '“' + String(sit.quote).replace(/^["“]|["”]$/g, '') + '”';
+  document.getElementById('epigraph-note').textContent = sit.note || '';
+  document.getElementById('epigraph-cite').textContent = (sit.verse || '') + (sit.catchword ? '  ·  ' + sit.catchword : '');
+  root.hidden = false;
+}
+function paintQuire(items) {
+  const host = document.getElementById('quire');
+  if (!host) return;
+  const words = [];
+  const seen = new Set();
+  const last = getLastSit();
+  if (last && last.catchword) words.push(last.catchword);
+  (items || []).forEach((item) => {
+    if (item.type !== 'sit') return;
+    const word = firstCatchword(item.title) || firstCatchword(item.body);
+    if (word) words.push(word);
+  });
+  const unique = words.filter((w) => {
+    const key = w.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 12);
+  host.hidden = !unique.length;
+  host.innerHTML = unique.map((w) => '<button type="button" class="quire-chip">' + esc(w) + '</button>').join('');
+}
+
+const VESPERS_PROMPTS = [
+  'What are you laying down?',
+  'Where did you need rest?',
+  'What stayed after the day?',
+  'Whom will you forgive before sleep?',
+  'What fear can wait until morning?',
+  'Where was mercy given to you?',
+  'What will you leave in His hands?',
+];
+const VESPERS_FALLBACK = [
+  { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
+  { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.' },
+  { verse: 'Matthew 6:34', quote: 'Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.' },
+  { verse: 'Luke 23:46', quote: 'Father, into thy hands I commend my spirit.' },
+];
+function vespersPrompt() {
+  return VESPERS_PROMPTS[new Date().getDay()];
+}
+function vespersSaying() {
+  if (dailyData && dailyData.word) {
+    return { verse: dailyData.word.verse, quote: dailyData.word.passage };
+  }
+  return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
+}
+function paintVespers() {
+  const card = document.getElementById('vespers-card');
+  if (!card || card.hidden) return;
+  const saying = vespersSaying();
+  document.getElementById('vespers-prompt').textContent = vespersPrompt();
+  document.getElementById('vespers-quote').textContent = saying.quote;
+  document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
+}
+function keepVespers() {
+  const saying = vespersSaying();
+  const note = (document.getElementById('vespers-reply') && document.getElementById('vespers-reply').value.trim()) || '';
+  const key = 'vespers-' + todayStr();
+  saveJournalItem({
+    id: key,
+    key,
+    type: 'sit',
+    title: saying.verse || 'Vespers',
+    body: (note ? note + '\n\n' : '') + saying.quote,
+    verse: saying.verse,
+  });
+  rememberSitting({ quote: saying.quote, verse: saying.verse, note, office: 'Vespers' });
+  showToast('Kept the evening');
+  openAmen({ quote: saying.quote, verse: saying.verse, holdMs: 3000 });
+}
+function amenVespers() {
+  const saying = vespersSaying();
+  openAmen({ quote: saying.quote, verse: saying.verse, holdMs: 3200 });
+}
+
 function revealWords(el, text) {
   if (!el) return;
   const clean = String(text || '').replace(/^["“]|["”]$/g, '');
@@ -2888,6 +3202,8 @@ const COMMANDS = [
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
   { label: 'Grief & Loss', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Grief & Loss'), 80); } },
   { label: 'Peace', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Peace'), 80); } },
@@ -3033,6 +3349,13 @@ function bindRituals() {
   if (cmdk) cmdk.addEventListener('click', (e) => { if (e.target === cmdk) closeCommandPalette(); });
   const input = document.getElementById('cmdk-input');
   if (input) input.addEventListener('input', () => renderCmdList(input.value));
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lib-folio')?.classList.contains('on')) return;
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') turnLibFolio(-1);
+    if (e.key === 'ArrowRight') turnLibFolio(1);
+  });
   window.addEventListener('online', setOfflineBanner);
   window.addEventListener('offline', setOfflineBanner);
   setOfflineBanner();
