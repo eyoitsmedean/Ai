@@ -3,7 +3,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -18,7 +18,10 @@ const THEME_SET = new Set(themeNames());
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders(res, filePath) {
-    if (/\.(html|js)$/.test(filePath) || filePath.endsWith('sw.js')) {
+    if (filePath.endsWith('sw.js')) {
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Service-Worker-Allowed', '/');
+    } else if (/\.(html|js)$/.test(filePath)) {
       res.setHeader('Cache-Control', 'no-cache');
     }
   },
@@ -223,6 +226,31 @@ app.get('/api/daily', async (req, res) => {
 
 app.get('/api/themes', (req, res) => {
   res.json({ themes: themeNames() });
+});
+
+app.post('/api/verify', (req, res) => {
+  if (!rateLimit(`verify:${clientKey(req)}`, 60, 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const rawItems = Array.isArray(req.body?.items) ? req.body.items : [req.body || {}];
+  if (rawItems.length > 12) return res.status(400).json({ error: 'Too many citations.' });
+  const results = rawItems.slice(0, 12).map((item) => {
+    const verse = typeof item?.verse === 'string' ? item.verse.slice(0, 80) : '';
+    const quote = typeof item?.quote === 'string' ? item.quote.slice(0, 2000) : '';
+    if (!verse) return { ok: false, reason: 'missing-verse', verse: '', quote: '' };
+    const verified = verifyQuote(verse, quote);
+    return {
+      ok: Boolean(verified.ok),
+      verse: verified.citation || verse,
+      quote: verified.quote || quote,
+      score: verified.score || 0,
+      reason: verified.reason || (verified.ok ? 'quote-match' : 'unknown-ref'),
+    };
+  });
+  res.json({
+    results,
+    allVerified: results.length > 0 && results.every((row) => row.ok),
+  });
 });
 
 app.get('/api/library', (req, res) => {

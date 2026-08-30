@@ -8,6 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="description" content="A quiet reading room for the words Jesus actually spoke." />
+  <meta property="og:title" content="Red Letter" />
+  <meta property="og:description" content="Not every verse — His words." />
+  <meta property="og:type" content="website" />
   <title>Red Letter — The Advisor</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/icon-192.png" />
@@ -899,6 +902,203 @@ textarea { font-family: var(--body); }
 .sit-reply:focus { border-bottom-color: var(--crimson); }
 .sit-step { display: none; }
 .sit-step.on { display: block; animation: rise .35s var(--ease); }
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 85;
+  display: none;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: var(--crimson);
+  color: #FBF7EE;
+}
+.offline-banner.on { display: block; }
+
+.week-ribbon {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 28px;
+}
+.week-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-4);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.week-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-2);
+  background: transparent;
+}
+.week-cell.done .week-dot { background: var(--crimson); border-color: var(--crimson); }
+.week-cell.today { color: var(--crimson); }
+.week-cell.future { opacity: .4; }
+
+.word-reveal span {
+  display: inline;
+  animation: rise .55s var(--ease) both;
+}
+
+.amen {
+  position: fixed;
+  inset: 0;
+  z-index: 88;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s var(--ease);
+  text-align: center;
+  padding: 32px;
+}
+.amen.on { opacity: 1; pointer-events: all; }
+.amen-word {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(48px, 12vw, 88px);
+  color: var(--crimson);
+  letter-spacing: -0.03em;
+}
+.amen-echo {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink-2);
+  max-width: 28ch;
+  margin: 16px auto 0;
+}
+
+.cmdk {
+  position: fixed;
+  inset: 0;
+  z-index: 86;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh 16px 16px;
+  background: rgba(20, 16, 12, .28);
+}
+.cmdk.on { display: flex; }
+.cmdk-box {
+  width: min(520px, 100%);
+  background: var(--folio);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.cmdk-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  padding: 10px 2px 12px;
+  font-family: var(--display);
+  font-size: 22px;
+  color: var(--ink);
+  outline: none;
+}
+.cmdk-list { margin-top: 10px; max-height: 48vh; overflow-y: auto; }
+.cmdk-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 10px 6px;
+  text-align: left;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+}
+.cmdk-item.active, .cmdk-item:hover { color: var(--crimson); }
+.cmdk-hint { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); }
+
+.blessing-item, .share-style {
+  width: 100%;
+  display: block;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule);
+  padding: 14px 0;
+  text-align: left;
+}
+.blessing-item.selected, .share-style:hover { color: var(--crimson); }
+.blessing-item-cite, .share-style-kicker {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 4px;
+}
+.blessing-preview {
+  margin: 16px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.blessing-preview-quote {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.trust-seal {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.trust-seal.ok { color: var(--gold); }
+.trust-seal.warn { color: var(--crimson); }
+.scripture-block.scripture-verified { border-left-color: var(--gold); }
+
+.crisis-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 92;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(20, 16, 12, .46);
+}
+.crisis-modal.on { display: grid; }
+.crisis-card {
+  width: min(440px, 100%);
+  background: var(--folio);
+  padding: 28px 24px;
+  border: 1px solid var(--rule);
+}
+.crisis-card h2 {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 500;
+  margin: 8px 0 12px;
+}
+.crisis-card p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; margin-bottom: 12px; }
+.crisis-actions { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.crisis-actions a { color: var(--crimson); }
+
+.cmd-hint { display: none; }
+@media (min-width: 880px) {
+  .cmd-hint { display: inline; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-4); }
+}
 .lib-theme {
   width: 100%;
   margin-top: 10px;
@@ -956,6 +1156,7 @@ textarea { font-family: var(--body); }
 <body>
 <div class="grain" aria-hidden="true"></div>
 <div class="wash" aria-hidden="true"></div>
+<div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
 
 <section id="onboarding" class="titlepage hidden" role="dialog" aria-labelledby="tp-title">
   <div class="tp-inner">
@@ -1004,7 +1205,8 @@ textarea { font-family: var(--body); }
     </nav>
     <div class="rail-foot">
       <div class="streak-quiet" id="rail-streak">A first morning</div>
-      <button class="quiet-btn" onclick="openSettings()">Room settings</button>
+      <button class="quiet-btn" onclick="openCommandPalette()">Find a word</button>
+      <button class="quiet-btn" onclick="openSettings()" style="margin-top:8px">Room settings</button>
     </div>
   </aside>
 
@@ -1016,6 +1218,9 @@ textarea { font-family: var(--body); }
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <span class="today-streak" id="streak-num">1</span>
+        <button class="icon-btn" onclick="openCommandPalette()" aria-label="Find a word">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        </button>
         <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </button>
@@ -1029,7 +1234,8 @@ textarea { font-family: var(--body); }
           <span class="today-streak" id="today-streak-label"></span>
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
-        <h1 class="display" style="margin-bottom:36px">Today’s <em>light</em></h1>
+        <h1 class="display" style="margin-bottom:20px">Today’s <em>light</em></h1>
+        <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
 
         <section class="movement" id="aff-card">
           <p class="eyebrow">Affirmation</p>
@@ -1043,7 +1249,7 @@ textarea { font-family: var(--body); }
             <p class="cite" id="aff-verse"></p>
             <div class="actions">
               <button class="ghost" id="aff-save-btn" onclick="toggleSave('aff')"><span id="aff-save-label">Keep</span></button>
-              <button class="ghost" onclick="shareItem('aff')">Share card</button>
+              <button class="ghost" onclick="openShareSheet('aff')">Share card</button>
               <button class="ghost" onclick="sitWith('aff')">Sit with this</button>
             </div>
           </div>
@@ -1063,7 +1269,7 @@ textarea { font-family: var(--body); }
             <p class="reflection" id="word-reflection"></p>
             <div class="actions">
               <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
-              <button class="ghost" onclick="shareItem('word')">Share card</button>
+              <button class="ghost" onclick="openShareSheet('word')">Share card</button>
               <button class="ghost" onclick="sitWith('word')">Sit with this</button>
             </div>
           </div>
@@ -1072,6 +1278,7 @@ textarea { font-family: var(--body); }
         <div class="cta-row">
           <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
           <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
+          <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
         </div>
       </div>
 
@@ -1101,7 +1308,7 @@ textarea { font-family: var(--body); }
             <p class="enc-closing" id="enc-closing"></p>
             <div class="actions">
               <button class="ghost" id="enc-save-btn" onclick="toggleSave('enc')"><span id="enc-save-label">Keep this</span></button>
-              <button class="ghost" onclick="shareItem('enc')">Share card</button>
+              <button class="ghost" onclick="openShareSheet('enc')">Share card</button>
               <button class="ghost" onclick="sitWith('enc')">Sit with this</button>
               <button class="ghost" onclick="openThemeInLetters(currentEncTheme)">More sayings</button>
             </div>
@@ -1136,7 +1343,7 @@ textarea { font-family: var(--body); }
             <p class="lib-folio-quote" id="lib-folio-quote"></p>
             <div class="actions">
               <button class="ghost" id="lib-save-btn" onclick="toggleSave('lib')"><span id="lib-save-label">Keep</span></button>
-              <button class="ghost" onclick="shareItem('lib')">Share card</button>
+              <button class="ghost" onclick="openShareSheet('lib')">Share card</button>
               <button class="ghost" onclick="sitWith('lib')">Sit with this</button>
               <button class="ghost" onclick="askAboutSaying()">Ask about this</button>
             </div>
@@ -1220,6 +1427,7 @@ textarea { font-family: var(--body); }
     <p class="sit-copy">Read the sentence once, aloud if you can. Then keep it in front of you for one quiet minute. Nothing else is required.</p>
     <div class="actions">
       <button class="cta cta-primary" type="button" onclick="startSitRest()">Begin the quiet</button>
+      <button class="ghost" type="button" id="sit-listen" onclick="toggleSitListen()" aria-pressed="false">Listen</button>
     </div>
   </div>
   <div class="sit-step" id="sit-step-2">
@@ -1241,6 +1449,7 @@ textarea { font-family: var(--body); }
     <textarea class="sit-reply" id="sit-reply" rows="3" placeholder="Write the word that remained…"></textarea>
     <div class="actions" style="margin-top:18px">
       <button class="cta cta-primary" type="button" onclick="keepSitReply()">Keep this sitting</button>
+      <button class="ghost" type="button" onclick="amenFromSit()">Amen</button>
       <button class="ghost" type="button" onclick="closeSit()">Leave it on the page</button>
     </div>
   </div>
@@ -1263,6 +1472,16 @@ textarea { font-family: var(--body); }
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Morning reminder</div>
+      <div class="setting-sub">A quiet knock around 8:00, if this device allows it</div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
+      <div class="toggle-track"></div>
+    </label>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">Type size</div>
       <div class="setting-sub">Comfort for long reading</div>
     </div>
@@ -1274,8 +1493,72 @@ textarea { font-family: var(--body); }
   </div>
   <div class="sheet-about">
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
 </aside>
+
+<aside class="settings-sheet" id="blessing-sheet" role="dialog" aria-modal="true" aria-labelledby="blessing-title">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title-row">
+    <div class="sheet-title" id="blessing-title">Send a blessing</div>
+    <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
+  </div>
+  <p class="sit-copy">A saying, a short note, and a card. Nothing else is added.</p>
+  <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
+  <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="A word for them…"></textarea>
+  <div class="blessing-preview" id="blessing-preview"></div>
+  <div id="blessing-list"></div>
+  <div class="actions" style="margin-top:18px">
+    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
+    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
+    <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
+  </div>
+</aside>
+
+<aside class="settings-sheet" id="share-sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title-row">
+    <div class="sheet-title" id="share-title">A card</div>
+    <button class="ghost" type="button" onclick="closeShareSheet()">Close</button>
+  </div>
+  <button class="share-style" type="button" onclick="shareWithStyle('parchment')"><span class="share-style-kicker">Default</span>Parchment</button>
+  <button class="share-style" type="button" onclick="shareWithStyle('dawn')"><span class="share-style-kicker">Warm</span>Dawn</button>
+  <button class="share-style" type="button" onclick="shareWithStyle('void')"><span class="share-style-kicker">Lamp out</span>Night</button>
+</aside>
+
+<div class="cmdk" id="cmdk" aria-hidden="true" role="dialog" aria-label="Find a word">
+  <div class="cmdk-box">
+    <label class="sr-only" for="cmdk-input">Find a word</label>
+    <input class="cmdk-input" id="cmdk-input" type="search" placeholder="Ask, seek, or open a word…" autocomplete="off" />
+    <div class="cmdk-list" id="cmdk-list"></div>
+  </div>
+</div>
+
+<div class="amen" id="amen" aria-hidden="true">
+  <div>
+    <p class="amen-word">Amen</p>
+    <p class="amen-echo" id="amen-echo" hidden></p>
+    <p class="cite" id="amen-cite" hidden></p>
+  </div>
+</div>
+
+<div class="crisis-modal" id="crisis-modal" role="dialog" aria-modal="true" aria-labelledby="crisis-title">
+  <div class="crisis-card">
+    <p class="eyebrow">You are not alone</p>
+    <h2 id="crisis-title">Please reach a person who can help right now</h2>
+    <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
+    <div class="crisis-actions">
+      <a href="tel:988">Call or text 988 (US)</a>
+      <a href="https://findahelpline.com" target="_blank" rel="noreferrer">Find a helpline anywhere</a>
+    </div>
+    <p>If you are in immediate danger, call your local emergency number. This page is not a person.</p>
+    <div class="actions">
+      <button class="cta cta-primary" type="button" id="crisis-continue">I am safe — continue carefully</button>
+      <button class="ghost" type="button" id="crisis-close">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1319,10 +1602,19 @@ let chatHistory = [];
 let isChatBusy = false;
 let curatedPacks = null;
 const encCache = {};
+let pendingShareType = null;
+let blessingPick = null;
+let amenTimer = null;
+let sitUtterance = null;
+let sitSpeaking = false;
+let cmdIndex = 0;
+let cmdFiltered = [];
+let ritualsBound = false;
 
 (function init() {
   setWatch();
   paintThemeIndex();
+  bindRituals();
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
@@ -1359,9 +1651,13 @@ function chooseNeed(kind) {
 
 function startApp() {
   applySettings();
+  markMorning();
   updateStreak();
+  renderWeekRibbon();
   updateDateUI();
   loadDailyContent();
+  bindRituals();
+  checkMorningReminder();
 }
 
 function switchTab(tab) {
@@ -1394,16 +1690,100 @@ function yestStr() {
   return padDate(d);
 }
 
+function twoAgoStr() {
+  const d = new Date();
+  d.setDate(d.getDate() - 2);
+  return padDate(d);
+}
+function weekStartStr() {
+  const d = new Date();
+  const diff = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - diff);
+  return padDate(d);
+}
+function parseJSON(value, fallback) {
+  try { return value ? JSON.parse(value) : fallback; } catch (_) { return fallback; }
+}
+function mornings() {
+  return parseJSON(ls('rla-mornings'), []);
+}
+function markMorning() {
+  const today = todayStr();
+  const days = mornings();
+  if (!days.includes(today)) {
+    days.push(today);
+    lsSet('rla-mornings', JSON.stringify(days.slice(-90)));
+  }
+}
+function getStreakState() {
+  const saved = parseJSON(ls('rla-streak-v2'), null);
+  if (saved) return saved;
+  const raw = parseJSON(ls('rla-streak'), { date: '', count: 0 });
+  return { count: raw.count || 0, lastPractice: raw.date || '', graceWeek: '', graceUsed: false, longest: raw.count || 0 };
+}
 function updateStreak() {
-  const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
   const today = todayStr();
   const yest = yestStr();
-  let count = raw.date === today ? raw.count : raw.date === yest ? raw.count + 1 : 1;
-  lsSet('rla-streak', JSON.stringify({ date: today, count }));
+  const twoAgo = twoAgoStr();
+  const week = weekStartStr();
+  const state = getStreakState();
+  if (state.graceWeek !== week) {
+    state.graceWeek = week;
+    state.graceUsed = false;
+  }
+  if (state.lastPractice === today) {
+    paintStreak(state);
+    return;
+  }
+  if (!state.lastPractice) state.count = 1;
+  else if (state.lastPractice === yest) state.count = (Number(state.count) || 0) + 1;
+  else if (state.lastPractice === twoAgo && !state.graceUsed) {
+    state.count = (Number(state.count) || 0) + 1;
+    state.graceUsed = true;
+    showToast('Grace held your morning — welcome back');
+  } else {
+    state.count = 1;
+  }
+  state.lastPractice = today;
+  state.longest = Math.max(Number(state.longest) || 0, state.count);
+  lsSet('rla-streak-v2', JSON.stringify(state));
+  lsSet('rla-streak', JSON.stringify({ date: today, count: state.count }));
+  paintStreak(state);
+}
+function paintStreak(state) {
+  const count = Math.max(1, Number(state.count) || 1);
   document.getElementById('streak-num').textContent = count;
-  document.getElementById('today-streak-label').textContent = count > 1 ? count + ' mornings' : '';
+  const grace = state.graceUsed && state.graceWeek === weekStartStr();
+  document.getElementById('today-streak-label').textContent = count > 1
+    ? (grace ? count + ' mornings · grace this week' : count + ' mornings')
+    : '';
   const rail = document.getElementById('rail-streak');
-  if (rail) rail.textContent = count > 1 ? count + ' mornings in this room' : 'A first morning';
+  if (rail) {
+    rail.textContent = count > 1
+      ? (grace ? count + ' mornings · grace held one' : count + ' mornings in this room')
+      : 'A first morning';
+  }
+}
+function renderWeekRibbon() {
+  const host = document.getElementById('week-ribbon');
+  if (!host) return;
+  host.innerHTML = '';
+  const today = todayStr();
+  const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const start = weekStartStr();
+  const days = mornings();
+  for (let i = 0; i < 7; i += 1) {
+    const d = new Date(start + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    const date = padDate(d);
+    const cell = document.createElement('div');
+    cell.className = 'week-cell';
+    if (days.includes(date)) cell.classList.add('done');
+    if (date === today) cell.classList.add('today');
+    if (date > today) cell.classList.add('future');
+    cell.innerHTML = '<span class="week-dot" aria-hidden="true"></span><span>' + labels[i] + '</span>';
+    host.appendChild(cell);
+  }
 }
 
 function updateDateUI() {
@@ -1452,7 +1832,7 @@ async function loadDailyContent() {
     }
   }
   document.getElementById('aff-text').textContent = dailyData.affirmation.text;
-  document.getElementById('aff-quote').textContent = dailyData.affirmation.quote;
+  revealWords(document.getElementById('aff-quote'), dailyData.affirmation.quote);
   document.getElementById('aff-verse').textContent = dailyData.affirmation.verse + '  ·  KJV';
   document.getElementById('aff-skel').style.display = 'none';
   document.getElementById('aff-content').style.display = 'block';
@@ -1808,8 +2188,11 @@ function keepSitReply() {
     body: (note ? note + '\n\n' : '') + sitPayload.quote,
     verse: sitPayload.verse,
   });
+  const quote = sitPayload.quote;
+  const verse = sitPayload.verse;
   closeSit();
   showToast('Kept in the journal');
+  openAmen({ quote, verse, holdMs: 3000 });
   if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
     lsSet('rla-install-hint', '1');
     setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
@@ -1819,15 +2202,25 @@ function keepSitReply() {
 function closeSit() {
   clearInterval(sitTimer);
   sitTimer = null;
+  stopSitListen();
   document.getElementById('sit-sheet').classList.remove('on');
-  if (!document.getElementById('settings-sheet').classList.contains('on')) {
-    document.getElementById('overlay').classList.remove('on');
-  }
+  hideOverlayIfIdle();
 }
 
+function anySheetOn() {
+  return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
+    .some((id) => document.getElementById(id)?.classList.contains('on'));
+}
+function hideOverlayIfIdle() {
+  if (!anySheetOn()) document.getElementById('overlay').classList.remove('on');
+}
 function closeSheets() {
   closeSit();
   closeSettings();
+  closeBlessing();
+  closeShareSheet();
+  closeCommandPalette();
+  closeAmen();
 }
 
 const chatInput = document.getElementById('chat-input');
@@ -1856,9 +2249,13 @@ function useSuggestion(btn) {
   sendMsg();
 }
 
-async function sendMsg() {
-  const text = chatInput.value.trim();
+async function sendMsg(preset) {
+  const text = (preset || chatInput.value).trim();
   if (!text || isChatBusy) return;
+  if (looksLikeCrisisClient(text)) {
+    const action = await showCrisisModal();
+    if (action !== 'continue') return;
+  }
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
     document.getElementById('suggestions').style.display = 'none';
@@ -1928,6 +2325,7 @@ async function sendMsg() {
     bumpChat();
     chatHistory.push({ role: 'assistant', content: fullText });
     addSaveToChatBubble(aiBubble, fullText, text);
+    sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
     const fallback = [
       'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
@@ -2079,6 +2477,23 @@ function setSaveBtnState(type, saved) {
   lbl.textContent = saved ? 'Kept' : (type === 'enc' ? 'Keep this' : 'Keep');
 }
 
+function openShareSheet(type) {
+  pendingShareType = type;
+  closeSit();
+  closeSettings();
+  closeBlessing();
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('share-sheet').classList.add('on');
+}
+function closeShareSheet() {
+  document.getElementById('share-sheet').classList.remove('on');
+  hideOverlayIfIdle();
+}
+function shareWithStyle(style) {
+  const type = pendingShareType;
+  closeShareSheet();
+  shareItem(type, style);
+}
 function sharePayload(type) {
   if (type === 'aff' && dailyData) return { kicker: 'Today', title: dailyData.affirmation.text, quote: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
   if (type === 'word' && dailyData) return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse };
@@ -2100,50 +2515,74 @@ function wrapLines(ctx, text, maxWidth) {
   return lines.slice(0, 10);
 }
 
-function renderShareCard(payload) {
-  const w = 1080, h = 1350;
-  const c = document.createElement('canvas');
-  c.width = w; c.height = h;
-  const ctx = c.getContext('2d');
+function paintShareGround(ctx, w, h, style) {
+  if (style === 'dawn') {
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#F7E8D4');
+    g.addColorStop(0.5, '#F0D5B8');
+    g.addColorStop(1, '#C45A3A');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    return { ink: '#2A1208', red: '#8B1212', mute: 'rgba(42,18,8,0.55)', frame: 'rgba(42,18,8,0.18)' };
+  }
+  if (style === 'void') {
+    const g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, '#1A0A0A');
+    g.addColorStop(1, '#0E0C0B');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    return { ink: '#FFF5F0', red: '#E8A8A0', mute: 'rgba(255,255,255,0.55)', frame: 'rgba(255,255,255,0.14)' };
+  }
   ctx.fillStyle = '#F4EFE4';
   ctx.fillRect(0, 0, w, h);
   ctx.fillStyle = 'rgba(143,29,29,0.06)';
   ctx.fillRect(0, 0, w, 18);
-  ctx.strokeStyle = 'rgba(27,22,16,0.14)';
+  return { ink: '#1B1610', red: '#8F1D1D', mute: '#7A6E5E', frame: 'rgba(27,22,16,0.14)' };
+}
+
+function renderShareCard(payload, style) {
+  const w = 1080, h = 1350;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  const colors = paintShareGround(ctx, w, h, style || 'parchment');
+  ctx.strokeStyle = colors.frame;
   ctx.strokeRect(48, 48, w - 96, h - 96);
   ctx.strokeRect(56, 56, w - 112, h - 112);
-  ctx.fillStyle = '#8F1D1D';
+  ctx.fillStyle = colors.red;
   ctx.font = '500 28px "Instrument Sans", sans-serif';
   ctx.letterSpacing = '8px';
   ctx.fillText('RED LETTER', 96, 160);
   ctx.letterSpacing = '0px';
-  ctx.fillStyle = '#7A6E5E';
+  ctx.fillStyle = colors.mute;
   ctx.font = 'italic 28px Fraunces, serif';
-  ctx.fillText(payload.kicker || 'The Gospels', 96, 220);
-  ctx.fillStyle = '#1B1610';
+  ctx.fillText(payload.kicker || payload.theme || 'The Gospels', 96, 220);
+  ctx.fillStyle = colors.ink;
   ctx.font = '500 54px Fraunces, serif';
   let y = 320;
-  wrapLines(ctx, payload.title, w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 66; });
+  wrapLines(ctx, payload.title || payload.theme || '', w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 66; });
   y += 24;
-  ctx.fillStyle = '#8F1D1D';
+  ctx.fillStyle = colors.red;
   ctx.font = 'italic 42px Fraunces, serif';
   wrapLines(ctx, payload.quote, w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 56; });
   y += 20;
-  ctx.fillStyle = '#7A6E5E';
+  ctx.fillStyle = colors.mute;
   ctx.font = '500 24px "Instrument Sans", sans-serif';
   ctx.fillText((payload.verse || '') + '   ·   KJV', 96, Math.min(y + 20, h - 140));
-  ctx.fillStyle = '#8F1D1D';
+  ctx.fillStyle = colors.red;
   ctx.font = 'italic 26px Fraunces, serif';
   ctx.fillText('The words He actually spoke.', 96, h - 110);
   return new Promise(resolve => c.toBlob(resolve, 'image/png'));
 }
 
-async function shareItem(type) {
-  const payload = sharePayload(type);
+async function shareItem(type, style) {
+  const payload = type === 'blessing' && blessingPick
+    ? { kicker: 'A blessing', title: (document.getElementById('blessing-note').value.trim() || 'For you'), quote: blessingPick.quote, verse: blessingPick.verse }
+    : sharePayload(type);
   if (!payload) return;
   const text = payload.title + '\n\n' + payload.quote + '\n— ' + payload.verse;
   try {
-    const blob = await renderShareCard(payload);
+    const blob = await renderShareCard(payload, style);
     const file = new File([blob], 'red-letter.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], title: 'Red Letter', text });
@@ -2154,7 +2593,7 @@ async function shareItem(type) {
     navigator.share({ title: 'Red Letter', text }).catch(() => {});
   } else {
     try {
-      const blob = await renderShareCard(payload);
+      const blob = await renderShareCard(payload, style);
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'red-letter.png';
@@ -2173,11 +2612,33 @@ function openSettings() {
 }
 function closeSettings() {
   document.getElementById('settings-sheet').classList.remove('on');
-  if (!document.getElementById('sit-sheet').classList.contains('on')) {
-    document.getElementById('overlay').classList.remove('on');
-  }
+  hideOverlayIfIdle();
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheets(); });
+document.addEventListener('keydown', e => {
+  const meta = e.metaKey || e.ctrlKey;
+  if (meta && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    const root = document.getElementById('cmdk');
+    if (root.classList.contains('on')) closeCommandPalette();
+    else openCommandPalette();
+    return;
+  }
+  if (e.key === '/' && !meta && !e.altKey) {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      e.preventDefault();
+      openCommandPalette();
+      return;
+    }
+  }
+  if (e.key === 'Escape') closeSheets();
+  const cmdk = document.getElementById('cmdk');
+  if (cmdk && cmdk.classList.contains('on')) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); cmdIndex = Math.min(cmdIndex + 1, cmdFiltered.length - 1); syncCmdActive(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); cmdIndex = Math.max(cmdIndex - 1, 0); syncCmdActive(); }
+    if (e.key === 'Enter') { e.preventDefault(); runCmd(cmdIndex); }
+  }
+});
 
 function toggleDark(on) {
   document.documentElement.dataset.theme = on ? 'dark' : 'light';
@@ -2202,6 +2663,8 @@ function applySettings() {
     const btn = document.getElementById('fs-' + s);
     if (btn) btn.classList.toggle('active', s === fs);
   });
+  const reminder = document.getElementById('reminder-toggle');
+  if (reminder) reminder.checked = ls('rla-reminder') === '1';
 }
 
 let toastTimer;
@@ -2265,6 +2728,316 @@ function formatAI(text) {
 function extractFirstVerse(text) {
   const m = text.match(/(Matthew|Mark|Luke|John)\s+\d+:\d+/);
   return m ? m[0] : '';
+}
+
+function revealWords(el, text) {
+  if (!el) return;
+  const clean = String(text || '').replace(/^["“]|["”]$/g, '');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = clean;
+    return;
+  }
+  const words = clean.split(/\s+/).filter(Boolean);
+  el.innerHTML = '';
+  el.classList.add('word-reveal');
+  words.forEach((word, index) => {
+    const span = document.createElement('span');
+    span.textContent = word + (index === words.length - 1 ? '' : ' ');
+    span.style.animationDelay = (40 + index * 42) + 'ms';
+    el.appendChild(span);
+  });
+}
+
+function openAmen(opts = {}) {
+  const root = document.getElementById('amen');
+  const echo = document.getElementById('amen-echo');
+  const cite = document.getElementById('amen-cite');
+  if (!root) return;
+  if (echo) {
+    echo.textContent = opts.quote ? '“' + String(opts.quote).replace(/^["“]|["”]$/g, '') + '”' : '';
+    echo.hidden = !opts.quote;
+  }
+  if (cite) {
+    cite.textContent = opts.verse || '';
+    cite.hidden = !opts.verse;
+  }
+  root.classList.add('on');
+  root.setAttribute('aria-hidden', 'false');
+  clearTimeout(amenTimer);
+  amenTimer = setTimeout(closeAmen, opts.holdMs || 2800);
+}
+function closeAmen() {
+  const root = document.getElementById('amen');
+  if (!root) return;
+  root.classList.remove('on');
+  root.setAttribute('aria-hidden', 'true');
+  clearTimeout(amenTimer);
+}
+function amenFromSit() {
+  if (!sitPayload) return;
+  closeSit();
+  openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
+}
+
+function stopSitListen() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  sitSpeaking = false;
+  const btn = document.getElementById('sit-listen');
+  if (btn) {
+    btn.textContent = 'Listen';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+}
+function toggleSitListen() {
+  if (!window.speechSynthesis) {
+    showToast('Listening isn’t available on this device');
+    return;
+  }
+  if (sitSpeaking) { stopSitListen(); return; }
+  const quote = (sitPayload && sitPayload.quote) || '';
+  const verse = (sitPayload && sitPayload.verse) || '';
+  sitUtterance = new SpeechSynthesisUtterance((quote + '. ' + verse).replace(/[“”]/g, ''));
+  sitUtterance.rate = 0.88;
+  sitUtterance.onend = () => stopSitListen();
+  sitUtterance.onerror = () => stopSitListen();
+  sitSpeaking = true;
+  const btn = document.getElementById('sit-listen');
+  if (btn) {
+    btn.textContent = 'Pause';
+    btn.setAttribute('aria-pressed', 'true');
+  }
+  window.speechSynthesis.speak(sitUtterance);
+}
+
+async function blessingSeeds() {
+  try {
+    const res = await fetch('/api/library?limit=24');
+    const data = await res.json();
+    if (data.sayings && data.sayings.length) {
+      return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
+    }
+  } catch (_) {}
+  try {
+    const res = await fetch('/library.json');
+    const data = await res.json();
+    return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
+  } catch (_) {
+    return [];
+  }
+}
+async function openBlessing(seed) {
+  closeSit();
+  closeSettings();
+  closeShareSheet();
+  const picks = await blessingSeeds();
+  if (seed && seed.verse && seed.quote && !picks.some((p) => p.verse === seed.verse)) picks.unshift(seed);
+  blessingPick = seed || picks[0] || null;
+  renderBlessingList(picks);
+  updateBlessingPreview();
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('blessing-sheet').classList.add('on');
+}
+function closeBlessing() {
+  document.getElementById('blessing-sheet').classList.remove('on');
+  hideOverlayIfIdle();
+}
+function blessingFromToday() {
+  if (dailyData) {
+    openBlessing({ verse: dailyData.affirmation.verse, quote: dailyData.affirmation.quote });
+  } else {
+    openBlessing(null);
+  }
+}
+function renderBlessingList(picks) {
+  const list = document.getElementById('blessing-list');
+  if (!list) return;
+  list.innerHTML = picks.map((item, index) => {
+    const selected = blessingPick && blessingPick.verse === item.verse;
+    const short = item.quote.length > 90 ? item.quote.slice(0, 90) + '…' : item.quote;
+    return '<button type="button" class="blessing-item' + (selected ? ' selected' : '') + '" data-index="' + index + '">' +
+      '<span class="blessing-item-cite">' + esc(item.verse) + '</span>' +
+      '<span>“' + esc(short) + '”</span></button>';
+  }).join('');
+  list.querySelectorAll('.blessing-item').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      blessingPick = picks[Number(btn.getAttribute('data-index'))];
+      renderBlessingList(picks);
+      updateBlessingPreview();
+    });
+  });
+}
+function updateBlessingPreview() {
+  const preview = document.getElementById('blessing-preview');
+  if (!preview || !blessingPick) return;
+  const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
+  preview.innerHTML = (note ? '<div class="blessing-preview-note">' + esc(note) + '</div>' : '') +
+    '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
+    '<div class="cite">' + esc(blessingPick.verse) + '</div>';
+}
+async function sendBlessing(style) {
+  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  closeBlessing();
+  await shareItem('blessing', style || 'parchment');
+  showToast('Blessing ready to send');
+}
+
+const COMMANDS = [
+  { label: 'Today’s reading', hint: 'Today', run: () => switchTab('today') },
+  { label: 'Find encouragement', hint: 'Seek', run: () => switchTab('seek') },
+  { label: 'Ask the Advisor', hint: 'Counsel', run: () => switchTab('advisor') },
+  { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
+  { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
+  { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
+  { label: 'Grief & Loss', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Grief & Loss'), 80); } },
+  { label: 'Peace', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Peace'), 80); } },
+  { label: 'Hope', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Hope'), 80); } },
+  { label: 'Room settings', hint: 'Lamp', run: () => openSettings() },
+];
+function renderCmdList(filter) {
+  const list = document.getElementById('cmdk-list');
+  if (!list) return;
+  const q = String(filter || '').trim().toLowerCase();
+  cmdFiltered = COMMANDS.filter((item) => !q || item.label.toLowerCase().includes(q) || item.hint.toLowerCase().includes(q));
+  if (q.startsWith('ask ') || q.startsWith('how ') || q.length > 18) {
+    cmdFiltered = [{
+      label: 'Ask Advisor: “' + filter.trim() + '”',
+      hint: 'Letter',
+      run: () => { switchTab('advisor'); setTimeout(() => sendMsg(filter.trim()), 120); },
+    }].concat(cmdFiltered);
+  }
+  cmdIndex = 0;
+  list.innerHTML = '';
+  cmdFiltered.forEach((item, index) => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'cmdk-item' + (index === 0 ? ' active' : '');
+    row.innerHTML = '<span>' + esc(item.label) + '</span><span class="cmdk-hint">' + esc(item.hint) + '</span>';
+    row.addEventListener('click', () => runCmd(index));
+    list.appendChild(row);
+  });
+}
+function syncCmdActive() {
+  const list = document.getElementById('cmdk-list');
+  if (!list) return;
+  Array.from(list.children).forEach((child, index) => child.classList.toggle('active', index === cmdIndex));
+}
+function runCmd(index) {
+  const item = cmdFiltered[index];
+  closeCommandPalette();
+  if (item && typeof item.run === 'function') item.run();
+}
+function openCommandPalette() {
+  const root = document.getElementById('cmdk');
+  const input = document.getElementById('cmdk-input');
+  root.classList.add('on');
+  root.setAttribute('aria-hidden', 'false');
+  renderCmdList('');
+  if (input) { input.value = ''; setTimeout(() => input.focus(), 20); }
+}
+function closeCommandPalette() {
+  const root = document.getElementById('cmdk');
+  if (!root) return;
+  root.classList.remove('on');
+  root.setAttribute('aria-hidden', 'true');
+}
+
+function looksLikeCrisisClient(text) {
+  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+}
+function showCrisisModal() {
+  return new Promise((resolve) => {
+    const el = document.getElementById('crisis-modal');
+    el.classList.add('on');
+    const finish = (action) => {
+      el.classList.remove('on');
+      resolve(action);
+    };
+    document.getElementById('crisis-continue').onclick = () => finish('continue');
+    document.getElementById('crisis-close').onclick = () => finish('close');
+  });
+}
+
+async function sealLetter(bubble) {
+  if (!bubble) return;
+  const blocks = [...bubble.querySelectorAll('.scripture-block')];
+  if (!blocks.length) return;
+  const items = blocks.map((block) => ({
+    verse: (block.querySelector('.scripture-verse') || {}).textContent || '',
+    quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
+  }));
+  try {
+    const res = await fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items }),
+    });
+    const data = await res.json();
+    (data.results || []).forEach((row, i) => {
+      if (!blocks[i]) return;
+      const seal = document.createElement('div');
+      seal.className = 'trust-seal ' + (row.ok ? 'ok' : 'warn');
+      seal.textContent = row.ok ? 'Sealed from the Gospels' : 'Needs a closer look';
+      blocks[i].appendChild(seal);
+      blocks[i].classList.add(row.ok ? 'scripture-verified' : 'scripture-unverified');
+    });
+  } catch (_) {}
+}
+
+async function toggleReminder(on) {
+  if (!on) {
+    lsSet('rla-reminder', '0');
+    return;
+  }
+  if (!('Notification' in window)) {
+    document.getElementById('reminder-toggle').checked = false;
+    showToast('Notifications aren’t available here');
+    return;
+  }
+  let permission = Notification.permission;
+  if (permission === 'default') permission = await Notification.requestPermission();
+  if (permission !== 'granted') {
+    document.getElementById('reminder-toggle').checked = false;
+    lsSet('rla-reminder', '0');
+    showToast('Reminder permission was declined');
+    return;
+  }
+  lsSet('rla-reminder', '1');
+  showToast('Morning reminder on · around 8:00');
+}
+function checkMorningReminder() {
+  if (ls('rla-reminder') !== '1') return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const now = new Date();
+  if (now.getHours() < 8 || now.getHours() > 10) return;
+  const key = 'rla-reminded-' + todayStr();
+  if (ls(key) === '1') return;
+  try {
+    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: '/icon-192.png', tag: 'rla-morning' });
+    lsSet(key, '1');
+  } catch (_) {}
+}
+
+function setOfflineBanner() {
+  document.getElementById('offline-banner').classList.toggle('on', !navigator.onLine);
+}
+
+function bindRituals() {
+  if (ritualsBound) return;
+  ritualsBound = true;
+  const note = document.getElementById('blessing-note');
+  if (note) note.addEventListener('input', updateBlessingPreview);
+  const amen = document.getElementById('amen');
+  if (amen) amen.addEventListener('click', closeAmen);
+  const cmdk = document.getElementById('cmdk');
+  if (cmdk) cmdk.addEventListener('click', (e) => { if (e.target === cmdk) closeCommandPalette(); });
+  const input = document.getElementById('cmdk-input');
+  if (input) input.addEventListener('input', () => renderCmdList(input.value));
+  window.addEventListener('online', setOfflineBanner);
+  window.addEventListener('offline', setOfflineBanner);
+  setOfflineBanner();
+  if (window.speechSynthesis) window.speechSynthesis.getVoices();
+  setInterval(checkMorningReminder, 5 * 60 * 1000);
 }
 
 if ('serviceWorker' in navigator) {

@@ -104,6 +104,19 @@ describe('smoke routes', () => {
     assert.equal(JSON.parse(ok.raw).ok, true);
   });
 
+  it('verifies a real saying and rejects a missing verse', async () => {
+    const ok = await request('POST', '/api/verify', {
+      items: [{ verse: 'John 14:27', quote: 'Peace I leave with you' }],
+    });
+    assert.equal(ok.status, 200);
+    const data = JSON.parse(ok.raw);
+    assert.equal(data.allVerified, true);
+    assert.match(data.results[0].quote, /Peace I leave with you/);
+    const missing = await request('POST', '/api/verify', { verse: '' });
+    assert.equal(missing.status, 200);
+    assert.equal(JSON.parse(missing.raw).allVerified, false);
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

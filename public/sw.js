@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v7';
+const CACHE = 'rla-phase0-v8';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',
@@ -28,14 +28,30 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
-  if (url.pathname.startsWith('/api/')) return;
 
-  const isDocument = e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html');
+  if (url.pathname.startsWith('/api/')) {
+    e.respondWith(
+      fetch(e.request).catch(() =>
+        new Response(JSON.stringify({ error: 'offline', offline: true }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    );
+    return;
+  }
+
+  const isDocument =
+    e.request.mode === 'navigate' ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('.html') ||
+    (e.request.headers.get('accept') || '').includes('text/html');
+
   if (isDocument) {
     e.respondWith(
       fetch(e.request)
         .then((res) => {
-          if (res.ok) {
+          if (res && res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(e.request, copy));
           }
@@ -50,7 +66,7 @@ self.addEventListener('fetch', (e) => {
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request)
         .then((res) => {
-          if (res.ok) {
+          if (res && res.ok && url.origin === self.location.origin) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(e.request, copy));
           }

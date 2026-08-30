@@ -145,6 +145,7 @@ describe('verifyJsonQuotes', () => {
 describe('looksLikeCrisis', () => {
   it('detects clear self-harm language and ignores ordinary grief', () => {
     assert.equal(looksLikeCrisis('I want to kill myself tonight'), true);
+    assert.equal(looksLikeCrisis('I have no reason to live'), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
   });
 });
