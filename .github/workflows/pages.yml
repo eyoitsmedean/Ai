@@ -37,7 +37,7 @@ jobs:
         if: steps.pages-setup.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'public'
 
       - name: Deploy to GitHub Pages
         if: steps.pages-setup.outcome == 'success'

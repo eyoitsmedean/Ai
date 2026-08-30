@@ -102,7 +102,20 @@ async function main() {
     assert(appHtml.includes('Stories 9:16') && appHtml.includes('Square 1:1'), 'missing share ratios');
     assert(appHtml.includes('sit-overlay') && appHtml.includes('reflect-box') && appHtml.includes('pray-box'), 'missing sit/reflect/pray');
     assert(appHtml.includes('examen-box') && appHtml.includes('plan-card') && appHtml.includes('mem-box'), 'missing examen/plan/memorize');
+    assert(appHtml.includes('midday-card') && appHtml.includes('amen-overlay') && appHtml.includes('cmd-overlay'), 'missing midday/amen/cmd');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
+  });
+
+  await check('corpus + verses + verify APIs', async () => {
+    const corpusRes = await req('/api/corpus');
+    assert(corpusRes.res.ok && corpusRes.json.passages?.length >= 40, 'corpus api');
+    const verses = await req('/api/verses');
+    assert(verses.res.ok && verses.json.count >= 40, 'verses api');
+    const verify = await req('/api/verify', {
+      method: 'POST',
+      body: JSON.stringify({ citations: [{ verse: 'Matthew 6:34', quote: "don't be anxious for tomorrow" }] }),
+    });
+    assert(verify.res.ok && verify.json.results?.[0]?.verified, 'verify api');
   });
 
   await check('library search payload', async () => {

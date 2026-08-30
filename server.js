@@ -19,7 +19,16 @@ const FREE_CHAT_LIMIT = Number(process.env.FREE_CHAT_LIMIT || 5);
 
 app.use(express.json({ limit: '256kb' }));
 app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    setHeaders(res, filePath) {
+      if (filePath.endsWith('sw.js')) {
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Service-Worker-Allowed', '/');
+      }
+    },
+  })
+);
 
 const hasAuth = !!(process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY);
 const ai = hasAuth
@@ -84,6 +93,32 @@ function guessTheme(text) {
   return 'Hope';
 }
 
+function publicCorpusPayload() {
+  return {
+    translation: corpus.translation,
+    translationName: corpus.translationName,
+    themes: corpus.THEMES,
+    books: corpus.BOOKS || ['Matthew', 'Mark', 'Luke', 'John'],
+    passages: corpus.passages.map((p) => ({
+      id: p.id,
+      verse: corpus.cite(p),
+      book: p.book,
+      chapter: p.chapter,
+      theme: p.theme,
+      text: p.text,
+      note: p.note || null,
+    })),
+  };
+}
+
+function verseCatalog() {
+  return corpus.passages.map((p) => ({
+    verse: corpus.cite(p),
+    quote: p.text,
+    theme: Array.isArray(p.theme) ? p.theme[0] : p.theme || '',
+  }));
+}
+
 const ADVISOR_SYSTEM = `You are "The Red Letter Advisor" — a deeply compassionate guide who helps people with life's real struggles using exclusively the direct words of Jesus Christ from the four Gospels: Matthew, Mark, Luke, and John.
 
 RESPONSE STRUCTURE — follow this exactly every time:
@@ -101,6 +136,7 @@ One sentence explaining why this speaks directly to their situation.
 STRICT RULES:
 • Only quote the direct words of Jesus in Matthew, Mark, Luke, and John. Never quote Paul, prophets, or other authors.
 • Every quote must be verbatim scripture — never fabricate or paraphrase a single word.
+• Prefer World English Bible (WEB) wording when recalling verses; if unsure of exact wording, choose a shorter verified phrase and cite accurately rather than inventing.
 • Cite every verse in bold on its own line: **Matthew 5:44**
 • Put the exact Jesus quote on the next line, in curly quotes "like this."
 • Put the one-sentence context on the line after the quote.
@@ -109,7 +145,12 @@ STRICT RULES:
 • If no direct red-letter parallel exists, say so honestly and offer the closest relevant teaching.
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
-• Never claim to be Jesus, a pastor, a therapist, or a crisis counselor.`;
+• Never claim to be Jesus, a pastor, a therapist, or a crisis counselor.
+
+SAFETY:
+• You are not a pastor, therapist, or crisis counselor.
+• If the user expresses suicidal ideation, self-harm intent, or immediate danger, do NOT give spiritual advice as the main response. Briefly acknowledge their pain, urge them to contact emergency services or the 988 Suicide & Crisis Lifeline (call/text 988 in the US) or https://www.iasp.info/suicidalthoughts/ internationally, and keep any scripture secondary and non-prescriptive.
+• Never tell someone to endure abuse, stay in danger, or avoid professional help.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -130,7 +171,7 @@ Return ONLY valid JSON (no markdown, no fences) with this exact structure:
 }
 
 Rules:
-- Every quote must be actual Jesus speech from the four Gospels.
+- Every quote must be actual Jesus speech from the four Gospels (WEB preferred).
 - The affirmation must feel personal and specific, not generic.
 - Choose a theme that is timeless and emotionally resonant.
 - Today is ${new Date().toDateString()} — choose content appropriate for the day.`;
@@ -153,7 +194,7 @@ Return ONLY valid JSON (no markdown fences) with this structure:
   "closing": "One warm, non-pressuring closing line"
 }
 
-Include 3–4 passages. Use only real, verifiable red-letter verses. Be emotionally generous — meet real pain with real comfort.`;
+Include 3–4 passages. Use only real, verifiable red-letter verses (WEB preferred). Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
 
 const CRISIS_REPLY = `I hear how heavy this is, and I'm glad you said something. I am a reflective guide using the words of Jesus — not a crisis counselor, and not a substitute for real human help.
 
@@ -171,8 +212,8 @@ async function getDaily() {
 
   if (!ai) {
     const offline = offlineDaily(key);
-    dailyCache.set(key, offline);
-    return offline;
+    dailyCache.set(key, { ...offline, source: 'corpus' });
+    return dailyCache.get(key);
   }
 
   try {
@@ -204,14 +245,15 @@ async function getDaily() {
         verified: word.verified,
       },
       verified: !!(aff.verified && word.verified),
+      source: 'model',
     };
     dailyCache.set(key, out);
     return out;
   } catch (err) {
     console.error('Daily LLM error:', err.message);
     const offline = offlineDaily(key);
-    dailyCache.set(key, offline);
-    return offline;
+    dailyCache.set(key, { ...offline, source: 'corpus-fallback' });
+    return dailyCache.get(key);
   }
 }
 
@@ -219,6 +261,8 @@ app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
     hasAuth,
+    api: hasAuth,
+    name: 'red-letter-advisor',
     corpusPassages: corpus.passages.length,
     themes: corpus.THEMES.length,
     freeChatLimit: FREE_CHAT_LIMIT,
@@ -227,6 +271,43 @@ app.get('/api/health', (_req, res) => {
 
 app.get('/api/quota', (req, res) => {
   res.json(getQuota(getClientId(req)));
+});
+
+app.get('/api/corpus', (_req, res) => {
+  res.json(publicCorpusPayload());
+});
+
+app.get('/api/verses', (_req, res) => {
+  const list = verseCatalog();
+  res.json({ translation: corpus.translation || 'WEB', count: list.length, verses: list });
+});
+
+app.post('/api/verify', async (req, res) => {
+  try {
+    const citations = Array.isArray(req.body?.citations) ? req.body.citations : [];
+    if (!citations.length && typeof req.body?.text === 'string') {
+      const annotated = await annotateAdvisorText(req.body.text);
+      return res.json({
+        total: annotated.citations.length,
+        verified: annotated.grounded,
+        grounded: annotated.grounded,
+        unverified: annotated.unverified,
+        text: annotated.text,
+        results: annotated.citations,
+      });
+    }
+    const results = await verifyPassages(
+      citations.map((item) => ({ verse: item.verse, quote: item.quote || '' }))
+    );
+    res.json({
+      total: results.length,
+      verified: results.filter((item) => item.verified).length,
+      results,
+    });
+  } catch (err) {
+    console.error('Verify error:', err.message);
+    res.status(500).json({ error: 'Verification failed.' });
+  }
 });
 
 app.get('/api/library', (req, res) => {
@@ -261,7 +342,7 @@ app.get('/api/daily', async (_req, res) => {
     res.json(await getDaily());
   } catch (err) {
     console.error('Daily error:', err.message);
-    res.json(offlineDaily(todayKey()));
+    res.json({ ...offlineDaily(todayKey()), source: 'corpus-error-fallback' });
   }
 });
 
@@ -270,7 +351,7 @@ app.post('/api/encouragement', async (req, res) => {
   if (!theme || typeof theme !== 'string') {
     return res.status(400).json({ error: 'theme required.' });
   }
-  if (!ai) return res.json(offlineEncouragement(theme));
+  if (!ai) return res.json({ ...offlineEncouragement(theme), source: 'corpus' });
 
   try {
     const response = await ai.messages.create({
@@ -291,10 +372,11 @@ app.post('/api/encouragement', async (req, res) => {
       practice: data.practice,
       closing: data.closing,
       verified: passages.every((p) => p.verified),
+      source: 'model',
     });
   } catch (err) {
     console.error('Encouragement error:', err.message);
-    res.json(offlineEncouragement(theme));
+    res.json({ ...offlineEncouragement(theme), source: 'corpus-fallback' });
   }
 });
 

@@ -20,6 +20,12 @@ module.exports = {
       text: "Therefore don’t be anxious for tomorrow, for tomorrow will be anxious for itself. Each day’s own evil is sufficient.",
     },
     {
+      id: 'mt6-9-13',
+      book: 'Matthew', chapter: 6, verseStart: 9, verseEnd: 13,
+      theme: ['Peace', 'Purpose & Direction', 'Forgiveness'],
+      text: "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’",
+    },
+    {
       id: 'jn14-27',
       book: 'John', chapter: 14, verseStart: 27, verseEnd: 27,
       theme: ['Anxiety & Worry', 'Peace', 'Fear'],

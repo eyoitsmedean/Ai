@@ -289,3 +289,15 @@ Sources: Lectio 365 / 24-7 Prayer (P.R.A.Y + evening Examen), Bearing Fruit (gra
 | **Grace over streak** (Bearing Fruit garden) | Guilt resets kill return | Plan marks “received” per day; unfinished days stay open; presence week never wipes. |
 
 **Product rule:** Every new habit surface still cites only verified Jesus speech (WEB corpus). No invented quotes in Examen, memory, or plans.
+
+---
+
+## 11. Merge synthesis (PR #4 + this branch)
+
+Base `claude/jesus-teachings-chatbot-bSBhF` absorbed Quiet Chapel PR #4 (modular JS/CSS, dark chapel, streaks, client corpus). This branch kept the **feature-depth product** (grace presence, Sit/Reflect/Examen/plan/memorize, Lattice grounding, freemium) and **stone + crimson** brand (avoid dark-mode default).
+
+**Kept from PR #4:** SW network-first HTML + offline API JSON, `sw.js` cache headers, favicon/apple-touch icons, SAFETY block in advisor prompt, `/api/corpus` · `/api/verses` · `/api/verify`, modular assets retained under `public/js` + `public/css` for future port.
+
+**Kept from this branch:** Monolith Today shell, grace over streaks, grounding via `data/scripture.js`, quota freemium, habit depth.
+
+**Added in synthesis:** Midday Lord’s Prayer pause (Mt 6:9–13), Amen seal ritual, ⌘K command palette.

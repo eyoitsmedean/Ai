@@ -9,6 +9,8 @@
   <meta name="description" content="Daily guidance from the direct words of Jesus Christ in the four Gospels." />
   <title>The Red Letter Advisor</title>
   <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -248,6 +250,31 @@ textarea,input{font-family:var(--font-ui)}
 .sit-hint{font-size:calc(13px * var(--scale));color:rgba(237,232,224,.55);margin-bottom:24px}
 .sit-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 
+.midday-card{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .45s .06s var(--ease) both}
+.midday-card.highlight{border-color:rgba(185,28,28,.3);background:linear-gradient(180deg,rgba(185,28,28,.06),var(--surface))}
+.midday-hd{font-family:var(--font-disp);font-size:calc(15px * var(--scale));font-weight:700;margin-bottom:4px}
+.midday-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);line-height:1.4;margin-bottom:12px}
+.midday-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.amen-overlay{position:fixed;inset:0;z-index:460;background:rgba(20,18,16,.72);display:none;align-items:center;justify-content:center;padding:24px}
+.amen-overlay.open{display:flex;animation:fadeUp .35s var(--ease) both}
+.amen-card{width:min(360px,100%);background:var(--surface);border-radius:var(--r);padding:28px 22px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow-lg)}
+.amen-seal{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-disp);font-weight:700;font-size:18px;animation:badgePulse .8s ease 1}
+.amen-title{font-family:var(--font-disp);font-size:calc(20px * var(--scale));font-weight:700;margin-bottom:8px}
+.amen-body{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.5;margin-bottom:18px}
+.amen-quote{font-family:var(--font-body);font-style:italic;color:var(--crimson-words);font-size:calc(14px * var(--scale));line-height:1.45;margin-bottom:8px}
+.amen-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:18px}
+
+.cmd-overlay{position:fixed;inset:0;z-index:500;background:rgba(20,18,16,.55);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 16px}
+.cmd-overlay.open{display:flex;animation:fadeUp .25s var(--ease) both}
+.cmd-panel{width:min(420px,100%);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden}
+.cmd-input{width:100%;padding:14px 16px;border:none;border-bottom:1px solid var(--border);background:transparent;color:var(--ink);font-size:calc(15px * var(--scale));outline:none}
+.cmd-list{max-height:280px;overflow:auto}
+.cmd-item{width:100%;text-align:left;padding:12px 16px;border:none;background:transparent;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:2px;font-family:var(--font-ui)}
+.cmd-item:hover,.cmd-item.active{background:var(--crimson-glow)}
+.cmd-item strong{font-size:calc(13px * var(--scale))}
+.cmd-item span{font-size:calc(11px * var(--scale));color:var(--ink-muted)}
+
 .reflect-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
 .reflect-box.hidden{display:none!important}
 .reflect-prompt{font-size:calc(13px * var(--scale));color:var(--ink-soft);margin-bottom:10px;line-height:1.45}
@@ -407,6 +434,9 @@ textarea,input{font-family:var(--font-ui)}
     </div>
     <div class="header-right">
       <span class="quota-hint hidden" id="quota-hint"></span>
+      <button type="button" class="icon-btn" onclick="openCommandPalette()" aria-label="Search" title="Search (⌘K)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
       <button type="button" class="icon-btn" onclick="openSettings()" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
@@ -470,6 +500,14 @@ textarea,input{font-family:var(--font-ui)}
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
         <div class="presence-week" id="presence-week" aria-label="This week's presence"></div>
+      </div>
+      <div class="midday-card" id="midday-card">
+        <div class="midday-hd">Midday pause</div>
+        <p class="midday-sub">Pray as He taught — a short return to the Father in the middle of the day.</p>
+        <div class="midday-actions">
+          <button type="button" class="action-btn" onclick="openMidday()">Pray the Lord’s Prayer</button>
+          <button type="button" class="action-btn" onclick="listenMidday()">Listen</button>
+        </div>
       </div>
       <div class="plan-card" id="plan-card">
         <div class="plan-hd">7 days with His words</div>
@@ -624,6 +662,31 @@ textarea,input{font-family:var(--font-ui)}
     <button type="button" class="action-btn" onclick="closeSit()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
   </div>
 </div>
+<div class="sit-overlay" id="midday-overlay" role="dialog" aria-label="Midday prayer" aria-hidden="true">
+  <p class="sit-hint" style="margin-bottom:12px;color:rgba(237,232,224,.55)">As He taught us to pray</p>
+  <p class="sit-quote" id="midday-quote"></p>
+  <p class="sit-cite" id="midday-cite">Matthew 6:9–13 · WEB</p>
+  <div class="sit-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="finishMidday()">Amen</button>
+    <button type="button" class="action-btn" onclick="closeMidday()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="amen-overlay" id="amen-overlay" role="dialog" aria-label="Amen" aria-hidden="true">
+  <div class="amen-card">
+    <div class="amen-seal">✓</div>
+    <div class="amen-title">Amen</div>
+    <p class="amen-body">Received and sealed — His words, verified, carried into your day.</p>
+    <p class="amen-quote" id="amen-quote"></p>
+    <p class="amen-cite" id="amen-cite"></p>
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="closeAmen()">Continue</button>
+  </div>
+</div>
+<div class="cmd-overlay" id="cmd-overlay" role="dialog" aria-label="Command palette" aria-hidden="true">
+  <div class="cmd-panel">
+    <input class="cmd-input" id="cmd-input" type="search" placeholder="Go somewhere or seek a theme…" autocomplete="off" aria-label="Command" />
+    <div class="cmd-list" id="cmd-list"></div>
+  </div>
+</div>
 <div class="install-banner hidden" id="install-banner">
   <p><strong>Add Red Letter</strong>Keep His words one tap away</p>
   <div class="ib-actions">
@@ -649,6 +712,7 @@ async function api(path, opts = {}) {
 /* ═══ OFFLINE CORPUS ═══ */
 const CORPUS = [
   { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient.", themes: ['Anxiety & Worry', 'Peace'] },
+  { verse: 'Matthew 6:9-13', text: "Pray like this: 'Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.'", themes: ['Peace', 'Purpose & Direction', 'Forgiveness'] },
   { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful.", themes: ['Anxiety & Worry', 'Peace', 'Fear'] },
   { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.', themes: ['Anxiety & Worry', 'Suffering & Pain', 'Peace'] },
   { verse: 'Matthew 5:44', text: 'But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you.', themes: ['Conflict & Relationships', 'Forgiveness'] },
@@ -894,8 +958,133 @@ function closeSit() {
 }
 function finishSit() {
   closeSit();
-  markPresence();
+  markPresence({ skipReflect: true });
+  openAmen(dailyData?.word?.passage, dailyData?.word?.verse);
+  showReflect();
 }
+
+/* ═══ MIDDAY PAUSE (Lectio 365 — Lord’s Prayer) ═══ */
+const LORDS_PRAYER = CORPUS.find((c) => c.verse === 'Matthew 6:9-13') || {
+  verse: 'Matthew 6:9-13',
+  text: "Pray like this: 'Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.'",
+};
+
+function renderMidday() {
+  const card = document.getElementById('midday-card');
+  if (!card) return;
+  const h = new Date().getHours();
+  card.classList.toggle('highlight', h >= 11 && h < 15);
+}
+
+function openMidday() {
+  document.getElementById('midday-quote').textContent = '"' + LORDS_PRAYER.text + '"';
+  document.getElementById('midday-cite').textContent = LORDS_PRAYER.verse + ' · WEB';
+  const overlay = document.getElementById('midday-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+
+function closeMidday() {
+  const overlay = document.getElementById('midday-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+}
+
+function finishMidday() {
+  closeMidday();
+  lsSet('rla-midday-day', todayISO());
+  markPresence({ skipReflect: true });
+  openAmen(LORDS_PRAYER.text, LORDS_PRAYER.verse);
+  showToast('Midday received');
+}
+
+function listenMidday() {
+  speakText(LORDS_PRAYER.text + '. ' + LORDS_PRAYER.verse);
+}
+
+/* ═══ AMEN SEAL (Quiet Chapel trust ritual, grace-toned) ═══ */
+function openAmen(quote, verse) {
+  const overlay = document.getElementById('amen-overlay');
+  if (!overlay) return;
+  document.getElementById('amen-quote').textContent = quote
+    ? '"' + pickCarryPhrase(quote) + '"'
+    : '';
+  document.getElementById('amen-cite').textContent = verse ? verse + ' · WEB' : '';
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+
+function closeAmen() {
+  const overlay = document.getElementById('amen-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+}
+
+/* ═══ COMMAND PALETTE ═══ */
+const CMD_ITEMS = [
+  { label: 'Today', hint: 'Daily word & presence', run: () => goTab('today') },
+  { label: 'Seek', hint: 'Encouragement by theme', run: () => goTab('seek') },
+  { label: 'Advisor', hint: 'Ask from the red letters', run: () => goTab('advisor') },
+  { label: 'Library', hint: 'Browse verified sayings', run: () => goTab('library') },
+  { label: 'Journal', hint: 'Prayers & saved words', run: () => goTab('journal') },
+  { label: 'Sit with today’s word', hint: 'One quiet minute', run: () => { goTab('today'); startSit(); } },
+  { label: 'Midday prayer', hint: 'The Lord’s Prayer', run: () => { goTab('today'); openMidday(); } },
+  { label: 'Evening Examen', hint: 'Close the day', run: () => { goTab('today'); document.getElementById('examen-box')?.scrollIntoView({ behavior: 'smooth' }); } },
+  { label: '7-day plan', hint: 'Walk with His words', run: () => { goTab('today'); document.getElementById('plan-card')?.scrollIntoView({ behavior: 'smooth' }); } },
+  { label: 'Share a blessing', hint: 'Open share card', run: () => { const w = dailyData?.word; if (w) openShareCard({ verse: w.verse, quote: pickCarryPhrase(w.passage), theme: w.theme }); } },
+];
+
+function openCommandPalette() {
+  const overlay = document.getElementById('cmd-overlay');
+  const input = document.getElementById('cmd-input');
+  if (!overlay || !input) return;
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  input.value = '';
+  renderCmdList('');
+  setTimeout(() => input.focus(), 30);
+}
+
+function closeCommandPalette() {
+  const overlay = document.getElementById('cmd-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+}
+
+function renderCmdList(q) {
+  const list = document.getElementById('cmd-list');
+  if (!list) return;
+  const query = String(q || '').toLowerCase().trim();
+  const items = CMD_ITEMS.filter(
+    (c) => !query || c.label.toLowerCase().includes(query) || c.hint.toLowerCase().includes(query)
+  );
+  list.innerHTML = items
+    .map(
+      (c, i) =>
+        '<button type="button" class="cmd-item' +
+        (i === 0 ? ' active' : '') +
+        '" data-i="' +
+        CMD_ITEMS.indexOf(c) +
+        '"><strong>' +
+        esc(c.label) +
+        '</strong><span>' +
+        esc(c.hint) +
+        '</span></button>'
+    )
+    .join('');
+  list.querySelectorAll('.cmd-item').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const item = CMD_ITEMS[Number(btn.dataset.i)];
+      closeCommandPalette();
+      item?.run();
+    });
+  });
+}
+
+document.getElementById('cmd-input')?.addEventListener('input', (e) => renderCmdList(e.target.value));
+document.getElementById('cmd-overlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'cmd-overlay') closeCommandPalette();
+});
 
 /* ═══ REFLECT (Glorify-style one prompt) ═══ */
 function showReflect() {
@@ -2205,6 +2394,7 @@ function initApp() {
   renderCarry();
   renderPlan();
   renderExamen();
+  renderMidday();
   renderThemeGrid();
   goTab('today');
   const nav = document.getElementById('bottom-nav');
@@ -2228,9 +2418,17 @@ if ('serviceWorker' in navigator) {
 }
 
 document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    openCommandPalette();
+    return;
+  }
   if (e.key === 'Escape') {
     closeShareCard();
     closeSit();
+    closeMidday();
+    closeAmen();
+    closeCommandPalette();
   }
 });
 
