@@ -35,6 +35,10 @@ html{-webkit-text-size-adjust:100%}
          radial-gradient(ellipse 60% 40% at 90% 10%,rgba(146,100,10,.05),transparent 55%),
          linear-gradient(180deg,var(--stone) 0%,#E8E2D8 100%);
 }
+html[data-hour="morning"]{--mesh:radial-gradient(ellipse 90% 55% at 30% -10%,rgba(185,28,28,.1),transparent 55%),radial-gradient(ellipse 50% 40% at 100% 0%,rgba(232,201,138,.12),transparent 50%),linear-gradient(180deg,#F3EDE4 0%,#E8E2D8 100%)}
+html[data-hour="day"]{--mesh:radial-gradient(ellipse 80% 50% at 20% 0%,rgba(159,18,57,.05),transparent 60%),linear-gradient(180deg,var(--stone) 0%,#E8E2D8 100%)}
+html[data-hour="dusk"]{--mesh:radial-gradient(ellipse 70% 45% at 80% 0%,rgba(146,100,10,.14),transparent 50%),radial-gradient(ellipse 60% 40% at 10% 20%,rgba(159,18,57,.08),transparent 55%),linear-gradient(180deg,#E9E0D4 0%,#DDD4C6 100%)}
+html[data-hour="night"]{--mesh:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(159,18,57,.09),transparent 55%),linear-gradient(180deg,#E4DDD3 0%,#D6CEC2 100%)}
 :root[data-theme="dark"],
 html.theme-dark{
   --ink:#EDE8E0;--ink-soft:#C8C0B4;--ink-muted:#8A8278;
@@ -275,6 +279,45 @@ textarea,input{font-family:var(--font-ui)}
 .cmd-item strong{font-size:calc(13px * var(--scale))}
 .cmd-item span{font-size:calc(11px * var(--scale));color:var(--ink-muted)}
 
+.word-reveal span{display:inline;opacity:0;animation:wordIn .55s var(--ease) forwards}
+@keyframes wordIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.atelier-row{display:flex;gap:8px;padding:0 14px 14px;flex-wrap:wrap}
+.atelier-pill{flex:1;min-width:140px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);text-align:left;cursor:pointer;transition:transform .15s var(--ease),border-color .2s}
+.atelier-pill:hover{transform:translateY(-1px);border-color:rgba(185,28,28,.35)}
+.atelier-pill strong{display:block;font-family:var(--font-disp);font-size:calc(14px * var(--scale));margin-bottom:2px}
+.atelier-pill span{font-size:calc(11px * var(--scale));color:var(--ink-muted);line-height:1.35}
+
+.draw-stage{margin:0 14px 16px;perspective:900px;min-height:160px}
+.draw-card{position:relative;padding:22px 18px;border-radius:var(--r);background:linear-gradient(145deg,rgba(185,28,28,.14),var(--surface));border:1px solid rgba(185,28,28,.25);transform-style:preserve-3d;transition:transform .6s var(--ease);text-align:center}
+.draw-card.flip{animation:drawFlip .7s var(--ease)}
+@keyframes drawFlip{0%{transform:rotateY(0)}40%{transform:rotateY(90deg) scale(.96)}100%{transform:rotateY(0)}}
+.draw-kicker{font-size:calc(10px * var(--scale));font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.draw-quote{font-family:var(--font-body);font-style:italic;color:var(--crimson-words);font-size:calc(16px * var(--scale));line-height:1.5;margin-bottom:8px}
+.draw-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:12px}
+.draw-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+.breath-overlay{position:fixed;inset:0;z-index:470;background:var(--chrome);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
+.breath-overlay.open{display:flex;animation:fadeUp .4s var(--ease) both}
+.breath-ring{width:170px;height:170px;border-radius:50%;border:2px solid rgba(185,28,28,.45);box-shadow:0 0 0 18px rgba(185,28,28,.08);display:flex;align-items:center;justify-content:center;margin-bottom:28px;animation:breathe 8s ease-in-out infinite}
+.breath-ring.paused{animation-play-state:paused}
+@keyframes breathe{0%,100%{transform:scale(.84);border-color:rgba(185,28,28,.35)}50%{transform:scale(1.08);border-color:rgba(232,201,138,.55)}}
+.breath-phase{font-family:var(--font-disp);font-size:22px;color:#EDE8E0;font-weight:700}
+.breath-phrase{font-family:var(--font-body);font-style:italic;color:var(--crimson-words);font-size:calc(18px * var(--scale));line-height:1.5;max-width:300px;margin:0 0 10px}
+.breath-cite{font-size:calc(12px * var(--scale));color:var(--gold);font-weight:700;margin-bottom:8px}
+.breath-hint{font-size:calc(13px * var(--scale));color:rgba(237,232,224,.55);margin-bottom:22px}
+
+.parable-overlay{position:fixed;inset:0;z-index:480;background:linear-gradient(180deg,#1A1410 0%,#141210 100%);display:none;flex-direction:column;max-width:430px;margin:0 auto;color:#EDE8E0}
+.parable-overlay.open{display:flex;animation:fadeUp .4s var(--ease) both}
+.parable-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(237,232,224,.08)}
+.parable-kicker{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:rgba(232,201,138,.7);font-weight:700}
+.parable-body{flex:1;overflow:auto;padding:24px 20px 32px;-webkit-overflow-scrolling:touch}
+.parable-title{font-family:var(--font-disp);font-size:calc(22px * var(--scale));font-weight:700;margin-bottom:8px;color:#F7F4EF}
+.parable-note{font-size:calc(13px * var(--scale));color:rgba(237,232,224,.55);margin-bottom:20px;line-height:1.45;font-style:italic}
+.parable-text{font-family:var(--font-body);font-size:calc(17px * var(--scale));line-height:1.7;color:rgba(255,230,230,.92);font-style:italic}
+.parable-cite{margin-top:18px;font-size:calc(12px * var(--scale));color:var(--gold);font-weight:700}
+.parable-actions{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px calc(16px + env(safe-area-inset-bottom));border-top:1px solid rgba(237,232,224,.08)}
+
 .reflect-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
 .reflect-box.hidden{display:none!important}
 .reflect-prompt{font-size:calc(13px * var(--scale));color:var(--ink-soft);margin-bottom:10px;line-height:1.45}
@@ -485,6 +528,7 @@ textarea,input{font-family:var(--font-ui)}
           <button type="button" class="action-btn" onclick="listenWord()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
           <button type="button" class="action-btn" onclick="shareWord()" aria-label="Share word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
           <button type="button" class="action-btn" onclick="startSit()" aria-label="Sit with this word">Sit</button>
+          <button type="button" class="action-btn" onclick="openBreathPrayer()" aria-label="Breath prayer">Breathe</button>
           <button type="button" class="action-btn" onclick="carryWord()" aria-label="Carry phrase">Carry</button>
           <button type="button" class="action-btn" id="save-word-btn" onclick="saveWord()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
         </div></div></div>
@@ -547,6 +591,24 @@ textarea,input{font-family:var(--font-ui)}
     </section>
     <section class="page" id="seek-page" data-tab="seek">
       <div class="page-hd"><div class="page-hd-eyebrow">Find comfort</div><h1 class="page-hd-title">What do you need today?</h1></div>
+      <div class="atelier-row">
+        <button type="button" class="atelier-pill" onclick="drawAWord()"><strong>Draw a word</strong><span>One verified saying, given to you</span></button>
+        <button type="button" class="atelier-pill" onclick="openBreathPrayer()"><strong>Breath prayer</strong><span>Inhale His words · exhale rest</span></button>
+        <button type="button" class="atelier-pill" onclick="openRandomParable()"><strong>Parable chamber</strong><span>Enter a story He told</span></button>
+      </div>
+      <div class="draw-stage hidden" id="draw-stage">
+        <div class="draw-card" id="draw-card">
+          <div class="draw-kicker">Drawn for you</div>
+          <p class="draw-quote" id="draw-quote"></p>
+          <p class="draw-cite" id="draw-cite"></p>
+          <div class="draw-actions">
+            <button type="button" class="action-btn" onclick="carryDrawn()">Carry</button>
+            <button type="button" class="action-btn" onclick="shareDrawn()">Share</button>
+            <button type="button" class="action-btn" onclick="openBreathFromDraw()">Breathe</button>
+            <button type="button" class="action-btn" onclick="drawAWord()">Draw again</button>
+          </div>
+        </div>
+      </div>
       <div class="theme-grid" id="theme-grid"></div><div class="seek-result hidden" id="seek-result"></div>
     </section>
     <section class="page" id="advisor-page" data-tab="advisor">
@@ -687,6 +749,34 @@ textarea,input{font-family:var(--font-ui)}
     <div class="cmd-list" id="cmd-list"></div>
   </div>
 </div>
+<div class="breath-overlay" id="breath-overlay" role="dialog" aria-label="Breath prayer" aria-hidden="true">
+  <div class="breath-ring" id="breath-ring"><span class="breath-phase" id="breath-phase">Inhale</span></div>
+  <p class="breath-phrase" id="breath-phrase"></p>
+  <p class="breath-cite" id="breath-cite"></p>
+  <p class="breath-hint">Four counts in · hold the phrase · four counts out. No timer shame.</p>
+  <div class="sit-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="finishBreath()">Amen</button>
+    <button type="button" class="action-btn" onclick="closeBreath()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="parable-overlay" id="parable-overlay" role="dialog" aria-label="Parable chamber" aria-hidden="true">
+  <div class="parable-top">
+    <span class="parable-kicker">Parable chamber</span>
+    <button type="button" class="action-btn" onclick="closeParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Close</button>
+  </div>
+  <div class="parable-body">
+    <h2 class="parable-title" id="parable-title"></h2>
+    <p class="parable-note" id="parable-note"></p>
+    <p class="parable-text" id="parable-text"></p>
+    <p class="parable-cite" id="parable-cite"></p>
+  </div>
+  <div class="parable-actions">
+    <button type="button" class="action-btn" onclick="sitParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Sit</button>
+    <button type="button" class="action-btn" onclick="carryParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Carry</button>
+    <button type="button" class="action-btn" onclick="shareParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Share</button>
+    <button type="button" class="action-btn" onclick="breatheParable()" style="background:rgba(185,28,28,.35);border-color:rgba(185,28,28,.5);color:#fff">Breathe</button>
+  </div>
+</div>
 <div class="install-banner hidden" id="install-banner">
   <p><strong>Add Red Letter</strong>Keep His words one tap away</p>
   <div class="ib-actions">
@@ -720,6 +810,7 @@ const CORPUS = [
   { verse: 'Matthew 28:20', text: 'Behold, I am with you always, even to the end of the age.', themes: ['Loneliness', 'Hope', 'Faith & Doubt'] },
   { verse: 'Matthew 5:4', text: 'Blessed are those who mourn, for they shall be comforted.', themes: ['Grief & Loss', 'Hope'] },
   { verse: 'Luke 12:32', text: "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom.", themes: ['Fear', 'Hope'] },
+  { verse: 'Mark 4:39', text: 'Peace! Be still!', themes: ['Fear', 'Peace', 'Anxiety & Worry'] },
   { verse: 'John 13:34-35', text: 'A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another. By this everyone will know that you are my disciples, if you have love for one another.', themes: ['Conflict & Relationships', 'Loneliness'] },
   { verse: 'John 11:25-26', text: 'I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?', themes: ['Grief & Loss', 'Faith & Doubt'] },
   { verse: 'Matthew 6:14-15', text: "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don't forgive men their trespasses, neither will your Father forgive your trespasses.", themes: ['Forgiveness', 'Shame & Guilt'] },
@@ -1032,6 +1123,9 @@ const CMD_ITEMS = [
   { label: 'Evening Examen', hint: 'Close the day', run: () => { goTab('today'); document.getElementById('examen-box')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: '7-day plan', hint: 'Walk with His words', run: () => { goTab('today'); document.getElementById('plan-card')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: 'Share a blessing', hint: 'Open share card', run: () => { const w = dailyData?.word; if (w) openShareCard({ verse: w.verse, quote: pickCarryPhrase(w.passage), theme: w.theme }); } },
+  { label: 'Draw a word', hint: 'One saying, given to you', run: () => { goTab('seek'); drawAWord(); } },
+  { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
+  { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
 ];
 
 function openCommandPalette() {
@@ -1085,6 +1179,227 @@ document.getElementById('cmd-input')?.addEventListener('input', (e) => renderCmd
 document.getElementById('cmd-overlay')?.addEventListener('click', (e) => {
   if (e.target.id === 'cmd-overlay') closeCommandPalette();
 });
+
+/* ═══ WORD REVEAL (Quiet Chapel craft, light brand) ═══ */
+function revealWords(el, text) {
+  if (!el) return;
+  const clean = String(text || '').replace(/^["“]|["”]$/g, '').trim();
+  if (!clean) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = text;
+    return;
+  }
+  const words = clean.split(/\s+/).filter(Boolean);
+  el.innerHTML = '';
+  el.classList.add('word-reveal');
+  const open = document.createElement('span');
+  open.textContent = '“';
+  open.style.animationDelay = '0ms';
+  el.appendChild(open);
+  words.forEach((word, index) => {
+    const span = document.createElement('span');
+    span.textContent = word + (index === words.length - 1 ? '' : ' ');
+    span.style.animationDelay = (70 + index * 48) + 'ms';
+    el.appendChild(span);
+  });
+  const close = document.createElement('span');
+  close.textContent = '”';
+  close.style.animationDelay = (70 + words.length * 48) + 'ms';
+  el.appendChild(close);
+}
+
+/* ═══ HOUR ATMOSPHERE ═══ */
+function setHourAtmosphere() {
+  const h = new Date().getHours();
+  let hour = 'day';
+  if (h < 6 || h >= 21) hour = 'night';
+  else if (h < 11) hour = 'morning';
+  else if (h >= 17) hour = 'dusk';
+  document.documentElement.dataset.hour = hour;
+}
+
+/* ═══ DRAW A WORD ═══ */
+let drawnWord = null;
+function drawAWord() {
+  goTab('seek');
+  const pool = CORPUS.filter((c) => (c.text || '').length > 20);
+  drawnWord = pool[Math.floor(Math.random() * pool.length)] || CORPUS[0];
+  const stage = document.getElementById('draw-stage');
+  const card = document.getElementById('draw-card');
+  stage.classList.remove('hidden');
+  document.getElementById('draw-quote').textContent = '"' + pickCarryPhrase(drawnWord.text) + '"';
+  document.getElementById('draw-cite').textContent = drawnWord.verse + ' · WEB';
+  card.classList.remove('flip');
+  void card.offsetWidth;
+  card.classList.add('flip');
+  revealWords(document.getElementById('draw-quote'), pickCarryPhrase(drawnWord.text));
+  stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function carryDrawn() {
+  if (!drawnWord) return;
+  lsSetJSON('rla-carry', { phrase: pickCarryPhrase(drawnWord.text), verse: drawnWord.verse, day: todayISO() });
+  renderCarry();
+  showToast('Carrying this drawn word');
+}
+function shareDrawn() {
+  if (!drawnWord) return;
+  openShareCard({ verse: drawnWord.verse, quote: pickCarryPhrase(drawnWord.text), theme: 'Drawn for you' });
+}
+function openBreathFromDraw() {
+  if (!drawnWord) return;
+  openBreathPrayer(pickCarryPhrase(drawnWord.text), drawnWord.verse);
+}
+
+/* ═══ BREATH PRAYER ═══ */
+let breathTimer = null;
+function openBreathPrayer(phrase, verse) {
+  const carry = lsJSON('rla-carry', null);
+  const p =
+    phrase ||
+    (carry?.day === todayISO() && carry.phrase) ||
+    pickCarryPhrase(dailyData?.word?.passage || '') ||
+    "Peace! Be still!";
+  const v = verse || (carry?.day === todayISO() && carry.verse) || dailyData?.word?.verse || 'Mark 4:39';
+  document.getElementById('breath-phrase').textContent = '"' + p + '"';
+  document.getElementById('breath-cite').textContent = v + ' · WEB';
+  const overlay = document.getElementById('breath-overlay');
+  const phase = document.getElementById('breath-phase');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  let step = 0;
+  clearInterval(breathTimer);
+  const labels = ['Inhale', 'Hold', 'Exhale', 'Rest'];
+  phase.textContent = labels[0];
+  breathTimer = setInterval(() => {
+    step = (step + 1) % 4;
+    phase.textContent = labels[step];
+  }, 4000);
+}
+function closeBreath() {
+  clearInterval(breathTimer);
+  breathTimer = null;
+  const overlay = document.getElementById('breath-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+}
+function finishBreath() {
+  closeBreath();
+  markPresence({ skipReflect: true });
+  openAmen(document.getElementById('breath-phrase')?.textContent?.replace(/^"|"$/g, ''), document.getElementById('breath-cite')?.textContent?.replace(' · WEB', ''));
+}
+
+/* ═══ PARABLE CHAMBER ═══ */
+let parableCurrent = null;
+const FALLBACK_PARABLES = [
+  {
+    verse: 'Luke 15:20-24',
+    text: "But while he was still far off, his father saw him and was moved with compassion, and ran, fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven and in your sight. I am no longer worthy to be called your son.’ But the father said to his servants, ‘Bring out the best robe and put it on him. Put a ring on his hand and sandals on his feet. Bring the fattened calf, kill it, and let’s eat and celebrate; for this my son was dead and is alive again. He was lost and is found.’",
+    note: 'Parable of the Lost Son — Jesus teaching in narrative form',
+    title: 'The Lost Son',
+  },
+  {
+    verse: 'Luke 10:33-37',
+    text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion… Then Jesus said to him, “Go and do likewise.”",
+    note: 'Parable of the Good Samaritan',
+    title: 'The Good Samaritan',
+  },
+  {
+    verse: 'Matthew 13:31-32',
+    text: "The Kingdom of Heaven is like a grain of mustard seed which a man took, and sowed in his field, which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs and becomes a tree, so that the birds of the air come and lodge in its branches.",
+    note: 'Parable of the Mustard Seed',
+    title: 'The Mustard Seed',
+  },
+];
+
+function parableTitleFromNote(note, verse) {
+  const m = String(note || '').match(/Parable of the ([^—\-]+)/i);
+  if (m) return m[1].trim();
+  return verse || 'A parable';
+}
+
+async function getParablePool() {
+  try {
+    if (libData?.passages?.length) {
+      return libData.passages.filter((p) => /parable/i.test(p.note || ''));
+    }
+    const res = await api('/api/library');
+    if (res.ok) {
+      libData = await res.json();
+      return (libData.passages || []).filter((p) => /parable/i.test(p.note || ''));
+    }
+  } catch {}
+  return FALLBACK_PARABLES;
+}
+
+async function openRandomParable() {
+  const pool = await getParablePool();
+  const p = pool[Math.floor(Math.random() * pool.length)] || FALLBACK_PARABLES[0];
+  openParableChamber(p);
+}
+
+function openParableChamber(p) {
+  if (!p) return;
+  parableCurrent = {
+    verse: p.verse,
+    text: p.text,
+    note: p.note || '',
+    title: p.title || parableTitleFromNote(p.note, p.verse),
+  };
+  document.getElementById('parable-title').textContent = parableCurrent.title;
+  document.getElementById('parable-note').textContent = parableCurrent.note || 'A story Jesus told.';
+  document.getElementById('parable-text').textContent = '"' + parableCurrent.text + '"';
+  document.getElementById('parable-cite').textContent = parableCurrent.verse + ' · WEB';
+  const overlay = document.getElementById('parable-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+
+function closeParable() {
+  const overlay = document.getElementById('parable-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+}
+
+function sitParable() {
+  if (!parableCurrent) return;
+  if (!dailyData) dailyData = {};
+  dailyData.word = {
+    theme: 'Parable',
+    title: parableCurrent.title,
+    passage: parableCurrent.text,
+    verse: parableCurrent.verse,
+    reflection: parableCurrent.note,
+    verified: true,
+  };
+  closeParable();
+  startSit();
+}
+
+function carryParable() {
+  if (!parableCurrent) return;
+  lsSetJSON('rla-carry', {
+    phrase: pickCarryPhrase(parableCurrent.text),
+    verse: parableCurrent.verse,
+    day: todayISO(),
+  });
+  renderCarry();
+  showToast('Carrying a line from the parable');
+}
+
+function shareParable() {
+  if (!parableCurrent) return;
+  openShareCard({
+    verse: parableCurrent.verse,
+    quote: pickCarryPhrase(parableCurrent.text),
+    theme: parableCurrent.title,
+  });
+}
+
+function breatheParable() {
+  if (!parableCurrent) return;
+  closeParable();
+  openBreathPrayer(pickCarryPhrase(parableCurrent.text), parableCurrent.verse);
+}
 
 /* ═══ REFLECT (Glorify-style one prompt) ═══ */
 function showReflect() {
@@ -1670,6 +1985,9 @@ async function loadDaily() {
   document.getElementById('word-verse').textContent = w.verse;
   document.getElementById('word-reflection').textContent = w.reflection || '';
   document.getElementById('word-verified').innerHTML = w.verified !== false ? verifiedBadge() : '';
+  revealWords(document.getElementById('word-passage'), w.passage);
+  setHourAtmosphere();
+  renderMidday();
 }
 
 function shareAffirmation() {
@@ -2000,6 +2318,9 @@ function renderLibList() {
       '<button type="button" class="action-btn" data-lib-action="share" data-lib-idx="' + idx + '">Share</button>' +
       '<button type="button" class="action-btn" data-lib-action="save" data-lib-idx="' + idx + '">Save</button>' +
       '<button type="button" class="action-btn" data-lib-action="carry" data-lib-idx="' + idx + '">Carry</button>' +
+      (p.note && /parable/i.test(p.note)
+        ? '<button type="button" class="action-btn" data-lib-action="chamber" data-lib-idx="' + idx + '">Enter chamber</button>'
+        : '') +
       '</div></div></details>';
   }).join('');
 }
@@ -2033,6 +2354,10 @@ document.getElementById('lib-list')?.addEventListener('click', (e) => {
   if (btn.getAttribute('data-lib-action') === 'share') shareLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'save') saveLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'carry') carryLibByIndex(idx);
+  else if (btn.getAttribute('data-lib-action') === 'chamber') {
+    const p = libPassages[idx];
+    if (p) openParableChamber(p);
+  }
 });
 
 function carryLibByIndex(idx) {
@@ -2388,6 +2713,7 @@ function dismissInstall() {
 function initApp() {
   updateDayCount();
   applySettings();
+  setHourAtmosphere();
   loadQuota();
   loadAdvisorMode();
   loadDaily();
@@ -2429,6 +2755,8 @@ document.addEventListener('keydown', (e) => {
     closeMidday();
     closeAmen();
     closeCommandPalette();
+    closeBreath();
+    closeParable();
   }
 });
 

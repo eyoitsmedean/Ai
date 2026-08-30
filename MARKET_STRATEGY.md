@@ -301,3 +301,17 @@ Base `claude/jesus-teachings-chatbot-bSBhF` absorbed Quiet Chapel PR #4 (modular
 **Kept from this branch:** Monolith Today shell, grace over streaks, grounding via `data/scripture.js`, quota freemium, habit depth.
 
 **Added in synthesis:** Midday Lord’s Prayer pause (Mt 6:9–13), Amen seal ritual, ⌘K command palette.
+
+---
+
+## 12. Creative atelier (distinctive red-letter craft)
+
+Not another chat wrapper — sensory companionship with verified speech only.
+
+| Experience | Craft |
+| --- | --- |
+| **Word reveal** | Today’s passage arrives word-by-word (respects reduced motion) |
+| **Hour atmosphere** | Morning / day / dusk / night mesh shifts — light brand, not dark-mode default |
+| **Draw a word** | Seek: one random verified saying with flip + reveal |
+| **Breath prayer** | Inhale / hold / exhale over a short Jesus phrase (carry or “Peace! Be still!”) |
+| **Parable chamber** | Immersive story room for Gospel parables · Sit / Carry / Share / Breathe |
