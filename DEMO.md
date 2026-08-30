@@ -14,7 +14,7 @@ Between guests: Settings → **New reader**, or hit `/?fresh=1` again.
 
 | Minute | Let them… | You stay quiet |
 | --- | --- | --- |
-| 0–1 | Arrive from `/welcome` or `/?fresh=1`. Pick why they came. Tap **Open the page**. | Do not explain “lectio.” |
+| 0–1 | Arrive from `/welcome` or `/?fresh=1`. Pick why they came. Tap **Open the page**. | Do not lecture. |
 | 1–4 | Sit through Read. They may close. They may tap **I’ve sat with it** instead of waiting twenty seconds. | If they freeze, point at Close. |
 | 4–6 | Today: the sentence, seven beads, **Hear this**, or **Bless someone**. | The card downloads if the phone will not share. |
 | 6–8 | Advisor: “I feel so much shame” or whatever they are actually carrying. | If they type crisis language, 988 must appear. That is the test, not a failure. |
