@@ -1048,10 +1048,10 @@ textarea { font-family: var(--body); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  color: var(--ink-4);
-  font-size: 10px;
-  letter-spacing: .08em;
+  gap: 7px;
+  color: var(--ink-3);
+  font-size: 11px;
+  letter-spacing: .1em;
   text-transform: uppercase;
   background: none;
   border: none;
@@ -1067,7 +1067,12 @@ textarea { font-family: var(--body); }
 .week-cell.done .week-dot,
 .seven-day.done .seven-dot { background: var(--crimson); border-color: var(--crimson); }
 .week-cell.today, .seven-day.today { color: var(--crimson); }
-.week-cell.future, .seven-day.future { opacity: .4; }
+.seven-day.today .seven-dot,
+.week-cell.today .week-dot {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 14%, transparent);
+}
+.week-cell.future, .seven-day.future { opacity: .55; }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
 
