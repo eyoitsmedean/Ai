@@ -457,6 +457,24 @@ textarea,input{font-family:var(--font-ui)}
 .rhythm-done{display:none;text-align:center;padding:10px 8px;font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45}
 .rhythm-shell.complete .rhythm-done{display:block}
 .rhythm-shell.complete .rhythm-cta{display:none}
+.rhythm-closure{display:none;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.rhythm-shell.complete .rhythm-closure{display:flex}
+
+.silence-overlay{position:fixed;inset:0;z-index:505;background:#0A0908;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
+.silence-overlay.open{display:flex;animation:fadeUp .6s var(--ease) both}
+.silence-kicker{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:rgba(232,201,138,.4);font-weight:700;margin-bottom:28px;opacity:.7;transition:opacity 1.2s}
+.silence-quote{font-family:var(--font-body);font-style:italic;font-size:clamp(20px,5.5vw,28px);line-height:1.5;color:rgba(255,230,230,.88);max-width:18ch}
+.silence-cite{margin-top:22px;font-size:12px;color:rgba(232,201,138,.55);font-weight:700}
+.silence-count{margin-top:36px;font-family:var(--font-disp);font-size:42px;color:rgba(237,232,224,.2);font-weight:700;font-variant-numeric:tabular-nums}
+.silence-hint{margin-top:16px;font-size:12px;color:rgba(237,232,224,.28)}
+.silence-actions{margin-top:28px;opacity:.35;transition:opacity .8s}
+.silence-overlay.ending .silence-actions,.silence-overlay.ending .silence-kicker{opacity:1}
+html.journal-private #journal-list .red-quote,
+html.journal-private #journal-list .verse-cite{filter:blur(5px);user-select:none}
+html.journal-private #journal-page:focus-within .red-quote,
+html.journal-private #journal-page:focus-within .verse-cite,
+html.journal-private #journal-list:hover .red-quote,
+html.journal-private #journal-list:hover .verse-cite{filter:none}
 
 .day-poles{display:flex;gap:8px;margin:0 14px 16px}
 .day-pole{flex:1;padding:10px 8px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);text-align:center;font-size:calc(11px * var(--scale));color:var(--ink-muted);font-weight:600}
@@ -662,7 +680,17 @@ html.simple-mode .rhythm-sub{display:none}
           <button type="button" class="action-btn" onclick="openBreathPrayer()">Breathe</button>
           <button type="button" class="action-btn" onclick="shareWord()">Share</button>
         </div>
-        <p class="rhythm-done" id="rhythm-done">Today’s morning rhythm is complete. Midday and evening wait when you’re ready — gently.</p>
+        <p class="rhythm-done" id="rhythm-done">Morning rhythm finished — you showed up. Midday and evening wait when you’re ready.</p>
+        <div class="rhythm-closure" id="rhythm-closure">
+          <button type="button" class="action-btn" onclick="openSilence()">Silence</button>
+          <button type="button" class="action-btn" onclick="askAboutTodaysWord()">Ask about this</button>
+          <button type="button" class="action-btn" onclick="shareWord()">Share a blessing</button>
+        </div>
+      </div>
+      <div class="harvest-card" id="harvest-card">
+        <h3>This week’s harvest</h3>
+        <p class="harvest-sub">Words you received — a quiet garden, not a streak. Tap any leaf to carry it again.</p>
+        <div class="harvest-garden" id="harvest-garden"></div>
       </div>
       <div class="day-poles" id="day-poles" aria-label="Day poles">
         <div class="day-pole" id="pole-morning"><strong>Morning</strong>Word</div>
@@ -716,11 +744,6 @@ html.simple-mode .rhythm-sub{display:none}
               <button type="button" class="action-btn" onclick="listenMidday()">Listen</button>
             </div>
           </div>
-          <div class="harvest-card" id="harvest-card">
-            <h3>This week’s harvest</h3>
-            <p class="harvest-sub">Words you received — a quiet garden, not a streak. Tap any leaf to carry it again.</p>
-            <div class="harvest-garden" id="harvest-garden"></div>
-          </div>
           <div class="plan-card" id="plan-card">
             <div class="plan-hd">7 days with His words</div>
             <p class="plan-sub">A gentle first week — one verified saying a day. Missed a day? Return without shame.</p>
@@ -756,7 +779,7 @@ html.simple-mode .rhythm-sub{display:none}
         </div>
       </details>
       <div class="cta-row">
-        <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
+        <button type="button" class="cta-btn cta-primary" onclick="askAboutTodaysWord()">Ask about today’s word</button>
         <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
       </div>
     </section>
@@ -793,13 +816,17 @@ html.simple-mode .rhythm-sub{display:none}
           <strong>Sitting with</strong>
           <p id="advisor-context-text"></p>
         </div>
-        <div class="chat-welcome" id="chat-welcome"><h3>Speak what's on your heart</h3><p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John.</p></div>
+        <div class="chat-welcome" id="chat-welcome">
+          <h3>Start from His words</h3>
+          <p>The Advisor is a guest — best entered from today’s red letter, not a blank chat. Every reply cites only Jesus in Matthew, Mark, Luke, and John.</p>
+          <button type="button" class="cta-btn cta-primary" style="margin:14px auto 0;display:inline-flex;width:auto;padding:12px 18px" onclick="askAboutTodaysWord()">Ask about today’s word</button>
+        </div>
         <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
         <div class="suggestions" id="suggestions">
+          <button type="button" class="sug-chip" onclick="askAboutTodaysWord()">Ask about today’s word</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm anxious about tomorrow</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I need to forgive someone</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I feel alone</button>
-          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm searching for purpose</button>
         </div>
         <div id="chat-messages"></div>
       </div>
@@ -848,6 +875,8 @@ html.simple-mode .rhythm-sub{display:none}
     <button type="button" class="ob-toggle" id="dark-toggle" onclick="toggleDark()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Simple mode</div><div class="setting-desc">Fewer surfaces — rhythm first</div></div>
     <button type="button" class="ob-toggle" id="simple-toggle" onclick="toggleSimpleMode()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
+  <div class="setting-row"><div><div class="setting-label">Private journal</div><div class="setting-desc">Blur saved words until you hover or focus</div></div>
+    <button type="button" class="ob-toggle" id="privacy-toggle" onclick="toggleJournalPrivacy()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Text size</div>
     <div class="size-btns"><button type="button" class="size-btn" data-fs="sm" onclick="setFontSize('sm')">A</button><button type="button" class="size-btn active" data-fs="md" onclick="setFontSize('md')">A</button><button type="button" class="size-btn" data-fs="lg" onclick="setFontSize('lg')">A</button></div></div></div>
   <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:10px">
@@ -867,10 +896,10 @@ html.simple-mode .rhythm-sub{display:none}
   <button type="button" class="danger-btn" onclick="resetOnboarding()">Reset onboarding</button>
 </div></div>
 <div class="sheet" id="paywall-sheet"><div class="sheet-hd"><h2 class="sheet-title">Red Letter Plus</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
-<div class="sheet-body"><p class="about-text">You've used today's free Advisor conversations. Come back tomorrow, or unlock unlimited guidance.</p>
+<div class="sheet-body"><p class="about-text">Today’s free Advisor conversations are used. His words in Library, Today, and Seek stay free — always. Come back tomorrow, or join Plus for unlimited Advisor guidance and share craft.</p>
   <div class="paywall-price">$7.99<span style="font-size:14px;font-weight:500;color:var(--ink-muted)">/mo</span></div>
   <div class="paywall-sub">or $59.99/year — save 37%</div>
-  <p class="about-text" style="margin-bottom:12px">Coming soon — join the waitlist</p>
+  <p class="about-text" style="margin-bottom:12px">Coming soon — join the waitlist. Nothing in the Gospels is locked behind Plus.</p>
   <input type="email" class="paywall-input" id="waitlist-email" placeholder="your@email.com" aria-label="Email" />
   <button type="button" class="paywall-btn" onclick="joinWaitlist()">Join waitlist</button>
 </div></div>
@@ -999,6 +1028,17 @@ html.simple-mode .rhythm-sub{display:none}
   <div class="lectio-actions">
     <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" id="lectio-next" onclick="lectioNext()">Continue</button>
     <button type="button" class="action-btn" onclick="closeLectio()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="silence-overlay" id="silence-overlay" role="dialog" aria-label="Contemplatio · silence" aria-hidden="true">
+  <div class="silence-kicker">Contemplatio · rest without words</div>
+  <p class="silence-quote" id="silence-quote"></p>
+  <p class="silence-cite" id="silence-cite"></p>
+  <div class="silence-count" id="silence-count">90</div>
+  <p class="silence-hint">Controls fade. Stay if you can — leave whenever you need.</p>
+  <div class="silence-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="finishSilence()">Amen</button>
+    <button type="button" class="action-btn" onclick="closeSilence()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0;margin-left:8px">Leave gently</button>
   </div>
 </div>
 <div class="install-banner hidden" id="install-banner">
@@ -1633,10 +1673,10 @@ function lectioNext() {
     setRhythmFlag('sit', true);
     setRhythmFlag('carry', true);
     markPresence({ skipReflect: true });
-    openAmen(lectioPhrase || dailyData?.word?.passage, dailyData?.word?.verse);
     renderDayPoles();
     renderRhythm();
-    showToast('Lectio complete — word carried');
+    openSilence(lectioPhrase || dailyData?.word?.passage, dailyData?.word?.verse);
+    showToast('Lectio complete — enter silence');
     return;
   }
   lectioStep += 1;
@@ -1645,6 +1685,54 @@ function lectioNext() {
 function closeLectio() {
   const overlay = document.getElementById('lectio-overlay');
   overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+  releaseFocusTrap();
+}
+
+/* ═══ CONTEMPLATIO / SILENCE (HolyJot — space after words) ═══ */
+let silenceTimer = null;
+let silenceLeft = 90;
+function openSilence(quote, verse) {
+  const carry = lsJSON('rla-carry', null);
+  const q =
+    quote ||
+    lectioPhrase ||
+    carry?.phrase ||
+    (dailyData?.word ? pickCarryPhrase(dailyData.word.passage) : '') ||
+    'Peace! Be still!';
+  const v = verse || carry?.verse || dailyData?.word?.verse || 'Mark 4:39';
+  document.getElementById('silence-quote').textContent = '"' + q + '"';
+  document.getElementById('silence-cite').textContent = v + ' · WEB';
+  silenceLeft = 90;
+  document.getElementById('silence-count').textContent = String(silenceLeft);
+  const overlay = document.getElementById('silence-overlay');
+  overlay.classList.remove('ending');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  trapFocus(overlay);
+  clearInterval(silenceTimer);
+  silenceTimer = setInterval(() => {
+    silenceLeft -= 1;
+    const el = document.getElementById('silence-count');
+    if (el) el.textContent = String(Math.max(0, silenceLeft));
+    if (silenceLeft <= 12) overlay.classList.add('ending');
+    if (silenceLeft <= 0) finishSilence();
+  }, 1000);
+  announceStatus('Silence opened — Contemplatio');
+}
+function finishSilence() {
+  closeSilence();
+  openAmen(
+    document.getElementById('silence-quote')?.textContent?.replace(/^"|"$/g, '') || '',
+    (document.getElementById('silence-cite')?.textContent || '').replace(/\s·\sWEB$/, '')
+  );
+  showToast('Silence received');
+}
+function closeSilence() {
+  clearInterval(silenceTimer);
+  silenceTimer = null;
+  const overlay = document.getElementById('silence-overlay');
+  overlay?.classList.remove('open', 'ending');
   overlay?.setAttribute('aria-hidden', 'true');
   releaseFocusTrap();
 }
@@ -1885,7 +1973,8 @@ const CMD_ITEMS = [
   { label: 'Ask about today’s word', hint: 'Advisor with verse context', run: () => askAboutTodaysWord() },
   { label: 'Rest with Him', hint: 'Night peace', run: () => openRestWithHim() },
   { label: 'Lectio Divina', hint: 'Read · Notice · Sit · Respond', run: () => openLectio() },
-  { label: 'This week’s harvest', hint: 'Words you received', run: () => { goTab('today'); document.getElementById('more-practices').open = true; document.getElementById('harvest-card')?.scrollIntoView({ behavior: 'smooth' }); } },
+  { label: 'Silence', hint: 'Contemplatio · rest without words', run: () => openSilence() },
+  { label: 'This week’s harvest', hint: 'Words you received', run: () => { goTab('today'); document.getElementById('harvest-card')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: 'Draw a word', hint: 'One saying, given to you', run: () => { goTab('seek'); drawAWord(); } },
   { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
   { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
@@ -2684,6 +2773,18 @@ function toggleSimpleMode() {
   showToast(on ? 'Simple mode — rhythm first' : 'Full surfaces restored');
 }
 
+function toggleJournalPrivacy() {
+  const on = !document.documentElement.classList.contains('journal-private');
+  document.documentElement.classList.toggle('journal-private', on);
+  lsSet('rla-journal-private', on ? '1' : '0');
+  const btn = document.getElementById('privacy-toggle');
+  if (btn) {
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+  }
+  showToast(on ? 'Journal blurred for privacy' : 'Journal visible');
+}
+
 function setFontSize(size) {
   const root = document.documentElement;
   root.removeAttribute('data-fs');
@@ -2725,6 +2826,13 @@ function applySettings() {
   if (sBtn) {
     sBtn.classList.toggle('on', simple);
     sBtn.setAttribute('aria-pressed', String(simple));
+  }
+  const priv = ls('rla-journal-private') === '1';
+  document.documentElement.classList.toggle('journal-private', priv);
+  const pBtn = document.getElementById('privacy-toggle');
+  if (pBtn) {
+    pBtn.classList.toggle('on', priv);
+    pBtn.setAttribute('aria-pressed', String(priv));
   }
   const fs = ls('rla-fs') || 'md';
   setFontSize(fs);
@@ -3590,6 +3698,7 @@ document.addEventListener('keydown', (e) => {
     closeFocusReading();
     closeRest();
     closeLectio();
+    closeSilence();
   }
 });
 

@@ -365,3 +365,18 @@ Research (Lectio 365 P.R.A.Y. + classical Lectio Divina, Holy Habits return-with
 | **Overlay focus** | Focus trap + Escape close for Focus / Rest / Lectio |
 
 **Product rule unchanged:** every new surface cites only verified Jesus speech (WEB). Crisis 988 stays in the header.
+
+---
+
+## 16. World-class loop 4 (silence · guest Advisor · harvest · privacy)
+
+Research (HolyJot Lectio UX, ScreensDesign session closure, Walk With Jesus privacy, Bearing Fruit grace garden):
+
+| Finding | Build |
+| --- | --- |
+| **Contemplatio needs silence** — apps interrupt with tools | **Silence** overlay — 90s faded chrome over a carry phrase; Lectio ends here |
+| **Blank chat is friction / addiction** | Advisor is a **guest** — primary CTA is Ask about today’s word |
+| **Positive session closure** | Rhythm complete → Silence / Ask / Share actions |
+| **Harvest is the moat** | Week’s harvest surfaced on Today (not buried in More) |
+| **Gospels stay free** | Plus copy: Library/Today/Seek free; Advisor quota only |
+| **Journal privacy** | Settings blur for saved words until hover/focus |

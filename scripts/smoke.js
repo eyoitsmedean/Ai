@@ -110,6 +110,7 @@ async function main() {
     assert(appHtml.includes('ob-close-scale') && appHtml.includes('simple-toggle'), 'missing closeness/simple');
     assert(appHtml.includes('lectio-overlay') && appHtml.includes('harvest-card') && appHtml.includes('return-ribbon'), 'missing lectio/harvest/return');
     assert(appHtml.includes('Lock screen') && appHtml.includes('verify-chip') && appHtml.includes('status-live'), 'missing lock/verify/status');
+    assert(appHtml.includes('silence-overlay') && appHtml.includes('rhythm-closure') && appHtml.includes('privacy-toggle'), 'missing silence/closure/privacy');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 
