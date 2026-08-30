@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -1240,9 +1240,10 @@ html.sitting .sit-sheet {
   border: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 10vh 8vw calc(10vh + env(safe-area-inset-bottom, 0px));
+  justify-content: flex-start;
+  padding: 8vh 8vw calc(8vh + env(safe-area-inset-bottom, 0px));
   background: var(--folio);
+  overflow-y: auto;
 }
 @media (max-width: 879px) {
   html.sitting .sit-sheet {
@@ -2037,6 +2038,7 @@ function churchYear(date) {
 }
 function applySeason() {
   currentSeason = churchYear(new Date());
+  if (!document.documentElement.dataset.theme) document.documentElement.dataset.theme = 'light';
   document.documentElement.dataset.season = currentSeason.id;
   const brand = document.getElementById('brand-sub');
   if (brand) brand.textContent = currentSeason.runningHead;

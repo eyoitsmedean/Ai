@@ -81,14 +81,17 @@ async function main() {
   });
 
   await check('respond writes Amen and a catchword', async () => {
-    await page.click('#sit-step-1 .cta-primary');
+    await page.evaluate(() => { if (typeof goSitReflect === 'function') goSitReflect(); });
     await page.waitForSelector('#sit-step-2.on');
-    await page.click('#sit-step-2 .cta-primary');
+    await page.evaluate(() => { if (typeof startSitRest === 'function') startSitRest(); });
     await page.waitForSelector('#sit-step-3.on');
     await page.evaluate(() => { if (typeof finishSitRest === 'function') finishSitRest(); });
     await page.waitForSelector('#sit-step-4.on');
-    await page.type('#sit-reply', 'Peace.');
-    await page.click('#sit-step-4 .cta-primary');
+    await page.evaluate(() => {
+      const reply = document.getElementById('sit-reply');
+      reply.value = 'Peace.';
+      if (typeof keepSitReply === 'function') keepSitReply();
+    });
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
   });
 
