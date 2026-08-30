@@ -3114,7 +3114,7 @@ function renderJournal() {
     return;
   }
 
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Sat with', note: 'Line' };
   const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson', note: 'badge-gold' };
 
   list.innerHTML = items.map(item => {
@@ -4422,7 +4422,7 @@ function folioSlips() {
 
 function folioMarkup(slips) {
   const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  const labels = { aff: 'Affirmation', word: 'Word', enc: 'Seek', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const labels = { aff: 'Affirmation', word: 'Word', enc: 'Seek', chat: 'Advisor', lectio: 'Sat with', note: 'Line' };
   const body = slips.map(function (item) {
     const label = labels[item.type] || 'Kept';
     const keep = esc(item.title || '');
@@ -4435,7 +4435,7 @@ function folioMarkup(slips) {
       + '</article>';
   }).join('');
   return '<div class="folio-mark" aria-hidden="true">R</div>'
-    + '<h2 class="folio-title">A commonplace</h2>'
+    + '<h2 class="folio-title">Lines you kept</h2>'
     + '<p class="folio-month">' + month + '</p>'
     + body
     + '<p class="folio-colophon">Lines kept from the red letters of Jesus in Matthew, Mark, Luke, and John.<br>Printed for keeping, not for a feed.</p>';
