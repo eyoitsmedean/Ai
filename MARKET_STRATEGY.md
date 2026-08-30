@@ -368,15 +368,31 @@ Research (Lectio 365 P.R.A.Y. + classical Lectio Divina, Holy Habits return-with
 
 ---
 
-## 16. World-class loop 4 (silence · guest Advisor · harvest · privacy)
+## 16. World-class loop 4 (silence · harvest · privacy) — corrected
 
-Research (HolyJot Lectio UX, ScreensDesign session closure, Walk With Jesus privacy, Bearing Fruit grace garden):
+Research (HolyJot Lectio UX, ScreensDesign session closure, Walk With Jesus privacy):
 
 | Finding | Build |
 | --- | --- |
-| **Contemplatio needs silence** — apps interrupt with tools | **Silence** overlay — 90s faded chrome over a carry phrase; Lectio ends here |
-| **Blank chat is friction / addiction** | Advisor is a **guest** — primary CTA is Ask about today’s word |
-| **Positive session closure** | Rhythm complete → Silence / Ask / Share actions |
-| **Harvest is the moat** | Week’s harvest surfaced on Today (not buried in More) |
-| **Gospels stay free** | Plus copy: Library/Today/Seek free; Advisor quota only |
-| **Journal privacy** | Settings blur for saved words until hover/focus |
+| **Contemplatio needs silence** | **Silence** overlay after Lectio / rhythm complete |
+| **Positive session closure** | Rhythm complete → Advisor / Ask / Share / Silence |
+| **Harvest is distinctive** | Week’s harvest on Today |
+| **Journal privacy** | Optional blur for saved words |
+
+**Correction to founding intent:** Red Letter **Advisor** is the product. Advisor is not a “guest” — it is the hero surface. Contextual “Ask about this word” remains a power path into Advisor, not a demotion of chat.
+
+---
+
+## 17. Revert to founding prompts (Advisor · trust · viral · brand)
+
+First five prompts of this effort: research → online research → build → QA → rebuild to world-class; “Work on it”; elevate RLA with **trust/verification, viral share cards, brand polish**; “Build baby build.”
+
+| Finding (2026 research) | Build |
+| --- | --- |
+| **Citation-first AI** (Apologist Project output-transform) | Trust strip + WEB seals on shares + verify chip |
+| **Viral scripture graphics** (4:5 feed, 9:16 stories, captions with CTA) | Share seal **✓ VERIFIED · WEB** + viral caption copy/share |
+| **Brand on first screen** (red-letter rubrication) | Wordmark **Red Letter Advisor** + crimson emphasis |
+| **Advisor as category product** | Primary CTA **Ask the Advisor**; hero panel restored on Advisor tab |
+| **Commercial clarity** | Plus = unlimited Advisor + share craft; Library corpus stays free |
+
+**Operating rule:** Ignore Quiet-Page merge theater and strategy pivots that shrink the Advisor. Keep looping research → build → QA until world-class.

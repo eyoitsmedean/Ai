@@ -68,6 +68,16 @@ textarea,input{font-family:var(--font-ui)}
 .header{height:var(--header-h);background:var(--chrome);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;z-index:20;padding-top:env(safe-area-inset-top,0)}
 .header-brand{display:flex;flex-direction:column;gap:1px}
 .header-wordmark{font-family:var(--font-disp);font-size:calc(17px * var(--scale));font-weight:700;color:#F7F4EF;letter-spacing:-.3px}
+.header-wordmark em{font-style:normal;color:var(--crimson-lt,#FB7185);font-weight:800}
+.trust-strip{display:flex;align-items:center;justify-content:center;gap:10px;padding:7px 14px;background:linear-gradient(90deg,rgba(159,18,57,.08),rgba(159,18,57,.14),rgba(159,18,57,.08));border-bottom:1px solid rgba(159,18,57,.18);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--crimson)}
+.trust-strip span{opacity:.85}
+.trust-strip .ts-dot{width:5px;height:5px;border-radius:50%;background:var(--crimson);box-shadow:0 0 0 3px rgba(159,18,57,.18);animation:trustPulse 2.4s ease-in-out infinite}
+@keyframes trustPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.7}}
+.advisor-hero{margin:0 12px 12px;padding:16px;border-radius:var(--r);border:1px solid rgba(159,18,57,.28);background:linear-gradient(145deg,rgba(159,18,57,.12),var(--surface));text-align:center}
+.advisor-hero h3{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin:0 0 6px;color:var(--ink)}
+.advisor-hero p{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45;margin:0 0 12px}
+.share-caption{margin:8px 14px 0;padding:10px 12px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--border);font-size:12px;color:var(--ink-soft);line-height:1.4}
+.share-caption strong{color:var(--crimson);display:block;margin-bottom:2px;font-size:11px;letter-spacing:.3px;text-transform:uppercase}
 .header-day{font-size:calc(10px * var(--scale));color:rgba(237,232,224,.55);font-weight:500;letter-spacing:.4px}
 .header-right{display:flex;align-items:center;gap:8px}
 .icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(237,232,224,.12);border:1px solid rgba(237,232,224,.18);border-radius:var(--r-sm);color:#F7F4EF;transition:background .15s,border-color .15s}
@@ -616,7 +626,7 @@ html.simple-mode .rhythm-sub{display:none}
 <div class="app" id="app">
   <header class="header">
     <div class="header-brand">
-      <div class="header-wordmark">Red Letter</div>
+      <div class="header-wordmark">Red Letter <em>Advisor</em></div>
       <div class="header-day" id="day-label">Day 1 with Him</div>
     </div>
     <div class="header-right">
@@ -630,6 +640,7 @@ html.simple-mode .rhythm-sub{display:none}
       </button>
     </div>
   </header>
+  <div class="trust-strip" id="trust-strip" role="status"><span class="ts-dot" aria-hidden="true"></span><span>Verified · WEB red letters only</span><span>·</span><span>Not invented speech</span></div>
   <div class="pages">
     <section class="page active reading-room" id="today-page" data-tab="today">
       <div class="page-hd"><div class="page-hd-eyebrow" id="today-date"></div><h1 class="page-hd-title" id="today-greeting">Good morning</h1></div>
@@ -682,9 +693,10 @@ html.simple-mode .rhythm-sub{display:none}
         </div>
         <p class="rhythm-done" id="rhythm-done">Morning rhythm finished — you showed up. Midday and evening wait when you’re ready.</p>
         <div class="rhythm-closure" id="rhythm-closure">
+          <button type="button" class="action-btn" onclick="goTab('advisor')">Ask the Advisor</button>
+          <button type="button" class="action-btn" onclick="askAboutTodaysWord()">Ask about this word</button>
+          <button type="button" class="action-btn" onclick="shareWord()">Share card</button>
           <button type="button" class="action-btn" onclick="openSilence()">Silence</button>
-          <button type="button" class="action-btn" onclick="askAboutTodaysWord()">Ask about this</button>
-          <button type="button" class="action-btn" onclick="shareWord()">Share a blessing</button>
         </div>
       </div>
       <div class="harvest-card" id="harvest-card">
@@ -779,8 +791,8 @@ html.simple-mode .rhythm-sub{display:none}
         </div>
       </details>
       <div class="cta-row">
-        <button type="button" class="cta-btn cta-primary" onclick="askAboutTodaysWord()">Ask about today’s word</button>
-        <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
+        <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
+        <button type="button" class="cta-btn cta-secondary" onclick="askAboutTodaysWord()">Ask about today’s word</button>
       </div>
     </section>
     <section class="page" id="seek-page" data-tab="seek">
@@ -816,17 +828,22 @@ html.simple-mode .rhythm-sub{display:none}
           <strong>Sitting with</strong>
           <p id="advisor-context-text"></p>
         </div>
+        <div class="advisor-hero" id="advisor-hero">
+          <h3>Your Red Letter Advisor</h3>
+          <p>Guidance only from the words Jesus spoke — verified WEB citations, never invented quotes. Bring what’s heavy; leave with His speech.</p>
+          <button type="button" class="cta-btn cta-primary" style="margin:0 auto;display:inline-flex;width:auto;padding:12px 18px" onclick="askAboutTodaysWord()">Start with today’s word</button>
+        </div>
         <div class="chat-welcome" id="chat-welcome">
-          <h3>Start from His words</h3>
-          <p>The Advisor is a guest — best entered from today’s red letter, not a blank chat. Every reply cites only Jesus in Matthew, Mark, Luke, and John.</p>
-          <button type="button" class="cta-btn cta-primary" style="margin:14px auto 0;display:inline-flex;width:auto;padding:12px 18px" onclick="askAboutTodaysWord()">Ask about today’s word</button>
+          <h3>Speak what’s on your heart</h3>
+          <p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John — grounded and checkable.</p>
         </div>
         <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
         <div class="suggestions" id="suggestions">
-          <button type="button" class="sug-chip" onclick="askAboutTodaysWord()">Ask about today’s word</button>
+          <button type="button" class="sug-chip" onclick="askAboutTodaysWord()">About today’s word</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm anxious about tomorrow</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I need to forgive someone</button>
           <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I feel alone</button>
+          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm searching for purpose</button>
         </div>
         <div id="chat-messages"></div>
       </div>
@@ -896,10 +913,10 @@ html.simple-mode .rhythm-sub{display:none}
   <button type="button" class="danger-btn" onclick="resetOnboarding()">Reset onboarding</button>
 </div></div>
 <div class="sheet" id="paywall-sheet"><div class="sheet-hd"><h2 class="sheet-title">Red Letter Plus</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
-<div class="sheet-body"><p class="about-text">Today’s free Advisor conversations are used. His words in Library, Today, and Seek stay free — always. Come back tomorrow, or join Plus for unlimited Advisor guidance and share craft.</p>
+<div class="sheet-body"><p class="about-text">You’ve used today’s free Advisor conversations. Unlimited Red Letter Advisor guidance, premium share cards, and deeper habit craft — Plus is how we keep the corpus free for everyone.</p>
   <div class="paywall-price">$7.99<span style="font-size:14px;font-weight:500;color:var(--ink-muted)">/mo</span></div>
   <div class="paywall-sub">or $59.99/year — save 37%</div>
-  <p class="about-text" style="margin-bottom:12px">Coming soon — join the waitlist. Nothing in the Gospels is locked behind Plus.</p>
+  <p class="about-text" style="margin-bottom:12px">Coming soon — join the waitlist. His words in Library stay free.</p>
   <input type="email" class="paywall-input" id="waitlist-email" placeholder="your@email.com" aria-label="Email" />
   <button type="button" class="paywall-btn" onclick="joinWaitlist()">Join waitlist</button>
 </div></div>
@@ -920,10 +937,11 @@ html.simple-mode .rhythm-sub{display:none}
     <div class="bless-row">
       <input type="text" id="bless-name" maxlength="40" placeholder="Bless someone by name (optional)" aria-label="Blessing recipient" />
     </div>
+    <div class="share-caption" id="share-caption"><strong>Caption ready</strong><span id="share-caption-text">Verified red letters · invite someone into His words.</span></div>
     <div class="share-actions">
       <button type="button" class="action-btn" onclick="downloadShareCard()" aria-label="Download">Download</button>
       <button type="button" class="action-btn" onclick="nativeShareCard()" aria-label="Share">Share</button>
-      <button type="button" class="action-btn" onclick="copyShareText()" aria-label="Copy">Copy</button>
+      <button type="button" class="action-btn" onclick="copyShareText()" aria-label="Copy">Copy caption</button>
       <button type="button" class="action-btn" onclick="blessShareCard()" aria-label="Send a blessing">Bless</button>
     </div></div></div>
 
@@ -3007,8 +3025,12 @@ function appendMsg(role, html, extra) {
   wrap.innerHTML = '<div class="bubble">' + html + '</div>';
   if (extra?.badges) wrap.querySelector('.bubble').insertAdjacentHTML('beforeend', extra.badges);
   document.getElementById('chat-messages').appendChild(wrap);
-  document.getElementById('chat-welcome').style.display = 'none';
-  document.getElementById('suggestions').style.display = 'none';
+  const welcome = document.getElementById('chat-welcome');
+  if (welcome) welcome.style.display = 'none';
+  const hero = document.getElementById('advisor-hero');
+  if (hero) hero.style.display = 'none';
+  const suggestions = document.getElementById('suggestions');
+  if (suggestions) suggestions.style.display = 'none';
   const trust = document.getElementById('advisor-trust');
   if (trust) trust.style.display = 'none';
   scrollChat();
@@ -3389,6 +3411,8 @@ function openShareCard({ verse, quote, theme }) {
       return;
     }
     drawShareCard();
+    const cap = document.getElementById('share-caption-text');
+    if (cap) cap.textContent = viralShareCaption().split('\n').slice(-2).join(' · ');
     const modal = document.getElementById('share-modal');
     if (!modal) throw new Error('share modal missing');
     modal.classList.add('open');
@@ -3490,17 +3514,48 @@ function drawShareCard() {
   ctx.font = '400 26px Figtree, sans-serif';
   ctx.fillStyle = pal.tag;
   ctx.fillText('the words Jesus spoke', W / 2, H - (bottomPad - 150));
+
+  // Trust seal — research: citation-first scripture products win on share
+  const sealY = H - (bottomPad - 210);
+  ctx.fillStyle = 'rgba(185,28,28,0.92)';
+  const sealW = 320, sealH = 48;
+  roundRect(ctx, W / 2 - sealW / 2, sealY - 34, sealW, sealH, 24);
+  ctx.fill();
+  ctx.font = '700 22px Figtree, sans-serif';
+  ctx.fillStyle = '#FFF8F5';
+  ctx.fillText('✓ VERIFIED · WEB', W / 2, sealY);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function viralShareCaption() {
+  const v = shareState.verse || 'His words';
+  return (
+    '"' +
+    shareState.quote +
+    '" — ' +
+    v +
+    '\n\nVerified red letters · World English Bible\nOpen Red Letter Advisor → sit with what He actually said.'
+  );
 }
 
 function copyShareText() {
-  const text = '"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
-  navigator.clipboard?.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => showToast('Copy failed'));
+  const text = viralShareCaption();
+  navigator.clipboard?.writeText(text).then(() => showToast('Caption copied — ready to paste')).catch(() => showToast('Copy failed'));
 }
 
 async function blessShareCard() {
   const name = (document.getElementById('bless-name')?.value || '').trim();
   const forLine = name ? 'A blessing for ' + name + ' from His words:\n\n' : 'A blessing for you from His words:\n\n';
-  const text = forLine + '"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
+  const text = forLine + viralShareCaption();
   try {
     if (navigator.share) {
       await navigator.share({ title: name ? 'A blessing for ' + name : 'A red-letter blessing', text });
@@ -3524,17 +3579,17 @@ function downloadShareCard() {
 
 async function nativeShareCard() {
   const canvas = document.getElementById('share-canvas');
-  const text = '"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
+  const text = viralShareCaption();
   try {
     if (navigator.share && navigator.canShare) {
       const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
       const file = new File([blob], 'red-letter.png', { type: 'image/png' });
       if (navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Red Letter', text });
+        await navigator.share({ files: [file], title: 'Red Letter Advisor', text });
         return;
       }
     }
-    if (navigator.share) { await navigator.share({ title: 'Red Letter', text }); return; }
+    if (navigator.share) { await navigator.share({ title: 'Red Letter Advisor', text }); return; }
   } catch {}
   downloadShareCard();
 }
