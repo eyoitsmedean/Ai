@@ -126,6 +126,8 @@ async function main() {
     }));
     assert(today.season, 'season lost after sit');
     assert(today.seven === 7, 'expected 7 named days, got ' + today.seven);
+    const names = await page.$$eval('.seven-day', (els) => els.map((e) => e.innerText.replace(/\s+/g, ' ').trim()));
+    assert(/Go/i.test(names.join(' ')), 'last day must read Go, not a clipped OO: ' + names.join(' / '));
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');

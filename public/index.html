@@ -1091,24 +1091,33 @@ html.hearing .hear-rule { display: block; }
 }
 .offline-banner.on { display: block; }
 
+.path-block { margin: 0 0 28px; }
+.path-block[hidden] { display: none; }
 .week-ribbon, .seven {
   display: flex;
-  gap: 8px;
-  margin: 0 0 28px;
+  gap: 6px;
+  margin: 0;
 }
 .week-cell, .seven-day {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 7px;
   color: var(--ink-3);
-  font-size: 11px;
-  letter-spacing: .1em;
+  font-size: 10px;
+  letter-spacing: .06em;
   text-transform: uppercase;
   background: none;
   border: none;
   padding: 0;
+}
+.seven-day span:last-child,
+.week-cell span:last-child {
+  white-space: nowrap;
+  overflow: visible;
+  max-width: 100%;
 }
 .week-dot, .seven-dot {
   width: 8px;
@@ -1615,7 +1624,10 @@ html.sitting .sit-sheet {
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
-        <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+        <div class="path-block" id="path-block">
+          <p class="eyebrow" id="path-kicker">Seven Days</p>
+          <div class="week-ribbon" id="week-ribbon" aria-label="Seven Days with His words"></div>
+        </div>
 
         <aside class="resume" id="resume-slip" hidden>
           <p class="eyebrow">The sentence waits</p>
@@ -2385,6 +2397,8 @@ function paintSeven() {
   if (!host) return;
   const days = sevenDays();
   if (!days.length) {
+    const kicker = document.getElementById('path-kicker');
+    if (kicker) kicker.textContent = 'This week';
     host.className = 'week-ribbon';
     host.innerHTML = '';
     const today = todayStr();
@@ -2408,6 +2422,8 @@ function paintSeven() {
   const state = pathState();
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
+  const kicker = document.getElementById('path-kicker');
+  if (kicker) kicker.textContent = 'Seven Days';
   host.className = 'seven';
   host.setAttribute('aria-label', 'Seven Days with His words');
   host.innerHTML = days.map((day, i) => {
