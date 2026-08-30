@@ -1858,6 +1858,13 @@ html.sitting .sit-sheet {
       <button class="fs-btn" id="fs-lg" onclick="setFs('lg')">A+</button>
     </div>
   </div>
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">New reader</div>
+      <div class="setting-sub">Wipe this device so the next person does not inherit a journal</div>
+    </div>
+    <button class="ghost" type="button" onclick="startNewReader()">Begin again</button>
+  </div>
   <div class="sheet-about">
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
@@ -2078,7 +2085,30 @@ function vespersSaying() {
   return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
 }
 
+function clearReaderStorage() {
+  try {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf('rla-') === 0) keys.push(k);
+    }
+    keys.forEach((k) => localStorage.removeItem(k));
+  } catch (_) {}
+}
+function startNewReader() {
+  if (!confirm('Start a new reader on this device? Words kept here will be cleared.')) return;
+  clearReaderStorage();
+  location.href = '/';
+}
+
 (function init() {
+  try {
+    const q = new URLSearchParams(location.search);
+    if (q.get('fresh') === '1' || q.get('demo') === '1') {
+      clearReaderStorage();
+      history.replaceState({}, '', '/');
+    }
+  } catch (_) {}
   setWatch();
   applySeason();
   paintThemeIndex();
@@ -2132,7 +2162,7 @@ function startApp() {
   applySettings();
   applySeason();
   markMorning();
-  updateStreak();
+  paintStreak(getStreakState());
   paintSeven();
   updateDateUI();
   paintCatchword();
@@ -3114,7 +3144,7 @@ function renderJournal() {
     list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a sitting, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sitting' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -3439,6 +3469,7 @@ function rememberSitting({ quote, verse, note, office }) {
   const until = todayStr();
   lsSet('rla-last-sit', JSON.stringify({ date: until, quote, verse, note, office, catchword }));
   if (catchword) lsSet('rla-catchword', JSON.stringify({ word: catchword, until }));
+  updateStreak();
   paintCatchword();
   paintEpigraph();
   const catchEl = document.getElementById('folio-catch');
@@ -3800,6 +3831,7 @@ const COMMANDS = [
   { label: 'Peace', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Peace'), 80); } },
   { label: 'Hope', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Hope'), 80); } },
   { label: 'Room settings', hint: 'Lamp', run: () => openSettings() },
+  { label: 'New reader on this device', hint: 'Fresh', run: () => startNewReader() },
 ];
 function renderCmdList(filter) {
   const list = document.getElementById('cmdk-list');

@@ -46,6 +46,21 @@ async function main() {
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
   });
 
+  await check('fresh start wipes the last reader', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-letters-' + new Date().toISOString().slice(0, 10), '{"messages":[]}');
+    });
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    const wiped = await page.evaluate(() => ({
+      onboarded: localStorage.getItem('rla-onboarded'),
+      title: !document.getElementById('onboarding').classList.contains('hidden'),
+    }));
+    assert(!wiped.onboarded, 'fresh=1 left the last reader');
+    assert(wiped.title, 'fresh=1 should open the title page');
+  });
+
   await check('title page, then lectio', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
     await page.evaluate(() => {
