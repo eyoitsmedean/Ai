@@ -601,6 +601,59 @@ textarea { font-family: var(--body); }
 }
 
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.quiet-verbs { display: flex; flex-wrap: wrap; gap: 16px; margin: 8px 0 0; }
+.quiet-verbs button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--crimson);
+}
+#aff-card .aff-text {
+  font-size: clamp(20px, 3.2vw, 26px);
+  max-width: 28ch;
+  color: var(--ink-2);
+}
+.resume {
+  margin: 0 0 36px;
+  padding: 0 0 0 16px;
+  border-left: 1px solid var(--crimson);
+  max-width: 42ch;
+}
+.resume[hidden] { display: none; }
+.resume-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--crimson);
+  margin: 8px 0 16px;
+}
+.hear-rule {
+  display: none;
+  height: 2px;
+  background: var(--rule);
+  margin: 14px 0 6px;
+  max-width: 28ch;
+  overflow: hidden;
+}
+html.hearing .hear-rule { display: block; }
+.hear-rule i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--crimson);
+  animation: hearFill 18s linear forwards;
+}
+@keyframes hearFill { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .hear-rule i { animation: none; width: 100%; }
+}
+.compose { margin: 22px 0 28px; max-width: 48ch; }
+.letter-tools { margin: 12px 0 0; }
+.verso { opacity: .92; }
 .cta {
   border: none;
   padding: 13px 16px;
@@ -1230,6 +1283,18 @@ textarea { font-family: var(--body); }
     text-transform: uppercase;
     color: #8A8074;
   }
+  body.printing-journal #today-page,
+  body.printing-journal #seek-page,
+  body.printing-journal #advisor-page,
+  body.printing-journal .compose .actions,
+  body.printing-journal .journal-delete { display: none !important; }
+  body.printing-journal #journal-page {
+    position: static !important;
+    opacity: 1 !important;
+    pointer-events: all !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
 }
 
 html.sitting .rail,
@@ -1532,7 +1597,7 @@ html.sitting .sit-sheet {
         <div class="mast-sub"><span id="header-sub">Today</span><span class="mast-catch" id="mast-catch" hidden></span></div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
-        <span class="today-streak" id="streak-num">1</span>
+        <span class="today-streak" id="streak-num" hidden></span>
         <button class="icon-btn" onclick="openCommandPalette()" aria-label="Find a word">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
         </button>
@@ -1550,11 +1615,16 @@ html.sitting .sit-sheet {
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
-        <p class="hear-now" id="hear-status" hidden>Listening</p>
-        <div class="actions" style="margin-bottom:22px">
-          <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
-        </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+
+        <aside class="resume" id="resume-slip" hidden>
+          <p class="eyebrow">The sentence waits</p>
+          <p class="resume-quote" id="resume-quote"></p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="resumeSit()">Continue sitting</button>
+            <button class="ghost" type="button" onclick="dismissResume()">Leave it</button>
+          </div>
+        </aside>
 
         <aside class="epigraph" id="epigraph" hidden>
           <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
@@ -1564,8 +1634,31 @@ html.sitting .sit-sheet {
           <button class="flyleaf-turn" type="button" onclick="turnFlyleaf()">Turn the leaf</button>
         </aside>
 
-        <section class="movement" id="aff-card">
-          <p class="eyebrow">Affirmation</p>
+        <section class="movement" id="word-card">
+          <p class="eyebrow">Word of the day</p>
+          <div id="word-skel">
+            <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
+          </div>
+          <div id="word-content" style="display:none">
+            <div class="badge" id="word-theme"></div>
+            <h2 class="word-title" id="word-title"></h2>
+            <p class="red-letter" id="word-passage"></p>
+            <p class="cite" id="word-verse"></p>
+            <div class="hear-rule" id="hear-rule" hidden aria-hidden="true"><i></i></div>
+            <p class="hear-now" id="hear-status" hidden>Listening</p>
+            <div class="rule"></div>
+            <p class="reflection" id="word-reflection"></p>
+            <div class="actions">
+              <button class="cta cta-primary" type="button" onclick="sitWith('word')">Sit with this</button>
+              <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this</button>
+              <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
+              <button class="ghost" onclick="openShareSheet('word')">Share card</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="movement verso" id="aff-card">
+          <p class="eyebrow">A quieter line</p>
           <div id="aff-skel">
             <div class="skel h l"></div><div class="skel m"></div><div class="skel s"></div>
           </div>
@@ -1578,26 +1671,6 @@ html.sitting .sit-sheet {
               <button class="ghost" id="aff-save-btn" onclick="toggleSave('aff')"><span id="aff-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('aff')">Share card</button>
               <button class="ghost" onclick="sitWith('aff')">Sit with this</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="movement" id="word-card">
-          <p class="eyebrow">Word of the day</p>
-          <div id="word-skel">
-            <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
-          </div>
-          <div id="word-content" style="display:none">
-            <div class="badge" id="word-theme"></div>
-            <h2 class="word-title" id="word-title"></h2>
-            <p class="red-letter" id="word-passage"></p>
-            <p class="cite" id="word-verse"></p>
-            <div class="rule"></div>
-            <p class="reflection" id="word-reflection"></p>
-            <div class="actions">
-              <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
-              <button class="ghost" onclick="openShareSheet('word')">Share card</button>
-              <button class="ghost" onclick="sitWith('word')">Sit with this</button>
             </div>
           </div>
         </section>
@@ -1616,10 +1689,10 @@ html.sitting .sit-sheet {
           </div>
         </section>
 
-        <div class="cta-row">
-          <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
-          <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
-          <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
+        <div class="quiet-verbs">
+          <button type="button" onclick="switchTab('advisor')">Ask</button>
+          <button type="button" onclick="switchTab('seek')">Find a word</button>
+          <button type="button" onclick="blessingFromToday()">Send a blessing</button>
         </div>
         <div class="colophon">
           <span id="folio-colophon">Set in the Gospels. Not a person.</span>
@@ -1714,9 +1787,12 @@ html.sitting .sit-sheet {
             <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
             <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
           </div>
+          <div class="letter-tools">
+            <button class="ghost" type="button" onclick="newLetter()">A new letter</button>
+          </div>
           <div class="gate" id="chat-gate">
-            <h3>Five letters for today</h3>
-            <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
+            <h3>Today’s correspondence is full</h3>
+            <p>Five letters is enough for one day. The rooms are still open — sit with Today, or return in the morning.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
@@ -1732,6 +1808,15 @@ html.sitting .sit-sheet {
       <div class="page" id="journal-page">
         <p class="eyebrow">A commonplace book</p>
         <h1 class="display">Your <em>journal</em></h1>
+        <div class="compose">
+          <label class="sr-only" for="compose-line">A line for the commonplace</label>
+          <textarea class="sit-reply" id="compose-line" rows="2" placeholder="A line of your own…"></textarea>
+          <div class="actions" style="margin-top:14px">
+            <button class="ghost" type="button" onclick="keepCompose()">Keep this line</button>
+            <button class="ghost" type="button" onclick="exportJournal()">Export Markdown</button>
+            <button class="ghost" type="button" onclick="printJournal()">Print the book</button>
+          </div>
+        </div>
         <div class="quire" id="quire" hidden></div>
         <div id="journal-list"></div>
       </div>
@@ -2167,6 +2252,7 @@ function startApp() {
   updateDateUI();
   paintCatchword();
   paintEpigraph();
+  paintResume();
   loadDailyContent();
   restoreLetters();
   bindRituals();
@@ -2266,9 +2352,13 @@ function updateStreak() {
   paintStreak(state);
 }
 function paintStreak(state) {
-  const count = Math.max(1, Number(state.count) || 1);
-  document.getElementById('streak-num').textContent = count;
+  const count = Number(state.count) || 0;
   const grace = state.graceUsed && state.graceWeek === weekStartStr();
+  const num = document.getElementById('streak-num');
+  if (num) {
+    num.hidden = count < 1;
+    num.textContent = count > 0 ? String(count) : '';
+  }
   document.getElementById('today-streak-label').textContent = count > 1
     ? (grace ? count + ' mornings · grace this week' : count + ' mornings')
     : '';
@@ -2276,7 +2366,7 @@ function paintStreak(state) {
   if (rail) {
     rail.textContent = count > 1
       ? (grace ? count + ' mornings · grace held one' : count + ' mornings in this room')
-      : 'A first morning';
+      : (count === 1 ? 'One morning kept' : 'A first morning');
   }
 }
 function renderWeekRibbon() {
@@ -2859,7 +2949,8 @@ function keepSitReply() {
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
   if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
-  closeSit();
+  dismissResume();
+  closeSit({ kept: true });
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
   if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
@@ -2868,13 +2959,48 @@ function keepSitReply() {
   }
 }
 
-function closeSit() {
+function closeSit(opts = {}) {
   clearInterval(sitTimer);
   sitTimer = null;
   stopSitListen();
   document.documentElement.classList.remove('sitting');
   document.getElementById('sit-sheet').classList.remove('on');
+  if (!opts.kept && sitPayload && sitStep >= 1 && sitStep < 4) {
+    lsSet('rla-resume', JSON.stringify({ payload: sitPayload, step: sitStep, date: todayStr() }));
+  }
   hideOverlayIfIdle();
+  paintResume();
+}
+function getResume() {
+  const raw = parseJSON(ls('rla-resume'), null);
+  if (!raw || !raw.payload || raw.date !== todayStr()) return null;
+  return raw;
+}
+function paintResume() {
+  const slip = document.getElementById('resume-slip');
+  if (!slip) return;
+  const raw = getResume();
+  if (!raw) {
+    slip.hidden = true;
+    return;
+  }
+  const q = document.getElementById('resume-quote');
+  if (q) q.textContent = '“' + String(raw.payload.quote || '').replace(/^["“]|["”]$/g, '') + '”';
+  slip.hidden = false;
+}
+function resumeSit() {
+  const raw = getResume();
+  if (!raw) return;
+  sitPayload = raw.payload;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  paintSitPayload(sitPayload);
+  showSitStep(Math.min(4, Math.max(1, Number(raw.step) || 1)));
+}
+function dismissResume() {
+  try { localStorage.removeItem('rla-resume'); } catch (_) {}
+  const slip = document.getElementById('resume-slip');
+  if (slip) slip.hidden = true;
 }
 
 let sheetTrigger = null;
@@ -3141,10 +3267,10 @@ function renderJournal() {
   const items = getJournal();
   paintQuire(items);
   if (!items.length) {
-    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a sitting, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
+    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Write a line above, or keep a sitting. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with', note: 'A line' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -3160,6 +3286,48 @@ function renderJournal() {
   }).join('');
 }
 
+function keepCompose() {
+  const el = document.getElementById('compose-line');
+  const line = el && el.value.trim();
+  if (!line) return;
+  const key = 'note-' + Date.now();
+  saveJournalItem({ id: key, key, type: 'note', title: 'A line', body: line });
+  el.value = '';
+  renderJournal();
+  showToast('Kept in the journal');
+}
+function exportJournal() {
+  const items = getJournal();
+  if (!items.length) { showToast('The book is still blank'); return; }
+  const md = '# Commonplace — Red Letter\n\n' + items.map((item) => {
+    const head = item.title || 'A line';
+    const verse = item.verse ? '\n\n—' + item.verse : '';
+    return '## ' + head + '\n\n' + String(item.body || '') + verse;
+  }).join('\n\n---\n\n') + '\n';
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'red-letter-commonplace.md';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function printJournal() {
+  switchTab('journal');
+  document.body.classList.add('printing-journal');
+  window.print();
+  setTimeout(() => document.body.classList.remove('printing-journal'), 400);
+}
+function newLetter() {
+  chatHistory = [];
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  persistLetters();
+  const suggestions = document.getElementById('suggestions');
+  if (suggestions) suggestions.style.display = '';
+  document.getElementById('chat-gate').classList.remove('on');
+  if (chatsToday().n < FREE_CHATS) setComposerEnabled(true);
+  showToast('A blank letter');
+}
 function deleteJournalItem(key) {
   removeJournalItem(key);
   renderJournal();
@@ -3606,7 +3774,8 @@ function closeAmen() {
 }
 function amenFromSit() {
   if (!sitPayload) return;
-  closeSit();
+  dismissResume();
+  closeSit({ kept: true });
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
 }
 
@@ -3649,10 +3818,12 @@ function stopHearOffice() {
   const btn = document.getElementById('hear-office');
   const status = document.getElementById('hear-status');
   if (btn) {
-    btn.textContent = 'Hear this office';
+    btn.textContent = 'Hear this';
     btn.setAttribute('aria-pressed', 'false');
   }
   if (status) status.hidden = true;
+  const rule = document.getElementById('hear-rule');
+  if (rule) rule.hidden = true;
 }
 function officeScript() {
   const parts = [];
@@ -3696,6 +3867,8 @@ function toggleHearOffice() {
     status.hidden = false;
     status.textContent = 'Listening — the page can rest';
   }
+  const rule = document.getElementById('hear-rule');
+  if (rule) rule.hidden = false;
   const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
   utter.rate = 0.88;
   utter.onend = () => { if (officeSpeaking) stopHearOffice(); };
@@ -3821,7 +3994,10 @@ const COMMANDS = [
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Continue sitting', hint: 'Resume', run: () => resumeSit() },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
+  { label: 'Export the commonplace', hint: 'Keep', run: () => { switchTab('journal'); exportJournal(); } },
+  { label: 'A new letter', hint: 'Counsel', run: () => { switchTab('advisor'); newLetter(); } },
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

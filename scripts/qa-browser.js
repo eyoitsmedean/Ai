@@ -118,12 +118,17 @@ async function main() {
       silk: !!document.querySelector('.silk'),
       askHim: document.body.innerText.includes('Ask Him'),
       sitting: document.documentElement.classList.contains('sitting'),
+      wordFirst: !!(document.getElementById('word-card') && document.getElementById('aff-card')
+        && (document.getElementById('word-card').compareDocumentPosition(document.getElementById('aff-card')) & Node.DOCUMENT_POSITION_FOLLOWING)),
+      compose: !!document.getElementById('compose-line'),
     }));
     assert(today.season, 'season lost after sit');
     assert(today.seven === 7, 'expected 7 named days, got ' + today.seven);
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    assert(today.wordFirst, 'the Word must sit above the quieter line');
+    assert(today.compose, 'commonplace must have a place to write');
   });
 
   await check('no page errors', async () => {

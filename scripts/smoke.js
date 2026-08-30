@@ -92,6 +92,8 @@ async function main() {
     const { res, text } = await req('/');
     assert(res.ok, 'app not 200');
     assert(text.includes('sit-step-4'), 'missing lectio respond leaf');
+    assert(text.includes('id="resume-slip"'), 'missing resume slip');
+    assert(text.includes('compose-line'), 'missing commonplace compose');
     assert(text.includes('id="amen"'), 'missing Amen');
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');
