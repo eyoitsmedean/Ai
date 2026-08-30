@@ -1,18 +1,22 @@
 {
   "name": "red-letter-advisor",
-  "version": "1.0.0",
+  "version": "3.0.1",
   "description": "Red Letter Advisor — daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node scripts/smoke.js",
-    "smoke": "node scripts/smoke.js"
+    "smoke": "node scripts/smoke.js",
+    "qa": "node scripts/qa-browser.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.9.0"
   }
 }

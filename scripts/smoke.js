@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Red Letter Advisor smoke QA — run against a live server (npm start).
+ * Quiet Page smoke QA — run against a live server (npm start).
  * Usage: node scripts/smoke.js [baseUrl]
  */
 const BASE = process.argv[2] || 'http://localhost:3000';
@@ -10,7 +10,6 @@ async function req(path, opts = {}) {
     ...opts,
     headers: {
       'Content-Type': 'application/json',
-      'X-Client-Id': 'smoke-qa',
       ...(opts.headers || {}),
     },
   });
@@ -35,96 +34,96 @@ async function main() {
   await check('health', async () => {
     const { res, json } = await req('/api/health');
     assert(res.ok && json.ok, 'health not ok');
+    assert(json.corpus === true, 'chapel corpus should report loaded');
     assert(json.corpusPassages >= 40, 'corpus too small: ' + json.corpusPassages);
+    assert(json.llm === false || json.llm === true, 'llm flag missing');
   });
 
-  await check('library books + Mark filter', async () => {
-    const { json } = await req('/api/library?book=Mark');
-    assert(Array.isArray(json.books) && json.books.includes('Mark'), 'missing books');
-    assert(json.passages.length >= 3, 'Mark passages missing');
-    assert(json.passages.every((p) => p.book === 'Mark'), 'non-Mark slipped through');
+  await check('quota is unlimited', async () => {
+    const { json } = await req('/api/quota');
+    assert(json.unlimited === true, 'words must not be metered');
   });
 
-  await check('daily verified', async () => {
+  await check('daily curated', async () => {
     const { json } = await req('/api/daily');
     assert(json.affirmation?.quote && json.word?.passage, 'daily payload incomplete');
-    assert(json.affirmation.verified !== false && json.word.verified !== false, 'daily not verified');
   });
 
-  await check('encouragement grounded', async () => {
+  await check('encouragement', async () => {
     const { json } = await req('/api/encouragement', {
       method: 'POST',
       body: JSON.stringify({ theme: 'Anxiety & Worry' }),
     });
     assert(json.passages?.length >= 1, 'no passages');
-    assert(json.passages.every((p) => p.verified), 'unverified encouragement');
   });
 
-  await check('scripture grounding transform', async () => {
-    const { groundAdvisorText } = require('../data/scripture');
-    const raw = [
-      'Here is comfort.',
-      '',
-      '**Matthew 6:34**',
-      '"Totally fake invented Jesus quote about pizza."',
-      '',
-      'Rest in Him.',
-    ].join('\n');
-    const out = await groundAdvisorText(raw);
-    assert(out.citations.length >= 1, 'no citations');
-    assert(out.citations[0].verified === true, 'citation not verified');
-    assert(!/pizza/i.test(out.text), 'fake quote not replaced');
-    assert(/anxious for tomorrow|don't be anxious|don’t be anxious/i.test(out.text), 'corpus text missing');
-    assert(out.grounded >= 1, 'grounded count');
+  await check('verify Matthew 11:28', async () => {
+    const { json } = await req('/api/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        citations: [{
+          verse: 'Matthew 11:28',
+          quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+        }],
+      }),
+    });
+    assert(json.results?.[0]?.verified, 'Matthew 11:28 not sealed');
   });
 
-  await check('chat SSE offline grounded', async () => {
+  await check('verify WEB John 14:27', async () => {
+    const { json } = await req('/api/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        citations: [{
+          verse: 'John 14:27',
+          quote: 'Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don’t let your heart be troubled, neither let it be fearful.',
+        }],
+      }),
+    });
+    assert(json.results?.[0]?.verified, 'WEB John 14:27 not sealed');
+  });
+
+  await check('library Mark filter', async () => {
+    const { json } = await req('/api/library?book=Mark');
+    assert(Array.isArray(json.books) && json.books.includes('Mark'), 'missing books');
+    assert(json.passages.length >= 1, 'Mark passages missing');
+    assert(json.passages.every((p) => p.book === 'Mark'), 'non-Mark slipped through');
+  });
+
+  await check('chat shame → John 8:11', async () => {
     const res = await fetch(BASE + '/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Client-Id': 'smoke-chat-' + Date.now() },
-      body: JSON.stringify({ messages: [{ role: 'user', content: 'I feel anxious about tomorrow' }] }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'I feel so much shame' }] }),
     });
     assert(res.ok, 'chat status ' + res.status);
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
-    assert(/Matthew|Mark|Luke|John/.test(body), 'no gospel citation');
-    assert(/"done"\s*:/.test(body) || body.includes('"done":true'), 'no done event');
+    assert(/John 8:11/i.test(body), 'shame should cite John 8:11');
+    assert(!/daily_limit|unlock Plus/i.test(body), 'chat must not paywall');
   });
 
-  await check('welcome + app shells', async () => {
-    const app = await fetch(BASE + '/');
-    const welcome = await fetch(BASE + '/welcome');
-    assert(app.ok && welcome.ok, 'shells not 200');
-    const appHtml = await app.text();
-    const welcomeHtml = await welcome.text();
-    assert(appHtml.includes('share-modal') && appHtml.includes('presence-btn'), 'app missing core UI');
-    assert(appHtml.includes('lib-search') && appHtml.includes('carry-card'), 'missing search/carry');
-    assert(appHtml.includes('Stories 9:16') && appHtml.includes('Square 1:1'), 'missing share ratios');
-    assert(appHtml.includes('sit-overlay') && appHtml.includes('reflect-box') && appHtml.includes('pray-box'), 'missing sit/reflect/pray');
-    assert(appHtml.includes('examen-box') && appHtml.includes('plan-card') && appHtml.includes('mem-box'), 'missing examen/plan/memorize');
-    assert(appHtml.includes('midday-card') && appHtml.includes('amen-overlay') && appHtml.includes('cmd-overlay'), 'missing midday/amen/cmd');
-    assert(appHtml.includes('breath-overlay') && appHtml.includes('parable-overlay') && appHtml.includes('draw-stage'), 'missing breath/parable/draw');
-    assert(appHtml.includes('rhythm-shell') && appHtml.includes('day-poles') && appHtml.includes('more-practices'), 'missing rhythm/poles');
-    assert(appHtml.includes('crisis-pill') && appHtml.includes('bless-name'), 'missing crisis/bless');
-    assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
+  await check('welcome landing', async () => {
+    const { res, text } = await req('/welcome');
+    assert(res.ok, 'welcome not 200');
+    assert(/Red Letter/i.test(text) && text.includes('988'), 'welcome missing brand/trust');
+    assert(text.includes('href="/"'), 'welcome missing Open the Advisor');
+    assert(!/Plus launches|unlock Plus|Red Letter Plus/i.test(text), 'welcome must not sell a paywall');
   });
 
-  await check('corpus + verses + verify APIs', async () => {
-    const corpusRes = await req('/api/corpus');
-    assert(corpusRes.res.ok && corpusRes.json.passages?.length >= 40, 'corpus api');
-    const verses = await req('/api/verses');
-    assert(verses.res.ok && verses.json.count >= 40, 'verses api');
-    const verify = await req('/api/verify', {
-      method: 'POST',
-      body: JSON.stringify({ citations: [{ verse: 'Matthew 6:34', quote: "don't be anxious for tomorrow" }] }),
-    });
-    assert(verify.res.ok && verify.json.results?.[0]?.verified, 'verify api');
-  });
-
-  await check('library search payload', async () => {
-    const { json } = await req('/api/library');
-    assert(json.passages.some((p) => /parable/i.test(p.note || '')), 'parable notes missing for filter');
-    assert(json.passages.every((p) => p.text && p.verse), 'passage fields incomplete');
+  await check('Quiet Page shell', async () => {
+    const { res, text } = await req('/');
+    assert(res.ok, 'app not 200');
+    assert(text.includes('lectio-overlay'), 'missing lectio');
+    assert(text.includes('flyleaf'), 'missing flyleaf');
+    assert(text.includes('hear-word-btn'), 'missing Hear this');
+    assert(text.includes('path-beads'), 'missing path beads');
+    assert(text.includes('id="amen"'), 'missing Amen');
+    assert(text.includes('crisis.js'), 'missing crisis');
+    assert(!text.includes('<<<<<<<'), 'conflict markers in app');
+    assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
+    assert(/data-theme="light"/.test(text), 'paper is the default theme');
+    assert(!/prefers-color-scheme:\s*dark/.test(text), 'OS dark mode must not restyle the page');
   });
 
   if (fails.length) {

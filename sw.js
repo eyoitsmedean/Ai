@@ -1,4 +1,4 @@
-const CACHE = 'rla-v18-qa';
+const CACHE = 'rla-v16-path';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -28,10 +28,9 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
 });
 
@@ -67,9 +66,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() =>
-          caches.match(e.request).then((c) => c || caches.match('/') || caches.match('/index.html'))
-        )
+        .catch(() => caches.match(e.request).then((c) => c || caches.match('/index.html')))
     );
     return;
   }
@@ -96,8 +93,7 @@ self.addEventListener('periodicsync', (e) => {
     caches.open('rla-prefs').then((c) => c.match('/__prefs')).then((res) => {
       if (!res) return;
       return res.json().then((prefs) => {
-        const now = new Date();
-        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const today = new Date().toISOString().slice(0, 10);
         if (!prefs || prefs.lastLectio === today) return;
         const hour = new Date().getHours();
         if (hour < Number(prefs.quietHour || 7)) return;
