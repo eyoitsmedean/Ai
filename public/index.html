@@ -74,6 +74,64 @@ html { -webkit-text-size-adjust: 100%; }
 :root[data-fs="sm"] { --scale: 0.9; }
 :root[data-fs="lg"] { --scale: 1.12; }
 
+/* Church year — the paper changes clothes. The chrome does not. */
+:root { --silk: var(--crimson); --season-wash: var(--wash); }
+:root[data-season="advent"] {
+  --paper: #EEEBE6;
+  --paper-2: #E4E0D8;
+  --folio: #F4F1EA;
+  --crimson: #5C2448;
+  --crimson-deep: #3D1730;
+  --crimson-soft: #EDE4EA;
+  --gold: #5A4A6A;
+  --wash: rgba(92, 36, 72, 0.07);
+  --silk: #5C2448;
+}
+:root[data-season="christmas"] {
+  --paper: #F7F0E2;
+  --paper-2: #EFE4CC;
+  --folio: #FBF6EC;
+  --crimson: #9A1C24;
+  --gold: #A07A2A;
+  --wash: rgba(200, 148, 64, 0.12);
+  --silk: #A07A2A;
+}
+:root[data-season="lent"] {
+  --paper: #E8E0D2;
+  --paper-2: #DDD4C4;
+  --folio: #EFE8DA;
+  --crimson: #6E2E24;
+  --crimson-deep: #4A1E18;
+  --gold: #6B5344;
+  --wash: rgba(80, 56, 40, 0.04);
+  --silk: #6B5344;
+}
+:root[data-season="easter"] {
+  --paper: #F7F2E6;
+  --paper-2: #EFE6D0;
+  --folio: #FBF7EE;
+  --crimson: #8F1D1D;
+  --gold: #C4A35A;
+  --wash: rgba(196, 163, 90, 0.10);
+  --silk: #C4A35A;
+}
+:root[data-theme="dark"][data-season="advent"] {
+  --paper: #121016; --paper-2: #1A1620; --folio: #16131B;
+  --crimson: #C989B0; --silk: #C989B0; --gold: #A090B0;
+}
+:root[data-theme="dark"][data-season="lent"] {
+  --paper: #16130F; --paper-2: #1C1813; --folio: #18140F;
+  --crimson: #C47A6A; --silk: #8A6E58; --gold: #8A6E58;
+}
+:root[data-theme="dark"][data-season="christmas"],
+:root[data-theme="dark"][data-season="easter"] {
+  --gold: #D4B56A; --silk: #D4B56A;
+}
+
+:root[data-season="lent"] .tp-ornament,
+:root[data-season="lent"] .rule-double { opacity: .45; }
+:root[data-season="lent"] .wash { opacity: .4; }
+
 html, body {
   min-height: 100%;
   background: var(--paper);
@@ -145,6 +203,32 @@ textarea { font-family: var(--body); }
   background: var(--paper);
 }
 .titlepage.hidden { display: none; }
+.titlepage.leaving {
+  animation: leafOut .64s var(--ease) forwards;
+  pointer-events: none;
+}
+@keyframes leafOut {
+  to { opacity: 0; transform: perspective(900px) rotateY(-11deg) translateX(-3%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .titlepage.leaving { animation: none; opacity: 0; }
+  .sit-rest-word, .word-reveal span { animation: none !important; opacity: 1 !important; }
+  html.sitting .sit-sheet { transition: none; }
+}
+.tp-mark {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 22px;
+  border: 1px solid var(--crimson);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--crimson);
+  letter-spacing: 0;
+}
 .tp-inner {
   width: min(440px, 100%);
   text-align: center;
@@ -254,6 +338,22 @@ textarea { font-family: var(--body); }
 .tp-note a { color: var(--crimson); }
 
 /* ── Shell ── */
+.silk {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  z-index: 40;
+  background: linear-gradient(180deg, transparent 0 4%, var(--silk) 8%, var(--silk) 72%, transparent 88%);
+  opacity: .72;
+  box-shadow: 1px 0 0 color-mix(in srgb, var(--silk) 22%, transparent);
+}
+@media (min-width: 880px) {
+  .silk { left: calc(var(--rail) - 3px); width: 6px; }
+}
+
 .shell {
   position: relative;
   z-index: 1;
@@ -877,7 +977,7 @@ textarea { font-family: var(--body); }
 
 .sit-sheet { z-index: 52; }
 .sit-kicker { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--crimson); margin-bottom: 8px; }
-.sit-office { display: flex; gap: 16px; margin: 8px 0 22px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4); }
+.sit-office { display: flex; flex-wrap: wrap; gap: 10px 16px; margin: 8px 0 22px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4); }
 .sit-office span.on { color: var(--crimson); }
 .sit-quote {
   font-family: var(--display);
@@ -938,12 +1038,12 @@ textarea { font-family: var(--body); }
 }
 .offline-banner.on { display: block; }
 
-.week-ribbon {
+.week-ribbon, .seven {
   display: flex;
   gap: 8px;
   margin: 0 0 28px;
 }
-.week-cell {
+.week-cell, .seven-day {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -953,17 +1053,23 @@ textarea { font-family: var(--body); }
   font-size: 10px;
   letter-spacing: .08em;
   text-transform: uppercase;
+  background: none;
+  border: none;
+  padding: 0;
 }
-.week-dot {
+.week-dot, .seven-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   border: 1px solid var(--rule-2);
   background: transparent;
 }
-.week-cell.done .week-dot { background: var(--crimson); border-color: var(--crimson); }
-.week-cell.today { color: var(--crimson); }
-.week-cell.future { opacity: .4; }
+.week-cell.done .week-dot,
+.seven-day.done .seven-dot { background: var(--crimson); border-color: var(--crimson); }
+.week-cell.today, .seven-day.today { color: var(--crimson); }
+.week-cell.future, .seven-day.future { opacity: .4; }
+.seven-day:not(:disabled):hover { color: var(--crimson); }
+.seven-day:disabled { cursor: default; }
 
 .epigraph {
   margin: 0 0 36px;
@@ -972,6 +1078,16 @@ textarea { font-family: var(--body); }
   max-width: 42ch;
 }
 .epigraph[hidden] { display: none; }
+.flyleaf-turn {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--crimson);
+}
 .epigraph-quote {
   font-family: var(--display);
   font-style: italic;
@@ -1057,12 +1173,83 @@ textarea { font-family: var(--body); }
 }
 .folio-turn .ghost[disabled] { opacity: .35; cursor: default; }
 
+.print-folio { display: none; }
 @media print {
-  .grain, .wash, .rail, .dock, .mast, .composer, .cta-row, .actions,
+  @page { margin: 22mm 20mm; }
+  .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
   .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
-  .crisis-modal, .toast, .week-ribbon, .mode-switch, .nav-btn { display: none !important; }
+  .crisis-modal, .toast, .week-ribbon, .seven, .mode-switch, .nav-btn,
+  .skip-link, .titlepage { display: none !important; }
   .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
   .folio, body { background: #fff !important; }
+  body.printing .shell { display: none !important; }
+  body.printing .print-folio {
+    display: flex !important;
+    min-height: 90vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8vh 6vw;
+  }
+  body.printing .print-mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    color: #8F1D1D;
+    font-size: 22px;
+    width: 44px; height: 44px;
+    border: 1px solid #8F1D1D;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    margin-bottom: 28px;
+  }
+  body.printing .print-quote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 28pt;
+    line-height: 1.35;
+    color: #8F1D1D;
+    max-width: 22ch;
+  }
+  body.printing .print-cite {
+    margin-top: 22px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-size: 10pt;
+    color: #6F6456;
+  }
+  body.printing .print-foot {
+    margin-top: 48px;
+    font-size: 9pt;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #8A8074;
+  }
+}
+
+html.sitting .rail,
+html.sitting .dock,
+html.sitting .mast,
+html.sitting .silk { opacity: 0; pointer-events: none; }
+html.sitting .sheet-overlay { background: var(--paper); }
+html.sitting .sit-sheet {
+  inset: 0;
+  width: 100%;
+  max-height: none;
+  transform: none;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10vh 8vw calc(10vh + env(safe-area-inset-bottom, 0px));
+  background: var(--folio);
+}
+@media (max-width: 879px) {
+  html.sitting .sit-sheet {
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: none;
+    max-height: none;
+  }
 }
 
 .word-reveal span {
@@ -1275,14 +1462,16 @@ textarea { font-family: var(--body); }
 <a class="skip-link" href="#today-page">Skip to the folio</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="wash" aria-hidden="true"></div>
+<div class="silk" aria-hidden="true"></div>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
 
 <section id="onboarding" class="titlepage hidden" role="dialog" aria-labelledby="tp-title">
   <div class="tp-inner">
+    <div class="tp-mark" aria-hidden="true">R</div>
     <div class="tp-ornament">Est. in the Gospels</div>
     <div class="tp-kicker">A reading room</div>
     <h1 class="tp-title" id="tp-title">Red <em>Letter</em></h1>
-    <p class="tp-deck">Daily guidance from the words Jesus actually spoke.</p>
+    <p class="tp-deck">The words He spoke. Set on paper. Nothing else required.</p>
     <div class="tp-points">
       <div class="tp-point"><span class="tp-num">01</span><span>A morning word, set in red.</span></div>
       <div class="tp-point"><span class="tp-num">02</span><span>Encouragement for the life you are in.</span></div>
@@ -1293,7 +1482,7 @@ textarea { font-family: var(--body); }
       <span>This is not a person, and it is not therapy, medical care, or pastoral counseling. If you are in crisis, call or text <a href="tel:988">988</a> in the U.S., or find a local helpline at <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</span>
     </label>
     <div id="ob-ack-block">
-      <button class="tp-open" id="ob-open" disabled onclick="showNeedStep()">Open the room</button>
+      <button class="tp-open" id="ob-open" disabled onclick="showNeedStep()">Turn the page</button>
       <p class="tp-note">Red letters mark the direct speech of Jesus in many printed Bibles.</p>
     </div>
     <div class="tp-need" id="ob-need">
@@ -1314,7 +1503,7 @@ textarea { font-family: var(--body); }
   <aside class="rail">
     <a class="brand" href="#today" onclick="switchTab('today'); return false;">
       <div class="brand-mark">Red <span>Letter</span></div>
-      <div class="brand-sub">The Advisor</div>
+      <div class="brand-sub" id="brand-sub">Ordinary Time</div>
     </a>
     <nav class="rail-nav">
       <button class="rail-btn active" id="rail-today" onclick="switchTab('today')" aria-current="page"><span class="idx">I</span><span class="lbl">Today</span></button>
@@ -1366,6 +1555,7 @@ textarea { font-family: var(--body); }
           <p class="epigraph-quote" id="epigraph-quote"></p>
           <p class="epigraph-note" id="epigraph-note"></p>
           <p class="cite" id="epigraph-cite"></p>
+          <button class="flyleaf-turn" type="button" onclick="turnFlyleaf()">Turn the leaf</button>
         </aside>
 
         <section class="movement" id="aff-card">
@@ -1426,7 +1616,7 @@ textarea { font-family: var(--body); }
           <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
         </div>
         <div class="colophon">
-          <span>Set in the Gospels. Not a person.</span>
+          <span id="folio-colophon">Set in the Gospels. Not a person.</span>
           <span class="colophon-catch" id="folio-catch"></span>
         </div>
       </div>
@@ -1572,19 +1762,28 @@ textarea { font-family: var(--body); }
   <p class="sit-kicker" id="sit-kicker"></p>
   <div class="sit-office" aria-hidden="true">
     <span id="sit-mark-1">I Read</span>
-    <span id="sit-mark-2">II Rest</span>
-    <span id="sit-mark-3">III Reply</span>
+    <span id="sit-mark-2">II Reflect</span>
+    <span id="sit-mark-3">III Rest</span>
+    <span id="sit-mark-4">IV Respond</span>
   </div>
   <div class="sit-step on" id="sit-step-1">
     <p class="sit-quote" id="sit-quote"></p>
     <p class="cite sit-cite" id="sit-cite"></p>
-    <p class="sit-copy">Read the sentence once, aloud if you can. Then keep it in front of you for one quiet minute. Nothing else is required.</p>
+    <p class="sit-copy">Read the sentence once, aloud if you can. Nothing else is required of this leaf.</p>
     <div class="actions">
-      <button class="cta cta-primary" type="button" onclick="startSitRest()">Begin the quiet</button>
+      <button class="cta cta-primary" type="button" onclick="goSitReflect()">Turn to reflect</button>
       <button class="ghost" type="button" id="sit-listen" onclick="toggleSitListen()" aria-pressed="false">Listen</button>
     </div>
   </div>
   <div class="sit-step" id="sit-step-2">
+    <p class="sit-quote" id="sit-quote-reflect"></p>
+    <p class="sit-copy" id="sit-reflect">Notice the word that stays. You do not have to explain it yet.</p>
+    <div class="actions">
+      <button class="cta cta-primary" type="button" onclick="startSitRest()">Begin the quiet</button>
+      <button class="ghost" type="button" onclick="finishSitRest()">Skip to a reply</button>
+    </div>
+  </div>
+  <div class="sit-step" id="sit-step-3">
     <p class="sit-quote" id="sit-quote-rest"></p>
     <div class="sit-ring-wrap">
       <svg class="sit-ring" viewBox="0 0 120 120" aria-hidden="true">
@@ -1597,13 +1796,14 @@ textarea { font-family: var(--body); }
       <button class="ghost" type="button" onclick="finishSitRest()">Skip to a reply</button>
     </div>
   </div>
-  <div class="sit-step" id="sit-step-3">
+  <div class="sit-step" id="sit-step-4">
     <p class="sit-copy">What stayed with you? One sentence is enough.</p>
     <label class="sr-only" for="sit-reply">What stayed with you</label>
     <textarea class="sit-reply" id="sit-reply" rows="3" placeholder="Write the word that remained…"></textarea>
     <div class="actions" style="margin-top:18px">
       <button class="cta cta-primary" type="button" onclick="keepSitReply()">Keep this sitting</button>
       <button class="ghost" type="button" onclick="amenFromSit()">Amen</button>
+      <button class="ghost" type="button" onclick="printSitting()">Print this leaf</button>
       <button class="ghost" type="button" onclick="closeSit()">Leave it on the page</button>
     </div>
   </div>
@@ -1654,6 +1854,7 @@ textarea { font-family: var(--body); }
   </div>
   <div class="sheet-about">
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
 </aside>
@@ -1722,6 +1923,16 @@ textarea { font-family: var(--body); }
 
 <div class="toast" id="toast"></div>
 
+<article class="print-folio" id="print-folio" aria-hidden="true">
+  <div class="print-mark">R</div>
+  <p class="print-quote" id="print-quote"></p>
+  <p class="print-cite" id="print-cite"></p>
+  <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
+</article>
+
+<script src="/data/curated.js"></script>
+<script src="/data/advisor.js"></script>
+<script src="/data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -1773,7 +1984,67 @@ let deferredInstall = null;
 let cmdIndex = 0;
 let cmdFiltered = [];
 let ritualsBound = false;
+let openFirstSit = false;
+let currentSeason = { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' };
 
+function civilDate(y, m, d) { return new Date(y, m - 1, d); }
+function ymdNum(date) {
+  const d = date instanceof Date ? date : new Date(date);
+  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+function addDaysLocal(date, n) {
+  const d = date instanceof Date ? date : new Date(date);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+}
+function easterSunday(year) {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return civilDate(year, month, day);
+}
+function adventSunday(year) {
+  const start = civilDate(year, 11, 27);
+  return addDaysLocal(start, (7 - start.getDay()) % 7);
+}
+function churchYear(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  const year = d.getFullYear();
+  const n = ymdNum(d);
+  const seasons = {
+    advent: { id: 'advent', name: 'Advent', runningHead: 'Advent', note: 'A violet thread. Waiting is the work.' },
+    christmas: { id: 'christmas', name: 'Christmas', runningHead: 'Christmas', note: 'The Word became flesh, and the paper warms.' },
+    lent: { id: 'lent', name: 'Lent', runningHead: 'Lent', note: 'Unbleached paper. The sentence is enough.' },
+    easter: { id: 'easter', name: 'Easter', runningHead: 'Easter', note: 'Gold in the rule. He is not in the tomb.' },
+    ordinary: { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' },
+  };
+  if (n >= ymdNum(civilDate(year, 12, 25)) || n <= ymdNum(civilDate(year, 1, 5))) return seasons.christmas;
+  if (n >= ymdNum(adventSunday(year)) && n <= ymdNum(civilDate(year, 12, 24))) return seasons.advent;
+  const easter = easterSunday(year);
+  if (n >= ymdNum(addDaysLocal(easter, -46)) && n <= ymdNum(addDaysLocal(easter, -1))) return seasons.lent;
+  if (n >= ymdNum(easter) && n <= ymdNum(addDaysLocal(easter, 49))) return seasons.easter;
+  return seasons.ordinary;
+}
+function applySeason() {
+  currentSeason = churchYear(new Date());
+  document.documentElement.dataset.season = currentSeason.id;
+  const brand = document.getElementById('brand-sub');
+  if (brand) brand.textContent = currentSeason.runningHead;
+  const folio = document.getElementById('folio-colophon');
+  if (folio) folio.textContent = currentSeason.name + '. Set in the Gospels. Not a person.';
+  const sheet = document.getElementById('season-colophon');
+  if (sheet) sheet.textContent = currentSeason.name + '. ' + currentSeason.note + ' Set in Fraunces and Source Serif 4.';
+}
 
 const VESPERS_PROMPTS = [
   'What are you laying down?',
@@ -1802,6 +2073,7 @@ function vespersSaying() {
 
 (function init() {
   setWatch();
+  applySeason();
   paintThemeIndex();
   bindRituals();
   if (!ls('rla-onboarded')) {
@@ -1828,21 +2100,33 @@ function showNeedStep() {
 function chooseNeed(kind) {
   lsSet('rla-onboarded', '1');
   if (kind) lsSet('rla-need', kind);
-  document.getElementById('onboarding').classList.add('hidden');
-  document.getElementById('app').removeAttribute('aria-hidden');
-  startApp();
-  if (kind === 'ask') switchTab('advisor');
-  else if (kind) {
-    switchTab('seek');
-    loadEnc(kind);
+  const ob = document.getElementById('onboarding');
+  const finish = () => {
+    ob.classList.add('hidden');
+    ob.classList.remove('leaving');
+    document.getElementById('app').removeAttribute('aria-hidden');
+    if (!kind) openFirstSit = true;
+    startApp();
+    if (kind === 'ask') switchTab('advisor');
+    else if (kind) {
+      switchTab('seek');
+      loadEnc(kind);
+    }
+  };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    finish();
+    return;
   }
+  ob.classList.add('leaving');
+  setTimeout(finish, 640);
 }
 
 function startApp() {
   applySettings();
+  applySeason();
   markMorning();
   updateStreak();
-  renderWeekRibbon();
+  paintSeven();
   updateDateUI();
   paintCatchword();
   paintEpigraph();
@@ -1959,25 +2243,87 @@ function paintStreak(state) {
   }
 }
 function renderWeekRibbon() {
+  paintSeven();
+}
+function sevenDays() {
+  return (window.RLA_SEVEN || []).slice();
+}
+function pathState() {
+  const raw = parseJSON(ls('rla-seven'), null);
+  if (raw && Array.isArray(raw.done)) return raw;
+  return { started: todayStr(), done: [] };
+}
+function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
-  host.innerHTML = '';
-  const today = todayStr();
-  const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-  const start = weekStartStr();
-  const days = mornings();
-  for (let i = 0; i < 7; i += 1) {
-    const d = new Date(start + 'T12:00:00');
-    d.setDate(d.getDate() + i);
-    const date = padDate(d);
-    const cell = document.createElement('div');
-    cell.className = 'week-cell';
-    if (days.includes(date)) cell.classList.add('done');
-    if (date === today) cell.classList.add('today');
-    if (date > today) cell.classList.add('future');
-    cell.innerHTML = '<span class="week-dot" aria-hidden="true"></span><span>' + labels[i] + '</span>';
-    host.appendChild(cell);
+  const days = sevenDays();
+  if (!days.length) {
+    host.className = 'week-ribbon';
+    host.innerHTML = '';
+    const today = todayStr();
+    const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    const start = weekStartStr();
+    const kept = mornings();
+    for (let i = 0; i < 7; i += 1) {
+      const d = new Date(start + 'T12:00:00');
+      d.setDate(d.getDate() + i);
+      const date = padDate(d);
+      const cell = document.createElement('div');
+      cell.className = 'week-cell';
+      if (kept.includes(date)) cell.classList.add('done');
+      if (date === today) cell.classList.add('today');
+      if (date > today) cell.classList.add('future');
+      cell.innerHTML = '<span class="week-dot" aria-hidden="true"></span><span>' + labels[i] + '</span>';
+      host.appendChild(cell);
+    }
+    return;
   }
+  const state = pathState();
+  const done = new Set(state.done || []);
+  const next = days.findIndex((_, i) => !done.has(i));
+  host.className = 'seven';
+  host.setAttribute('aria-label', 'Seven Days with His words');
+  host.innerHTML = days.map((day, i) => {
+    const cls = done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future');
+    const locked = next >= 0 && i > next;
+    return '<button type="button" class="seven-day ' + cls + '" data-i="' + i + '"' + (locked ? ' disabled' : '') + '>' +
+      '<span class="seven-dot" aria-hidden="true"></span><span>' + esc(day.title) + '</span></button>';
+  }).join('');
+  host.querySelectorAll('.seven-day').forEach((btn) => {
+    btn.addEventListener('click', () => sitSeven(Number(btn.getAttribute('data-i'))));
+  });
+}
+function sitSeven(index) {
+  const day = sevenDays()[index];
+  if (!day) return;
+  sitPayload = {
+    kicker: 'Seven Days · ' + day.title,
+    title: day.title,
+    quote: day.passage,
+    verse: day.verse,
+    reflection: day.reflection,
+    pathIndex: index,
+  };
+  sitStep = 1;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  document.getElementById('sit-kicker').textContent = sitPayload.kicker;
+  document.getElementById('sit-quote').textContent = sitPayload.quote;
+  document.getElementById('sit-quote-rest').textContent = sitPayload.quote;
+  const reflectQ = document.getElementById('sit-quote-reflect');
+  if (reflectQ) reflectQ.textContent = sitPayload.quote;
+  const reflect = document.getElementById('sit-reflect');
+  if (reflect) reflect.textContent = sitPayload.reflection || 'Notice the word that stays.';
+  document.getElementById('sit-cite').textContent = (sitPayload.verse || '') + '  ·  KJV';
+  document.getElementById('sit-reply').value = '';
+  showSitStep(1);
+}
+function markSevenDay(index) {
+  if (index == null || index < 0) return;
+  const state = pathState();
+  if (!state.done.includes(index)) state.done.push(index);
+  lsSet('rla-seven', JSON.stringify(state));
+  paintSeven();
 }
 
 function isNightOffice() {
@@ -2041,7 +2387,10 @@ async function loadDailyContent() {
   } catch (e) {
     try {
       const cur = await loadCurated();
-      dailyData = cur.daily;
+      const pack = Array.isArray(cur.daily)
+      ? cur.daily[Math.abs(Math.floor((Date.now() / 86400000) % cur.daily.length))]
+      : cur.daily;
+    dailyData = pack;
     } catch (_) {
       document.getElementById('aff-skel').innerHTML = '<p class="lede">The morning page could not be fetched. Refresh when you have a connection.</p>';
       return;
@@ -2056,7 +2405,7 @@ async function loadDailyContent() {
 
   document.getElementById('word-theme').textContent = dailyData.word.theme;
   document.getElementById('word-title').textContent = dailyData.word.title;
-  document.getElementById('word-passage').textContent = dailyData.word.passage;
+  revealWords(document.getElementById('word-passage'), dailyData.word.passage);
   document.getElementById('word-verse').textContent = dailyData.word.verse + '  ·  KJV';
   document.getElementById('word-reflection').textContent = dailyData.word.reflection;
   document.getElementById('word-skel').style.display = 'none';
@@ -2067,6 +2416,10 @@ async function loadDailyContent() {
   if (catchEl) {
     const word = (getCatchword() || firstCatchword(dailyData.word.passage) || 'Peace');
     catchEl.textContent = word;
+  }
+  if (openFirstSit) {
+    openFirstSit = false;
+    setTimeout(() => sitWith('word'), 520);
   }
 }
 
@@ -2348,23 +2701,35 @@ document.getElementById('lib-q').addEventListener('input', (e) => {
 
 function sitPayloadFor(type) {
   if (type === 'aff' && dailyData) {
-    return { kicker: 'Today', title: dailyData.affirmation.text, quote: dailyData.affirmation.quote, verse: dailyData.affirmation.verse };
+    return { kicker: 'Today', title: dailyData.affirmation.text, quote: dailyData.affirmation.quote, verse: dailyData.affirmation.verse, reflection: dailyData.word && dailyData.word.reflection };
   }
   if (type === 'word' && dailyData) {
-    return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse };
+    return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse, reflection: dailyData.word.reflection };
   }
   if (type === 'enc' && currentEncData) {
     const p = currentEncData.passages?.[0];
-    return { kicker: currentEncTheme, title: currentEncData.headline, quote: p?.quote || currentEncData.opening, verse: p?.verse || '' };
+    return { kicker: currentEncTheme, title: currentEncData.headline, quote: p?.quote || currentEncData.opening, verse: p?.verse || '', reflection: currentEncData.opening };
   }
   if (type === 'lib' && currentSaying) {
-    return { kicker: currentSaying.book, title: currentSaying.citation, quote: currentSaying.text, verse: currentSaying.citation };
+    return { kicker: currentSaying.book, title: currentSaying.citation, quote: currentSaying.text, verse: currentSaying.citation, reflection: 'Read it once more. Notice the word that stays.' };
   }
   if (type === 'vespers') {
     const v = vespersSaying();
-    return { kicker: 'Vespers', title: vespersPrompt(), quote: v.quote, verse: v.verse };
+    return { kicker: officeName() === 'Compline' ? 'Compline' : 'Vespers', title: vespersPrompt(), quote: v.quote, verse: v.verse, reflection: 'Lay the day down beside this sentence.' };
   }
   return null;
+}
+
+function paintSitPayload(payload) {
+  document.getElementById('sit-kicker').textContent = payload.kicker || 'A saying';
+  document.getElementById('sit-quote').textContent = payload.quote;
+  document.getElementById('sit-quote-rest').textContent = payload.quote;
+  const reflectQ = document.getElementById('sit-quote-reflect');
+  if (reflectQ) reflectQ.textContent = payload.quote;
+  const reflect = document.getElementById('sit-reflect');
+  if (reflect) reflect.textContent = payload.reflection || 'Notice the word that stays. You do not have to explain it yet.';
+  document.getElementById('sit-cite').textContent = (payload.verse || '') + '  ·  KJV';
+  document.getElementById('sit-reply').value = '';
 }
 
 function sitWith(type) {
@@ -2374,24 +2739,27 @@ function sitWith(type) {
   sitStep = 1;
   closeSettings();
   openSheetChrome('sit-sheet');
-  document.getElementById('sit-kicker').textContent = payload.kicker || 'A saying';
-  document.getElementById('sit-quote').textContent = payload.quote;
-  document.getElementById('sit-quote-rest').textContent = payload.quote;
-  document.getElementById('sit-cite').textContent = (payload.verse || '') + '  ·  KJV';
-  document.getElementById('sit-reply').value = '';
+  paintSitPayload(payload);
   showSitStep(1);
 }
 
 function showSitStep(n) {
   sitStep = n;
-  [1, 2, 3].forEach((i) => {
-    document.getElementById('sit-step-' + i).classList.toggle('on', i === n);
-    document.getElementById('sit-mark-' + i).classList.toggle('on', i === n);
+  [1, 2, 3, 4].forEach((i) => {
+    const step = document.getElementById('sit-step-' + i);
+    const mark = document.getElementById('sit-mark-' + i);
+    if (step) step.classList.toggle('on', i === n);
+    if (mark) mark.classList.toggle('on', i === n);
   });
+  document.documentElement.classList.toggle('sitting', n >= 1);
+}
+
+function goSitReflect() {
+  showSitStep(2);
 }
 
 function startSitRest() {
-  showSitStep(2);
+  showSitStep(3);
   paceSitRest((sitPayload && sitPayload.quote) || '');
   sitEndsAt = Date.now() + SIT_SECONDS * 1000;
   const ring = document.getElementById('sit-progress');
@@ -2434,7 +2802,7 @@ function paintSitClock() {
 function finishSitRest() {
   clearInterval(sitTimer);
   sitTimer = null;
-  showSitStep(3);
+  showSitStep(4);
   document.getElementById('sit-reply').focus();
 }
 
@@ -2453,6 +2821,7 @@ function keepSitReply() {
   const quote = sitPayload.quote;
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
+  if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
@@ -2466,6 +2835,7 @@ function closeSit() {
   clearInterval(sitTimer);
   sitTimer = null;
   stopSitListen();
+  document.documentElement.classList.remove('sitting');
   document.getElementById('sit-sheet').classList.remove('on');
   hideOverlayIfIdle();
 }
@@ -2637,7 +3007,8 @@ async function sendMsg(preset) {
     addSaveToChatBubble(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
-    const fallback = [
+    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+    const fallback = living || [
       'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
       '',
       '**John 14:27**',
@@ -3075,11 +3446,17 @@ function paintCatchword() {
     el.textContent = word ? '— ' + word : '';
   });
 }
+function turnFlyleaf() {
+  lsSet('rla-flyleaf-' + todayStr(), '1');
+  const root = document.getElementById('epigraph');
+  if (root) root.hidden = true;
+}
 function paintEpigraph() {
   const sit = getLastSit();
   const root = document.getElementById('epigraph');
+  const turned = ls('rla-flyleaf-' + todayStr()) === '1';
   const fresh = sit && sit.quote && (sit.date === todayStr() || sit.date === yestStr());
-  if (!root || !fresh) {
+  if (!root || !fresh || turned) {
     if (root) root.hidden = true;
     return;
   }
@@ -3386,6 +3763,19 @@ async function sendBlessing(style) {
   showToast('Blessing ready to send');
 }
 
+function printSitting() {
+  const p = sitPayload || (dailyData && dailyData.word
+    ? { quote: dailyData.word.passage, verse: dailyData.word.verse }
+    : null);
+  if (!p) { showToast('Nothing to print yet'); return; }
+  document.getElementById('print-quote').textContent = '“' + String(p.quote || '').replace(/^["“]|["”]$/g, '') + '”';
+  document.getElementById('print-cite').textContent = (p.verse || '') + '  ·  KJV';
+  document.getElementById('print-foot').textContent = 'Red Letter · ' + (currentSeason.name || 'the Gospels');
+  document.body.classList.add('printing');
+  window.print();
+  setTimeout(() => document.body.classList.remove('printing'), 500);
+}
+
 const COMMANDS = [
   { label: 'Today’s reading', hint: 'Today', run: () => switchTab('today') },
   { label: 'Find encouragement', hint: 'Seek', run: () => switchTab('seek') },
@@ -3393,6 +3783,8 @@ const COMMANDS = [
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
+  { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

@@ -8,12 +8,17 @@
     "dev": "node server.js",
     "test": "node --test test/*.test.js",
     "spoken": "node scripts/build-spoken.js",
-    "icons": "python3 scripts/make-icons.py"
+    "icons": "python3 scripts/make-icons.py",
+    "smoke": "node scripts/smoke.js",
+    "qa": "node scripts/qa-browser.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.9.0"
   }
 }

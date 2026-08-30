@@ -14,6 +14,7 @@
     html, body { min-height: 100%; background: var(--paper); color: var(--ink); font-family: 'Instrument Sans', system-ui, sans-serif; }
     .grain { pointer-events:none; position:fixed; inset:0; opacity:.04; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
     main { max-width: 720px; margin: 0 auto; padding: 64px 24px 80px; text-align: center; }
+    .mark { width:46px; height:46px; margin:0 auto 22px; border:1px solid var(--crimson); border-radius:50%; display:grid; place-items:center; font-family:Fraunces,Georgia,serif; font-style:italic; font-size:22px; color:var(--crimson); }
     .kicker { letter-spacing:.28em; text-transform:uppercase; font-size:11px; color:var(--mute); margin-bottom:16px; }
     h1 { font-family: Fraunces, Georgia, serif; font-weight:500; font-size: clamp(48px, 10vw, 84px); letter-spacing:-.03em; line-height:.95; }
     h1 em { font-style:italic; color:var(--crimson); }
@@ -39,15 +40,16 @@
 <body>
   <div class="grain" aria-hidden="true"></div>
   <main>
+    <div class="mark" aria-hidden="true">R</div>
     <div class="kicker">Not every verse — His words</div>
     <h1>Red <em>Letter</em></h1>
-    <p class="deck">A reading room that keeps office. Morning. Sit. Vespers. Counsel — only what He said.</p>
+    <p class="deck">A reading room that keeps office. Complex underneath. Almost nothing on the page.</p>
     <p class="quote">Peace I leave with you, my peace I give unto you.</p>
     <p class="cite">John 14:27  ·  KJV</p>
     <div class="pillars">
-      <div class="pillar"><strong>Morning</strong><span>A word in crimson. Hear it. Sit one minute. Keep a catchword until dawn.</span></div>
-      <div class="pillar"><strong>Vespers</strong><span>After dusk the folio becomes an evening office. At night, compline.</span></div>
-      <div class="pillar"><strong>Counsel</strong><span>Write what is true. The reply cites only Matthew–John. Quotes are inserted from a Gospel corpus.</span></div>
+      <div class="pillar"><strong>Lectio</strong><span>Read. Reflect. Rest. Respond. Four leaves, one sentence. The chrome leaves the room.</span></div>
+      <div class="pillar"><strong>Office</strong><span>Morning, vespers, compline. A silk ribbon follows the church year. You never have to name the season.</span></div>
+      <div class="pillar"><strong>Counsel</strong><span>Write what is true. The reply cites only Matthew–John — even when the lamp is out.</span></div>
       <div class="pillar"><strong>Trust</strong><span>Not a person. Not another Bible app. Crisis: 988 (U.S.) · findahelpline.com.</span></div>
     </div>
     <a class="btn" href="/">Open the room</a>
