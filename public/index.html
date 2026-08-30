@@ -1768,6 +1768,8 @@ let blessingPick = null;
 let amenTimer = null;
 let sitUtterance = null;
 let sitSpeaking = false;
+let officeSpeaking = false;
+let deferredInstall = null;
 let cmdIndex = 0;
 let cmdFiltered = [];
 let ritualsBound = false;
@@ -3224,7 +3226,6 @@ function toggleSitListen() {
   window.speechSynthesis.speak(sitUtterance);
 }
 
-let officeSpeaking = false;
 function stopHearOffice() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   officeSpeaking = false;
@@ -3268,10 +3269,6 @@ function toggleHearOffice() {
   stopSitListen();
   const text = officeScript();
   if (!text.trim()) { showToast('The office is still being set.'); return; }
-  const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
-  utter.rate = 0.88;
-  utter.onend = () => stopHearOffice();
-  utter.onerror = () => stopHearOffice();
   officeSpeaking = true;
   document.documentElement.classList.add('hearing');
   const btn = document.getElementById('hear-office');
@@ -3284,10 +3281,16 @@ function toggleHearOffice() {
     status.hidden = false;
     status.textContent = 'Listening — the page can rest';
   }
-  window.speechSynthesis.speak(utter);
+  const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
+  utter.rate = 0.88;
+  utter.onend = () => { if (officeSpeaking) stopHearOffice(); };
+  try {
+    window.speechSynthesis.speak(utter);
+  } catch (_) {
+    showToast('This browser would not speak. The office is still on the page.');
+  }
 }
 
-let deferredInstall = null;
 function paintInstallState() {
   const btn = document.getElementById('install-btn');
   if (!btn) return;
