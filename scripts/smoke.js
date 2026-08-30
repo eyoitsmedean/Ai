@@ -106,6 +106,10 @@ async function main() {
     assert(appHtml.includes('breath-overlay') && appHtml.includes('parable-overlay') && appHtml.includes('draw-stage'), 'missing breath/parable/draw');
     assert(appHtml.includes('rhythm-shell') && appHtml.includes('day-poles') && appHtml.includes('more-practices'), 'missing rhythm/poles');
     assert(appHtml.includes('crisis-pill') && appHtml.includes('bless-name'), 'missing crisis/bless');
+    assert(appHtml.includes('focus-overlay') && appHtml.includes('rest-overlay') && appHtml.includes('advisor-context'), 'missing focus/rest/context');
+    assert(appHtml.includes('ob-close-scale') && appHtml.includes('simple-toggle'), 'missing closeness/simple');
+    assert(appHtml.includes('lectio-overlay') && appHtml.includes('harvest-card') && appHtml.includes('return-ribbon'), 'missing lectio/harvest/return');
+    assert(appHtml.includes('Lock screen') && appHtml.includes('verify-chip') && appHtml.includes('status-live'), 'missing lock/verify/status');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 

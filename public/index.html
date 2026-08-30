@@ -481,6 +481,77 @@ textarea,input{font-family:var(--font-ui)}
 
 .reading-room #word-card{margin-top:0}
 .reading-room #affirmation-card{opacity:.92}
+
+.focus-overlay{position:fixed;inset:0;z-index:490;background:linear-gradient(180deg,#1A1410,#0F0D0B);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
+.focus-overlay.open{display:flex;animation:fadeUp .35s var(--ease) both}
+.focus-kicker{font-size:11px;letter-spacing:.55px;text-transform:uppercase;color:rgba(232,201,138,.65);font-weight:700;margin-bottom:28px}
+.focus-phrase{font-family:var(--font-body);font-style:italic;font-size:clamp(22px,6vw,32px);line-height:1.45;color:rgba(255,230,230,.95);max-width:20ch;min-height:4.5em;display:flex;align-items:center;justify-content:center}
+.focus-cite{margin-top:24px;font-size:12px;color:var(--gold);font-weight:700}
+.focus-hint{margin-top:18px;font-size:13px;color:rgba(237,232,224,.45)}
+.focus-actions{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;justify-content:center}
+
+.rest-overlay{position:fixed;inset:0;z-index:485;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(159,18,57,.22),transparent 55%),#0C0A08;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
+.rest-overlay.open{display:flex;animation:fadeUp .4s var(--ease) both}
+.rest-title{font-family:var(--font-disp);font-size:28px;color:#F7F4EF;font-weight:700;margin-bottom:12px}
+.rest-quote{font-family:var(--font-body);font-style:italic;font-size:calc(18px * var(--scale));color:var(--crimson-words);line-height:1.55;max-width:300px;margin-bottom:10px}
+.rest-cite{font-size:12px;color:var(--gold);font-weight:700;margin-bottom:20px}
+.rest-hint{font-size:13px;color:rgba(237,232,224,.5);margin-bottom:24px;line-height:1.45}
+
+.advisor-context{margin:0 12px 10px;padding:12px 14px;border-radius:var(--r-sm);border:1px solid rgba(185,28,28,.25);background:rgba(185,28,28,.08)}
+.advisor-context.hidden{display:none!important}
+.advisor-context strong{display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.advisor-context p{font-size:calc(13px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.4}
+
+.ob-close-wrap{width:100%;max-width:320px;margin:0 auto 24px;text-align:left}
+.ob-close-label{font-size:14px;color:rgba(237,232,224,.7);margin-bottom:12px;line-height:1.4}
+.ob-close-scale{display:flex;justify-content:space-between;gap:6px}
+.ob-close-btn{flex:1;padding:12px 0;border-radius:10px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.06);color:#EDE8E0;font-weight:700;font-size:14px}
+.ob-close-btn.on{background:var(--crimson);border-color:var(--crimson)}
+.ob-close-ends{display:flex;justify-content:space-between;font-size:11px;color:rgba(237,232,224,.45);margin-top:8px}
+
+html.simple-mode .more-practices,
+html.simple-mode .atelier-row,
+html.simple-mode #affirmation-card,
+html.simple-mode .day-poles,
+html.simple-mode .harvest-card{display:none!important}
+html.simple-mode .rhythm-sub{display:none}
+
+.return-ribbon{margin:0 14px 14px;padding:14px 16px;border-radius:var(--r);border:1px solid rgba(185,28,28,.28);background:linear-gradient(135deg,rgba(185,28,28,.1),rgba(237,232,224,.55));animation:fadeUp .5s var(--ease) both}
+.return-ribbon.hidden{display:none!important}
+.return-ribbon strong{display:block;font-family:var(--font-disp);font-size:calc(16px * var(--scale));color:var(--ink);margin-bottom:4px}
+.return-ribbon p{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45;margin-bottom:10px}
+.return-ribbon .action-btn{margin-right:6px}
+
+.harvest-card{margin:0 14px 16px;padding:16px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface)}
+.harvest-card h3{font-family:var(--font-disp);font-size:calc(16px * var(--scale));margin:0 0 4px}
+.harvest-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
+.harvest-garden{display:flex;flex-wrap:wrap;gap:8px}
+.harvest-leaf{flex:1 1 42%;min-width:140px;padding:12px;border-radius:var(--r-sm);border:1px solid rgba(185,28,28,.18);background:linear-gradient(180deg,rgba(185,28,28,.06),var(--surface-2));cursor:pointer;text-align:left}
+.harvest-leaf:hover{border-color:rgba(185,28,28,.4)}
+.harvest-leaf .hl-day{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.harvest-leaf .hl-phrase{font-family:var(--font-body);font-style:italic;font-size:calc(13px * var(--scale));color:var(--crimson-words);line-height:1.35}
+.harvest-leaf .hl-cite{font-size:11px;color:var(--ink-muted);margin-top:6px;font-weight:600}
+.harvest-empty{font-size:calc(13px * var(--scale));color:var(--ink-muted);font-style:italic}
+
+.lectio-overlay{position:fixed;inset:0;z-index:495;background:linear-gradient(165deg,#2A1810 0%,#120E0C 55%,#1A1410 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;text-align:center;max-width:430px;margin:0 auto}
+.lectio-overlay.open{display:flex;animation:fadeUp .4s var(--ease) both}
+.lectio-steps{display:flex;gap:6px;margin-bottom:18px}
+.lectio-step{padding:6px 10px;border-radius:999px;border:1px solid rgba(237,232,224,.15);font-size:10px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:rgba(237,232,224,.4)}
+.lectio-step.on{background:var(--crimson);border-color:var(--crimson);color:#fff}
+.lectio-step.done{color:rgba(232,201,138,.85);border-color:rgba(232,201,138,.35)}
+.lectio-label{font-family:var(--font-disp);font-size:22px;color:#F7F4EF;margin-bottom:8px;font-weight:700}
+.lectio-guide{font-size:13px;color:rgba(237,232,224,.55);margin-bottom:18px;line-height:1.45;max-width:280px}
+.lectio-quote{font-family:var(--font-body);font-style:italic;font-size:calc(17px * var(--scale));color:var(--crimson-words);line-height:1.55;max-width:300px;min-height:4.5em;display:flex;align-items:center;justify-content:center}
+.lectio-cite{margin-top:14px;font-size:12px;color:var(--gold);font-weight:700}
+.lectio-notice{width:100%;max-width:300px;margin:16px 0 0;padding:12px;border-radius:var(--r-sm);border:1px solid rgba(237,232,224,.15);background:rgba(237,232,224,.06);color:#EDE8E0;font-size:14px;font-family:var(--font-body)}
+.lectio-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;justify-content:center}
+
+.status-live{position:fixed;left:12px;right:12px;bottom:76px;z-index:600;max-width:406px;margin:0 auto;padding:10px 14px;border-radius:var(--r-sm);background:rgba(26,20,16,.92);color:#EDE8E0;font-size:12px;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.status-live.show{opacity:1}
+
+.verify-chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 10px;border-radius:999px;border:1px solid rgba(185,28,28,.25);background:rgba(185,28,28,.06);color:var(--crimson);font-size:11px;font-weight:700;cursor:pointer}
+.verify-chip.ok{border-color:rgba(22,101,52,.35);background:rgba(22,101,52,.08);color:#166534}
+.verify-chip.bad{border-color:rgba(153,27,27,.4);color:#991B1B}
 </style>
 </head>
 <body>
@@ -489,23 +560,39 @@ textarea,input{font-family:var(--font-ui)}
     <div class="ob-wordmark">Red Letter</div>
     <p class="ob-tagline">Daily guidance from the words Jesus actually spoke.</p>
     <button type="button" class="ob-btn" onclick="obNext()">Continue</button>
-    <div class="ob-dots"><span class="ob-dot active"></span><span class="ob-dot"></span><span class="ob-dot"></span></div>
+    <div class="ob-dots"><span class="ob-dot active"></span><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot"></span></div>
   </div>
   <div class="ob-screen" data-step="1">
-    <p class="ob-quote">"Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient."</p>
-    <p class="ob-cite">Matthew 6:34 · WEB</p>
-    <p class="ob-prompt">Sit with this for a breath</p>
-    <button type="button" class="ob-btn" onclick="obNext()">I've received it</button>
-    <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot active"></span><span class="ob-dot"></span></div>
+    <p class="ob-commit" style="margin-bottom:8px">How close do you feel to Him right now?</p>
+    <div class="ob-close-wrap">
+      <p class="ob-close-label">No wrong answer — His words meet you where you are.</p>
+      <div class="ob-close-scale" role="group" aria-label="Closeness">
+        <button type="button" class="ob-close-btn" data-c="1" onclick="selectCloseness(1)">1</button>
+        <button type="button" class="ob-close-btn" data-c="2" onclick="selectCloseness(2)">2</button>
+        <button type="button" class="ob-close-btn" data-c="3" onclick="selectCloseness(3)">3</button>
+        <button type="button" class="ob-close-btn" data-c="4" onclick="selectCloseness(4)">4</button>
+        <button type="button" class="ob-close-btn" data-c="5" onclick="selectCloseness(5)">5</button>
+      </div>
+      <div class="ob-close-ends"><span>Distant</span><span>Near</span></div>
+    </div>
+    <button type="button" class="ob-btn" id="ob-close-next" disabled onclick="obNextFromCloseness()">Continue</button>
+    <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot active"></span><span class="ob-dot"></span><span class="ob-dot"></span></div>
   </div>
   <div class="ob-screen" data-step="2">
+    <p class="ob-quote" id="ob-match-quote">"Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient."</p>
+    <p class="ob-cite" id="ob-match-cite">Matthew 6:34 · WEB</p>
+    <p class="ob-prompt">A word for where you are</p>
+    <button type="button" class="ob-btn" onclick="obNext()">I've received it</button>
+    <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot active"></span><span class="ob-dot"></span></div>
+  </div>
+  <div class="ob-screen" data-step="3">
     <p class="ob-commit">I'll return for one red letter each day</p>
     <button type="button" class="ob-toggle" id="ob-commit-toggle" onclick="toggleCommit()" aria-pressed="false">
       <span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span>
       <span class="ob-toggle-label">Yes — I'll make space for His words</span>
     </button>
     <button type="button" class="ob-btn" id="ob-begin-btn" disabled onclick="finishOnboarding()">Begin</button>
-    <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot active"></span></div>
+    <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot active"></span></div>
   </div>
 </div>
 <div class="app" id="app">
@@ -529,6 +616,12 @@ textarea,input{font-family:var(--font-ui)}
     <section class="page active reading-room" id="today-page" data-tab="today">
       <div class="page-hd"><div class="page-hd-eyebrow" id="today-date"></div><h1 class="page-hd-title" id="today-greeting">Good morning</h1></div>
       <div id="offline-banner" class="offline-banner hidden">You're offline — showing verified passages from our library.</div>
+      <div class="return-ribbon hidden" id="return-ribbon" role="status">
+        <strong id="return-title">Welcome back</strong>
+        <p id="return-copy">Missed days don’t erase you. Return without shame — one red letter is enough.</p>
+        <button type="button" class="action-btn" onclick="dismissReturnRibbon(true)">Begin with Him</button>
+        <button type="button" class="action-btn" onclick="dismissReturnRibbon(false)">Not now</button>
+      </div>
       <div class="carry-card hidden" id="carry-card">
         <div class="carry-label">Carry this today</div>
         <p class="carry-phrase" id="carry-phrase"></p>
@@ -564,6 +657,8 @@ textarea,input{font-family:var(--font-ui)}
         <button type="button" class="rhythm-cta" id="rhythm-cta" onclick="advanceRhythm()">Begin with Him</button>
         <div class="rhythm-secondary">
           <button type="button" class="action-btn" onclick="guidedLectioListen()">Guided listen</button>
+          <button type="button" class="action-btn" onclick="openFocusReading()">Focus</button>
+          <button type="button" class="action-btn" onclick="askAboutTodaysWord()">Ask about this</button>
           <button type="button" class="action-btn" onclick="openBreathPrayer()">Breathe</button>
           <button type="button" class="action-btn" onclick="shareWord()">Share</button>
         </div>
@@ -579,6 +674,7 @@ textarea,input{font-family:var(--font-ui)}
         <h2 style="font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin-bottom:10px" id="word-title"></h2>
         <p class="red-quote" id="word-passage"></p><p class="verse-cite" id="word-verse"></p>
         <p style="font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.6;margin-top:12px" id="word-reflection"></p><div id="word-verified"></div>
+        <button type="button" class="verify-chip" id="verify-chip" onclick="verifyTodaysWord()">Tap to re-verify · WEB</button>
         <div class="card-actions">
           <button type="button" class="action-btn" onclick="listenWord()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
           <button type="button" class="action-btn" onclick="shareWord()" aria-label="Share word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
@@ -613,11 +709,17 @@ textarea,input{font-family:var(--font-ui)}
         <div class="more-practices-body">
           <div class="midday-card" id="midday-card">
             <div class="midday-hd">Midday pause</div>
-            <p class="midday-sub">Pray as He taught — a short return to the Father in the middle of the day.</p>
+            <p class="midday-sub">Pray as He taught — or walk Lectio Divina over today’s word.</p>
             <div class="midday-actions">
               <button type="button" class="action-btn" onclick="openMidday()">Pray the Lord’s Prayer</button>
+              <button type="button" class="action-btn" onclick="openLectio()">Lectio Divina</button>
               <button type="button" class="action-btn" onclick="listenMidday()">Listen</button>
             </div>
+          </div>
+          <div class="harvest-card" id="harvest-card">
+            <h3>This week’s harvest</h3>
+            <p class="harvest-sub">Words you received — a quiet garden, not a streak. Tap any leaf to carry it again.</p>
+            <div class="harvest-garden" id="harvest-garden"></div>
           </div>
           <div class="plan-card" id="plan-card">
             <div class="plan-hd">7 days with His words</div>
@@ -687,6 +789,10 @@ textarea,input{font-family:var(--font-ui)}
           <button type="button" onclick="openPaywall()">Unlock Plus</button>
         </div>
         <div id="advisor-mode-banner" class="offline-banner hidden">Corpus mode — verified red-letter passages (AI advisor offline).</div>
+        <div class="advisor-context hidden" id="advisor-context">
+          <strong>Sitting with</strong>
+          <p id="advisor-context-text"></p>
+        </div>
         <div class="chat-welcome" id="chat-welcome"><h3>Speak what's on your heart</h3><p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John.</p></div>
         <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
         <div class="suggestions" id="suggestions">
@@ -710,6 +816,10 @@ textarea,input{font-family:var(--font-ui)}
     </section>
     <section class="page" id="journal-page" data-tab="journal">
       <div class="page-hd"><div class="page-hd-eyebrow">Your collection</div><h1 class="page-hd-title">Journal</h1></div>
+      <div style="padding:0 14px 12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="action-btn" onclick="exportJournal()">Export journal</button>
+        <button type="button" class="action-btn" onclick="openRestWithHim()">Rest with Him</button>
+      </div>
       <div class="pray-box" id="pray-box">
         <div class="pray-hd">Praying for…</div>
         <p class="pray-sub">Name what’s on your heart. Pair it with His words when you’re ready — no streak, no scoreboard.</p>
@@ -736,6 +846,8 @@ textarea,input{font-family:var(--font-ui)}
 <div class="sheet-body">
   <div class="setting-row"><div><div class="setting-label">Dark mode</div><div class="setting-desc">Easier on the eyes at night</div></div>
     <button type="button" class="ob-toggle" id="dark-toggle" onclick="toggleDark()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
+  <div class="setting-row"><div><div class="setting-label">Simple mode</div><div class="setting-desc">Fewer surfaces — rhythm first</div></div>
+    <button type="button" class="ob-toggle" id="simple-toggle" onclick="toggleSimpleMode()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Text size</div>
     <div class="size-btns"><button type="button" class="size-btn" data-fs="sm" onclick="setFontSize('sm')">A</button><button type="button" class="size-btn active" data-fs="md" onclick="setFontSize('md')">A</button><button type="button" class="size-btn" data-fs="lg" onclick="setFontSize('lg')">A</button></div></div></div>
   <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:10px">
@@ -774,6 +886,7 @@ textarea,input{font-family:var(--font-ui)}
       <button type="button" class="share-ratio active" data-ratio="feed" onclick="setShareRatio('feed')">Feed 4:5</button>
       <button type="button" class="share-ratio" data-ratio="story" onclick="setShareRatio('story')">Stories 9:16</button>
       <button type="button" class="share-ratio" data-ratio="square" onclick="setShareRatio('square')">Square 1:1</button>
+      <button type="button" class="share-ratio" data-ratio="lock" onclick="setShareRatio('lock')">Lock screen</button>
     </div>
     <div class="bless-row">
       <input type="text" id="bless-name" maxlength="40" placeholder="Bless someone by name (optional)" aria-label="Blessing recipient" />
@@ -786,6 +899,7 @@ textarea,input{font-family:var(--font-ui)}
     </div></div></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="status-live" id="status-live" role="status" aria-live="polite" aria-atomic="true"></div>
 <div class="sit-overlay" id="sit-overlay" role="dialog" aria-label="Sit with His words" aria-hidden="true">
   <div class="sit-ring" id="sit-ring"><span class="sit-count" id="sit-count">60</span></div>
   <p class="sit-quote" id="sit-quote"></p>
@@ -847,6 +961,44 @@ textarea,input{font-family:var(--font-ui)}
     <button type="button" class="action-btn" onclick="carryParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Carry</button>
     <button type="button" class="action-btn" onclick="shareParable()" style="background:rgba(237,232,224,.08);border-color:rgba(237,232,224,.15);color:#EDE8E0">Share</button>
     <button type="button" class="action-btn" onclick="breatheParable()" style="background:rgba(185,28,28,.35);border-color:rgba(185,28,28,.5);color:#fff">Breathe</button>
+  </div>
+</div>
+<div class="focus-overlay" id="focus-overlay" role="dialog" aria-label="Focus reading" aria-hidden="true">
+  <div class="focus-kicker">Focus · one phrase at a time</div>
+  <p class="focus-phrase" id="focus-phrase"></p>
+  <p class="focus-cite" id="focus-cite"></p>
+  <p class="focus-hint" id="focus-hint">Tap anywhere for the next phrase · contemplative, not rushed</p>
+  <div class="focus-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="focusNext()">Next</button>
+    <button type="button" class="action-btn" onclick="closeFocusReading()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="rest-overlay" id="rest-overlay" role="dialog" aria-label="Rest with Him" aria-hidden="true">
+  <div class="rest-title">Rest with Him</div>
+  <p class="rest-quote" id="rest-quote"></p>
+  <p class="rest-cite" id="rest-cite"></p>
+  <p class="rest-hint">Let the day end in His peace — not another feed.</p>
+  <div class="sit-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" onclick="finishRest()">Amen · sleep in peace</button>
+    <button type="button" class="action-btn" onclick="openBreathPrayerFromRest()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Breathe</button>
+    <button type="button" class="action-btn" onclick="closeRest()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="lectio-overlay" id="lectio-overlay" role="dialog" aria-label="Lectio Divina" aria-hidden="true">
+  <div class="lectio-steps" id="lectio-steps" aria-hidden="true">
+    <span class="lectio-step" data-step="0">Read</span>
+    <span class="lectio-step" data-step="1">Notice</span>
+    <span class="lectio-step" data-step="2">Sit</span>
+    <span class="lectio-step" data-step="3">Respond</span>
+  </div>
+  <div class="lectio-label" id="lectio-label">Read</div>
+  <p class="lectio-guide" id="lectio-guide">Receive the whole saying slowly — aloud if you can.</p>
+  <p class="lectio-quote" id="lectio-quote"></p>
+  <p class="lectio-cite" id="lectio-cite"></p>
+  <input type="text" class="lectio-notice hidden" id="lectio-notice" maxlength="80" placeholder="What word or phrase caught you?" aria-label="Noticed word" />
+  <div class="lectio-actions">
+    <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" id="lectio-next" onclick="lectioNext()">Continue</button>
+    <button type="button" class="action-btn" onclick="closeLectio()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
   </div>
 </div>
 <div class="install-banner hidden" id="install-banner">
@@ -966,6 +1118,7 @@ const SHARE_SIZES = {
   feed: { W: 1080, H: 1350 },
   story: { W: 1080, H: 1920 },
   square: { W: 1080, H: 1080 },
+  lock: { W: 1170, H: 2532 },
 };
 
 const SHARE_STYLES = {
@@ -1019,6 +1172,7 @@ function updateDayCount() {
   const el = document.getElementById('day-label');
   if (el) el.textContent = 'Day ' + day + ' with Him';
   renderPresence();
+  maybeShowReturnRibbon();
 }
 
 function getPresenceDays() {
@@ -1078,9 +1232,11 @@ function markPresence(opts) {
     lsSetJSON('rla-presence', days.slice(-400));
   }
   setRhythmFlag('receive', true);
+  recordHarvest();
   renderPresence();
   renderDayPoles();
   renderRhythm();
+  renderHarvest();
   showToast('Received. Carry one phrase with you.');
   if (!opts?.skipReflect) showReflect();
 }
@@ -1166,7 +1322,9 @@ function renderDayPoles() {
 function routeByHour() {
   const h = new Date().getHours();
   const more = document.getElementById('more-practices');
-  if (h >= 17) {
+  if (h >= 21) {
+    setTimeout(() => openRestWithHim(), 600);
+  } else if (h >= 17) {
     if (more) more.open = true;
     setTimeout(() => document.getElementById('examen-box')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
   } else if (h >= 11 && h < 15) {
@@ -1207,6 +1365,403 @@ function guidedLectioListen() {
   };
   utter();
   showToast('Guided listen — pauses built in');
+}
+
+/* ═══ ASK ABOUT THIS WORD (Bible Path contextual AI) ═══ */
+function askAboutTodaysWord() {
+  if (!dailyData?.word) {
+    showToast('Today’s word is still loading');
+    return;
+  }
+  const w = dailyData.word;
+  const phrase = pickCarryPhrase(w.passage);
+  const ctx = document.getElementById('advisor-context');
+  const ctxText = document.getElementById('advisor-context-text');
+  if (ctx && ctxText) {
+    ctx.classList.remove('hidden');
+    ctxText.textContent = w.verse + ' — “' + phrase + '”';
+  }
+  goTab('advisor');
+  const prompt =
+    "I've been sitting with these words of Jesus (" +
+    w.verse +
+    '): "' +
+    phrase +
+    '". Help me live them today — what do they ask of me, gently and practically?';
+  const input = document.getElementById('chat-input');
+  if (input) input.value = prompt;
+  setTimeout(() => sendChat(), 180);
+}
+
+/* ═══ FOCUS READING (contemplative RSVP — slow) ═══ */
+let focusPhrases = [];
+let focusIdx = 0;
+function splitFocusPhrases(text) {
+  const clean = String(text || '').replace(/^["“]|["”]$/g, '').trim();
+  const parts = clean.split(/(?<=[.!?;:])\s+/).filter((p) => p.length > 2);
+  if (parts.length >= 2) return parts;
+  const words = clean.split(/\s+/);
+  const chunks = [];
+  for (let i = 0; i < words.length; i += 5) chunks.push(words.slice(i, i + 5).join(' '));
+  return chunks.filter(Boolean);
+}
+function openFocusReading() {
+  if (!dailyData?.word) return;
+  focusPhrases = splitFocusPhrases(dailyData.word.passage);
+  focusIdx = 0;
+  document.getElementById('focus-cite').textContent = (dailyData.word.verse || '') + ' · WEB';
+  document.getElementById('focus-phrase').textContent = focusPhrases[0] || '';
+  document.getElementById('focus-hint').textContent = 'Tap Next · contemplative, not rushed';
+  const overlay = document.getElementById('focus-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  trapFocus(overlay);
+}
+function focusNext() {
+  focusIdx += 1;
+  if (focusIdx >= focusPhrases.length) {
+    closeFocusReading();
+    setRhythmFlag('sit', true);
+    markPresence({ skipReflect: true });
+    openAmen(dailyData?.word?.passage, dailyData?.word?.verse);
+    showReflect();
+    renderRhythm();
+    return;
+  }
+  document.getElementById('focus-phrase').textContent = focusPhrases[focusIdx];
+  document.getElementById('focus-hint').textContent =
+    focusIdx + 1 + ' of ' + focusPhrases.length + ' · stay with this phrase';
+}
+function closeFocusReading() {
+  const overlay = document.getElementById('focus-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+  releaseFocusTrap();
+}
+
+/* ═══ REST WITH HIM (night pole / Vesper-shaped) ═══ */
+function openRestWithHim() {
+  const w = examenWordForToday();
+  document.getElementById('rest-quote').textContent = '"' + w.text + '"';
+  document.getElementById('rest-cite').textContent = w.verse + ' · WEB';
+  const overlay = document.getElementById('rest-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  trapFocus(overlay);
+}
+function closeRest() {
+  const overlay = document.getElementById('rest-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+  releaseFocusTrap();
+}
+
+/* ═══ WELCOME BACK (Holy Habits — return without shame) ═══ */
+function daysBetweenISO(a, b) {
+  const ms = Date.parse(b + 'T12:00:00') - Date.parse(a + 'T12:00:00');
+  return Math.round(ms / 86400000);
+}
+function maybeShowReturnRibbon() {
+  const ribbon = document.getElementById('return-ribbon');
+  if (!ribbon) return;
+  if (ls('rla-return-dismiss') === todayISO()) {
+    ribbon.classList.add('hidden');
+    return;
+  }
+  const days = getPresenceDays().slice().sort();
+  if (!days.length) {
+    ribbon.classList.add('hidden');
+    return;
+  }
+  const last = days[days.length - 1];
+  const gap = daysBetweenISO(last, todayISO());
+  if (gap < 2) {
+    ribbon.classList.add('hidden');
+    return;
+  }
+  const title = document.getElementById('return-title');
+  const copy = document.getElementById('return-copy');
+  if (title) title.textContent = gap === 2 ? 'Welcome back' : 'You’ve been missed — gently';
+  if (copy) {
+    copy.textContent =
+      gap >= 7
+        ? 'A week away doesn’t undo presence. One red letter today is a full return — no streak to repair.'
+        : 'Missed days don’t erase you. Return without shame — one red letter is enough.';
+  }
+  ribbon.classList.remove('hidden');
+}
+function dismissReturnRibbon(begin) {
+  lsSet('rla-return-dismiss', todayISO());
+  document.getElementById('return-ribbon')?.classList.add('hidden');
+  if (begin) advanceRhythm();
+}
+
+/* ═══ WEEK’S HARVEST (Eden-shaped garden · grace, not XP) ═══ */
+function getHarvest() {
+  return lsJSON('rla-harvest', []);
+}
+function recordHarvest() {
+  if (!dailyData?.word) return;
+  const today = todayISO();
+  const items = getHarvest().filter((h) => h.day !== today);
+  items.push({
+    day: today,
+    verse: dailyData.word.verse,
+    phrase: pickCarryPhrase(dailyData.word.passage),
+    theme: dailyData.word.theme || '',
+  });
+  lsSetJSON('rla-harvest', items.slice(-60));
+}
+function weekStartISO() {
+  const now = new Date(todayISO() + 'T12:00:00');
+  const start = new Date(now);
+  start.setDate(now.getDate() - now.getDay());
+  return start.toISOString().slice(0, 10);
+}
+function renderHarvest() {
+  const garden = document.getElementById('harvest-garden');
+  if (!garden) return;
+  const start = weekStartISO();
+  const week = getHarvest().filter((h) => h.day >= start);
+  if (!week.length) {
+    garden.innerHTML = '<p class="harvest-empty">Receive today’s word — it will take root here.</p>';
+    return;
+  }
+  garden.innerHTML = week
+    .slice()
+    .reverse()
+    .map((h) => {
+      const label = new Date(h.day + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' });
+      return (
+        '<button type="button" class="harvest-leaf" onclick="carryHarvest(\'' +
+        esc(h.day) +
+        '\')"><div class="hl-day">' +
+        esc(label) +
+        '</div><div class="hl-phrase">“' +
+        esc(h.phrase) +
+        '”</div><div class="hl-cite">' +
+        esc(h.verse) +
+        '</div></button>'
+      );
+    })
+    .join('');
+}
+function carryHarvest(day) {
+  const h = getHarvest().find((x) => x.day === day);
+  if (!h) return;
+  lsSetJSON('rla-carry', { phrase: h.phrase, verse: h.verse, day: todayISO() });
+  renderCarry();
+  showToast('Carrying again: ' + h.verse);
+}
+
+/* ═══ LECTIO DIVINA (classical midday / anytime) ═══ */
+let lectioStep = 0;
+let lectioPhrase = '';
+const LECTIO_COPY = [
+  { label: 'Read', guide: 'Receive the whole saying slowly — aloud if you can.', next: 'I have read' },
+  { label: 'Notice', guide: 'What word or phrase catches your heart? Name it.', next: 'Hold this word' },
+  { label: 'Sit', guide: 'Rest with that phrase. No analysis — companionship.', next: 'Amen · I sat' },
+  { label: 'Respond', guide: 'Yield one honest sentence to Him — then carry the phrase.', next: 'Yield · Amen' },
+];
+function openLectio() {
+  if (!dailyData?.word) {
+    showToast('Today’s word is still loading');
+    return;
+  }
+  lectioStep = 0;
+  lectioPhrase = '';
+  const overlay = document.getElementById('lectio-overlay');
+  document.getElementById('lectio-quote').textContent = '"' + dailyData.word.passage + '"';
+  document.getElementById('lectio-cite').textContent = dailyData.word.verse + ' · WEB';
+  document.getElementById('lectio-notice')?.classList.add('hidden');
+  const notice = document.getElementById('lectio-notice');
+  if (notice) notice.value = '';
+  renderLectioStep();
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  trapFocus(overlay);
+  announceStatus('Lectio Divina opened — Read');
+}
+function renderLectioStep() {
+  const meta = LECTIO_COPY[lectioStep] || LECTIO_COPY[0];
+  document.getElementById('lectio-label').textContent = meta.label;
+  document.getElementById('lectio-guide').textContent = meta.guide;
+  document.getElementById('lectio-next').textContent = meta.next;
+  document.querySelectorAll('#lectio-steps .lectio-step').forEach((el) => {
+    const n = Number(el.dataset.step);
+    el.classList.toggle('on', n === lectioStep);
+    el.classList.toggle('done', n < lectioStep);
+  });
+  const notice = document.getElementById('lectio-notice');
+  if (notice) {
+    notice.classList.toggle('hidden', lectioStep !== 1 && lectioStep !== 3);
+    notice.placeholder = lectioStep === 3 ? 'One sentence of response…' : 'What word or phrase caught you?';
+    if (lectioStep === 1 || lectioStep === 3) setTimeout(() => notice.focus(), 80);
+  }
+  if (lectioStep === 2 && lectioPhrase) {
+    document.getElementById('lectio-quote').textContent = '"' + lectioPhrase + '"';
+  } else if (lectioStep === 0 && dailyData?.word) {
+    document.getElementById('lectio-quote').textContent = '"' + dailyData.word.passage + '"';
+  }
+}
+function lectioNext() {
+  const notice = document.getElementById('lectio-notice');
+  if (lectioStep === 1) {
+    lectioPhrase = (notice?.value || '').trim() || pickCarryPhrase(dailyData?.word?.passage || '');
+  }
+  if (lectioStep === 3) {
+    const response = (notice?.value || '').trim();
+    if (response) {
+      const items = getJournal();
+      items.unshift({
+        key: 'lectio|' + todayISO() + '|' + Date.now(),
+        quote: response,
+        verse: dailyData?.word?.verse || '',
+        theme: 'Lectio response',
+        savedAt: Date.now(),
+      });
+      lsSetJSON('rla-journal', items.slice(0, 200));
+    }
+    closeLectio();
+    lsSet('rla-midday-day', todayISO());
+    lsSetJSON('rla-carry', {
+      phrase: lectioPhrase || pickCarryPhrase(dailyData?.word?.passage || ''),
+      verse: dailyData?.word?.verse || '',
+      day: todayISO(),
+    });
+    renderCarry();
+    setRhythmFlag('sit', true);
+    setRhythmFlag('carry', true);
+    markPresence({ skipReflect: true });
+    openAmen(lectioPhrase || dailyData?.word?.passage, dailyData?.word?.verse);
+    renderDayPoles();
+    renderRhythm();
+    showToast('Lectio complete — word carried');
+    return;
+  }
+  lectioStep += 1;
+  renderLectioStep();
+}
+function closeLectio() {
+  const overlay = document.getElementById('lectio-overlay');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
+  releaseFocusTrap();
+}
+
+/* ═══ VERIFY CHIP + STATUS LIVE (trust + PWA a11y) ═══ */
+async function verifyTodaysWord() {
+  const chip = document.getElementById('verify-chip');
+  if (!dailyData?.word || !chip) return;
+  chip.textContent = 'Verifying…';
+  try {
+    const res = await api('/api/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        citations: [{ verse: dailyData.word.verse, quote: dailyData.word.passage }],
+      }),
+    });
+    const data = await res.json();
+    const ok = data.verified >= 1 || data.results?.[0]?.verified;
+    if (ok) {
+      chip.classList.add('ok');
+      chip.classList.remove('bad');
+      chip.textContent = '✓ Verified against WEB corpus';
+      announceStatus('Passage verified against World English Bible');
+    } else {
+      chip.classList.add('bad');
+      chip.textContent = 'Could not confirm — showing library text';
+    }
+  } catch {
+    chip.classList.add('ok');
+    chip.textContent = '✓ Offline — from verified library';
+    announceStatus('Offline — using verified local library');
+  }
+}
+function announceStatus(msg) {
+  const el = document.getElementById('status-live');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(announceStatus._t);
+  announceStatus._t = setTimeout(() => el.classList.remove('show'), 3200);
+}
+function wireOnlineStatus() {
+  const banner = document.getElementById('offline-banner');
+  const apply = () => {
+    const offline = !navigator.onLine;
+    banner?.classList.toggle('hidden', !offline);
+    announceStatus(offline ? 'You are offline — verified library available' : 'Back online');
+  };
+  window.addEventListener('online', apply);
+  window.addEventListener('offline', apply);
+  if (!navigator.onLine) banner?.classList.remove('hidden');
+}
+
+/* Focus trap for overlays */
+let focusTrapEl = null;
+let focusTrapPrev = null;
+function trapFocus(el) {
+  focusTrapPrev = document.activeElement;
+  focusTrapEl = el;
+  const focusable = el.querySelector('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+  if (focusable) setTimeout(() => focusable.focus(), 40);
+}
+function releaseFocusTrap() {
+  focusTrapEl = null;
+  if (focusTrapPrev && focusTrapPrev.focus) {
+    try { focusTrapPrev.focus(); } catch (_) {}
+  }
+  focusTrapPrev = null;
+}
+document.addEventListener('keydown', (e) => {
+  if (!focusTrapEl || e.key !== 'Tab') return;
+  const nodes = [...focusTrapEl.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])')].filter(
+    (n) => !n.disabled && n.offsetParent !== null
+  );
+  if (!nodes.length) return;
+  const first = nodes[0];
+  const last = nodes[nodes.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+});
+
+function openBreathPrayerFromRest() {
+  const w = examenWordForToday();
+  closeRest();
+  openBreathPrayer(pickCarryPhrase(w.text), w.verse);
+}
+function finishRest() {
+  closeRest();
+  lsSet('rla-examen-day', todayISO());
+  markPresence({ skipReflect: true });
+  renderDayPoles();
+  openAmen(examenWordForToday().text, examenWordForToday().verse);
+  showToast('Rest in His peace');
+}
+
+/* ═══ JOURNAL EXPORT (local-first trust) ═══ */
+function exportJournal() {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    product: 'Red Letter',
+    journal: lsJSON('rla-journal', []),
+    prayers: getPrayers(),
+    presenceDays: getPresenceDays(),
+    harvest: getHarvest(),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'red-letter-journal-' + todayISO() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Journal exported — yours alone until you share it');
 }
 
 /* ═══ SIT WITH HIM (lectio-lite minute) ═══ */
@@ -1326,6 +1881,11 @@ const CMD_ITEMS = [
   { label: '7-day plan', hint: 'Walk with His words', run: () => { goTab('today'); document.getElementById('plan-card')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: 'Share a blessing', hint: 'Open share card', run: () => { const w = dailyData?.word; if (w) openShareCard({ verse: w.verse, quote: pickCarryPhrase(w.passage), theme: w.theme }); } },
   { label: 'Begin today’s rhythm', hint: 'Receive → Sit → Reflect → Carry', run: () => { goTab('today'); advanceRhythm(); } },
+  { label: 'Focus reading', hint: 'One phrase at a time', run: () => openFocusReading() },
+  { label: 'Ask about today’s word', hint: 'Advisor with verse context', run: () => askAboutTodaysWord() },
+  { label: 'Rest with Him', hint: 'Night peace', run: () => openRestWithHim() },
+  { label: 'Lectio Divina', hint: 'Read · Notice · Sit · Respond', run: () => openLectio() },
+  { label: 'This week’s harvest', hint: 'Words you received', run: () => { goTab('today'); document.getElementById('more-practices').open = true; document.getElementById('harvest-card')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: 'Draw a word', hint: 'One saying, given to you', run: () => { goTab('seek'); drawAWord(); } },
   { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
   { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
@@ -1983,6 +2543,31 @@ function saveExamen() {
 }
 
 /* ═══ ONBOARDING ═══ */
+let closeness = 0;
+const CLOSENESS_WORDS = {
+  1: { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient." },
+  2: { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful." },
+  3: { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
+  4: { verse: 'Luke 12:32', text: "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom." },
+  5: { verse: 'Matthew 28:20', text: 'Behold, I am with you always, even to the end of the age.' },
+};
+
+function selectCloseness(n) {
+  closeness = n;
+  document.querySelectorAll('.ob-close-btn').forEach((b) => b.classList.toggle('on', Number(b.dataset.c) === n));
+  const next = document.getElementById('ob-close-next');
+  if (next) next.disabled = false;
+}
+
+function obNextFromCloseness() {
+  if (!closeness) return;
+  const w = CLOSENESS_WORDS[closeness] || CLOSENESS_WORDS[3];
+  lsSet('rla-closeness', String(closeness));
+  document.getElementById('ob-match-quote').textContent = '"' + w.text + '"';
+  document.getElementById('ob-match-cite').textContent = w.verse + ' · WEB';
+  obNext();
+}
+
 function obNext() {
   document.querySelector('.ob-screen.active')?.classList.remove('active');
   obStep++;
@@ -2027,12 +2612,17 @@ function finishOnboarding() {
 
 function resetOnboarding() {
   localStorage.removeItem('rla-onboarded');
+  localStorage.removeItem('rla-closeness');
   closeSheets();
   obStep = 0;
   commitOn = false;
+  closeness = 0;
   document.querySelectorAll('.ob-screen').forEach((s, i) => s.classList.toggle('active', i === 0));
+  document.querySelectorAll('.ob-close-btn').forEach((b) => b.classList.remove('on'));
+  const closeNext = document.getElementById('ob-close-next');
+  if (closeNext) closeNext.disabled = true;
   document.getElementById('ob-begin-btn').disabled = true;
-  document.getElementById('ob-commit-toggle').classList.remove('on');
+  document.getElementById('ob-commit-toggle')?.classList.remove('on');
   document.getElementById('onboarding').classList.remove('hidden');
 }
 
@@ -2082,6 +2672,18 @@ function toggleDark() {
   }
 }
 
+function toggleSimpleMode() {
+  const on = !document.documentElement.classList.contains('simple-mode');
+  document.documentElement.classList.toggle('simple-mode', on);
+  lsSet('rla-simple', on ? '1' : '0');
+  const btn = document.getElementById('simple-toggle');
+  if (btn) {
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+  }
+  showToast(on ? 'Simple mode — rhythm first' : 'Full surfaces restored');
+}
+
 function setFontSize(size) {
   const root = document.documentElement;
   root.removeAttribute('data-fs');
@@ -2116,6 +2718,13 @@ function applySettings() {
       btn.classList.add('on');
       btn.setAttribute('aria-pressed', 'true');
     }
+  }
+  const simple = ls('rla-simple') === '1';
+  document.documentElement.classList.toggle('simple-mode', simple);
+  const sBtn = document.getElementById('simple-toggle');
+  if (sBtn) {
+    sBtn.classList.toggle('on', simple);
+    sBtn.setAttribute('aria-pressed', String(simple));
   }
   const fs = ls('rla-fs') || 'md';
   setFontSize(fs);
@@ -2711,9 +3320,9 @@ function drawShareCard() {
   canvas.width = W;
   canvas.height = H;
   const pal = SHARE_STYLES[shareStyle] || SHARE_STYLES.night;
-  const quoteBudget = shareRatio === 'story' ? 820 : shareRatio === 'square' ? 420 : 620;
-  const quoteTop = shareRatio === 'story' ? 360 : shareRatio === 'square' ? 220 : 260;
-  const bottomPad = shareRatio === 'story' ? 320 : shareRatio === 'square' ? 200 : 260;
+  const quoteBudget = shareRatio === 'story' || shareRatio === 'lock' ? 820 : shareRatio === 'square' ? 420 : 620;
+  const quoteTop = shareRatio === 'lock' ? 720 : shareRatio === 'story' ? 360 : shareRatio === 'square' ? 220 : 260;
+  const bottomPad = shareRatio === 'lock' ? 480 : shareRatio === 'story' ? 320 : shareRatio === 'square' ? 200 : 260;
 
   ctx.fillStyle = pal.bg;
   ctx.fillRect(0, 0, W, H);
@@ -2732,11 +3341,11 @@ function drawShareCard() {
     ctx.fillStyle = pal.theme;
     ctx.textAlign = 'center';
     const themeLabel = String(shareState.theme).toUpperCase();
-    ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, shareRatio === 'story' ? 180 : 140);
+    ctx.fillText(themeLabel.length > 42 ? themeLabel.slice(0, 40) + '…' : themeLabel, W / 2, shareRatio === 'story' || shareRatio === 'lock' ? 180 : 140);
   }
 
   const q = '"' + String(shareState.quote || '') + '"';
-  let fontSize = shareRatio === 'story' ? 56 : 52;
+  let fontSize = shareRatio === 'story' || shareRatio === 'lock' ? 56 : 52;
   let lineH = Math.round(fontSize * 1.38);
   let lines = [];
   const maxW = W - 180;
@@ -2797,7 +3406,8 @@ async function blessShareCard() {
 function downloadShareCard() {
   const canvas = document.getElementById('share-canvas');
   const a = document.createElement('a');
-  const suffix = shareRatio === 'story' ? 'story' : shareRatio === 'square' ? 'square' : 'feed';
+  const suffix =
+    shareRatio === 'story' ? 'story' : shareRatio === 'square' ? 'square' : shareRatio === 'lock' ? 'lock' : 'feed';
   a.download = 'red-letter-' + suffix + '-' + (shareState.verse || 'verse').replace(/[:\s]/g, '-') + '.png';
   a.href = canvas.toDataURL('image/png');
   a.click();
@@ -2938,7 +3548,9 @@ function initApp() {
   renderMidday();
   renderRhythm();
   renderDayPoles();
+  renderHarvest();
   renderThemeGrid();
+  wireOnlineStatus();
   goTab('today');
   routeByHour();
   const nav = document.getElementById('bottom-nav');
@@ -2975,6 +3587,9 @@ document.addEventListener('keydown', (e) => {
     closeCommandPalette();
     closeBreath();
     closeParable();
+    closeFocusReading();
+    closeRest();
+    closeLectio();
   }
 });
 

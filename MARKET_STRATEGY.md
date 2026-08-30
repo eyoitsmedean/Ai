@@ -332,3 +332,36 @@ Prompts across this effort asked for world-class, research-driven building, merg
 | **Named blessing virality** | Generic Bless copy | Optional **bless-by-name** on share cards |
 | **Day 5–8 cliff** (YouVersion discipleship data) | Plan quiet in the messy middle | Soft bridge copy on plan days 5–7 |
 | **Secondary depth without clutter** | Midday/plan/examen always visible | **More with Him** accordion |
+
+---
+
+## 14. World-class loop 2 (contextual · focus · rest · trust)
+
+Fresh research (Bible Path contextual AI, AddictiveBible/RSVP focus, Vesper night rest, local-first PWA export trust, ScreensDesign empathy onboarding):
+
+| Finding | Build |
+| --- | --- |
+| **Ask AI from the verse** (Bible Path) — blank chat is friction | **Ask about this** seeds Advisor with today’s WEB citation + context banner |
+| **Focus / RSVP reading** — one unit of attention | **Focus** mode: contemplative phrase-by-phrase (slow, not speed-read) |
+| **Night rest companion** (Vesper) | **Rest with Him** — peace saying + Amen · sleep |
+| **Empathy onboarding** (Bible Path closeness) | Closeness 1–5 → matching red-letter before commitment |
+| **Local-first export** | **Export journal** JSON (conscious share boundary) |
+| **Simple / calm mode** (accessibility) | Settings **Simple mode** — rhythm first, hide buffet |
+
+---
+
+## 15. World-class loop 3 (Lectio · return · harvest · lock · trust a11y)
+
+Research (Lectio 365 P.R.A.Y. + classical Lectio Divina, Holy Habits return-without-shame, Eden garden metaphor without XP shame, Bible Chat lock-screen virality, 2026 PWA accessibility live regions):
+
+| Finding | Build |
+| --- | --- |
+| **Classical Lectio** (midday depth beyond Lord’s Prayer) | **Lectio Divina** chamber — Read → Notice → Sit → Respond on today’s WEB saying |
+| **Return, not streak repair** (Holy Habits) | **Welcome-back ribbon** after a gap — one red letter is a full return |
+| **Garden of presence** (Eden-shaped, grace) | **This week’s harvest** — leaves of received phrases; tap to carry again |
+| **Lock-screen share hook** (Bible Chat UA) | Share format **Lock screen** (tall wallpaper) |
+| **Re-verify trust** | **Verify chip** on today’s word → `/api/verify` |
+| **Offline as state change** (PWA a11y 2026) | **status-live** aria-live region + online/offline wiring |
+| **Overlay focus** | Focus trap + Escape close for Focus / Rest / Lectio |
+
+**Product rule unchanged:** every new surface cites only verified Jesus speech (WEB). Crisis 988 stays in the header.
