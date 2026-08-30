@@ -124,6 +124,10 @@ async function main() {
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
     assert(/data-theme="light"/.test(text), 'paper is the default theme');
     assert(!/prefers-color-scheme:\s*dark/.test(text), 'OS dark mode must not restyle the page');
+    assert(text.includes('start-new-reader'), 'shared-device reset missing');
+    assert(text.includes('fresh') && text.includes('clearReaderStorage'), 'facilitator ?fresh=1 missing');
+    assert(/Open the page/.test(text), 'onboarding CTA should be simple');
+    assert(text.includes('lectio-rest-skip'), 'rest must not trap a guest');
   });
 
   if (fails.length) {

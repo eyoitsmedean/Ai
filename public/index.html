@@ -1881,6 +1881,29 @@ body::before {
   font-size: 14px;
   color: var(--text-3);
 }
+.lectio-leave {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--text-4);
+  line-height: 1.45;
+}
+.page-hd-note {
+  margin: 6px 0 0;
+  font-size: calc(13px * var(--scale));
+  color: var(--text-3);
+  line-height: 1.45;
+}
+.theme-card.for-you {
+  border-color: rgba(143,29,29,.4);
+}
+#bless-preview {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 12px 0 4px;
+  background: var(--bg-2);
+}
 .journal-tools { padding: 0 4px 12px; display: flex; gap: 8px; flex-wrap: wrap; }
 #install-btn {
   display: none;
@@ -1911,6 +1934,7 @@ body::before {
   justify-content: center;
   background: #1F1A16;
   text-align: center;
+  cursor: pointer;
 }
 .amen.on { display: flex; }
 .amen-word {
@@ -2144,7 +2168,7 @@ body::before {
     <button type="button" class="intent-chip" data-intent="encouragement" onclick="selectIntent(this)">Encouragement</button>
     <button type="button" class="intent-chip" data-intent="jesus-words" onclick="selectIntent(this)">Jesus&rsquo; Words</button>
   </div>
-  <button class="ob-btn" onclick="completeOnboarding()">Begin My Journey</button>
+  <button class="ob-btn" onclick="completeOnboarding()">Open the page</button>
   <p class="ob-note">"Red letters" are the passages printed in red in many Bibles,<br>marking the direct speech of Jesus.</p>
 </div>
 
@@ -2162,7 +2186,7 @@ body::before {
     </div>
     <div class="header-right">
       <button type="button" id="install-btn" hidden aria-label="Install app">Install</button>
-      <div class="streak-badge" id="streak-badge"><span id="streak-num">1</span></div>
+      <div class="streak-badge" id="streak-badge" hidden><span id="streak-num"></span></div>
       <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
@@ -2234,7 +2258,7 @@ body::before {
                 <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
                 Share
               </button>
-              <button class="action-btn-dark" type="button" onclick="openBlessing('word')">Bless someone</button>
+              <button class="action-btn-dark" type="button" id="bless-word-btn" onclick="openBlessing('word')">Bless someone</button>
             </div>
           </div>
         </div>
@@ -2387,7 +2411,7 @@ body::before {
         </div>
       </div>
       <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chat-input" placeholder="Share what's on your heart…" rows="1"></textarea>
+        <textarea class="chat-input" id="chat-input" placeholder="What are you carrying?" rows="1"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendMsg()">
           <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -2397,8 +2421,9 @@ body::before {
     <!-- ── JOURNAL ── -->
     <div class="page" id="journal-page">
       <div class="page-hd">
-        <div class="page-hd-eyebrow">Saved passages</div>
+        <div class="page-hd-eyebrow">Lines you keep</div>
         <h1 class="page-hd-title">Commonplace</h1>
+        <p class="page-hd-note">A private page of His words and yours. Not a feed.</p>
       </div>
       <form class="compose" id="compose-form" onsubmit="return keepLine(event)">
         <textarea id="compose-line" placeholder="A word you want to keep…" maxlength="400"></textarea>
@@ -2493,8 +2518,15 @@ body::before {
       <button class="fs-btn" id="fs-lg" onclick="setFs('lg')" style="font-size:17px">A+</button>
     </div>
   </div>
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">This device is shared</div>
+      <div class="setting-sub">Clears words kept on this phone so the next guest starts clean. Use between testers.</div>
+    </div>
+    <button type="button" class="chat-tool-btn" id="start-new-reader" onclick="startNewReader()">New reader</button>
+  </div>
   <div class="sheet-about">
-    <p><strong>The Red Letter Advisor</strong> answers every question exclusively from the direct words of Jesus Christ as recorded in Matthew, Mark, Luke, and John — the passages printed in red in many Bible editions. No other scripture, no outside commentary.</p>
+    <p><strong>The Red Letter Advisor</strong> is a guide, not His voice. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John — the passages printed in red in many Bibles. No other scripture, no outside commentary.</p>
     <p style="margin-top:10px">Citations are sealed against a local Gospel index (KJV curated + WEB corpus). If a line cannot be confirmed, the page will say so. A voice may read the red letters on this device — nothing leaves the page. Crisis help: <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a>.</p>
   </div>
 </div>
@@ -2520,9 +2552,10 @@ body::before {
     <h3>Send a blessing</h3>
     <p class="bless-lead">A card of His words, for one person. No feed. No likes.</p>
     <input class="bless-name" id="bless-name" type="text" maxlength="40" placeholder="Their name (optional)" />
+    <canvas id="bless-preview" width="1080" height="1080" aria-label="Blessing card preview"></canvas>
     <div class="share-actions">
       <button type="button" class="share-secondary" onclick="closeBlessing()">Close</button>
-      <button type="button" class="share-primary" onclick="sendBlessing()">Send</button>
+      <button type="button" class="share-primary" id="bless-send-btn" onclick="sendBlessing()">Save the card</button>
     </div>
   </div>
 </div>
@@ -2537,7 +2570,7 @@ body::before {
   <div class="sit-progress" aria-hidden="true"><i></i></div>
 </div>
 
-<div class="lectio-overlay" id="lectio-overlay" aria-label="Lectio">
+<div class="lectio-overlay" id="lectio-overlay" aria-label="Read these words slowly">
   <button type="button" class="sit-close" onclick="closeLectio()">Close</button>
   <div class="lectio-rail" id="lectio-rail">
     <button type="button" class="on" onclick="lectioGo(0)">Read</button>
@@ -2552,6 +2585,7 @@ body::before {
     <button class="hear-verb" type="button" id="hear-lectio-btn" aria-pressed="false" onclick="hearPassage('lectio')">Hear this</button>
     <div class="hear-rule" id="hear-rule-lectio" hidden aria-hidden="true"><i></i></div>
     <button type="button" class="lectio-next" onclick="lectioGo(1)">Continue</button>
+    <p class="lectio-leave">Four short rooms. Close anytime — the sentence waits.</p>
   </div>
   <div class="lectio-room" id="lectio-room-1">
     <p class="lectio-kicker">Reflect</p>
@@ -2566,6 +2600,7 @@ body::before {
     <div class="sit-breath" aria-hidden="true"></div>
     <p class="sit-hint">Twenty seconds. Nothing else is required.</p>
     <button type="button" class="lectio-next" id="lectio-rest-next" onclick="lectioGo(3)" style="visibility:hidden">Respond</button>
+    <button type="button" class="lectio-skip" id="lectio-rest-skip" onclick="lectioGo(3)">I’ve sat with it</button>
     <div class="sit-progress" id="lectio-progress" aria-hidden="true"><i></i></div>
   </div>
   <div class="lectio-room" id="lectio-room-3">
@@ -2620,7 +2655,34 @@ const NAV_X = { today: '0%', seek: '25%', advisor: '50%', journal: '75%' };
 /* ═══════════════════════════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════════════════════════ */
+function clearReaderStorage() {
+  try {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf('rla-') === 0) keys.push(k);
+    }
+    keys.forEach(function (k) { localStorage.removeItem(k); });
+  } catch (e) {}
+  if ('caches' in window) {
+    caches.delete('rla-prefs').catch(function () {});
+  }
+}
+
+function startNewReader() {
+  if (!confirm('Start a new reader on this device? Words kept here will be cleared.')) return;
+  clearReaderStorage();
+  location.href = '/';
+}
+
 (function init() {
+  try {
+    const q = new URLSearchParams(location.search);
+    if (q.get('fresh') === '1' || q.get('demo') === '1') {
+      clearReaderStorage();
+      history.replaceState({}, '', '/');
+    }
+  } catch (e) {}
   applySettings();
   const onboarded = ls('rla-onboarded');
   const ob = document.getElementById('onboarding');
@@ -2653,8 +2715,9 @@ function startApp() {
   app.style.display = '';
   applySettings();
   applyHourPaper();
-  updateStreak();
+  renderStreak();
   updateDateUI();
+  markIntentTheme();
   loadDailyContent();
   renderFlyleaf();
   renderResumeSlip();
@@ -2671,9 +2734,10 @@ function switchTab(tab) {
   document.getElementById('nav-' + tab).classList.add('active');
   document.getElementById('nav').style.setProperty('--nav-x', NAV_X[tab]);
 
-  const subs = { today: 'Daily Words of Life', seek: 'Encouragement by Theme', advisor: 'Guided by the Gospels', journal: 'Your Saved Passages' };
+  const subs = { today: 'Today’s page', seek: 'Words by need', advisor: 'A guide, not His voice', journal: 'Lines you keep' };
   document.getElementById('header-sub').textContent = subs[tab];
   if (tab === 'today') renderFlyleaf();
+  if (tab === 'seek') markIntentTheme();
   if (tab === 'journal') renderJournal();
 }
 
@@ -2691,21 +2755,63 @@ function yesterdayStr() {
   return todayStr(n);
 }
 
-function updateStreak() {
-  const raw = ls('rla-streak') ? JSON.parse(ls('rla-streak')) : { date: '', count: 0 };
+function streakState() {
+  try { return JSON.parse(ls('rla-streak') || '{"date":"","count":0}'); }
+  catch (e) { return { date: '', count: 0 }; }
+}
+
+function renderStreak() {
+  const raw = streakState();
+  const count = Number(raw.count) || 0;
+  const sat = !!ls('rla-last-lectio') || !!ls(lectioKey());
+  const badge = document.getElementById('streak-badge');
+  if (badge) badge.hidden = !sat || count < 1;
+  const num = document.getElementById('streak-num');
+  if (num) num.textContent = count ? String(count) : '';
+  const label = document.getElementById('today-streak-label');
+  if (label) label.textContent = sat && count > 1 ? count + ' days of quiet' : '';
+}
+
+function noteQuietDay() {
   const today = todayStr();
-  const yest  = yesterdayStr();
-  let count;
+  const raw = streakState();
+  let count = Number(raw.count) || 0;
   if (raw.date === today) {
-    count = raw.count;
-  } else if (raw.date === yest) {
-    count = raw.count + 1;
+    if (!count) count = 1;
+  } else if (raw.date === yesterdayStr()) {
+    count = count + 1;
   } else {
     count = 1;
   }
-  lsSet('rla-streak', JSON.stringify({ date: today, count }));
-  document.getElementById('streak-num').textContent = count;
-  document.getElementById('today-streak-label').textContent = count > 1 ? count + ' days of quiet' : '';
+  lsSet('rla-streak', JSON.stringify({ date: today, count: count }));
+  lsSet('rla-last-lectio', today);
+  renderStreak();
+}
+
+function intentKey() { return ls('rla-intent') || selectedIntent || ''; }
+
+function intentTheme() {
+  const map = { peace: 'Peace', guidance: 'Purpose & Direction', encouragement: 'Hope', 'jesus-words': '' };
+  return map[intentKey()] || '';
+}
+
+function intentLine() {
+  const map = {
+    peace: 'You came for peace. One sentence is enough.',
+    guidance: 'You came for guidance. He rarely hands over the whole map.',
+    encouragement: 'You came to be encouraged. The words are already here.',
+    'jesus-words': 'You came for His words. They are the page.'
+  };
+  return map[intentKey()] || '';
+}
+
+function markIntentTheme() {
+  const theme = intentTheme();
+  document.querySelectorAll('.theme-card').forEach(function (c) {
+    c.classList.toggle('for-you', !!theme && c.getAttribute('data-theme') === theme);
+  });
+  const seekEye = document.querySelector('#seek-page .page-hd-eyebrow');
+  if (seekEye && theme) seekEye.textContent = 'You named ' + theme.toLowerCase();
 }
 
 function updateDateUI() {
@@ -3002,13 +3108,13 @@ function renderJournal() {
   if (items.length === 0) {
     list.innerHTML = `
       <div class="journal-empty">
-        <div class="journal-empty-title">A commonplace waits</div>
-        <div class="journal-empty-text">Keep a line from lectio, Today, Seek, or Advisor. You can still print the day’s word as a folio.</div>
+        <div class="journal-empty-title">Nothing kept yet</div>
+        <div class="journal-empty-text">Write a line below, or keep one from Today, Seek, or the Advisor. You can still print today’s word.</div>
       </div>`;
     return;
   }
 
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Sat with', note: 'Line' };
   const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson', note: 'badge-gold' };
 
   list.innerHTML = items.map(item => {
@@ -3505,10 +3611,11 @@ function applyDailyToUI(data) {
 
   const grace = document.getElementById('grace-note');
   if (grace) {
-    const streak = JSON.parse(ls('rla-streak') || '{"count":1}');
+    const streak = streakState();
+    const why = intentLine();
     grace.textContent = streak.count > 1
       ? ('A quiet ' + streak.count + '-day rhythm — missing a day never erases your place here.')
-      : 'Welcome. One quiet moment with his words is enough for today.';
+      : (why || 'Welcome. One quiet moment with his words is enough for today.');
   }
   openFirstLectio();
   renderFlyleaf();
@@ -3649,10 +3756,11 @@ function setSharePaper(paper) {
   if (shareDraft.quote) drawShareCard(shareDraft.quote, shareDraft.verse, shareDraft.title, paper);
 }
 
-function drawShareCard(quote, verse, title, paper) {
+function drawShareCard(quote, verse, title, paper, canvasId) {
   paper = paper || shareDraft.paper || 'rubric';
   shareDraft = { quote, verse, title, paper };
-  const canvas = document.getElementById('share-canvas');
+  const canvas = document.getElementById(canvasId || 'share-canvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const papers = {
@@ -3855,6 +3963,13 @@ function closeSit() {
 }
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
+  const amen = document.getElementById('amen');
+  if (amen && amen.classList.contains('on')) {
+    amen.classList.remove('on');
+    amen.setAttribute('aria-hidden', 'true');
+    amen.onclick = null;
+    return;
+  }
   const crisis = document.getElementById('crisis-modal');
   if (crisis && crisis.classList.contains('on')) {
     const close = document.getElementById('crisis-close');
@@ -3895,10 +4010,13 @@ let lectioCtx = null;
 let lectioRestTimer = null;
 
 function lectioQuestion(theme) {
-  if (!theme) return 'What word in this sentence stays with you?';
-  if (LECTIO_Q[theme]) return LECTIO_Q[theme];
-  const hit = Object.keys(LECTIO_Q).find(k => theme.toLowerCase().includes(k.toLowerCase()));
-  return (hit && LECTIO_Q[hit]) || 'What word in this sentence stays with you?';
+  const t = theme || intentTheme();
+  if (t && LECTIO_Q[t]) return LECTIO_Q[t];
+  if (t) {
+    const hit = Object.keys(LECTIO_Q).find(k => t.toLowerCase().includes(k.toLowerCase()));
+    if (hit) return LECTIO_Q[hit];
+  }
+  return 'What word in this sentence stays with you?';
 }
 
 function lectioKey() { return 'rla-lectio-' + todayStr(); }
@@ -4054,7 +4172,7 @@ function finishLectio(skip) {
       body: lectioCtx.quote,
       verse: lectioCtx.verse
     });
-    showToast('Kept in your commonplace');
+    showToast('Kept on your page');
   } else {
     showToast('That is enough for today');
   }
@@ -4067,9 +4185,9 @@ function finishLectio(skip) {
     fromHim: !(!skip && note)
   });
   clearLectioDraft();
+  noteQuietDay();
   afterLectioPath();
   persistQuietPrefs();
-  maybeAskQuietHour();
   showAmen();
 }
 
@@ -4088,8 +4206,18 @@ function quoteForShare(type) {
 }
 function openBlessing(type) {
   blessType = type || 'word';
-  document.getElementById('bless-name').value = '';
-  document.getElementById('bless-modal').classList.add('on');
+  const nameEl = document.getElementById('bless-name');
+  if (nameEl) nameEl.value = '';
+  try {
+    const { quote, verse, title } = quoteForShare(blessType);
+    if (quote) drawShareCard(quote, verse, title, shareDraft.paper || 'rubric', 'bless-preview');
+  } catch (err) {
+    console.warn(err);
+  }
+  const btn = document.getElementById('bless-send-btn');
+  if (btn) btn.textContent = (navigator.share) ? 'Send' : 'Save the card';
+  const modal = document.getElementById('bless-modal');
+  if (modal) modal.classList.add('on');
 }
 function closeBlessing() {
   document.getElementById('bless-modal').classList.remove('on');
@@ -4098,8 +4226,8 @@ async function sendBlessing() {
   const { quote, verse, title } = quoteForShare(blessType);
   if (!quote) return;
   const name = (document.getElementById('bless-name').value || '').trim();
-  drawShareCard(quote, verse, title, shareDraft.paper || 'rubric');
-  const canvas = document.getElementById('share-canvas');
+  drawShareCard(quote, verse, title, shareDraft.paper || 'rubric', 'bless-preview');
+  const canvas = document.getElementById('bless-preview') || document.getElementById('share-canvas');
   const text = (name ? name + ' — ' : '') + 'I kept these words for you.\n\n“' + quote + '”\n— ' + verse;
   canvas.toBlob(async (blob) => {
     const file = new File([blob], 'blessing.png', { type: 'image/png' });
@@ -4132,7 +4260,7 @@ function keepLine(e) {
   document.getElementById('compose-line').value = '';
   setCarry({ line: note, verse: '', quote: '', fromHim: false });
   renderJournal();
-  showToast('Kept in your commonplace');
+  showToast('Kept on your page');
   return false;
 }
 
@@ -4294,7 +4422,7 @@ function folioSlips() {
 
 function folioMarkup(slips) {
   const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  const labels = { aff: 'Affirmation', word: 'Word', enc: 'Seek', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const labels = { aff: 'Affirmation', word: 'Word', enc: 'Seek', chat: 'Advisor', lectio: 'Sat with', note: 'Line' };
   const body = slips.map(function (item) {
     const label = labels[item.type] || 'Kept';
     const keep = esc(item.title || '');
@@ -4307,7 +4435,7 @@ function folioMarkup(slips) {
       + '</article>';
   }).join('');
   return '<div class="folio-mark" aria-hidden="true">R</div>'
-    + '<h2 class="folio-title">A commonplace</h2>'
+    + '<h2 class="folio-title">Lines you kept</h2>'
     + '<p class="folio-month">' + month + '</p>'
     + body
     + '<p class="folio-colophon">Lines kept from the red letters of Jesus in Matthew, Mark, Luke, and John.<br>Printed for keeping, not for a feed.</p>';
@@ -4368,13 +4496,16 @@ function printFolioSheet() {
 function showAmen() {
   const el = document.getElementById('amen');
   if (!el) return;
+  const hide = function () {
+    el.classList.remove('on');
+    el.setAttribute('aria-hidden', 'true');
+    el.onclick = null;
+  };
   requestAnimationFrame(function () {
     el.classList.add('on');
     el.setAttribute('aria-hidden', 'false');
-    setTimeout(function () {
-      el.classList.remove('on');
-      el.setAttribute('aria-hidden', 'true');
-    }, 2400);
+    el.onclick = hide;
+    setTimeout(hide, 2400);
   });
 }
 

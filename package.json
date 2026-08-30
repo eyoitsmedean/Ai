@@ -8,7 +8,8 @@
     "dev": "node server.js",
     "test": "node scripts/smoke.js",
     "smoke": "node scripts/smoke.js",
-    "qa": "node scripts/qa-browser.js"
+    "qa": "node scripts/qa-browser.js",
+    "demo": "node scripts/demo-humans.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
