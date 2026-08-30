@@ -2606,7 +2606,7 @@ function updateStreak() {
 function updateDateUI() {
   const now = new Date();
   const h = now.getHours();
-  const greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const greeting = h < 5 ? 'This night' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 21 ? 'Good evening' : 'This night';
   document.getElementById('today-greeting').textContent = greeting;
 
   const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -3863,8 +3863,10 @@ function renderFlyleaf() {
 }
 
 let hearUtter = null;
+let hearTimer = null;
 
 function stopHear() {
+  if (hearTimer) { clearTimeout(hearTimer); hearTimer = null; }
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   hearUtter = null;
   document.querySelectorAll('.hear-verb').forEach(function (btn) {
@@ -3903,23 +3905,12 @@ function hearQuoteFor(source) {
 }
 
 function hearPassage(source) {
-  if (hearUtter) {
+  if (hearUtter || hearTimer) {
     stopHear();
     return;
   }
   const quote = String(hearQuoteFor(source) || '').replace(/^[“"]|[”"]$/g, '').trim();
   if (!quote) return;
-  if (!window.speechSynthesis) {
-    showToast('This page is quiet on this device');
-    return;
-  }
-  const u = new SpeechSynthesisUtterance(quote);
-  u.rate = 0.76;
-  u.pitch = 0.95;
-  u.lang = 'en-GB';
-  const voice = pickHearVoice();
-  if (voice) u.voice = voice;
-  hearUtter = u;
   const btn = document.getElementById(source === 'lectio' ? 'hear-lectio-btn' : source === 'enc' ? 'hear-enc-btn' : 'hear-word-btn');
   if (btn) {
     btn.classList.add('on');
@@ -3941,8 +3932,15 @@ function hearPassage(source) {
       });
     }
   }
-  u.onend = function () { stopHear(); };
-  u.onerror = function () { stopHear(); };
+  hearTimer = setTimeout(stopHear, ms);
+  if (!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(quote);
+  u.rate = 0.76;
+  u.pitch = 0.95;
+  u.lang = 'en-GB';
+  const voice = pickHearVoice();
+  if (voice) u.voice = voice;
+  hearUtter = u;
   window.speechSynthesis.speak(u);
 }
 
