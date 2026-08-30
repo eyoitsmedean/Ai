@@ -3456,12 +3456,7 @@ function saveQuietHour(val) {
 function maybeAskQuietHour() {
   if (ls('rla-quiet-asked')) return;
   lsSet('rla-quiet-asked', '1');
-  const sel = document.getElementById('quiet-hour-select');
-  if (sel && !sel.value) {
-    sel.value = '7';
-    saveQuietHour('7');
-    showToast('Quiet hour set for 7:00 — change it in Settings');
-  }
+  showToast('A quiet hour lives in Settings if you want one');
 }
 
 function persistQuietPrefs() {
