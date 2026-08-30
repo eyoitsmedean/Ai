@@ -442,6 +442,45 @@ textarea,input{font-family:var(--font-ui)}
 .install-banner .ib-no{background:transparent;color:rgba(237,232,224,.65)}
 
 .time-input{padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(13px * var(--scale));font-family:var(--font-ui)}
+
+.rhythm-shell{margin:0 14px 14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .4s var(--ease) both}
+.rhythm-kicker{font-size:calc(10px * var(--scale));font-weight:700;letter-spacing:.55px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.rhythm-title{font-family:var(--font-disp);font-size:calc(18px * var(--scale));font-weight:700;margin-bottom:6px}
+.rhythm-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);line-height:1.4;margin-bottom:14px}
+.rhythm-steps{display:flex;gap:6px;margin-bottom:14px}
+.rhythm-step{flex:1;text-align:center;padding:8px 4px;border-radius:999px;border:1px solid var(--border);font-size:calc(10px * var(--scale));font-weight:700;color:var(--ink-muted);background:var(--surface-2)}
+.rhythm-step.on{background:var(--crimson);border-color:var(--crimson);color:#fff}
+.rhythm-step.done{background:rgba(185,28,28,.12);border-color:rgba(185,28,28,.35);color:var(--crimson)}
+.rhythm-cta{width:100%;padding:14px 16px;border:none;border-radius:var(--r-sm);background:var(--crimson);color:#fff;font-weight:700;font-size:calc(14px * var(--scale));margin-bottom:8px}
+.rhythm-cta:hover{transform:translateY(-1px)}
+.rhythm-secondary{display:flex;gap:8px;flex-wrap:wrap}
+.rhythm-done{display:none;text-align:center;padding:10px 8px;font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45}
+.rhythm-shell.complete .rhythm-done{display:block}
+.rhythm-shell.complete .rhythm-cta{display:none}
+
+.day-poles{display:flex;gap:8px;margin:0 14px 16px}
+.day-pole{flex:1;padding:10px 8px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);text-align:center;font-size:calc(11px * var(--scale));color:var(--ink-muted);font-weight:600}
+.day-pole strong{display:block;font-family:var(--font-disp);font-size:calc(12px * var(--scale));color:var(--ink);margin-bottom:2px;font-weight:700}
+.day-pole.on{border-color:rgba(185,28,28,.4);background:linear-gradient(180deg,rgba(185,28,28,.08),var(--surface));color:var(--crimson)}
+.day-pole.now{box-shadow:0 0 0 2px rgba(185,28,28,.2)}
+
+.more-practices{margin:0 14px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.more-practices>summary{padding:14px 16px;cursor:pointer;font-family:var(--font-disp);font-weight:700;font-size:calc(15px * var(--scale));list-style:none;display:flex;justify-content:space-between;align-items:center}
+.more-practices>summary::-webkit-details-marker{display:none}
+.more-practices>summary::after{content:'+';color:var(--ink-muted);font-size:18px}
+.more-practices[open]>summary::after{content:'−'}
+.more-practices-body{padding:0 0 8px;border-top:1px solid var(--border)}
+.more-practices .midday-card,.more-practices .plan-card,.more-practices .examen-box{margin:12px 12px 0;animation:none}
+.more-practices .examen-box{margin-bottom:12px}
+
+.crisis-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.08);color:rgba(237,232,224,.75);font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.02em}
+.crisis-pill:hover{color:#fff;border-color:rgba(237,232,224,.35)}
+
+.bless-row{padding:0 14px 10px;display:flex;gap:8px}
+.bless-row input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(13px * var(--scale))}
+
+.reading-room #word-card{margin-top:0}
+.reading-room #affirmation-card{opacity:.92}
 </style>
 </head>
 <body>
@@ -476,6 +515,7 @@ textarea,input{font-family:var(--font-ui)}
       <div class="header-day" id="day-label">Day 1 with Him</div>
     </div>
     <div class="header-right">
+      <a class="crisis-pill" href="tel:988" title="Crisis support">988</a>
       <span class="quota-hint hidden" id="quota-hint"></span>
       <button type="button" class="icon-btn" onclick="openCommandPalette()" aria-label="Search" title="Search (⌘K)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -486,7 +526,7 @@ textarea,input{font-family:var(--font-ui)}
     </div>
   </header>
   <div class="pages">
-    <section class="page active" id="today-page" data-tab="today">
+    <section class="page active reading-room" id="today-page" data-tab="today">
       <div class="page-hd"><div class="page-hd-eyebrow" id="today-date"></div><h1 class="page-hd-title" id="today-greeting">Good morning</h1></div>
       <div id="offline-banner" class="offline-banner hidden">You're offline — showing verified passages from our library.</div>
       <div class="carry-card hidden" id="carry-card">
@@ -511,14 +551,29 @@ textarea,input{font-family:var(--font-ui)}
           <button type="button" class="action-btn" onclick="closeMemorize()">Done</button>
         </div>
       </div>
-      <div class="card card-crimson" id="affirmation-card"><div class="card-body">
-        <div class="section-label" style="padding:0 0 8px;color:rgba(255,255,255,.6)">Daily Affirmation</div>
-        <p class="red-quote" id="affirmation-text">Loading…</p><p class="verse-cite" id="affirmation-verse"></p><div id="affirmation-verified"></div>
-        <div class="card-actions">
-          <button type="button" class="action-btn" onclick="listenAffirmation()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
-          <button type="button" class="action-btn" onclick="shareAffirmation()" aria-label="Share affirmation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
-          <button type="button" class="action-btn" id="save-aff-btn" onclick="saveAffirmation()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
-        </div></div></div>
+      <div class="rhythm-shell" id="rhythm-shell">
+        <div class="rhythm-kicker">Today’s rhythm</div>
+        <div class="rhythm-title" id="rhythm-title">One finished session with His words</div>
+        <p class="rhythm-sub">Rhythm, not a buffet — receive, sit, reflect, carry. No streak shame if you miss a day.</p>
+        <div class="rhythm-steps" id="rhythm-steps" aria-label="Session steps">
+          <span class="rhythm-step on" data-step="receive">Receive</span>
+          <span class="rhythm-step" data-step="sit">Sit</span>
+          <span class="rhythm-step" data-step="reflect">Reflect</span>
+          <span class="rhythm-step" data-step="carry">Carry</span>
+        </div>
+        <button type="button" class="rhythm-cta" id="rhythm-cta" onclick="advanceRhythm()">Begin with Him</button>
+        <div class="rhythm-secondary">
+          <button type="button" class="action-btn" onclick="guidedLectioListen()">Guided listen</button>
+          <button type="button" class="action-btn" onclick="openBreathPrayer()">Breathe</button>
+          <button type="button" class="action-btn" onclick="shareWord()">Share</button>
+        </div>
+        <p class="rhythm-done" id="rhythm-done">Today’s morning rhythm is complete. Midday and evening wait when you’re ready — gently.</p>
+      </div>
+      <div class="day-poles" id="day-poles" aria-label="Day poles">
+        <div class="day-pole" id="pole-morning"><strong>Morning</strong>Word</div>
+        <div class="day-pole" id="pole-midday"><strong>Midday</strong>Prayer</div>
+        <div class="day-pole" id="pole-evening"><strong>Evening</strong>Examen</div>
+      </div>
       <div class="card" id="word-card"><div class="card-body">
         <div class="section-label" style="padding:0 0 8px" id="word-theme"></div>
         <h2 style="font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin-bottom:10px" id="word-title"></h2>
@@ -531,6 +586,14 @@ textarea,input{font-family:var(--font-ui)}
           <button type="button" class="action-btn" onclick="openBreathPrayer()" aria-label="Breath prayer">Breathe</button>
           <button type="button" class="action-btn" onclick="carryWord()" aria-label="Carry phrase">Carry</button>
           <button type="button" class="action-btn" id="save-word-btn" onclick="saveWord()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
+        </div></div></div>
+      <div class="card card-crimson" id="affirmation-card"><div class="card-body">
+        <div class="section-label" style="padding:0 0 8px;color:rgba(255,255,255,.6)">Daily Affirmation</div>
+        <p class="red-quote" id="affirmation-text">Loading…</p><p class="verse-cite" id="affirmation-verse"></p><div id="affirmation-verified"></div>
+        <div class="card-actions">
+          <button type="button" class="action-btn" onclick="listenAffirmation()" aria-label="Listen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>
+          <button type="button" class="action-btn" onclick="shareAffirmation()" aria-label="Share affirmation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share</button>
+          <button type="button" class="action-btn" id="save-aff-btn" onclick="saveAffirmation()" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save</button>
         </div></div></div>
       <div class="reflect-box hidden" id="reflect-box">
         <p class="reflect-prompt" id="reflect-prompt">What one phrase from His words stays with you?</p>
@@ -545,45 +608,51 @@ textarea,input{font-family:var(--font-ui)}
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
         <div class="presence-week" id="presence-week" aria-label="This week's presence"></div>
       </div>
-      <div class="midday-card" id="midday-card">
-        <div class="midday-hd">Midday pause</div>
-        <p class="midday-sub">Pray as He taught — a short return to the Father in the middle of the day.</p>
-        <div class="midday-actions">
-          <button type="button" class="action-btn" onclick="openMidday()">Pray the Lord’s Prayer</button>
-          <button type="button" class="action-btn" onclick="listenMidday()">Listen</button>
+      <details class="more-practices" id="more-practices">
+        <summary>More with Him</summary>
+        <div class="more-practices-body">
+          <div class="midday-card" id="midday-card">
+            <div class="midday-hd">Midday pause</div>
+            <p class="midday-sub">Pray as He taught — a short return to the Father in the middle of the day.</p>
+            <div class="midday-actions">
+              <button type="button" class="action-btn" onclick="openMidday()">Pray the Lord’s Prayer</button>
+              <button type="button" class="action-btn" onclick="listenMidday()">Listen</button>
+            </div>
+          </div>
+          <div class="plan-card" id="plan-card">
+            <div class="plan-hd">7 days with His words</div>
+            <p class="plan-sub">A gentle first week — one verified saying a day. Missed a day? Return without shame.</p>
+            <p class="plan-sub" id="plan-bridge" style="display:none;color:var(--crimson)">Day 5–7 is where habits form — one small return is enough.</p>
+            <div class="plan-days" id="plan-days" role="tablist" aria-label="Plan days"></div>
+            <div class="plan-body" id="plan-body"></div>
+          </div>
+          <div class="examen-box" id="examen-box">
+            <div class="examen-hd">Evening with Him</div>
+            <p class="examen-sub">Close the day over His words — rejoice, review, release, rest. Inspired by the Examen; grounded only in verified red letters.</p>
+            <div class="examen-word">
+              <p class="examen-quote" id="examen-quote"></p>
+              <p class="examen-cite" id="examen-cite"></p>
+            </div>
+            <div class="examen-step">
+              <div class="examen-label">Rejoice — where did His peace touch you?</div>
+              <textarea class="examen-input" id="examen-rejoice" maxlength="320" placeholder="One moment of grace…" aria-label="Rejoice"></textarea>
+            </div>
+            <div class="examen-step">
+              <div class="examen-label">Review — where do you still need His words?</div>
+              <textarea class="examen-input" id="examen-review" maxlength="320" placeholder="Name it honestly…" aria-label="Review"></textarea>
+            </div>
+            <div class="examen-step">
+              <div class="examen-label">Release — what will you entrust to Him tonight?</div>
+              <textarea class="examen-input" id="examen-release" maxlength="320" placeholder="Lay it down…" aria-label="Release"></textarea>
+            </div>
+            <div class="examen-actions">
+              <button type="button" class="action-btn" onclick="saveExamen()">Rest · Amen</button>
+              <button type="button" class="action-btn" onclick="listenExamen()">Listen</button>
+            </div>
+            <p class="examen-done" id="examen-done">Tonight’s examen is held in your Journal. Sleep in His peace.</p>
+          </div>
         </div>
-      </div>
-      <div class="plan-card" id="plan-card">
-        <div class="plan-hd">7 days with His words</div>
-        <p class="plan-sub">A gentle first week — one verified saying a day. Missed a day? Return without shame.</p>
-        <div class="plan-days" id="plan-days" role="tablist" aria-label="Plan days"></div>
-        <div class="plan-body" id="plan-body"></div>
-      </div>
-      <div class="examen-box" id="examen-box">
-        <div class="examen-hd">Evening with Him</div>
-        <p class="examen-sub">Close the day over His words — rejoice, review, release, rest. Inspired by the Examen; grounded only in verified red letters.</p>
-        <div class="examen-word">
-          <p class="examen-quote" id="examen-quote"></p>
-          <p class="examen-cite" id="examen-cite"></p>
-        </div>
-        <div class="examen-step">
-          <div class="examen-label">Rejoice — where did His peace touch you?</div>
-          <textarea class="examen-input" id="examen-rejoice" maxlength="320" placeholder="One moment of grace…" aria-label="Rejoice"></textarea>
-        </div>
-        <div class="examen-step">
-          <div class="examen-label">Review — where do you still need His words?</div>
-          <textarea class="examen-input" id="examen-review" maxlength="320" placeholder="Name it honestly…" aria-label="Review"></textarea>
-        </div>
-        <div class="examen-step">
-          <div class="examen-label">Release — what will you entrust to Him tonight?</div>
-          <textarea class="examen-input" id="examen-release" maxlength="320" placeholder="Lay it down…" aria-label="Release"></textarea>
-        </div>
-        <div class="examen-actions">
-          <button type="button" class="action-btn" onclick="saveExamen()">Rest · Amen</button>
-          <button type="button" class="action-btn" onclick="listenExamen()">Listen</button>
-        </div>
-        <p class="examen-done" id="examen-done">Tonight’s examen is held in your Journal. Sleep in His peace.</p>
-      </div>
+      </details>
       <div class="cta-row">
         <button type="button" class="cta-btn cta-primary" onclick="goTab('advisor')">Ask the Advisor</button>
         <button type="button" class="cta-btn cta-secondary" onclick="goTab('seek')">Seek by Theme</button>
@@ -705,6 +774,9 @@ textarea,input{font-family:var(--font-ui)}
       <button type="button" class="share-ratio active" data-ratio="feed" onclick="setShareRatio('feed')">Feed 4:5</button>
       <button type="button" class="share-ratio" data-ratio="story" onclick="setShareRatio('story')">Stories 9:16</button>
       <button type="button" class="share-ratio" data-ratio="square" onclick="setShareRatio('square')">Square 1:1</button>
+    </div>
+    <div class="bless-row">
+      <input type="text" id="bless-name" maxlength="40" placeholder="Bless someone by name (optional)" aria-label="Blessing recipient" />
     </div>
     <div class="share-actions">
       <button type="button" class="action-btn" onclick="downloadShareCard()" aria-label="Download">Download</button>
@@ -1005,9 +1077,136 @@ function markPresence(opts) {
     days.push(today);
     lsSetJSON('rla-presence', days.slice(-400));
   }
+  setRhythmFlag('receive', true);
   renderPresence();
+  renderDayPoles();
+  renderRhythm();
   showToast('Received. Carry one phrase with you.');
   if (!opts?.skipReflect) showReflect();
+}
+
+/* ═══ TODAY'S RHYTHM (Lectio 365 — rhythm not buffet) ═══ */
+const RHYTHM_ORDER = ['receive', 'sit', 'reflect', 'carry'];
+function getRhythm() {
+  const raw = lsJSON('rla-rhythm', null);
+  if (raw?.day === todayISO()) return raw;
+  return { day: todayISO(), receive: false, sit: false, reflect: false, carry: false };
+}
+function setRhythmFlag(key, val) {
+  const r = getRhythm();
+  r[key] = !!val;
+  r.day = todayISO();
+  lsSetJSON('rla-rhythm', r);
+  return r;
+}
+function rhythmStepIndex(r) {
+  for (let i = 0; i < RHYTHM_ORDER.length; i++) {
+    if (!r[RHYTHM_ORDER[i]]) return i;
+  }
+  return RHYTHM_ORDER.length;
+}
+function renderRhythm() {
+  const r = getRhythm();
+  const shell = document.getElementById('rhythm-shell');
+  const cta = document.getElementById('rhythm-cta');
+  if (!shell || !cta) return;
+  const idx = rhythmStepIndex(r);
+  const complete = idx >= RHYTHM_ORDER.length;
+  shell.classList.toggle('complete', complete);
+  document.querySelectorAll('#rhythm-steps .rhythm-step').forEach((el, i) => {
+    const key = RHYTHM_ORDER[i];
+    el.classList.toggle('done', !!r[key]);
+    el.classList.toggle('on', !complete && i === idx);
+  });
+  const labels = [
+    'Begin with Him',
+    'Sit with this word',
+    'Write a reflection',
+    'Carry one phrase',
+  ];
+  cta.textContent = complete ? 'Complete' : labels[idx] || 'Continue';
+  if (complete) {
+    document.getElementById('rhythm-title').textContent = 'Morning rhythm complete';
+  }
+}
+function advanceRhythm() {
+  const r = getRhythm();
+  const idx = rhythmStepIndex(r);
+  if (idx >= RHYTHM_ORDER.length) {
+    showToast('Morning rhythm already complete');
+    return;
+  }
+  const step = RHYTHM_ORDER[idx];
+  if (step === 'receive') {
+    document.getElementById('word-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    markPresence({ skipReflect: true });
+    showToast('Received. Next: sit with Him.');
+  } else if (step === 'sit') {
+    startSit();
+  } else if (step === 'reflect') {
+    showReflect();
+    document.getElementById('reflect-input')?.focus();
+  } else if (step === 'carry') {
+    carryWord();
+  }
+  renderRhythm();
+}
+function renderDayPoles() {
+  const morning = getRhythm().receive || getPresenceDays().includes(todayISO());
+  const midday = ls('rla-midday-day') === todayISO();
+  const evening = ls('rla-examen-day') === todayISO();
+  document.getElementById('pole-morning')?.classList.toggle('on', morning);
+  document.getElementById('pole-midday')?.classList.toggle('on', midday);
+  document.getElementById('pole-evening')?.classList.toggle('on', evening);
+  const h = new Date().getHours();
+  document.getElementById('pole-morning')?.classList.toggle('now', h < 11);
+  document.getElementById('pole-midday')?.classList.toggle('now', h >= 11 && h < 17);
+  document.getElementById('pole-evening')?.classList.toggle('now', h >= 17);
+}
+function routeByHour() {
+  const h = new Date().getHours();
+  const more = document.getElementById('more-practices');
+  if (h >= 17) {
+    if (more) more.open = true;
+    setTimeout(() => document.getElementById('examen-box')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+  } else if (h >= 11 && h < 15) {
+    if (more) more.open = true;
+    setTimeout(() => document.getElementById('midday-card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
+  }
+}
+function guidedLectioListen() {
+  if (!dailyData?.word) return;
+  const w = dailyData.word;
+  const parts = [
+    w.passage || '',
+    '…',
+    w.verse || '',
+    '…',
+    w.reflection || 'Sit with these words without rushing.',
+  ];
+  const utter = () => {
+    if (!('speechSynthesis' in window)) {
+      speakText(parts.filter((p) => p !== '…').join('. '));
+      return;
+    }
+    window.speechSynthesis.cancel();
+    let i = 0;
+    const next = () => {
+      if (i >= parts.length) return;
+      const part = parts[i++];
+      if (part === '…') {
+        setTimeout(next, 1200);
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(part);
+      u.rate = 0.92;
+      u.onend = next;
+      window.speechSynthesis.speak(u);
+    };
+    next();
+  };
+  utter();
+  showToast('Guided listen — pauses built in');
 }
 
 /* ═══ SIT WITH HIM (lectio-lite minute) ═══ */
@@ -1049,9 +1248,11 @@ function closeSit() {
 }
 function finishSit() {
   closeSit();
+  setRhythmFlag('sit', true);
   markPresence({ skipReflect: true });
   openAmen(dailyData?.word?.passage, dailyData?.word?.verse);
   showReflect();
+  renderRhythm();
 }
 
 /* ═══ MIDDAY PAUSE (Lectio 365 — Lord’s Prayer) ═══ */
@@ -1086,6 +1287,7 @@ function finishMidday() {
   lsSet('rla-midday-day', todayISO());
   markPresence({ skipReflect: true });
   openAmen(LORDS_PRAYER.text, LORDS_PRAYER.verse);
+  renderDayPoles();
   showToast('Midday received');
 }
 
@@ -1123,6 +1325,7 @@ const CMD_ITEMS = [
   { label: 'Evening Examen', hint: 'Close the day', run: () => { goTab('today'); document.getElementById('examen-box')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: '7-day plan', hint: 'Walk with His words', run: () => { goTab('today'); document.getElementById('plan-card')?.scrollIntoView({ behavior: 'smooth' }); } },
   { label: 'Share a blessing', hint: 'Open share card', run: () => { const w = dailyData?.word; if (w) openShareCard({ verse: w.verse, quote: pickCarryPhrase(w.passage), theme: w.theme }); } },
+  { label: 'Begin today’s rhythm', hint: 'Receive → Sit → Reflect → Carry', run: () => { goTab('today'); advanceRhythm(); } },
   { label: 'Draw a word', hint: 'One saying, given to you', run: () => { goTab('seek'); drawAWord(); } },
   { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
   { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
@@ -1427,6 +1630,8 @@ function saveReflection() {
   saveJournal(entry, verse || 'Reflection', 'Reflection');
   document.getElementById('reflect-input').value = '';
   hideReflect();
+  setRhythmFlag('reflect', true);
+  renderRhythm();
   showToast('Reflection saved to Journal');
 }
 
@@ -1515,7 +1720,11 @@ function carryWord() {
   const phrase = pickCarryPhrase(dailyData.word.passage);
   const payload = { phrase, verse: dailyData.word.verse, day: todayISO() };
   lsSetJSON('rla-carry', payload);
+  setRhythmFlag('carry', true);
+  setRhythmFlag('receive', true);
   renderCarry();
+  renderRhythm();
+  renderDayPoles();
   showToast('Carrying this phrase today');
 }
 
@@ -1638,6 +1847,8 @@ function renderPlan() {
   const progress = ensurePlanStarted();
   const todayN = planDayNumber();
   if (!planViewDay) planViewDay = todayN;
+  const bridge = document.getElementById('plan-bridge');
+  if (bridge) bridge.style.display = todayN >= 5 ? 'block' : 'none';
   let chips = '';
   for (let d = 1; d <= 7; d++) {
     const done = !!progress.done[d];
@@ -1767,6 +1978,7 @@ function saveExamen() {
   lsSetJSON('rla-examen-draft', { day: todayISO(), rejoice, review, release });
   document.getElementById('examen-box')?.classList.add('done');
   markPresence({ skipReflect: true });
+  renderDayPoles();
   showToast('Amen. Rest in His peace.');
 }
 
@@ -2569,10 +2781,13 @@ function copyShareText() {
 }
 
 async function blessShareCard() {
-  const text = 'A blessing for you from His words:\n\n"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
+  const name = (document.getElementById('bless-name')?.value || '').trim();
+  const forLine = name ? 'A blessing for ' + name + ' from His words:\n\n' : 'A blessing for you from His words:\n\n';
+  const text = forLine + '"' + shareState.quote + '" — ' + shareState.verse + '\n\nRed Letter · the words Jesus spoke';
   try {
     if (navigator.share) {
-      await navigator.share({ title: 'A red-letter blessing', text });
+      await navigator.share({ title: name ? 'A blessing for ' + name : 'A red-letter blessing', text });
+      showToast('Blessing sent');
       return;
     }
   } catch {}
@@ -2721,8 +2936,11 @@ function initApp() {
   renderPlan();
   renderExamen();
   renderMidday();
+  renderRhythm();
+  renderDayPoles();
   renderThemeGrid();
   goTab('today');
+  routeByHour();
   const nav = document.getElementById('bottom-nav');
   const indicator = document.getElementById('nav-indicator');
   if (nav && indicator) {

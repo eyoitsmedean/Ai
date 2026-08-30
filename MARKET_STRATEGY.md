@@ -315,3 +315,20 @@ Not another chat wrapper — sensory companionship with verified speech only.
 | **Draw a word** | Seek: one random verified saying with flip + reveal |
 | **Breath prayer** | Inhale / hold / exhale over a short Jesus phrase (carry or “Peace! Be still!”) |
 | **Parable chamber** | Immersive story room for Gospel parables · Sit / Carry / Share / Breathe |
+
+---
+
+## 13. World-class loop (Aug 2026 research → build)
+
+Prompts across this effort asked for world-class, research-driven building, merge synthesis, and creative ambition. Latest online synthesis (Lectio 365, Hallow, Glorify, Warm Peach 2026, Bibly, Bible Path, YouVersion retention notes):
+
+| Finding | Gap we had | Build |
+| --- | --- | --- |
+| **Rhythm, not buffet** (Lectio 365) | Today scrolled as feature pile | **Today’s rhythm** — Receive → Sit → Reflect → Carry with one CTA |
+| **Finished session** (Bible Path / ScreensDesign) | Presence alone ≠ session | Rhythm complete state + Amen seals |
+| **Morning / midday / evening poles** | Practices unprioritized | **Day poles** + hour routing (evening opens Examen) |
+| **Audio with pauses** (Hallow Lectio) | Flat TTS | **Guided listen** with silence between passage / cite / reflection |
+| **Crisis always near** | Buried in Settings | Header **988** pill |
+| **Named blessing virality** | Generic Bless copy | Optional **bless-by-name** on share cards |
+| **Day 5–8 cliff** (YouVersion discipleship data) | Plan quiet in the messy middle | Soft bridge copy on plan days 5–7 |
+| **Secondary depth without clutter** | Midday/plan/examen always visible | **More with Him** accordion |

@@ -1,4 +1,4 @@
-const CACHE = 'rla-v13';
+const CACHE = 'rla-v14';
 const PRECACHE = [
   '/',
   '/manifest.json',

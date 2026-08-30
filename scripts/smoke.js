@@ -104,6 +104,8 @@ async function main() {
     assert(appHtml.includes('examen-box') && appHtml.includes('plan-card') && appHtml.includes('mem-box'), 'missing examen/plan/memorize');
     assert(appHtml.includes('midday-card') && appHtml.includes('amen-overlay') && appHtml.includes('cmd-overlay'), 'missing midday/amen/cmd');
     assert(appHtml.includes('breath-overlay') && appHtml.includes('parable-overlay') && appHtml.includes('draw-stage'), 'missing breath/parable/draw');
+    assert(appHtml.includes('rhythm-shell') && appHtml.includes('day-poles') && appHtml.includes('more-practices'), 'missing rhythm/poles');
+    assert(appHtml.includes('crisis-pill') && appHtml.includes('bless-name'), 'missing crisis/bless');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 
