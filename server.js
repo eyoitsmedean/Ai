@@ -4,6 +4,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
 const fs = require('fs');
 const vm = require('vm');
+const letters = require('./data/red-letters');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -382,13 +383,49 @@ async function fetchDailyContent() {
   }
 }
 
+app.get('/welcome', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
     model: MODEL,
     llm: !!client,
     corpus: Boolean(loadCorpus().daily || loadCorpus().verses),
+    corpusPassages: (letters.passages || []).length,
     version: '3.0.0',
+  });
+});
+
+app.get('/api/quota', (_req, res) => {
+  res.json({ used: 0, remaining: null, limit: null, unlimited: true });
+});
+
+app.get('/api/library', (req, res) => {
+  const theme = req.query.theme;
+  const book = req.query.book;
+  let passages = letters.passages || [];
+  if (book && typeof letters.byBook === 'function') passages = letters.byBook(String(book));
+  if (theme) {
+    passages = passages.filter((p) =>
+      Array.isArray(p.theme) ? p.theme.includes(String(theme)) : p.theme === String(theme)
+    );
+  }
+  res.json({
+    translation: letters.translation || 'WEB',
+    translationName: letters.translationName || 'World English Bible',
+    themes: letters.THEMES || [],
+    books: letters.BOOKS || ['Matthew', 'Mark', 'Luke', 'John'],
+    passages: passages.map((p) => ({
+      id: p.id,
+      verse: typeof letters.cite === 'function' ? letters.cite(p) : `${p.book} ${p.chapter}:${p.verseStart}`,
+      book: p.book,
+      chapter: p.chapter,
+      theme: p.theme,
+      text: p.text,
+      note: p.note || null,
+    })),
   });
 });
 
@@ -561,5 +598,6 @@ app.get('*', (req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`R  The Red Letter Advisor → http://localhost:${PORT}`);
+  console.log(`   Landing: http://localhost:${PORT}/welcome`);
   console.log(`   LLM: ${client ? MODEL : 'living Advisor + curated (no API key)'}`);
 });

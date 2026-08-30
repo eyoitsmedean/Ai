@@ -1,783 +1,708 @@
 {
-  "translation": "World English Bible (public domain)",
-  "disclaimer": "Quotes are the direct speech of Jesus from Matthew, Mark, Luke, and John (WEB).",
-  "daily": [
-    {
-      "affirmation": {
-        "text": "You are invited to rest — not because you earned it, but because He offers it.",
-        "verse": "Matthew 11:28",
-        "quote": "Come to me, all you who labor and are heavily burdened, and I will give you rest."
-      },
-      "word": {
-        "theme": "Rest",
-        "title": "The Invitation Still Stands",
-        "passage": "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
-        "verse": "Matthew 11:28–30",
-        "reflection": "Weariness is not a failure of faith. Bring what feels heavy and sit with His words before you try to fix anything else today."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "You do not have to carry tomorrow's weight in today's hands.",
-        "verse": "Matthew 6:34",
-        "quote": "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient."
-      },
-      "word": {
-        "theme": "Trust",
-        "title": "Enough for Today",
-        "passage": "Therefore don't be anxious, saying, 'What will we eat?', 'What will we drink?' or, 'With what will we be clothed?' For the Gentiles seek after all these things; for your heavenly Father knows that you need all these things. But seek first God's Kingdom and his righteousness; and all these things will be given to you as well.",
-        "verse": "Matthew 6:31–33",
-        "reflection": "Anxiety often rushes ahead of grace. Ask for what you need for this one day, and let the rest wait."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "His peace is not fragile — it is a gift you can receive even when circumstances have not changed.",
-        "verse": "John 14:27",
-        "quote": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful."
-      },
-      "word": {
-        "theme": "Peace",
-        "title": "Not as the World Gives",
-        "passage": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful.",
-        "verse": "John 14:27",
-        "reflection": "Worldly peace depends on control. His peace arrives as a presence. Breathe, and let the words settle before you scroll on."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "You are seen — even the small details of your life are known.",
-        "verse": "Luke 12:7",
-        "quote": "But the very hairs of your head are all numbered. Therefore don't be afraid. You are of more value than many sparrows."
-      },
-      "word": {
-        "theme": "Belonging",
-        "title": "More Than Many Sparrows",
-        "passage": "Aren't five sparrows sold for two assaria coins? Not one of them is forgotten by God. But the very hairs of your head are all numbered. Therefore don't be afraid. You are of more value than many sparrows.",
-        "verse": "Luke 12:6–7",
-        "reflection": "Loneliness lies. If He tracks sparrows, He has not misplaced you. Let that truth interrupt the story fear is telling."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "Forgiveness is not pretending it didn't hurt — it is choosing freedom over bitterness.",
-        "verse": "Matthew 6:14",
-        "quote": "For if you forgive men their trespasses, your heavenly Father will also forgive you."
-      },
-      "word": {
-        "theme": "Forgiveness",
-        "title": "The Measure You Use",
-        "passage": "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don't forgive men their trespasses, neither will your Father forgive your trespasses.",
-        "verse": "Matthew 6:14–15",
-        "reflection": "Start small if you must: release one memory into His care. Forgiveness is often a path, not a single moment."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "You are not abandoned in the dark — He walks with those who follow Him.",
-        "verse": "John 8:12",
-        "quote": "I am the light of the world. He who follows me will not walk in the darkness, but will have the light of life."
-      },
-      "word": {
-        "theme": "Light",
-        "title": "Light for the Path",
-        "passage": "I am the light of the world. He who follows me will not walk in the darkness, but will have the light of life.",
-        "verse": "John 8:12",
-        "reflection": "You may not see the whole road. Following means taking the next faithful step in the light you have."
-      }
-    },
-    {
-      "affirmation": {
-        "text": "Love is not a feeling you wait for — it is a way He calls you to live.",
-        "verse": "John 13:34",
-        "quote": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another."
-      },
-      "word": {
-        "theme": "Love",
-        "title": "As I Have Loved You",
-        "passage": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another. By this everyone will know that you are my disciples, if you have love for one another.",
-        "verse": "John 13:34–35",
-        "reflection": "Ask one question today: what would love look like in this room, this message, this hard conversation?"
-      }
-    }
+  "translation": "WEB",
+  "translationName": "World English Bible",
+  "themes": [
+    "Anxiety & Worry",
+    "Conflict & Relationships",
+    "Faith & Doubt",
+    "Fear",
+    "Forgiveness",
+    "Grief & Loss",
+    "Hope",
+    "Loneliness",
+    "Peace",
+    "Purpose & Direction",
+    "Shame & Guilt",
+    "Suffering & Pain"
   ],
-  "encouragement": {
-    "Anxiety & Worry": {
-      "theme": "Anxiety & Worry",
-      "headline": "You Are Held in the Worry",
-      "opening": "Anxiety can feel like a storm you are failing to calm. You are not weak for feeling it — and you are not alone in it.",
-      "passages": [
-        {
-          "verse": "Matthew 6:34",
-          "quote": "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient.",
-          "context": "Jesus limits the assignment to today — not because tomorrow is unreal, but because grace meets you in the present."
-        },
-        {
-          "verse": "Matthew 6:26",
-          "quote": "See the birds of the sky, that they don't sow, neither do they reap, nor gather into barns. Your heavenly Father feeds them. Aren't you of much more value than they?",
-          "context": "Your worth is not measured by how well you control outcomes."
-        },
-        {
-          "verse": "John 14:1",
-          "quote": "Don't let your heart be troubled. Believe in God. Believe also in me.",
-          "context": "He speaks peace into a troubled heart before circumstances rearrange."
-        }
-      ],
-      "practice": "Place one hand on your chest, name one fear out loud, then slowly read Matthew 6:34 three times.",
-      "closing": "You do not have to solve everything to be held."
-    },
-    "Grief & Loss": {
-      "theme": "Grief & Loss",
-      "headline": "Blessed Are Those Who Mourn",
-      "opening": "Grief is love with nowhere to go. Jesus does not rush past tears — He names mourning as a place of blessing.",
-      "passages": [
-        {
-          "verse": "Matthew 5:4",
-          "quote": "Blessed are those who mourn, for they shall be comforted.",
-          "context": "Comfort is promised, not demanded on a timeline."
-        },
-        {
-          "verse": "John 11:35",
-          "quote": "Jesus wept.",
-          "context": "Even knowing resurrection was near, He entered the sorrow of those He loved."
-        },
-        {
-          "verse": "John 14:18",
-          "quote": "I will not leave you orphans. I will come to you.",
-          "context": "Loss can feel like abandonment; His word answers with presence."
-        }
-      ],
-      "practice": "Light a candle or sit in quiet for two minutes and simply say the name of the one you miss.",
-      "closing": "Your tears are seen. Comfort comes as a Companion, not a lecture."
-    },
-    "Forgiveness": {
-      "theme": "Forgiveness",
-      "headline": "Freedom on the Other Side of Release",
-      "opening": "Forgiveness can feel impossible when the wound is still open. Jesus speaks into that exact struggle — with honesty and hope.",
-      "passages": [
-        {
-          "verse": "Matthew 6:14",
-          "quote": "For if you forgive men their trespasses, your heavenly Father will also forgive you.",
-          "context": "Forgiveness is woven into the life He invites you into."
-        },
-        {
-          "verse": "Matthew 18:21–22",
-          "quote": "Then Peter came and said to him, \"Lord, how often shall my brother sin against me, and I forgive him? Until seven times?\" Jesus said to him, \"I don't tell you until seven times, but, until seventy times seven.\"",
-          "context": "Forgiveness is a practice of the heart, not a single scoreboard."
-        },
-        {
-          "verse": "Luke 23:34",
-          "quote": "Father, forgive them, for they don't know what they are doing.",
-          "context": "From the cross, He models mercy under unjust pain."
-        }
-      ],
-      "practice": "Write the person's name, then underneath write: \"I release them into Your care.\" Sit with that for one minute.",
-      "closing": "You can take the next honest step without pretending the hurt never happened."
-    },
-    "Loneliness": {
-      "theme": "Loneliness",
-      "headline": "You Are Not Forgotten",
-      "opening": "Loneliness can make the room feel louder than any crowd. Jesus speaks belonging into people who felt unseen.",
-      "passages": [
-        {
-          "verse": "Matthew 28:20",
-          "quote": "Behold, I am with you always, even to the end of the age.",
-          "context": "His last promise is presence that does not expire."
-        },
-        {
-          "verse": "John 14:18",
-          "quote": "I will not leave you orphans. I will come to you.",
-          "context": "Isolation is met with adoption language — family, not distance."
-        },
-        {
-          "verse": "Luke 12:7",
-          "quote": "But the very hairs of your head are all numbered. Therefore don't be afraid. You are of more value than many sparrows.",
-          "context": "Detail-level care is how He describes your worth."
-        }
-      ],
-      "practice": "Send one honest message to a safe person, or sit with John 14:18 spoken aloud as a prayer.",
-      "closing": "Even here, you are accompanied."
-    },
-    "Conflict & Relationships": {
-      "theme": "Conflict & Relationships",
-      "headline": "Peace Without Pretending",
-      "opening": "Conflict drains the spirit. Jesus gives a way that is neither revenge nor silence — clear, courageous, and merciful.",
-      "passages": [
-        {
-          "verse": "Matthew 5:9",
-          "quote": "Blessed are the peacemakers, for they shall be called children of God.",
-          "context": "Peacemaking is active work, not conflict avoidance."
-        },
-        {
-          "verse": "Matthew 18:15",
-          "quote": "If your brother sins against you, go, show him his fault between you and him alone. If he listens to you, you have gained back your brother.",
-          "context": "Start privately, with restoration as the aim."
-        },
-        {
-          "verse": "Matthew 5:44",
-          "quote": "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you,",
-          "context": "Love does not mean enabling harm; it means refusing hatred as your master."
-        }
-      ],
-      "practice": "Before your next hard conversation, pray one sentence: \"Help me seek peace and tell the truth.\"",
-      "closing": "You can move toward peace without abandoning your integrity."
-    },
-    "Fear": {
-      "theme": "Fear",
-      "headline": "Courage in His Presence",
-      "opening": "Fear shrinks the future. Jesus meets fearful people with presence first — then with a call to trust.",
-      "passages": [
-        {
-          "verse": "John 14:27",
-          "quote": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful.",
-          "context": "His peace is given, not earned by bravery."
-        },
-        {
-          "verse": "Matthew 14:27",
-          "quote": "But immediately Jesus spoke to them, saying, \"Cheer up! It is I! Don't be afraid.\"",
-          "context": "In the storm, the first word is recognition: He is near."
-        },
-        {
-          "verse": "Luke 12:32",
-          "quote": "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom.",
-          "context": "You are addressed tenderly — little flock — not scolded for fear."
-        }
-      ],
-      "practice": "Name the fear in one sentence, then read John 14:27 slowly, emphasizing \"I give to you.\"",
-      "closing": "Fear may visit. It does not get to name who you are."
-    },
-    "Purpose & Direction": {
-      "theme": "Purpose & Direction",
-      "headline": "Seek First What Lasts",
-      "opening": "When direction feels foggy, Jesus reorders the search: begin with the Kingdom, and let lesser things find their place.",
-      "passages": [
-        {
-          "verse": "Matthew 6:33",
-          "quote": "But seek first God's Kingdom and his righteousness; and all these things will be given to you as well.",
-          "context": "Priority, not hustle, is the starting point."
-        },
-        {
-          "verse": "Matthew 5:14",
-          "quote": "You are the light of the world. A city located on a hill can't be hidden.",
-          "context": "Purpose includes being visible goodness in ordinary places."
-        },
-        {
-          "verse": "Matthew 22:37–39",
-          "quote": "Jesus said to him, \"'You shall love the Lord your God with all your heart, with all your soul, and with all your mind.' This is the first and great commandment. A second likewise is this, 'You shall love your neighbor as yourself.'\"",
-          "context": "When plans blur, love of God and neighbor remains clear."
-        }
-      ],
-      "practice": "Write one Kingdom-shaped action you can take this week that loves God or neighbor.",
-      "closing": "You do not need the whole map to take a faithful next step."
-    },
-    "Faith & Doubt": {
-      "theme": "Faith & Doubt",
-      "headline": "Even Little Faith Matters",
-      "opening": "Doubt does not disqualify you. Jesus meets imperfect trust with patience and truth.",
-      "passages": [
-        {
-          "verse": "Matthew 17:20",
-          "quote": "He said to them, \"Because of your unbelief. For most certainly I tell you, if you have faith as a grain of mustard seed, you will tell this mountain, 'Move from here to there,' and it will move; and nothing will be impossible for you.\"",
-          "context": "Small faith, placed in Him, is not worthless."
-        },
-        {
-          "verse": "John 20:27",
-          "quote": "Then he said to Thomas, \"Reach here your finger, and see my hands. Reach here your hand, and put it into my side. Don't be unbelieving, but believing.\"",
-          "context": "He invites honest examination rather than shaming the question."
-        },
-        {
-          "verse": "Mark 9:23",
-          "quote": "Jesus said to him, \"If you can believe, all things are possible to him who believes.\"",
-          "context": "Belief grows in relationship, not performance."
-        }
-      ],
-      "practice": "Pray the honest prayer: \"I believe; help my unbelief\" — then sit quietly for one minute.",
-      "closing": "Bring your questions. He can hold them."
-    },
-    "Suffering & Pain": {
-      "theme": "Suffering & Pain",
-      "headline": "Courage for the Hard Day",
-      "opening": "Pain can make God feel far. Jesus never pretends suffering is small — He promises presence and a peace the world cannot counterfeit.",
-      "passages": [
-        {
-          "verse": "John 16:33",
-          "quote": "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.",
-          "context": "Trouble is named as real; victory is named as greater."
-        },
-        {
-          "verse": "Matthew 5:4",
-          "quote": "Blessed are those who mourn, for they shall be comforted.",
-          "context": "Comfort is for mourners, not for those who never hurt."
-        },
-        {
-          "verse": "Matthew 11:28",
-          "quote": "Come to me, all you who labor and are heavily burdened, and I will give you rest.",
-          "context": "The invitation is for the burdened, not the already-rested."
-        }
-      ],
-      "practice": "Tell Him one sentence about the pain, then rest your body for sixty seconds without fixing anything.",
-      "closing": "Your suffering is not invisible to Him."
-    },
-    "Shame & Guilt": {
-      "theme": "Shame & Guilt",
-      "headline": "Lifted, Not Crushed",
-      "opening": "Shame says you are the sum of your worst moment. Jesus offers mercy that restores dignity.",
-      "passages": [
-        {
-          "verse": "John 8:11",
-          "quote": "She said, \"No one, Lord.\" Jesus said, \"Neither do I condemn you. Go your way. From now on, sin no more.\"",
-          "context": "Mercy and a new path arrive together — without public humiliation."
-        },
-        {
-          "verse": "Luke 15:20",
-          "quote": "He arose and came to his father. But while he was still far off, his father saw him and was moved with compassion, and ran, embraced him, and kissed him.",
-          "context": "In Jesus' story, the Father runs toward the returning child."
-        },
-        {
-          "verse": "Matthew 9:13",
-          "quote": "But you go and learn what this means: 'I desire mercy, and not sacrifice,' for I came not to call the righteous, but sinners to repentance.",
-          "context": "He came for people who need mercy — that includes you."
-        }
-      ],
-      "practice": "Write the shame-story in one line, then beneath it write John 8:11's \"Neither do I condemn you.\"",
-      "closing": "You can walk forward without dragging the old name He has already refused to pin on you."
-    },
-    "Peace": {
-      "theme": "Peace",
-      "headline": "A Different Kind of Peace",
-      "opening": "Peace is not the absence of noise — it is the presence of Jesus' gift in the middle of it.",
-      "passages": [
-        {
-          "verse": "John 14:27",
-          "quote": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful.",
-          "context": "This peace is His to give, not yours to manufacture."
-        },
-        {
-          "verse": "Matthew 5:9",
-          "quote": "Blessed are the peacemakers, for they shall be called children of God.",
-          "context": "Received peace becomes offered peace."
-        },
-        {
-          "verse": "John 16:33",
-          "quote": "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.",
-          "context": "Peace \"in me\" can coexist with trouble \"in the world.\""
-        }
-      ],
-      "practice": "Breathe in for four counts, out for six, while repeating: \"My peace I give to you.\"",
-      "closing": "Receive what He is already offering."
-    },
-    "Hope": {
-      "theme": "Hope",
-      "headline": "Living Hope, Spoken Aloud",
-      "opening": "Hope is not denial. It is trust that His word outlasts what you see right now.",
-      "passages": [
-        {
-          "verse": "John 11:25–26",
-          "quote": "Jesus said to her, \"I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?\"",
-          "context": "Hope reaches past the grave and asks for trust."
-        },
-        {
-          "verse": "Matthew 28:20",
-          "quote": "Behold, I am with you always, even to the end of the age.",
-          "context": "Hope has a Person attached to it."
-        },
-        {
-          "verse": "John 16:22",
-          "quote": "Therefore you now have sorrow, but I will see you again, and your heart will rejoice, and no one will take your joy away from you.",
-          "context": "Sorrow is temporary in His timeline; joy is secured."
-        }
-      ],
-      "practice": "Speak John 11:25 aloud once as a declaration, once as a question to yourself, once as a prayer.",
-      "closing": "Hold on. The story is not finished."
-    }
-  },
-  "library": [
+  "books": [
+    "Matthew",
+    "Mark",
+    "Luke",
+    "John"
+  ],
+  "passages": [
     {
-      "theme": "Anxiety",
+      "id": "mt6-25-27",
+      "verse": "Matthew 6:25-27",
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Anxiety & Worry",
+        "Peace"
+      ],
+      "text": "Therefore I tell you, don’t be anxious for your life: what you will eat, or what you will drink; nor yet for your body, what you will wear. Isn’t life more than food, and the body more than clothing? See the birds of the sky, that they don’t sow, neither do they reap, nor gather into barns. Your heavenly Father feeds them. Aren’t you of much more value than they? Which of you by being anxious can add one moment to his lifespan?",
+      "note": null
+    },
+    {
+      "id": "mt6-34",
       "verse": "Matthew 6:34",
-      "quote": "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient."
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Anxiety & Worry",
+        "Peace"
+      ],
+      "text": "Therefore don’t be anxious for tomorrow, for tomorrow will be anxious for itself. Each day’s own evil is sufficient.",
+      "note": null
     },
     {
-      "theme": "Rest",
-      "verse": "Matthew 11:28",
-      "quote": "Come to me, all you who labor and are heavily burdened, and I will give you rest."
+      "id": "mt6-9-13",
+      "verse": "Matthew 6:9-13",
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Peace",
+        "Purpose & Direction",
+        "Forgiveness"
+      ],
+      "text": "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’",
+      "note": null
     },
     {
-      "theme": "Peace",
+      "id": "jn14-27",
       "verse": "John 14:27",
-      "quote": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful."
+      "book": "John",
+      "chapter": 14,
+      "theme": [
+        "Anxiety & Worry",
+        "Peace",
+        "Fear"
+      ],
+      "text": "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don’t let your heart be troubled, neither let it be fearful.",
+      "note": null
     },
     {
-      "theme": "Love",
-      "verse": "John 13:34",
-      "quote": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another."
+      "id": "mt11-28-30",
+      "verse": "Matthew 11:28-30",
+      "book": "Matthew",
+      "chapter": 11,
+      "theme": [
+        "Anxiety & Worry",
+        "Suffering & Pain",
+        "Peace"
+      ],
+      "text": "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
+      "note": null
     },
     {
-      "theme": "Forgiveness",
-      "verse": "Matthew 6:14",
-      "quote": "For if you forgive men their trespasses, your heavenly Father will also forgive you."
+      "id": "mt10-29-31",
+      "verse": "Matthew 10:29-31",
+      "book": "Matthew",
+      "chapter": 10,
+      "theme": [
+        "Fear",
+        "Anxiety & Worry"
+      ],
+      "text": "Aren’t two sparrows sold for an assarion coin? Not one of them falls to the ground apart from your Father’s will. But the very hairs of your head are all numbered. Therefore don’t be afraid. You are of more value than many sparrows.",
+      "note": null
     },
     {
-      "theme": "Courage",
-      "verse": "John 14:1",
-      "quote": "Don't let your heart be troubled. Believe in God. Believe also in me."
-    },
-    {
-      "theme": "Presence",
-      "verse": "Matthew 28:20",
-      "quote": "Behold, I am with you always, even to the end of the age."
-    },
-    {
-      "theme": "Mercy",
-      "verse": "Matthew 5:7",
-      "quote": "Blessed are the merciful, for they shall obtain mercy."
-    },
-    {
-      "theme": "Humility",
-      "verse": "Matthew 5:5",
-      "quote": "Blessed are the gentle, for they shall inherit the earth."
-    },
-    {
-      "theme": "Generosity",
-      "verse": "Luke 6:38",
-      "quote": "Give, and it will be given to you: good measure, pressed down, shaken together, and running over, will be given to you. For with the same measure you measure it will be measured back to you."
-    },
-    {
-      "theme": "Enemies",
-      "verse": "Matthew 5:44",
-      "quote": "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you,"
-    },
-    {
-      "theme": "Truth",
-      "verse": "John 8:32",
-      "quote": "You will know the truth, and the truth will make you free."
-    }
-  ],
-  "verses": [
-    {
-      "verse": "John 10:10",
-      "quote": "The thief only comes to steal, kill, and destroy. I came that they may have life, and may have it abundantly.",
-      "theme": "Life"
-    },
-    {
-      "verse": "John 10:11",
-      "quote": "I am the good shepherd. The good shepherd lays down his life for the sheep.",
-      "theme": "Care"
-    },
-    {
-      "verse": "John 11:25–26",
-      "quote": "Jesus said to her, \"I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?\"",
-      "theme": "Hope"
-    },
-    {
-      "verse": "John 11:35",
-      "quote": "Jesus wept.",
-      "theme": "Grief & Loss"
-    },
-    {
-      "verse": "John 13:34",
-      "quote": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another.",
-      "theme": "Love"
-    },
-    {
-      "verse": "John 13:34–35",
-      "quote": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another. By this everyone will know that you are my disciples, if you have love for one another.",
-      "theme": "Love"
-    },
-    {
-      "verse": "John 14:1",
-      "quote": "Don't let your heart be troubled. Believe in God. Believe also in me.",
-      "theme": "Anxiety & Worry"
-    },
-    {
-      "verse": "John 14:18",
-      "quote": "I will not leave you orphans. I will come to you.",
-      "theme": "Grief & Loss"
-    },
-    {
-      "verse": "John 14:27",
-      "quote": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don't let your heart be troubled, neither let it be fearful.",
-      "theme": "Peace"
-    },
-    {
-      "verse": "John 14:6",
-      "quote": "Jesus said to him, \"I am the way, the truth, and the life. No one comes to the Father, except through me.\"",
-      "theme": "Way"
-    },
-    {
-      "verse": "John 15:12",
-      "quote": "This is my commandment, that you love one another, even as I have loved you.",
-      "theme": "Love"
-    },
-    {
-      "verse": "John 15:5",
-      "quote": "I am the vine. You are the branches. He who remains in me and I in him bears much fruit, for apart from me you can do nothing.",
-      "theme": "Abide"
-    },
-    {
-      "verse": "John 15:9",
-      "quote": "Even as the Father has loved me, I also have loved you. Remain in my love.",
-      "theme": "Love"
-    },
-    {
-      "verse": "John 16:22",
-      "quote": "Therefore you now have sorrow, but I will see you again, and your heart will rejoice, and no one will take your joy away from you.",
-      "theme": "Hope"
-    },
-    {
-      "verse": "John 16:33",
-      "quote": "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.",
-      "theme": "Suffering & Pain"
-    },
-    {
-      "verse": "John 20:27",
-      "quote": "Then he said to Thomas, \"Reach here your finger, and see my hands. Reach here your hand, and put it into my side. Don't be unbelieving, but believing.\"",
-      "theme": "Faith & Doubt"
-    },
-    {
-      "verse": "John 3:16",
-      "quote": "For God so loved the world, that he gave his only born Son, that whoever believes in him should not perish, but have eternal life.",
-      "theme": "Love"
-    },
-    {
-      "verse": "John 6:35",
-      "quote": "Jesus said to them, \"I am the bread of life. Whoever comes to me will not be hungry, and whoever believes in me will never be thirsty.\"",
-      "theme": "Provision"
-    },
-    {
-      "verse": "John 8:11",
-      "quote": "She said, \"No one, Lord.\" Jesus said, \"Neither do I condemn you. Go your way. From now on, sin no more.\"",
-      "theme": "Shame & Guilt"
-    },
-    {
-      "verse": "John 8:12",
-      "quote": "I am the light of the world. He who follows me will not walk in the darkness, but will have the light of life.",
-      "theme": "Light"
-    },
-    {
-      "verse": "John 8:32",
-      "quote": "You will know the truth, and the truth will make you free.",
-      "theme": "Truth"
-    },
-    {
-      "verse": "Luke 11:9",
-      "quote": "I tell you, keep asking, and it will be given you. Keep seeking, and you will find. Keep knocking, and it will be opened to you.",
-      "theme": "Prayer"
-    },
-    {
+      "id": "lk12-32",
       "verse": "Luke 12:32",
-      "quote": "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom.",
-      "theme": "Fear"
+      "book": "Luke",
+      "chapter": 12,
+      "theme": [
+        "Fear",
+        "Hope"
+      ],
+      "text": "Don’t be afraid, little flock, for it is your Father’s good pleasure to give you the Kingdom.",
+      "note": null
     },
     {
-      "verse": "Luke 12:6–7",
-      "quote": "Aren't five sparrows sold for two assaria coins? Not one of them is forgotten by God. But the very hairs of your head are all numbered. Therefore don't be afraid. You are of more value than many sparrows.",
-      "theme": "Belonging"
+      "id": "jn16-33",
+      "verse": "John 16:33",
+      "book": "John",
+      "chapter": 16,
+      "theme": [
+        "Fear",
+        "Hope",
+        "Suffering & Pain"
+      ],
+      "text": "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.",
+      "note": null
     },
     {
-      "verse": "Luke 12:7",
-      "quote": "But the very hairs of your head are all numbered. Therefore don't be afraid. You are of more value than many sparrows.",
-      "theme": "Belonging"
-    },
-    {
-      "verse": "Luke 15:20",
-      "quote": "He arose and came to his father. But while he was still far off, his father saw him and was moved with compassion, and ran, embraced him, and kissed him.",
-      "theme": "Shame & Guilt"
-    },
-    {
-      "verse": "Luke 23:34",
-      "quote": "Father, forgive them, for they don't know what they are doing.",
-      "theme": "Forgiveness"
-    },
-    {
-      "verse": "Luke 6:27–28",
-      "quote": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
-      "theme": "Mercy"
-    },
-    {
-      "verse": "Luke 6:31",
-      "quote": "As you would like people to do to you, do exactly so to them.",
-      "theme": "Golden Rule"
-    },
-    {
-      "verse": "Luke 6:36",
-      "quote": "Therefore be merciful, even as your Father is also merciful.",
-      "theme": "Mercy"
-    },
-    {
-      "verse": "Luke 6:38",
-      "quote": "Give, and it will be given to you: good measure, pressed down, shaken together, and running over, will be given to you. For with the same measure you measure it will be measured back to you.",
-      "theme": "Generosity"
-    },
-    {
-      "verse": "Mark 10:27",
-      "quote": "Jesus, looking at them, said, \"With men it is impossible, but not with God, for all things are possible with God.\"",
-      "theme": "Faith"
-    },
-    {
-      "verse": "Mark 12:30–31",
-      "quote": "You shall love the Lord your God with all your heart, with all your soul, with all your mind, and with all your strength.' This is the first commandment. The second is like this: 'You shall love your neighbor as yourself.' There is no other commandment greater than these.",
-      "theme": "Love"
-    },
-    {
-      "verse": "Mark 9:23",
-      "quote": "Jesus said to him, \"If you can believe, all things are possible to him who believes.\"",
-      "theme": "Faith & Doubt"
-    },
-    {
-      "verse": "Matthew 11:28",
-      "quote": "Come to me, all you who labor and are heavily burdened, and I will give you rest.",
-      "theme": "Rest"
-    },
-    {
-      "verse": "Matthew 11:28–30",
-      "quote": "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
-      "theme": "Rest"
-    },
-    {
-      "verse": "Matthew 11:29–30",
-      "quote": "Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
-      "theme": "Rest"
-    },
-    {
-      "verse": "Matthew 14:27",
-      "quote": "But immediately Jesus spoke to them, saying, \"Cheer up! It is I! Don't be afraid.\"",
-      "theme": "Fear"
-    },
-    {
-      "verse": "Matthew 17:20",
-      "quote": "He said to them, \"Because of your unbelief. For most certainly I tell you, if you have faith as a grain of mustard seed, you will tell this mountain, 'Move from here to there,' and it will move; and nothing will be impossible for you.\"",
-      "theme": "Faith & Doubt"
-    },
-    {
-      "verse": "Matthew 18:15",
-      "quote": "If your brother sins against you, go, show him his fault between you and him alone. If he listens to you, you have gained back your brother.",
-      "theme": "Conflict & Relationships"
-    },
-    {
-      "verse": "Matthew 18:21–22",
-      "quote": "Then Peter came and said to him, \"Lord, how often shall my brother sin against me, and I forgive him? Until seven times?\" Jesus said to him, \"I don't tell you until seven times, but, until seventy times seven.\"",
-      "theme": "Forgiveness"
-    },
-    {
-      "verse": "Matthew 19:14",
-      "quote": "But Jesus said, \"Allow the little children, and don't forbid them to come to me; for the Kingdom of Heaven belongs to ones like these.\"",
-      "theme": "Children"
-    },
-    {
-      "verse": "Matthew 19:26",
-      "quote": "Looking at them, Jesus said, \"With men this is impossible, but with God all things are possible.\"",
-      "theme": "Faith"
-    },
-    {
-      "verse": "Matthew 22:37–39",
-      "quote": "Jesus said to him, \"'You shall love the Lord your God with all your heart, with all your soul, and with all your mind.' This is the first and great commandment. A second likewise is this, 'You shall love your neighbor as yourself.'\"",
-      "theme": "Purpose & Direction"
-    },
-    {
-      "verse": "Matthew 28:20",
-      "quote": "Behold, I am with you always, even to the end of the age.",
-      "theme": "Loneliness"
-    },
-    {
-      "verse": "Matthew 5:14",
-      "quote": "You are the light of the world. A city located on a hill can't be hidden.",
-      "theme": "Purpose & Direction"
-    },
-    {
-      "verse": "Matthew 5:16",
-      "quote": "Even so, let your light shine before men, that they may see your good works and glorify your Father who is in heaven.",
-      "theme": "Witness"
-    },
-    {
-      "verse": "Matthew 5:3",
-      "quote": "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven.",
-      "theme": "Beatitudes"
-    },
-    {
+      "id": "mt5-4",
       "verse": "Matthew 5:4",
-      "quote": "Blessed are those who mourn, for they shall be comforted.",
-      "theme": "Grief & Loss"
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Grief & Loss",
+        "Hope"
+      ],
+      "text": "Blessed are those who mourn, for they shall be comforted.",
+      "note": null
     },
     {
+      "id": "jn14-1-3",
+      "verse": "John 14:1-3",
+      "book": "John",
+      "chapter": 14,
+      "theme": [
+        "Grief & Loss",
+        "Hope",
+        "Fear"
+      ],
+      "text": "Don’t let your heart be troubled. Believe in God. Believe also in me. In my Father’s house are many homes. If it weren’t so, I would have told you. I am going to prepare a place for you. If I go and prepare a place for you, I will come again and will receive you to myself; that where I am, you may be there also.",
+      "note": null
+    },
+    {
+      "id": "jn11-25-26",
+      "verse": "John 11:25-26",
+      "book": "John",
+      "chapter": 11,
+      "theme": [
+        "Grief & Loss",
+        "Hope",
+        "Faith & Doubt"
+      ],
+      "text": "I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?",
+      "note": null
+    },
+    {
+      "id": "mt6-14-15",
+      "verse": "Matthew 6:14-15",
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Forgiveness",
+        "Shame & Guilt"
+      ],
+      "text": "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don’t forgive men their trespasses, neither will your Father forgive your trespasses.",
+      "note": null
+    },
+    {
+      "id": "mt18-21-22",
+      "verse": "Matthew 18:21-22",
+      "book": "Matthew",
+      "chapter": 18,
+      "theme": [
+        "Forgiveness",
+        "Conflict & Relationships"
+      ],
+      "text": "I don’t tell you until seven times, but, until seventy times seven.",
+      "note": null
+    },
+    {
+      "id": "lk23-34",
+      "verse": "Luke 23:34",
+      "book": "Luke",
+      "chapter": 23,
+      "theme": [
+        "Forgiveness",
+        "Suffering & Pain"
+      ],
+      "text": "Father, forgive them, for they don’t know what they are doing.",
+      "note": null
+    },
+    {
+      "id": "jn8-10-11",
+      "verse": "John 8:10-11",
+      "book": "John",
+      "chapter": 8,
+      "theme": [
+        "Forgiveness",
+        "Shame & Guilt"
+      ],
+      "text": "Woman, where are your accusers? Did no one condemn you? … Neither do I condemn you. Go your way. From now on, sin no more.",
+      "note": null
+    },
+    {
+      "id": "mt28-20",
+      "verse": "Matthew 28:20",
+      "book": "Matthew",
+      "chapter": 28,
+      "theme": [
+        "Loneliness",
+        "Hope",
+        "Faith & Doubt"
+      ],
+      "text": "Behold, I am with you always, even to the end of the age.",
+      "note": null
+    },
+    {
+      "id": "jn14-18",
+      "verse": "John 14:18",
+      "book": "John",
+      "chapter": 14,
+      "theme": [
+        "Loneliness",
+        "Hope"
+      ],
+      "text": "I will not leave you orphans. I will come to you.",
+      "note": null
+    },
+    {
+      "id": "jn15-9",
+      "verse": "John 15:9",
+      "book": "John",
+      "chapter": 15,
+      "theme": [
+        "Loneliness",
+        "Hope",
+        "Peace"
+      ],
+      "text": "Even as the Father has loved me, I also have loved you. Remain in my love.",
+      "note": null
+    },
+    {
+      "id": "mt5-44",
       "verse": "Matthew 5:44",
-      "quote": "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you,",
-      "theme": "Conflict & Relationships"
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Conflict & Relationships",
+        "Forgiveness"
+      ],
+      "text": "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you,",
+      "note": null
     },
     {
-      "verse": "Matthew 5:5",
-      "quote": "Blessed are the gentle, for they shall inherit the earth.",
-      "theme": "Humility"
+      "id": "mt7-1-3",
+      "verse": "Matthew 7:1-3",
+      "book": "Matthew",
+      "chapter": 7,
+      "theme": [
+        "Conflict & Relationships",
+        "Shame & Guilt"
+      ],
+      "text": "Don’t judge, so that you won’t be judged. For with whatever judgment you judge, you will be judged; and with whatever measure you measure, it will be measured to you. Why do you see the speck that is in your brother’s eye, but don’t consider the beam that is in your own eye?",
+      "note": null
     },
     {
-      "verse": "Matthew 5:6",
-      "quote": "Blessed are those who hunger and thirst for righteousness, for they shall be filled.",
-      "theme": "Beatitudes"
-    },
-    {
-      "verse": "Matthew 5:7",
-      "quote": "Blessed are the merciful, for they shall obtain mercy.",
-      "theme": "Mercy"
-    },
-    {
-      "verse": "Matthew 5:8",
-      "quote": "Blessed are the pure in heart, for they shall see God.",
-      "theme": "Beatitudes"
-    },
-    {
-      "verse": "Matthew 5:9",
-      "quote": "Blessed are the peacemakers, for they shall be called children of God.",
-      "theme": "Conflict & Relationships"
-    },
-    {
-      "verse": "Matthew 6:14",
-      "quote": "For if you forgive men their trespasses, your heavenly Father will also forgive you.",
-      "theme": "Forgiveness"
-    },
-    {
-      "verse": "Matthew 6:14–15",
-      "quote": "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don't forgive men their trespasses, neither will your Father forgive your trespasses.",
-      "theme": "Forgiveness"
-    },
-    {
-      "verse": "Matthew 6:26",
-      "quote": "See the birds of the sky, that they don't sow, neither do they reap, nor gather into barns. Your heavenly Father feeds them. Aren't you of much more value than they?",
-      "theme": "Anxiety & Worry"
-    },
-    {
-      "verse": "Matthew 6:31–33",
-      "quote": "Therefore don't be anxious, saying, 'What will we eat?', 'What will we drink?' or, 'With what will we be clothed?' For the Gentiles seek after all these things; for your heavenly Father knows that you need all these things. But seek first God's Kingdom and his righteousness; and all these things will be given to you as well.",
-      "theme": "Trust"
-    },
-    {
-      "verse": "Matthew 6:33",
-      "quote": "But seek first God's Kingdom and his righteousness; and all these things will be given to you as well.",
-      "theme": "Purpose & Direction"
-    },
-    {
-      "verse": "Matthew 6:34",
-      "quote": "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient.",
-      "theme": "Trust"
-    },
-    {
-      "verse": "Matthew 6:9–13",
-      "quote": "Pray like this: 'Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.'",
-      "theme": "Prayer"
-    },
-    {
+      "id": "mt7-12",
       "verse": "Matthew 7:12",
-      "quote": "Therefore, whatever you desire for men to do to you, you shall also do to them; for this is the law and the prophets.",
-      "theme": "Golden Rule"
+      "book": "Matthew",
+      "chapter": 7,
+      "theme": [
+        "Conflict & Relationships"
+      ],
+      "text": "Therefore, whatever you desire for men to do to you, you shall also do to them; for this is the law and the prophets.",
+      "note": null
     },
     {
-      "verse": "Matthew 7:7",
-      "quote": "Ask, and it will be given you. Seek, and you will find. Knock, and it will be opened for you.",
-      "theme": "Prayer"
+      "id": "jn13-34-35",
+      "verse": "John 13:34-35",
+      "book": "John",
+      "chapter": 13,
+      "theme": [
+        "Conflict & Relationships",
+        "Loneliness"
+      ],
+      "text": "A new commandment I give to you, that you love one another. Just as I have loved you, you also love one another. By this everyone will know that you are my disciples, if you have love for one another.",
+      "note": null
     },
     {
-      "verse": "Matthew 9:13",
-      "quote": "But you go and learn what this means: 'I desire mercy, and not sacrifice,' for I came not to call the righteous, but sinners to repentance.",
-      "theme": "Shame & Guilt"
+      "id": "mt5-14-16",
+      "verse": "Matthew 5:14-16",
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Purpose & Direction",
+        "Hope"
+      ],
+      "text": "You are the light of the world. A city located on a hill can’t be hidden. Neither do you light a lamp and put it under a measuring basket, but on a stand; and it shines to all who are in the house. Even so, let your light shine before men, that they may see your good works and glorify your Father who is in heaven.",
+      "note": null
+    },
+    {
+      "id": "mt6-33",
+      "verse": "Matthew 6:33",
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Purpose & Direction",
+        "Anxiety & Worry"
+      ],
+      "text": "But seek first God’s Kingdom and his righteousness; and all these things will be given to you as well.",
+      "note": null
+    },
+    {
+      "id": "mt22-37-39",
+      "verse": "Matthew 22:37-39",
+      "book": "Matthew",
+      "chapter": 22,
+      "theme": [
+        "Purpose & Direction",
+        "Conflict & Relationships"
+      ],
+      "text": "‘You shall love the Lord your God with all your heart, with all your soul, and with all your mind.’ This is the first and great commandment. A second likewise is this, ‘You shall love your neighbor as yourself.’",
+      "note": null
+    },
+    {
+      "id": "jn15-16",
+      "verse": "John 15:16",
+      "book": "John",
+      "chapter": 15,
+      "theme": [
+        "Purpose & Direction"
+      ],
+      "text": "You didn’t choose me, but I chose you and appointed you, that you should go and bear fruit, and that your fruit should remain; that whatever you will ask of the Father in my name, he may give it to you.",
+      "note": null
+    },
+    {
+      "id": "mk9-23",
+      "verse": "Mark 9:23",
+      "book": "Mark",
+      "chapter": 9,
+      "theme": [
+        "Faith & Doubt"
+      ],
+      "text": "If you can believe, all things are possible to him who believes.",
+      "note": null
+    },
+    {
+      "id": "mt17-20",
+      "verse": "Matthew 17:20",
+      "book": "Matthew",
+      "chapter": 17,
+      "theme": [
+        "Faith & Doubt",
+        "Hope"
+      ],
+      "text": "Because of your unbelief. For most certainly I tell you, if you have faith as a grain of mustard seed, you will tell this mountain, ‘Move from here to there,’ and it will move; and nothing will be impossible for you.",
+      "note": null
+    },
+    {
+      "id": "jn20-29",
+      "verse": "John 20:29",
+      "book": "John",
+      "chapter": 20,
+      "theme": [
+        "Faith & Doubt"
+      ],
+      "text": "Because you have seen me, you have believed. Blessed are those who have not seen and have believed.",
+      "note": null
+    },
+    {
+      "id": "mt5-10-12",
+      "verse": "Matthew 5:10-12",
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Suffering & Pain",
+        "Hope"
+      ],
+      "text": "Blessed are those who have been persecuted for righteousness’ sake, for theirs is the Kingdom of Heaven. Blessed are you when people reproach you, persecute you, and say all kinds of evil against you falsely, for my sake. Rejoice, and be exceedingly glad, for great is your reward in heaven. For that is how they persecuted the prophets who were before you.",
+      "note": null
+    },
+    {
+      "id": "lk6-21",
+      "verse": "Luke 6:21",
+      "book": "Luke",
+      "chapter": 6,
+      "theme": [
+        "Suffering & Pain",
+        "Hope",
+        "Grief & Loss"
+      ],
+      "text": "Blessed are you who hunger now, for you will be filled. Blessed are you who weep now, for you will laugh.",
+      "note": null
+    },
+    {
+      "id": "lk15-20-24",
+      "verse": "Luke 15:20-24",
+      "book": "Luke",
+      "chapter": 15,
+      "theme": [
+        "Shame & Guilt",
+        "Forgiveness",
+        "Hope"
+      ],
+      "text": "But while he was still far off, his father saw him and was moved with compassion, and ran, fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven and in your sight. I am no longer worthy to be called your son.’ But the father said to his servants, ‘Bring out the best robe and put it on him. Put a ring on his hand and sandals on his feet. Bring the fattened calf, kill it, and let’s eat and celebrate; for this, my son, was dead and is alive again. He was lost and is found.’",
+      "note": "Parable of the Lost Son — Jesus teaching in narrative form"
+    },
+    {
+      "id": "lk18-13-14",
+      "verse": "Luke 18:13-14",
+      "book": "Luke",
+      "chapter": 18,
+      "theme": [
+        "Shame & Guilt",
+        "Faith & Doubt"
+      ],
+      "text": "But the tax collector, standing far away, wouldn’t even lift up his eyes to heaven, but beat his breast, saying, ‘God, be merciful to me, a sinner!’ I tell you, this man went down to his house justified rather than the other; for everyone who exalts himself will be humbled, but he who humbles himself will be exalted.",
+      "note": "Parable of the Pharisee and the Tax Collector"
+    },
+    {
+      "id": "mt5-9",
+      "verse": "Matthew 5:9",
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Peace",
+        "Conflict & Relationships"
+      ],
+      "text": "Blessed are the peacemakers, for they shall be called children of God.",
+      "note": null
+    },
+    {
+      "id": "jn14-1",
+      "verse": "John 14:1",
+      "book": "John",
+      "chapter": 14,
+      "theme": [
+        "Peace",
+        "Fear",
+        "Anxiety & Worry"
+      ],
+      "text": "Don’t let your heart be troubled. Believe in God. Believe also in me.",
+      "note": null
+    },
+    {
+      "id": "mt7-7-8",
+      "verse": "Matthew 7:7-8",
+      "book": "Matthew",
+      "chapter": 7,
+      "theme": [
+        "Hope",
+        "Faith & Doubt",
+        "Purpose & Direction"
+      ],
+      "text": "Ask, and it will be given you. Seek, and you will find. Knock, and it will be opened for you. For everyone who asks receives. He who seeks finds. To him who knocks it will be opened.",
+      "note": null
+    },
+    {
+      "id": "jn10-10",
+      "verse": "John 10:10",
+      "book": "John",
+      "chapter": 10,
+      "theme": [
+        "Hope",
+        "Purpose & Direction"
+      ],
+      "text": "The thief only comes to steal, kill, and destroy. I came that they may have life, and may have it abundantly.",
+      "note": null
+    },
+    {
+      "id": "mt28-18-19",
+      "verse": "Matthew 28:18-19",
+      "book": "Matthew",
+      "chapter": 28,
+      "theme": [
+        "Hope",
+        "Purpose & Direction"
+      ],
+      "text": "All authority has been given to me in heaven and on earth. Go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit,",
+      "note": null
+    },
+    {
+      "id": "mt6-19-21",
+      "verse": "Matthew 6:19-21",
+      "book": "Matthew",
+      "chapter": 6,
+      "theme": [
+        "Purpose & Direction",
+        "Anxiety & Worry"
+      ],
+      "text": "Don’t lay up treasures for yourselves on the earth, where moth and rust consume, and where thieves break through and steal; but lay up for yourselves treasures in heaven, where neither moth nor rust consume, and where thieves don’t break through and steal; for where your treasure is, there your heart will be also.",
+      "note": null
+    },
+    {
+      "id": "lk6-38",
+      "verse": "Luke 6:38",
+      "book": "Luke",
+      "chapter": 6,
+      "theme": [
+        "Conflict & Relationships",
+        "Hope"
+      ],
+      "text": "Give, and it will be given to you: good measure, pressed down, shaken together, and running over, will be given to you. For with the same measure you measure it will be measured back to you.",
+      "note": null
+    },
+    {
+      "id": "mt5-3-6",
+      "verse": "Matthew 5:3-6",
+      "book": "Matthew",
+      "chapter": 5,
+      "theme": [
+        "Hope",
+        "Purpose & Direction",
+        "Suffering & Pain"
+      ],
+      "text": "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven. Blessed are those who mourn, for they shall be comforted. Blessed are the gentle, for they shall inherit the earth. Blessed are those who hunger and thirst for righteousness, for they shall be filled.",
+      "note": null
+    },
+    {
+      "id": "mk4-39",
+      "verse": "Mark 4:39",
+      "book": "Mark",
+      "chapter": 4,
+      "theme": [
+        "Fear",
+        "Peace",
+        "Anxiety & Worry"
+      ],
+      "text": "He awoke and rebuked the wind, and said to the sea, “Peace! Be still!” The wind ceased and there was a great calm.",
+      "note": "Jesus speaks to the storm — narrative with His command"
+    },
+    {
+      "id": "mk5-36",
+      "verse": "Mark 5:36",
+      "book": "Mark",
+      "chapter": 5,
+      "theme": [
+        "Fear",
+        "Faith & Doubt",
+        "Grief & Loss"
+      ],
+      "text": "Don’t be afraid, only believe.",
+      "note": null
+    },
+    {
+      "id": "mk10-14-15",
+      "verse": "Mark 10:14-15",
+      "book": "Mark",
+      "chapter": 10,
+      "theme": [
+        "Hope",
+        "Faith & Doubt",
+        "Purpose & Direction"
+      ],
+      "text": "Allow the little children to come to me! Don’t forbid them, for God’s Kingdom belongs to such as these. Most certainly I tell you, whoever will not receive God’s Kingdom like a little child, he will in no way enter into it.",
+      "note": null
+    },
+    {
+      "id": "lk10-41-42",
+      "verse": "Luke 10:41-42",
+      "book": "Luke",
+      "chapter": 10,
+      "theme": [
+        "Anxiety & Worry",
+        "Peace",
+        "Purpose & Direction"
+      ],
+      "text": "Martha, Martha, you are anxious and troubled about many things, but one thing is needed. Mary has chosen the good part, which will not be taken away from her.",
+      "note": null
+    },
+    {
+      "id": "lk6-27-28",
+      "verse": "Luke 6:27-28",
+      "book": "Luke",
+      "chapter": 6,
+      "theme": [
+        "Conflict & Relationships",
+        "Forgiveness"
+      ],
+      "text": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
+      "note": null
+    },
+    {
+      "id": "jn3-16-17",
+      "verse": "John 3:16-17",
+      "book": "John",
+      "chapter": 3,
+      "theme": [
+        "Hope",
+        "Faith & Doubt",
+        "Shame & Guilt"
+      ],
+      "text": "For God so loved the world, that he gave his only born Son, that whoever believes in him should not perish, but have eternal life. For God didn’t send his Son into the world to judge the world, but that the world should be saved through him.",
+      "note": null
+    },
+    {
+      "id": "jn6-35",
+      "verse": "John 6:35",
+      "book": "John",
+      "chapter": 6,
+      "theme": [
+        "Hope",
+        "Loneliness",
+        "Purpose & Direction"
+      ],
+      "text": "I am the bread of life. He who comes to me will not be hungry, and he who believes in me will never be thirsty.",
+      "note": null
+    },
+    {
+      "id": "jn8-12",
+      "verse": "John 8:12",
+      "book": "John",
+      "chapter": 8,
+      "theme": [
+        "Hope",
+        "Fear",
+        "Purpose & Direction"
+      ],
+      "text": "I am the light of the world. He who follows me will not walk in the darkness, but will have the light of life.",
+      "note": null
+    },
+    {
+      "id": "jn15-4-5",
+      "verse": "John 15:4-5",
+      "book": "John",
+      "chapter": 15,
+      "theme": [
+        "Purpose & Direction",
+        "Faith & Doubt",
+        "Loneliness"
+      ],
+      "text": "Remain in me, and I in you. As the branch can’t bear fruit by itself unless it remains in the vine, so neither can you, unless you remain in me. I am the vine. You are the branches. He who remains in me and I in him bears much fruit, for apart from me you can do nothing.",
+      "note": null
+    },
+    {
+      "id": "mt9-12-13",
+      "verse": "Matthew 9:12-13",
+      "book": "Matthew",
+      "chapter": 9,
+      "theme": [
+        "Shame & Guilt",
+        "Hope",
+        "Suffering & Pain"
+      ],
+      "text": "Those who are healthy have no need for a physician, but those who are sick do. But you go and learn what this means: ‘I desire mercy, and not sacrifice,’ for I came not to call the righteous, but sinners to repentance.",
+      "note": null
+    },
+    {
+      "id": "mt13-31-32",
+      "verse": "Matthew 13:31-32",
+      "book": "Matthew",
+      "chapter": 13,
+      "theme": [
+        "Hope",
+        "Faith & Doubt",
+        "Purpose & Direction"
+      ],
+      "text": "The Kingdom of Heaven is like a grain of mustard seed which a man took, and sowed in his field, which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs and becomes a tree, so that the birds of the air come and lodge in its branches.",
+      "note": "Parable of the Mustard Seed"
+    },
+    {
+      "id": "mt18-12-14",
+      "verse": "Matthew 18:12-14",
+      "book": "Matthew",
+      "chapter": 18,
+      "theme": [
+        "Loneliness",
+        "Hope",
+        "Shame & Guilt"
+      ],
+      "text": "What do you think? If a man has one hundred sheep, and one of them goes astray, doesn’t he leave the ninety-nine, go to the mountains, and seek that which has gone astray? If he finds it, most certainly I tell you, he rejoices over it more than over the ninety-nine which have not gone astray. Even so it is not the will of your Father who is in heaven that one of these little ones should perish.",
+      "note": "Parable of the Lost Sheep"
+    },
+    {
+      "id": "lk10-33-37",
+      "verse": "Luke 10:33-37",
+      "book": "Luke",
+      "chapter": 10,
+      "theme": [
+        "Conflict & Relationships",
+        "Purpose & Direction",
+        "Suffering & Pain"
+      ],
+      "text": "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him. On the next day, when he departed, he took out two denarii, gave them to the host, and said to him, ‘Take care of him. Whatever you spend beyond that, I will repay you when I return.’ Now which of these three do you think seemed to be a neighbor to him who fell among the robbers?” He said, “He who showed mercy on him.” Then Jesus said to him, “Go and do likewise.”",
+      "note": "Parable of the Good Samaritan"
+    },
+    {
+      "id": "jn10-11-14",
+      "verse": "John 10:11-14",
+      "book": "John",
+      "chapter": 10,
+      "theme": [
+        "Loneliness",
+        "Hope",
+        "Fear"
+      ],
+      "text": "I am the good shepherd. The good shepherd lays down his life for the sheep. He who is a hired hand and not a shepherd, who doesn’t own the sheep, sees the wolf coming, leaves the sheep, and flees. The wolf snatches the sheep and scatters them. The hired hand flees because he is a hired hand and doesn’t care for the sheep. I am the good shepherd. I know my own, and I’m known by my own.",
+      "note": "Parable / figure of the Good Shepherd"
     }
   ]
 }
