@@ -2107,12 +2107,12 @@ body::before {
   body {
     background:
       radial-gradient(900px 480px at 50% 0%, rgba(143,29,29,.06), transparent 50%),
-      #E8E2D6;
+      color-mix(in srgb, var(--bg) 78%, #C9BEB0);
   }
   :root[data-theme="dark"] body {
     background:
       radial-gradient(900px 480px at 50% 0%, rgba(143,29,29,.10), transparent 50%),
-      #16120F;
+      color-mix(in srgb, var(--bg) 86%, #000);
   }
   .app {
     max-width: 480px;
@@ -2149,7 +2149,7 @@ body::before {
 </div>
 
 <!-- ════════ APP ════════ -->
-<div class="app" id="app">
+<div class="app" id="app" hidden>
 
   <!-- Header -->
   <header class="header">
@@ -2648,7 +2648,9 @@ function completeOnboarding() {
 }
 
 function startApp() {
-  document.getElementById('app').style.display = '';
+  const app = document.getElementById('app');
+  app.hidden = false;
+  app.style.display = '';
   applySettings();
   applyHourPaper();
   updateStreak();
@@ -3853,6 +3855,17 @@ function closeSit() {
 }
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
+  const crisis = document.getElementById('crisis-modal');
+  if (crisis && crisis.classList.contains('on')) {
+    const close = document.getElementById('crisis-close');
+    if (close) close.click();
+    return;
+  }
+  if (typeof closeSettings === 'function') closeSettings();
+  if (typeof closeFolio === 'function') closeFolio();
+  if (typeof closeBlessing === 'function') closeBlessing();
+  if (typeof closeShareModal === 'function') closeShareModal();
+  if (typeof closePathClose === 'function') closePathClose();
   closeSit();
   closeLectio();
 });
