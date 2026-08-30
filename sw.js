@@ -1,4 +1,4 @@
-const CACHE = 'rla-v13-amen';
+const CACHE = 'rla-v14-folio';
 const PRECACHE = [
   '/',
   '/index.html',

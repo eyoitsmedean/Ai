@@ -1308,6 +1308,8 @@ textarea { font-family: var(--font-ui); }
   --bg-2: #F1EBDD;
 }
 :root[data-season="christmas"] { --bg: #F6F0EA; --bg-2: #EFE4DA; }
+:root:not([data-theme="dark"])[data-hour="vespers"] { --bg: #F4EEE4; --bg-2: #EBE4D8; }
+:root:not([data-theme="dark"])[data-hour="night"] { --bg: #EFE8DC; --bg-2: #E6DFD2; }
 .grace-note {
   font-size: calc(11.5px * var(--scale));
   color: var(--text-3); padding: 0 18px 8px; line-height: 1.4;
@@ -1647,6 +1649,158 @@ body::before {
   border-radius: 50%;
 }
 .sit-verb:hover { opacity: .72; }
+.word-verbs { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: center; }
+.word-verbs .sit-verb, .word-verbs .hear-verb { margin-top: 18px; }
+.hear-verb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.hear-verb::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--crimson);
+}
+.hear-verb.on, .hear-verb[aria-pressed="true"] { color: var(--crimson); }
+.hear-rule {
+  margin-top: 14px;
+  height: 1px;
+  background: var(--border);
+  overflow: hidden;
+}
+.hear-rule i {
+  display: block;
+  height: 1px;
+  width: 0;
+  background: var(--crimson);
+}
+.flyleaf {
+  margin: 2px 18px 8px;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--border);
+}
+.flyleaf-kicker {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+.flyleaf-line {
+  font-family: var(--font-disp);
+  font-size: clamp(22px, 5.4vw, 30px);
+  font-weight: 500;
+  letter-spacing: -.028em;
+  line-height: 1.25;
+  color: var(--text-1);
+  max-width: 16ch;
+}
+.flyleaf-line.from-him { color: var(--crimson); }
+.flyleaf-cite {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.folio-overlay {
+  position: fixed; inset: 0; z-index: 140;
+  display: none;
+  flex-direction: column;
+  background: #F6F3EC;
+  padding: 20px 22px 28px;
+}
+.folio-overlay.on { display: flex; }
+:root[data-theme="dark"] .folio-overlay { background: #1F1A16; }
+.folio-sheet {
+  flex: 1;
+  overflow: auto;
+  max-width: 420px;
+  margin: 36px auto 0;
+  padding: 8px 8px 24px;
+}
+.folio-mark {
+  font-family: var(--font-disp);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--crimson);
+  width: 48px; height: 48px;
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+}
+.folio-title {
+  font-family: var(--font-disp);
+  font-size: clamp(28px, 7vw, 36px);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.folio-month {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 28px;
+}
+.folio-slip {
+  padding: 22px 0 4px;
+  border-top: 1px solid var(--border);
+}
+.folio-kicker {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+.folio-keep {
+  font-family: var(--font-disp);
+  font-size: 18px;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.folio-quote {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--crimson);
+  margin-bottom: 8px;
+}
+.folio-cite {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.folio-colophon {
+  margin-top: 28px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-3);
+}
+.folio-actions { display: flex; justify-content: center; padding-top: 8px; }
 @keyframes sitBreath {
   0%, 100% { transform: scale(.86); opacity: .45; }
   50% { transform: scale(1.08); opacity: 1; }
@@ -1751,7 +1905,7 @@ body::before {
   font-size: 14px;
   color: var(--text-3);
 }
-.journal-tools { padding: 0 4px 12px; }
+.journal-tools { padding: 0 4px 12px; display: flex; gap: 8px; flex-wrap: wrap; }
 #install-btn {
   display: none;
   padding: 6px 11px;
@@ -1887,6 +2041,7 @@ body::before {
   .sit-breath { animation: none; }
   .sit-overlay.on .sit-progress i { animation: none; width: 100%; }
   .lectio-overlay.on .sit-progress i { animation: none; width: 100%; }
+  .hear-rule i { transition: none !important; }
   .page { transition: none; }
 }
 
@@ -1971,6 +2126,11 @@ body::before {
         <h1 class="page-hd-title">Today’s <em>light</em></h1>
         <p class="path-rail" id="path-rail" hidden></p>
       </div>
+      <aside class="flyleaf" id="flyleaf" hidden>
+        <p class="flyleaf-kicker">You are carrying</p>
+        <p class="flyleaf-line" id="flyleaf-line"></p>
+        <p class="flyleaf-cite" id="flyleaf-cite"></p>
+      </aside>
 
       <div class="section-label">Daily Affirmation</div>
       <div class="card card-crimson" id="aff-card">
@@ -2027,7 +2187,11 @@ body::before {
             <div class="blockquote" id="word-passage"></div>
             <div class="word-verse-label" id="word-verse"></div>
             <div class="word-reflection" id="word-reflection"></div>
-            <button class="sit-verb" type="button" onclick="openLectio()">Take this slowly</button>
+            <div class="word-verbs">
+              <button class="sit-verb" type="button" onclick="openLectio()">Take this slowly</button>
+              <button class="hear-verb" type="button" id="hear-word-btn" aria-pressed="false" onclick="hearPassage('word')">Hear this</button>
+            </div>
+            <div class="hear-rule" id="hear-rule" hidden aria-hidden="true"><i></i></div>
             <p class="lectio-done" id="lectio-done" hidden>You sat with these words today.</p>
             <p class="waiting-slip" id="waiting-slip" hidden>The page is still here when you are ready.</p>
             <div class="card-actions dark-sep">
@@ -2111,7 +2275,11 @@ body::before {
           <div class="practice-text" id="enc-practice"></div>
         </div>
         <div class="enc-closing" id="enc-closing"></div>
-        <button class="sit-verb" type="button" onclick="openLectio('enc')">Take this slowly</button>
+        <div class="word-verbs">
+          <button class="sit-verb" type="button" onclick="openLectio('enc')">Take this slowly</button>
+          <button class="hear-verb" type="button" id="hear-enc-btn" aria-pressed="false" onclick="hearPassage('enc')">Hear this</button>
+        </div>
+        <div class="hear-rule" id="hear-rule-enc" hidden aria-hidden="true"><i></i></div>
         <div style="margin-top:16px;display:flex;gap:8px">
           <button class="action-btn-dark" id="enc-save-btn" onclick="toggleSave('enc')">
             <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
@@ -2177,8 +2345,9 @@ body::before {
           <button type="submit">Keep</button>
         </div>
       </form>
-      <div class="journal-tools" id="journal-tools" hidden>
-        <button type="button" class="chat-tool-btn" onclick="exportCommonplace()">Export Markdown</button>
+      <div class="journal-tools" id="journal-tools">
+        <button type="button" class="chat-tool-btn" onclick="openFolio()">Print this month</button>
+        <button type="button" class="chat-tool-btn" id="export-md-btn" hidden onclick="exportCommonplace()">Export Markdown</button>
       </div>
       <div id="journal-list"></div>
     </div>
@@ -2247,7 +2416,7 @@ body::before {
   </div>
   <div class="sheet-about">
     <p><strong>The Red Letter Advisor</strong> answers every question exclusively from the direct words of Jesus Christ as recorded in Matthew, Mark, Luke, and John — the passages printed in red in many Bible editions. No other scripture, no outside commentary.</p>
-    <p style="margin-top:10px">Citations are sealed against a local Gospel index (KJV curated + WEB corpus). If a line cannot be confirmed, the page will say so. Crisis help: <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a>.</p>
+    <p style="margin-top:10px">Citations are sealed against a local Gospel index (KJV curated + WEB corpus). If a line cannot be confirmed, the page will say so. A voice may read the red letters on this device — nothing leaves the page. Crisis help: <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a>.</p>
   </div>
 </div>
 
@@ -2301,6 +2470,8 @@ body::before {
     <p class="lectio-kicker">Read</p>
     <p class="sit-quote" id="lectio-quote"></p>
     <p class="sit-ref" id="lectio-ref"></p>
+    <button class="hear-verb" type="button" id="hear-lectio-btn" aria-pressed="false" onclick="hearPassage('lectio')">Hear this</button>
+    <div class="hear-rule" id="hear-rule-lectio" hidden aria-hidden="true"><i></i></div>
     <button type="button" class="lectio-next" onclick="lectioGo(1)">Continue</button>
   </div>
   <div class="lectio-room" id="lectio-room-1">
@@ -2329,6 +2500,14 @@ body::before {
 
 <div class="amen" id="amen" aria-hidden="true">
   <div class="amen-word">Amen</div>
+</div>
+
+<div class="folio-overlay" id="folio-overlay" aria-label="Letterpress folio">
+  <button type="button" class="sit-close" onclick="closeFolio()">Close</button>
+  <div class="folio-sheet" id="folio-sheet"></div>
+  <div class="folio-actions">
+    <button type="button" class="lectio-next" onclick="printFolioSheet()">Print</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -2379,9 +2558,11 @@ function completeOnboarding() {
 function startApp() {
   document.getElementById('app').style.display = '';
   applySettings();
+  applyHourPaper();
   updateStreak();
   updateDateUI();
   loadDailyContent();
+  renderFlyleaf();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2396,7 +2577,7 @@ function switchTab(tab) {
 
   const subs = { today: 'Daily Words of Life', seek: 'Encouragement by Theme', advisor: 'Guided by the Gospels', journal: 'Your Saved Passages' };
   document.getElementById('header-sub').textContent = subs[tab];
-
+  if (tab === 'today') renderFlyleaf();
   if (tab === 'journal') renderJournal();
 }
 
@@ -2430,6 +2611,7 @@ function updateDateUI() {
 
   const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('today-date').textContent = dateStr;
+  applyHourPaper();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2703,19 +2885,17 @@ function renderJournal() {
   const list = document.getElementById('journal-list');
   const items = getJournal();
 
+  const exportBtn = document.getElementById('export-md-btn');
+  if (exportBtn) exportBtn.hidden = items.length === 0;
+
   if (items.length === 0) {
-    const tools = document.getElementById('journal-tools');
-    if (tools) tools.hidden = true;
     list.innerHTML = `
       <div class="journal-empty">
         <div class="journal-empty-title">A commonplace waits</div>
-        <div class="journal-empty-text">Keep a line from lectio, Today, Seek, or Advisor. The page stays quiet until you do.</div>
+        <div class="journal-empty-text">Keep a line from lectio, Today, Seek, or Advisor. You can still print the day’s word as a folio.</div>
       </div>`;
     return;
   }
-
-  const tools = document.getElementById('journal-tools');
-  if (tools) tools.hidden = items.length === 0;
 
   const TYPE_LABELS = { aff: 'Affirmation', word: 'Word of Day', enc: 'Encouragement', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
   const TYPE_COLORS = { aff: 'badge-crimson', word: 'badge-gold', enc: 'badge-crimson', chat: 'badge-gold', lectio: 'badge-crimson', note: 'badge-gold' };
@@ -3039,6 +3219,7 @@ function applyDailyToUI(data) {
       : 'Welcome. One quiet moment with his words is enough for today.';
   }
   openFirstLectio();
+  renderFlyleaf();
 }
 
 const _origLoadDaily = typeof loadDailyContent === 'function' ? loadDailyContent : null;
@@ -3532,6 +3713,7 @@ function startLectioRest() {
 
 function closeLectio() {
   clearTimeout(lectioRestTimer);
+  stopHear();
   const ov = document.getElementById('lectio-overlay');
   if (ov) ov.classList.remove('on');
   const bar = document.getElementById('lectio-progress');
@@ -3557,6 +3739,13 @@ function finishLectio(skip) {
     showToast('That is enough for today');
   }
   closeLectio();
+  const kept = (!skip && note) ? note : firstKeptLine(lectioCtx && lectioCtx.quote);
+  setCarry({
+    line: kept,
+    verse: lectioCtx ? lectioCtx.verse : '',
+    quote: lectioCtx ? lectioCtx.quote : '',
+    fromHim: !(!skip && note)
+  });
   showAmen();
 }
 
@@ -3617,9 +3806,241 @@ function keepLine(e) {
   const key = 'note-' + Date.now();
   saveJournalItem({ id: key, key, type: 'note', title: note, body: '', verse: '' });
   document.getElementById('compose-line').value = '';
+  setCarry({ line: note, verse: '', quote: '', fromHim: false });
   renderJournal();
   showToast('Kept in your commonplace');
   return false;
+}
+
+function applyHourPaper() {
+  const h = new Date().getHours();
+  const hour = h < 5 ? 'night' : h < 11 ? 'morning' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
+  document.documentElement.setAttribute('data-hour', hour);
+}
+
+function firstKeptLine(quote) {
+  const clean = String(quote || '').replace(/^[“"]|[”"]$/g, '').trim();
+  if (!clean) return '';
+  const words = clean.split(/\s+/);
+  return words.slice(0, 12).join(' ') + (words.length > 12 ? '…' : '');
+}
+
+function setCarry(payload) {
+  if (!payload || !payload.line) return;
+  lsSet('rla-carry', JSON.stringify({
+    date: todayStr(),
+    line: String(payload.line).trim(),
+    verse: payload.verse || '',
+    quote: payload.quote || '',
+    fromHim: !!payload.fromHim
+  }));
+  renderFlyleaf();
+}
+
+function getCarry() {
+  try { return JSON.parse(ls('rla-carry') || 'null'); } catch (e) { return null; }
+}
+
+function renderFlyleaf() {
+  const el = document.getElementById('flyleaf');
+  if (!el) return;
+  const c = getCarry();
+  const lineEl = document.getElementById('flyleaf-line');
+  const citeEl = document.getElementById('flyleaf-cite');
+  if (!c || !c.line) {
+    el.hidden = true;
+    return;
+  }
+  lineEl.textContent = c.line;
+  lineEl.classList.toggle('from-him', !!c.fromHim);
+  citeEl.textContent = c.verse || '';
+  el.hidden = false;
+  const todayOn = document.getElementById('today-page') && document.getElementById('today-page').classList.contains('active');
+  const sub = document.getElementById('header-sub');
+  if (todayOn && sub) {
+    sub.textContent = c.line.length > 42 ? c.line.slice(0, 40) + '…' : c.line;
+  }
+}
+
+let hearUtter = null;
+
+function stopHear() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  hearUtter = null;
+  document.querySelectorAll('.hear-verb').forEach(function (btn) {
+    btn.classList.remove('on');
+    btn.setAttribute('aria-pressed', 'false');
+  });
+  document.querySelectorAll('.hear-rule').forEach(function (rule) {
+    rule.hidden = true;
+    rule.setAttribute('aria-hidden', 'true');
+    const i = rule.querySelector('i');
+    if (i) {
+      i.style.transition = 'none';
+      i.style.width = '0';
+    }
+  });
+}
+
+function pickHearVoice() {
+  if (!window.speechSynthesis) return null;
+  const voices = window.speechSynthesis.getVoices() || [];
+  return voices.find(function (v) { return /en-GB/i.test(v.lang) && /female|UK English|Serena|Google UK/i.test(v.name); })
+    || voices.find(function (v) { return /en-GB/i.test(v.lang); })
+    || voices.find(function (v) { return /^en/i.test(v.lang) && /natural|premium|enhanced|Samantha|Aria/i.test(v.name); })
+    || voices.find(function (v) { return /^en/i.test(v.lang); })
+    || null;
+}
+
+function hearQuoteFor(source) {
+  if (source === 'lectio' && lectioCtx) return lectioCtx.quote || '';
+  if (source === 'enc' && currentEncData) {
+    const p = currentEncData.passages && currentEncData.passages[0];
+    return (p && p.quote) || '';
+  }
+  if (dailyData && dailyData.word) return dailyData.word.passage || '';
+  return '';
+}
+
+function hearPassage(source) {
+  if (hearUtter) {
+    stopHear();
+    return;
+  }
+  const quote = String(hearQuoteFor(source) || '').replace(/^[“"]|[”"]$/g, '').trim();
+  if (!quote) return;
+  if (!window.speechSynthesis) {
+    showToast('This page is quiet on this device');
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(quote);
+  u.rate = 0.76;
+  u.pitch = 0.95;
+  u.lang = 'en-GB';
+  const voice = pickHearVoice();
+  if (voice) u.voice = voice;
+  hearUtter = u;
+  const btn = document.getElementById(source === 'lectio' ? 'hear-lectio-btn' : source === 'enc' ? 'hear-enc-btn' : 'hear-word-btn');
+  if (btn) {
+    btn.classList.add('on');
+    btn.setAttribute('aria-pressed', 'true');
+  }
+  const rule = document.getElementById(source === 'lectio' ? 'hear-rule-lectio' : source === 'enc' ? 'hear-rule-enc' : 'hear-rule');
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ms = Math.max(5000, Math.min(90000, quote.split(/\s+/).length * 480));
+  if (rule) {
+    rule.hidden = false;
+    rule.setAttribute('aria-hidden', 'false');
+    const i = rule.querySelector('i');
+    if (i) {
+      i.style.transition = 'none';
+      i.style.width = '0';
+      requestAnimationFrame(function () {
+        i.style.transition = reduced ? 'none' : ('width ' + ms + 'ms linear');
+        i.style.width = '100%';
+      });
+    }
+  }
+  u.onend = function () { stopHear(); };
+  u.onerror = function () { stopHear(); };
+  window.speechSynthesis.speak(u);
+}
+
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = function () { pickHearVoice(); };
+}
+
+function folioSlips() {
+  const items = getJournal();
+  const now = new Date();
+  let slips = items.filter(function (i) {
+    if (!i.savedAt) return true;
+    const d = new Date(i.savedAt);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  });
+  if (!slips.length) slips = items.slice();
+  if (!slips.length) {
+    const carry = getCarry();
+    if (carry && carry.line) {
+      slips = [{ type: 'lectio', title: carry.line, body: carry.quote, verse: carry.verse, savedAt: Date.now() }];
+    } else if (dailyData && dailyData.word) {
+      slips = [{ type: 'word', title: dailyData.word.title, body: dailyData.word.passage, verse: dailyData.word.verse, savedAt: Date.now() }];
+    }
+  }
+  return slips;
+}
+
+function folioMarkup(slips) {
+  const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const labels = { aff: 'Affirmation', word: 'Word', enc: 'Seek', chat: 'Advisor', lectio: 'Lectio', note: 'Line' };
+  const body = slips.map(function (item) {
+    const label = labels[item.type] || 'Kept';
+    const keep = esc(item.title || '');
+    const quote = item.body ? esc(item.body) : '';
+    const verse = item.verse ? esc(item.verse) : '';
+    return '<article class="folio-slip"><p class="folio-kicker">' + label + '</p>'
+      + (keep ? '<p class="folio-keep">' + keep + '</p>' : '')
+      + (quote ? '<p class="folio-quote">“' + quote + '”</p>' : '')
+      + (verse ? '<p class="folio-cite">' + verse + '</p>' : '')
+      + '</article>';
+  }).join('');
+  return '<div class="folio-mark" aria-hidden="true">R</div>'
+    + '<h2 class="folio-title">A commonplace</h2>'
+    + '<p class="folio-month">' + month + '</p>'
+    + body
+    + '<p class="folio-colophon">Lines kept from the red letters of Jesus in Matthew, Mark, Luke, and John.<br>Printed for keeping, not for a feed.</p>';
+}
+
+function openFolio() {
+  const slips = folioSlips();
+  if (!slips.length) {
+    showToast('Keep a line, then print');
+    return;
+  }
+  const sheet = document.getElementById('folio-sheet');
+  sheet.innerHTML = folioMarkup(slips);
+  const ov = document.getElementById('folio-overlay');
+  ov.classList.add('on');
+}
+
+function closeFolio() {
+  document.getElementById('folio-overlay').classList.remove('on');
+}
+
+function printFolioSheet() {
+  const slips = folioSlips();
+  if (!slips.length) return;
+  let frame = document.getElementById('folio-frame');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'folio-frame';
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+    document.body.appendChild(frame);
+  }
+  const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Commonplace — '
+    + month + '</title>'
+    + '<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Figtree:wght@400;500&display=swap" rel="stylesheet">'
+    + '<style>@page{size:letter;margin:1.15in 1.2in 1.25in;}*{box-sizing:border-box;}body{margin:0;background:#F6F3EC;color:#1C1612;font-family:"Source Serif 4",Georgia,serif;}'
+    + '.folio-mark{font-family:Fraunces,serif;font-style:italic;font-size:36px;color:#8F1D1D;width:56px;height:56px;border:1px solid rgba(28,22,18,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:28px;}'
+    + '.folio-title{font-family:Fraunces,serif;font-weight:500;font-size:42px;letter-spacing:-.03em;line-height:1.1;margin:0 0 10px;}'
+    + '.folio-month{font-family:Figtree,sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6A6258;margin:0 0 36px;}'
+    + '.folio-slip{page-break-inside:avoid;padding:26px 0 6px;border-top:1px solid rgba(28,22,18,.12);}'
+    + '.folio-kicker{font-family:Figtree,sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#6A6258;margin:0 0 10px;}'
+    + '.folio-keep{font-family:Fraunces,serif;font-size:20px;letter-spacing:-.02em;line-height:1.3;margin:0 0 12px;}'
+    + '.folio-quote{color:#8F1D1D;font-style:italic;font-size:15.5px;line-height:1.55;margin:0 0 8px;}'
+    + '.folio-cite{font-family:Figtree,sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8F1D1D;margin:0;}'
+    + '.folio-colophon{margin-top:40px;font-family:Figtree,sans-serif;font-size:11px;line-height:1.6;color:#6A6258;}'
+    + '</style></head><body>' + folioMarkup(slips) + '</body></html>';
+  const doc = frame.contentDocument;
+  doc.open();
+  doc.write(html);
+  doc.close();
+  setTimeout(function () {
+    frame.contentWindow.focus();
+    frame.contentWindow.print();
+  }, 400);
 }
 
 function showAmen() {

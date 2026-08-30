@@ -142,9 +142,9 @@ These are the ideas that keep a studio busy for years. Each one stays simple to 
 3. **Lectio in four taps.** **Shipped.** Read / Reflect / Rest / Respond — one red-letter per step. Rest is twenty seconds. Respond writes the commonplace. No timer guilt.
 4. **Commonplace book.** **Begun.** Compose a line anytime. Lectio, Today, Seek, and Advisor all keep slips. Local-first. Export Markdown. Titled pages and backlinks can still grow.
 5. **Margin conversations.** Small-group rooms that are just a shared page + a verse. No feed. No likes.
-6. **Audio as typesetting.** A single human voice (or your own) reading the day’s red letters. Waveform as a thin rule, not a DJ deck.
-7. **Watch / lock screen.** One sentence. Crimson on paper. Nothing else.
-8. **Print.** A monthly letterpress PDF of saved lines. The digital product that is not afraid to become paper again.
+6. **Audio as typesetting.** **Shipped.** *Hear this* — a thin crimson rule, the day’s sentence, no DJ deck. Nothing leaves the device.
+7. **Watch / lock screen.** **Shipped in-app.** The sentence you carry sits on the flyleaf until you keep another. His words stay crimson; yours stay ink.
+8. **Print.** **Shipped.** A monthly letterpress folio of the commonplace. Printed for keeping, not for a feed.
 9. **Kids’ “He said.”** Same type system, larger, fewer words. No cartoon Jesus.
 10. **Parish edition.** A pastor’s page of twelve themes for a week. Still no ads in the text.
 
