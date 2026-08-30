@@ -1,43 +1,36 @@
-const CACHE = 'rla-v18-qa';
+const CACHE = 'rla-phase0-v11';
 const PRECACHE = [
-  '/',
   '/index.html',
   '/manifest.json',
-  '/css/app.css',
-  '/js/app.js',
-  '/js/share-card.js',
-  '/js/crisis.js',
-  '/js/atelier.js',
-  '/js/craft.js',
-  '/js/trust.js',
-  '/data/corpus.json',
-  '/data/curated.js',
+  '/curated.json',
+  '/library.json',
   '/data/advisor.js',
+  '/data/curated.js',
   '/data/paths.js',
   '/icon-192.png',
   '/icon-512.png',
-  '/favicon.png',
-  '/apple-touch-icon.png'
+  '/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(CACHE).then((c) => Promise.all(PRECACHE.map((url) => c.add(url).catch(() => null))))
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    )
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
@@ -51,13 +44,13 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  const isHTML =
+  const isDocument =
     e.request.mode === 'navigate' ||
     url.pathname === '/' ||
     url.pathname.endsWith('.html') ||
     (e.request.headers.get('accept') || '').includes('text/html');
 
-  if (isHTML) {
+  if (isDocument) {
     e.respondWith(
       fetch(e.request)
         .then((res) => {
@@ -67,9 +60,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() =>
-          caches.match(e.request).then((c) => c || caches.match('/') || caches.match('/index.html'))
-        )
+        .catch(() => caches.match(e.request).then((cached) => cached || caches.match('/index.html')))
     );
     return;
   }
@@ -88,30 +79,4 @@ self.addEventListener('fetch', (e) => {
       return cached || network;
     })
   );
-});
-
-self.addEventListener('periodicsync', (e) => {
-  if (e.tag !== 'quiet-hour') return;
-  e.waitUntil(
-    caches.open('rla-prefs').then((c) => c.match('/__prefs')).then((res) => {
-      if (!res) return;
-      return res.json().then((prefs) => {
-        const now = new Date();
-        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-        if (!prefs || prefs.lastLectio === today) return;
-        const hour = new Date().getHours();
-        if (hour < Number(prefs.quietHour || 7)) return;
-        return self.registration.showNotification('The page is still here', {
-          body: prefs.carry || 'A quiet sentence is waiting.',
-          icon: '/icon-192.png',
-          tag: 'rla-quiet',
-        });
-      });
-    })
-  );
-});
-
-self.addEventListener('notificationclick', (e) => {
-  e.notification.close();
-  e.waitUntil(self.clients.openWindow('/'));
 });

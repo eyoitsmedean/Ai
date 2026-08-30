@@ -1,15 +1,14 @@
-# The Quiet Page
+# Red Letter — a design language
 
-A design language for **The Red Letter Advisor**.  
 Complex in the making. Almost invisible in the using.
 
-This is not a church-app skin. It is a reading room.
+This is not a church-app skin. It is a bound book that happens to run in a browser.
 
 ---
 
 ## The person we are trying to impress
 
-Someone who loves **Notion** — not because it is flashy, but because it feels like *good paper that gets out of the way*. They notice tracking on a headline. They feel when a shadow is one stop too dark. They are moved by products that are obviously expensive to build and almost cheap to use.
+Someone who loves **Notion** — not because it is flashy, but because it feels like good paper that gets out of the way. They notice tracking on a headline. They feel when a shadow is one stop too dark. They are moved by products that are obviously expensive to build and almost cheap to use.
 
 They would close an app that shouts. They would keep an app that *breathes*.
 
@@ -27,33 +26,32 @@ If you removed the navigation, the first screen would still say *red letter* —
 
 | From | Steal | Refuse |
 | --- | --- | --- |
-| **Notion** | Warm paper canvas. Hairline borders. Color as punctuation. Lyon/serif used like a magazine pull-quote. | Feature-card clutter. Playful sticker rainbow. |
-| **The New York Times Magazine** | Display serif + quiet grotesque. Negative tracking on titles. Generous measure. | News chrome, density. |
-| **Hallow** | Contemplative pacing. Intention before content. Seasonal gravity. | Wellness sterility. Faceless illustration coldness. |
-| **YouVersion Verse Images** | A share object beautiful enough to leave the app. | Stock-photo collage, badge spam. |
-| **A red-letter Bible** | Rubrication: red is *speech*, not brand paint. | Painting every header, button, and badge red. |
-| **Lectio divina** | Read → sit → listen. The product has a *pause*, not only a *tap*. | Streaks that shame. Gamified holiness. |
-| **Letterpress / bookplates** | Optical size. Ink bite. A mark, not a logo lockup. | Fake “ancient scroll” textures, clip-art crosses. |
+| **Notion** | Warm paper. Hairline borders. Color as punctuation. Slash to find anything. | Feature-card clutter. Playful sticker rainbow. |
+| **A red-letter Bible** | Rubrication: red is *speech*, not brand paint. Catchwords. A colophon. | Painting every header, button, and badge red. |
+| **Letterpress / bookplates** | A printer’s device. Optical size. Ink bite. Seasonal paper. | Fake “ancient scroll” textures, clip-art crosses. |
+| **Lectio divina** | Read → Reflect → Rest → Respond. The product has a *pause*. | Streaks that shame. Gamified holiness. |
+| **The church year** | Advent cools. Lent strips. Easter lifts. Christmas warms. | A settings toggle labeled “liturgical mode.” |
+| **Hallow** | Contemplative pacing. A named week. | Wellness sterility. Faceless illustration. |
 
 ---
 
 ## Principles
 
-1. **One accent.** Crimson is reserved for the words He spoke, and for the one active state that means “you are here.” Never for decoration.
-2. **Paper, not glass.** Warm off-white (`#F6F3EC`). Warm near-black ink. No cool SaaS grey. No neon dark mode — candlelight.
-3. **Chrome disappears.** No solid red app bar. No emoji tile grid. No fire-streak carnival. A quiet mark, a date, a page.
-4. **Typesetting is the craft.** The hard work is measure, leading, optical size, quote marks, verse labels. Users should feel it without naming it.
-5. **Simple verbs.** Open. Read. Sit. Ask. Save. Share. If a control needs a tutorial, it is wrong.
+1. **One accent.** Crimson is reserved for the words He spoke, and for the one active state that means “you are here.”
+2. **Paper, not glass.** Warm off-white (`#F4EFE4`). Warm near-black ink. No cool SaaS grey. Night is a lamp, never OLED.
+3. **Chrome disappears.** When you Sit, the rail and dock leave. The sentence is the page.
+4. **Typesetting is the craft.** Measure, leading, optical size, small caps, catchwords.
+5. **Simple verbs.** Open. Read. Sit. Ask. Keep. Print. If a control needs a tutorial, it is wrong.
 6. **Grace over score.** A rhythm may be counted. A missed day is never a failure state.
-7. **Sacred, not sentimental.** No stock doves. No sparkle explosion. Reverence is restraint.
+7. **Sacred, not sentimental.** No stock doves. Reverence is restraint.
 
 ---
 
 ## The mark
 
-Not a clip-art cross.
+A small **R** in Fraunces italic, set in crimson, sitting in a hairline circle of ink — a printer’s device on a title page. Wordmark beside it: `Red Letter`. The running head changes with the church year.
 
-A small **R** in Fraunces italic, set in crimson, sitting in a hairline circle of ink — as if a printer’s device on a title page. Wordmark beside it in quiet sans: `Red Letter`. Subline changes with the page, like a running head in a book.
+A silk ribbon in the gutter takes the season’s color. You never have to name Advent. The paper just cools.
 
 ---
 
@@ -61,92 +59,57 @@ A small **R** in Fraunces italic, set in crimson, sitting in a hairline circle o
 
 | Role | Face | Why |
 | --- | --- | --- |
-| Display | **Fraunces** (soft, optical) | Human, slightly wonky, bookplate warmth — not museum Didone |
-| Scripture | **Source Serif 4** italic | Readable at length; feels printed, not “UI quote” |
-| UI | **Figtree** | Humanist grotesque; Notion-adjacent without copying Inter |
+| Display | **Fraunces** (soft, optical) | Human, slightly wonky, bookplate warmth |
+| Scripture | **Source Serif 4** italic | Readable at length; feels printed |
+| UI | **Instrument Sans** | Humanist grotesque; Notion-adjacent without copying Inter |
 
 Titles use tight tracking. Body uses open leading (1.55–1.7). Verse citations are small-caps, letterspaced, crimson.
 
 ---
 
-## Color (light)
+## Color (Ordinary Time)
 
 ```
-Paper        #F6F3EC
-Paper inset  #EFEBE3
-Ink          #1C1612
-Ink muted    #5C534A
-Rule         rgba(28,22,18,.10)
+Paper        #F4EFE4
+Folio        #FBF7EE
+Ink          #1B1610
+Ink muted    #7A6E5E
+Rule         rgba(27,22,16,.10)
 Crimson      #8F1D1D     ← His speech only
-Candle dark  #1F1A16     ← night reading (warm lamp, never OLED)
+Gold         #8A6A28
 ```
 
-Dark mode is a **lamp after vespers**, not OLED black. Surfaces stay brown-warm. Crimson lifts slightly so red letters still read.
-
----
-
-## Surfaces
-
-Notion’s lesson: **cards do not need shadows to exist.**
-
-- Default: paper on paper, 1px whisper rule, 12–16px radius.
-- The daily plate: the one inverted field — deep crimson, letterpress ornament, white/ivory type. This is the *only* loud object on Today.
-- Scripture blocks: left rule in crimson, italic ink, no boxy “card stack” look.
-- Theme tiles: a Fraunces initial + name. No emoji. Hover is a hairline, not a leap.
+The church year retints the paper. Advent goes violet-cool. Lent is unbleached and quieter. Easter lifts gold into the rule. Christmas warms. Dark mode is a lamp after vespers.
 
 ---
 
 ## Motion
 
-200–280ms, ease-out. Pages fade like turning a leaf — no bounce, no confetti.
-
-The one ceremonial motion: **Sit.** A breath ring expands and rests for twenty seconds while a red-letter sentence holds the center. The user is not winning. They are staying.
+200–280ms, ease-out. The title page turns like a leaf. Sit dissolves the chrome. Rest lets the sentence arrive word by word.
 
 `prefers-reduced-motion` kills ornament, keeps meaning.
 
 ---
 
-## Screens, as a studio would hang them
+## Surfaces, as a studio would hang them
 
-### Open (onboarding)
-A cream page. One rubricated sentence from Matthew 11:28. Four quiet intents (Peace, Guidance, Encouragement, His words). One verb: *Begin*. No feature brochure. The product *is* the sentence.
+### Title page
+A cream leaf. Printer’s mark. One italic word in crimson. Crisis honesty before the door opens. The verb is *Turn the page.*
 
 ### Today
-Running head. Date in small caps. A greeting, then a title with one italic word.  
-**The Word is the page** — one glance, one verb: *Take this slowly*.  
-Letterpress affirmation sits underneath, not in front of the ritual.  
-A path of beads (Seven or Forty) advances only when they have sat. Missing a day never skips a room.  
-A grace line. Two verbs: *Ask* / *Seek*.  
-Disclaimer in the voice of a colophon.
+Running head in the season’s name. A flyleaf of yesterday’s sitting — turn it. Seven named days (Come / Peace / Light / Love / Forgive / Abide / Go). The Word is the page. Vespers after seventeen. Compline after twenty-one. A colophon.
+
+### Sit
+Four leaves. Read / Reflect / Rest / Respond. The furniture leaves the room. Rest is one quiet minute. Respond writes the commonplace. Print makes a letterpress broadside.
 
 ### Seek
-A table of contents. Twelve initials. Open one: a headline, an opening, rubricated passages, a practice. Back is “All themes,” like returning to a contents page.
+A table of contents. Twelve rooms. A spoken library you can turn leaf by leaf.
 
 ### Advisor
-A conversation that looks like annotated margins. User ink on the right. His words in red, blocked as quotations. Crisis line is typographic, not a siren. New conversation is a text button, not a trash icon.
+Correspondence. His words in red, blocked as quotations. If the lamp is out, a living retrieval still answers from the Gospels. Crisis is typographic, not a siren.
 
 ### Journal
-A commonplace book. Saved slips with a type label and a date. Empty state is a sentence, not a sad illustration.
-
-### Share
-A square as careful as a title page: crimson field, Fraunces quote, verse in small caps, quiet wordmark. Something you would post without embarrassment.
-
----
-
-## Ambition the team can grow into (not vapor — a backlog with taste)
-
-These are the ideas that keep a studio busy for years. Each one stays simple to *use*.
-
-1. **Seasonal paper.** **Shipped as a church-year engine.** Advent cools. Lent strips. Easter lifts. Christmas warms. Ordinary time stays the Quiet Page. A colophon names the season; the type does not panic. **Forty** is the longer named path (Lent, or after Seven). Days unlock after sitting, not after the calendar punishes you.
-2. **Verse atelier.** **Shipped.** Three papers — Rubric, Paper, Lamp — no stock sunsets. A blessing that arrives as an image, not a screenshot of UI.
-3. **Lectio in four taps.** **Shipped.** Read / Reflect / Rest / Respond — one red-letter per step. Rest is twenty seconds. Respond writes the commonplace. No timer guilt.
-4. **Commonplace book.** **Begun.** Compose a line anytime. Lectio, Today, Seek, and Advisor all keep slips. Local-first. Export Markdown. Titled pages and backlinks can still grow.
-5. **Margin conversations.** Small-group rooms that are just a shared page + a verse. No feed. No likes.
-6. **Audio as typesetting.** **Shipped.** *Hear this* — a thin crimson rule, the day’s sentence, no DJ deck. Nothing leaves the device.
-7. **Watch / lock screen.** **Shipped in-app.** The sentence you carry sits on the flyleaf until you keep another. His words stay crimson; yours stay ink.
-8. **Print.** **Shipped.** A monthly letterpress folio of the commonplace. Printed for keeping, not for a feed.
-9. **Kids’ “He said.”** Same type system, larger, fewer words. No cartoon Jesus.
-10. **Parish edition.** A pastor’s page of twelve themes for a week. Still no ads in the text.
+A commonplace. Tipped-in slips. A quire of catchwords.
 
 ---
 
@@ -163,5 +126,5 @@ These are the ideas that keep a studio busy for years. Each one stays simple to 
 
 ## Studio note
 
-Build the complexity in **type, paper, and pause**.  
+Build the complexity in **type, paper, season, and pause**.  
 Spend the simplicity on **the person holding the phone.**

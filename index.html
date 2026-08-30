@@ -3,307 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#9F1239" />
-  <meta name="description" content="Daily guidance from the words Jesus actually spoke. Red Letter — encouragement, chat, and habits grounded only in the Gospels." />
-  <meta property="og:title" content="Red Letter — His words, for your day" />
-  <meta property="og:description" content="Not every verse. His words. Daily guidance from the red letters of Jesus." />
-  <title>Red Letter — the words Jesus spoke</title>
+  <title>Red Letter — The words He actually spoke</title>
+  <meta name="description" content="A reading room for the words Jesus actually spoke. Morning, sit, vespers, counsel — not another Bible app." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;1,400;1,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --ink: #0F0D0B;
-      --ink-soft: #2A241E;
-      --stone: #E8E2D8;
-      --crimson: #B91C1C;
-      --crimson-deep: #7F0F2E;
-      --gold: #C4A35A;
-      --font-disp: 'Fraunces', Georgia, serif;
-      --font-body: 'Source Serif 4', Georgia, serif;
-      --font-ui: 'Figtree', system-ui, sans-serif;
-    }
-    html, body { min-height: 100%; }
-    body {
-      font-family: var(--font-ui);
-      color: var(--stone);
-      background: var(--ink);
-      overflow-x: hidden;
-    }
-
-    .hero {
-      position: relative;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: clamp(24px, 5vw, 56px);
-      padding-bottom: clamp(40px, 8vh, 72px);
-      background:
-        radial-gradient(ellipse 90% 70% at 70% 20%, rgba(185, 28, 28, 0.35), transparent 55%),
-        radial-gradient(ellipse 60% 50% at 10% 80%, rgba(127, 15, 46, 0.4), transparent 50%),
-        linear-gradient(165deg, #1A0A0C 0%, #0F0D0B 45%, #0A0807 100%);
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .brand {
-      position: relative;
-      font-family: var(--font-disp);
-      font-weight: 800;
-      font-size: clamp(3.4rem, 14vw, 7.5rem);
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      color: var(--crimson);
-      margin-bottom: 1.1rem;
-      animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .headline {
-      position: relative;
-      font-family: var(--font-body);
-      font-style: italic;
-      font-weight: 400;
-      font-size: clamp(1.15rem, 3.2vw, 1.55rem);
-      line-height: 1.45;
-      color: rgba(232, 226, 216, 0.88);
-      max-width: 28ch;
-      margin-bottom: 0.85rem;
-      animation: rise 0.9s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .sub {
-      position: relative;
-      font-size: clamp(0.92rem, 2vw, 1.05rem);
-      color: rgba(232, 226, 216, 0.55);
-      max-width: 36ch;
-      line-height: 1.55;
-      margin-bottom: 2rem;
-      animation: rise 0.9s 0.14s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .cta-row {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      animation: rise 0.9s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 14px 22px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--stone);
-      color: var(--ink);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-    }
-    .btn-ghost {
-      background: transparent;
-      color: rgba(232, 226, 216, 0.85);
-      border: 1px solid rgba(232, 226, 216, 0.25);
-    }
-
-    .quote-plane {
-      position: absolute;
-      top: 12%;
-      right: 6%;
-      left: auto;
-      width: min(42vw, 420px);
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: clamp(1.05rem, 2.4vw, 1.45rem);
-      line-height: 1.55;
-      color: rgba(185, 28, 28, 0.9);
-      text-align: right;
-      animation: fade 1.2s 0.3s ease both, drift 8s 1s ease-in-out infinite;
-      pointer-events: none;
-    }
-    .quote-plane cite {
-      display: block;
-      margin-top: 12px;
-      font-family: var(--font-ui);
-      font-style: normal;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-
-    @media (max-width: 720px) {
-      .quote-plane {
-        position: relative;
-        top: auto; right: auto;
-        width: 100%;
-        text-align: left;
-        margin-bottom: 2.5rem;
-        order: -1;
-      }
-      .hero { justify-content: center; }
-      .hero-inner { display: flex; flex-direction: column; }
-    }
-
-    .section {
-      padding: clamp(48px, 10vw, 96px) clamp(24px, 5vw, 56px);
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .section h2 {
-      font-family: var(--font-disp);
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      color: var(--crimson);
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
-    }
-    .section p {
-      font-family: var(--font-body);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: rgba(232, 226, 216, 0.7);
-      margin-bottom: 1rem;
-    }
-
-    .waitlist {
-      background: linear-gradient(180deg, #14100E 0%, #0F0D0B 100%);
-      border-top: 1px solid rgba(232, 226, 216, 0.08);
-    }
-    .waitlist-form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 1.25rem;
-      max-width: 420px;
-    }
-    .waitlist-form input {
-      flex: 1 1 200px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(232, 226, 216, 0.2);
-      background: rgba(232, 226, 216, 0.05);
-      color: var(--stone);
-      font-size: 0.95rem;
-      font-family: var(--font-ui);
-    }
-    .waitlist-form input::placeholder { color: rgba(232, 226, 216, 0.35); }
-    .waitlist-note {
-      font-size: 0.8rem;
-      color: rgba(232, 226, 216, 0.4);
-      margin-top: 10px;
-    }
-    .waitlist-ok {
-      display: none;
-      font-family: var(--font-body);
-      font-style: italic;
-      color: var(--gold);
-      margin-top: 1rem;
-    }
-    .waitlist-ok.show { display: block; animation: rise 0.5s ease both; }
-
-    footer {
-      padding: 28px clamp(24px, 5vw, 56px) 40px;
-      font-size: 0.75rem;
-      color: rgba(232, 226, 216, 0.35);
-      border-top: 1px solid rgba(232, 226, 216, 0.06);
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fade {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes drift {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .brand, .headline, .sub, .cta-row, .quote-plane { animation: none; }
-    }
+    :root { --paper:#F4EFE4; --ink:#1B1610; --crimson:#8F1D1D; --mute:#7A6E5E; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; background: var(--paper); color: var(--ink); font-family: 'Instrument Sans', system-ui, sans-serif; }
+    .grain { pointer-events:none; position:fixed; inset:0; opacity:.04; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    main { max-width: 720px; margin: 0 auto; padding: 64px 24px 80px; text-align: center; }
+    .mark { width:46px; height:46px; margin:0 auto 22px; border:1px solid var(--crimson); border-radius:50%; display:grid; place-items:center; font-family:Fraunces,Georgia,serif; font-style:italic; font-size:22px; color:var(--crimson); }
+    .kicker { letter-spacing:.28em; text-transform:uppercase; font-size:11px; color:var(--mute); margin-bottom:16px; }
+    h1 { font-family: Fraunces, Georgia, serif; font-weight:500; font-size: clamp(48px, 10vw, 84px); letter-spacing:-.03em; line-height:.95; }
+    h1 em { font-style:italic; color:var(--crimson); }
+    .deck { font-family: 'Source Serif 4', Georgia, serif; font-style:italic; font-size:20px; color:#4A4034; max-width:32ch; margin: 22px auto 28px; line-height:1.5; }
+    .quote { font-family: Fraunces, Georgia, serif; font-style:italic; font-size: clamp(22px, 4vw, 28px); color:var(--crimson); max-width:22ch; margin: 0 auto 12px; line-height:1.4; }
+    .cite { letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:var(--mute); margin-bottom:36px; }
+    .pillars { text-align:left; margin: 0 auto 40px; max-width: 440px; }
+    .pillar { padding: 14px 0; border-top: 1px solid rgba(27,22,16,.1); display:grid; grid-template-columns: 88px 1fr; gap: 12px; }
+    .pillar:last-child { border-bottom: 1px solid rgba(27,22,16,.1); }
+    .pillar strong { color: var(--crimson); font-size: 12px; letter-spacing:.12em; text-transform:uppercase; }
+    .pillar span { font-family: 'Source Serif 4', Georgia, serif; color:#4A4034; line-height:1.5; }
+    a.btn { display:inline-block; background:var(--crimson); color:#FBF7EE; text-decoration:none; padding:14px 22px; letter-spacing:.06em; text-transform:uppercase; font-size:13px; }
+    form { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin: 28px 0 8px; }
+    input[type=email] { border:none; border-bottom:1px solid rgba(27,22,16,.2); background:transparent; padding:10px 4px; font: inherit; font-size:16px; min-width:220px; color:var(--ink); outline:none; }
+    input[type=email]:focus { border-bottom-color: var(--crimson); }
+    button.send { border:none; background:transparent; color:var(--crimson); letter-spacing:.08em; text-transform:uppercase; font-size:12px; padding:10px 0; }
+    p.note { margin-top:20px; font-size:13px; color:var(--mute); line-height:1.55; }
+    p.note a { color:var(--crimson); }
+    #wait-msg { font-size:14px; color:var(--crimson); min-height:1.4em; }
+    .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
   </style>
 </head>
 <body>
-  <section class="hero" aria-label="Red Letter">
-    <div class="hero-inner">
-      <blockquote class="quote-plane">
-        “Therefore don’t be anxious for tomorrow, for tomorrow will be anxious for itself.”
-        <cite>Matthew 6:34 · WEB</cite>
-      </blockquote>
-      <h1 class="brand">Red Letter</h1>
-      <p class="headline">Daily guidance from the words Jesus actually spoke.</p>
-      <p class="sub">Not every verse — His words. Encouragement, chat, and a daily red letter grounded only in the Gospels.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="/">Open the Advisor</a>
-        <a class="btn btn-ghost" href="#waitlist">Join the waitlist</a>
-      </div>
-      <p class="sub" style="margin-top:1.25rem;margin-bottom:0;font-size:0.82rem;max-width:42ch">Verified Gospel citations · Not a pastor or therapist · Crisis help: 988</p>
+  <div class="grain" aria-hidden="true"></div>
+  <main>
+    <div class="mark" aria-hidden="true">R</div>
+    <div class="kicker">Not every verse — His words</div>
+    <h1>Red <em>Letter</em></h1>
+    <p class="deck">A reading room that keeps office. Complex underneath. Almost nothing on the page.</p>
+    <p class="quote">Peace I leave with you, my peace I give unto you.</p>
+    <p class="cite">John 14:27  ·  KJV</p>
+    <div class="pillars">
+      <div class="pillar"><strong>Lectio</strong><span>Read. Reflect. Rest. Respond. Four leaves, one sentence. The chrome leaves the room.</span></div>
+      <div class="pillar"><strong>Office</strong><span>Morning, vespers, compline. A silk ribbon follows the church year. You never have to name the season.</span></div>
+      <div class="pillar"><strong>Counsel</strong><span>Write what is true. The reply cites only Matthew–John — even when the lamp is out.</span></div>
+      <div class="pillar"><strong>Trust</strong><span>Not a person. Not another Bible app. Crisis: 988 (U.S.) · findahelpline.com.</span></div>
     </div>
-  </section>
-
-  <section class="section" aria-label="Why Red Letter">
-    <h2>Only the red letters</h2>
-    <p>YouVersion made the Bible accessible. Hallow made prayer a habit. The open place is making the spoken words of Jesus the product — guidance you can verify, share, and return to.</p>
-    <p>Every citation is checked against the World English Bible. No invented sayings. No pastoral pretense. Just His words, for the weight of this day.</p>
-  </section>
-
-  <section class="section waitlist" id="waitlist" aria-label="Waitlist">
-    <h2>A note when a season begins</h2>
-    <p>His words stay free. If you want one letter when Advent, Lent, or a new path opens, leave an address. No weekly paywall. Nothing in the Gospels is locked.</p>
-    <form class="waitlist-form" id="waitlist-form">
-      <input type="email" id="email" name="email" required placeholder="you@email.com" autocomplete="email" aria-label="Email" />
-      <button type="submit" class="btn btn-primary">Keep me a note</button>
+    <a class="btn" href="/">Turn the page</a>
+    <form id="wait" onsubmit="return joinWait(event)">
+      <label class="sr" for="email">Email</label>
+      <input id="email" type="email" required placeholder="Leave an email for Plus" autocomplete="email" />
+      <button class="send" type="submit">Hold my place</button>
     </form>
-    <p class="waitlist-note">No spam. One note. The Advisor is already open — you do not wait to sit with His words.</p>
-    <p class="waitlist-ok" id="waitlist-ok" role="status">You’re on the list. Share Red Letter with someone who needs His words today.</p>
-  </section>
-
-  <footer>
-    Reflective guidance for thought and prayer — not a substitute for pastoral counsel, therapy, or crisis care.
-    US &amp; Canada: <a href="tel:988" style="color:inherit">988</a> ·
-    <a href="https://www.iasp.info/suicidalthoughts/" style="color:inherit" target="_blank" rel="noopener">IASP worldwide</a>
-  </footer>
-
+    <p id="wait-msg"></p>
+    <p class="note">Software, not a pastor. Quoted speech is King James, public domain.<br>Run the room with <code>npm start</code>. GitHub Pages opens the folio from <code>public/</code>.</p>
+  </main>
   <script>
-    // When served by Express, "/" is the app. Landing lives at /welcome when Node runs.
-    // On GitHub Pages without the API, this file is the site root — point CTA at public app.
-    (function () {
-      const isPages = !location.port && location.hostname.includes('github');
-      const appHref = isPages ? './public/' : '/';
-      document.querySelectorAll('a.btn-primary[href="/"]').forEach(a => { a.href = appHref; });
-    })();
-
-    document.getElementById('waitlist-form').addEventListener('submit', (e) => {
+    async function joinWait(e) {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
-      if (!email) return;
+      const msg = document.getElementById('wait-msg');
       try {
-        const list = JSON.parse(localStorage.getItem('rla-waitlist') || '[]');
-        if (!list.includes(email)) list.push(email);
-        localStorage.setItem('rla-waitlist', JSON.stringify(list));
-        localStorage.setItem('rla-waitlist-email', email);
-      } catch {}
-      document.getElementById('waitlist-form').style.display = 'none';
-      document.getElementById('waitlist-ok').classList.add('show');
-    });
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Could not save that.');
+        msg.textContent = 'You are on the list. The room is open now.';
+      } catch (err) {
+        msg.textContent = 'The list could not be reached. Open the room anyway.';
+      }
+      return false;
+    }
   </script>
 </body>
 </html>

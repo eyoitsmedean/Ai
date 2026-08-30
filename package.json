@@ -1,15 +1,16 @@
 {
   "name": "red-letter-advisor",
-  "version": "3.0.1",
-  "description": "Red Letter Advisor — daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
+  "version": "1.0.0",
+  "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node scripts/smoke.js",
+    "test": "node --test test/*.test.js",
+    "spoken": "node scripts/build-spoken.js",
+    "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
-    "qa": "node scripts/qa-browser.js",
-    "demo": "node scripts/demo-humans.js"
+    "qa": "node scripts/qa-browser.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
