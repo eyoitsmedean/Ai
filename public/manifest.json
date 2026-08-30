@@ -1,19 +1,15 @@
 {
   "name": "Red Letter",
   "short_name": "Red Letter",
-  "description": "Daily guidance from the words Jesus actually spoke — only the red letters of the Gospels.",
+  "description": "Daily guidance from the direct words of Jesus Christ in the four Gospels.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0E0C0B",
-  "theme_color": "#0E0C0B",
+  "background_color": "#EDE8E0",
+  "theme_color": "#9F1239",
   "orientation": "portrait",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
-  "categories": ["lifestyle", "health", "religion"],
-  "lang": "en",
-  "dir": "ltr"
+  "categories": ["lifestyle", "health", "religion"]
 }

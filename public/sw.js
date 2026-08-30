@@ -1,14 +1,7 @@
-const CACHE = 'rla-v10-chapel';
+const CACHE = 'rla-v14';
 const PRECACHE = [
+  '/',
   '/manifest.json',
-  '/css/app.css',
-  '/js/app.js',
-  '/js/share-card.js',
-  '/js/crisis.js',
-  '/js/atelier.js',
-  '/js/craft.js',
-  '/js/trust.js',
-  '/data/corpus.json',
   '/icon-192.png',
   '/icon-512.png',
   '/favicon.png',
@@ -23,9 +16,10 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
@@ -45,7 +39,6 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Network-first for HTML navigations so redesigns ship immediately
   const isHTML =
     e.request.mode === 'navigate' ||
     url.pathname === '/' ||
@@ -62,12 +55,13 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((c) => c || caches.match('/index.html')))
+        .catch(() =>
+          caches.match(e.request).then((c) => c || caches.match('/'))
+        )
     );
     return;
   }
 
-  // Cache-first for hashed/static assets
   e.respondWith(
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request)

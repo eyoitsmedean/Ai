@@ -255,3 +255,80 @@ This codebase already implements the wedge:
 
 **Category thesis:**  
 *YouVersion made the Bible accessible. Hallow made prayer a subscription habit. Bible Chat made Scripture conversational. The open throne is making the red words of Jesus the product — guidance, encouragement, and daily presence from what He actually said.*
+
+---
+
+## 9. 2026 research update (product implications)
+
+Sources synthesized Aug 2026: ScreensDesign Bible UX patterns, Hallow/Glorify comparisons (Learn of Christ, Warm Peach), YouVersion feature surface, Bible Chat prayer-tracking notes, Apologist Project / Lattice citation accuracy.
+
+| Pattern from winners | Implication for Red Letter |
+| --- | --- |
+| **Finished daily session** (YouVersion / Duomo / ScreensDesign) | Not an endless feed — a clear loop: read → sit → reflect → receive. We ship **Sit** (60s lectio-lite) + **Reflect** prompt + presence check-in. |
+| **Grace over streak shame** (Glorify, ScreensDesign recovery design) | Presence week dots and cumulative “Day N with Him” — never wipe identity for a missed day. |
+| **One journal prompt tied to the day’s word** (Glorify) | Reflect box after receiving today’s word; saved into Journal with verse context. |
+| **Prayer intentions** (Hallow community / Bible Chat prayer tab) | Lightweight local “Praying for…” list; optional pair with today’s red letter + share as blessing. |
+| **Guided pause / Lectio** (Hallow) | Sit overlay keeps eyes on one verified quote for one minute — companionship without audio production budget. |
+| **Scripture must not be hallucinated** (Lattice / Apologist Project) | Output-transform grounding: replace model quotes with WEB corpus text; surface ✓ WEB badges. |
+| **Share formats for IG + Stories + wallpaper** (Church Canvas / Verses) | Feed 4:5, Stories 9:16, Square 1:1 × Night/Crimson/Parchment. |
+
+**Still later (Phase 1+):** native store apps, live Stripe/IAP, seasonal Lent challenge UA, full audio production, small-group mode.
+
+---
+
+## 10. 2026 rhythm research (Examen · memory · plans)
+
+Sources: Lectio 365 / 24-7 Prayer (P.R.A.Y + evening Examen), Bearing Fruit (grace-based habits + memory), Altar (Examen + flashcards + plans), ScreensDesign habit recovery patterns.
+
+| Pattern | Why it retains | Red Letter response |
+| --- | --- | --- |
+| **Morning / evening poles** (Lectio 365) | D7 retention rises when the day has two soft anchors, not one endless feed | Morning: Word → Sit → Reflect. Evening: **Examen** over a verified peace saying — rejoice, review, release, rest. |
+| **Examen without therapy cosplay** | Users want to close the day with God, not a chatbot diagnosis | Four short prompts + one WEB red-letter; optional Journal save; crisis links stay in Settings. |
+| **Scripture memory** (Altar, Bearing Fruit) | Carry phrases stick when practiced, not only shared | **Practice** on Carry: progressive blank-out of the phrase; reveal / check — no scores, no shame. |
+| **Short reading plans** (YouVersion DNA, Altar) | First-week structure beats “open and wander” | **7 days with His words** — one curated Gospel saying per day; grace progress (missed days don’t reset identity). |
+| **Grace over streak** (Bearing Fruit garden) | Guilt resets kill return | Plan marks “received” per day; unfinished days stay open; presence week never wipes. |
+
+**Product rule:** Every new habit surface still cites only verified Jesus speech (WEB corpus). No invented quotes in Examen, memory, or plans.
+
+---
+
+## 11. Merge synthesis (PR #4 + this branch)
+
+Base `claude/jesus-teachings-chatbot-bSBhF` absorbed Quiet Chapel PR #4 (modular JS/CSS, dark chapel, streaks, client corpus). This branch kept the **feature-depth product** (grace presence, Sit/Reflect/Examen/plan/memorize, Lattice grounding, freemium) and **stone + crimson** brand (avoid dark-mode default).
+
+**Kept from PR #4:** SW network-first HTML + offline API JSON, `sw.js` cache headers, favicon/apple-touch icons, SAFETY block in advisor prompt, `/api/corpus` · `/api/verses` · `/api/verify`, modular assets retained under `public/js` + `public/css` for future port.
+
+**Kept from this branch:** Monolith Today shell, grace over streaks, grounding via `data/scripture.js`, quota freemium, habit depth.
+
+**Added in synthesis:** Midday Lord’s Prayer pause (Mt 6:9–13), Amen seal ritual, ⌘K command palette.
+
+---
+
+## 12. Creative atelier (distinctive red-letter craft)
+
+Not another chat wrapper — sensory companionship with verified speech only.
+
+| Experience | Craft |
+| --- | --- |
+| **Word reveal** | Today’s passage arrives word-by-word (respects reduced motion) |
+| **Hour atmosphere** | Morning / day / dusk / night mesh shifts — light brand, not dark-mode default |
+| **Draw a word** | Seek: one random verified saying with flip + reveal |
+| **Breath prayer** | Inhale / hold / exhale over a short Jesus phrase (carry or “Peace! Be still!”) |
+| **Parable chamber** | Immersive story room for Gospel parables · Sit / Carry / Share / Breathe |
+
+---
+
+## 13. World-class loop (Aug 2026 research → build)
+
+Prompts across this effort asked for world-class, research-driven building, merge synthesis, and creative ambition. Latest online synthesis (Lectio 365, Hallow, Glorify, Warm Peach 2026, Bibly, Bible Path, YouVersion retention notes):
+
+| Finding | Gap we had | Build |
+| --- | --- | --- |
+| **Rhythm, not buffet** (Lectio 365) | Today scrolled as feature pile | **Today’s rhythm** — Receive → Sit → Reflect → Carry with one CTA |
+| **Finished session** (Bible Path / ScreensDesign) | Presence alone ≠ session | Rhythm complete state + Amen seals |
+| **Morning / midday / evening poles** | Practices unprioritized | **Day poles** + hour routing (evening opens Examen) |
+| **Audio with pauses** (Hallow Lectio) | Flat TTS | **Guided listen** with silence between passage / cite / reflection |
+| **Crisis always near** | Buried in Settings | Header **988** pill |
+| **Named blessing virality** | Generic Bless copy | Optional **bless-by-name** on share cards |
+| **Day 5–8 cliff** (YouVersion discipleship data) | Plan quiet in the messy middle | Soft bridge copy on plan days 5–7 |
+| **Secondary depth without clutter** | Midday/plan/examen always visible | **More with Him** accordion |
