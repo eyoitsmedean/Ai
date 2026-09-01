@@ -550,10 +550,32 @@ html.simple-mode .rhythm-sub{display:none}
 .return-ribbon p{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45;margin-bottom:10px}
 .return-ribbon .action-btn{margin-right:6px}
 
-.harvest-card{margin:0 14px 16px;padding:16px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface)}
+.harvest-card{margin:0 14px 16px;padding:16px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface);overflow:hidden}
 .harvest-card h3{font-family:var(--font-disp);font-size:calc(16px * var(--scale));margin:0 0 4px}
 .harvest-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
-.harvest-garden{display:flex;flex-wrap:wrap;gap:8px}
+.harvest-garden{display:none}
+.garden-stage{position:relative;height:220px;border-radius:var(--r-sm);overflow:hidden;border:1px solid rgba(185,28,28,.14);background:linear-gradient(180deg,#F8F0E4 0%,#EDE4D4 42%,#E2D6C4 100%);cursor:pointer;touch-action:manipulation}
+html[data-hour="dusk"] .garden-stage,html[data-hour="night"] .garden-stage{background:linear-gradient(180deg,#2A1E18 0%,#1A1410 50%,#120E0C 100%)}
+html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E8 0%,#F0E6D6 45%,#E5D8C6 100%)}
+#garden-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.garden-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;pointer-events:none;z-index:2}
+.garden-empty.hidden{display:none}
+.garden-empty-icon{width:44px;height:44px;border-radius:50%;border:2px dashed rgba(159,18,57,.25);margin-bottom:10px;position:relative;animation:gardenSeedPulse 3s ease-in-out infinite}
+.garden-empty-icon::after{content:'';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:3px;height:14px;background:linear-gradient(180deg,rgba(34,120,60,.5),rgba(34,120,60,.2));border-radius:2px}
+@keyframes gardenSeedPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.06);opacity:1}}
+.garden-empty p{font-family:var(--font-body);font-style:italic;font-size:calc(13px * var(--scale));color:var(--ink-muted);line-height:1.45;max-width:220px}
+.garden-shimmer{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);transform:translateX(-100%);animation:gardenShimmer 8s ease-in-out infinite;pointer-events:none;z-index:1}
+@keyframes gardenShimmer{0%,100%{transform:translateX(-100%)}45%,55%{transform:translateX(100%)}}
+.garden-detail{position:fixed;inset:0;z-index:510;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s}
+.garden-detail.open{opacity:1;pointer-events:all;visibility:visible}
+.garden-detail-bg{position:absolute;inset:0;background:rgba(20,18,16,.55);backdrop-filter:blur(4px)}
+.garden-detail-card{position:relative;width:100%;max-width:430px;background:var(--surface);border-radius:var(--r) var(--r) 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));border:1px solid var(--border);border-bottom:none;box-shadow:0 -8px 40px rgba(26,22,18,.12);transform:translateY(100%);transition:transform .42s cubic-bezier(.32,.72,.24,1)}
+.garden-detail.open .garden-detail-card{transform:translateY(0)}
+.garden-detail-petal{width:48px;height:48px;margin:0 auto 12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,200,200,.9),var(--crimson));box-shadow:0 4px 20px rgba(159,18,57,.25);animation:badgePulse 1.2s ease 1}
+.garden-detail-day{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:8px}
+.garden-detail-phrase{font-family:var(--font-body);font-style:italic;font-size:calc(17px * var(--scale));color:var(--crimson-words);line-height:1.5;text-align:center;margin-bottom:8px}
+.garden-detail-cite{font-size:12px;font-weight:700;color:var(--ink-muted);text-align:center;margin-bottom:18px}
+.garden-detail-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .harvest-leaf{flex:1 1 42%;min-width:140px;padding:12px;border-radius:var(--r-sm);border:1px solid rgba(185,28,28,.18);background:linear-gradient(180deg,rgba(185,28,28,.06),var(--surface-2));cursor:pointer;text-align:left}
 .harvest-leaf:hover{border-color:rgba(185,28,28,.4)}
 .harvest-leaf .hl-day{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
@@ -743,8 +765,16 @@ html.simple-mode .rhythm-sub{display:none}
       </div>
       <div class="harvest-card" id="harvest-card">
         <h3>This week’s harvest</h3>
-        <p class="harvest-sub">Words you received — a quiet garden, not a streak. Tap any leaf to carry it again.</p>
-        <div class="harvest-garden" id="harvest-garden"></div>
+        <p class="harvest-sub">Words you received bloom here — a quiet garden, not a streak. Tap a flower to carry it again.</p>
+        <div class="garden-stage" id="garden-stage" role="img" aria-label="Living garden of received words">
+          <canvas id="garden-canvas"></canvas>
+          <div class="garden-shimmer" aria-hidden="true"></div>
+          <div class="garden-empty" id="garden-empty">
+            <div class="garden-empty-icon" aria-hidden="true"></div>
+            <p>Receive today’s word — a garden waits to bloom.</p>
+          </div>
+        </div>
+        <div class="harvest-garden" id="harvest-garden" aria-hidden="true"></div>
       </div>
       <div class="day-poles" id="day-poles" aria-label="Day poles">
         <div class="day-pole" id="pole-morning"><strong>Morning</strong>Word</div>
@@ -1088,6 +1118,20 @@ html.simple-mode .rhythm-sub{display:none}
   <div class="lectio-actions">
     <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" id="lectio-next" onclick="lectioNext()">Continue</button>
     <button type="button" class="action-btn" onclick="closeLectio()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="garden-detail" id="garden-detail" role="dialog" aria-label="Harvest bloom" aria-hidden="true">
+  <div class="garden-detail-bg" onclick="closeGardenDetail()"></div>
+  <div class="garden-detail-card">
+    <div class="garden-detail-petal" aria-hidden="true"></div>
+    <div class="garden-detail-day" id="garden-detail-day"></div>
+    <p class="garden-detail-phrase" id="garden-detail-phrase"></p>
+    <p class="garden-detail-cite" id="garden-detail-cite"></p>
+    <div class="garden-detail-actions">
+      <button type="button" class="cta-btn cta-primary" style="width:auto;padding:12px 18px" onclick="gardenDetailCarry()">Carry this phrase</button>
+      <button type="button" class="action-btn" onclick="gardenDetailShare()">Share</button>
+      <button type="button" class="action-btn" onclick="closeGardenDetail()">Close</button>
+    </div>
   </div>
 </div>
 <div class="encounter-overlay" id="encounter-overlay" role="dialog" aria-label="Today's Red Letter Encounter" aria-hidden="true">
@@ -1641,33 +1685,308 @@ function weekStartISO() {
   return start.toISOString().slice(0, 10);
 }
 function renderHarvest() {
-  const garden = document.getElementById('harvest-garden');
-  if (!garden) return;
+  renderLivingGarden();
+}
+
+/* ═══ LIVING GARDEN — canvas blooms for received words ═══ */
+let gardenPlants = [];
+let gardenRaf = 0;
+let gardenStart = 0;
+let gardenSelected = null;
+let gardenDetailItem = null;
+let gardenFireflies = [];
+
+function gardenHash(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function gardenPalette(hue, dark) {
+  const sets = dark
+    ? [
+        { petal: '#FB7185', core: '#E11D48', stem: '#3A5A40', leaf: '#4A7A52' },
+        { petal: '#FDA4AF', core: '#BE123C', stem: '#3D4A38', leaf: '#5A6B48' },
+        { petal: '#F5D87A', core: '#B8860B', stem: '#4A4030', leaf: '#6A5A40' },
+      ]
+    : [
+        { petal: '#E11D48', core: '#9F1239', stem: '#2D6A4F', leaf: '#40916C' },
+        { petal: '#BE123C', core: '#7F0F2E', stem: '#386641', leaf: '#52B788' },
+        { petal: '#D4A017', core: '#92640A', stem: '#5C4A32', leaf: '#8B7355' },
+      ];
+  return sets[hue % sets.length];
+}
+
+function buildGardenPlants(week) {
+  return week.map((item, i, arr) => {
+    const seed = gardenHash(item.day + item.verse + item.phrase);
+    const t = arr.length <= 1 ? 0.5 : i / (arr.length - 1);
+    return {
+      item,
+      xRatio: 0.1 + t * 0.8,
+      height: 55 + (seed % 45),
+      petals: 5 + (seed % 5),
+      hue: seed % 3,
+      swayPhase: (seed % 628) / 100,
+      swayAmt: 4 + (seed % 6),
+      growth: 0,
+      targetGrowth: 1,
+      bloomDelay: i * 180,
+      seed,
+    };
+  });
+}
+
+function initGardenFireflies(count, w, h) {
+  gardenFireflies = Array.from({ length: count }, (_, i) => ({
+    x: Math.random() * w,
+    y: h * 0.15 + Math.random() * h * 0.45,
+    r: 1 + Math.random() * 1.5,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.4 + Math.random() * 0.6,
+    drift: (Math.random() - 0.5) * 0.3,
+  }));
+}
+
+function drawGardenPlant(ctx, p, w, h, groundY, t, dark, animate) {
+  const x = w * p.xRatio;
+  const growth = animate ? p.growth : 1;
+  if (growth < 0.02) return;
+  const sway = animate ? Math.sin(t * 0.0012 + p.swayPhase) * p.swayAmt * growth : 0;
+  const stemH = p.height * growth;
+  const topY = groundY - stemH;
+  const pal = gardenPalette(p.hue, dark);
+
+  ctx.save();
+  ctx.strokeStyle = pal.stem;
+  ctx.lineWidth = 2.2 * growth;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x, groundY);
+  ctx.quadraticCurveTo(x + sway, groundY - stemH * 0.55, x + sway * 0.6, topY + 8);
+  ctx.stroke();
+
+  if (growth > 0.35) {
+    const leafScale = Math.min(1, (growth - 0.35) / 0.35);
+    ctx.fillStyle = pal.leaf;
+    ctx.globalAlpha = 0.85 * leafScale;
+    [-1, 1].forEach((side) => {
+      const ly = groundY - stemH * (0.35 + side * 0.08);
+      ctx.beginPath();
+      ctx.ellipse(x + side * 14 + sway * 0.3, ly, 10 * leafScale, 5 * leafScale, side * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  if (growth > 0.65) {
+    const bloom = Math.min(1, (growth - 0.65) / 0.35);
+    const cx = x + sway * 0.6;
+    const cy = topY;
+    const petalR = 7 + p.petals * 0.4;
+    for (let i = 0; i < p.petals; i++) {
+      const ang = (i / p.petals) * Math.PI * 2 + t * 0.0003;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(ang);
+      ctx.globalAlpha = 0.92 * bloom;
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, petalR);
+      grad.addColorStop(0, pal.petal);
+      grad.addColorStop(1, pal.core);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(petalR * 0.55, 0, petalR, petalR * 0.42, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.globalAlpha = bloom;
+    ctx.fillStyle = pal.core;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.5 * bloom, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    if (animate && bloom > 0.8) {
+      ctx.fillStyle = 'rgba(255,220,180,' + (0.25 + Math.sin(t * 0.004 + p.swayPhase) * 0.15) + ')';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 14 + Math.sin(t * 0.003) * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+
+  p._hitR = Math.max(18, 12 + p.height * growth * 0.15);
+  p._cx = x + sway * 0.6;
+  p._cy = topY;
+}
+
+function drawLivingGardenFrame(ts) {
+  const canvas = document.getElementById('garden-canvas');
+  const stage = document.getElementById('garden-stage');
+  if (!canvas || !stage) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!gardenStart) gardenStart = ts;
+  const t = ts - gardenStart;
+  const w = canvas.offsetWidth;
+  const h = canvas.offsetHeight;
+  if (!w || !h) return;
+  const dpr = window.devicePixelRatio || 1;
+  if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+
+  const hour = document.documentElement.dataset.hour || 'day';
+  const dark = hour === 'dusk' || hour === 'night';
+  const groundY = h * 0.82;
+
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  if (dark) {
+    sky.addColorStop(0, '#1A1410');
+    sky.addColorStop(0.55, '#120E0C');
+    sky.addColorStop(1, '#0A0806');
+  } else if (hour === 'morning') {
+    sky.addColorStop(0, '#FBF3E8');
+    sky.addColorStop(0.5, '#F0E6D6');
+    sky.addColorStop(1, '#DDD0BC');
+  } else {
+    sky.addColorStop(0, '#F8F0E4');
+    sky.addColorStop(0.5, '#EDE4D4');
+    sky.addColorStop(1, '#D8CAB6');
+  }
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, h);
+
+  const glowX = w * (0.65 + Math.sin(t * 0.0004) * 0.05);
+  const glow = ctx.createRadialGradient(glowX, h * 0.18, 0, glowX, h * 0.18, w * 0.55);
+  glow.addColorStop(0, dark ? 'rgba(225,29,72,.12)' : 'rgba(232,184,74,.22)');
+  glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, w, h);
+
+  if (dark && !reduced) {
+    gardenFireflies.forEach((f) => {
+      f.x += f.drift;
+      f.y += Math.sin(t * 0.001 * f.speed + f.phase) * 0.15;
+      if (f.x < 0) f.x = w;
+      if (f.x > w) f.x = 0;
+      const a = 0.35 + Math.sin(t * 0.002 + f.phase) * 0.25;
+      ctx.fillStyle = 'rgba(245,216,122,' + a + ')';
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  const groundGrad = ctx.createLinearGradient(0, groundY - 20, 0, h);
+  groundGrad.addColorStop(0, dark ? 'rgba(45,106,79,.35)' : 'rgba(64,145,108,.28)');
+  groundGrad.addColorStop(1, dark ? 'rgba(20,30,22,.6)' : 'rgba(45,80,55,.35)');
+  ctx.fillStyle = groundGrad;
+  ctx.beginPath();
+  ctx.ellipse(w / 2, groundY + 8, w * 0.52, 22, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  const animate = !reduced;
+  gardenPlants.forEach((p) => {
+    if (animate && p.growth < p.targetGrowth) {
+      const elapsed = t - p.bloomDelay;
+      if (elapsed > 0) p.growth = Math.min(p.targetGrowth, elapsed / 1400);
+    }
+    drawGardenPlant(ctx, p, w, h, groundY, t, dark, animate);
+  });
+
+  if (animate && gardenPlants.length) {
+    gardenRaf = requestAnimationFrame(drawLivingGardenFrame);
+  }
+}
+
+function stopGardenAnimation() {
+  if (gardenRaf) cancelAnimationFrame(gardenRaf);
+  gardenRaf = 0;
+}
+
+function renderLivingGarden() {
+  stopGardenAnimation();
+  gardenStart = 0;
+  const empty = document.getElementById('garden-empty');
   const start = weekStartISO();
   const week = getHarvest().filter((h) => h.day >= start);
-  if (!week.length) {
-    garden.innerHTML = '<p class="harvest-empty">Receive today’s word — it will take root here.</p>';
-    return;
+  gardenPlants = buildGardenPlants(week);
+  empty?.classList.toggle('hidden', week.length > 0);
+
+  const canvas = document.getElementById('garden-canvas');
+  if (canvas) {
+    initGardenFireflies(week.length ? 6 + week.length * 2 : 0, canvas.offsetWidth || 300, canvas.offsetHeight || 220);
+    drawLivingGardenFrame(performance.now());
+    if (gardenPlants.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gardenRaf = requestAnimationFrame(drawLivingGardenFrame);
+    }
   }
-  garden.innerHTML = week
-    .slice()
-    .reverse()
-    .map((h) => {
-      const label = new Date(h.day + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' });
-      return (
-        '<button type="button" class="harvest-leaf" onclick="carryHarvest(\'' +
-        esc(h.day) +
-        '\')"><div class="hl-day">' +
-        esc(label) +
-        '</div><div class="hl-phrase">“' +
-        esc(h.phrase) +
-        '”</div><div class="hl-cite">' +
-        esc(h.verse) +
-        '</div></button>'
-      );
-    })
-    .join('');
+
+  const garden = document.getElementById('harvest-garden');
+  if (garden) {
+    garden.innerHTML = week.length
+      ? week.map((h) => '<span data-day="' + esc(h.day) + '">' + esc(h.verse) + '</span>').join('')
+      : '';
+  }
 }
+
+function gardenHitTest(clientX, clientY) {
+  const canvas = document.getElementById('garden-canvas');
+  if (!canvas) return null;
+  const rect = canvas.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+  let best = null;
+  let bestD = Infinity;
+  gardenPlants.forEach((p) => {
+    if (!p._cx) return;
+    const d = Math.hypot(x - p._cx, y - p._cy);
+    if (d < (p._hitR || 20) && d < bestD) {
+      bestD = d;
+      best = p.item;
+    }
+  });
+  return best;
+}
+
+function openGardenDetail(item) {
+  if (!item) return;
+  gardenDetailItem = item;
+  const label = new Date(item.day + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  document.getElementById('garden-detail-day').textContent = label;
+  document.getElementById('garden-detail-phrase').textContent = '"' + item.phrase + '"';
+  document.getElementById('garden-detail-cite').textContent = item.verse + ' · WEB';
+  const detail = document.getElementById('garden-detail');
+  detail.classList.add('open');
+  detail.setAttribute('aria-hidden', 'false');
+}
+
+function closeGardenDetail() {
+  const detail = document.getElementById('garden-detail');
+  detail?.classList.remove('open');
+  detail?.setAttribute('aria-hidden', 'true');
+  gardenDetailItem = null;
+}
+
+function gardenDetailCarry() {
+  if (!gardenDetailItem) return;
+  carryHarvest(gardenDetailItem.day);
+  closeGardenDetail();
+}
+
+function gardenDetailShare() {
+  if (!gardenDetailItem) return;
+  closeGardenDetail();
+  openShareCard({ verse: gardenDetailItem.verse, quote: gardenDetailItem.phrase, theme: gardenDetailItem.theme || 'Harvest' });
+}
+
 function carryHarvest(day) {
   const h = getHarvest().find((x) => x.day === day);
   if (!h) return;
@@ -2061,6 +2380,7 @@ const CMD_ITEMS = [
   { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
   { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
   { label: 'Today\'s Encounter', hint: 'Replay the cinematic opening', run: () => openEncounter(true) },
+  { label: 'Walk the garden', hint: 'This week\'s living harvest', run: () => { goTab('today'); document.getElementById('harvest-card')?.scrollIntoView({ behavior: 'smooth' }); renderLivingGarden(); } },
 ];
 
 function openCommandPalette() {
@@ -2336,6 +2656,7 @@ function setHourAtmosphere() {
   else if (h < 11) hour = 'morning';
   else if (h >= 17) hour = 'dusk';
   document.documentElement.dataset.hour = hour;
+  renderLivingGarden();
 }
 
 /* ═══ DRAW A WORD ═══ */
@@ -3987,6 +4308,23 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then((reg) => reg.update()).catch(() => {});
 }
 
+document.getElementById('garden-stage')?.addEventListener('click', (e) => {
+  const hit = gardenHitTest(e.clientX, e.clientY);
+  if (hit) openGardenDetail(hit);
+});
+document.getElementById('garden-stage')?.addEventListener('touchend', (e) => {
+  const t = e.changedTouches?.[0];
+  if (!t) return;
+  const hit = gardenHitTest(t.clientX, t.clientY);
+  if (hit) { e.preventDefault(); openGardenDetail(hit); }
+}, { passive: false });
+if (typeof ResizeObserver !== 'undefined') {
+  const gardenStage = document.getElementById('garden-stage');
+  if (gardenStage) {
+    new ResizeObserver(() => renderLivingGarden()).observe(gardenStage);
+  }
+}
+
 document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
@@ -4006,6 +4344,7 @@ document.addEventListener('keydown', (e) => {
     closeLectio();
     closeSilence();
     closeEncounter('today');
+    closeGardenDetail();
   }
 });
 

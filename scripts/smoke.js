@@ -113,7 +113,7 @@ async function main() {
     assert(appHtml.includes('silence-overlay') && appHtml.includes('rhythm-closure') && appHtml.includes('privacy-toggle'), 'missing silence/closure/privacy');
     assert(appHtml.includes('trust-strip') && appHtml.includes('advisor-hero') && appHtml.includes('Ask the Advisor'), 'missing trust/advisor hero');
     assert(appHtml.includes('share-caption') && /VERIFIED · WEB|Verified · WEB/.test(appHtml), 'missing viral trust share chrome');
-    assert(appHtml.includes('encounter-overlay') && appHtml.includes('encounter-quote'), 'missing daily encounter');
+    assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 
