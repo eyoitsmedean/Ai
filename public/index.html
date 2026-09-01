@@ -580,6 +580,48 @@ html.simple-mode .rhythm-sub{display:none}
 .verify-chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 10px;border-radius:999px;border:1px solid rgba(185,28,28,.25);background:rgba(185,28,28,.06);color:var(--crimson);font-size:11px;font-weight:700;cursor:pointer}
 .verify-chip.ok{border-color:rgba(22,101,52,.35);background:rgba(22,101,52,.08);color:#166534}
 .verify-chip.bad{border-color:rgba(153,27,27,.4);color:#991B1B}
+
+/* ═══ RED LETTER ENCOUNTER — daily cinematic opening ═══ */
+.encounter-overlay{position:fixed;inset:0;z-index:520;background:#050403;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;text-align:center;max-width:430px;margin:0 auto;overflow:hidden}
+.encounter-overlay.open{display:flex}
+.encounter-overlay.fade-out{animation:encFadeOut .55s var(--ease) forwards}
+@keyframes encFadeOut{to{opacity:0;visibility:hidden}}
+.encounter-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
+.encounter-glow{position:absolute;width:min(90vw,320px);height:min(90vw,320px);border-radius:50%;background:radial-gradient(circle,rgba(159,18,57,.28) 0%,rgba(159,18,57,.06) 45%,transparent 70%);animation:encGlow 4.2s ease-in-out infinite;pointer-events:none}
+@keyframes encGlow{0%,100%{transform:scale(.88);opacity:.5}50%{transform:scale(1.08);opacity:.85}}
+.encounter-inner{position:relative;z-index:2;width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center}
+.encounter-kicker{font-size:10px;font-weight:700;letter-spacing:.65px;text-transform:uppercase;color:rgba(232,201,138,.55);margin-bottom:10px;opacity:0;transform:translateY(8px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.encounter-kicker.show{opacity:1;transform:none}
+.encounter-date{font-family:var(--font-disp);font-size:clamp(22px,6vw,28px);font-weight:700;color:rgba(247,244,239,.92);letter-spacing:-.3px;margin-bottom:6px;opacity:0;transform:translateY(12px);transition:opacity .8s .1s var(--ease),transform .8s .1s var(--ease)}
+.encounter-date.show{opacity:1;transform:none}
+.encounter-theme{font-size:12px;font-weight:600;letter-spacing:.35px;text-transform:uppercase;color:rgba(225,29,72,.75);margin-bottom:28px;opacity:0;transition:opacity .6s var(--ease)}
+.encounter-theme.show{opacity:1}
+.encounter-quote{font-family:var(--font-body);font-style:italic;font-size:clamp(21px,5.8vw,27px);line-height:1.48;color:rgba(255,228,228,.94);max-width:22ch;min-height:5em;margin:0 auto 16px;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:0 .28em}
+.encounter-quote .enc-word{display:inline;opacity:0;transform:translateY(14px) scale(.96);filter:blur(4px);animation:encWordIn .72s var(--ease) forwards}
+@keyframes encWordIn{to{opacity:1;transform:none;filter:none}}
+.encounter-quote .enc-word.lit{text-shadow:0 0 22px rgba(225,29,72,.55),0 0 40px rgba(225,29,72,.2)}
+.encounter-quote .enc-q{opacity:0;animation:encWordIn .5s var(--ease) forwards;color:rgba(255,228,228,.5);font-size:.85em}
+.encounter-verse{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px;opacity:0;transition:opacity .6s var(--ease)}
+.encounter-verse.show{opacity:1}
+.encounter-whisper{font-size:13px;color:rgba(237,232,224,.45);font-style:italic;margin-bottom:24px;opacity:0;transition:opacity .6s .15s var(--ease)}
+.encounter-whisper.show{opacity:1}
+.encounter-actions{display:flex;flex-direction:column;gap:10px;width:100%;opacity:0;transform:translateY(10px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.encounter-actions.show{opacity:1;transform:none}
+.encounter-btn{width:100%;padding:14px 18px;border-radius:var(--r);font-size:calc(14px * var(--scale));font-weight:700;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.encounter-btn:active{transform:scale(.98)}
+.encounter-btn-primary{background:linear-gradient(135deg,var(--crimson),var(--crimson-deep));color:#fff;box-shadow:0 4px 20px rgba(159,18,57,.35)}
+.encounter-btn-secondary{background:rgba(237,232,224,.1);border:1px solid rgba(237,232,224,.18);color:#EDE8E0}
+.encounter-btn-ghost{background:transparent;border:1px solid rgba(237,232,224,.12);color:rgba(237,232,224,.65);font-weight:600}
+.encounter-skip{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;z-index:3;padding:8px 14px;border-radius:999px;border:1px solid rgba(237,232,224,.12);background:rgba(20,18,16,.5);color:rgba(237,232,224,.5);font-size:12px;font-weight:600;cursor:pointer;opacity:0;transition:opacity .4s}
+.encounter-skip.show{opacity:1}
+.encounter-skip:hover{color:rgba(237,232,224,.85);border-color:rgba(237,232,224,.25)}
+.encounter-progress{position:absolute;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
+.encounter-dot{width:5px;height:5px;border-radius:50%;background:rgba(237,232,224,.15);transition:background .3s,transform .3s}
+.encounter-dot.on{background:var(--crimson);transform:scale(1.25);box-shadow:0 0 8px rgba(225,29,72,.5)}
+@media (prefers-reduced-motion:reduce){
+  .encounter-glow{animation:none;opacity:.6}
+  .encounter-quote .enc-word{animation:none;opacity:1;transform:none;filter:none}
+}
 </style>
 </head>
 <body>
@@ -1046,6 +1088,28 @@ html.simple-mode .rhythm-sub{display:none}
   <div class="lectio-actions">
     <button type="button" class="ob-btn" style="width:auto;padding:12px 22px" id="lectio-next" onclick="lectioNext()">Continue</button>
     <button type="button" class="action-btn" onclick="closeLectio()" style="background:rgba(237,232,224,.1);border-color:rgba(237,232,224,.2);color:#EDE8E0">Close</button>
+  </div>
+</div>
+<div class="encounter-overlay" id="encounter-overlay" role="dialog" aria-label="Today's Red Letter Encounter" aria-hidden="true">
+  <canvas class="encounter-canvas" id="encounter-canvas" aria-hidden="true"></canvas>
+  <div class="encounter-glow" aria-hidden="true"></div>
+  <button type="button" class="encounter-skip" id="encounter-skip" onclick="closeEncounter('today')">Enter</button>
+  <div class="encounter-inner">
+    <div class="encounter-kicker" id="encounter-kicker">Red Letter · Day <span id="encounter-day-n">1</span></div>
+    <div class="encounter-date" id="encounter-date"></div>
+    <div class="encounter-theme" id="encounter-theme"></div>
+    <p class="encounter-quote" id="encounter-quote" aria-live="polite"></p>
+    <p class="encounter-verse" id="encounter-verse"></p>
+    <p class="encounter-whisper" id="encounter-whisper">He spoke this to you today.</p>
+    <div class="encounter-actions" id="encounter-actions">
+      <button type="button" class="encounter-btn encounter-btn-primary" onclick="closeEncounter('sit')">Sit with Him · one minute</button>
+      <button type="button" class="encounter-btn encounter-btn-secondary" onclick="closeEncounter('ask')">Ask the Advisor about this</button>
+      <button type="button" class="encounter-btn encounter-btn-ghost" onclick="closeEncounter('witness')">Witness · share His words</button>
+      <button type="button" class="encounter-btn encounter-btn-ghost" onclick="closeEncounter('today')">Enter Today</button>
+    </div>
+  </div>
+  <div class="encounter-progress" id="encounter-progress" aria-hidden="true">
+    <span class="encounter-dot"></span><span class="encounter-dot"></span><span class="encounter-dot"></span><span class="encounter-dot"></span><span class="encounter-dot"></span>
   </div>
 </div>
 <div class="silence-overlay" id="silence-overlay" role="dialog" aria-label="Contemplatio · silence" aria-hidden="true">
@@ -1996,6 +2060,7 @@ const CMD_ITEMS = [
   { label: 'Draw a word', hint: 'One saying, given to you', run: () => { goTab('seek'); drawAWord(); } },
   { label: 'Breath prayer', hint: 'Inhale His words', run: () => openBreathPrayer() },
   { label: 'Parable chamber', hint: 'A story He told', run: () => openRandomParable() },
+  { label: 'Today\'s Encounter', hint: 'Replay the cinematic opening', run: () => openEncounter(true) },
 ];
 
 function openCommandPalette() {
@@ -2076,6 +2141,191 @@ function revealWords(el, text) {
   close.textContent = '”';
   close.style.animationDelay = (70 + words.length * 48) + 'ms';
   el.appendChild(close);
+}
+
+/* ═══ RED LETTER ENCOUNTER — once-daily cinematic opening ═══ */
+let encounterTimers = [];
+let encounterEmbers = null;
+let encounterPhase = 0;
+
+function encounterKey() { return 'rla-encounter-' + todayISO(); }
+
+function clearEncounterTimers() {
+  encounterTimers.forEach((t) => clearTimeout(t));
+  encounterTimers = [];
+}
+
+function scheduleEncounter(fn, ms) {
+  encounterTimers.push(setTimeout(fn, ms));
+}
+
+function startEncounterEmbers() {
+  const canvas = document.getElementById('encounter-canvas');
+  if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const resize = () => {
+    canvas.width = canvas.offsetWidth * (window.devicePixelRatio || 1);
+    canvas.height = canvas.offsetHeight * (window.devicePixelRatio || 1);
+    ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+  };
+  resize();
+  const particles = Array.from({ length: 28 }, () => ({
+    x: Math.random() * canvas.offsetWidth,
+    y: Math.random() * canvas.offsetHeight,
+    r: 1 + Math.random() * 2.2,
+    vy: -0.15 - Math.random() * 0.45,
+    vx: (Math.random() - 0.5) * 0.25,
+    a: 0.15 + Math.random() * 0.35,
+    hue: Math.random() > 0.6 ? 'gold' : 'crimson',
+  }));
+  let raf = 0;
+  const draw = () => {
+    if (!document.getElementById('encounter-overlay')?.classList.contains('open')) {
+      cancelAnimationFrame(raf);
+      encounterEmbers = null;
+      return;
+    }
+    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    particles.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y < -8) { p.y = canvas.offsetHeight + 8; p.x = Math.random() * canvas.offsetWidth; }
+      if (p.x < -8) p.x = canvas.offsetWidth + 8;
+      if (p.x > canvas.offsetWidth + 8) p.x = -8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.hue === 'gold'
+        ? 'rgba(232,184,74,' + p.a + ')'
+        : 'rgba(225,29,72,' + p.a + ')';
+      ctx.fill();
+    });
+    raf = requestAnimationFrame(draw);
+  };
+  encounterEmbers = { stop: () => cancelAnimationFrame(raf), resize };
+  window.addEventListener('resize', resize);
+  draw();
+}
+
+function setEncounterPhase(n) {
+  encounterPhase = n;
+  document.querySelectorAll('#encounter-progress .encounter-dot').forEach((d, i) => {
+    d.classList.toggle('on', i <= n);
+  });
+}
+
+function revealCinematicWords(el, text, onDone) {
+  if (!el) return;
+  const clean = String(text || '').replace(/^["“]|["”]$/g, '').trim();
+  if (!clean) { onDone?.(); return; }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = '"' + clean + '"';
+    onDone?.();
+    return;
+  }
+  const words = clean.split(/\s+/).filter(Boolean);
+  el.innerHTML = '';
+  const open = document.createElement('span');
+  open.className = 'enc-q';
+  open.textContent = '“';
+  open.style.animationDelay = '0ms';
+  el.appendChild(open);
+  words.forEach((word, index) => {
+    const span = document.createElement('span');
+    span.className = 'enc-word';
+    span.textContent = word + (index === words.length - 1 ? '' : ' ');
+    const delay = 120 + index * 72;
+    span.style.animationDelay = delay + 'ms';
+    el.appendChild(span);
+    scheduleEncounter(() => {
+      span.classList.add('lit');
+      if (index === words.length - 1 && navigator.vibrate) {
+        try { navigator.vibrate(12); } catch (_) {}
+      }
+    }, delay + 400);
+  });
+  const close = document.createElement('span');
+  close.className = 'enc-q';
+  close.textContent = '”';
+  close.style.animationDelay = (120 + words.length * 72) + 'ms';
+  el.appendChild(close);
+  scheduleEncounter(onDone, 120 + words.length * 72 + 900);
+}
+
+function maybeShowEncounter(force) {
+  if (!dailyData?.word) return;
+  if (!force && ls(encounterKey()) === '1') return;
+  scheduleEncounter(() => openEncounter(!!force), force ? 0 : 700);
+}
+
+function openEncounter(force) {
+  if (!dailyData?.word) return;
+  clearEncounterTimers();
+  const w = dailyData.word;
+  const overlay = document.getElementById('encounter-overlay');
+  if (!overlay) return;
+
+  document.getElementById('encounter-day-n').textContent = ls('rla-day-num') || '1';
+  document.getElementById('encounter-date').textContent = formatDate();
+  document.getElementById('encounter-theme').textContent = w.theme || 'Word of the Day';
+  document.getElementById('encounter-verse').textContent = w.verse + ' · WEB · Verified';
+  document.getElementById('encounter-quote').innerHTML = '';
+
+  ['encounter-kicker', 'encounter-date', 'encounter-theme', 'encounter-verse',
+   'encounter-whisper', 'encounter-actions', 'encounter-skip'].forEach((id) => {
+    document.getElementById(id)?.classList.remove('show');
+  });
+
+  overlay.classList.remove('fade-out');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  trapFocus(overlay);
+  setEncounterPhase(0);
+  startEncounterEmbers();
+
+  scheduleEncounter(() => {
+    document.getElementById('encounter-kicker')?.classList.add('show');
+    document.getElementById('encounter-date')?.classList.add('show');
+    setEncounterPhase(1);
+  }, 400);
+
+  scheduleEncounter(() => {
+    document.getElementById('encounter-theme')?.classList.add('show');
+    setEncounterPhase(2);
+  }, 1100);
+
+  scheduleEncounter(() => {
+    setEncounterPhase(3);
+    revealCinematicWords(document.getElementById('encounter-quote'), w.passage, () => {
+      document.getElementById('encounter-verse')?.classList.add('show');
+      document.getElementById('encounter-whisper')?.classList.add('show');
+      document.getElementById('encounter-actions')?.classList.add('show');
+      document.getElementById('encounter-skip')?.classList.add('show');
+      setEncounterPhase(4);
+    });
+  }, 1600);
+
+  if (!force) lsSet(encounterKey(), '1');
+}
+
+function closeEncounter(action) {
+  clearEncounterTimers();
+  encounterEmbers?.stop?.();
+  encounterEmbers = null;
+  const overlay = document.getElementById('encounter-overlay');
+  if (!overlay) return;
+  lsSet(encounterKey(), '1');
+  overlay.classList.add('fade-out');
+  scheduleEncounter(() => {
+    overlay.classList.remove('open', 'fade-out');
+    overlay.setAttribute('aria-hidden', 'true');
+    if (action === 'sit') { goTab('today'); startSit(); }
+    else if (action === 'ask') askAboutTodaysWord();
+    else if (action === 'witness' && dailyData?.word) {
+      openShareCard({ verse: dailyData.word.verse, quote: dailyData.word.passage, theme: dailyData.word.theme });
+    }
+    else goTab('today');
+  }, 480);
 }
 
 /* ═══ HOUR ATMOSPHERE ═══ */
@@ -2935,6 +3185,7 @@ async function loadDaily() {
   revealWords(document.getElementById('word-passage'), w.passage);
   setHourAtmosphere();
   renderMidday();
+  maybeShowEncounter();
 }
 
 function shareAffirmation() {
@@ -3754,6 +4005,7 @@ document.addEventListener('keydown', (e) => {
     closeRest();
     closeLectio();
     closeSilence();
+    closeEncounter('today');
   }
 });
 
