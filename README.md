@@ -44,6 +44,27 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Phones (Red Words)
+
+The same corpus ships as an offline Flutter shell — **Red Words**, *His words, for this moment.*
+
+```bash
+flutter pub get
+flutter test
+flutter build apk          # Android release APK (debug-signed in this repo)
+flutter build appbundle    # Play AAB, same signing
+```
+
+- iOS workspace: `ios/Runner.xcworkspace` — bundle `com.redwords.redWords`
+- Widget: **RedWordsWidget** (`com.redwords.redWords.RedWordsWidget`), App Group `group.com.redwords.redWords`
+- Deep link: `redwords://today`
+- Widget card = the Word only (sentence + citation). No badge, streak, or app name on the card.
+- A signed IPA still needs a Mac. See `TESTFLIGHT.md`.
+
+```bash
+node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js
+```
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
