@@ -2319,8 +2319,8 @@ function closeSit() {
   clearInterval(sitTimer);
   sitTimer = null;
   const overlay = document.getElementById('sit-overlay');
-  overlay.classList.remove('open');
-  overlay.setAttribute('aria-hidden', 'true');
+  overlay?.classList.remove('open');
+  overlay?.setAttribute('aria-hidden', 'true');
 }
 function finishSit() {
   closeSit();
@@ -3106,9 +3106,10 @@ function planDayNumber() {
   return Math.min(7, Math.max(1, diff));
 }
 function findPlanPassage(verse) {
+  if (!verse) return CORPUS[0];
   const hit = CORPUS.find((c) => c.verse === verse);
   if (hit) return hit;
-  return CORPUS.find((c) => verse.startsWith(c.verse.split('-')[0])) || CORPUS[0];
+  return CORPUS.find((c) => (c.verse || '').startsWith(String(verse).split('-')[0])) || CORPUS[0];
 }
 function renderPlan() {
   const daysEl = document.getElementById('plan-days');
@@ -3555,12 +3556,12 @@ async function loadDaily() {
 }
 
 function shareAffirmation() {
-  if (!dailyData) return;
+  if (!dailyData?.affirmation?.quote) return;
   openShareCard({ verse: dailyData.affirmation.verse, quote: dailyData.affirmation.quote, theme: 'Daily Affirmation' });
 }
 
 function shareWord() {
-  if (!dailyData) return;
+  if (!dailyData?.word?.passage) return;
   openShareCard({ verse: dailyData.word.verse, quote: dailyData.word.passage, theme: dailyData.word.theme });
 }
 
