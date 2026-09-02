@@ -46,4 +46,13 @@ This Linux agent cannot compile a signed IPA. The iOS project is archive-ready w
 - Tap the widget → app opens Today (`redwords://today`)
 - The card is the sentence + citation only
 
-Android sideload: install the release APK this PR built (`build/app/outputs/flutter-apk/app-release.apk`) after `flutter build apk`. Play App Signing still needs your Play Console upload key — this repo does not invent one.
+## Android artifacts produced on Linux (not store-signed)
+
+Built on this agent, debug-keystore signed (Play will not accept this as an upload key):
+
+| File | SHA-256 |
+| --- | --- |
+| `build/app/outputs/flutter-apk/app-release.apk` (44.8MB) | `f836085ca143fc4e053a553afa9974a2209dacd89892ff5b9ae2af17dadd36b5` |
+| `build/app/outputs/bundle/release/app-release.aab` (44.9MB) | `08f5dc8cbd55b0a569469018a4f73eec153b081fa6b215e3bde849dcec033f00` |
+
+Verified in the APK: label **Red Words**, package `com.redwords.red_words`, version `0.1.0` / `1`, `redwords://today`, `RedWordsWidget` receiver, `provides-component: app-widget`. No Play upload key exists in this repo.
