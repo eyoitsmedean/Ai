@@ -52,6 +52,7 @@ describe('smoke routes', () => {
     assert.ok(data.sayings > 100);
     assert.equal(res.headers['x-content-type-options'], 'nosniff');
     assert.match(res.headers['content-security-policy'] || '', /default-src 'self'/);
+    assert.equal(res.headers['x-powered-by'], undefined);
   });
 
   it('serves a verified daily page', async () => {

@@ -164,8 +164,12 @@ async function main() {
       document.getElementById('compose-line').value = 'A line I wrote.';
       if (typeof keepCompose === 'function') keepCompose();
     });
+    await page.focus('#compose-line');
+    await page.keyboard.type('Kept with Enter.');
+    await page.keyboard.press('Enter');
     const kept = await page.evaluate(() => document.getElementById('journal-list').innerText);
     assert(/A line I wrote/i.test(kept), 'compose did not keep the line');
+    assert(/Kept with Enter/i.test(kept), 'Enter did not keep the compose line');
     assert(/Sat with|A line/i.test(kept), 'commonplace missing type labels');
   });
 

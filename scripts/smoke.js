@@ -92,8 +92,15 @@ async function main() {
     assert(res.ok, 'chat status ' + res.status);
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
-    assert(/Luke 15|John 6:35|Matthew|Mark/i.test(body), 'fallback should cite a Gospel');
-    assert(/lost|rejoice|bread|shepherd|hunger/i.test(body), 'shame should retrieve a fitting saying');
+    const letter = body
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert(/Luke 15|John 6:35|Matthew|Mark/i.test(letter), 'fallback should cite a Gospel');
+    assert(/lost|rejoice|bread|shepherd|hunger/i.test(letter), 'shame should retrieve a fitting saying');
   });
 
   await check('welcome landing', async () => {
