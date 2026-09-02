@@ -11,7 +11,9 @@
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
-  <title>Red Letter — The Advisor</title>
+  <title>Red Letter</title>
+  <meta property="og:url" content="/" />
+  <meta name="application-name" content="Red Letter" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/icon-192.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -2524,7 +2526,7 @@ async function loadCurated() {
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch('/api/daily?date=' + encodeURIComponent(todayStr()));
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
   } catch (e) {
@@ -4158,6 +4160,24 @@ function bindRituals() {
   ritualsBound = true;
   const note = document.getElementById('blessing-note');
   if (note) note.addEventListener('input', updateBlessingPreview);
+  const compose = document.getElementById('compose-line');
+  if (compose) {
+    compose.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        keepCompose();
+      }
+    });
+  }
+  const sitReply = document.getElementById('sit-reply');
+  if (sitReply) {
+    sitReply.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        keepSitReply();
+      }
+    });
+  }
   const amen = document.getElementById('amen');
   if (amen) amen.addEventListener('click', closeAmen);
   const cmdk = document.getElementById('cmdk');

@@ -5,17 +5,50 @@ const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
-const { searchLibrary } = require('./lib/library');
+const { searchLibrary, sayingCount } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { adviseLetter } = require('./lib/advise');
+const pkg = require('./package.json');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
 
+if (process.env.TRUST_PROXY === '1' || process.env.TRUST_PROXY === 'true') {
+  app.set('trust proxy', 1);
+}
+
 app.use(express.json({ limit: '32kb' }));
+
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('X-DNS-Prefetch-Control', 'off');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  }
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data:",
+    "connect-src 'self'",
+    "worker-src 'self'",
+    "manifest-src 'self'",
+    "frame-ancestors 'self'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join('; '));
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders(res, filePath) {
     if (filePath.endsWith('sw.js')) {
@@ -100,7 +133,11 @@ STRICT RULES:
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
 • Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
 
-const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
+function dailySystemFor(dateKey) {
+  const label = dateKey
+    ? new Date(`${dateKey}T12:00:00`).toDateString()
+    : new Date().toDateString();
+  return `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
 Return ONLY valid JSON (no markdown, no fences) with this exact structure:
 {
@@ -122,7 +159,8 @@ Rules:
 - Every quote must be actual Jesus speech from the four Gospels.
 - The affirmation must feel personal and specific, not generic.
 - Choose a theme that is timeless and emotionally resonant.
-- Today is ${new Date().toDateString()} — choose content appropriate for the day.`;
+- Today is ${label} — choose content appropriate for the day.`;
+}
 
 const ENCOURAGE_SYSTEM = `You are "The Red Letter Advisor." Generate a deeply generous encouragement package for someone in a specific life situation, drawn entirely from the direct words of Jesus in the four Gospels.
 
@@ -150,6 +188,18 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function parseDateParam(raw) {
+  if (!raw || typeof raw !== 'string') return null;
+  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+  const y = Number(m[1]);
+  const mo = Number(m[2]) - 1;
+  const d = Number(m[3]);
+  const dt = new Date(y, mo, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo || dt.getDate() !== d) return null;
+  return raw;
+}
+
 async function generateStructured(system, user, schema, maxTokens) {
   try {
     return await client.messages.create({
@@ -171,9 +221,9 @@ async function generateStructured(system, user, schema, maxTokens) {
   }
 }
 
-async function generateDailyFromModel() {
+async function generateDailyFromModel(dateKey) {
   const response = await generateStructured(
-    DAILY_SYSTEM,
+    dailySystemFor(dateKey),
     "Generate today's daily affirmation and word.",
     DAILY_SCHEMA,
     1400
@@ -182,23 +232,23 @@ async function generateDailyFromModel() {
   return verifyJsonQuotes(parseModelJson(text));
 }
 
-async function fetchDailyContent() {
-  const key = todayKey();
+async function fetchDailyContent(dateKey) {
+  const key = dateKey || todayKey();
   if (dailyCache.has(key)) return dailyCache.get(key);
 
+  const curated = dailyForDate(dateKey || new Date());
+
   if (!client) {
-    const curated = dailyForDate();
     dailyCache.set(key, curated);
     return curated;
   }
 
   try {
-    const data = await generateDailyFromModel();
+    const data = await generateDailyFromModel(key);
     dailyCache.set(key, data);
     return data;
   } catch (err) {
     console.error('Daily model fallback:', err.message);
-    const curated = dailyForDate();
     dailyCache.set(key, curated);
     return curated;
   }
@@ -207,8 +257,13 @@ async function fetchDailyContent() {
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
+    service: 'red-letter-advisor',
+    version: pkg.version,
+    sayings: sayingCount(),
+    model: MODEL,
     anthropic: Boolean(client),
     themes: themeNames().length,
+    time: new Date().toISOString(),
   });
 });
 
@@ -217,7 +272,8 @@ app.get('/api/daily', async (req, res) => {
     return res.status(429).json({ error: 'Please return later for the morning page.' });
   }
   try {
-    res.json(await fetchDailyContent());
+    const dateKey = parseDateParam(req.query.date);
+    res.json(await fetchDailyContent(dateKey));
   } catch (err) {
     console.error('Daily error:', err.message);
     res.status(500).json({ error: 'Failed to generate daily content.' });
@@ -362,7 +418,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(adviseLetter(last.content));
   }
 
   try {
@@ -398,7 +454,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(adviseLetter(last.content) || FALLBACK_LETTER);
   }
 });
 
@@ -416,25 +472,36 @@ app.post('/api/waitlist', (req, res) => {
   if (!Array.isArray(rows)) rows = [];
   if (!rows.some((r) => r.email === email)) {
     rows.push({ email, at: new Date().toISOString() });
-    fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
+    try {
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
+    } catch (err) {
+      console.error('Waitlist write:', err.message);
+      return res.status(500).json({ ok: false, error: 'Could not save the name.' });
+    }
   }
   res.json({ ok: true });
 });
 
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const published = path.join(__dirname, 'public', 'welcome.html');
+  const source = fs.existsSync(published) ? published : path.join(__dirname, 'index.html');
+  res.sendFile(source);
 });
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
+  if (path.extname(req.path)) {
+    return res.status(404).type('text').send('Not found');
+  }
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`The Red Letter Advisor → http://${HOST}:${PORT}`);
   });
 }
 

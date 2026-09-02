@@ -47,6 +47,11 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(data.themes, 12);
+    assert.equal(data.service, 'red-letter-advisor');
+    assert.match(String(data.version), /^\d+\.\d+\.\d+/);
+    assert.ok(data.sayings > 100);
+    assert.equal(res.headers['x-content-type-options'], 'nosniff');
+    assert.match(res.headers['content-security-policy'] || '', /default-src 'self'/);
   });
 
   it('serves a verified daily page', async () => {
@@ -56,6 +61,21 @@ describe('smoke routes', () => {
     assert.equal(data.verified, true);
     assert.match(data.affirmation.verse, /^(Matthew|Mark|Luke|John) /);
     assert.ok(data.affirmation.quote.length > 8);
+  });
+
+  it('honors a local calendar date on the daily page', async () => {
+    const a = await request('GET', '/api/daily?date=2026-08-29');
+    const b = await request('GET', '/api/daily?date=2026-08-30');
+    const da = JSON.parse(a.raw);
+    const db = JSON.parse(b.raw);
+    assert.equal(a.status, 200);
+    assert.equal(b.status, 200);
+    assert.notEqual(da.word.verse + da.word.title, db.word.verse + db.word.title);
+  });
+
+  it('does not treat missing assets as the folio', async () => {
+    const res = await request('GET', '/does-not-exist.js');
+    assert.equal(res.status, 404);
   });
 
   it('rejects an unknown encouragement theme', async () => {
@@ -77,9 +97,9 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
-  it('streams a verified letter for chat', async () => {
+  it('streams a retrieved letter for chat without a model key', async () => {
     const res = await request('POST', '/api/chat', {
-      messages: [{ role: 'user', content: 'I am afraid of the future' }],
+      messages: [{ role: 'user', content: 'I feel so much shame and guilt' }],
     });
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
@@ -91,8 +111,8 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /Luke 15|John 6:35/);
+    assert.match(letter, /lost|rejoice|bread|shepherd|hunger/i);
     assert.match(res.raw, /\[DONE\]/);
   });
 

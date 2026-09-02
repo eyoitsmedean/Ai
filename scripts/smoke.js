@@ -35,11 +35,25 @@ async function main() {
     const { res, json } = await req('/api/health');
     assert(res.ok && json.ok, 'health not ok');
     assert(json.themes >= 12, 'theme rooms missing');
+    assert(json.sayings > 100, 'spoken corpus missing from health');
+    assert(res.headers.get('x-content-type-options') === 'nosniff', 'missing nosniff');
   });
 
   await check('daily page', async () => {
     const { json } = await req('/api/daily');
     assert(json.affirmation?.quote && json.word?.passage, 'daily payload incomplete');
+  });
+
+  await check('daily local date', async () => {
+    const a = await req('/api/daily?date=2026-08-29');
+    const b = await req('/api/daily?date=2026-08-30');
+    assert(a.json?.word?.verse && b.json?.word?.verse, 'dated daily missing');
+    assert(a.json.word.verse + a.json.word.title !== b.json.word.verse + b.json.word.title, 'dates did not rotate');
+  });
+
+  await check('missing asset is 404', async () => {
+    const { res } = await req('/does-not-exist.js');
+    assert(res.status === 404, 'expected 404 for missing js, got ' + res.status);
   });
 
   await check('encouragement', async () => {
@@ -78,7 +92,8 @@ async function main() {
     assert(res.ok, 'chat status ' + res.status);
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
-    assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
+    assert(/Luke 15|John 6:35|Matthew|Mark/i.test(body), 'fallback should cite a Gospel');
+    assert(/lost|rejoice|bread|shepherd|hunger/i.test(body), 'shame should retrieve a fitting saying');
   });
 
   await check('welcome landing', async () => {
