@@ -32,7 +32,7 @@ void main() {
   });
 
   test('no-retrieve stays without inventing', () {
-    final result = ask.ask('what is the weather in boise tomorrow');
+    final result = ask.ask('how do I caramelize onions for pasta night');
     expect(result.kind, AskKind.stay);
     expect(result.saying, isNull);
     expect(result.message.toLowerCase(), contains('not invent'));

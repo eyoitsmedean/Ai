@@ -110,12 +110,13 @@ class AskRetriever {
     Saying? best;
     var bestScore = 0;
     for (final saying in pack.sayings) {
-      final hay =
-          '${saying.word} ${saying.citation} ${saying.tags.join(' ')} ${saying.reflection}'
-              .toLowerCase();
+      final hay = '${saying.word} ${saying.citation} ${saying.tags.join(' ')}'
+          .toLowerCase();
       var score = 0;
       for (final token in tokens) {
-        if (hay.contains(token)) {
+        if (saying.tags.contains(token) || saying.chips.contains(token)) {
+          score += 10;
+        } else if (hay.contains(token)) {
           score += token.length > 5 ? 3 : 2;
         }
       }
@@ -125,7 +126,7 @@ class AskRetriever {
       }
     }
 
-    if (best == null || bestScore < 2) {
+    if (best == null || bestScore < 4) {
       return const AskResult(
         kind: AskKind.stay,
         message:

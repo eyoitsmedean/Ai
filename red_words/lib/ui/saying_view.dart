@@ -29,7 +29,7 @@ class SayingView extends StatelessWidget {
       data: media.copyWith(textScaler: scale),
       child: ColoredBox(
         color: paper,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(28, 36, 28, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

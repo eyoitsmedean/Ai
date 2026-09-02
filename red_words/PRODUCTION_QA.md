@@ -6,11 +6,11 @@ Deadline: Thursday 3 Sep 2026 8:00am America/Boise.
 
 | Check | Result |
 | --- | --- |
-| `flutter analyze` | recorded in PR |
-| `flutter test` | recorded in PR |
-| Scripture pack | 100 WEB Gospel sayings; first `anxiety-mt-6-34` / Matthew 6:34 |
-| Android Gradle | recorded in PR |
-| iOS compile | **FAIL / blocked** — no Mac on this agent. Project is archive-ready. See TESTFLIGHT.md. |
+| `flutter analyze` | **PASS** — No issues found |
+| `flutter test` | **PASS** — 36 passed, 0 failed |
+| Scripture pack | **PASS** — 100 WEB Gospel sayings; first `anxiety-mt-6-34` / Matthew 6:34 |
+| Android `assembleRelease` | **PASS** — `BUILD SUCCESSFUL`; APK label `Red Words`; id `com.redwords.redwords`. See `android/BUILD_PROOF.md`. Placeholder keystore, not Play. |
+| iOS compile | **FAIL / blocked** — no Mac. WidgetKit sources **and** `RedWordsWidget` app-extension target are in `project.pbxproj`. See TESTFLIGHT.md. |
 
 ## Manual (founder phones)
 
