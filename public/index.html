@@ -2,15 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#9F1239" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  <meta name="theme-color" content="#9F1239" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0F0D0B" media="(prefers-color-scheme: dark)" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Red Letter" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="Daily guidance from the direct words of Jesus Christ in the four Gospels." />
+  <meta property="og:title" content="Red Letter Advisor — His words, for your day" />
+  <meta property="og:description" content="Verified WEB red letters only. Not invented speech." />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="/og-image.png" />
   <title>The Red Letter Advisor</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="apple-touch-startup-image" href="/splash/iphone-14-pro-max.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash/iphone-14-pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash/iphone-14.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash/iphone-x.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash/iphone-8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+  <link rel="apple-touch-startup-image" href="/splash/ipad-pro-12.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -27,7 +43,7 @@ html{-webkit-text-size-adjust:100%}
   --shadow:0 2px 12px rgba(26,22,18,.06),0 1px 3px rgba(26,22,18,.04);
   --shadow-lg:0 8px 32px rgba(26,22,18,.10);
   --r:14px;--r-sm:10px;--ease:cubic-bezier(.4,0,.2,1);
-  --nav-h:64px;--header-h:56px;--scale:1;
+  --nav-h:68px;--header-h:56px;--scale:1;--kb:0px;--touch:44px;
   --font-disp:'Fraunces',Georgia,serif;
   --font-body:'Source Serif 4',Georgia,serif;
   --font-ui:'Figtree',system-ui,sans-serif;
@@ -58,14 +74,15 @@ html.theme-dark body,
 }
 :root[data-fs="sm"]{--scale:.9}
 :root[data-fs="lg"]{--scale:1.12}
-html,body{height:100%;font-family:var(--font-ui);font-size:calc(16px * var(--scale));background:var(--mesh);color:var(--ink);overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
-button{font-family:var(--font-ui);cursor:pointer}
-textarea,input{font-family:var(--font-ui)}
+html,body{height:100%;font-family:var(--font-ui);font-size:calc(16px * var(--scale));background:var(--mesh);color:var(--ink);overscroll-behavior:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button{font-family:var(--font-ui);cursor:pointer;touch-action:manipulation;min-height:var(--touch)}
+textarea,input,select{font-family:var(--font-ui);font-size:16px}
 :focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
 
-.app{display:flex;flex-direction:column;height:100dvh;max-width:430px;margin:0 auto;background:var(--mesh);position:relative;overflow:hidden;box-shadow:0 0 0 1px var(--border)}
+.app{display:flex;flex-direction:column;height:calc(100dvh - var(--kb));max-width:430px;margin:0 auto;background:var(--mesh);position:relative;overflow:hidden;box-shadow:0 0 0 1px var(--border)}
+@media (min-width: 720px){.app{max-width:430px;border-radius:0;min-height:100dvh}}
 
-.header{height:var(--header-h);background:var(--chrome);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;z-index:20;padding-top:env(safe-area-inset-top,0)}
+.header{height:calc(var(--header-h) + env(safe-area-inset-top,0px));background:var(--chrome);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;z-index:20;padding-top:env(safe-area-inset-top,0)}
 .header-brand{display:flex;flex-direction:column;gap:1px}
 .header-wordmark{font-family:var(--font-disp);font-size:calc(17px * var(--scale));font-weight:700;color:#F7F4EF;letter-spacing:-.3px}
 .header-wordmark em{font-style:normal;color:var(--crimson-lt,#FB7185);font-weight:800}
@@ -80,21 +97,21 @@ textarea,input{font-family:var(--font-ui)}
 .share-caption strong{color:var(--crimson);display:block;margin-bottom:2px;font-size:11px;letter-spacing:.3px;text-transform:uppercase}
 .header-day{font-size:calc(10px * var(--scale));color:rgba(237,232,224,.55);font-weight:500;letter-spacing:.4px}
 .header-right{display:flex;align-items:center;gap:8px}
-.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(237,232,224,.12);border:1px solid rgba(237,232,224,.18);border-radius:var(--r-sm);color:#F7F4EF;transition:background .15s,border-color .15s}
+.icon-btn{width:var(--touch);height:var(--touch);min-height:var(--touch);display:flex;align-items:center;justify-content:center;background:rgba(237,232,224,.12);border:1px solid rgba(237,232,224,.18);border-radius:var(--r-sm);color:#F7F4EF;transition:background .15s,border-color .15s}
 .icon-btn:hover,.icon-btn:focus-visible{background:rgba(237,232,224,.22);border-color:rgba(237,232,224,.3)}
 .icon-btn svg{width:18px;height:18px;stroke:currentColor}
 
 .pages{flex:1;position:relative;overflow:hidden}
-.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h) + 16px);opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px));opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
 .page.active{opacity:1;pointer-events:all}
 .page::-webkit-scrollbar{width:3px}
 .page::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 #advisor-page{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
 .chat-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
 
-.nav{height:var(--nav-h);background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;flex-shrink:0;z-index:20;padding-bottom:env(safe-area-inset-bottom,0);position:relative}
+.nav{height:calc(var(--nav-h) + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;flex-shrink:0;z-index:20;padding-bottom:env(safe-area-inset-bottom,0);position:relative}
 .nav-indicator{position:absolute;top:0;left:0;height:2px;width:20%;background:var(--crimson);transition:transform .28s var(--ease);transform:translateX(var(--nav-x,0))}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--ink-muted);padding:6px 2px;transition:color .2s}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--ink-muted);padding:8px 2px;min-height:var(--touch);transition:color .2s}
 .nav-btn svg{width:20px;height:20px}
 .nav-btn span{font-size:calc(9px * var(--scale));font-weight:600;text-transform:uppercase;letter-spacing:.4px}
 .nav-btn.active{color:var(--crimson)}
@@ -119,7 +136,7 @@ textarea,input{font-family:var(--font-ui)}
 .ob-toggle-label{font-size:calc(14px * var(--scale));color:rgba(237,232,224,.85);line-height:1.4}
 .ob-btn{width:100%;max-width:300px;background:#EDE8E0;color:var(--chrome);border:none;border-radius:var(--r);padding:15px;font-size:calc(15px * var(--scale));font-weight:700;letter-spacing:.2px;transition:transform .15s,box-shadow .15s;animation:fadeUp .7s .24s var(--ease) both}
 .ob-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
-.ob-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;pointer-events:none}
+.ob-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .ob-btn.busy{opacity:.7;pointer-events:none}
 .ob-dots{display:flex;gap:8px;margin-top:28px}
 .ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(237,232,224,.25);transition:background .2s,transform .2s}
@@ -150,7 +167,7 @@ textarea,input{font-family:var(--font-ui)}
 
 .card-actions{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
 .card-crimson .card-actions{border-top-color:rgba(255,255,255,.15)}
-.action-btn{display:inline-flex;align-items:center;gap:5px;background:var(--stone);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 12px;font-size:calc(12px * var(--scale));font-weight:600;color:var(--ink-soft);transition:background .15s}
+.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--stone);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;min-height:var(--touch);font-size:calc(13px * var(--scale));font-weight:600;color:var(--ink-soft);transition:background .15s}
 .action-btn:hover{background:var(--border)}
 .action-btn svg{width:14px;height:14px}
 .card-crimson .action-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
@@ -188,7 +205,7 @@ textarea,input{font-family:var(--font-ui)}
 .chat-welcome h3{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin-bottom:6px}
 .chat-welcome p{font-size:calc(13px * var(--scale));color:var(--ink-muted);line-height:1.5}
 .suggestions{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 12px;justify-content:center}
-.sug-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 12px;font-size:calc(12px * var(--scale));color:var(--ink-soft);transition:border-color .15s}
+.sug-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;min-height:var(--touch);font-size:calc(13px * var(--scale));color:var(--ink-soft);transition:border-color .15s}
 .sug-chip:hover{border-color:var(--crimson);color:var(--crimson)}
 .msg{padding:10px 14px;display:flex;flex-direction:column;gap:4px}
 .msg.user{align-items:flex-end}
@@ -210,15 +227,15 @@ textarea,input{font-family:var(--font-ui)}
 .scripture-ctx{font-size:calc(13px * var(--scale));color:var(--ink-muted);margin-top:8px}
 .ai-p{margin-bottom:6px}
 .vcite{color:var(--gold);font-weight:600}
-.chat-input-bar{display:flex;gap:8px;padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0));background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
-.chat-input{flex:1;border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-size:calc(14px * var(--scale));resize:none;max-height:100px;background:var(--surface-2);color:var(--ink)}
-.chat-send{width:42px;height:42px;background:var(--crimson);border:none;border-radius:var(--r-sm);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-input-bar{display:flex;gap:8px;padding:10px 12px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
+.chat-input{flex:1;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;font-size:16px;resize:none;max-height:100px;background:var(--surface-2);color:var(--ink);min-height:var(--touch)}
+.chat-send{width:var(--touch);height:var(--touch);min-height:var(--touch);background:var(--crimson);border:none;border-radius:var(--r-sm);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send:disabled{opacity:.4}
 
 /* Library */
 .filter-chips{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .filter-chips::-webkit-scrollbar{display:none}
-.filter-chip{flex-shrink:0;padding:7px 14px;border-radius:var(--r-sm);font-size:calc(12px * var(--scale));font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--ink-muted);transition:all .15s}
+.filter-chip{flex-shrink:0;padding:11px 14px;min-height:var(--touch);border-radius:var(--r-sm);font-size:calc(13px * var(--scale));font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--ink-muted);transition:all .15s}
 .filter-chip.active{background:var(--crimson);border-color:var(--crimson);color:#fff}
 .lib-item{border-bottom:1px solid var(--border)}
 .lib-item summary{padding:14px 16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
@@ -250,7 +267,7 @@ textarea,input{font-family:var(--font-ui)}
 .carry-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 
 .lib-search-wrap{padding:0 14px 10px}
-.lib-search{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:calc(14px * var(--scale))}
+.lib-search{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:16px;min-height:var(--touch)}
 .lib-search::placeholder{color:var(--ink-muted)}
 
 .sit-overlay{position:fixed;inset:0;z-index:450;background:var(--chrome);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;max-width:430px;margin:0 auto}
@@ -331,7 +348,7 @@ textarea,input{font-family:var(--font-ui)}
 .reflect-box{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
 .reflect-box.hidden{display:none!important}
 .reflect-prompt{font-size:calc(13px * var(--scale));color:var(--ink-soft);margin-bottom:10px;line-height:1.45}
-.reflect-input{width:100%;min-height:72px;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(14px * var(--scale));resize:vertical;margin-bottom:10px}
+.reflect-input{width:100%;min-height:72px;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:16px;resize:vertical;margin-bottom:10px}
 .reflect-actions{display:flex;gap:8px}
 
 .plan-card{margin:0 14px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .45s .08s var(--ease) both}
@@ -368,7 +385,7 @@ textarea,input{font-family:var(--font-ui)}
 .examen-cite{font-size:calc(11px * var(--scale));color:var(--gold);font-weight:700;margin-top:6px}
 .examen-step{margin-bottom:12px}
 .examen-label{font-size:calc(12px * var(--scale));font-weight:700;color:var(--ink-soft);margin-bottom:6px}
-.examen-input{width:100%;min-height:56px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:calc(13px * var(--scale));resize:vertical}
+.examen-input{width:100%;min-height:56px;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:16px;resize:vertical}
 .examen-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .examen-done{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-top:8px;display:none}
 .examen-box.done .examen-done{display:block}
@@ -405,14 +422,14 @@ textarea,input{font-family:var(--font-ui)}
 .sheet.open{transform:translateX(-50%) translateY(0)}
 .sheet-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 12px;border-bottom:1px solid var(--border)}
 .sheet-title{font-family:var(--font-disp);font-size:calc(18px * var(--scale));font-weight:700}
-.sheet-close{background:none;border:none;color:var(--ink-muted);padding:4px}
+.sheet-close{background:none;border:none;color:var(--ink-muted);padding:10px;min-width:var(--touch);min-height:var(--touch)}
 .sheet-body{padding:16px 18px 24px}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
 .setting-row:last-child{border-bottom:none}
 .setting-label{font-size:calc(14px * var(--scale));font-weight:500}
 .setting-desc{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-top:2px}
 .size-btns{display:flex;gap:6px}
-.size-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);font-weight:700;font-size:calc(12px * var(--scale));color:var(--ink-muted)}
+.size-btn{width:var(--touch);height:var(--touch);min-height:var(--touch);border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);font-weight:700;font-size:calc(12px * var(--scale));color:var(--ink-muted)}
 .size-btn.active{background:var(--crimson);border-color:var(--crimson);color:#fff}
 .about-text{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.6}
 .crisis-links{display:flex;flex-direction:column;gap:10px;margin-top:8px}
@@ -421,7 +438,7 @@ textarea,input{font-family:var(--font-ui)}
 
 .paywall-price{font-family:var(--font-disp);font-size:calc(28px * var(--scale));font-weight:700;color:var(--crimson);margin:8px 0 4px}
 .paywall-sub{font-size:calc(13px * var(--scale));color:var(--ink-muted);margin-bottom:16px}
-.paywall-input{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:calc(14px * var(--scale));background:var(--surface-2);margin-bottom:12px}
+.paywall-input{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:16px;background:var(--surface-2);margin-bottom:12px;min-height:var(--touch)}
 .paywall-btn{width:100%;padding:14px;background:var(--crimson);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:calc(14px * var(--scale))}
 
 /* Share modal */
@@ -439,19 +456,30 @@ textarea,input{font-family:var(--font-ui)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .hidden{display:none!important}
 
-.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 18px);transform:translateX(-50%) translateY(12px);background:var(--chrome);color:#F7F4EF;padding:11px 16px;border-radius:12px;font-size:calc(13px * var(--scale));font-weight:500;z-index:500;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:min(360px,90vw);text-align:center;box-shadow:var(--shadow-lg)}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(12px);background:var(--chrome);color:#F7F4EF;padding:11px 16px;border-radius:12px;font-size:calc(13px * var(--scale));font-weight:500;z-index:500;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:min(360px,90vw);text-align:center;box-shadow:var(--shadow-lg)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.install-banner{position:fixed;left:50%;bottom:calc(var(--nav-h) + 12px);transform:translateX(-50%);width:min(402px,calc(100% - 28px));background:var(--chrome);color:#F7F4EF;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;z-index:250;box-shadow:var(--shadow-lg);animation:fadeUp .4s var(--ease) both}
+.install-banner{position:fixed;left:50%;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(402px,calc(100% - 28px));background:var(--chrome);color:#F7F4EF;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;z-index:250;box-shadow:var(--shadow-lg);animation:fadeUp .4s var(--ease) both}
 .install-banner.hidden{display:none!important}
 .install-banner p{flex:1;font-size:calc(13px * var(--scale));line-height:1.35}
 .install-banner strong{display:block;font-size:calc(14px * var(--scale));margin-bottom:2px}
-.install-banner .ib-actions{display:flex;gap:6px;flex-shrink:0}
-.install-banner button{border:none;border-radius:8px;padding:8px 12px;font-size:calc(12px * var(--scale));font-weight:700;cursor:pointer}
+.install-banner .ib-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.install-banner button{border:none;border-radius:8px;padding:10px 14px;min-height:40px;font-size:calc(13px * var(--scale));font-weight:700;cursor:pointer}
+@media (display-mode: standalone), (display-mode: fullscreen){
+  .install-banner{display:none!important}
+}
 .install-banner .ib-yes{background:#EDE8E0;color:var(--chrome)}
 .install-banner .ib-no{background:transparent;color:rgba(237,232,224,.65)}
 
-.time-input{padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(13px * var(--scale));font-family:var(--font-ui)}
+.time-input{padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:16px;font-family:var(--font-ui);min-height:var(--touch)}
+.pray-form input{font-size:16px;min-height:var(--touch);padding:12px}
+body.kb-open .nav{display:none}
+body.kb-open .page{padding-bottom:16px}
+.sw-banner{position:fixed;left:50%;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:260;width:min(402px,calc(100% - 28px));background:var(--chrome);color:#F7F4EF;border-radius:14px;padding:12px 14px;display:none;align-items:center;gap:10px;box-shadow:var(--shadow-lg)}
+.sw-banner.show{display:flex}
+.sw-banner button{min-height:40px;padding:8px 12px;border:none;border-radius:8px;background:#EDE8E0;color:var(--chrome);font-weight:700}
+.ob-close-btn{min-height:var(--touch)}
+.quota-bar button{min-height:var(--touch);padding:8px}
 
 .rhythm-shell{margin:0 14px 14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);animation:fadeUp .4s var(--ease) both}
 .rhythm-kicker{font-size:calc(10px * var(--scale));font-weight:700;letter-spacing:.55px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
@@ -501,11 +529,11 @@ html.journal-private #journal-list:hover .verse-cite{filter:none}
 .more-practices .midday-card,.more-practices .plan-card,.more-practices .examen-box{margin:12px 12px 0;animation:none}
 .more-practices .examen-box{margin-bottom:12px}
 
-.crisis-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.08);color:rgba(237,232,224,.75);font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.02em}
+.crisis-pill{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;min-height:36px;border-radius:999px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.08);color:rgba(237,232,224,.75);font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.02em}
 .crisis-pill:hover{color:#fff;border-color:rgba(237,232,224,.35)}
 
 .bless-row{padding:0 14px 10px;display:flex;gap:8px}
-.bless-row input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:calc(13px * var(--scale))}
+.bless-row input{flex:1;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:16px;min-height:var(--touch)}
 
 .reading-room #word-card{margin-top:0}
 .reading-room #affirmation-card{opacity:.92}
@@ -678,12 +706,13 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot active"></span><span class="ob-dot"></span></div>
   </div>
   <div class="ob-screen" data-step="3">
-    <p class="ob-commit">I'll return for one red letter each day</p>
+    <p class="ob-commit">One red letter each day is enough</p>
     <button type="button" class="ob-toggle" id="ob-commit-toggle" onclick="toggleCommit()" aria-pressed="false">
       <span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span>
-      <span class="ob-toggle-label">Yes — I'll make space for His words</span>
+      <span class="ob-toggle-label">Optional — I'll make space for His words</span>
     </button>
-    <button type="button" class="ob-btn" id="ob-begin-btn" disabled onclick="finishOnboarding()">Begin</button>
+    <button type="button" class="ob-btn" id="ob-begin-btn" onclick="finishOnboarding()">Begin</button>
+    <button type="button" class="ob-btn" style="margin-top:10px;background:transparent;color:rgba(237,232,224,.7);box-shadow:none" onclick="finishOnboarding()">Skip for now</button>
     <div class="ob-dots"><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot active"></span></div>
   </div>
 </div>
@@ -920,7 +949,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
         <div id="chat-messages"></div>
       </div>
       <div class="chat-input-bar">
-        <textarea class="chat-input" id="chat-input" rows="1" placeholder="Share what's weighing on you…" aria-label="Message"></textarea>
+        <textarea class="chat-input" id="chat-input" rows="1" placeholder="Share what's weighing on you…" aria-label="Message" enterkeyhint="send" autocomplete="off"></textarea>
         <button type="button" class="chat-send" id="chat-send" onclick="sendChat()" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
     </section>
@@ -972,7 +1001,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%">
       <div>
         <div class="setting-label">Morning reminder</div>
-        <div class="setting-desc">A gentle nudge for today's red letter</div>
+        <div class="setting-desc">While the app is open. iPhone home-screen apps cannot schedule background alerts — add a calendar reminder if you need one.</div>
       </div>
       <button type="button" class="ob-toggle" id="reminder-toggle" onclick="toggleReminder()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button>
     </div>
@@ -1168,12 +1197,14 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
   </div>
 </div>
 <div class="install-banner hidden" id="install-banner">
-  <p><strong>Add Red Letter</strong>Keep His words one tap away</p>
+  <p><strong>Add Red Letter to your home screen</strong><span id="install-copy">Keep His words one tap away</span></p>
   <div class="ib-actions">
-    <button type="button" class="ib-yes" onclick="acceptInstall()">Install</button>
+    <button type="button" class="ib-yes" id="install-yes" onclick="acceptInstall()">Install</button>
     <button type="button" class="ib-no" onclick="dismissInstall()">Not now</button>
   </div>
 </div>
+<div class="sw-banner" id="sw-banner" role="status"><span>A new version is ready</span><button type="button" onclick="applyAppUpdate()">Update</button></div>
+<noscript><div style="padding:32px;text-align:center;font-family:Georgia,serif">Red Letter Advisor needs JavaScript to open. Crisis help: <a href="tel:988">988</a>.</div></noscript>
 
 <script>
 /* ═══ STORAGE & API ═══ */
@@ -1486,6 +1517,7 @@ function renderDayPoles() {
   document.getElementById('pole-evening')?.classList.toggle('now', h >= 17);
 }
 function routeByHour() {
+  if (ls('rla-onboarded-at') === todayISO()) return;
   const h = new Date().getHours();
   const more = document.getElementById('more-practices');
   if (h >= 21) {
@@ -3257,9 +3289,6 @@ function toggleCommit() {
   const t = document.getElementById('ob-commit-toggle');
   t.classList.toggle('on', commitOn);
   t.setAttribute('aria-pressed', String(commitOn));
-  const begin = document.getElementById('ob-begin-btn');
-  begin.disabled = !commitOn;
-  begin.setAttribute('aria-disabled', String(!commitOn));
 }
 
 function finishOnboarding() {
@@ -3267,6 +3296,7 @@ function finishOnboarding() {
   if (begin) begin.classList.add('busy');
   try {
     lsSet('rla-onboarded', '1');
+    lsSet('rla-onboarded-at', todayISO());
     if (commitOn) lsSet('rla-commitment', '1');
   } catch (_) {}
   const ob = document.getElementById('onboarding');
@@ -3299,7 +3329,7 @@ function resetOnboarding() {
   document.querySelectorAll('.ob-close-btn').forEach((b) => b.classList.remove('on'));
   const closeNext = document.getElementById('ob-close-next');
   if (closeNext) closeNext.disabled = true;
-  document.getElementById('ob-begin-btn').disabled = true;
+  document.getElementById('ob-begin-btn').disabled = false;
   document.getElementById('ob-commit-toggle')?.classList.remove('on');
   document.getElementById('onboarding').classList.remove('hidden');
 }
@@ -3308,13 +3338,17 @@ function resetOnboarding() {
 const TABS = ['today', 'seek', 'advisor', 'library', 'journal'];
 
 function goTab(tab) {
+  if (!TABS.includes(tab)) tab = 'today';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   const idx = TABS.indexOf(tab);
   const nav = document.getElementById('bottom-nav');
-  const w = nav.offsetWidth / TABS.length;
-  document.getElementById('nav-indicator').style.width = w + 'px';
-  document.getElementById('nav-indicator').style.transform = 'translateX(' + (idx * w) + 'px)';
+  const indicator = document.getElementById('nav-indicator');
+  if (nav && indicator) {
+    const w = nav.offsetWidth / TABS.length;
+    indicator.style.width = w + 'px';
+    indicator.style.transform = 'translateX(' + (idx * w) + 'px)';
+  }
   if (tab === 'journal') { renderJournal(); renderPrayers(); }
   if (tab === 'library' && !libData) loadLibrary();
 }
@@ -3337,12 +3371,19 @@ function closeSheets() {
   document.querySelectorAll('.sheet').forEach(s => s.classList.remove('open'));
 }
 
+function syncThemeColor() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark' || document.documentElement.classList.contains('theme-dark');
+  const color = dark ? '#0F0D0B' : '#9F1239';
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', color));
+}
+
 function toggleDark() {
   const root = document.documentElement;
   const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   root.setAttribute('data-theme', next);
   root.classList.toggle('theme-dark', next === 'dark');
   lsSet('rla-theme', next);
+  syncThemeColor();
   const btn = document.getElementById('dark-toggle');
   if (btn) {
     btn.classList.toggle('on', next === 'dark');
@@ -3382,9 +3423,12 @@ function setFontSize(size) {
   document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('active', b.dataset.fs === size));
 }
 
-function joinWaitlist() {
+async function joinWaitlist() {
   const email = document.getElementById('waitlist-email').value.trim();
   if (email) lsSet('rla-waitlist-email', email);
+  try {
+    if (email) await api('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) });
+  } catch (_) {}
   closeSheets();
   showToast('You’re on the Plus waitlist. Thank you.');
 }
@@ -3434,6 +3478,7 @@ function applySettings() {
   const remTime = ls('rla-reminder-time') || '07:30';
   const remInput = document.getElementById('reminder-time');
   if (remInput) remInput.value = remTime;
+  syncThemeColor();
 }
 
 async function loadQuota() {
@@ -4249,24 +4294,131 @@ function maybeFireReminder() {
   } catch (_) {}
 }
 
-/* ═══ PWA INSTALL ═══ */
+/* ═══ PWA INSTALL + MOBILE SHELL ═══ */
 let deferredInstall = null;
+let waitingWorker = null;
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function maybeShowInstallBanner() {
+  if (isStandalone() || ls('rla-install-dismiss') === '1') return;
+  const banner = document.getElementById('install-banner');
+  const copy = document.getElementById('install-copy');
+  const yes = document.getElementById('install-yes');
+  if (!banner) return;
+  if (isIOS()) {
+    if (copy) copy.textContent = 'Tap Share, then Add to Home Screen.';
+    if (yes) yes.textContent = 'How';
+    setTimeout(() => banner.classList.remove('hidden'), 2400);
+  } else if (deferredInstall) {
+    if (copy) copy.textContent = 'Keep His words one tap away on Android.';
+    if (yes) yes.textContent = 'Install';
+    setTimeout(() => banner.classList.remove('hidden'), 1800);
+  }
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredInstall = e;
-  if (ls('rla-install-dismiss') === '1') return;
-  setTimeout(() => document.getElementById('install-banner')?.classList.remove('hidden'), 1800);
+  maybeShowInstallBanner();
 });
-async function acceptInstall() {
-  document.getElementById('install-banner')?.classList.add('hidden');
-  if (!deferredInstall) return;
-  deferredInstall.prompt();
-  await deferredInstall.userChoice;
+window.addEventListener('appinstalled', () => {
   deferredInstall = null;
+  document.getElementById('install-banner')?.classList.add('hidden');
+  lsSet('rla-installed', '1');
+});
+
+async function acceptInstall() {
+  if (deferredInstall) {
+    document.getElementById('install-banner')?.classList.add('hidden');
+    deferredInstall.prompt();
+    await deferredInstall.userChoice;
+    deferredInstall = null;
+    return;
+  }
+  if (isIOS()) {
+    showToast('On iPhone: tap Share, then Add to Home Screen');
+    return;
+  }
+  showToast('Open in Chrome, then tap Install in the menu');
 }
 function dismissInstall() {
   lsSet('rla-install-dismiss', '1');
   document.getElementById('install-banner')?.classList.add('hidden');
+}
+
+function wireKeyboardInset() {
+  const apply = () => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    document.documentElement.style.setProperty('--kb', inset + 'px');
+  };
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', apply);
+    window.visualViewport.addEventListener('scroll', apply);
+    apply();
+  }
+  const input = document.getElementById('chat-input');
+  input?.addEventListener('focus', () => document.body.classList.add('kb-open'));
+  input?.addEventListener('blur', () => {
+    document.body.classList.remove('kb-open');
+    document.documentElement.style.setProperty('--kb', '0px');
+  });
+}
+
+function closeAllOverlays() {
+  closeShareCard();
+  closeSit();
+  closeMidday();
+  closeAmen();
+  closeCommandPalette();
+  closeBreath();
+  closeParable();
+  closeFocusReading();
+  closeRest();
+  closeLectio();
+  closeSilence();
+  closeGardenDetail();
+  closeSheets();
+  const enc = document.getElementById('encounter-overlay');
+  if (enc?.classList.contains('open')) closeEncounter('today');
+}
+
+function wireAndroidBack() {
+  const ids = [
+    'sit-overlay','midday-overlay','amen-overlay','cmd-overlay','breath-overlay',
+    'parable-overlay','focus-overlay','rest-overlay','lectio-overlay','silence-overlay',
+    'encounter-overlay','garden-detail','share-modal','settings-sheet','paywall-sheet',
+  ];
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el || typeof MutationObserver === 'undefined') return;
+    new MutationObserver(() => {
+      if (el.classList.contains('open') && history.state?.rla !== id) {
+        history.pushState({ rla: id }, '');
+      }
+    }).observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+  window.addEventListener('popstate', () => closeAllOverlays());
+}
+
+function applyAppUpdate() {
+  waitingWorker?.postMessage('SKIP_WAITING');
+  waitingWorker = null;
+  document.getElementById('sw-banner')?.classList.remove('show');
+  setTimeout(() => location.reload(), 200);
+}
+
+function routeFromQuery() {
+  const params = new URLSearchParams(location.search);
+  const tab = params.get('tab');
+  if (tab && TABS.includes(tab)) goTab(tab);
 }
 
 /* ═══ INIT ═══ */
@@ -4287,6 +4439,7 @@ function initApp() {
   renderThemeGrid();
   wireOnlineStatus();
   goTab('today');
+  routeFromQuery();
   routeByHour();
   const nav = document.getElementById('bottom-nav');
   const indicator = document.getElementById('nav-indicator');
@@ -4295,6 +4448,9 @@ function initApp() {
     indicator.style.width = w + 'px';
   }
   if (ls('rla-reminder') === '1') scheduleLocalReminder();
+  wireKeyboardInset();
+  wireAndroidBack();
+  maybeShowInstallBanner();
 }
 
 if (!ls('rla-onboarded')) {
@@ -4305,7 +4461,22 @@ if (!ls('rla-onboarded')) {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then((reg) => reg.update()).catch(() => {});
+  navigator.serviceWorker.register('/sw.js').then((reg) => {
+    reg.update();
+    if (reg.waiting) {
+      waitingWorker = reg.waiting;
+      document.getElementById('sw-banner')?.classList.add('show');
+    }
+    reg.addEventListener('updatefound', () => {
+      const nw = reg.installing;
+      nw?.addEventListener('statechange', () => {
+        if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+          waitingWorker = nw;
+          document.getElementById('sw-banner')?.classList.add('show');
+        }
+      });
+    });
+  }).catch(() => {});
 }
 
 document.getElementById('garden-stage')?.addEventListener('click', (e) => {

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
+const zlib = require('zlib');
 const {
   corpus,
   verifyPassage,
@@ -13,18 +14,112 @@ const {
 } = require('./data/scripture');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.HOST || '0.0.0.0';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const FREE_CHAT_LIMIT = Number(process.env.FREE_CHAT_LIMIT || 5);
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
+app.use((req, res, next) => {
+  const proto = req.headers['x-forwarded-proto'];
+  if (IS_PROD && proto === 'http') {
+    return res.redirect(301, 'https://' + req.headers.host + req.originalUrl);
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  if (IS_PROD) {
+    res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  }
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "img-src 'self' data: blob:",
+      "connect-src 'self'",
+      "manifest-src 'self'",
+      "worker-src 'self'",
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; ')
+  );
+  next();
+});
+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/chat')) return next();
+  const ae = String(req.headers['accept-encoding'] || '');
+  if (!/(gzip|deflate)/.test(ae) || req.headers['x-no-compress']) return next();
+  const useGzip = ae.includes('gzip');
+  const _write = res.write.bind(res);
+  const _end = res.end.bind(res);
+  let chunks = [];
+  res.write = (chunk, enc) => {
+    if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, enc));
+    return true;
+  };
+  res.end = (chunk, enc) => {
+    if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, enc));
+    const raw = Buffer.concat(chunks);
+    const type = String(res.getHeader('Content-Type') || '');
+    const compressible = /text|json|javascript|xml|svg|manifest/.test(type) && raw.length > 512;
+    if (!compressible || res.headersSent) {
+      res.write = _write;
+      res.end = _end;
+      return _end(raw);
+    }
+    const packed = useGzip ? zlib.gzipSync(raw) : zlib.deflateSync(raw);
+    res.setHeader('Content-Encoding', useGzip ? 'gzip' : 'deflate');
+    res.setHeader('Vary', 'Accept-Encoding');
+    res.setHeader('Content-Length', packed.length);
+    res.write = _write;
+    res.end = _end;
+    return _end(packed);
+  };
+  next();
+});
 
 app.use(express.json({ limit: '256kb' }));
+
+const apiHits = new Map();
+app.use('/api/', (req, res, next) => {
+  const id = String(req.headers['x-client-id'] || req.ip || 'anon').slice(0, 80);
+  const now = Date.now();
+  const recent = (apiHits.get(id) || []).filter((t) => now - t < 60000);
+  const cap = req.path === '/chat' ? 20 : 90;
+  if (recent.length >= cap) {
+    return res.status(429).json({ error: 'slow_down', message: 'Please wait a moment, then try again.' });
+  }
+  recent.push(now);
+  apiHits.set(id, recent);
+  next();
+});
+
 app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/offline', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'offline.html')));
 app.use(
   express.static(path.join(__dirname, 'public'), {
     setHeaders(res, filePath) {
       if (filePath.endsWith('sw.js')) {
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Service-Worker-Allowed', '/');
+      } else if (/\.(png|jpg|webp|woff2)$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+      } else if (filePath.endsWith('manifest.json')) {
+        res.setHeader('Cache-Control', 'no-cache');
       }
     },
   })
@@ -263,10 +358,20 @@ app.get('/api/health', (_req, res) => {
     hasAuth,
     api: hasAuth,
     name: 'red-letter-advisor',
+    version: '1.1.0',
     corpusPassages: corpus.passages.length,
     themes: corpus.THEMES.length,
     freeChatLimit: FREE_CHAT_LIMIT,
+    env: IS_PROD ? 'production' : 'development',
   });
+});
+
+app.post('/api/waitlist', (req, res) => {
+  const email = String(req.body?.email || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'invalid_email' });
+  }
+  res.json({ ok: true });
 });
 
 app.get('/api/quota', (req, res) => {
@@ -492,9 +597,24 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✝  The Red Letter Advisor → http://localhost:${PORT}`);
+app.use((req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'not_found' });
+  }
+  res.status(404).sendFile(path.join(__dirname, 'public', 'offline.html'));
+});
+
+const server = app.listen(PORT, HOST, () => {
+  console.log(`✝  The Red Letter Advisor → http://${HOST}:${PORT}`);
   console.log(`   Auth: ${hasAuth ? 'configured' : 'offline corpus mode'}`);
   console.log(`   Corpus: ${corpus.passages.length} verified red-letter passages`);
-  console.log(`   Landing: http://localhost:${PORT}/welcome`);
+  console.log(`   Landing: http://${HOST}:${PORT}/welcome`);
 });
+
+function shutdown(signal) {
+  console.log(signal + ' — closing');
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(0), 4000);
+}
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));

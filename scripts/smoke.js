@@ -91,6 +91,43 @@ async function main() {
     assert(/"done"\s*:/.test(body) || body.includes('"done":true'), 'no done event');
   });
 
+  await check('security headers + no powered-by', async () => {
+    const res = await fetch(BASE + '/api/health');
+    assert(!res.headers.get('x-powered-by'), 'x-powered-by leaked');
+    assert(res.headers.get('x-content-type-options') === 'nosniff', 'missing nosniff');
+    assert(/SAMEORIGIN/i.test(res.headers.get('x-frame-options') || ''), 'missing frame options');
+    assert(/Content-Security-Policy/i.test([...res.headers.keys()].join(' ') ) || res.headers.get('content-security-policy'), 'missing CSP');
+    const csp = res.headers.get('content-security-policy') || '';
+    assert(csp.includes("default-src 'self'"), 'weak CSP');
+  });
+
+  await check('manifest installable', async () => {
+    const { res, json } = await req('/manifest.json');
+    assert(res.ok && json.name && json.short_name, 'manifest incomplete');
+    assert(json.id && json.start_url && json.display === 'standalone', 'missing id/start/display');
+    const purposes = (json.icons || []).map((i) => i.purpose).join(' ');
+    assert(purposes.includes('any') && purposes.includes('maskable'), 'need separate any + maskable icons');
+    assert((json.icons || []).some((i) => i.sizes === '512x512'), 'missing 512 icon');
+    assert(Array.isArray(json.shortcuts) && json.shortcuts.length >= 2, 'missing shortcuts');
+  });
+
+  await check('production icons + splash + offline', async () => {
+    const paths = [
+      '/icon-192.png', '/icon-512.png', '/icon-maskable-512.png',
+      '/apple-touch-icon.png', '/favicon.png', '/og-image.png',
+      '/splash/iphone-14.png', '/offline.html', '/robots.txt',
+      '/.well-known/assetlinks.json',
+    ];
+    for (const p of paths) {
+      const res = await fetch(BASE + p);
+      assert(res.ok, p + ' ' + res.status);
+      if (p.endsWith('.png')) {
+        const buf = Buffer.from(await res.arrayBuffer());
+        assert(buf.length > 2000, p + ' still a placeholder (' + buf.length + 'b)');
+      }
+    }
+  });
+
   await check('welcome + app shells', async () => {
     const app = await fetch(BASE + '/');
     const welcome = await fetch(BASE + '/welcome');
@@ -114,6 +151,12 @@ async function main() {
     assert(appHtml.includes('trust-strip') && appHtml.includes('advisor-hero') && appHtml.includes('Ask the Advisor'), 'missing trust/advisor hero');
     assert(appHtml.includes('share-caption') && /VERIFIED · WEB|Verified · WEB/.test(appHtml), 'missing viral trust share chrome');
     assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
+    assert(appHtml.includes('apple-mobile-web-app-capable'), 'missing iOS A2HS meta');
+    assert(appHtml.includes('apple-touch-startup-image'), 'missing iOS splash');
+    assert(appHtml.includes('black-translucent'), 'missing iOS status bar');
+    assert(appHtml.includes('id="ob-begin-btn"') && !/id="ob-begin-btn" disabled/.test(appHtml), 'Begin still gated');
+    assert(appHtml.includes('wireKeyboardInset') && appHtml.includes('wireAndroidBack'), 'missing mobile shell');
+    assert(appHtml.includes('Add to Home Screen') || appHtml.includes('install-copy'), 'missing iOS install copy');
     assert(/Red Letter/i.test(welcomeHtml) && welcomeHtml.includes('988'), 'welcome missing brand/trust');
   });
 
@@ -127,6 +170,17 @@ async function main() {
       body: JSON.stringify({ citations: [{ verse: 'Matthew 6:34', quote: "don't be anxious for tomorrow" }] }),
     });
     assert(verify.res.ok && verify.json.results?.[0]?.verified, 'verify api');
+  });
+
+  await check('waitlist + offline routes', async () => {
+    const bad = await req('/api/waitlist', { method: 'POST', body: JSON.stringify({ email: 'nope' }) });
+    assert(bad.res.status === 400, 'waitlist should reject bad email');
+    const ok = await req('/api/waitlist', { method: 'POST', body: JSON.stringify({ email: 'friend@example.com' }) });
+    assert(ok.res.ok && ok.json.ok, 'waitlist failed');
+    const off = await fetch(BASE + '/offline');
+    assert(off.ok, 'offline route');
+    const html = await off.text();
+    assert(html.includes('Offline') || html.includes('offline'), 'offline page copy');
   });
 
   await check('library search payload', async () => {

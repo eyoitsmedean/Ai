@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#9F1239" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Red Letter" />
   <meta name="description" content="Daily guidance from the words Jesus actually spoke. Red Letter — encouragement, chat, and habits grounded only in the Gospels." />
   <meta property="og:title" content="Red Letter — His words, for your day" />
   <meta property="og:description" content="Not every verse. His words. Daily guidance from the red letters of Jesus." />
+  <meta property="og:image" content="/og-image.png" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <title>Red Letter — the words Jesus spoke</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -291,7 +296,7 @@
       document.querySelectorAll('a.btn-primary[href="/"]').forEach(a => { a.href = appHref; });
     })();
 
-    document.getElementById('waitlist-form').addEventListener('submit', (e) => {
+    document.getElementById('waitlist-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
       if (!email) return;
@@ -300,6 +305,11 @@
         if (!list.includes(email)) list.push(email);
         localStorage.setItem('rla-waitlist', JSON.stringify(list));
         localStorage.setItem('rla-waitlist-email', email);
+        await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
       } catch {}
       document.getElementById('waitlist-form').style.display = 'none';
       document.getElementById('waitlist-ok').classList.add('show');

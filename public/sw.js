@@ -1,16 +1,22 @@
-const CACHE = 'rla-v23';
+const CACHE = 'rla-v24';
 const PRECACHE = [
   '/',
+  '/offline',
+  '/offline.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
+  '/icon-maskable-512.png',
   '/favicon.png',
   '/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(PRECACHE).catch(() => c.addAll(['/', '/offline.html', '/manifest.json'])))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -23,17 +29,22 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+self.addEventListener('message', (e) => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
-      fetch(e.request).catch(() =>
-        new Response(JSON.stringify({ error: 'offline', offline: true }), {
-          status: 503,
-          headers: { 'Content-Type': 'application/json' },
-        })
+      fetch(e.request).catch(
+        () =>
+          new Response(JSON.stringify({ error: 'offline', offline: true }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' },
+          })
       )
     );
     return;
@@ -56,7 +67,7 @@ self.addEventListener('fetch', (e) => {
           return res;
         })
         .catch(() =>
-          caches.match(e.request).then((c) => c || caches.match('/'))
+          caches.match(e.request).then((c) => c || caches.match('/') || caches.match('/offline.html'))
         )
     );
     return;
