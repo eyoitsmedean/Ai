@@ -322,7 +322,7 @@
           return;
         }
         lsSet('rla-reminder', '1');
-        if (typeof global.showToast === 'function') global.showToast('Morning reminder on · around 8:00');
+        if (typeof global.showToast === 'function') global.showToast('Morning nudge on · while app is open');
       } else {
         lsSet('rla-reminder', '0');
       }

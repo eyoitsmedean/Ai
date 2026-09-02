@@ -8,11 +8,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '256kb' }));
+
+// Production security + cache headers for the PWA shell
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Permissions-Policy', 'interest-cohort=()');
+  if (req.path === '/' || req.path === '/index.html' || req.path === '/manifest.json' || req.path === '/sw.js') {
+    res.setHeader('Cache-Control', 'no-cache');
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders(res, filePath) {
     if (filePath.endsWith('sw.js')) {
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Service-Worker-Allowed', '/');
+    } else if (/\.(?:js|css|png|jpg|jpeg|webp|woff2)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
     }
   },
 }));

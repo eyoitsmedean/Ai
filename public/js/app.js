@@ -1479,33 +1479,23 @@
     global.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
       deferredInstallPrompt = event;
+      global.deferredInstallPrompt = event;
       if (button) {
         button.classList.add('visible', 'show');
         button.hidden = false;
+        button.textContent = 'Install';
       }
     });
-    if (button) {
-      button.addEventListener('click', async () => {
-        if (!deferredInstallPrompt) return;
-        button.disabled = true;
-        try {
-          await deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-        } finally {
-          deferredInstallPrompt = null;
-          button.disabled = false;
-          button.classList.remove('visible', 'show');
-          button.hidden = true;
-        }
-      });
-    }
+    // Click handling lives in mobile.js so iOS gets Add-to-Home guidance
+    // when beforeinstallprompt is unavailable.
     global.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
+      global.deferredInstallPrompt = null;
       if (button) {
         button.classList.remove('visible', 'show');
         button.hidden = true;
       }
-      showToast('Red Letter Advisor installed');
+      showToast('Red Letter installed');
     });
   }
 

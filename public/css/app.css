@@ -46,12 +46,10 @@
 
 
 /* ═══ 01 · Fonts ══════════════════════════════════════════════════════════
-   Fraunces (display, optical size + soft axis), Literata (reading),
-   Figtree (interface). Georgia and system-ui carry the fallback.
+   Fraunces (display), Literata (reading), Figtree (UI).
+   Loaded via <link> in index.html (not @import) for faster first paint.
+   Georgia and system-ui carry the fallback when offline.
    ─────────────────────────────────────────────────────────────────────── */
-
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..800,0..100,0..1;1,9..144,300..800,0..100,0..1&family=Literata:ital,opsz,wght@0,7..72,300..600;1,7..72,300..600&display=swap');
-
 
 /* ═══ 02 · Reset & base ═══════════════════════════════════════════════════ */
 
@@ -4212,3 +4210,154 @@ body.dark .blessing-note {
   .amen-word { animation: none; }
   .amen, .amen-inner { transition: none; }
 }
+
+/* ═══ 30 · Production mobile (iPhone + Android) ═══════════════════════════ */
+
+:root {
+  --keyboard-inset: 0px;
+  --touch-min: 44px;
+}
+
+/* iOS focus-zoom lock: form controls never drop below 16px */
+.chat-input,
+.cmdk-input,
+.blessing-note,
+input[type="text"],
+input[type="search"],
+textarea {
+  font-size: 16px !important;
+}
+
+.icon-btn {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: 12px;
+}
+
+#install-btn {
+  min-height: var(--touch-min);
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.action-btn,
+.action-btn-dark {
+  min-height: var(--touch-min);
+  padding: 12px 16px;
+}
+
+.fs-btn {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+}
+
+.journal-delete,
+.crisis-dismiss,
+.lectio-close {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+}
+
+.emotion-chip,
+.share-style,
+.ob-btn,
+.cta-btn {
+  min-height: var(--touch-min);
+}
+
+/* Keyboard: lift composer / dock out from under soft keyboard */
+.keyboard-open .nav,
+.keyboard-open .dock {
+  transform: translateY(calc(-1 * var(--keyboard-inset)));
+  transition: transform 120ms linear;
+}
+
+.keyboard-open .chat-input-wrap {
+  padding-bottom: calc(12px + var(--safe-bottom) + var(--keyboard-inset));
+}
+
+.keyboard-open .nav,
+.keyboard-open .dock {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Standalone / coarse pointer: full-bleed, no desktop phone chrome */
+@media (pointer: coarse) and (min-width: 431px) {
+  .app {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  :root {
+    --shell-offset: 0px;
+  }
+}
+
+html.is-standalone .app {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.is-standalone {
+  --shell-offset: 0px;
+}
+
+.install-sheet-body {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 16px;
+}
+
+.install-steps {
+  margin: 12px 0 16px 1.1em;
+  padding: 0;
+}
+
+.install-steps li {
+  margin: 8px 0;
+}
+
+.install-note {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Prevent iOS rubber-band from revealing void behind sheets */
+.plus-sheet,
+.settings-sheet,
+.lectio,
+.amen,
+.cmdk {
+  overscroll-behavior: contain;
+}
+
+/* Ensure chat composer stays above keyboard inset */
+#advisor-page.page {
+  display: flex;
+  flex-direction: column;
+}
+
+@supports (height: 100svh) {
+  html.is-standalone .app {
+    height: 100svh;
+  }
+}
+
+@media (pointer: coarse) and (min-width: 431px) {
+  @supports (height: 100svh) {
+    .app {
+      height: 100svh;
+    }
+  }
+}
+

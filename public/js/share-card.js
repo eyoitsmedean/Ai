@@ -114,26 +114,48 @@
   }
 
   async function shareCard(opts) {
+    try {
+      if (document.fonts && document.fonts.ready) {
+        await Promise.race([
+          document.fonts.ready,
+          new Promise((resolve) => setTimeout(resolve, 400)),
+        ]);
+      }
+    } catch (_) { /* ignore */ }
+
     const canvas = drawCard(opts);
     const file = await canvasToFile(canvas);
     const title = opts.verse || 'Red Letter';
     const text = `${opts.quote || ''}${opts.verse ? `\n— ${opts.verse}` : ''}\n\nShared from Red Letter`;
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title, text });
-      return 'shared';
-    }
-    if (navigator.share) {
-      try {
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title, text });
+        return 'shared';
+      }
+      if (navigator.share) {
         await navigator.share({ title, text });
         return 'shared-text';
-      } catch (_) { /* fall through */ }
+      }
+    } catch (err) {
+      if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) {
+        return 'cancelled';
+      }
     }
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(file);
-    a.download = file.name;
-    a.click();
-    URL.revokeObjectURL(a.href);
+
+    // iOS standalone often blocks <a download> — open blob preview instead
+    const url = URL.createObjectURL(file);
+    const opened = global.open(url, '_blank');
+    if (!opened) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
     return 'downloaded';
   }
 

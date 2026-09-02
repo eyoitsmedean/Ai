@@ -2,15 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0E0C0B" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#0E0C0B" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#0E0C0B" media="(prefers-color-scheme: light)" />
+  <meta name="color-scheme" content="dark light" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Red Letter" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="Daily guidance from the words Jesus actually spoke — only the red letters of the Gospels." />
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Red Letter" />
+  <meta name="twitter:description" content="Not every verse — His words." />
+  <meta name="twitter:image" content="/og-image.png" />
   <title>Red Letter</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -18,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/app.css?v=10" />
+  <link rel="stylesheet" href="/css/app.css?v=11" />
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -208,8 +217,8 @@
         </div>
       </div>
       <div class="chat-limit-note" id="chat-limit-note"></div>
-      <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chat-input" placeholder="What’s on your heart…" rows="1" aria-label="Message"></textarea>
+      <div class="chat-input-wrap" id="chat-input-wrap">
+        <textarea class="chat-input" id="chat-input" placeholder="What’s on your heart…" rows="1" aria-label="Message" enterkeyhint="send" autocomplete="off" autocapitalize="sentences"></textarea>
         <button type="button" class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -280,7 +289,7 @@
   </div>
 </div>
 
-<div class="sheet-overlay" id="overlay" onclick="closeSettings();closePlus();closeShareSheet();closeBlessing()"></div>
+<div class="sheet-overlay" id="overlay" onclick="closeSettings();closePlus();closeShareSheet();closeBlessing();closeInstallHelp()"></div>
 
 <div class="settings-sheet" id="settings-sheet" role="dialog" aria-label="Settings">
   <div class="sheet-handle"></div>
@@ -308,8 +317,8 @@
   </div>
   <div class="setting-row">
     <div>
-      <div class="setting-label">Morning reminder</div>
-      <div class="setting-sub">A gentle nudge around 8:00 if you haven’t practiced</div>
+      <div class="setting-label">Morning nudge</div>
+      <div class="setting-sub">While the app is open, a quiet reminder around 8:00 if you haven’t practiced</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="reminder-toggle" />
@@ -372,6 +381,14 @@
   </div>
 </div>
 
+<div class="plus-sheet" id="install-sheet" aria-hidden="true" role="dialog" aria-label="Add to Home Screen">
+  <div class="plus-card">
+    <div class="plus-title">Keep Red Letter close</div>
+    <div id="install-sheet-body" class="install-sheet-body"></div>
+    <button type="button" class="plus-dismiss" onclick="closeInstallHelp()">Close</button>
+  </div>
+</div>
+
 <!-- Amen closing ritual -->
 <div class="amen" id="amen" aria-hidden="true" role="dialog" aria-label="Amen">
   <div class="amen-inner">
@@ -384,11 +401,12 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="/js/share-card.js?v=10"></script>
-<script src="/js/crisis.js?v=10"></script>
-<script src="/js/app.js?v=10"></script>
-<script src="/js/atelier.js?v=10"></script>
-<script src="/js/craft.js?v=10"></script>
-<script src="/js/trust.js?v=10"></script>
+<script src="/js/share-card.js?v=11"></script>
+<script src="/js/crisis.js?v=11"></script>
+<script src="/js/app.js?v=11"></script>
+<script src="/js/atelier.js?v=11"></script>
+<script src="/js/craft.js?v=11"></script>
+<script src="/js/trust.js?v=11"></script>
+<script src="/js/mobile.js?v=11"></script>
 </body>
 </html>

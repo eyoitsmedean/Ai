@@ -1,23 +1,41 @@
-const CACHE = 'rla-v10-chapel';
+const CACHE = 'rla-v11-mobile';
 const PRECACHE = [
+  '/',
+  '/index.html',
   '/manifest.json',
-  '/css/app.css',
-  '/js/app.js',
-  '/js/share-card.js',
-  '/js/crisis.js',
-  '/js/atelier.js',
-  '/js/craft.js',
-  '/js/trust.js',
+  '/css/app.css?v=11',
+  '/js/app.js?v=11',
+  '/js/share-card.js?v=11',
+  '/js/crisis.js?v=11',
+  '/js/atelier.js?v=11',
+  '/js/craft.js?v=11',
+  '/js/trust.js?v=11',
+  '/js/mobile.js?v=11',
   '/data/corpus.json',
   '/icon-192.png',
   '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
   '/favicon.png',
   '/apple-touch-icon.png',
+  '/og-image.png',
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(CACHE).then(async (cache) => {
+      // Precache individually so one miss doesn't fail the whole install
+      await Promise.all(
+        PRECACHE.map(async (url) => {
+          try {
+            await cache.add(url);
+          } catch (err) {
+            console.warn('Precache miss', url, err);
+          }
+        })
+      );
+      return self.skipWaiting();
+    })
   );
 });
 
@@ -26,6 +44,25 @@ self.addEventListener('activate', (e) => {
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ('focus' in client) return client.focus();
+      }
+      if (self.clients.openWindow) return self.clients.openWindow('/');
+      return undefined;
+    })
   );
 });
 
@@ -45,7 +82,6 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Network-first for HTML navigations so redesigns ship immediately
   const isHTML =
     e.request.mode === 'navigate' ||
     url.pathname === '/' ||
@@ -57,17 +93,34 @@ self.addEventListener('fetch', (e) => {
       fetch(e.request)
         .then((res) => {
           if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put(e.request, copy));
+            const forRequest = res.clone();
+            const forIndex = res.clone();
+            const forRoot = res.clone();
+            caches.open(CACHE).then((c) => {
+              c.put(e.request, forRequest);
+              c.put('/index.html', forIndex);
+              c.put('/', forRoot);
+            });
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((c) => c || caches.match('/index.html')))
+        .catch(async () => {
+          const cached =
+            (await caches.match(e.request)) ||
+            (await caches.match('/index.html')) ||
+            (await caches.match('/'));
+          return (
+            cached ||
+            new Response('<h1>Red Letter is offline</h1><p>Open once online to save readings.</p>', {
+              status: 503,
+              headers: { 'Content-Type': 'text/html; charset=utf-8' },
+            })
+          );
+        })
     );
     return;
   }
 
-  // Cache-first for hashed/static assets
   e.respondWith(
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request)
