@@ -42,6 +42,8 @@ async function finishSit(page) {
     if (typeof keepSitReply === 'function') keepSitReply();
   });
   await page.waitForFunction(() => !document.getElementById('sit-sheet').classList.contains('on'), { timeout: 6000 }).catch(() => {});
+  await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+  await page.waitForFunction(() => !document.getElementById('amen')?.classList.contains('on'), { timeout: 4000 }).catch(() => {});
 }
 
 async function main() {
@@ -84,9 +86,11 @@ async function main() {
 
     await check(device.name + ' — Advisor sit + bless', async () => {
       await page.click('#nav-advisor');
-      await page.waitForSelector('#chat-input', { timeout: 4000 });
-      await page.type('#chat-input', 'I feel shame');
-      await page.click('#send-btn');
+      await page.waitForSelector('#chat-input:not([disabled])', { timeout: 4000 });
+      await page.evaluate(() => {
+        if (typeof closeAmen === 'function') closeAmen();
+        if (typeof sendMsg === 'function') sendMsg('I feel shame');
+      });
       await page.waitForFunction(() => {
         return /John|Matthew|Mark|Luke/i.test(document.getElementById('chat-messages')?.innerText || '');
       }, { timeout: 20000 });

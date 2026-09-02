@@ -354,7 +354,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, 40, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 

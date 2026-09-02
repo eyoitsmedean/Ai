@@ -80,9 +80,11 @@ async function main() {
       }
 
       if (guest.crisis) {
-        await page.click('#nav-advisor');
-        await page.type('#chat-input', guest.ask);
-        await page.click('#send-btn');
+        await page.evaluate((ask) => {
+          if (typeof closeAmen === 'function') closeAmen();
+          if (typeof switchTab === 'function') switchTab('advisor');
+          if (typeof sendMsg === 'function') sendMsg(ask);
+        }, guest.ask);
         await page.waitForSelector('#crisis-modal.on', { timeout: 6000 });
         const copy = await page.$eval('#crisis-modal', (el) => el.innerText);
         assert(/988/.test(copy), 'crisis missing 988');
@@ -99,9 +101,11 @@ async function main() {
         assert(theme === 'dark', 'lamp did not light');
         await page.evaluate(() => toggleDark(false));
       } else {
-        await page.click('#nav-advisor');
-        await page.type('#chat-input', guest.ask);
-        await page.click('#send-btn');
+        await page.evaluate((ask) => {
+          if (typeof closeAmen === 'function') closeAmen();
+          if (typeof switchTab === 'function') switchTab('advisor');
+          if (typeof sendMsg === 'function') sendMsg(ask);
+        }, guest.ask);
         await page.waitForFunction(() => /Matthew|Mark|Luke|John/i.test(document.getElementById('chat-messages')?.innerText || ''), { timeout: 20000 });
         const paywall = await page.evaluate(() => !!document.getElementById('chat-gate'));
         assert(!paywall, 'paywall appeared');
