@@ -48,10 +48,14 @@ class _RedWordsAppState extends State<RedWordsApp> {
     _boot();
   }
 
+  bool get _hostless => widget.session != null;
+
   Future<void> _boot() async {
     final opened = await session.hasOpened();
-    final link = RedWordsLink.parse(widget.initialLink) ??
-        RedWordsLink.parse(await LinkBridge.initial());
+    Uri? link = RedWordsLink.parse(widget.initialLink);
+    if (link == null && !_hostless) {
+      link = RedWordsLink.parse(await LinkBridge.initial());
+    }
     AppLeaf next;
     if (widget.catalog.isEmpty || moment == null) {
       next = AppLeaf.empty;
@@ -62,7 +66,9 @@ class _RedWordsAppState extends State<RedWordsApp> {
     }
     if (next == AppLeaf.today) {
       await session.markOpened();
-      await _pushWidget();
+      if (widget.syncWidget && !_hostless) {
+        await _pushWidget();
+      }
     }
     if (mounted) {
       setState(() {

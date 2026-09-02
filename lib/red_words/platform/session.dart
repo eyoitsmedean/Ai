@@ -2,14 +2,18 @@ import 'package:flutter/services.dart';
 
 /// First-open leaf. Tests inject [opened].
 class SessionStore {
-  SessionStore({bool? opened}) : _opened = opened;
+  SessionStore({bool? opened})
+      : _opened = opened,
+        _injected = opened != null;
 
   bool? _opened;
+  final bool _injected;
 
   static const _channel = MethodChannel('redwords/session');
 
   Future<bool> hasOpened() async {
     if (_opened != null) return _opened!;
+    if (_injected) return false;
     try {
       final value = await _channel.invokeMethod<bool>('hasOpened');
       _opened = value ?? false;
@@ -21,6 +25,7 @@ class SessionStore {
 
   Future<void> markOpened() async {
     _opened = true;
+    if (_injected) return;
     try {
       await _channel.invokeMethod<void>('markOpened');
     } on MissingPluginException {

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:red_words/red_words/moment/widget_contract.dart';
 
 void main() {
   const forbidden = [
