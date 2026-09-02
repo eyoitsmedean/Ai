@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - claude/jesus-teachings-chatbot-bSBhF
+      - cursor/world-class-red-letter-4ba9
   workflow_dispatch:
 
 permissions:
