@@ -3,3 +3,12 @@ node_modules/
 *.log
 .DS_Store
 data/waitlist.json
+red_words/.dart_tool/
+red_words/build/
+red_words/.flutter-plugins
+red_words/.flutter-plugins-dependencies
+red_words/android/.gradle/
+red_words/android/local.properties
+red_words/android/key.properties
+red_words/android/**/*.jks
+red_words/android/**/*.keystore
