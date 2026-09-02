@@ -96,8 +96,38 @@ async function main() {
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');
     assert(text.includes('988'), 'missing crisis line');
+    assert(text.includes('id="return-ribbon"'), 'missing day-two ribbon');
+    assert(text.includes('id="seven-close"'), 'missing Seven Days last page');
+    assert(text.includes('addSitToChatBubble'), 'Advisor must end in Sit');
+    assert(text.includes('encodeBlessingClient'), 'blessing page missing');
+    assert(!text.includes('Five letters for today'), 'must not meter His words');
+    assert(!text.includes('FREE_CHATS'), 'must not paywall the Advisor');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
+    assert(!/prefers-color-scheme:\s*dark/.test(text) || text.includes('media="(prefers-color-scheme: dark)"'), 'theme-color media is ok');
+  });
+
+  await check('blessing page', async () => {
+    const minted = await req('/api/blessing', {
+      method: 'POST',
+      body: JSON.stringify({
+        verse: 'Matthew 11:28',
+        quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+        note: 'For a friend',
+      }),
+    });
+    assert(minted.res.ok && minted.json?.token, 'could not mint blessing');
+    const page = await req('/b/' + minted.json.token);
+    assert(page.res.ok, 'blessing HTTP ' + page.res.status);
+    assert(/Come unto me/i.test(page.text), 'blessing missing His words');
+    assert(/Sit with this/i.test(page.text), 'blessing missing sit');
+    assert(/988/.test(page.text), 'blessing missing crisis');
+  });
+
+  await check('security headers', async () => {
+    const { res } = await req('/');
+    assert(res.headers.get('x-content-type-options') === 'nosniff', 'nosniff missing');
+    assert(/default-src 'self'/.test(res.headers.get('content-security-policy') || ''), 'CSP missing');
   });
 
   if (fails.length) {

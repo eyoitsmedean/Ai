@@ -2,11 +2,14 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  <meta name="theme-color" content="#F4EFE4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#14110D" media="(prefers-color-scheme: dark)" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Red Letter" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="A quiet reading room for the words Jesus actually spoke." />
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
@@ -15,6 +18,11 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/icon-192.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-startup-image" href="/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/splash-1080x2400.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -134,12 +142,18 @@ html { -webkit-text-size-adjust: 100%; }
 
 html, body {
   min-height: 100%;
+  min-height: 100dvh;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--ui);
   font-size: calc(16px * var(--scale));
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+body {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 ::selection { background: rgba(143, 29, 29, 0.16); color: var(--ink); }
 button { font-family: inherit; cursor: pointer; color: inherit; }
@@ -446,7 +460,7 @@ textarea { font-family: var(--body); }
 .mast-name em { font-style: italic; color: var(--crimson); }
 .mast-sub { font-size: 11px; color: var(--ink-3); letter-spacing: .12em; text-transform: uppercase; }
 .icon-btn {
-  width: 36px; height: 36px;
+  width: 44px; height: 44px;
   border: 1px solid var(--rule);
   background: transparent;
   display: grid;
@@ -481,6 +495,7 @@ textarea { font-family: var(--body); }
 }
 .nav-btn {
   flex: 1;
+  min-height: 44px;
   border: none;
   background: none;
   color: var(--ink-3);
@@ -786,8 +801,9 @@ textarea { font-family: var(--body); }
 .chip {
   background: none;
   border: 1px solid var(--rule-2);
-  padding: 8px 12px;
-  font-size: 13px;
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 16px;
   color: var(--ink-2);
   font-family: var(--body);
   font-style: italic;
@@ -842,7 +858,7 @@ textarea { font-family: var(--body); }
   display: flex;
   gap: 8px;
   align-items: flex-end;
-  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px) + var(--kb, 0px));
   border-top: 1px solid var(--rule);
   background: var(--folio);
 }
@@ -861,7 +877,7 @@ textarea { font-family: var(--body); }
 }
 .chat-input:focus { border-bottom-color: var(--crimson); }
 .send-btn {
-  width: 42px; height: 42px;
+  width: 44px; height: 44px; flex-shrink: 0;
   border: none;
   background: var(--crimson);
   color: #FBF7EE;
@@ -905,8 +921,8 @@ textarea { font-family: var(--body); }
 }
 .journal-verse { margin-top: 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--crimson); }
 .journal-delete {
-  position: absolute; top: 18px; right: 0;
-  width: 28px; height: 28px;
+  position: absolute; top: 12px; right: 0;
+  width: 44px; height: 44px;
   border: none; background: none; color: var(--ink-4);
 }
 .journal-delete:hover { color: var(--crimson); }
@@ -941,18 +957,18 @@ textarea { font-family: var(--body); }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--rule); }
 .setting-label { font-size: 15px; }
 .setting-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
-.toggle { position: relative; width: 44px; height: 26px; flex-shrink: 0; }
+.toggle { position: relative; width: 52px; height: 32px; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle-track { position: absolute; inset: 0; background: var(--paper-2); border: 1px solid var(--rule-2); cursor: pointer; }
 .toggle-track::after {
   content: '';
   position: absolute; left: 3px; top: 3px;
-  width: 18px; height: 18px; background: var(--crimson);
+  width: 24px; height: 24px; background: var(--crimson);
   transition: transform .2s var(--ease);
 }
-.toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+.toggle input:checked + .toggle-track::after { transform: translateX(20px); }
 .fs-control { display: flex; gap: 6px; }
-.fs-btn { width: 36px; height: 36px; border: 1px solid var(--rule); background: none; }
+.fs-btn { width: 44px; height: 44px; border: 1px solid var(--rule); background: none; }
 .fs-btn.active { border-color: var(--crimson); color: var(--crimson); }
 .sheet-about { padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13.5px; line-height: 1.65; color: var(--ink-3); }
 .sheet-about strong { color: var(--ink-2); }
@@ -1028,7 +1044,7 @@ textarea { font-family: var(--body); }
   right: 0;
   z-index: 85;
   display: none;
-  padding: 8px 16px;
+  padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px;
   text-align: center;
   font-size: 12px;
   letter-spacing: .08em;
@@ -1073,8 +1089,45 @@ textarea { font-family: var(--body); }
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 14%, transparent);
 }
 .week-cell.future, .seven-day.future { opacity: .55; }
+.seven-day { min-height: 44px; }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
+
+.return-ribbon {
+  margin: 0 0 28px;
+  padding: 16px 0 4px;
+  border-top: 1px solid var(--rule);
+}
+.return-ribbon[hidden] { display: none; }
+.return-line {
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.seven-close {
+  margin: 0 0 36px;
+  padding: 8px 0 4px;
+}
+.seven-close[hidden] { display: none; }
+.seven-close-list {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin: 12px 0 18px;
+}
+
+.install-sheet .install-steps {
+  font-family: var(--body);
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin: 8px 0 18px;
+}
+.install-sheet .install-steps li { margin: 10px 0; }
+
+.page { padding-bottom: calc(var(--dock) + 28px + var(--kb, 0px)); }
 
 .epigraph {
   margin: 0 0 36px;
@@ -1418,7 +1471,7 @@ html.sitting .sit-sheet {
   background: transparent;
   padding: 8px 0;
   font-family: var(--ui);
-  font-size: 13px;
+  font-size: 16px;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--ink-3);
@@ -1555,6 +1608,11 @@ html.sitting .sit-sheet {
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
         </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+        <aside class="seven-close" id="seven-close" hidden></aside>
+        <aside class="return-ribbon" id="return-ribbon" hidden>
+          <p class="eyebrow">Welcome back</p>
+          <p class="return-line" id="return-line">The sentence waited.</p>
+        </aside>
 
         <aside class="epigraph" id="epigraph" hidden>
           <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
@@ -1713,10 +1771,6 @@ html.sitting .sit-sheet {
             <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
             <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
             <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
-          </div>
-          <div class="gate" id="chat-gate">
-            <h3>Five letters for today</h3>
-            <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
@@ -1883,10 +1937,25 @@ html.sitting .sit-sheet {
   <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="A word for them…"></textarea>
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
+  <p class="sit-copy" id="blessing-link-note" hidden>A page of His words — not a screenshot of an app.</p>
   <div class="actions" style="margin-top:18px">
-    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
-    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
-    <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
+    <button class="cta cta-primary" type="button" id="bless-send" onclick="sendBlessing('parchment')">Send the page</button>
+    <button class="ghost" type="button" onclick="copyBlessingLink()">Copy the link</button>
+    <button class="ghost" type="button" onclick="sendBlessingCard('parchment')">Save a card</button>
+  </div>
+</aside>
+
+<aside class="settings-sheet install-sheet" id="install-sheet" role="dialog" aria-modal="true" aria-labelledby="install-title">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title-row">
+    <div class="sheet-title" id="install-title">Keep this room</div>
+    <button class="ghost" type="button" onclick="closeInstallSheet()">Close</button>
+  </div>
+  <p class="sit-copy" id="install-copy">Add Red Letter to the home screen. The page will wait here in the morning — no app store required.</p>
+  <ol class="install-steps" id="install-steps"></ol>
+  <div class="actions">
+    <button class="cta cta-primary" type="button" id="install-native" onclick="promptInstall()">Add to home screen</button>
+    <button class="ghost" type="button" onclick="closeInstallSheet()">Not now</button>
   </div>
 </aside>
 
@@ -1947,7 +2016,6 @@ html.sitting .sit-sheet {
 <script src="/data/advisor.js"></script>
 <script src="/data/paths.js"></script>
 <script>
-const FREE_CHATS = 5;
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
   ['Grief & Loss', 'When love has nowhere to stand'],
@@ -2164,10 +2232,14 @@ function startApp() {
   markMorning();
   paintStreak(getStreakState());
   paintSeven();
+  paintSevenClose();
   updateDateUI();
   paintCatchword();
   paintEpigraph();
+  paintReturnRibbon();
   loadDailyContent();
+  openBlessingFromUrl();
+  openTabFromUrl();
   restoreLetters();
   bindRituals();
   checkMorningReminder();
@@ -2287,8 +2359,10 @@ function sevenDays() {
 }
 function pathState() {
   const raw = parseJSON(ls('rla-seven'), null);
-  if (raw && Array.isArray(raw.done)) return raw;
-  return { started: todayStr(), done: [] };
+  if (raw && Array.isArray(raw.done)) {
+    return { started: raw.started || todayStr(), done: raw.done, lastSit: raw.lastSit || '' };
+  }
+  return { started: todayStr(), done: [], lastSit: '' };
 }
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
@@ -2329,10 +2403,19 @@ function paintSeven() {
   host.querySelectorAll('.seven-day').forEach((btn) => {
     btn.addEventListener('click', () => sitSeven(Number(btn.getAttribute('data-i'))));
   });
+  paintSevenClose();
 }
 function sitSeven(index) {
   const day = sevenDays()[index];
   if (!day) return;
+  const state = pathState();
+  const done = new Set(state.done || []);
+  const next = sevenDays().findIndex((_, i) => !done.has(i));
+  if (next >= 0 && index > next) return;
+  if (index === next && state.lastSit === todayStr()) {
+    showToast('This room opens again in the morning.');
+    return;
+  }
   sitPayload = {
     kicker: 'Seven Days · ' + day.title,
     title: day.title,
@@ -2358,9 +2441,61 @@ function sitSeven(index) {
 function markSevenDay(index) {
   if (index == null || index < 0) return;
   const state = pathState();
-  if (!state.done.includes(index)) state.done.push(index);
+  if (state.done.includes(index)) {
+    paintSeven();
+    return;
+  }
+  if (state.lastSit === todayStr()) {
+    paintSeven();
+    return;
+  }
+  state.done.push(index);
+  state.lastSit = todayStr();
   lsSet('rla-seven', JSON.stringify(state));
   paintSeven();
+  paintSevenClose();
+}
+function paintSevenClose() {
+  const host = document.getElementById('seven-close');
+  if (!host) return;
+  const days = sevenDays();
+  const state = pathState();
+  const done = new Set(state.done || []);
+  const complete = days.length > 0 && days.every((_, i) => done.has(i));
+  host.hidden = !complete;
+  if (!complete) return;
+  host.innerHTML = '<p class="eyebrow">Seven Days</p>' +
+    '<h2 class="display" style="font-size:28px;margin-bottom:10px">The last <em>page</em></h2>' +
+    '<p class="sit-copy">You sat with each room. The book is allowed to close for the morning.</p>' +
+    '<p class="seven-close-list">' + days.map((d) => esc(d.title) + ' — ' + esc(d.verse)).join('<br>') + '</p>' +
+    '<div class="actions">' +
+    '<button class="cta cta-primary" type="button" onclick="beginSevenAgain()">Begin Seven Days again</button>' +
+    '<button class="ghost" type="button" onclick="blessingFromToday()">Bless someone</button>' +
+    '</div>';
+}
+function beginSevenAgain() {
+  lsSet('rla-seven', JSON.stringify({ started: todayStr(), done: [], lastSit: '' }));
+  paintSeven();
+  paintSevenClose();
+  showToast('Seven Days is open again');
+}
+function paintReturnRibbon() {
+  const el = document.getElementById('return-ribbon');
+  const line = document.getElementById('return-line');
+  if (!el) return;
+  const sit = getLastSit();
+  const satToday = sit && sit.date === todayStr();
+  const satYesterday = sit && sit.date === yestStr();
+  if (satYesterday && !satToday) {
+    el.hidden = false;
+    if (line) {
+      line.textContent = sit.verse
+        ? 'The sentence waited. Yesterday you sat with ' + sit.verse + '.'
+        : 'The sentence waited.';
+    }
+  } else {
+    el.hidden = true;
+  }
 }
 
 function isNightOffice() {
@@ -2879,7 +3014,7 @@ function closeSit() {
 
 let sheetTrigger = null;
 function anySheetOn() {
-  return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
+  return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet', 'install-sheet']
     .some((id) => document.getElementById(id)?.classList.contains('on'));
 }
 function focusables(root) {
@@ -2911,6 +3046,7 @@ function closeSheets() {
   closeSettings();
   closeBlessing();
   closeShareSheet();
+  closeInstallSheet();
   closeCommandPalette();
   closeAmen();
 }
@@ -2949,14 +3085,12 @@ function restoreLetters() {
       const stream = createStreamBubble();
       updateStreamBubble(stream, m.content);
       addSaveToChatBubble(stream, m.content, 'A letter');
+      addSitToChatBubble(stream, m.content);
       sealLetter(stream.bubble);
     }
   });
   document.getElementById('suggestions').style.display = 'none';
-  if (chatsToday().n >= FREE_CHATS) {
-    document.getElementById('chat-gate').classList.add('on');
-    setComposerEnabled(false);
-  }
+  setComposerEnabled(true);
 }
 
 function useSuggestion(btn) {
@@ -2971,12 +3105,6 @@ async function sendMsg(preset) {
   if (looksLikeCrisisClient(text)) {
     const action = await showCrisisModal();
     if (action !== 'continue') return;
-  }
-  if (chatsToday().n >= FREE_CHATS) {
-    document.getElementById('chat-gate').classList.add('on');
-    document.getElementById('suggestions').style.display = 'none';
-    setComposerEnabled(false);
-    return;
   }
   chatInput.value = '';
   chatInput.style.height = 'auto';
@@ -3042,6 +3170,7 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fullText });
     persistLetters();
     addSaveToChatBubble(aiBubble, fullText, text);
+    addSitToChatBubble(aiBubble, fullText);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
     const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
@@ -3060,16 +3189,12 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fallback });
     persistLetters();
     addSaveToChatBubble(aiBubble, fallback, text);
+    addSitToChatBubble(aiBubble, fallback);
   } finally {
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
-    const gated = chatsToday().n >= FREE_CHATS;
-    if (gated) {
-      document.getElementById('chat-gate').classList.add('on');
-      setComposerEnabled(false);
-    } else {
-      document.getElementById('send-btn').disabled = false;
-    }
+    document.getElementById('send-btn').disabled = false;
+    setComposerEnabled(true);
     scrollChat();
   }
 }
@@ -3119,6 +3244,36 @@ function addSaveToChatBubble({ wrap }, text, question) {
     saveBtn.disabled = true;
   };
   wrap.appendChild(saveBtn);
+}
+
+function extractFirstQuote(text) {
+  const m = String(text || '').match(/[“"]([^”"]{10,})[”"]/);
+  return m ? m[1] : '';
+}
+
+function addSitToChatBubble({ wrap }, text) {
+  const verse = extractFirstVerse(text);
+  const quote = extractFirstQuote(text);
+  if (!quote) return;
+  const btn = document.createElement('button');
+  btn.className = 'msg-save-btn';
+  btn.id = 'sit-from-letter';
+  btn.textContent = 'Sit with this';
+  btn.onclick = () => {
+    sitPayload = {
+      kicker: 'A letter',
+      title: verse || 'A saying',
+      quote,
+      verse,
+      reflection: 'Notice the word that stays. You do not have to explain it yet.',
+    };
+    sitStep = 1;
+    closeSettings();
+    openSheetChrome('sit-sheet');
+    paintSitPayload(sitPayload);
+    showSitStep(1);
+  };
+  wrap.appendChild(btn);
 }
 
 function scrollChat() {
@@ -3472,6 +3627,7 @@ function rememberSitting({ quote, verse, note, office }) {
   updateStreak();
   paintCatchword();
   paintEpigraph();
+  paintReturnRibbon();
   const catchEl = document.getElementById('folio-catch');
   if (catchEl && catchword) catchEl.textContent = catchword;
 }
@@ -3706,28 +3862,66 @@ function toggleHearOffice() {
   }
 }
 
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
 function paintInstallState() {
   const btn = document.getElementById('install-btn');
   if (!btn) return;
-  const standalone = window.matchMedia('(display-mode: standalone)').matches;
-  if (standalone) {
+  if (isStandalone()) {
     btn.textContent = 'Kept';
     btn.disabled = true;
     return;
   }
-  btn.disabled = !deferredInstall;
-  btn.textContent = deferredInstall ? 'Keep' : 'Use the browser menu';
+  btn.disabled = false;
+  btn.textContent = deferredInstall ? 'Keep' : (isIOS() ? 'On iPhone' : 'Keep');
+}
+function installStepsHtml() {
+  if (isIOS()) {
+    return '<li>Tap the <strong>Share</strong> button in Safari (the square with an arrow).</li>' +
+      '<li>Scroll and tap <strong>Add to Home Screen</strong>.</li>' +
+      '<li>Tap <strong>Add</strong>. The room opens like an app — no store, no account.</li>';
+  }
+  if (isAndroid()) {
+    return '<li>Open the Chrome menu (three dots).</li>' +
+      '<li>Tap <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>' +
+      '<li>Confirm. Red Letter will sit with your other apps.</li>';
+  }
+  return '<li>Use your browser’s install or “Add to Home Screen” command.</li>' +
+    '<li>On a phone, this is under the browser menu.</li>';
+}
+function openInstallSheet() {
+  closeSit();
+  closeBlessing();
+  closeShareSheet();
+  const steps = document.getElementById('install-steps');
+  const native = document.getElementById('install-native');
+  if (steps) steps.innerHTML = installStepsHtml();
+  if (native) native.hidden = !deferredInstall;
+  openSheetChrome('install-sheet');
+}
+function closeInstallSheet() {
+  const el = document.getElementById('install-sheet');
+  if (el) el.classList.remove('on');
+  hideOverlayIfIdle();
 }
 async function promptInstall() {
-  if (!deferredInstall) {
-    showToast('Use your browser menu to add this room to the home screen');
+  if (deferredInstall) {
+    deferredInstall.prompt();
+    const choice = await deferredInstall.userChoice;
+    deferredInstall = null;
+    paintInstallState();
+    closeInstallSheet();
+    showToast(choice.outcome === 'accepted' ? 'The room will wait on the home screen' : 'You can keep the room later');
     return;
   }
-  deferredInstall.prompt();
-  const choice = await deferredInstall.userChoice;
-  deferredInstall = null;
-  paintInstallState();
-  showToast(choice.outcome === 'accepted' ? 'The room will wait on the home screen' : 'You can keep the room later');
+  openInstallSheet();
 }
 
 async function blessingSeeds() {
@@ -3794,11 +3988,97 @@ function updateBlessingPreview() {
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
     '<div class="cite">' + esc(blessingPick.verse) + '</div>';
 }
+function encodeBlessingClient({ verse, quote, note }) {
+  const payload = JSON.stringify({ v: verse, q: quote, n: note || '' });
+  const bytes = new TextEncoder().encode(payload);
+  let bin = '';
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+function decodeBlessingClient(token) {
+  try {
+    const pad = token.length % 4 === 0 ? '' : '='.repeat(4 - (token.length % 4));
+    const b64 = token.replace(/-/g, '+').replace(/_/g, '/') + pad;
+    const bin = atob(b64);
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+    const data = JSON.parse(new TextDecoder().decode(bytes));
+    if (!data.v || !data.q) return null;
+    return { verse: data.v, quote: data.q, note: data.n || '' };
+  } catch (_) {
+    return null;
+  }
+}
+function blessingUrl() {
+  if (!blessingPick) return '';
+  const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
+  const token = encodeBlessingClient({ verse: blessingPick.verse, quote: blessingPick.quote, note });
+  return location.origin + '/b/' + token;
+}
+async function copyBlessingLink() {
+  const url = blessingUrl();
+  if (!url) { showToast('Choose a verse first'); return; }
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast('Blessing link copied');
+  } catch (_) {
+    showToast(url);
+  }
+}
+async function sendBlessingCard(style) {
+  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  await shareItem('blessing', style || 'parchment');
+}
 async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
+  const url = blessingUrl();
+  const text = (note ? note + '\n\n' : '') + '“' + blessingPick.quote + '”\n— ' + blessingPick.verse + '\n\n' + url;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'A blessing', text, url });
+      closeBlessing();
+      showToast('Blessing sent');
+      return;
+    }
+  } catch (err) {
+    if (err && err.name === 'AbortError') return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast('Blessing link copied');
+  } catch (_) {
+    await shareItem('blessing', style || 'parchment');
+  }
   closeBlessing();
-  await shareItem('blessing', style || 'parchment');
-  showToast('Blessing ready to send');
+}
+function openTabFromUrl() {
+  try {
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (tab === 'advisor' || tab === 'seek' || tab === 'journal' || tab === 'today') {
+      switchTab(tab);
+    }
+  } catch (_) {}
+}
+function openBlessingFromUrl() {
+  try {
+    const q = new URLSearchParams(location.search);
+    const token = q.get('b');
+    if (!token) return;
+    const parsed = decodeBlessingClient(token);
+    history.replaceState({}, '', '/');
+    if (!parsed) return;
+    sitPayload = {
+      kicker: parsed.note || 'A blessing',
+      title: parsed.verse,
+      quote: parsed.quote,
+      verse: parsed.verse,
+      reflection: parsed.note || 'Someone sent you these words.',
+    };
+    sitStep = 1;
+    openSheetChrome('sit-sheet');
+    paintSitPayload(sitPayload);
+    showSitStep(1);
+  } catch (_) {}
 }
 
 function printSitting() {
@@ -3982,6 +4262,7 @@ function bindRituals() {
   window.addEventListener('online', setOfflineBanner);
   window.addEventListener('offline', setOfflineBanner);
   setOfflineBanner();
+  bindKeyboardInset();
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
   setInterval(checkMorningReminder, 5 * 60 * 1000);
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -3996,7 +4277,7 @@ function bindRituals() {
   });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Tab' || !anySheetOn()) return;
-    const open = ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
+    const open = ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet', 'install-sheet']
       .map((id) => document.getElementById(id))
       .find((el) => el && el.classList.contains('on'));
     if (!open) return;
@@ -4012,6 +4293,21 @@ function bindRituals() {
       first.focus();
     }
   });
+}
+
+function bindKeyboardInset() {
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const apply = () => {
+    const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    document.documentElement.style.setProperty('--kb', (kb > 40 ? kb : 0) + 'px');
+    if (document.activeElement && document.activeElement.id === 'chat-input' && kb > 40) {
+      scrollChat();
+    }
+  };
+  vv.addEventListener('resize', apply);
+  vv.addEventListener('scroll', apply);
+  apply();
 }
 
 if ('serviceWorker' in navigator) {
