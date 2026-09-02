@@ -1,0 +1,27 @@
+{
+  "appId": "app.redletter.quietpage",
+  "appName": "Red Letter",
+  "webDir": "public",
+  "backgroundColor": "#F4EFE4",
+  "ios": {
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile",
+    "scheme": "Red Letter",
+    "backgroundColor": "#F4EFE4"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#F4EFE4",
+    "useLegacyBridge": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 400,
+      "backgroundColor": "#F4EFE4",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "LIGHT"
+    }
+  }
+}
