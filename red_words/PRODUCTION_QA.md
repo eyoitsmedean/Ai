@@ -7,7 +7,7 @@ Deadline: Thursday 3 Sep 2026 8:00am America/Boise.
 | Check | Result |
 | --- | --- |
 | `flutter analyze` | **PASS** — No issues found |
-| `flutter test` | **PASS** — 36 passed, 0 failed |
+| `flutter test` | **PASS** — 39 passed, 0 failed |
 | Scripture pack | **PASS** — 100 WEB Gospel sayings; first `anxiety-mt-6-34` / Matthew 6:34 |
 | Android `assembleRelease` | **PASS** — `BUILD SUCCESSFUL`; APK label `Red Words`; id `com.redwords.redwords`. See `android/BUILD_PROOF.md`. Placeholder keystore, not Play. |
 | iOS compile | **FAIL / blocked** — no Mac. WidgetKit sources **and** `RedWordsWidget` app-extension target are in `project.pbxproj`. See TESTFLIGHT.md. |

@@ -20,6 +20,14 @@ application-label:'Red Words'
 
 SHA-256 of that local APK: `d8c340c417b67fb3b4fa1dc65f5c79fe54aa10387054bf74965c992b34284ed5`
 
-Signing: local **placeholder** keystore (`/tmp/redwords-placeholder.jks`) so Gradle was not debug-signed. This APK is **not** Play-uploadable. Dean must replace `android/key.properties` with the real upload keystore.
+Signing: **not** the Android debug cert. `apksigner verify --print-certs`:
+
+```
+Verifies
+Verified using v2 scheme (APK Signature Scheme v2): true
+Signer #1 certificate DN: CN=Red Words Placeholder, O=Red Words, C=US
+```
+
+Local placeholder keystore only (`/tmp/redwords-placeholder.jks`). This APK is **not** Play-uploadable. Dean must replace `android/key.properties` with the real upload keystore.
 
 R8/ProGuard: enabled for release (`isMinifyEnabled = true`).
