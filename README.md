@@ -44,6 +44,10 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Ninety days
+
+`plans/` holds a founder playbook, not product code: five 90-day plans to earn from this and adjacent work, sized to a few hours a week. Open `plans/index.html` in a browser (checklists, ledger, and calendar are saved on the device) or read `plans/PLANS.md`. It is not published by the Pages workflow.
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
