@@ -1,0 +1,17 @@
+---
+description: Choose the correct Dean studio lock for this request
+alwaysApply: true
+---
+
+Pick one lock and obey it. Do not mix product constitutions.
+
+| If the work is… | Lock |
+| --- | --- |
+| Red Letter, Quiet Page, Advisor, lectio, Sit/Seek/Today/Journal, KJV folio | `studio/locks/red-letter.md` |
+| Red Words, Flutter, iPhone, Android, widgets, WEB sayings, One Honest Step | `studio/locks/red-words-native.md` |
+| 90-day cash, business plans, folio/Notion OS, The Lamp / The Room | `studio/locks/ninety-day-folio.md` |
+| Muse, Muse Code, Meta Model API, `run muse` | `studio/locks/muse.md` |
+
+Default if unclear: Red Letter.
+
+Red Letter is a web folio (Today / Sit / Seek / Advisor / Journal, KJV). Red Words is Flutter (Today / Ask / Saved / Settings, WEB). They are siblings, not the same app. Do not merge their information architectures.
