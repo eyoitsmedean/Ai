@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<title>Ninety Days — five ways to earn, one at a time</title>
+<meta name="description" content="Five 90-day business plans sized to 4.5 hours a week, a newborn in October, and a clean room. Sell before you build." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#F4EFE4; --folio:#FBF7EE; --ink:#1B1610; --muted:#7A6E5E;
+  --rule:rgba(27,22,16,.10); --rule-strong:rgba(27,22,16,.22);
+  --crimson:#8F1D1D; --crimson-deep:#6B1414; --crimson-soft:#F3E4DC;
+  --gold:#8A6A28; --gold-soft:#F3EBD4;
+  --advent:#EAE4EC; --advent-ink:#4B3F5C;
+  --shadow:0 1px 0 rgba(27,22,16,.04),0 12px 40px rgba(27,22,16,.05);
+  --display:'Fraunces','Iowan Old Style',Georgia,serif;
+  --body:'Source Serif 4','Palatino Linotype',Palatino,serif;
+  --ui:'Instrument Sans',ui-sans-serif,system-ui,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --measure:44rem;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#14110D; --folio:#1A1612; --ink:#F3EBDD; --muted:#A79A86;
+    --rule:rgba(243,235,221,.10); --rule-strong:rgba(243,235,221,.24);
+    --crimson:#D15A54; --crimson-deep:#8F1D1D; --crimson-soft:#2A1614;
+    --gold:#C4A35A; --gold-soft:#241E12;
+    --advent:#1E1A26; --advent-ink:#B9AFD1;
+    --shadow:0 1px 0 rgba(0,0,0,.2),0 18px 50px rgba(0,0,0,.28);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;font-feature-settings:"kern","liga","onum"}
+a{color:inherit;text-decoration-color:var(--rule-strong);text-underline-offset:.15em}
+a:hover{text-decoration-color:var(--crimson)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+::selection{background:var(--crimson-soft)}
+.sc{font-family:var(--ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.red{color:var(--crimson)}
+.wrap{max-width:var(--measure);margin:0 auto;padding:0 20px}
+.rule{height:1px;background:var(--rule);border:0;margin:0}
+
+/* Mast */
+.mast{padding:28px 0 18px}
+.mast .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.mark{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
+.device{width:34px;height:34px;border-radius:50%;border:1px solid var(--rule-strong);display:grid;place-items:center;font-family:var(--display);font-style:italic;font-weight:560;color:var(--crimson);font-size:20px;line-height:1;padding-bottom:2px}
+.wordmark{font-family:var(--display);font-size:1.15rem;font-weight:500;letter-spacing:-.01em}
+.counter{font-family:var(--ui);font-size:.82rem;color:var(--muted);text-align:right;line-height:1.35}
+.counter b{color:var(--ink);font-weight:600}
+
+/* Title page */
+.title{padding:34px 0 26px}
+.title h1{font-family:var(--display);font-weight:500;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px}
+.title h1 em{font-style:italic;font-weight:560;color:var(--crimson)}
+.title p.lede{font-size:1.12rem;max-width:36rem;margin:0 0 18px;color:var(--ink)}
+.title .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule)}
+.fact .sc{display:block;margin-bottom:4px}
+.fact .v{font-family:var(--display);font-size:1.25rem;font-weight:500;letter-spacing:-.01em}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-top:8px;padding-bottom:8px}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{font-family:var(--ui);font-size:.8rem;font-weight:500;color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:999px;white-space:nowrap}
+.nav a.on,.nav a:hover{color:var(--ink);background:var(--folio)}
+.nav a.on{box-shadow:inset 0 0 0 1px var(--rule)}
+
+/* Sections */
+section{padding:40px 0 10px}
+.head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:18px}
+.head h2{flex:1 1 auto}
+.head .n{font-family:var(--display);font-style:italic;color:var(--crimson);font-size:1.1rem}
+.head h2{font-family:var(--display);font-weight:500;font-size:1.7rem;letter-spacing:-.015em;margin:0;line-height:1.15}
+.head .sc{margin-left:auto}
+p{margin:0 0 1em}
+.leaf{background:var(--folio);border:1px solid var(--rule);border-radius:14px;padding:22px 22px 18px;box-shadow:var(--shadow)}
+.leaf + .leaf{margin-top:14px}
+.leaf h3{font-family:var(--display);font-weight:500;font-size:1.2rem;margin:0 0 8px;letter-spacing:-.01em}
+
+/* Rules list */
+.rules{counter-reset:r;list-style:none;padding:0;margin:0}
+.rules li{counter-increment:r;position:relative;padding:14px 0 14px 46px;border-top:1px solid var(--rule)}
+.rules li:last-child{border-bottom:1px solid var(--rule)}
+.rules li::before{content:counter(r,upper-roman);position:absolute;left:0;top:14px;font-family:var(--display);font-style:italic;color:var(--crimson);font-size:1.05rem;width:34px}
+.rules b{font-weight:600}
+
+/* Rhythm */
+.rhythm{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:8px}
+.beat{border:1px solid var(--rule);border-radius:10px;padding:12px 14px;background:var(--paper)}
+.beat .d{font-family:var(--display);font-size:1.05rem;font-weight:500}
+.beat .m{font-family:var(--ui);font-size:.78rem;color:var(--muted)}
+.beat p{font-size:.95rem;margin:6px 0 0;line-height:1.45}
+
+/* Stack */
+.stack{display:grid;gap:10px}
+.tier{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:baseline;padding:12px 0;border-top:1px solid var(--rule)}
+.tier:last-child{border-bottom:1px solid var(--rule)}
+.tier .sc{padding-top:3px}
+.tier b{font-family:var(--display);font-weight:500;font-size:1.05rem}
+.tier button.link{text-decoration:underline;text-decoration-color:var(--rule-strong);text-underline-offset:.15em}
+.tier button.link:hover{text-decoration-color:var(--crimson)}
+.tier p{margin:4px 0 0;font-size:.98rem;color:var(--ink)}
+
+/* Tonight */
+.tonight{display:grid;grid-template-columns:1fr;gap:14px}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:999px;padding:3px;gap:2px;background:var(--paper)}
+.seg button{font-family:var(--ui);font-size:.82rem;font-weight:500;padding:7px 13px;border-radius:999px;color:var(--muted)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.move{font-family:var(--display);font-size:1.3rem;font-weight:500;letter-spacing:-.01em;line-height:1.3;margin:6px 0 0}
+.move small{display:block;font-family:var(--ui);font-size:.78rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;font-weight:500}
+.pick{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.pick button{font-family:var(--ui);font-size:.8rem;font-weight:500;padding:6px 11px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--muted);background:var(--paper)}
+.pick button.on{border-color:var(--crimson);color:var(--crimson);background:var(--crimson-soft)}
+
+/* Plan strip */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0 22px}
+.strip button{text-align:left;padding:12px 12px 10px;border:1px solid var(--rule);border-radius:12px;background:var(--folio);transition:transform .22s var(--ease),border-color .22s}
+.strip button:hover{transform:translateY(-1px)}
+.strip button.on{border-color:var(--crimson);box-shadow:0 0 0 1px var(--crimson) inset}
+.strip .num{font-family:var(--display);font-style:italic;color:var(--crimson);font-size:1.05rem;line-height:1}
+.strip .nm{font-family:var(--display);font-weight:500;font-size:.95rem;line-height:1.2;margin-top:6px;letter-spacing:-.01em}
+.strip .pr{font-family:var(--ui);font-size:.72rem;color:var(--muted);margin-top:6px}
+.strip .done{font-family:var(--ui);font-size:.7rem;color:var(--muted);margin-top:4px}
+@media (max-width:640px){.strip{grid-template-columns:repeat(2,1fr)}.strip button:last-child{grid-column:span 2}}
+
+/* Plan page */
+.plan{animation:leaf .32s var(--ease)}
+@keyframes leaf{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.plan .role{margin-bottom:10px}
+.plan h3.name{font-family:var(--display);font-weight:500;font-size:clamp(1.7rem,4.5vw,2.3rem);letter-spacing:-.02em;line-height:1.1;margin:0 0 12px}
+.plan .line{font-size:1.2rem;line-height:1.45;margin:0 0 20px;max-width:38rem}
+.plan .line::first-letter{color:var(--crimson);font-family:var(--display);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 18px;padding:16px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:22px}
+.kpi .sc{display:block;margin-bottom:3px}
+.kpi .v{font-family:var(--display);font-size:1.12rem;font-weight:500;line-height:1.25}
+.kpi .v small{font-family:var(--ui);font-size:.75rem;color:var(--muted);font-weight:400;display:block;margin-top:2px}
+.cols{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:720px){.cols.two{grid-template-columns:1fr 1fr}}
+.block h4{font-family:var(--ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 8px}
+.block p{font-size:1rem}
+
+/* Weeks */
+.weeks{list-style:none;margin:0;padding:0}
+.weeks li{display:grid;grid-template-columns:76px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--rule);font-size:.98rem}
+.weeks li:last-child{border-bottom:1px solid var(--rule)}
+.weeks .w{font-family:var(--ui);font-size:.75rem;color:var(--muted);padding-top:4px;line-height:1.4}
+.weeks .w b{display:block;color:var(--ink);font-weight:600;font-size:.8rem}
+.weeks li.protected{background:linear-gradient(90deg,var(--advent),transparent 70%);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:8px}
+.weeks li.protected .w b{color:var(--advent-ink)}
+
+/* Checklist */
+.checks{list-style:none;margin:0;padding:0}
+.checks li{border-top:1px solid var(--rule)}
+.checks li:last-child{border-bottom:1px solid var(--rule)}
+.checks label{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;padding:11px 0;cursor:pointer;font-size:.98rem;line-height:1.45}
+.checks input{appearance:none;width:20px;height:20px;margin-top:3px;border:1px solid var(--rule-strong);border-radius:6px;background:var(--paper);display:grid;place-items:center;transition:all .18s}
+.checks input:checked{background:var(--crimson);border-color:var(--crimson)}
+.checks input:checked::after{content:'';width:6px;height:10px;border:solid var(--paper);border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.checks input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule-strong)}
+.progress{height:3px;background:var(--rule);border-radius:2px;overflow:hidden;margin:6px 0 14px}
+.progress i{display:block;height:100%;background:var(--crimson);width:0;transition:width .4s var(--ease)}
+
+/* Scripts */
+.script{border:1px solid var(--rule);border-radius:12px;padding:14px 16px 12px;background:var(--paper);margin-bottom:10px;position:relative}
+.script h5{font-family:var(--ui);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;padding-right:70px}
+.script pre{white-space:pre-wrap;font-family:var(--body);font-size:.96rem;line-height:1.5;margin:0}
+.script .copy{position:absolute;top:10px;right:12px;font-family:var(--ui);font-size:.72rem;font-weight:500;color:var(--muted);border:1px solid var(--rule-strong);border-radius:999px;padding:4px 10px;background:var(--folio)}
+.script .copy:hover{color:var(--crimson);border-color:var(--crimson)}
+
+.kill{border-left:2px solid var(--crimson);padding:4px 0 4px 16px;margin:18px 0 0}
+.kill .sc{display:block;color:var(--crimson);margin-bottom:4px}
+.kill p{margin:0;font-size:1rem}
+.note{font-size:.92rem;color:var(--muted)}
+.tools{font-size:.95rem}
+
+/* Calendar */
+.cal-head{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin-bottom:14px}
+.cal-head label{font-family:var(--ui);font-size:.82rem;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+.cal-head input[type=date]{font:inherit;font-family:var(--ui);font-size:.85rem;padding:6px 9px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--folio);color:var(--ink)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--ui);font-size:.75rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1px solid var(--rule-strong)}
+.legend i.p{background:var(--advent)}
+.legend i.t{background:var(--crimson-soft)}
+.legend i.s{background:var(--gold-soft)}
+.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.wk{border:1px solid var(--rule);border-radius:12px;padding:12px 12px 10px;background:var(--folio);min-height:132px;display:flex;flex-direction:column;gap:6px}
+.wk.protected{background:var(--advent)}
+.wk.protected .sc{color:var(--advent-ink)}
+.wk.now{box-shadow:0 0 0 1px var(--crimson) inset;border-color:var(--crimson)}
+.wk .sc{font-size:.68rem}
+.wk .d{font-family:var(--display);font-size:1rem;font-weight:500;line-height:1.2}
+.wk .ph{font-family:var(--ui);font-size:.74rem;color:var(--muted);line-height:1.4}
+.wk .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto}
+.wk .tag{font-family:var(--display);font-style:italic;font-size:.8rem;color:var(--crimson);border:1px solid var(--rule);border-radius:6px;padding:1px 6px;background:var(--paper)}
+.wk .tag.s{color:var(--gold);background:var(--gold-soft)}
+.wk .ev{font-family:var(--ui);font-size:.72rem;color:var(--ink);line-height:1.35;padding-left:8px;border-left:1px solid var(--rule-strong)}
+.wk .ev .red{font-family:var(--display);font-style:italic}
+
+/* Ledger */
+.ledger-top{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:16px}
+@media (min-width:720px){.ledger-top{grid-template-columns:1.2fr 1fr}}
+.total .v{font-family:var(--display);font-size:2.6rem;font-weight:500;letter-spacing:-.02em;line-height:1}
+.total .sc{display:block;margin-bottom:6px}
+.total .sub{font-family:var(--ui);font-size:.8rem;color:var(--muted);margin-top:8px}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:22px 1fr 84px;gap:10px;align-items:center;font-family:var(--ui);font-size:.8rem}
+.bar .num{font-family:var(--display);font-style:italic;color:var(--crimson);font-size:.95rem}
+.bar .track{height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.bar .track i{display:block;height:100%;background:var(--crimson);width:0;transition:width .4s var(--ease)}
+.bar .amt{text-align:right;color:var(--muted)}
+.bar .amt b{color:var(--ink);font-weight:600}
+form.add{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}
+@media (min-width:720px){form.add{grid-template-columns:130px 1fr 110px 1fr auto}}
+form.add input,form.add select{font:inherit;font-family:var(--ui);font-size:.88rem;padding:9px 10px;border:1px solid var(--rule-strong);border-radius:9px;background:var(--folio);color:var(--ink);min-width:0}
+form.add button{font-family:var(--ui);font-size:.85rem;font-weight:600;background:var(--ink);color:var(--paper);border-radius:9px;padding:9px 14px}
+@media (max-width:719px){form.add button{grid-column:span 2}}
+table.entries{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.85rem}
+table.entries th{text-align:left;font-weight:500;color:var(--muted);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 6px;border-bottom:1px solid var(--rule)}
+table.entries td{padding:9px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+table.entries td.amt{text-align:right;font-weight:600;white-space:nowrap}
+table.entries td.x button{color:var(--muted);font-size:.8rem}
+table.entries td.x button:hover{color:var(--crimson)}
+.empty{font-family:var(--ui);font-size:.85rem;color:var(--muted);padding:14px 0}
+.tools-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.tools-row button{font-family:var(--ui);font-size:.78rem;font-weight:500;color:var(--muted);border:1px solid var(--rule-strong);border-radius:999px;padding:6px 12px;background:var(--folio)}
+.tools-row button:hover{color:var(--ink)}
+
+/* Compare */
+table.cmp{width:100%;border-collapse:collapse;font-size:.92rem}
+table.cmp th{font-family:var(--ui);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:8px 8px;border-bottom:1px solid var(--rule)}
+table.cmp td{padding:10px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+table.cmp td:first-child{font-family:var(--display);font-style:italic;color:var(--crimson);white-space:nowrap}
+table.cmp td b{font-weight:600}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* Colophon */
+footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem}
+footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--paper);font-family:var(--ui);font-size:.82rem;padding:9px 14px;border-radius:999px;transition:all .25s var(--ease);pointer-events:none;z-index:50}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media print{
+  .nav,.tonight,.strip,.copy,form.add,.tools-row,.pick,.seg,.cal-head input,td.x,th.x{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .leaf{box-shadow:none;border-color:#ccc;break-inside:avoid}
+  section{padding:18px 0 6px;break-inside:avoid}
+  .plan{break-before:page}
+  .wrap{max-width:100%}
+  a{text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap row">
+    <a class="mark" href="#top" aria-label="Ninety Days">
+      <span class="device" aria-hidden="true">R</span>
+      <span class="wordmark">Ninety Days</span>
+    </a>
+    <div class="counter" id="counter">4 Sep → 3 Dec 2026</div>
+  </div>
+</header>
+
+<div class="wrap title" id="top">
+  <h1>Five ways to earn.<br /><em>Run one.</em></h1>
+  <p class="lede">Five business plans sized to the life you actually have: about four and a half optional hours a week, a newborn arriving in October, and a clean room around your day job. Every plan makes you attempt a sale before it lets you build anything.</p>
+  <p class="note">Everything on this page is an estimate, not a promise. Compliments are not demand. Only the ledger counts.</p>
+  <div class="facts">
+    <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
+    <div class="fact"><span class="sc">Real hours</span><span class="v">≈ 40 of 58</span></div>
+    <div class="fact"><span class="sc">Base case, one engine</span><span class="v">$2,500 – $4,000</span></div>
+    <div class="fact"><span class="sc">Floor</span><span class="v">$350</span></div>
+  </div>
+</div>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a href="#first">Read first</a>
+    <a href="#choose">Choose</a>
+    <a href="#plans">The five</a>
+    <a href="#compare">Compare</a>
+    <a href="#calendar">Calendar</a>
+    <a href="#ledger">Ledger</a>
+    <a href="#money">Money &amp; paper</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="first" class="wrap">
+  <div class="head"><span class="n">i</span><h2>Read first</h2><span class="sc">Six rules</span></div>
+  <ol class="rules">
+    <li><b>Sell before you build.</b> Every plan's first week is a message to a stranger, not a document. Ten unpaid build hours is the ceiling before someone has said yes with money.</li>
+    <li><b>One engine.</b> Pick one plan to actually run. One more may run in the background if its work is finished before the baby arrives. Two engines is none.</li>
+    <li><b>Four and a half hours.</b> Tuesday sixty, Thursday ninety, Saturday sixty, Sunday fifteen. That is the whole budget. If a week needs more, the plan is wrong, not the week.</li>
+    <li><b>Protected weeks are protected.</b> From the day the baby arrives until at least thirty days after, optional work is zero. Links stay live. Auto-replies do the talking. Nothing restarts on a date; it restarts when both of you say yes.</li>
+    <li><b>Clean room.</b> Personal devices, accounts, time, and words. No client in insurance, benefits, HR, staffing, or finance. Nothing from work: no contacts, templates, decks, language. Read your outside-work clause once, yourself, before the first paid job. If it's ambiguous, one written question.</li>
+    <li><b>Payment beats praise.</b> "I'd totally buy that" is not a data point. A deposit is. Log only money. Thirty percent of every dollar goes to the tax jar the day it arrives.</li>
+  </ol>
+
+  <div class="leaf" style="margin-top:22px">
+    <h3>The 4.5 hours</h3>
+    <p class="note" style="margin-bottom:10px">A week that fits on an index card. The Sunday fifteen is the only one you already keep.</p>
+    <div class="rhythm">
+      <div class="beat"><div class="d">Tuesday</div><div class="m">60 min</div><p>Prospect. Five messages or five videos. Reply to everyone.</p></div>
+      <div class="beat"><div class="d">Thursday</div><div class="m">90 min</div><p>Build or deliver. One thing, finished.</p></div>
+      <div class="beat"><div class="d">Saturday</div><div class="m">60 min</div><p>Finish and send. Ask for the sentence.</p></div>
+      <div class="beat"><div class="d">Sunday</div><div class="m">15 min</div><p>Ledger. Next week's five names. Close the laptop.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="choose" class="wrap">
+  <div class="head"><span class="n">ii</span><h2>Choose</h2><span class="sc">The recommended stack</span></div>
+  <div class="leaf">
+    <div class="stack">
+      <div class="tier"><span class="sc">Engine</span><div><b><button class="link" data-go="fix">I · One-Fix Friday</button></b><p>Highest probability of a first dollar. Local, visual, bounded, two-hour builds. Uses the one skill you have that almost nobody in a small town has: directing agents to ship in an evening.</p></div></div>
+      <div class="tier"><span class="sc">Background</span><div><b><button class="link" data-go="red">II · Red Letter — Advent</button></b><p>Already built. Finish the Advent companion in September, launch 1 Nov, sleep in between. Low cash now; it is the rehearsal for Lent, which your own research calls the payday.</p></div></div>
+      <div class="tier"><span class="sc">Seasonal</span><div><b><button class="link" data-go="voice">III · The Voice Capsule</button></b><p>One sample before the baby. Sell only in the week of Veterans Day. Deliver for Christmas. The most <em>you</em> of the five.</p></div></div>
+      <div class="tier"><span class="sc">Optional</span><div><b><button class="link" data-go="interview">IV · The Civilian Interview</button></b><p>Fastest to sell, easiest to stop. Run it instead of Plan I if you'd rather talk to veterans than to plumbers.</p></div></div>
+      <div class="tier"><span class="sc">Upsell</span><div><b><button class="link" data-go="rescue">V · Workflow Rescue</button></b><p>Never sold cold. It is the answer to a question a One-Fix client will ask you. One in the window is $1,500.</p></div></div>
+    </div>
+    <p class="note" style="margin:16px 0 0">Base case for Engine + Background + Seasonal: roughly $2,700. With one Rescue: roughly $4,200. Floor if only the first One-Fix sells: $350. These are planning numbers, not forecasts.</p>
+  </div>
+
+  <div class="leaf tonight" style="margin-top:14px">
+    <div>
+      <h3 style="margin-bottom:4px">Tonight</h3>
+      <p class="note" style="margin-bottom:12px">Pick the plan you're running and how many minutes you honestly have. You get one move.</p>
+      <div class="pick" id="tonight-plan"></div>
+      <div style="margin-top:12px"><div class="seg" id="tonight-min" role="group" aria-label="Minutes available">
+        <button data-m="0">0</button><button data-m="15">15</button><button data-m="45">45</button><button data-m="90">90</button>
+      </div></div>
+    </div>
+    <div class="move" id="tonight-move"></div>
+  </div>
+</section>
+
+<section id="plans" class="wrap">
+  <div class="head"><span class="n">iii</span><h2>The five</h2><span class="sc">Pick one to read</span></div>
+  <div class="strip" id="strip" role="tablist"></div>
+  <div id="plan"></div>
+</section>
+
+<section id="compare" class="wrap">
+  <div class="head"><span class="n">iv</span><h2>Side by side</h2><span class="sc">Estimates</span></div>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th></th><th>Plan</th><th>Price</th><th>90-day cash</th><th>Hours</th><th>First dollar</th><th>Fit</th></tr></thead>
+    <tbody id="cmp"></tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:12px">Cash is floor · base · stretch. "Fit" is the honest answer to: does this use something only you have? Everything is before tax, tools, and the time it takes to find the buyer.</p>
+</section>
+
+<section id="calendar" class="wrap">
+  <div class="head"><span class="n">v</span><h2>Thirteen weeks</h2><span class="sc">Adjusts to the birth</span></div>
+  <div class="cal-head">
+    <label>Baby arrives <input type="date" id="baby" min="2026-09-04" max="2026-12-03" /></label>
+    <div class="legend"><span><i class="p"></i>Protected (birth + 30 days)</span><span><i class="t"></i>This week</span><span><i class="s"></i>Season</span></div>
+  </div>
+  <div class="cal" id="cal"></div>
+  <p class="note" style="margin-top:12px">The date is an assumption until it isn't. Change it and the protected weeks move. Protection ends when both of you say yes, not when the shading does.</p>
+</section>
+
+<section id="ledger" class="wrap">
+  <div class="head"><span class="n">vi</span><h2>Ledger</h2><span class="sc">Only money counts</span></div>
+  <div class="ledger-top">
+    <div class="leaf total">
+      <span class="sc">Received, all plans</span>
+      <div class="v" id="total">$0</div>
+      <div class="sub" id="total-sub">Base case for the recommended stack is about $2,700.</div>
+    </div>
+    <div class="leaf"><div class="bars" id="bars"></div></div>
+  </div>
+  <div class="leaf">
+    <form class="add" id="add" autocomplete="off">
+      <input type="date" name="date" required />
+      <select name="plan" required></select>
+      <input type="number" name="amount" min="1" step="1" inputmode="numeric" placeholder="$" required />
+      <input type="text" name="note" placeholder="From whom, for what" maxlength="80" />
+      <button type="submit">Log it</button>
+    </form>
+    <div id="entries"></div>
+    <div class="tools-row">
+      <button type="button" id="export">Export CSV</button>
+      <button type="button" id="reset">Start over</button>
+    </div>
+  </div>
+</section>
+
+<section id="money" class="wrap">
+  <div class="head"><span class="n">vii</span><h2>Money &amp; paper</h2><span class="sc">Before the first dollar</span></div>
+  <div class="leaf">
+    <h3>The waterfall</h3>
+    <p>Every dollar that arrives is split the same day: <b>30% to a tax jar</b> (a separate savings account is enough), the rest to the household buffer. Nothing speculative. Nothing reinvested until a plan has paid twice. The only purchases allowed in these ninety days are a domain (about $12) and, if you need it, a call-recording app (about $10).</p>
+    <h3>Tax, plainly</h3>
+    <p>Side income is taxable from the first dollar. Once net self-employment earnings pass <b>$400</b> in the year you file Schedule C and pay self-employment tax; quarterly estimated payments may apply. Keep every Stripe receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. This page is not tax advice.</p>
+    <h3>Your name on the invoice</h3>
+    <p>Invoice under your own legal name and you need no filing to begin. If you trade under a name that isn't yours, Idaho requires an Assumed Business Name filing with the Secretary of State (a small fee; confirm the current amount). An LLC can wait until something has paid three times.</p>
+    <h3>The employer line</h3>
+    <p>Read your own agreements once — outside work, conflicts, confidentiality, invention assignment. Do it yourself; don't paste them anywhere. If a plan sits in a grey area, one written question before the first paid job. Until you have a written answer, treat insurance, benefits, HR, staffing, and financial services as off-limits buyers, and keep every artifact on your own devices and accounts.</p>
+    <h3>The family gate</h3>
+    <p>If a week's work steals sleep, or quietly moves load onto your partner, it stops. "Nothing this week" is a valid entry. The identity sentence still holds: a father who finishes small beautiful things. One at a time.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <span class="device" aria-hidden="true">R</span>
+  <p>Built from your repository, your market research, and your own venture notes. Everything you check or log here stays on this device. Nothing is sent anywhere.</p>
+  <p>Set in Fraunces, Source Serif 4, and Instrument Sans. Paper, ink, one red.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+const START = new Date(2026,8,4);      // Fri 4 Sep 2026
+const END   = new Date(2026,11,3);     // Thu 3 Dec 2026
+const KEY   = 'ninety.v1';
+
+/* ---------------- Plans ---------------- */
+const PLANS = [
+{
+  id:'fix', num:'I', name:'One-Fix Friday', role:'The engine. Run this one.',
+  line:'I find the one thing on your website or Google profile that loses you customers on a phone — and I fix it by Friday.',
+  price:'$350 flat', priceNote:'Refund if it doesn\'t help',
+  cash:{floor:350, base:1400, stretch:2800},
+  hours:'3–3.5 hrs / week', hoursNote:'in selling weeks',
+  first:'Fri 18 Sep', firstNote:'Week 2',
+  fit:'High — agent-directed builds, human copy',
+  who:'Owner-run local service businesses within thirty minutes of you: plumbers, HVAC, electricians, barbers, groomers, detailers, gyms, coffee, landscapers, med-spa, dentists, chiropractors. Never: insurance, benefits, HR, staffing, financial services, or anyone connected to your employer.',
+  what:'One fix, shipped: a mobile booking path that works, click-to-call above the fold, an FAQ that answers the five questions their reviews keep asking, a review-reply library in their voice, fixed hours/photos/services on the Google Business Profile, or a one-page landing for their best service. Plus a ninety-second before/after screen recording they can watch on their phone.',
+  why:'You direct coding agents like a crew chief — this repository is the proof. A shop quotes $2,000 and three weeks for what you can ship in a two-hour block. And you write copy that sounds like a person, which is the whole difference on a phone screen. The Friction Audit you already designed in your notes is the pitch; this just charges for the fix instead of the report.',
+  weeks:[
+    ['1','4–10 Sep','Set up a Stripe Payment Link for $350 (ten minutes). Save the three scripts to your phone. From Google Maps, list twenty businesses with 3.5–4.6 stars and a website that annoys you on a phone. Record the first five sixty-second phone videos — you, trying to book, narrating — and send them.'],
+    ['2','11–17 Sep','Send five more. Reply to everyone within a day. First sale: build Thursday, deliver Friday with the before/after video. Ask for one sentence you can quote.'],
+    ['3','18–24 Sep','Send five. Deliver. Post the before/after once, with permission — one sentence, no hashtags.'],
+    ['4','25 Sep–1 Oct','Send five. Deliver. If anyone says "we also have this problem with quotes / scheduling / new hires" — that is Plan V. Write it down.'],
+    ['5','2–8 Oct','Last sends before the baby. Deliver everything you\'ve sold. Set the auto-reply. Go home.'],
+    ['6–9','9 Oct–5 Nov','Protected. Nothing. The link stays live. Auto-reply: "Home with a newborn until [date]. I\'ll reply then — and I\'ll still fix it by a Friday."'],
+    ['10','6–12 Nov','Re-open. Reply to the backlog. Send five videos. Small Business Saturday (28 Nov) is the natural hook: "one fix before the holidays."'],
+    ['11–13','13 Nov–3 Dec','Five a week, deliver Fridays. Take no new work after 27 Nov unless it ships by 3 Dec.']
+  ],
+  checks:[
+    'Read your outside-work / conflict clause once. Local trades outside your employer\'s markets are clear — or one written question is sent before the first paid job.',
+    'Personal Stripe account; $350 Payment Link named "One-Fix Friday".',
+    'Three scripts saved to your phone.',
+    'List of twenty local businesses (name · contact · the one friction you saw).',
+    'First five phone videos recorded and sent.',
+    'Ten sent.',
+    'First paid fix delivered with before/after video.',
+    'One quotable sentence, with written OK to use it.',
+    'Second paid fix delivered.',
+    'One before/after posted publicly.',
+    'Auto-reply set; queue closed before the baby.',
+    'Re-opened after the protected weeks; five sent.',
+    'Fourth paid fix — base case reached.',
+    'Every dollar in the ledger; 30% moved to the tax jar.'
+  ],
+  scripts:[
+    ['First message · text, DM, or email · subject: Tried to book with you from my phone',
+`Hi [Name] — I'm Dean, here in [town]. I tried to book with you from my phone this morning and got stuck at [the exact spot]. I recorded it — sixty seconds, attached — because I think it's costing you customers who never call.
+
+I fix exactly one thing like this for local businesses: flat $350, done by Friday, refund if it doesn't help. Want me to fix this one?`],
+    ['Follow-up · three days later',
+`No pressure at all. Here's the fix I'd make, in one sentence, in case you'd rather do it yourself: [one sentence].
+
+If you'd like it done by Friday, the link is here: [Stripe link].`],
+    ['Delivery note',
+`Done. Here's ninety seconds of your site on a phone, before and after: [video].
+
+Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you up at night, tell me and I'll say whether it's a Friday fix or something bigger.
+
+— Dean`]
+  ],
+  kill:'Forty videos sent and zero sales by 2 Oct → stop. Don\'t polish the pitch; change the buyer (a different trade) or shelve it.',
+  clean:'Personal laptop, personal Stripe, personal accounts, evenings and weekends. No client in insurance, benefits, HR, staffing, or finance. No employer contacts, templates, or language.',
+  tools:'Stripe Payment Links ($0/month, 2.9% + 30¢) · iPhone screen recording ($0) · Cursor (you have it) · a $12 domain later, not now.',
+  tonight:{0:'Nothing is the move. The link is live. Go to bed.',15:'Find one local business whose site annoys you on your phone. Write its name and the friction in one line.',45:'Record and send two phone videos.',90:'Build and deliver the fix you\'ve sold, with the before/after video.'}
+},
+{
+  id:'red', num:'II', name:'Red Letter — Advent edition', role:'Background. Build in September, launch in November, sleep in between.',
+  line:'The app is built. Sell the one thing you can finish before the baby: a printed-feeling Advent companion of the words He spoke — then let the season carry it.',
+  price:'$12 PDF', priceNote:'$59.99 year only after ten PDFs sell',
+  cash:{floor:0, base:300, stretch:1200},
+  hours:'1.5 hrs / week', hoursNote:'almost all in September',
+  first:'Sun 1 Nov', firstNote:'pre-orders · delivered 22 Nov',
+  fit:'High — the corpus, the design, the copy all exist',
+  who:'The reader in your own market strategy: 28–45, loves Jesus more than religious noise, already screenshots verses, wants application not seminary. Small-group and women\'s-study leaders who share one thing a week. Gift-buyers in the last week of November.',
+  what:'"Advent with His words" — twenty-eight days (Sun 29 Nov → Sat 26 Dec) of one saying, one line of reflection, one blank line to answer. Typeset like the app: paper, ink, red for His speech. A PDF for the phone and for print-at-home. The same content becomes an in-app Advent path — the church-year retint already exists. Then, if the PDF sells, the Year: "keep the lamp lit" for $59.99 unlocks the live Advisor.',
+  why:'Nobody owns "the red letters" as a premium brand — you wrote that, and you were right. You already have the corpus, the design language, the forty-day path, share cards, and five ad scripts. The only missing piece is a thing with a price. Advent is the rehearsal for Lent (Ash Wednesday, 10 Feb 2027), which your own research says is the payday.',
+  weeks:[
+    ['1','4–10 Sep','Choose twenty-eight sayings from data/paths.js and lib/curated.js. Write nothing new yet.'],
+    ['2','11–17 Sep','Draft the reflections — one line each, the app\'s voice. Lay out the PDF from the app\'s print and broadside styles. One evening.'],
+    ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 link with file delivery (Stripe or Lemon Squeezy) and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.'],
+    ['4','25 Sep–1 Oct','Make four Advent share cards (the card code exists) and one face-free vertical video: hands, paper, one red sentence. Save them. Schedule nothing.'],
+    ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Close the laptop.'],
+    ['6–9','9 Oct–5 Nov','Protected. Nothing. Pages stays up.'],
+    ['10','6–12 Nov','(1 Nov falls in the protected window if the baby comes mid-October — open pre-orders the first evening you are allowed to.) Post the video and one card. Send the five leaders their copies.'],
+    ['11','13–19 Nov','One card, one post. Answer replies.'],
+    ['12','20–26 Nov','22 Nov: deliver the PDF to every buyer. Black Friday and Small Business Saturday: one post, no discount. "The words are free. The book is $12."'],
+    ['13','27 Nov–3 Dec','Advent begins 29 Nov; the in-app path goes live. Ten or more PDFs sold → build the $59.99 year gate in December. Fewer → stay free and aim at Lent.']
+  ],
+  checks:[
+    'Twenty-eight sayings picked (existing corpus only; KJV, public domain).',
+    'Twenty-eight one-line reflections written.',
+    'PDF built — paper, ink, crimson — phone-readable and A5-printable.',
+    '$12 link with file delivery live; test-bought once.',
+    'App on a real URL and installable.',
+    'Four share cards and one vertical video saved.',
+    'Five small-group leaders messaged with the free-copy offer.',
+    'Pre-orders open; posted once.',
+    'Three paid pre-orders — your own proof rule.',
+    '22 Nov: PDF delivered to buyers.',
+    '29 Nov: in-app Advent path live.',
+    'Decision logged: build the year, or stay free until Lent.'
+  ],
+  scripts:[
+    ['To a small-group leader',
+`Hi [Name] — I built a quiet little Advent companion: twenty-eight days, one thing Jesus actually said each morning, one line, one blank line to answer. No app required, no account.
+
+I'd like to give your group copies free. The only ask: if it helps, tell people where it came from when it opens on 1 Nov. Want a copy to look at?`],
+    ['Launch post',
+`Advent with His words.
+Twenty-eight days. One sentence He actually spoke, each morning, in red.
+
+The words are free in the app and always will be. The book is $12.
+[link]`],
+    ['Delivery email',
+`Here's your Advent. Print it, or keep it on your phone. Day 1 is Sunday 29 Nov.
+
+If one of these sentences lands, send it to one person — not a feed.
+
+— Dean · Red Letter`]
+  ],
+  kill:'Fewer than three pre-orders by 15 Nov → deliver to whoever bought, don\'t build the year, keep the words free, point everything at Lent.',
+  clean:'Entirely yours. Public-domain KJV. No employer overlap. Keep "software, not a person" and 988 in the product.',
+  tools:'Stripe or Lemon Squeezy ($0/month) · GitHub Pages ($0) · a domain ($12/yr, optional) · the app\'s own share-card and print code.',
+  tonight:{0:'Nothing is the move. Pages is up. Go to bed.',15:'Pick three sayings for Advent from data/paths.js.',45:'Write seven one-line reflections in the app\'s voice.',90:'Lay out the PDF from the app\'s print styles. Export a first draft.'}
+},
+{
+  id:'voice', num:'III', name:'The Voice Capsule', role:'Seasonal. One sample before the baby. Sell in Veterans Day week. Deliver for Christmas.',
+  line:'One hour with a veteran about one chapter. Their family receives ten minutes of his voice, a keepsake, and a short piece of music written for it.',
+  price:'$495 founding', priceNote:'first three · $750–950 after',
+  cash:{floor:0, base:990, stretch:1485},
+  hours:'6–8 hrs per capsule', hoursNote:'cap at three',
+  first:'Wed 11 Nov', firstNote:'Veterans Day · deposits',
+  fit:'Highest — veteran, listener, musician, typesetter',
+  who:'The adult child or spouse of a veteran, any era, who has said "I wish I had Dad\'s voice telling that story." Reunion groups. A veteran choosing his own legacy artifact. The buyer is usually 35–60, buying a Christmas gift that isn\'t a thing.',
+  what:'A consent-first conversation (60–75 minutes, in person or by phone), a truth-marked transcript, an 8–12 minute edited audio vignette, a four-page keepsake (photos, captions, source notes), and a 30–60 second original motif made in Ableton. Private by default. The narrator controls topics, cuts, and access, and can stop at any time. "No artifact" is a valid ending.',
+  why:'Veterans talk to veterans differently. You have spent a career teaching people to listen for the real sentence. You have the truth discipline never to invent a detail, the typesetting taste to make a keepsake feel like a book, and a Push 2 on the desk. Storyworth sells prompts; Remento sells an app; nobody sells a veteran-to-veteran audio heirloom with music. Your own frontier notes called this the best life-plus-differentiation bet. It is also the same muscle as the coming-home chapter.',
+  weeks:[
+    ['1','4–10 Sep','Write the one-page offer and a plain consent sheet: purpose, topics off-limits, who may hear it, withdrawal, deletion, AI transcription yes or no.'],
+    ['2–3','11–24 Sep','Record ONE sample with a consenting fellow veteran or family friend. Edit it. Write the motif. Time everything honestly.'],
+    ['4','25 Sep–1 Oct','Design the keepsake template in Red Letter\'s paper and type. Choose a three-minute excerpt you are allowed to share. Get that permission in writing.'],
+    ['5','2–8 Oct','Draft the Veterans Day post and messages to two local veteran organizations. Save them. Stop.'],
+    ['6–9','9 Oct–5 Nov','Protected. Nothing.'],
+    ['10','6–12 Nov','Post the excerpt. Message the Legion or VFW post and one veteran-family group. Email the ten people who would know someone. Take up to three deposits ($250) for Christmas delivery.'],
+    ['11–12','13–26 Nov','Schedule interviews — phone is fine. Record one or two.'],
+    ['13','27 Nov–3 Dec','Edit the first. Deliveries land by 20 Dec, just past the window; deposits count now.']
+  ],
+  checks:[
+    'One-page offer written: what, who controls what, price, delivery date.',
+    'Consent sheet written: topics, access, withdrawal, deletion, AI transcription.',
+    'Sample capsule recorded with full consent.',
+    'Sample edited to 8–12 minutes; all-in time logged.',
+    'Motif written and mixed (30–60 s).',
+    'Keepsake template designed; sample keepsake made.',
+    'Written permission for a three-minute public excerpt.',
+    'Veterans Day post and two organization messages drafted and saved.',
+    'Posted and sent in the week of 11 Nov.',
+    'First $250 deposit.',
+    'Three deposits (cap) — or the decision to keep it private.',
+    'First paid capsule delivered; the family\'s words recorded, with permission.'
+  ],
+  scripts:[
+    ['Veterans Day post',
+`I'm a Marine. This fall I sat with a fellow veteran for an hour about one chapter of his life and made his family something they can keep: ten minutes of his voice, a few pages, and a piece of music written for it. Nothing invented. He decided what was in it.
+
+I'm making three of these for Christmas, for families with a veteran whose stories they want in his own voice. $495 founding price, half now. Reply or message me.
+
+[three-minute sample, shared with his permission]`],
+    ['To a Legion or VFW post commander',
+`Sir — I'm Dean Ray, USMC, out in [town]. I'm making private audio keepsakes for veteran families: one conversation, ten minutes of their voice, a short keepsake, original music. Consent-first, private by default.
+
+Would you be willing to let members know, or introduce me to one family who has been meaning to record Dad? I'll do the first one for a member of the post at cost.`],
+    ['Deposit confirmation',
+`Thank you. Here's how it works: I call [narrator] first to introduce myself — no recording. He picks the chapter. We talk for about an hour whenever he's ready, in person or by phone. He hears the edit before anyone else and can cut anything.
+
+Delivery by 20 Dec. If he decides he'd rather not, you get the deposit back and we part friends.`]
+  ],
+  kill:'Zero deposits by 20 Nov → make one for your own family and file it under meaning, not money. Look again before Memorial Day.',
+  clean:'Nothing to do with your employer. No operational or security-sensitive military detail. No pressure to disclose. Narrator consent for everything, and separately for anything public.',
+  tools:'Voice Memos or a $10 call-recording app · Ableton + Push 2 (owned) · Pages, Figma, or the app\'s print CSS for the keepsake · Stripe deposit link.',
+  tonight:{0:'Nothing is the move. Go to bed.',15:'Write the five lines of the consent sheet.',45:'Edit ten minutes of the sample conversation.',90:'Write and mix the motif.'}
+},
+{
+  id:'interview', num:'IV', name:'The Civilian Interview', role:'Optional. Fastest to sell, cleanest to deliver, easiest to stop.',
+  line:'Sixty minutes of rehearsal for a veteran\'s next interview. I play the hiring manager. You leave with your five sentences.',
+  price:'$149 founding', priceNote:'first five · $199 after',
+  cash:{floor:149, base:800, stretch:1600},
+  hours:'1.5 hrs per session', hoursNote:'+ 1 hr / week outreach',
+  first:'Fri 25 Sep', firstNote:'Week 4',
+  fit:'High — you made this exact transition',
+  who:'Service members within six months of separating; veterans up to two years out interviewing for civilian roles; the spouse who books it for them. Exclude anyone interviewing at an insurance, benefits, HR, or financial-services firm — one simple rule that keeps you clean.',
+  what:'One recorded sixty-minute rehearsal of their actual upcoming interview with you as the hiring manager; a one-page "Five Sentences" card — how they say what they did in words a civilian manager hears; one text check-in the morning of.',
+  why:'You made this transition — Marine to sales floor to senior director — and you have spent years teaching people to talk like humans instead of like a résumé. You have sat on the hiring side. Interview coaches charge $100–300 an hour and almost none have worn the uniform. This is coaching an individual job-seeker, not selling enablement — the line your own notes draw.',
+  weeks:[
+    ['1','4–10 Sep','Read your outside-work clause. Write the offer — one screen. $149 Stripe link. Offer two free sessions to veterans you know in exchange for a sentence you can quote.'],
+    ['2','11–17 Sep','Run the two free sessions. Build the Five Sentences card from them. Post once on LinkedIn: one true transition moment of yours, no lesson attached.'],
+    ['3','18–24 Sep','Post once. Message the Boise State veterans center and one transition group with the offer.'],
+    ['4','25 Sep–1 Oct','First paid session. Post the permitted quote.'],
+    ['5','2–8 Oct','Sessions as booked. Book nothing inside the protected window.'],
+    ['6–9','9 Oct–5 Nov','Protected. Nothing. Auto-reply.'],
+    ['10–13','6 Nov–3 Dec','Re-open. One post a week. Sessions Tuesday and Thursday evenings. Stop at the fifth paid session if that is all the room you have — five is the base case.']
+  ],
+  checks:[
+    'Outside-work clause read; any ambiguity resolved in writing before the first paid session.',
+    'Offer page written; $149 Stripe link live.',
+    'Two free sessions delivered; two quotes with written permission.',
+    'Five Sentences card template built.',
+    'First LinkedIn post — one true moment, no lesson.',
+    'Boise State veterans center and one transition group messaged.',
+    'First paid session.',
+    'Third paid session.',
+    'Fifth paid session — base case.',
+    'Ledger updated; 30% to the tax jar.'
+  ],
+  scripts:[
+    ['The offer, in one screen',
+`You did hard things. You're about to sit across from someone who has never heard of your MOS and has eleven minutes.
+
+Sixty minutes with me — I play the hiring manager for the actual job — and you leave with your five sentences: what you did, why it mattered, and what you'll do for them, in words they hear. Recorded. One text from me the morning of.
+
+$149.
+
+— Dean Ray. USMC, then a sales floor, then senior director. I've sat on both sides of the table.`],
+    ['LinkedIn post · one true moment',
+`My first civilian interview, I answered "tell me about yourself" with my billet and my unit. He nodded politely and wrote nothing down.
+
+Nobody had told me the sentence he was waiting for was about him.
+
+That's all. Just remembering.`],
+    ['After the session',
+`Here's your recording and your five sentences. Read them out loud twice tomorrow, and once in the car before you walk in. I'll text you the morning of.
+
+You already did the hard part, years ago.`]
+  ],
+  kill:'Two free sessions, four posts, two organization messages, and zero paid by 5 Oct → park until January. Do not build a course.',
+  clean:'Individuals only, never companies. No candidates for insurance, benefits, HR, or finance roles. Personal time and tools. No employer frameworks by name — your own words only.',
+  tools:'Zoom or FaceTime ($0) · Stripe link · a one-page card in Pages or the app\'s print CSS.',
+  tonight:{0:'Nothing is the move. Go to bed.',15:'Text one veteran you know: a free rehearsal this week in exchange for one sentence.',45:'Write the offer page and make the Stripe link.',90:'Run a session.'}
+},
+{
+  id:'rescue', num:'V', name:'Workflow Rescue', role:'The bigger fish. Never sold cold — only as the answer to a question a One-Fix client asks.',
+  line:'Two weeks. One process that lives in the owner\'s head. I hand it back as a map, checklists, and a recorded walkthrough the team will actually use.',
+  price:'$1,500 fixed', priceNote:'half up front',
+  cash:{floor:0, base:1500, stretch:3000},
+  hours:'10–12 hrs all-in', hoursNote:'one client, maybe two',
+  first:'When a client says "and also…"', firstNote:'expected Week 3–4 or Week 11',
+  fit:'High — your failure mode is their asset',
+  who:'An owner-led local service business with five to twenty-five people and one process that breaks weekly because it lives in the owner\'s memory: lead to quote, job to invoice, a new hire\'s first week, how a complaint gets handled. Same exclusions as Plan I.',
+  what:'Two interviews (the owner, plus the two people who touch it), a one-page process map that shows where it actually breaks, checklists and message templates for each step, an exceptions list ("when you should NOT follow this"), and a twenty-minute recorded walkthrough the owner can play for the team. Version-dated and owner-approved. Not HR, legal, or safety guidance.',
+  why:'You build operating systems compulsively — your notes are the proof. Pointed at your own life it is your failure mode; pointed at someone else\'s business it is the most valuable thing you do. You have run enablement for hundreds of people. Agents draft the documents in minutes; you do the part that matters — the second question, the exceptions, and making it sound like a human wrote it. Your own venture studio ranked this first. It only lacked a buyer. Plan I finds the buyer.',
+  weeks:[
+    ['1–2','4–17 Sep','Nothing to sell yet. Write the one-page scope: what\'s in, what\'s out, two weeks, $1,500, half up front, not HR-legal-safety. Keep it in your Notes.'],
+    ['3–4','18 Sep–1 Oct','When a One-Fix client mentions a broken process — one will — say the scope out loud. If yes, take the deposit. Interview the owner (45 min) and two staff (20 min each) in one week.'],
+    ['5','2–8 Oct','Draft everything with agents in one two-hour block; spend the next hour cutting it in half. Record the walkthrough. Deliver before the baby, or set delivery for Week 11 and say so.'],
+    ['6–9','9 Oct–5 Nov','Protected. Nothing.'],
+    ['10–13','6 Nov–3 Dec','Deliver the open engagement. If a second One-Fix client asks, take one more for December delivery. Stop there.']
+  ],
+  checks:[
+    'One-page scope written (in / out / two weeks / $1,500 / half up front / not HR-legal-safety).',
+    '$750 deposit link created.',
+    'Heard the "and also…" from a One-Fix client; said the scope out loud.',
+    'Deposit received.',
+    'Owner interview and two staff interviews done.',
+    'Draft produced — then cut in half.',
+    'Twenty-minute walkthrough recorded.',
+    'Owner approved and version-dated it.',
+    'Final $750 received.',
+    'Asked for one sentence and one referral.'
+  ],
+  scripts:[
+    ['The scope, said out loud',
+`That's a two-week fix, not a Friday one. I'd talk to you and the two people who touch it, then hand you the process the way it should actually run — one page, the checklists, the messages, the exceptions, and a twenty-minute recording you can play for anyone new.
+
+$1,500, half now. If your team doesn't actually use it, tell me and I'll make it right.`],
+    ['Interview opener',
+`Walk me through the last time this went wrong. Not the process — the Tuesday.`],
+    ['Delivery note',
+`Here's [process] as it should run. Page one is the map; the red marks are where it broke last month. The exceptions page is the important one — it's the judgment you've been carrying in your head.
+
+Play the recording for whoever is new. Version 1.0, dated today. It's yours to change.`]
+  ],
+  kill:'Never cold-pitch this. If no One-Fix client has asked by 15 Nov, it waits for 2027.',
+  clean:'Same as Plan I. Never a business in your employer\'s markets. No employer templates or terminology. Your own methods, your own words.',
+  tools:'Zoom or a kitchen table · Cursor and agents for drafting · Loom or QuickTime for the walkthrough · Stripe.',
+  tonight:{0:'Nothing is the move. Go to bed.',15:'Write the one-page scope.',45:'Prepare the owner interview: ten questions, the first one about last Tuesday.',90:'Draft the process map from your notes. Cut it in half.'}
+}
+];
+
+/* Dated events. `season` marks the calendar; `plan` ties it to a plan's milestone. */
+const EVENTS = [
+  {d:new Date(2026,8,7),  t:'Labor Day', season:true},
+  {d:new Date(2026,8,8),  t:'First five videos sent', plan:'I'},
+  {d:new Date(2026,8,18), t:'First sale target', plan:'I'},
+  {d:new Date(2026,8,24), t:'PDF built and test-bought', plan:'II'},
+  {d:new Date(2026,8,24), t:'Sample capsule recorded', plan:'III'},
+  {d:new Date(2026,8,25), t:'First paid session target', plan:'IV'},
+  {d:new Date(2026,8,30), t:'Listen for "and also…"', plan:'V'},
+  {d:new Date(2026,9,2),  t:'Kill check: 40 videos, 0 sales?', plan:'I'},
+  {d:new Date(2026,9,5),  t:'Kill check: 0 paid sessions?', plan:'IV'},
+  {d:new Date(2026,9,8),  t:'Close every queue. Auto-replies on.'},
+  {d:new Date(2026,10,1), t:'Pre-orders open (first evening allowed)', plan:'II', season:true},
+  {d:new Date(2026,10,11),t:'Veterans Day · deposits', plan:'III', season:true},
+  {d:new Date(2026,10,15),t:'Kill checks: <3 pre-orders? No Rescue ask?', plan:'II'},
+  {d:new Date(2026,10,20),t:'Kill check: 0 deposits?', plan:'III'},
+  {d:new Date(2026,10,22),t:'Advent PDF ships', plan:'II', season:true},
+  {d:new Date(2026,10,26),t:'Thanksgiving', season:true},
+  {d:new Date(2026,10,28),t:'Small Business Saturday', plan:'I', season:true},
+  {d:new Date(2026,10,29),t:'Advent begins · in-app path live', plan:'II', season:true},
+  {d:new Date(2026,11,3), t:'Day 90. Open the ledger.'}
+];
+
+/* ---------------- State ---------------- */
+let S = load();
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(KEY)||'{}');
+    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45}, s);
+  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45}; }
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+
+/* ---------------- Helpers ---------------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = d => d.toLocaleDateString('en-US',{day:'numeric',month:'short'});
+const addDays = (d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const dayIndex = d => Math.floor((d - START)/86400000) + 1;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),1600); }
+function planById(id){ return PLANS.find(p=>p.id===id) || PLANS[0]; }
+function doneCount(p){ const c=S.checks[p.id]||{}; return p.checks.filter((_,i)=>c[i]).length; }
+
+/* ---------------- Counter ---------------- */
+function renderCounter(){
+  const now = new Date(); now.setHours(0,0,0,0);
+  const el = $('#counter');
+  if(now < START){ el.innerHTML = `Begins <b>Fri 4 Sep</b><br>ends Thu 3 Dec 2026`; return; }
+  if(now > END){ el.innerHTML = `<b>Ninety days done.</b><br>Open the ledger.`; return; }
+  const d = dayIndex(now); const w = Math.min(13, Math.ceil(d/7));
+  el.innerHTML = `<b>Day ${d}</b> of 90 · Week ${w}<br>${fmt(now)} → 3 Dec 2026`;
+}
+
+/* ---------------- Tonight ---------------- */
+function renderTonight(){
+  $('#tonight-plan').innerHTML = PLANS.map(p=>`<button data-p="${p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
+  $$('#tonight-min button').forEach(b=>b.classList.toggle('on', Number(b.dataset.m)===S.tonightMin));
+  const p = planById(S.tonightPlan);
+  $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}</small>${esc(p.tonight[S.tonightMin])}`;
+}
+$('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); });
+$('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightMin=Number(b.dataset.m); save(); renderTonight(); });
+
+/* ---------------- Plans ---------------- */
+function renderStrip(){
+  $('#strip').innerHTML = PLANS.map(p=>`<button role="tab" aria-selected="${S.active===p.id}" data-p="${p.id}" class="${S.active===p.id?'on':''}">
+    <div class="num">${p.num}</div><div class="nm">${esc(p.name)}</div><div class="pr">${esc(p.price)}</div><div class="done">${doneCount(p)} / ${p.checks.length} done</div></button>`).join('');
+}
+function renderPlan(){
+  const p = planById(S.active); const c = S.checks[p.id]||{}; const done = doneCount(p);
+  const babyDate = new Date(S.baby+'T00:00:00');
+  const isProt = (label)=> /Protected/.test(label);
+  $('#plan').innerHTML = `
+  <article class="plan leaf" id="plan-${p.id}">
+    <div class="sc role"><span class="red">Plan ${p.num}</span> · ${esc(p.role)}</div>
+    <h3 class="name">${esc(p.name)}</h3>
+    <p class="line">${esc(p.line)}</p>
+    <div class="kpis">
+      <div class="kpi"><span class="sc">Price</span><div class="v">${esc(p.price)}<small>${esc(p.priceNote)}</small></div></div>
+      <div class="kpi"><span class="sc">90-day cash</span><div class="v">${money(p.cash.base)}<small>floor ${money(p.cash.floor)} · stretch ${money(p.cash.stretch)}</small></div></div>
+      <div class="kpi"><span class="sc">Time</span><div class="v">${esc(p.hours)}<small>${esc(p.hoursNote)}</small></div></div>
+      <div class="kpi"><span class="sc">First dollar</span><div class="v">${esc(p.first)}<small>${esc(p.firstNote)}</small></div></div>
+    </div>
+    <div class="cols two">
+      <div class="block"><h4>Who pays</h4><p>${esc(p.who)}</p></div>
+      <div class="block"><h4>What they get</h4><p>${esc(p.what)}</p></div>
+    </div>
+    <div class="block" style="margin-top:6px"><h4>Why you</h4><p>${esc(p.why)}</p></div>
+
+    <div class="block" style="margin-top:22px"><h4>The thirteen weeks</h4>
+      <ul class="weeks">${p.weeks.map(w=>`<li class="${isProt(w[2])?'protected':''}"><div class="w"><b>Week ${esc(w[0])}</b>${esc(w[1])}</div><div>${esc(w[2])}</div></li>`).join('')}</ul>
+      <p class="note" style="margin-top:8px">Protected weeks assume the baby arrives around ${fmt(babyDate)}. Change the date in the calendar and treat the shaded weeks as the ones that move.</p>
+    </div>
+
+    <div class="block" style="margin-top:22px"><h4>Checklist · ${done} of ${p.checks.length}</h4>
+      <div class="progress"><i style="width:${(done/p.checks.length)*100}%"></i></div>
+      <ul class="checks">${p.checks.map((t,i)=>`<li><label><input type="checkbox" data-i="${i}" ${c[i]?'checked':''}><span>${esc(t)}</span></label></li>`).join('')}</ul>
+    </div>
+
+    <div class="block" style="margin-top:22px"><h4>Say this</h4>
+      ${p.scripts.map((s,i)=>`<div class="script"><h5>${esc(s[0])}</h5><pre>${esc(s[1])}</pre><button class="copy" data-i="${i}">Copy</button></div>`).join('')}
+    </div>
+
+    <div class="kill"><span class="sc">Kill rule</span><p>${esc(p.kill)}</p></div>
+    <div class="cols two" style="margin-top:18px">
+      <div class="block"><h4>Clean room</h4><p class="note" style="color:var(--ink)">${esc(p.clean)}</p></div>
+      <div class="block"><h4>Tools &amp; cost</h4><p class="tools">${esc(p.tools)}</p></div>
+    </div>
+  </article>`;
+}
+$('#strip').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.active=b.dataset.p; save(); renderStrip(); renderPlan(); });
+$('#plan').addEventListener('change', e=>{
+  const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
+  const p = planById(S.active); S.checks[p.id] = S.checks[p.id]||{};
+  if(cb.checked) S.checks[p.id][cb.dataset.i] = true; else delete S.checks[p.id][cb.dataset.i];
+  save(); renderStrip();
+  const done = doneCount(p);
+  $('#plan .progress i').style.width = (done/p.checks.length*100)+'%';
+  $$('#plan .block h4').forEach(h=>{ if(/^Checklist/.test(h.textContent)) h.textContent = `Checklist · ${done} of ${p.checks.length}`; });
+  if(done===p.checks.length) toast('Plan finished. Log the money.');
+});
+$('#plan').addEventListener('click', e=>{
+  const b = e.target.closest('.copy'); if(!b) return;
+  const p = planById(S.active); const txt = p.scripts[b.dataset.i][1];
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(()=>toast('Copied'), ()=>{ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copied');}catch(_){toast('Select and copy by hand');} ta.remove(); });
+});
+$$('[data-go]').forEach(b=>b.addEventListener('click', ()=>{ S.active=b.dataset.go; save(); renderStrip(); renderPlan(); document.getElementById('plans').scrollIntoView({behavior:'smooth'}); }));
+
+/* ---------------- Compare ---------------- */
+function renderCompare(){
+  $('#cmp').innerHTML = PLANS.map(p=>`<tr><td>${p.num}</td><td><b>${esc(p.name)}</b><br><span class="note">${esc(p.role)}</span></td><td>${esc(p.price)}</td><td>${money(p.cash.floor)} · <b>${money(p.cash.base)}</b> · ${money(p.cash.stretch)}</td><td>${esc(p.hours)}</td><td>${esc(p.first)}</td><td>${esc(p.fit)}</td></tr>`).join('');
+}
+
+/* ---------------- Calendar ---------------- */
+function renderCal(){
+  const baby = new Date(S.baby+'T00:00:00'); const protEnd = addDays(baby,30);
+  const now = new Date(); now.setHours(0,0,0,0);
+  $('#baby').value = S.baby;
+  let html='';
+  for(let w=0; w<13; w++){
+    const a = addDays(START, w*7), b = addDays(a,6);
+    const prot = a<=protEnd && b>=baby;
+    const isNow = now>=a && now<=b;
+    const phase = prot ? 'Protected · zero optional hours' : (b<baby ? 'Before · sell and deliver' : 'After · re-open, season');
+    const events = EVENTS.filter(e=>e.d>=a && e.d<=b);
+    const shown = prot ? events.filter(e=>e.season) : events;
+    const plans = [...new Set(shown.filter(e=>e.plan).map(e=>e.plan))];
+    html += `<div class="wk ${prot?'protected':''} ${isNow?'now':''}">
+      <span class="sc">Week ${w+1}${isNow?' · now':''}</span>
+      <div class="d">${fmt(a)} – ${fmt(b)}</div>
+      <div class="ph">${phase}</div>
+      ${shown.map(e=>`<div class="ev">${e.plan?`<span class="red">${e.plan}</span> · `:''}${esc(e.t)}</div>`).join('')}
+      <div class="tags">${plans.map(t=>`<span class="tag ${shown.some(e=>e.plan===t&&e.season)?'s':''}">${t}</span>`).join('')}</div>
+    </div>`;
+  }
+  $('#cal').innerHTML = html;
+}
+$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); });
+
+/* ---------------- Ledger ---------------- */
+function renderLedger(){
+  const sel = $('#add select[name=plan]');
+  if(!sel.options.length){ sel.innerHTML = PLANS.map(p=>`<option value="${p.id}">${p.num} · ${esc(p.name)}</option>`).join(''); }
+  const dateIn = $('#add input[name=date]'); if(!dateIn.value){ const t=new Date(); dateIn.value = t.toISOString().slice(0,10); }
+  const total = S.ledger.reduce((s,e)=>s+Number(e.amount||0),0);
+  $('#total').textContent = money(total);
+  const recBase = Math.round((1400+300+990)/100)*100;
+  $('#total-sub').textContent = total===0 ? `Base case for the recommended stack is about ${money(recBase)}. Tax jar so far: $0.`
+    : `${Math.round(total/recBase*100)}% of the recommended base case · tax jar should hold ${money(total*0.3)}.`;
+  $('#bars').innerHTML = PLANS.map(p=>{ const got = S.ledger.filter(e=>e.plan===p.id).reduce((s,e)=>s+Number(e.amount||0),0); const pct = Math.min(100, p.cash.base? got/p.cash.base*100 : 0);
+    return `<div class="bar" title="${esc(p.name)}"><span class="num">${p.num}</span><div class="track"><i style="width:${pct}%"></i></div><span class="amt"><b>${money(got)}</b> / ${money(p.cash.base)}</span></div>`; }).join('');
+  if(!S.ledger.length){ $('#entries').innerHTML = `<div class="empty">Nothing yet. That is the honest starting line.</div>`; return; }
+  const rows = [...S.ledger].sort((a,b)=>b.date.localeCompare(a.date));
+  $('#entries').innerHTML = `<table class="entries"><thead><tr><th>Date</th><th>Plan</th><th>Note</th><th style="text-align:right">Amount</th><th class="x"></th></tr></thead><tbody>
+    ${rows.map(e=>`<tr><td>${esc(fmt(new Date(e.date+'T00:00:00')))}</td><td>${planById(e.plan).num}</td><td>${esc(e.note||'')}</td><td class="amt">${money(e.amount)}</td><td class="x"><button data-id="${e.id}" aria-label="Remove">×</button></td></tr>`).join('')}
+  </tbody></table>`;
+}
+$('#add').addEventListener('submit', e=>{
+  e.preventDefault(); const f = new FormData(e.target);
+  const amount = Number(f.get('amount')); if(!amount || amount<=0) return;
+  S.ledger.push({id:Date.now().toString(36), date:f.get('date'), plan:f.get('plan'), amount, note:(f.get('note')||'').trim()});
+  save(); e.target.reset(); renderLedger(); toast(`${money(amount)} logged · move ${money(amount*0.3)} to the tax jar`);
+});
+$('#entries').addEventListener('click', e=>{ const b=e.target.closest('button[data-id]'); if(!b) return; S.ledger = S.ledger.filter(x=>x.id!==b.dataset.id); save(); renderLedger(); });
+$('#export').addEventListener('click', ()=>{
+  const lines = ['date,plan,amount,note'].concat(S.ledger.map(e=>[e.date, planById(e.plan).name, e.amount, '"'+(e.note||'').replace(/"/g,'""')+'"'].join(',')));
+  const blob = new Blob([lines.join('\n')],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ninety-days-ledger.csv'; a.click(); URL.revokeObjectURL(a.href);
+});
+$('#reset').addEventListener('click', ()=>{ if(!confirm('Clear every check, the ledger, and the dates on this device?')) return; localStorage.removeItem(KEY); S=load(); renderAll(); toast('Cleared'); });
+
+/* ---------------- Nav highlight ---------------- */
+const links = $$('.nav a');
+const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+en.target.id)); } }); },{rootMargin:'-40% 0px -55% 0px'});
+$$('main section').forEach(s=>io.observe(s));
+
+/* ---------------- Go ---------------- */
+function renderAll(){ renderCounter(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); }
+renderAll();
+})();
+</script>
+</body>
+</html>
