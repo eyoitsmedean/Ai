@@ -72,7 +72,7 @@ This is not a new app. Continue PR 13 (`cursor/red-words-production-d607`). WEB 
 Do not merge PR 12’s KJV Sit/Seek product. Do not fake an IPA on Linux. Fix remaining production holes, keep tests green, update the PR with honest verify-vs-blocked rows.
 ```
 
-### Paste (PR 12 / ship chat)
+### Short reminder — PR 12 / ship chat
 
 ```
 Dean’s Masterpiece Protocol v2 and the Red Words native project lock now govern this chat.
