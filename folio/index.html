@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Ninety Days · One Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500;1,9..144,650&family=Instrument+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f4efe4;
+      --folio: #fbf7ee;
+      --ink: #1b1610;
+      --muted: #7a6e5e;
+      --rule: rgba(27, 22, 16, 0.1);
+      --crimson: #8f1d1d;
+      --gold: #8a6a28;
+      --sage: #3f5346;
+      --shadow: 0 18px 50px rgba(27, 22, 16, 0.08);
+      --measure: 42rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(143, 29, 29, 0.05), transparent 50%),
+        radial-gradient(900px 500px at 100% 0%, rgba(138, 106, 40, 0.07), transparent 45%),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    a { color: var(--crimson); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+    button, .btn {
+      font-family: "Instrument Sans", system-ui, sans-serif;
+      letter-spacing: 0.04em;
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: 15.5rem minmax(0, 1fr);
+      gap: 0;
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      padding: 1.6rem 1.2rem 2rem;
+      border-right: 1px solid var(--rule);
+      background: rgba(251, 247, 238, 0.72);
+      backdrop-filter: blur(10px);
+      overflow: auto;
+    }
+    .mark {
+      width: 2.1rem;
+      height: 2.1rem;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--crimson);
+      font-family: Fraunces, serif;
+      font-style: italic;
+      font-weight: 650;
+      font-size: 1.15rem;
+    }
+    nav .eyebrow {
+      margin: 1.1rem 0 0.35rem;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    nav a.toc {
+      display: block;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.38rem 0;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.86rem;
+      line-height: 1.3;
+    }
+    nav a.toc small { display: block; color: var(--muted); font-size: 0.72rem; }
+    nav a.toc:hover, nav a.toc.active { color: var(--crimson); }
+    main { padding: 2.4rem 2.2rem 6rem; }
+    .leaf {
+      background: var(--folio);
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow);
+      padding: 2.4rem 2.2rem 2.6rem;
+      margin-bottom: 1.4rem;
+    }
+    .eyebrow {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    h1, h2, h3 {
+      font-family: Fraunces, serif;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin: 0.2rem 0 0.8rem;
+    }
+    h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); font-style: italic; }
+    h1 em { color: var(--crimson); font-style: italic; }
+    h2 { font-size: 1.85rem; }
+    h3 { font-size: 1.2rem; font-style: italic; }
+    p.lead { font-size: 1.22rem; max-width: var(--measure); }
+    .colophon, .muted, .tiny { color: var(--muted); }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: 0.78rem; letter-spacing: 0.04em; }
+    .grid-2, .grid-3, .laws, .score {
+      display: grid;
+      gap: 0.85rem;
+    }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .laws { grid-template-columns: 1fr 1fr; }
+    .card, .law, .score article, .week, .stat {
+      border: 1px solid var(--rule);
+      background: rgba(244, 239, 228, 0.55);
+      padding: 1rem 1.05rem 1.05rem;
+    }
+    .law b {
+      display: block;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .stat .n {
+      font-family: Fraunces, serif;
+      font-size: 1.7rem;
+      font-style: italic;
+      color: var(--crimson);
+      line-height: 1;
+    }
+    .stat .k {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+    th {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    tr.pick td { background: rgba(143, 29, 29, 0.06); }
+    .plan-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 0.7rem;
+      margin-bottom: 1.1rem;
+    }
+    .plan-head .num {
+      font-family: Fraunces, serif;
+      font-style: italic;
+      color: var(--crimson);
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+    .badge {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+    }
+    .copy {
+      position: relative;
+      background: #1b1610;
+      color: #f4efe4;
+      padding: 1rem 1rem 1.1rem;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .copy button {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.55rem;
+      background: var(--folio);
+      color: var(--ink);
+      border: 0;
+      padding: 0.28rem 0.55rem;
+      cursor: pointer;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--folio);
+      padding: 0.55rem 0.85rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .btn.ghost { background: transparent; color: var(--ink); }
+    .btn:hover { opacity: 0.88; }
+    .weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+    .week h4 {
+      margin: 0 0 0.35rem;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .week p { margin: 0; font-size: 0.92rem; }
+    .kill { border-left: 3px solid var(--crimson); padding-left: 0.9rem; }
+    footer.colophon { text-align: center; font-size: 0.88rem; padding: 2rem 0 0; }
+    .chosen-banner {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--ink);
+      color: var(--folio);
+      padding: 0.7rem 1rem;
+      font-family: "Instrument Sans", sans-serif;
+      letter-spacing: 0.04em;
+    }
+    .chosen-banner.show { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .chosen-banner button { background: var(--folio); color: var(--ink); border: 0; padding: 0.35rem 0.6rem; cursor: pointer; }
+    body.focus-I .plan:not(#plan-I),
+    body.focus-II .plan:not(#plan-II),
+    body.focus-III .plan:not(#plan-III),
+    body.focus-IV .plan:not(#plan-IV),
+    body.focus-V .plan:not(#plan-V) { display: none; }
+    @media (max-width: 860px) {
+      .shell { grid-template-columns: 1fr; }
+      nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
+      main { padding: 1.2rem 1rem 4rem; }
+      .leaf { padding: 1.3rem 1.05rem 1.5rem; }
+      .grid-2, .grid-3, .laws, .weeks { grid-template-columns: 1fr; }
+      table { font-size: 0.86rem; }
+    }
+    @media print {
+      nav, .actions, .chosen-banner, .copy button { display: none !important; }
+      body { background: white; }
+      .shell { display: block; }
+      .leaf { box-shadow: none; break-inside: avoid; }
+      body[class*="focus-"] .plan { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="chosen-banner" id="chosenBanner">
+    <span id="chosenText"></span>
+    <button type="button" id="clearChoice">Show all five</button>
+  </div>
+  <div class="shell">
+    <nav aria-label="Folio">
+      <div class="mark" aria-hidden="true">D</div>
+      <p class="eyebrow">4 Sep – 3 Dec 2026</p>
+      <a class="toc" href="#cover">Title page</a>
+      <a class="toc" href="#you">What is already true</a>
+      <a class="toc" href="#laws">Seven laws</a>
+      <a class="toc" href="#board">Scoreboard</a>
+      <p class="eyebrow">The five</p>
+      <a class="toc" href="#plan-I">I · The Lamp<small>Evaluator cash · fastest</small></a>
+      <a class="toc" href="#plan-II">II · The Room<small>Rehearsal · $349</small></a>
+      <a class="toc" href="#plan-III">III · The Handoff<small>Workflow Rescue · $1,500</small></a>
+      <a class="toc" href="#plan-IV">IV · The Storefront<small>Friction Audit · $295</small></a>
+      <a class="toc" href="#plan-V">V · The Folio<small>Red Letter · Advent</small></a>
+      <p class="eyebrow">Close</p>
+      <a class="toc" href="#pick">Pick in 20 minutes</a>
+      <a class="toc" href="#sunday">Sunday close</a>
+    </nav>
+    <main>
+      <article class="leaf" id="cover">
+        <p class="eyebrow">A private operating folio · not a second brain</p>
+        <h1>Ninety days.<br><em>One plan.</em></h1>
+        <p class="lead">You already have a job, a young family, a truth-first operating system, and a finished product sitting in this repository. You do not need a sixth research shelf. You need one offer that can take money before 3 December — without stealing sleep or contaminating the day job.</p>
+        <div class="grid-3" style="margin-top:1.4rem">
+          <div class="stat"><div class="n">90</div><div class="k">Days · 4 Sep → 3 Dec</div></div>
+          <div class="stat"><div class="n">1</div><div class="k">Active plan. Never five.</div></div>
+          <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
+        </div>
+        <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026 from your repos, Notion, X, Hugging Face, and cloud-agent history. Public copy is family-safe. The private Notion twin carries your real names and page links.</p>
+      </article>
+
+      <article class="leaf" id="you">
+        <p class="eyebrow">Portrait</p>
+        <h2>What is already true</h2>
+        <p>You train people to talk like humans. You lead a growth academy. You keep a DEX rhythm — seven talk, nine listen — and you can hold a room with music and energy. You built <em>Red Letter</em>: a quiet page constrained to the words Jesus spoke, with lectio, a verified advisor, share cards, and a launch thesis that already knows Lent is the payday and weekly paywalls are a trap.</p>
+        <p>You also built an unusually serious private studio: clean-room rules, one-sprint discipline, claim ledgers, Mercor evaluator readiness, Workflow Rescue, rehearsal coaching, local friction audits, narrative integrity, veteran memory-to-music, Ableton on the Push 2. Almost none of it has been allowed to meet a buyer. That is not laziness. That is a new household, a protected night, and a refusal to fake evidence.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Assets that can take money now</h3>
+            <ul>
+              <li>L&amp;D / sales-enablement judgment, already practiced against public Mercor listings at $80–$120/hr advertised.</li>
+              <li>Live rehearsal skill — you already teach talk tracks for a living.</li>
+              <li>A process-rescue package with a $1,500 beta price and a synthetic case.</li>
+              <li>A 3–4 hour local audit a Front Range service business can say yes to this week.</li>
+              <li>A shippable PWA and a named Advent window inside these 90 days (Advent begins 29 November).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Constraints that beat any idea</h3>
+            <ul>
+              <li>Home, sleep, and required work still win. Optional capacity is a household yes, not a vibe.</li>
+              <li>Clean room: no employer clients, language, data, devices, time, or “I saw this at work.”</li>
+              <li>The meme account is not a funnel. 24k posts of id-posting will not sell a $1,500 ops engagement.</li>
+              <li>Hugging Face <code>nowaymyguy</code> has no models or Spaces to productize.</li>
+              <li>Music, memoir, veteran capsules, and family quests are life — not 90-day cash.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="leaf" id="laws">
+        <p class="eyebrow">Constitution</p>
+        <h2>Seven laws for these 90 days</h2>
+        <div class="laws">
+          <div class="law"><b>01 · One</b>Run one plan. The other four stay on paper. Excitement is not a second sprint.</div>
+          <div class="law"><b>02 · Home</b>If the household window is not confirmed, the only legal move is rest or required work.</div>
+          <div class="law"><b>03 · Clean room</b>Personal accounts, personal time, public or synthetic inputs. Never the employer graph.</div>
+          <div class="law"><b>04 · Payment</b>Compliments, stars, and “I would buy that” are not demand. Money or a dated no is.</div>
+          <div class="law"><b>05 · Eight hours</b>All-in cap per week, including asks that fail. Two evenings maximum. Quality review is never the first thing cut.</div>
+          <div class="law"><b>06 · Floor</b>After the first paid unit, realized contribution must clear about $100 per all-in hour or you reprice, rescope, or kill.</div>
+          <div class="law"><b>07 · Stop</b>Park and close are successful finishes. Unknown is an allowed state. No catch-up.</div>
+          <div class="law"><b>Honesty</b>Prices below are hypotheses except where a public listing is cited. Selection, hours, and buyers are unproven.</div>
+        </div>
+      </article>
+
+      <article class="leaf" id="board">
+        <p class="eyebrow">Choose with numbers, then with desire</p>
+        <h2>Scoreboard</h2>
+        <p>Read this as a betting card, not a forecast. “If it works” assumes the household gate stays green and you actually send the asks.</p>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>90-day cash if it works</th>
+                <th>Why it can work for you</th>
+                <th>Main risk</th>
+                <th>Life fit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pick">
+                <td><strong>I · The Lamp</strong><br>AI artifact evaluator</td>
+                <td>$3,200–$7,680 at 5–8 hrs/wk if accepted</td>
+                <td>No clients. No ads. Your actual job skill. Packet already built.</td>
+                <td>Selection, task supply, LLM-policy, outside-work clearance</td>
+                <td>Best</td>
+              </tr>
+              <tr>
+                <td><strong>II · The Room</strong><br>Pitch-to-practice</td>
+                <td>$1,396–$2,792 for 4–8 sessions at $349</td>
+                <td>You already run rooms. One 75-minute product. Fast yes.</td>
+                <td>Finding four buyers without the employer graph</td>
+                <td>Good</td>
+              </tr>
+              <tr>
+                <td><strong>III · The Handoff</strong><br>Workflow Rescue</td>
+                <td>$1,500–$4,500 for 1–2 betas</td>
+                <td>Highest clean-room ticket you already specified.</td>
+                <td>Longer sales cycle; 20-hour delivery; scope creep</td>
+                <td>Medium</td>
+              </tr>
+              <tr>
+                <td><strong>IV · The Storefront</strong><br>Friction Audit</td>
+                <td>$1,770–$2,950 for 6–10 at $295</td>
+                <td>Walkable Front Range businesses. Public pages only. Same week cash.</td>
+                <td>Hourly floor is tight; easy to underprice your judgment</td>
+                <td>Good</td>
+              </tr>
+              <tr>
+                <td><strong>V · The Folio</strong><br>Red Letter Advent</td>
+                <td>$0–$2,000 honest range; likely waitlist, not payroll</td>
+                <td>The product exists. Advent falls inside the 90 days. Lent 2027 is the real payday.</td>
+                <td>Consumer apps do not pay a new dad in 12 weeks</td>
+                <td>Highest meaning</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">Default pick if you want grocery money: <strong>The Lamp</strong>. Default pick if clearance blocks the Lamp and you can send ten personal messages: <strong>The Room</strong>. Default pick if you want owned IP and accept slow cash: <strong>The Folio</strong>.</p>
+      </article>
+
+      <article class="leaf plan" id="plan-I">
+        <div class="plan-head">
+          <div>
+            <p class="eyebrow">Plan I · fastest cash</p>
+            <h2>The Lamp</h2>
+            <p class="muted" style="margin:0">Get paid to judge AI-written training and GTM artifacts. Human judgment only.</p>
+          </div>
+          <div>
+            <span class="badge">$80–$120/hr listed</span>
+            <div class="num">I</div>
+          </div>
+        </div>
+        <p><strong>One breath.</strong> Platforms pay experienced L&amp;D and sales people to score model output against a rubric. You already do that kind of seeing for a living. The work needs no audience, no ads, and no testimonial release.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Who pays</h3>
+            <p>Expert-network / AI-eval marketplaces. The public listings you already saved: Training / onboarding / L&amp;D Evaluator and General Sales / GTM Evaluator, advertised $80–$120/hour as of 30 August 2026.</p>
+          </div>
+          <div class="card">
+            <h3>90-day math</h3>
+            <p>If accepted and supplied 5–8 billable hours a week for eight weeks: about $3,200–$7,680 gross. Modeled base used in your studio: $4,000 for a 40-hour engagement. Selection probability is unknown. Net is less after tax.</p>
+          </div>
+        </div>
+        <h3>Already built</h3>
+        <p>Internal readiness packet, synthetic practice, LLM-policy receipt, and a 20-minute decision page. Agents may not write real evaluations. You must.</p>
+        <h3>Twelve weeks</h3>
+        <div class="weeks">
+          <div class="week"><h4>Wk 1 · 4–10 Sep</h4><p>Five truth decisions only. Years in L&amp;D. Years in sales/GTM. Slide fluency. Outside-work / IP language. Consent to monitoring. Pursue / Park / Close.</p></div>
+          <div class="week"><h4>Wk 2 · 11–17 Sep</h4><p>If Pursue and written clearance is clear: apply in your own words. Availability: “up to eight hours a week, self-scheduled.” No agent-written assessment.</p></div>
+          <div class="week"><h4>Wk 3–4</h4><p>Interview and work trial, human-authored. Re-read the LLM policy the morning of every task. Isolate a personal device.</p></div>
+          <div class="week"><h4>Wk 5–12</h4><p>Bill the hours. Stop if the weekly floor exceeds eight, task supply dies, a task wants employer material in a model, or sleep fails.</p></div>
+        </div>
+        <h3>First 60 minutes</h3>
+        <ol>
+          <li>Open the M4 start page. Fill the five truth boxes. Unknown is allowed.</li>
+          <li>If any box is Blocked, this plan is dead. Do not apply “to see.”</li>
+          <li>If Pursue: print or save the LLM policy. That is the whole night.</li>
+        </ol>
+        <h3>Copy — availability line</h3>
+        <div class="copy" data-copy="I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
+        <p class="kill"><strong>Kill.</strong> Experience you cannot substantiate. IP language that needs a lawyer you will not ask. A trial that wants agent-written scores. Monitoring that cannot be isolated. Hours that shove bedtime.</p>
+        <div class="actions">
+          <button class="btn" type="button" data-choose="I">I choose The Lamp</button>
+          <a class="btn ghost" href="https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator" target="_blank" rel="noopener">Open L&amp;D listing</a>
+        </div>
+      </article>
+
+      <article class="leaf plan" id="plan-II">
+        <div class="plan-head">
+          <div>
+            <p class="eyebrow">Plan II · fastest yes from a human</p>
+            <h2>The Room</h2>
+            <p class="muted" style="margin:0">A 75-minute high-stakes rehearsal for people who must present, panel, or defend a case.</p>
+          </div>
+          <div>
+            <span class="badge">$349 · 75 minutes</span>
+            <div class="num">II</div>
+          </div>
+        </div>
+        <p><strong>One breath.</strong> Not generic interview coaching. An original practice case, a mock panel, three changes, one preserved strength, and a seven-day drill plan. You already dominate rooms. Sell that, once, to people you do not meet through work.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Who pays</h3>
+            <p>Enablement, customer-facing, and training people changing jobs or pitching internally — found via old classmates, church, veterans, music friends, and public posts. Never current employer staff, candidates, or clients.</p>
+          </div>
+          <div class="card">
+            <h3>90-day math</h3>
+            <p>4 paid sessions = $1,396. 8 = $2,792. Optional three-session at $795 only after two clean singles. Calendar tax is real: 75 minutes live plus ~45 minutes case prep. Cap at two evening sessions a week.</p>
+          </div>
+        </div>
+        <h3>Twelve weeks</h3>
+        <div class="weeks">
+          <div class="week"><h4>Wk 1</h4><p>One-page offer. One synthetic case (fictional company). Stripe or Venmo. Calendar link. No logo.</p></div>
+          <div class="week"><h4>Wk 2–3</h4><p>Ten personal messages, not blasts. Goal: two booked diagnostics. Free 15-minute fit call, then paid.</p></div>
+          <div class="week"><h4>Wk 4–8</h4><p>Deliver. Ask each buyer for one referral in an adjacent company, not theirs if it overlaps work.</p></div>
+          <div class="week"><h4>Wk 9–12</h4><p>If four paid: keep. If fewer than two paid after 40 asks: kill. Do not discount below $249.</p></div>
+        </div>
+        <h3>First 60 minutes</h3>
+        <ol>
+          <li>Write the offer in eight lines. Price $349. What is included. What is not (no insider questions, no outcome guarantee).</li>
+          <li>Invent one 12-minute case: a fictional software-tools firm pitching a training rollout. No industry you serve at work.</li>
+          <li>List ten people who are not in the employer graph. Do not message them tonight. That is tomorrow’s 20 minutes.</li>
+        </ol>
+        <h3>Copy — the ask</h3>
+        <div class="copy" data-copy="If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.">If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.</div>
+        <p class="kill"><strong>Kill.</strong> Recording without consent. Stolen interview questions. Guarantees. Sessions that repeatedly eat bedtime. Acquisition hours exceeding delivery hours after 40 asks.</p>
+        <div class="actions">
+          <button class="btn" type="button" data-choose="II">I choose The Room</button>
+        </div>
+      </article>
+
+      <article class="leaf plan" id="plan-III">
+        <div class="plan-head">
+          <div>
+            <p class="eyebrow">Plan III · highest ticket</p>
+            <h2>The Handoff</h2>
+            <p class="muted" style="margin:0">One messy operating process → map, SOP, job aid, owner card, 30-day test.</p>
+          </div>
+          <div>
+            <span class="badge">$1,500 beta</span>
+            <div class="num">III</div>
+          </div>
+        </div>
+        <p><strong>One breath.</strong> Independent consultancies and founder-led home/property firms pay when one weekly handoff drops photos, owners, or invoices. You already wrote the package. Do not start this until The Lamp is Park/Close and you still want a client.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Scope lock</h3>
+            <p>One process. ≤5 people. Two revisions. First review in 10 business days, final in 15. No software overhaul. No insurance, benefits, HR, or safety training. Standard price $2,250 only after a paid beta teaches you the real hours.</p>
+          </div>
+          <div class="card">
+            <h3>90-day math</h3>
+            <p>One beta = $1,500. Two = $3,000. Your model wanted ~$108/hour at standard price over 20 hours. Cap unpaid sample build at 10 hours. After two paid units, stop below $60/all-in hour, &gt;20% revision churn, or &gt;15% admin.</p>
+          </div>
+        </div>
+        <h3>Twelve weeks</h3>
+        <div class="weeks">
+          <div class="week"><h4>Wk 1</h4><p>Finish the fictional premium home-maintenance case: estimate → schedule → field → proof → invoice. Stop at 10 hours even if ugly.</p></div>
+          <div class="week"><h4>Wk 2–5</h4><p>20 qualified asks from public Google listings (not the employer book). One 20-minute diagnostic. No free custom build.</p></div>
+          <div class="week"><h4>Wk 6–9</h4><p>Deliver one beta or park. Invoice 50% to start, 50% on acceptance.</p></div>
+          <div class="week"><h4>Wk 10–12</h4><p>If accepted and hours held: a second beta or reprice to $2,250. If 40 asks and zero paid: kill.</p></div>
+        </div>
+        <h3>Copy — outreach</h3>
+        <div class="copy" data-copy="Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / nobody called me back] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / “nobody called me back”] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
+        <p class="kill"><strong>Kill.</strong> They want an agency retainer. They need logins you should not have. The process is safety-critical. You recognize the firm from work. Delivery will take nights you do not have.</p>
+        <div class="actions">
+          <button class="btn" type="button" data-choose="III">I choose The Handoff</button>
+        </div>
+      </article>
+
+      <article class="leaf plan" id="plan-IV">
+        <div class="plan-head">
+          <div>
+            <p class="eyebrow">Plan IV · same-week cash</p>
+            <h2>The Storefront</h2>
+            <p class="muted" style="margin:0">Walk their public booking path on a phone. Name five frictions. Rewrite one CTA.</p>
+          </div>
+          <div>
+            <span class="badge">$295 · 3–4 hours</span>
+            <div class="num">IV</div>
+          </div>
+        </div>
+        <p><strong>One breath.</strong> A Front Range plumber, landscaper, cleaner, or restoration shop has a Google profile and a site that leaks intent between “call” and “book.” You reproduce the journey, separate observation from inference, and hand back one better sentence plus a measurement note. No login. No SEO promises.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Why this is executable</h3>
+            <p>You can pick ten businesses from Maps this Saturday, screenshot the path, and send a one-paragraph note. The yes is cheap. The work fits a nap window. It is the rehearsal your studio already ranked first among local offers.</p>
+          </div>
+          <div class="card">
+            <h3>90-day math</h3>
+            <p>6 jobs = $1,770. 10 = $2,950. At 4 hours all-in that is ~$74/hour — under your $100 floor. So this is a cash-flow and evidence lane, not a career. After five paid, either raise to $450 or fold the pattern into The Handoff.</p>
+          </div>
+        </div>
+        <h3>Twelve weeks</h3>
+        <div class="weeks">
+          <div class="week"><h4>Wk 1</h4><p>Synthetic company only. Time the job. If it exceeds 8 hours including QA, kill or shrink the deliverable.</p></div>
+          <div class="week"><h4>Wk 2</h4><p>Ten public paths. Ten short emails or voicemails. Offer: “I’ll walk your book/call path and send five frictions plus one rewritten CTA for $295.”</p></div>
+          <div class="week"><h4>Wk 3–8</h4><p>Deliver within five days. Never post, never log in, never promise ranks or revenue.</p></div>
+          <div class="week"><h4>Wk 9–12</h4><p>Raise price or stop. Convert one buyer into The Handoff if the pain is operational, not copy.</p></div>
+        </div>
+        <h3>Copy — the note</h3>
+        <div class="copy" data-copy="I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.">I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.</div>
+        <p class="kill"><strong>Kill.</strong> They want you in Analytics. They want fake reviews. The job needs accessibility certification you will not give. You cannot separate fact from guess. It takes more than two evenings.</p>
+        <div class="actions">
+          <button class="btn" type="button" data-choose="IV">I choose The Storefront</button>
+        </div>
+      </article>
+
+      <article class="leaf plan" id="plan-V">
+        <div class="plan-head">
+          <div>
+            <p class="eyebrow">Plan V · owned product · Advent window</p>
+            <h2>The Folio</h2>
+            <p class="muted" style="margin:0">Red Letter as a public room. His words stay free. Live advisor is what people may pay for.</p>
+          </div>
+          <div>
+            <span class="badge">$59.99 / year · later</span>
+            <div class="num">V</div>
+          </div>
+        </div>
+        <p><strong>One breath.</strong> You already wrote the strategy: do not fight YouVersion; do not copy Bible Chat’s weekly gate; name a path; stay quieter. These 90 days end at the door of Advent (29 November). That is a season you can film. It is not Hallow’s Lent. Do not pretend it is.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Honest money</h3>
+            <p>A new faith PWA with zero installs will probably make $0–$500 by 3 December. A miracle path — a few hundred keepers and an annual attach — might touch $2,000. Choose this plan for owned IP and Advent craft, not for December rent. Lent 2027 (Ash Wednesday 10 February) remains the real commercial season you already marked on the wall.</p>
+          </div>
+          <div class="card">
+            <h3>What ships, what never locks</h3>
+            <p>HTTPS URL. Installable PWA. Blessing card that actually sends. Seven Days. 988. Curated advisor without a key. Never lock scripture. Never weekly price. Never “talk to God.” When money exists: 7-day live advisor, then $59.99 year / $9.99 month.</p>
+          </div>
+        </div>
+        <h3>Twelve weeks</h3>
+        <div class="weeks">
+          <div class="week"><h4>Wk 1</h4><p>Real URL. HTTPS. PWA install on your phone. Guest demo on a wiped session. If Day-1 lectio fails, fix onboarding, not features.</p></div>
+          <div class="week"><h4>Wk 2–3</h4><p>Film ads 1, 3, and 4 from LAUNCH.md on a face or handwriting. $0 paid until three people you love finish Day 1.</p></div>
+          <div class="week"><h4>Wk 4–8</h4><p>Waitlist. Blessings. Seven people through Seven Days. Spend the first $200 on Meta only if D7 is worth watching.</p></div>
+          <div class="week"><h4>Wk 9–12</h4><p>Advent clothes. A named 24-day path or a simple “wait with this sentence.” Stripe annual only after keepers exist. Build Forty for Lent in the background if energy remains — it is not this quarter’s cash.</p></div>
+        </div>
+        <h3>First 60 minutes</h3>
+        <ol>
+          <li>Put the app on a URL you can text. If Pages is live, that counts.</li>
+          <li>Sit the lectio yourself as a stranger: <code>/?fresh=1</code>.</li>
+          <li>Send one blessing to one real person. If the button is furniture, that is tonight’s only bug.</li>
+        </ol>
+        <h3>Copy — eight-second ad</h3>
+        <div class="copy" data-copy="I was carrying Tuesday on Monday. Then I sat with one sentence.
+[Matthew 6:34 or John 14:27 in crimson]
+A quiet page for the words Jesus spoke. Free.">I was carrying Tuesday on Monday. Then I sat with one sentence.
+[Matthew 6:34 or John 14:27 in crimson]
+A quiet page for the words Jesus spoke. Free.</div>
+        <p class="kill"><strong>Kill as a 90-day cash plan</strong> if you need money this quarter — switch to The Lamp. Keep building Red Letter as craft on crumbs. Kill the product itself only if you start locking verses, adding Paul, or pretending the model is Him.</p>
+        <div class="actions">
+          <button class="btn" type="button" data-choose="V">I choose The Folio</button>
+          <a class="btn ghost" href="../public/index.html">Open Red Letter</a>
+        </div>
+      </article>
+
+      <article class="leaf" id="pick">
+        <p class="eyebrow">Tonight, if the window is open</p>
+        <h2>Pick in twenty minutes</h2>
+        <ol>
+          <li><strong>Minutes 0–3.</strong> Is the household window confirmed? If no or unknown: close this folio. Rest is the right screen.</li>
+          <li><strong>Minutes 3–8.</strong> Can you truthfully claim the Lamp’s five gates? If yes and you want cash: choose I. If blocked: continue.</li>
+          <li><strong>Minutes 8–12.</strong> Can you name ten humans outside work who might pay $349 to rehearse? If yes: choose II. If you would rather walk storefronts than talk: choose IV.</li>
+          <li><strong>Minutes 12–16.</strong> Only choose III if you will send 20 asks and can protect 15-day delivery. Otherwise it is a fantasy client.</li>
+          <li><strong>Minutes 16–20.</strong> Choose V only if you accept that December cash may be zero and you still want Advent to have a URL. Write the choice in ink. Do not start a second plan “on the side.”</li>
+        </ol>
+        <p>Then do that plan’s first 60 minutes — or stop. Stopping is a valid finish.</p>
+      </article>
+
+      <article class="leaf" id="sunday">
+        <p class="eyebrow">Keep the week small</p>
+        <h2>Sunday close · three minutes</h2>
+        <ol>
+          <li>Did this folio make the week lighter, or did it become another dashboard?</li>
+          <li>Did money, a dated no, or a blocked gate appear — or only motion?</li>
+          <li>Continue, park 30 days, or close? Park creates no reminder. Close creates no successor.</li>
+        </ol>
+        <p>Required work still includes the academy block already on the calendar. That is the job. This folio never eats it.</p>
+        <h3>Parked on purpose</h3>
+        <p>Veteran memory-to-music, family adventure composer, Ableton album, owner-judgment libraries, agent-operations tabletop, ProofOps memberships, and every 6–18 month asset stay on the research shelf. They are not worse ideas. They cannot feed a household in 90 days without stealing the household.</p>
+        <h3>How this was made</h3>
+        <p class="muted">Sources: this repository (Red Letter product, <code>LAUNCH.md</code>, <code>MARKET_STRATEGY.md</code>), Notion workspace “My Life” (DeanOS, Venture Studio, M4, side-hustle shelf, Newborn Mode, This week), public GitHub <code>eyoitsmedean/Ai</code>, Hugging Face <code>nowaymyguy</code> (no repos), X <code>@Muricaenjoyer</code> (voice, not a channel), Cursor cloud-agent history (native-app ship attempts, Muse, QA). Granola was not signed in. Employer knowledge bases were not used as ingredients.</p>
+        <p class="muted">This page does not authorize applications, outreach, purchases, or publishing. You do.</p>
+        <footer class="colophon">
+          Printed for one person · 4 September 2026 · The words of a plan should be as quiet as the work
+        </footer>
+      </article>
+    </main>
+  </div>
+  <script>
+    const banner = document.getElementById("chosenBanner");
+    const chosenText = document.getElementById("chosenText");
+    const names = {
+      I: "The Lamp — evaluator cash",
+      II: "The Room — $349 rehearsal",
+      III: "The Handoff — $1,500 workflow rescue",
+      IV: "The Storefront — $295 friction audit",
+      V: "The Folio — Red Letter Advent"
+    };
+    function applyChoice(id) {
+      document.body.className = id ? "focus-" + id : "";
+      if (id) {
+        banner.classList.add("show");
+        chosenText.textContent = "This quarter: " + names[id] + ". The others are paper.";
+        localStorage.setItem("ninety-days-plan", id);
+        document.getElementById("plan-" + id).scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        banner.classList.remove("show");
+        localStorage.removeItem("ninety-days-plan");
+      }
+    }
+    document.querySelectorAll("[data-choose]").forEach((btn) => {
+      btn.addEventListener("click", () => applyChoice(btn.getAttribute("data-choose")));
+    });
+    document.getElementById("clearChoice").addEventListener("click", () => applyChoice(""));
+    document.querySelectorAll(".copy").forEach((block) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "Copy";
+      btn.addEventListener("click", async () => {
+        const text = block.getAttribute("data-copy") || block.innerText.replace(/\nCopy$/, "").trim();
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied";
+        setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+      });
+      block.appendChild(btn);
+    });
+    const saved = localStorage.getItem("ninety-days-plan");
+    if (saved && names[saved]) applyChoice(saved);
+  </script>
+</body>
+</html>
