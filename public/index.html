@@ -2617,25 +2617,26 @@ function markPathDay(kind, index) {
 /* The ledger — the launch signals from LAUNCH.md, counted on this device and kept for sixty days.
    Nothing leaves the device unless "Share anonymous counts" is on; then only completed days are sent,
    each once, as totals with no identifier. A day is a row: { open, lectio, blessing, advisor, sevenStart, sevenDone }. */
-const LEDGER_KEY = 'rla-ledger';
-const LEDGER_DAYS = 60;
-const LEDGER_EVENTS = ['open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone'];
+/* Functions, not top-level consts: startApp() runs from init() before the script reaches this point. */
+function ledgerKey() { return 'rla-ledger'; }
+function ledgerDays() { return 60; }
+function ledgerEvents() { return ['open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone']; }
 
 function ledger() {
-  const raw = parseJSON(ls(LEDGER_KEY), null);
+  const raw = parseJSON(ls(ledgerKey()), null);
   if (raw && raw.days && typeof raw.days === 'object') return raw;
   return { firstOpen: null, days: {}, sent: [] };
 }
 function saveLedger(book) {
-  const keep = Object.keys(book.days).sort().slice(-LEDGER_DAYS);
+  const keep = Object.keys(book.days).sort().slice(-ledgerDays());
   const days = {};
   keep.forEach((d) => { days[d] = book.days[d]; });
   book.days = days;
-  book.sent = (book.sent || []).filter((d) => days[d]).slice(-LEDGER_DAYS);
-  lsSet(LEDGER_KEY, JSON.stringify(book));
+  book.sent = (book.sent || []).filter((d) => days[d]).slice(-ledgerDays());
+  lsSet(ledgerKey(), JSON.stringify(book));
 }
 function signal(name) {
-  if (!LEDGER_EVENTS.includes(name)) return;
+  if (!ledgerEvents().includes(name)) return;
   const book = ledger();
   const day = todayStr();
   if (!book.firstOpen) book.firstOpen = day;
@@ -2700,7 +2701,7 @@ function unsentLedgerRows() {
     .map((d) => {
       const r = book.days[d];
       const row = { day: d };
-      LEDGER_EVENTS.forEach((k) => { if (r[k]) row[k] = r[k]; });
+      ledgerEvents().forEach((k) => { if (r[k]) row[k] = r[k]; });
       if (d === book.firstOpen) {
         row.newOpen = 1;
         if (r.lectio) row.day1Lectio = 1;

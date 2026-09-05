@@ -240,6 +240,66 @@ async function main() {
     assert(/It is Lent/.test(mid.invite), 'expected a Lent invitation, got: ' + mid.invite);
   });
 
+  await check('the ledger counts on the device and sends nothing until asked', async () => {
+    const posted = [];
+    const onRequest = (req) => { if (/\/api\/signal$/.test(req.url())) posted.push(req.postData()); };
+    page.on('request', onRequest);
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { localStorage.setItem('rla-onboarded', '1'); });
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    // A sitting kept today, a blessing, a letter, and an open from three days ago that was never sent.
+    await page.evaluate(() => {
+      signal('lectio');
+      signal('blessing');
+      signal('advisor');
+      const book = ledger();
+      const old = new Date(Date.now() - 3 * 86400000);
+      const day = old.getFullYear() + '-' + String(old.getMonth() + 1).padStart(2, '0') + '-' + String(old.getDate()).padStart(2, '0');
+      book.days[day] = { open: 1, lectio: 1 };
+      book.firstOpen = day;
+      saveLedger(book);
+      openSettings();
+    });
+    await page.waitForSelector('#share-counts-row:not([hidden])', { timeout: 4000 });
+    const before = await page.evaluate(() => ({
+      ledger: document.getElementById('ledger').innerText,
+      sub: document.getElementById('ledger-sub').textContent,
+      toggle: document.getElementById('share-counts-toggle').checked,
+      unsent: unsentLedgerRows().length,
+    }));
+    assert(/Sat on the first day\s+yes/.test(before.ledger), 'first-day sitting not shown: ' + before.ledger);
+    assert(/Sittings kept\s+2/.test(before.ledger), 'sittings miscounted: ' + before.ledger);
+    assert(/Blessings sent\s+1/.test(before.ledger) && /Letters to the Advisor\s+1/.test(before.ledger), 'counts wrong: ' + before.ledger);
+    assert(/Nothing is sent/.test(before.sub) && !before.toggle, 'sharing must be off by default');
+    assert(before.unsent === 1, 'one completed day should be waiting, saw ' + before.unsent);
+    assert(posted.length === 0, 'nothing may be posted before the toggle is on');
+
+    // The checkbox sits under a drawn toggle track inside a scrolling sheet; a DOM click fires the same change event.
+    await page.$eval('#share-counts-toggle', (el) => el.click());
+    await page.waitForResponse((r) => /\/api\/signal$/.test(r.url()), { timeout: 4000 });
+    const after = await page.evaluate(() => ({ unsent: unsentLedgerRows().length, sub: document.getElementById('ledger-sub').textContent }));
+    assert(posted.length === 1, 'expected one post, saw ' + posted.length);
+    const body = JSON.parse(posted[0]);
+    assert(body.rows.length === 1 && body.rows[0].newOpen === 1 && body.rows[0].day1Lectio === 1, 'row shape: ' + posted[0]);
+    assert(!Object.keys(body).some((k) => /id|email|name/i.test(k)) && !Object.keys(body.rows[0]).some((k) => /id/i.test(k)), 'no identifier may travel: ' + posted[0]);
+    assert(after.unsent === 0, 'sent day should be marked sent');
+    assert(/shared once a day/.test(after.sub), 'ledger copy should say sharing is on');
+
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    const persisted = await page.evaluate(() => ledgerSummary().sittings);
+    assert(persisted === 2, 'ledger must survive a reload, saw ' + persisted);
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    const wiped = await page.evaluate(() => localStorage.getItem('rla-ledger'));
+    assert(wiped === null, 'a new reader must not inherit the ledger');
+    page.off('request', onRequest);
+  });
+
+  await check('Room settings says how the red letters are decided', async () => {
+    const copy = await page.evaluate(() => document.getElementById('settings-sheet').innerText);
+    assert(/red-letter tradition/.test(copy) && /John 3:16–21/.test(copy), 'disclosure missing');
+    assert(/not a person/.test(copy) && /988/.test(copy), 'safety copy missing');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
