@@ -108,6 +108,8 @@ Never run “talk to God” as if the model were God. The product is **His recor
 | Advisor used | > 25% of WAU |
 | Paid (when you flip it on) | Annual attach, not weekly |
 
+Where the numbers come from: each device keeps its own ledger (Room settings → *The ledger*) and, only if the reader turns on *Share anonymous counts*, sends completed days once as plain totals with no identifier. `GET /api/signal/summary?days=30` on the API host answers the first four rows with their denominators. Day-1 lectio and Seven completion are exact; blessing and Advisor are per active device-day, because no id is sent and "WAU" cannot be unique devices without one. Read it every Monday; the target column is in the response.
+
 If Day-1 lectio is low, the onboarding is too long. If Day-7 is low, the days are not a story. If blessings are low, the button is still furniture.
 
 ---

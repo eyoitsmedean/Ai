@@ -421,6 +421,107 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ ok: true });
 });
 
+/* The ledger, shared by choice. A device posts completed days as plain totals, each day once, with no
+   identifier; the server appends them and can answer LAUNCH.md's four questions in aggregate.
+   Because there is no id, "active" is counted in device-days, not unique devices, and the summary says so. */
+const SIGNAL_PATH = process.env.RLA_SIGNAL_PATH || path.join(__dirname, 'data', 'signals.jsonl');
+const SIGNAL_FIELDS = ['open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone', 'newOpen', 'day1Lectio'];
+const SIGNAL_MAX_ROWS = 60;
+const SIGNAL_MAX_COUNT = 200;
+
+function isoDay(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function validSignalRows(body) {
+  if (!body || body.v !== 1 || !Array.isArray(body.rows)) return null;
+  if (body.rows.length === 0 || body.rows.length > SIGNAL_MAX_ROWS) return null;
+  const today = isoDay(new Date());
+  const floor = isoDay(new Date(Date.now() - (SIGNAL_MAX_ROWS + 1) * 86400000));
+  const seen = new Set();
+  const rows = [];
+  for (const raw of body.rows) {
+    if (!raw || typeof raw !== 'object') return null;
+    if (typeof raw.day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(raw.day)) return null;
+    if (raw.day >= today || raw.day < floor || seen.has(raw.day)) return null;
+    seen.add(raw.day);
+    const row = { day: raw.day };
+    for (const [k, v] of Object.entries(raw)) {
+      if (k === 'day') continue;
+      if (!SIGNAL_FIELDS.includes(k)) return null;
+      if (!Number.isInteger(v) || v < 1 || v > SIGNAL_MAX_COUNT) return null;
+      row[k] = v;
+    }
+    if ((row.newOpen || 0) > 1 || (row.day1Lectio || 0) > 1) return null;
+    if (row.day1Lectio && !row.newOpen) return null;
+    rows.push(row);
+  }
+  return rows;
+}
+
+function readSignalRows() {
+  let text = '';
+  try { text = fs.readFileSync(SIGNAL_PATH, 'utf8'); } catch (_) { return []; }
+  const rows = [];
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    try { rows.push(JSON.parse(line)); } catch (_) {}
+  }
+  return rows;
+}
+
+function summarizeSignals(rows, days) {
+  const since = isoDay(new Date(Date.now() - days * 86400000));
+  const totals = {};
+  SIGNAL_FIELDS.forEach((k) => { totals[k] = 0; });
+  let deviceDays = 0;
+  for (const r of rows) {
+    if (r.day < since) continue;
+    SIGNAL_FIELDS.forEach((k) => { totals[k] += r[k] || 0; });
+    if (r.open) deviceDays += 1;
+  }
+  const rate = (num, den) => (den ? Math.round((num / den) * 1000) / 10 : null);
+  return {
+    since,
+    days,
+    deviceDays,
+    totals,
+    launch: {
+      day1LectioPct: { value: rate(totals.day1Lectio, totals.newOpen), of: 'new opens', target: 40 },
+      sevenDonePct: { value: rate(totals.sevenDone, totals.sevenStart), of: 'Seven starters', target: 18 },
+      blessingPct: { value: rate(totals.blessing, deviceDays), of: 'active device-days (no id is sent, so not unique devices)', target: 8 },
+      advisorPct: { value: rate(totals.advisor, deviceDays), of: 'active device-days (no id is sent, so not unique devices)', target: 25 },
+    },
+  };
+}
+
+app.post('/api/signal', (req, res) => {
+  const rows = validSignalRows(req.body);
+  if (!rows) return res.status(400).json({ error: 'Day totals only.' });
+  // Shared addresses (a household, a parish) send from one IP; a device itself sends once a day.
+  if (!rateLimit(`signal:${clientKey(req)}`, 30, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const receivedAt = new Date().toISOString();
+  const lines = rows.map((r) => JSON.stringify({ ...r, receivedAt })).join('\n') + '\n';
+  try {
+    fs.appendFileSync(SIGNAL_PATH, lines);
+  } catch (err) {
+    console.error('signal write failed:', err.message);
+    return res.status(500).json({ error: 'Could not keep the count.' });
+  }
+  res.json({ ok: true, kept: rows.length });
+});
+
+app.get('/api/signal/summary', (req, res) => {
+  if (!rateLimit(`signal-summary:${clientKey(req)}`, 60, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const days = Math.min(365, Math.max(1, Number(req.query.days) || 30));
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(summarizeSignals(readSignalRows(), days));
+});
+
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));

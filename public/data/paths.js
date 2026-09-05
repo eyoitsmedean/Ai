@@ -1,39 +1,77 @@
 /* Named paths — Seven is the first week; Forty is the longer story (Lent, or after Day 7).
-   Words are public-domain KJV speech of Jesus. */
+   Words are public-domain KJV speech of Jesus; every passage is checked against the corpus in test/paths.test.js.
+   Forty is bound in five quires of eight leaves: Come · Light · Mercy · Abide · Go. */
 (function () {
-  const EXTRA = [
-    { title: 'Resurrection', theme: 'Life', verse: 'John 11:25–26', passage: 'I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.', reflection: 'He does not offer a theory of death. He offers himself in the middle of it.' },
-    { title: 'Bread', theme: 'Hunger', verse: 'John 6:35', passage: 'I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.', reflection: 'Hunger is honest. He does not scold it. He names himself as enough.' },
-    { title: 'Shepherd', theme: 'Care', verse: 'John 10:11', passage: 'I am the good shepherd: the good shepherd giveth his life for the sheep.', reflection: 'Care that costs nothing is a hireling. He stays when it is expensive.' },
-    { title: 'Troubled', theme: 'Peace', verse: 'John 14:1', passage: 'Let not your heart be troubled: ye believe in God, believe also in me.', reflection: 'He speaks to a room about to break. Belief here is company, not a quiz.' },
-    { title: 'Overcome', theme: 'Courage', verse: 'John 16:33', passage: 'In the world ye shall have tribulation: but be of good cheer; I have overcome the world.', reflection: 'He tells the truth about the world first. Cheer is not denial.' },
-    { title: 'Always', theme: 'Presence', verse: 'Matthew 28:20', passage: 'Lo, I am with you always, even unto the end of the world.', reflection: 'The last word is not a map. It is presence that does not expire.' },
-    { title: 'Paradise', theme: 'Mercy', verse: 'Luke 23:43', passage: 'Verily I say unto thee, To day shalt thou be with me in paradise.', reflection: 'A dying thief is given today, not a waitlist. Mercy does not arrive late.' },
-    { title: 'Peacemakers', theme: 'Peace', verse: 'Matthew 5:9', passage: 'Blessed are the peacemakers: for they shall be called the children of God.', reflection: 'Peace is made, not merely felt. One reconciling step is enough for this day.' },
-    { title: 'Anointed', theme: 'Purpose', verse: 'Luke 4:18', passage: 'The Spirit of the Lord is upon me, because he hath anointed me to preach the gospel to the poor; he hath sent me to heal the brokenhearted, to preach deliverance to the captives.', reflection: 'His purpose statement is toward the poor, the broken, the locked. That is the work.' },
-    { title: 'Sent', theme: 'Go', verse: 'John 20:21', passage: 'Peace be unto you: as my Father hath sent me, even so send I you.', reflection: 'Peace first. Then a sending. You do not go unaccompanied.' },
-    { title: 'Willing', theme: 'Surrender', verse: 'Matthew 26:39', passage: 'O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt.', reflection: 'He does not pretend the cup is sweet. Honesty and obedience can sit in one sentence.' },
-    { title: 'Ninety-nine', theme: 'Seeking', verse: 'Luke 15:4–5', passage: 'What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it? And when he hath found it, he layeth it on his shoulders, rejoicing.', reflection: 'You are not an acceptable loss. He goes after the one, and he is glad when he finds you.' }
+  const QUIRES = [
+    { title: 'Come', note: 'Invitation. Arrive laden, not finished.' },
+    { title: 'Light', note: 'The teaching. Plain sentences for a whole life.' },
+    { title: 'Mercy', note: 'Forgiveness given, then handed on.' },
+    { title: 'Abide', note: 'The farewell. Staying close is the work.' },
+    { title: 'Go', note: 'The cup, the cross, the garden, the sending.' },
   ];
 
-  function fromDaily() {
-    const list = (window.RLA_CURATED && window.RLA_CURATED.daily) || [];
-    return list.map(function (d) {
-      const w = d.word || {};
-      return {
-        title: w.title || w.theme || 'Word',
-        theme: w.theme || '',
-        verse: w.verse || '',
-        passage: w.passage || '',
-        reflection: w.reflection || ''
-      };
-    });
-  }
+  const FORTY = [
+    /* I · Come */
+    { title: 'Come', theme: 'Rest', verse: 'Matthew 11:28–30', passage: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls. For my yoke is easy, and my burden is light.', reflection: 'The first word of forty days is not a demand. It is an invitation to the tired. Come as you are — laden, not finished.' },
+    { title: 'Sparrows', theme: 'Worth', verse: 'Luke 12:6–7', passage: 'Are not five sparrows sold for two farthings, and not one of them is forgotten before God? But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', reflection: 'When life makes you feel small, he points to sparrows — and then to you. Your worth is not earned by output. It is spoken over you.' },
+    { title: 'Enough', theme: 'Peace', verse: 'Matthew 6:34', passage: 'Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.', reflection: 'He does not shame your anxiety. He narrows your field of view to one day, and gives grace enough for what is in front of you.' },
+    { title: 'Lilies', theme: 'Trust', verse: 'Matthew 6:28–30', passage: 'And why take ye thought for raiment? Consider the lilies of the field, how they grow; they toil not, neither do they spin: And yet I say unto you, That even Solomon in all his glory was not arrayed like one of these. Wherefore, if God so clothe the grass of the field, which to day is, and to morrow is cast into the oven, shall he not much more clothe you, O ye of little faith?', reflection: 'Consider is a slow verb. He asks you to look at something that is not trying, and to notice it is dressed.' },
+    { title: 'Be Still', theme: 'Storm', verse: 'Mark 4:39–40', passage: 'Peace, be still. Why are ye so fearful? how is it that ye have no faith?', reflection: 'The disciples had him in the boat and still panicked. He meets fear with a word to the wind, then a question to the heart.' },
+    { title: 'It Is I', theme: 'Presence', verse: 'Matthew 14:27', passage: 'Be of good cheer; it is I; be not afraid.', reflection: 'In the dark, on the water, the first gospel is not an explanation. It is a presence: it is I.' },
+    { title: 'Cast Out', theme: 'Welcome', verse: 'John 6:37', passage: 'All that the Father giveth me shall come to me; and him that cometh to me I will in no wise cast out.', reflection: 'In no wise is a locked door in the other direction. Whatever you have carried here, the coming is enough.' },
+    { title: 'Children', theme: 'Welcome', verse: 'Matthew 19:14', passage: 'Suffer little children, and forbid them not, to come unto me: for of such is the kingdom of heaven.', reflection: 'He stops the gatekeepers. Nearness is for the small, the interrupting, the ones others would send away.' },
 
-  window.RLA_FORTY = fromDaily().concat(EXTRA).slice(0, 40);
+    /* II · Light */
+    { title: 'Blessed', theme: 'Blessing', verse: 'Matthew 5:3–6', passage: 'Blessed are the poor in spirit: for theirs is the kingdom of heaven. Blessed are they that mourn: for they shall be comforted. Blessed are the meek: for they shall inherit the earth. Blessed are they which do hunger and thirst after righteousness: for they shall be filled.', reflection: 'The Beatitudes begin with lack. He blesses the ones who do not have it together, and promises filling.' },
+    { title: 'The Greatest', theme: 'Love', verse: 'Matthew 22:37–40', passage: 'Thou shalt love the Lord thy God with all thy heart, and with all thy soul, and with all thy mind. This is the first and great commandment. And the second is like unto it, Thou shalt love thy neighbour as thyself. On these two commandments hang all the law and the prophets.', reflection: 'When life feels complicated, he simplifies: love God, love the person beside you. Everything else hangs on that.' },
+    { title: 'Salt', theme: 'Savour', verse: 'Matthew 5:13', passage: 'Ye are the salt of the earth: but if the salt have lost his savour, wherewith shall it be salted? it is thenceforth good for nothing, but to be cast out, and to be trodden under foot of men.', reflection: 'Salt is small and it is everywhere in the dish. You are not asked to be the meal. You are asked to keep your savour.' },
+    { title: 'Light', theme: 'Witness', verse: 'Matthew 5:14–16', passage: 'Ye are the light of the world. A city that is set on an hill cannot be hid. Neither do men light a candle, and put it under a bushel, but on a candlestick; and it giveth light unto all that are in the house. Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.', reflection: 'He does not say try to become light. He says you are. The work is to stop covering what has already been lit.' },
+    { title: 'The Closet', theme: 'Prayer', verse: 'Matthew 6:6', passage: 'But thou, when thou prayest, enter into thy closet, and when thou hast shut thy door, pray to thy Father which is in secret; and thy Father which seeth in secret shall reward thee openly.', reflection: 'He protects prayer from performance. The room with the door shut is enough. Being seen there is the reward.' },
+    { title: 'Treasure', theme: 'Treasure', verse: 'Matthew 6:19–21', passage: 'Lay not up for yourselves treasures upon earth, where moth and rust doth corrupt, and where thieves break through and steal: But lay up for yourselves treasures in heaven, where neither moth nor rust doth corrupt, and where thieves do not break through nor steal: For where your treasure is, there will your heart be also.', reflection: 'He is not scolding ambition. He is telling the truth about attachment. What you store is where you live.' },
+    { title: 'Ask', theme: 'Seeking', verse: 'Matthew 7:7–8', passage: 'Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you: For every one that asketh receiveth; and he that seeketh findeth; and to him that knocketh it shall be opened.', reflection: 'Prayer here is persistence, not performance. Keep asking. Keep seeking. Keep knocking.' },
+    { title: 'The Gate', theme: 'Path', verse: 'Matthew 7:13–14', passage: 'Enter ye in at the strait gate: for wide is the gate, and broad is the way, that leadeth to destruction, and many there be which go in thereat: Because strait is the gate, and narrow is the way, which leadeth unto life, and few there be that find it.', reflection: 'Narrow is not cruel. It is honest: life is found by walking a way, not by drifting with the crowd.' },
+
+    /* III · Mercy */
+    { title: 'Merciful', theme: 'Mercy', verse: 'Luke 6:36', passage: 'Be ye therefore merciful, as your Father also is merciful.', reflection: 'Mercy is not softness that looks away. It is the family resemblance he wants you to wear.' },
+    { title: 'Judge Not', theme: 'Humility', verse: 'Matthew 7:1–2', passage: 'Judge not, that ye be not judged. For with what judgment ye judge, ye shall be judged: and with what measure ye mete, it shall be measured to you again.', reflection: 'This is not a ban on wisdom. It is a warning about the posture of the heart when we look at another person.' },
+    { title: 'As Ye Would', theme: 'Kindness', verse: 'Matthew 7:12', passage: 'Therefore all things whatsoever ye would that men should do to you, do ye even so to them: for this is the law and the prophets.', reflection: 'He compresses a library of law into one practiced sentence. The next kind act does not require a new theory.' },
+    { title: 'Enemies', theme: 'Enemies', verse: 'Matthew 5:44', passage: 'But I say unto you, Love your enemies, bless them that curse you, do good to them that hate you, and pray for them which despitefully use you, and persecute you;', reflection: 'The hardest sentence he spoke to ordinary people. It does not deny harm. It refuses to let harm write the last word of your heart.' },
+    { title: 'Physician', theme: 'Mercy', verse: 'Matthew 9:12–13', passage: 'They that be whole need not a physician, but they that are sick. But go ye and learn what that meaneth, I will have mercy, and not sacrifice: for I am not come to call the righteous, but sinners to repentance.', reflection: 'He sat at the wrong tables on purpose. If you are sick of yourself today, you are exactly who he came for.' },
+    { title: 'Ninety-nine', theme: 'Seeking', verse: 'Luke 15:4–5', passage: 'What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it? And when he hath found it, he layeth it on his shoulders, rejoicing.', reflection: 'You are not an acceptable loss. He goes after the one, and he is glad when he finds you.' },
+    { title: 'Neither Do I', theme: 'Shame', verse: 'John 8:11', passage: 'Neither do I condemn thee: go, and sin no more.', reflection: 'The accusers left first. What remained was one sentence with no stone in it. He still knows how to lift a face.' },
+    { title: 'Servant', theme: 'Service', verse: 'Mark 10:43–45', passage: 'But so shall it not be among you: but whosoever will be great among you, shall be your minister: And whosoever of you will be the chiefest, shall be servant of all. For even the Son of man came not to be ministered unto, but to minister, and to give his life a ransom for many.', reflection: 'He does not flatten ambition — he reroutes it. The highest place is the one that stoops.' },
+
+    /* IV · Abide */
+    { title: 'Bread', theme: 'Hunger', verse: 'John 6:35', passage: 'I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.', reflection: 'Hunger is honest. He does not scold it. He names himself as enough.' },
+    { title: 'Shepherd', theme: 'Care', verse: 'John 10:11', passage: 'I am the good shepherd: the good shepherd giveth his life for the sheep.', reflection: 'Care that costs nothing is a hireling. He stays when it is expensive.' },
+    { title: 'My Voice', theme: 'Shepherd', verse: 'John 10:27–28', passage: 'My sheep hear my voice, and I know them, and they follow me: And I give unto them eternal life; and they shall never perish, neither shall any man pluck them out of my hand.', reflection: 'The shepherd image is not cute. It is security: a voice, a following, a hand that does not drop you.' },
+    { title: 'Life', theme: 'Life', verse: 'John 10:10', passage: 'The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly.', reflection: 'Abundant is not a shopping word. It is life that is full because it is given, not because it is grasped.' },
+    { title: 'The Way', theme: 'Way', verse: 'John 14:6', passage: 'I am the way, the truth, and the life: no man cometh unto the Father, but by me.', reflection: 'He does not hand over a map and walk away. He offers himself as the road, the real, and the life inside both.' },
+    { title: 'Troubled', theme: 'Peace', verse: 'John 14:1', passage: 'Let not your heart be troubled: ye believe in God, believe also in me.', reflection: 'He speaks to a room about to break. Belief here is company, not a quiz.' },
+    { title: 'Comfortless', theme: 'Presence', verse: 'John 14:18', passage: 'I will not leave you comfortless: I will come to you.', reflection: 'The older word is orphans. He looks at people about to lose him and promises they will not be left that way.' },
+    { title: 'Friends', theme: 'Friendship', verse: 'John 15:13–15', passage: 'Greater love hath no man than this, that a man lay down his life for his friends. Ye are my friends, if ye do whatsoever I command you. Henceforth I call you not servants; for the servant knoweth not what his lord doeth: but I have called you friends; for all things that I have heard of my Father I have made known unto you.', reflection: 'Friendship with him is costly and intimate. He does not keep you in the dark about the Father’s heart.' },
+
+    /* V · Go */
+    { title: 'Your Joy', theme: 'Joy', verse: 'John 16:22', passage: 'And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.', reflection: 'He names the sorrow first and does not hurry it. Then he promises a joy with no handle for anyone else to grab.' },
+    { title: 'Overcome', theme: 'Courage', verse: 'John 16:33', passage: 'These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.', reflection: 'He tells the truth about the world first. Cheer is not denial. It rests on his overcoming, not yours.' },
+    { title: 'Willing', theme: 'Surrender', verse: 'Matthew 26:39', passage: 'O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt.', reflection: 'He does not pretend the cup is sweet. Honesty and obedience can sit in one sentence.' },
+    { title: 'Forgive Them', theme: 'Forgiveness', verse: 'Luke 23:34', passage: 'Father, forgive them; for they know not what they do.', reflection: 'Spoken from the cross, over the people driving the nails. Forgiveness here is not a feeling. It is the first thing he says.' },
+    { title: 'Paradise', theme: 'Mercy', verse: 'Luke 23:43', passage: 'Verily I say unto thee, To day shalt thou be with me in paradise.', reflection: 'A dying thief is given today, not a waitlist. Mercy does not arrive late.' },
+    { title: 'Resurrection', theme: 'Life', verse: 'John 11:25–26', passage: 'I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die. Believest thou this?', reflection: 'He does not offer a theory of death. He offers himself in the middle of it, and asks one question.' },
+    { title: 'Not Seen', theme: 'Faith', verse: 'John 20:29', passage: 'Thomas, because thou hast seen me, thou hast believed: blessed are they that have not seen, and yet have believed.', reflection: 'Thomas got his hands on the wounds. The blessing is spoken over the rest of us, who did not.' },
+    { title: 'Sent', theme: 'Go', verse: 'John 20:21', passage: 'Peace be unto you: as my Father hath sent me, even so send I you.', reflection: 'Peace first. Then a sending. Forty days end the way they began — accompanied.' },
+  ];
+
+  window.RLA_FORTY = FORTY;
+  window.RLA_FORTY_QUIRES = QUIRES;
 
   window.RLA_pathList = function (kind) {
-    if (kind === 'forty' && window.RLA_FORTY && window.RLA_FORTY.length) return window.RLA_FORTY;
+    if (kind === 'forty') return window.RLA_FORTY || [];
     return window.RLA_SEVEN || [];
+  };
+
+  /* Which quire a Forty leaf belongs to, 0–4. */
+  window.RLA_quireOf = function (index) {
+    return Math.min(QUIRES.length - 1, Math.floor(index / 8));
   };
 })();

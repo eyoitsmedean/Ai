@@ -50,9 +50,23 @@ Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playb
 | Push without a server is not reliable | Quiet hour writes prefs; periodicsync may notify if installed; missing it never fails |
 | Lent is the payday; Seven is the shippable Pray40 | **Forty** — 40 red-letter rooms ready before Ash Wednesday 10 Feb 2027 |
 
+## Build loop — 5 September 2026
+
+| Finding | What we built |
+| --- | --- |
+| Forty existed only as data (28 daily words + 12 extras, sliced); it repeated itself and repeated Seven, and the room never showed it | **Forty** is bound as five quires of eight — Come · Light · Mercy · Abide · Go — opening at Matthew 11:28 and ending at John 20:21. Today renders it as a collation of beads; only the next leaf opens; a sitting keeps it |
+| A reader arriving in Lent should not have to find a setting | Lent hands a new reader Forty; a reader mid-Seven is invited, never moved. Seven complete → *Begin Forty*. Path also in Room settings and ⌘K |
+| The KJV corpus had dropped six verses (Matt 2:16, 22:1, 26:38; Mark 4:40, 7:11, 8:8), so later citations in those chapters were off by one — *Matthew 22:37–40* resolved to 38–41 | Restored the verses, rebuilt the spoken corpus and library, added a verse-count integrity test for all 89 chapters |
+| Path data had no test | `test/paths.test.js` verifies every leaf against the corpus, forbids repeats, keeps `public/data` in sync |
+| 111 of 1,923 red letters still opened with the evangelist's frame ("Then said Jesus to them again, Peace be unto you" — John 20:21), because the extractor was eleven literal regexes; the `saying` rule also cut 39 of His own sentences in half (Matthew 6:31) | Three ordered frame rules with a block guard, parable speech kept whole, `data/spoken-overrides.json` for the 41 reviewed cases, Luke 13:14 (the ruler) removed, `npm run audit` + `test/spoken.test.js` so a named frame can never ship again |
+| LAUNCH named four signals and thresholds; nothing measured them, and a tracker would break "they do not feel managed, scored, or sold" | The ledger: counted on the device, read in Room settings, shared only by choice as day totals with no identifier; `/api/signal/summary` returns the four ratios and says which denominators are exact |
+| Lent 2027 was asserted in prose; the client's church-year copy had no test | Server and client checked against a retrieved table for 2025–2030, 2035, 2038 |
+| The room never said how the red letters are decided | Room settings: KJV red-letter tradition, John 3:16–21 set red as most KJV editions do, the citation always printed |
+
 ## Follow-ups (next iterations)
 
 - Lectio divina (Read / Reflect / Rest / Respond) is the daily ritual — shipped.
+- Forty (the Lent path) — shipped; film it in January, name the week before Ash Wednesday.
 - Wire live Anthropic key in production and tune prompts against real traffic.
 - Add push / local reminder for daily red letter / lectio.
 - Soft freemium paywall + annual plan.
