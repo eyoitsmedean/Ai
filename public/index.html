@@ -3137,7 +3137,7 @@ function markLetterpress(wrap) {
   if (!wrap || wrap.querySelector('.letter-colophon')) return;
   const note = document.createElement('div');
   note.className = 'letter-colophon';
-  note.textContent = 'Set without a model, from his words only.';
+  note.textContent = 'Set without a model, from His words only.';
   const letter = wrap.querySelector('.letter');
   if (letter && letter.nextSibling) wrap.insertBefore(note, letter.nextSibling);
   else wrap.appendChild(note);
@@ -3182,7 +3182,7 @@ function renderJournal() {
       <div class="journal-title">${esc(item.title)}</div>
       <div class="journal-body">${esc(item.body)}</div>
       ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
-      ${item.source === 'letterpress' ? '<div class="letter-colophon">Set without a model, from his words only.</div>' : ''}
+      ${item.source === 'letterpress' ? '<div class="letter-colophon">Set without a model, from His words only.</div>' : ''}
     </div>`;
   }).join('');
 }

@@ -29,8 +29,34 @@ describe('guessThemes hears ordinary phrasing', () => {
       'hi', 'thank you', 'I love my husband', 'my boss gave me a raise', 'my mother is visiting',
       'painting my room this weekend', 'Are you still there?', 'tomorrow is my birthday',
       'lost my keys', 'guilty pleasure', 'I feel fearless today', 'a bittersweet ending', 'shameless', 'hopefully',
+      'my sister and I are going to the beach', 'my daughter always makes me laugh', 'I am dying to see the new film',
+      'I have faith in my team', 'hope you are well', 'peace out',
     ]) {
       assert.deepEqual(guessThemes(q), [], q);
+    }
+  });
+
+  it('hears the ways people actually write about hurt', () => {
+    const cases = [
+      ['I miss my mom', 'Grief & Loss'],
+      ["I can't stop crying", 'Grief & Loss'],
+      ['I had a miscarriage last month', 'Grief & Loss'],
+      ['lost my dog yesterday', 'Grief & Loss'],
+      ['I feel worthless', 'Shame & Guilt'],
+      ['I keep failing at everything', 'Shame & Guilt'],
+      ['I hurt someone I love', 'Shame & Guilt'],
+      ['my best friend betrayed me', 'Forgiveness'],
+      ['I am angry at God', 'Faith & Doubt'],
+      ['I feel so far from God', 'Faith & Doubt'],
+      ['why does God let this happen', 'Faith & Doubt'],
+      ["I don't know how to keep going", 'Hope'],
+      ['I got laid off today and I have two kids', 'Anxiety & Worry'],
+      ["I'm drowning in debt", 'Anxiety & Worry'],
+      ['I feel numb', 'Faith & Doubt'],
+      ['I lost my job', 'Purpose & Direction'],
+    ];
+    for (const [q, theme] of cases) {
+      assert.ok(guessThemes(q).includes(theme), `${q} -> ${guessThemes(q)}`);
     }
   });
 
@@ -85,9 +111,33 @@ describe('composeLetter', () => {
     assert.deepEqual(citations, ['Matthew 11:28', 'John 14:27']);
   });
 
-  it('does not pair illness with sin', () => {
-    const filled = verifyAndSubstitute(composeLetter('diagnosed with cancer').text);
-    assert.doesNotMatch(filled, /thy sins be forgiven/);
+  it('never counsels the hurting with a conditional or a scolding', () => {
+    const walk = (q, turns) => {
+      const history = [];
+      const out = [];
+      for (let i = 0; i < turns; i++) {
+        const filled = verifyAndSubstitute(composeLetter(q, { history }).text);
+        out.push(filled);
+        history.push({ role: 'assistant', content: filled });
+      }
+      return out.join('\n');
+    };
+    const sick = walk('diagnosed with cancer', 4);
+    assert.doesNotMatch(sick, /thy sins be forgiven/);
+    assert.doesNotMatch(sick, /thy faith hath made thee whole/);
+    const doubter = walk('I feel nothing when I pray, is God even there', 4);
+    assert.doesNotMatch(doubter, /Because of your unbelief/);
+    const betrayed = walk('my husband cheated on me', 4);
+    assert.doesNotMatch(betrayed, /Go first/);
+    assert.doesNotMatch(betrayed, /bring thy gift to the altar/);
+  });
+
+  it('reads a new room’s opening even after another room was visited', () => {
+    const fear = verifyAndSubstitute(composeLetter('I am afraid').text);
+    const hope = composeLetter('I feel hopeless', { history: [{ role: 'assistant', content: fear }] });
+    assert.equal(hope.theme, 'Hope');
+    assert.match(hope.text, /^Hope is not optimism/);
+    assert.ok(!hope.citations.includes('Luke 12:32'), 'must not repeat the fear letter');
   });
 
   it('walks a room to exhaustion without repeating, then says so', () => {
@@ -150,6 +200,7 @@ describe('composeLetter', () => {
       for (const p of [...pack.passages, ...pack.more]) {
         assert.ok(isRedLetter(p.verse), `${name}: ${p.verse}`);
         assert.doesNotMatch(p.quote, /^(Then|And) (said|saith|spake) /, `${name}: ${p.verse} keeps a narrator`);
+        assert.doesNotMatch(p.quote, /^(Because of your|Therefore|Teaching them)/, `${name}: ${p.verse} starts mid-answer`);
       }
     }
   });
