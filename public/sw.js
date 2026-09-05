@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v11';
+const CACHE = 'rla-phase0-v14';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',
@@ -7,6 +7,7 @@ const PRECACHE = [
   '/data/advisor.js',
   '/data/curated.js',
   '/data/paths.js',
+  '/data/press.js',
   '/icon-192.png',
   '/icon-512.png',
   '/apple-touch-icon.png',

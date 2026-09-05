@@ -117,6 +117,61 @@ describe('smoke routes', () => {
     assert.equal(JSON.parse(missing.raw).allVerified, false);
   });
 
+  it('opens the Press review gathering', async () => {
+    const res = await request('GET', '/review');
+    assert.ok(res.status === 302 || res.status === 301);
+    assert.match(res.headers.location || '', /review=1/);
+  });
+
+  it('carries season and leaf into the review, and drops junk', async () => {
+    const res = await request('GET', '/review?season=lent&leaf=forty');
+    const loc = res.headers.location || '';
+    assert.match(loc, /season=lent/);
+    assert.match(loc, /leaf=forty/);
+    const junk = await request('GET', '/review?season=carnival&leaf=%3Cscript%3E');
+    const bad = junk.headers.location || '';
+    assert.doesNotMatch(bad, /season=/);
+    assert.doesNotMatch(bad, /leaf=/);
+  });
+
+  it('keeps 988 by call, text, and chat, and names the Crown’s patentee', async () => {
+    const res = await request('GET', '/index.html');
+    assert.equal(res.status, 200);
+    assert.ok((res.raw.match(/href="tel:988"/g) || []).length >= 4, '988 must be reachable from the title page, Advisor, settings, and crisis modal');
+    assert.ok(/988lifeline\.org/.test(res.raw), 'chat is a real 988 modality and must be offered');
+    assert.ok(/findahelpline\.com/.test(res.raw), 'a non-U.S. path must remain');
+    assert.ok(/Crown’s patentee, Cambridge University Press/.test(res.raw), 'the U.K. acknowledgement must be printed');
+    assert.ok(/not a person/i.test(res.raw), 'the page must say it is not a person');
+    const sw = await request('GET', '/sw.js');
+    assert.ok(/rla-phase0-v14/.test(sw.raw) && /\/data\/press\.js/.test(sw.raw), 'service worker must carry the Press offline under a fresh cache name');
+  });
+
+  it('seals every crimson sentence in the Press against the Gospel corpus', async () => {
+    const vm = require('node:vm');
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const ctx = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'public', 'data', 'press.js'), 'utf8'), ctx);
+    const press = ctx.window.RLA_PRESS;
+    assert.ok(press && press.parable && press.parable.leaves.length === 5, 'five parable leaves');
+    assert.ok(press.blessing.seeds.length >= 6, 'blessing seeds');
+    const items = [
+      { verse: press.reveal.verse, quote: press.reveal.quote },
+      { verse: press.breath.verse, quote: press.breath.quote },
+      { verse: press.examen.verse, quote: press.examen.quote },
+      ...press.parable.leaves.map((l) => ({ verse: l.verse, quote: l.quote })),
+      ...press.blessing.seeds,
+    ];
+    for (let i = 0; i < items.length; i += 12) {
+      const res = await request('POST', '/api/verify', { items: items.slice(i, i + 12) });
+      assert.equal(res.status, 200);
+      const data = JSON.parse(res.raw);
+      // ok means the reference is genuine red-letter speech; the score means the words are His, not a clipping.
+      const failed = data.results.filter((r) => !r.ok || r.score < 0.92).map((r) => r.verse + ' (' + (r.ok ? 'score ' + r.score.toFixed(2) : r.reason) + ')');
+      assert.deepEqual(failed, [], 'unsealed: ' + failed.join(', '));
+    }
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

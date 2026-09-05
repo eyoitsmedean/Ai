@@ -426,6 +426,16 @@ app.get('/welcome', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/review', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  const season = String(req.query.season || '').toLowerCase();
+  const q = new URLSearchParams({ review: '1' });
+  if (/^(advent|christmas|lent|easter|ordinary)$/.test(season)) q.set('season', season);
+  const leaf = String(req.query.leaf || '').toLowerCase();
+  if (/^(reveal|breath|parable|examen|blessing|forty)$/.test(leaf)) q.set('leaf', leaf);
+  res.redirect(302, '/?' + q.toString());
+});
+
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
   res.setHeader('Cache-Control', 'no-cache');

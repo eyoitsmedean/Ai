@@ -184,6 +184,14 @@ describe('similarity', () => {
     assert.ok(similarity(canon, canon) > 0.99);
     assert.ok(similarity(canon, 'try not to be sad, believe more') < 0.5);
   });
+
+  it('does not let a short verbatim clipping pass as the saying', () => {
+    const canon = lookup('John 14:27').text;
+    assert.ok(similarity(canon, 'Peace I leave with you') < 0.6, 'five words of thirty-one must not seal');
+    assert.ok(similarity(canon, 'Let not your heart be troubled, neither let it be afraid') < 0.92, 'a tail clause alone must not seal');
+    const twoVerse = lookup('Luke 15:11–12');
+    assert.ok(similarity(twoVerse.text, 'A certain man had two sons: And the younger of them said to his father, Father, give me the portion of goods that falleth to me.') >= 0.92, 'a full-sense span still seals');
+  });
 });
 
 describe('spoken corpus', () => {
