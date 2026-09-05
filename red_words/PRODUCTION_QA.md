@@ -13,7 +13,7 @@ Deadline: Thursday 3 Sep 2026 8:00am America/Boise.
 | 988 fallback | **PASS** — launcher `false`/`PlatformException` shows "This device can’t place calls. From a phone, call or text 988." No verse. |
 | Scripture pack | **PASS** — 100 WEB Gospel sayings; first `anxiety-mt-6-34` / Matthew 6:34 |
 | Android `assembleRelease` | **PASS** ×2 (2026-09-02, 2026-09-05 fresh VM) — APK label `Red Words`; id `com.redwords.redwords`; R8 mapping emitted. See `android/BUILD_PROOF.md`. Placeholder keystore, not Play. |
-| Android `bundleRelease` (AAB for Play) | **PASS** — `app-release.aab` 49.2 MB; 100 sayings / Mt 6:34 first / 4 Gospels read back out of the bundle. Placeholder signer. |
+| Android `bundleRelease` (AAB for Play) | **PASS** ×2 — latest `app-release.aab` 49.4 MB; 100 sayings / Mt 6:34 first / 4 Gospels read back out of the bundle; widget channel strings survive R8. Placeholder signer. |
 | iOS compile | **FAIL / blocked** — no Mac. WidgetKit sources **and** `RedWordsWidget` app-extension target are in `project.pbxproj`. See TESTFLIGHT.md. |
 
 ## Manual (founder phones)

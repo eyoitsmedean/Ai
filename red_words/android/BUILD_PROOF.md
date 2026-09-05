@@ -1,6 +1,30 @@
 # Android release build proof
 
-Two independent runs on Linux agents. Both green.
+Three runs on Linux agents. All green.
+
+## Run 3 — 2026-09-05 (after widget channel + 988 fallback)
+
+Same toolchain as Run 2. New Kotlin (`MainActivity` method channel, `SayingWidgetProvider` prefs file) compiled under AGP 9.1 / R8.
+
+```
+flutter analyze          No issues found!
+flutter test             +53: All tests passed!
+flutter build apk --release        ✓ app-release.apk (49.9MB)   assembleRelease 32.9s
+flutter build appbundle --release  ✓ app-release.aab (49.4MB)   bundleRelease 4.9s
+```
+
+Badging unchanged (`com.redwords.redwords`, `Red Words`, min 24, target 36). Signer unchanged (placeholder, not debug).
+
+R8 kept what the widget needs — strings present in `classes.dex`: `redwords/widget`, `red_words_widget`, `widget.word`, `widget.citation`, `widget.thread`; `mapping.txt` keeps `MainActivity` and `SayingWidgetProvider` under their real names (manifest components).
+
+Pack read back from the AAB: 100 · `anxiety-mt-6-34` · Matthew 6:34 · John/Luke/Mark/Matthew · `"license": "Public domain"`.
+
+SHA-256:
+
+```
+7352cde6e646fdeff80b055178e1f8900d52bdd492bee60c6dd6a528fa2878bc  app-release.apk
+e4ec2e307a34c250a157b8ce3e3e1fffbb0c29fbeb2c3addecf77e7956c8f2a7  app-release.aab
+```
 
 ## Run 2 — 2026-09-05 (fresh VM, toolchain reinstalled from scratch)
 
