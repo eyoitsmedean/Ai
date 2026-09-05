@@ -3,229 +3,447 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Five things worth doing</title>
-  <meta name="description" content="A 90-day brief. 5 September to 4 December 2026." />
+  <title>The Quire · Five things worth doing</title>
+  <meta name="description" content="A bound operating book. 5 September to 4 December 2026." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Instrument+Sans:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --paper: #f4efe4;
-      --ink: #1c1712;
-      --muted: #6b5e50;
-      --rule: #d8cfc0;
-      --crimson: #9c1c2a;
+      --folio: #fbf7ee;
+      --ink: #1b1610;
+      --muted: #7a6e5e;
+      --rule: rgba(27, 22, 16, .12);
+      --crimson: #8f1d1d;
+      --gold: #8a6a28;
       --wash: #efe6d4;
+      --violet: #5c4a62;
     }
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    html, body { margin: 0; background: var(--paper); color: var(--ink); }
     body {
       font-family: "Source Serif 4", Georgia, serif;
-      font-size: 1.05rem;
-      line-height: 1.55;
-      max-width: 40rem;
-      margin: 0 auto;
-      padding: 2.25rem 1.25rem 5rem;
+      font-size: 1.06rem;
+      line-height: 1.62;
     }
-    header { margin-bottom: 2.5rem; }
+    .wrap { max-width: 42rem; margin: 0 auto; padding: 0 1.25rem 6rem; }
+    .running {
+      position: sticky; top: 0; z-index: 4;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: .75rem;
+      padding: .65rem 0 .55rem;
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid transparent;
+      font-family: "Instrument Sans", system-ui, sans-serif;
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .running.is-scrolled { border-bottom-color: var(--rule); }
     .device {
-      display: inline-block;
-      width: 1.6rem; height: 1.6rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.45rem; height: 1.45rem;
       border: 1px solid var(--ink);
       border-radius: 999px;
       color: var(--crimson);
       font-family: Fraunces, serif;
       font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.5rem;
-      text-align: center;
-      vertical-align: middle;
-      margin-right: .4rem;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
     }
-    .running {
-      font-size: .72rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .ribbon {
+      width: 3px; height: 4.5rem;
+      background: var(--violet);
+      position: absolute; left: .55rem; top: 0;
+      opacity: .55;
     }
+    .title-leaf {
+      position: relative;
+      min-height: calc(100vh - 3rem);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 3.5rem 0 3rem;
+    }
+    .kicker { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
     h1 {
       font-family: Fraunces, serif;
       font-weight: 400;
-      font-size: 2.15rem;
-      line-height: 1.15;
-      margin: .6rem 0 .4rem;
+      font-size: clamp(2.4rem, 8vw, 3.6rem);
+      line-height: 1.08;
+      margin: .55rem 0 .4rem;
     }
-    .lede { color: var(--muted); font-style: italic; margin: 0 0 1.25rem; }
-    hr {
-      border: 0; border-top: 1px solid var(--rule);
-      margin: 2rem 0;
-    }
+    h1 em { color: var(--crimson); font-style: italic; }
+    .lede { font-family: Fraunces, serif; font-style: italic; font-size: 1.22rem; color: var(--muted); max-width: 28rem; }
+    .catch { margin-top: 2.5rem; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
     h2 {
       font-family: Fraunces, serif;
       font-weight: 400;
-      font-size: 1.45rem;
-      margin: 2.2rem 0 .35rem;
+      font-size: 1.85rem;
+      line-height: 1.15;
+      margin: 0 0 .35rem;
     }
     h2 em { color: var(--crimson); font-style: italic; }
     h3 {
-      font-size: .78rem;
-      letter-spacing: .12em;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: .72rem;
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--muted);
-      font-weight: 600;
-      margin: 1.25rem 0 .3rem;
+      font-weight: 500;
+      margin: 1.5rem 0 .35rem;
     }
-    p { margin: .55rem 0; }
-    ul { padding-left: 1.15rem; }
-    li { margin: .35rem 0; }
+    p { margin: .6rem 0; }
+    a { color: var(--crimson); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
+    .book { padding: 2.4rem 0 1rem; }
+    .num {
+      font-family: Fraunces, serif;
+      font-style: italic;
+      color: var(--crimson);
+      font-size: 1rem;
+    }
     .breath {
       font-family: Fraunces, serif;
       font-style: italic;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: var(--crimson);
-      margin: .25rem 0 1rem;
+      margin: .15rem 0 1rem;
     }
-    .pick {
-      background: var(--wash);
-      padding: 1.1rem 1.15rem;
-      border-left: 2px solid var(--crimson);
-      margin: 1.5rem 0;
+    .toc { list-style: none; padding: 0; margin: 1.25rem 0 0; }
+    .toc li { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--rule); }
+    .toc a { text-decoration: none; color: inherit; }
+    .toc a:hover em { color: var(--crimson); }
+    .toc em { font-family: Fraunces, serif; font-style: italic; }
+    .toc .pg { color: var(--muted); font-family: "Instrument Sans", sans-serif; font-size: .78rem; letter-spacing: .08em; }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; margin: .8rem 0 1.1rem; }
+    th, td { text-align: left; vertical-align: top; padding: .45rem .4rem .45rem 0; border-bottom: 1px solid var(--rule); }
+    th { font-family: "Instrument Sans", sans-serif; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+    ul { padding-left: 1.15rem; }
+    li { margin: .32rem 0; }
+    .card, .pick, .script {
+      background: var(--folio);
+      border: 1px solid var(--rule);
+      padding: 1rem 1.1rem;
+      margin: 1rem 0;
     }
-    .pick p:last-child { margin-bottom: 0; }
-    footer {
-      margin-top: 3rem;
-      font-size: .85rem;
-      color: var(--muted);
+    .pick { border-left: 2px solid var(--crimson); }
+    .script {
+      font-size: .98rem;
+      white-space: pre-wrap;
+      font-family: "Source Serif 4", Georgia, serif;
     }
-    a { color: var(--crimson); }
-    nav { margin: 1.25rem 0 0; font-size: .95rem; }
-    nav a { margin-right: .9rem; text-decoration: none; border-bottom: 1px solid var(--rule); }
-    nav a:hover { border-color: var(--crimson); }
+    .quire {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .45rem;
+      margin: 1rem 0 1.4rem;
+    }
+    .quire button, .ballot button {
+      font: inherit;
+      cursor: pointer;
+      background: var(--folio);
+      border: 1px solid var(--rule);
+      color: var(--ink);
+      text-align: left;
+    }
+    .quire button {
+      padding: .7rem .55rem .6rem;
+      min-height: 5.4rem;
+    }
+    .quire strong { display: block; font-family: Fraunces, serif; font-weight: 400; font-size: .95rem; }
+    .quire span { display: block; color: var(--muted); font-size: .78rem; margin-top: .2rem; }
+    .quire button[aria-pressed="true"], .ballot button[aria-pressed="true"] {
+      border-color: var(--crimson);
+      box-shadow: inset 0 0 0 1px var(--crimson);
+    }
+    .ballot { display: grid; gap: .5rem; margin: 1rem 0; }
+    .ballot button { padding: .85rem 1rem; }
+    .ballot b { font-family: Fraunces, serif; font-weight: 400; }
+    .saved { font-family: "Instrument Sans", sans-serif; font-size: .78rem; letter-spacing: .06em; color: var(--gold); min-height: 1.2em; }
+    .cal { display: grid; grid-template-columns: 7.2rem 1fr; gap: .35rem 1rem; margin: 1rem 0; }
+    .cal dt { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: .2rem; }
+    .cal dd { margin: 0; }
+    .nav-books {
+      display: flex; flex-wrap: wrap; gap: .55rem .9rem;
+      margin: 1.1rem 0 0;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: .86rem;
+    }
+    .nav-books a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+    .nav-books a:hover { border-color: var(--crimson); }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .88rem; }
+    @media (max-width: 640px) {
+      .quire { grid-template-columns: 1fr 1fr; }
+      .cal { grid-template-columns: 1fr; gap: .1rem; }
+      .cal dt { padding-top: .7rem; }
+    }
+    @media print {
+      .running, .ribbon, .nav-books { display: none; }
+      .title-leaf { min-height: auto; }
+      .book { break-inside: avoid; }
+      body { background: white; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="running"><span class="device">R</span> Studio · 5 Sep – 4 Dec 2026</div>
-    <h1>Five things worth doing</h1>
-    <p class="lede">A prompt was built from the life, then run. This is the output — not another catalog of businesses.</p>
-    <nav>
+  <div class="ribbon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="running" id="running">
+      <span><span class="device">Q</span> The quire</span>
+      <span>5 Sep – 4 Dec 26</span>
+    </div>
+
+    <header class="title-leaf" id="title">
+      <p class="kicker">Studio · operating book · for review</p>
+      <h1>Five things<br><em>worth doing</em></h1>
+      <p class="lede">Not ten more businesses. A bound expansion of the five — doctrine, calendar, scripts, and the rule that starves the factory.</p>
+      <ol class="toc">
+        <li><a href="#sit"><em>How to sit with this</em></a><span class="pg">12 min</span></li>
+        <li><a href="#math"><em>The math</em></a><span class="pg">20–35 hrs</span></li>
+        <li><a href="#compound"><em>I · The Compound</em></a><span class="pg">work hours</span></li>
+        <li><a href="#october"><em>II · October</em></a><span class="pg">the freeze</span></li>
+        <li><a href="#chapter"><em>III · One Chapter</em></a><span class="pg">one night</span></li>
+        <li><a href="#advent"><em>IV · Advent</em></a><span class="pg">Watch with me</span></li>
+        <li><a href="#factory"><em>V · The Factory</em></a><span class="pg">the ballot</span></li>
+      </ol>
+      <p class="catch">Catchword · October</p>
+    </header>
+
+    <nav class="nav-books" aria-label="Books">
       <a href="#compound">Compound</a>
       <a href="#october">October</a>
       <a href="#chapter">Chapter</a>
       <a href="#advent">Advent</a>
       <a href="#factory">Factory</a>
     </nav>
-  </header>
 
-  <p>Yesterday you already received ten income plans. The studio already holds five cash paths. None have a paid customer. The real 90 days are not ninety working days. September has maybe three optional weeks. October is a freeze you wrote into your own constitution. November has evenings. Call it twenty to thirty-five optional hours, total.</p>
-  <p>Anything that needs a funnel, a cohort of strangers, or a weekly content machine is a fantasy about a different season.</p>
+    <section class="book" id="sit">
+      <p class="num">Front matter</p>
+      <h2>How to sit with this</h2>
+      <p>Twelve minutes. Title leaf. The math. The pick. Then only the book you will run this month. The long form lives in <a href="./PLAYBOOK.md">PLAYBOOK.md</a> if you want every sitting card on paper.</p>
+      <div class="pick">
+        <h3>The pick, before the books</h3>
+        <p>If you can only run two: <strong>October</strong> and <strong>The Compound</strong>. They protect the household and the paycheck. If November opens: <strong>Advent</strong> or <strong>One Chapter</strong>, not both, unless writing is rest. The Factory is a rule, not a third life.</p>
+      </div>
+    </section>
 
-  <hr />
+    <section class="book" id="math">
+      <p class="num">Capacity</p>
+      <h2>The real ninety days</h2>
+      <p>September has maybe three optional weeks. October is a freeze you already wrote into your constitution. November has evenings. Call it twenty to thirty-five hours, total.</p>
+      <dl class="cal">
+        <dt>5–30 Sep</dt>
+        <dd>12–16 optional hours. Cohort live block. Family prep list. One URL sitting. Factory pick. Two memoir sittings if the window is open.</dd>
+        <dt>1–31 Oct</dt>
+        <dd>Zero optional. Job and household. Night work only if tomorrow morning is lighter.</dd>
+        <dt>1–28 Nov</dt>
+        <dd>8–12 hours. Seat sentence. Advent path and ten sends. Chapter to one reader. One factory conversation or <i>NONE</i>.</dd>
+        <dt>29 Nov–4 Dec</dt>
+        <dd>Watch only. Be a user. Count who returns on day two. Close the quire.</dd>
+      </dl>
+      <p>If two things collide: household gate, then job, then a Compound artifact already started, then Advent URL, then a chapter sitting, then the factory. Never the other direction.</p>
+    </section>
 
-  <article id="compound">
-    <h2>1 · <em>The Compound</em></h2>
-    <p class="breath">Make Q4 at work the business that already pays the house.</p>
-    <p>Treat the producer cohort and the artifacts you are already making as the 90-day project — not a side hustle you start after bedtime.</p>
-    <p>You said it yesterday: you are being paid to write prompts and coach sellers, and it is awesome. Week 2 of the cohort is live this Tuesday. Enablement is being rewritten as the person who can make AI change how sellers talk. That is the job you are already doing. A clearer seat inside a national firm is worth more than five local website fixes, and it uses hours you are already awake for.</p>
-    <h3>The work</h3>
-    <ul>
-      <li>This week: five real opportunities, one buyer-centered first sentence each. No new slides. Stop.</li>
-      <li>September: one artifact a week a seller can use without you in the room. Private outcome list only. Nothing leaves the building.</li>
-      <li>October: protect the job and the household. No optional after-hours polish.</li>
-      <li>November: one page for yourself about the seat you now own. If a scope conversation is real, have it.</li>
-    </ul>
-    <h3>Done</h3>
-    <p>A cohort that ran, a handful of used artifacts, and a sentence about 2027. Not a side-income dashboard.</p>
-    <h3>Kill</h3>
-    <p>If the household gate is red, this shrinks to “keep the job safe,” which still counts. If you start an enablement product at night, you have left the compound. Stop.</p>
-  </article>
+    <hr />
 
-  <article id="october">
-    <h2>2 · <em>October</em></h2>
-    <p class="breath">Design the freeze so the other four ideas have a household to come home to.</p>
-    <p>The 90-day project with the highest life ROI is the month you already named: a birthday, an arrival, two young boys, a partner who does not need a third operating system.</p>
-    <p>Your Family page is wiser than your Venture Studio. October will punish the habit of opening Notion when the window is open. A designed freeze is not quitting. It is the only way Advent, the memoir, and the job survive.</p>
-    <h3>The work</h3>
-    <ul>
-      <li>Before October: who has the boys if she goes in; the Tuesday work block on a calendar you will see; early birthday or cake at home.</li>
-      <li>October: one weekly household window, confirmed or not needed. No optional sprint. No new agent.</li>
-      <li>The only allowed night work: something that makes tomorrow morning lighter. If it is a product, it is the wrong night.</li>
-    </ul>
-    <h3>Done</h3>
-    <p>You are still a person the household can stand. The birthday happened. The arrival had a named adult for the boys. You did not start a sixth hub.</p>
-    <h3>Kill</h3>
-    <p>Any no — or uncertainty — on the family gate pauses everything else. That already is your rule.</p>
-  </article>
+    <article class="book" id="compound">
+      <p class="num">Book I</p>
+      <h2><em>The Compound</em></h2>
+      <p class="breath">Make Q4 at work the business that already pays the house.</p>
+      <p>You run enablement for a twelve-week producer cohort. Week 2 is a live block on <strong>Tuesday 8 September</strong>. Weeks 4 / 6 / 8 / 10 keep the same Monday twenty. No new slides. This book does not invent a twelfth module. It makes the quarter legible.</p>
+      <h3>Monday · twenty minutes · work hours</h3>
+      <ul>
+        <li>Five real opportunities in the approved system.</li>
+        <li>One buyer-centered first sentence each. Not five quotes.</li>
+        <li><strong>VERIFY · USE · STOP</strong> — verify the brief, use one relevant fact, ask one buyer question, stop talking.</li>
+        <li>No new slides. No after-hours chasing.</li>
+      </ul>
+      <h3>On their feet</h3>
+      <ul>
+        <li>Seven-second call: permission, one fact, silence after the ask.</li>
+        <li>Four minutes, no demo.</li>
+        <li>Close: one date, one artifact, one owner.</li>
+      </ul>
+      <p>Proof only after a named sales leader agrees: observed attempt, one correction, observed re-attempt within seven days. The leader owns both observations. You do not chase proof in a second brain.</p>
+      <h3>First-sentence mill</h3>
+      <div class="script">You have been [situation they already feel],
+and the next meeting will [cost they already fear],
+unless someone [the one job you can do with them this week].</div>
+      <p>Could they say it back without your product name? Does it name a date, a person, or a decision? If you delete the last clause, is it still true? Refuse invented ROI and “just circling back.”</p>
+      <h3>The weeks</h3>
+      <table>
+        <thead><tr><th>When</th><th>Finish</th><th>Stop</th></tr></thead>
+        <tbody>
+          <tr><td>Tue 8 Sep</td><td>Five sentences. One live block.</td><td>Stand up when the fifth exists.</td></tr>
+          <tr><td>Week of 14 Sep</td><td>One artifact a seller can use without you.</td><td>If it needs you in the room, cut it.</td></tr>
+          <tr><td>~Tue 22 Sep</td><td>Same Monday 20. Reuse.</td><td>No new slides.</td></tr>
+          <tr><td>Oct–Nov blocks</td><td>Keep the job. Same shape.</td><td>After-hours polish is contamination.</td></tr>
+          <tr><td>15–25 Nov</td><td>One private seat sentence.</td><td>A conversation only if it is real.</td></tr>
+        </tbody>
+      </table>
+      <h3>Seat sentence · write in November</h3>
+      <div class="script">In August I was the person who ______.
+By December I am the person they call when ______.
+In 2027 I want the seat that ______.
+I will not get there by building a night business that copies this job.</div>
+      <p>Names stay in the company system. Six outcome lines by December is a Compound. Sixty is a dashboard relapse.</p>
+    </article>
 
-  <article id="chapter">
-    <h2>3 · <em>One Chapter</em></h2>
-    <p class="breath">Finish one chapter of <i>Our War</i>. Give it to one trusted reader. Stop.</p>
-    <p>The book is the thing only you can make. Stop turning the veteran life into a service and write the night, not the offer.</p>
-    <p>You have a spine, a companion that is not allowed to invent firefights, and three named holes. Previous plans tried to productize veteran plus audio plus motif. That is a different object. A finished chapter is evidence. Another capsule brief is not.</p>
-    <h3>The work</h3>
-    <ul>
-      <li>Pick one hole. Coming home, or the apartment and the dog. Not both.</li>
-      <li>Forty-five minutes, two nights a week, September and November. October is off unless writing steadies you — one sitting, then stop.</li>
-      <li>Stay in the room. No TED ending. Never invent a name or a crash.</li>
-      <li>When it can be read aloud in under fifteen minutes, give it to one human who will tell you the truth. Not an agent.</li>
-    </ul>
-    <h3>Done</h3>
-    <p>One chapter, read by one person, three sentences of their reaction. No query letter. No website.</p>
-    <h3>Kill</h3>
-    <p>If a sitting turns into research about oral-history markets, you have left the book. Close the file.</p>
-  </article>
+    <article class="book" id="october">
+      <p class="num">Book II</p>
+      <h2><em>October</em></h2>
+      <p class="breath">Design the freeze so the other four have a household to come home to.</p>
+      <p>A birthday and an arrival. Your constitution already says protection lasts at least thirty days after birth, and longer if recovery needs it. Rest needs no receipt. Either adult may pause the weekly window without explanation.</p>
+      <h3>Before October · one Sunday · ten minutes</h3>
+      <ul>
+        <li>Who has the boys if she goes in — a name, not a protocol.</li>
+        <li>Tuesday work blocks on a calendar you will actually see.</li>
+        <li>His three: early, or cake at home after. Pick. Mark a wall.</li>
+        <li>Breakfast as a date stays a date or it moves.</li>
+        <li>One bag that makes a 2 a.m. exit boring. If it exists, do not reopen the list.</li>
+      </ul>
+      <h3>The night test</h3>
+      <div class="script">If I do this tonight, is tomorrow morning easier for her or the boys?
+If no, it is a product. It is the wrong night.</div>
+      <p>Allowed in October: required work, the household, one weekly window (Confirmed / Not confirmed / Not needed), and night work that lightens morning. Forbidden: optional sprints, new agents, research hours, domains, ads, a sixth hub, and opening this folio to add a book.</p>
+    </article>
 
-  <article id="advent">
-    <h2>4 · <em>Advent</em></h2>
-    <p class="breath">Put Red Letter in front of ten humans by 29 November. Do not add a feature.</p>
-    <p>The product is built. The category clock is real. Your 90 days include the first week of Advent and not Lent. Ship distribution, not architecture.</p>
-    <p>Hallow’s seasons move hundreds of thousands of downloads. You will not out-celebrity that. You can own a quieter claim: daily life from the words he actually spoke. Advent is a dress rehearsal for Ash Wednesday, 10 February 2027. A rehearsal with zero audience teaches you nothing.</p>
-    <p>Red Words is a separate ship line. Do not merge them. No Mac this quarter means no store this quarter.</p>
-    <h3>The work</h3>
-    <ul>
-      <li>September, one sitting: a real HTTPS URL. Open it on a phone as a stranger.</li>
-      <li>Do not add Paul, a feed, a paywall, a new shell, or a second corpus.</li>
-      <li>Before 29 November: twenty-eight Advent rooms, or Seven Days four times in seasonal clothes. Name the path. Film three quiet verticals. Send the link to ten people who will open it.</li>
-      <li>29 November to 4 December: be a user. Count who comes back on day two.</li>
-    </ul>
-    <h3>Done</h3>
-    <p>A URL a stranger can open. A named path. Ten sends. Three clips on the camera roll. A day-2 count, even if it is one.</p>
-    <h3>Kill</h3>
-    <p>Still redesigning on 15 November? Ship Today and stop. Buying ads before ten humans have sat is avoiding the scare of sending.</p>
-  </article>
+    <article class="book" id="chapter">
+      <p class="num">Book III</p>
+      <h2><em>One Chapter</em></h2>
+      <p class="breath">Finish one hole of <i>Our War</i>. One trusted reader. Stop.</p>
+      <p>The forward already named the book: the best people you served with, so other veterans feel less alone and the people who love them understand a little more. Two promised scenes are almost empty. Your last instruction to yourself was Chapter 11 — stay in the seconds after the noise. Do not write the decision.</p>
+      <h3>Pick the hole once</h3>
+      <div class="quire" id="hole">
+        <button type="button" data-hole="apartment" aria-pressed="false"><strong>Apartment &amp; the dog</strong><span>Ch 11 · default</span></button>
+        <button type="button" data-hole="home" aria-pressed="false"><strong>Coming home</strong><span>If the other night is wrong</span></button>
+      </div>
+      <p class="saved" id="hole-saved"></p>
+      <p>Write the apartment if you can. The scene is years ago: something has already left your hand; the sound is still in the room; the dog is backing up like the floor had changed. Empty hand — open or closed? The dog, or what broke? The first small, stupid, human thing next. Do not write Nepal, Nathan, counseling, or the meaning.</p>
+      <h3>Eight sittings · forty-five minutes</h3>
+      <table>
+        <thead><tr><th>#</th><th>Job</th><th>Done when</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Read the 2017 sentences. 200 words after the noise.</td><td>A sound is on the page.</td></tr>
+          <tr><td>2</td><td>The hand and the dog only.</td><td>You can see what the dog did.</td></tr>
+          <tr><td>3</td><td>The first small stupid action after.</td><td>The scene moves.</td></tr>
+          <tr><td>—</td><td>October off, unless writing steadies you.</td><td>One sitting, then stop.</td></tr>
+          <tr><td>4–5</td><td>Read aloud. Cut explanations. Mark what you do not remember.</td><td>No fake chronology.</td></tr>
+          <tr><td>6</td><td>Under fifteen minutes aloud.</td><td>A clock agrees.</td></tr>
+          <tr><td>7</td><td>One trusted reader. The ask below.</td><td>It left your hands.</td></tr>
+          <tr><td>8</td><td>Keep their three sentences. No rewrite unless a fact is false.</td><td>The 90 days can close.</td></tr>
+        </tbody>
+      </table>
+      <p>Sittings 1, 6, and 7 are enough. The others are craft, not permission to stall the send.</p>
+      <h3>The reader ask</h3>
+      <div class="script">I finished a chapter of the book. It is one night in an apartment, years ago. I do not want notes on market, structure, or whether it should be a podcast. I want three sentences: what you saw, where you did not believe me, and whether I sounded like I was performing. You can say you do not want to read it.</div>
+    </article>
 
-  <article id="factory">
-    <h2>5 · <em>The Factory</em></h2>
-    <p class="breath">Close the idea shop. Choose one existing cash lane for after October — or choose none.</p>
-    <p>Your scarce resource is not ideas. It is nights, and you have been spending them on prompts that produce more nights.</p>
-    <p>In thirty hours you asked for 90-day income plans twice, then asked again for five ideas. Zero of the existing lanes have a buyer. Another catalog is how the factory feeds. The executive project is to starve it.</p>
-    <h3>The work</h3>
-    <ul>
-      <li>Twenty minutes: read yesterday’s two folios once. Pick one cash lane, or write <i>NONE</i> through December, on This week. Do not build a new page for the pick.</li>
-      <li>If the pick is paid judgment on AI artifacts: freeze the readiness pack. After October, one application or one conversation. Not both. Not “to see.”</li>
-      <li>If the pick is a local one-fix: after October, walk into three places you already go. Look at the booking path. Say the sentence or do not.</li>
-      <li>If the pick is <i>NONE</i>: that is a finish. The other four are already a full life.</li>
-    </ul>
-    <h3>Done</h3>
-    <p>A written pick dated in September. One human conversation in November, or an explicit <i>NONE</i> you do not reopen when an agent offers a sixth menu.</p>
-    <h3>Kill</h3>
-    <p>The next time you type “build me 5 plans,” close the chat. If a lane needs a logo, a domain, or a new database, it is a relapse.</p>
-  </article>
+    <article class="book" id="advent">
+      <p class="num">Book IV</p>
+      <h2><em>Advent</em></h2>
+      <p class="breath">Put Red Letter in front of ten humans by 29 November. Do not add a feature.</p>
+      <p>The product is built. The paper already cools. First Sunday: <strong>29 November 2026</strong>. This quire closes <strong>4 December</strong>. You only have to prove week one in public. Weeks two through four exist so January-you is not inventing a path before Ash Wednesday, 10 February 2027.</p>
+      <p>No Paul. No feed. No paywall. No second corpus. No merge with Red Words. Never lock his words. Never a weekly price. Never talk as if the model were God.</p>
+      <h3>September · one sitting</h3>
+      <ul>
+        <li>Real HTTPS URL. PWA installable.</li>
+        <li>Text it to yourself. Open it as a stranger.</li>
+        <li>Sit Today. Send one blessing to one human you love.</li>
+        <li>Four marks on paper: glance, tutorial, blessing left the phone, urge to redesign.</li>
+      </ul>
+      <h3>The path · Watch with me</h3>
+      <p>Twenty-eight rooms. All speech already in this repo. Week 1 is Seven Days in seasonal clothes — you already built the ribbon. If wiring 28 rooms costs more than one November evening, ship week 1 and keep the rest as a table for January.</p>
+      <table>
+        <thead><tr><th>Week</th><th>Dates</th><th>Rooms</th></tr></thead>
+        <tbody>
+          <tr><td>Watch</td><td>29 Nov – 5 Dec</td><td>Come · Peace · Light · Love · Forgive · Abide · Go</td></tr>
+          <tr><td>Wait</td><td>6–12 Dec</td><td>Troubled · Overcome · Bread · Shepherd · Always · Willing · Ninety-nine</td></tr>
+          <tr><td>Prepare</td><td>13–19 Dec</td><td>Peacemakers · Anointed · Sent · Sufficient · Little flock · Comfortless · First</td></tr>
+          <tr><td>Near</td><td>20–26 Dec</td><td>Still · Sparrows · Joy · Sorrow · City on a hill · Bread · With you</td></tr>
+        </tbody>
+      </table>
+      <p>Verses are the ones already locked in Seven Days, Forty, and the curated packs — Matthew 11:28, John 14:27, John 8:12, John 13:34, Matthew 18:22, John 15:4, Matthew 28:20, then John 14:1, John 16:33, John 6:35, John 10:11, Matthew 26:39, Luke 15:4, Matthew 5:9, Luke 4:18, John 20:21, Matthew 6:34, Luke 12:32, John 14:18, Matthew 6:33, Mark 4:39, Luke 12:7, John 15:11, John 16:22, Matthew 5:14. Full citations sit in the playbook.</p>
+      <h3>Ten sends</h3>
+      <div class="script">I made a quiet page for the words Jesus actually spoke.
+If you want a week that does not shout, this is the door.
+It is free. His words stay free.
+[URL]
+If it is the wrong week, delete this. No offense.</div>
+      <p>Ten names on paper. When you have sent ten, stop recruiting. Film three quiet verticals — anxiety, blessing, ask — onto the camera roll. Posted or not. The meme account is not the funnel.</p>
+      <p>4 December: count who came back on day two. That number is the dress rehearsal. Money is Lent.</p>
+    </article>
 
-  <div class="pick">
-    <h3>The pick</h3>
-    <p>If you can only run two: <strong>October</strong> and <strong>The Compound</strong>. They protect the household and the paycheck. Everything else is optional craft.</p>
-    <p>If November opens and you still have heat: <strong>Advent</strong> is the only product motion that uses something you already built and a date that will not move. <strong>One Chapter</strong> is the only meaning project that cannot be copied. Run one of those, not both, unless writing <em>is</em> rest.</p>
-    <p>The Factory is not a third project. It is the rule that keeps you from commissioning a fourth folio tomorrow.</p>
+    <article class="book" id="factory">
+      <p class="num">Book V</p>
+      <h2><em>The Factory</em></h2>
+      <p class="breath">Close the idea shop. Choose one existing cash lane after October — or choose none.</p>
+      <p>The studio already holds more lanes than nights: Rescue, Lamp, Room, Storefront, capsules. This book is the third ask in two days. The executive project is to starve the shop.</p>
+      <h3>Ballot · twenty minutes · once</h3>
+      <div class="ballot" id="ballot">
+        <button type="button" data-pick="none" aria-pressed="false"><b>NONE</b> — a finish. The other four books are already a life. Recommended default.</button>
+        <button type="button" data-pick="lamp" aria-pressed="false"><b>The Lamp</b> — freeze the readiness pack. After October, one application or one conversation. Not both. Not “to see.”</button>
+        <button type="button" data-pick="fix" aria-pressed="false"><b>One-Fix</b> — after October, three places you already go. Look at the booking path. Say the sentence or do not. No site. No logo.</button>
+      </div>
+      <p class="saved" id="ballot-saved"></p>
+      <p>Date the pick on This week. Do not build a new page for it. Relapse signs: “build me 5 plans,” a new domain, ranking the old five, opening the readiness pack to add a sample.</p>
+    </article>
+
+    <div class="pick">
+      <h3>Close the leaf</h3>
+      <p>Do not ask another model for five more businesses this month. You are not under-strategized. You are over-crewed. The next useful prompt is “five first sentences for Tuesday,” or “200 words in the room,” or “open the URL.”</p>
+      <p>This folio stores no employer rows and no family names. Nothing here authorizes outreach, spend, or publication.</p>
+    </div>
+
+    <footer>
+      <p>Long form · <a href="./PLAYBOOK.md">PLAYBOOK.md</a> · first run · <a href="./FIVE.md">FIVE.md</a> · the prompt · <a href="./PROMPT.md">PROMPT.md</a></p>
+      <p>Set in Fraunces, Source Serif 4, and Instrument Sans. Crimson is for speech and the one active state. The silk in the gutter is Advent violet — waiting is the work.</p>
+    </footer>
   </div>
+  <script>
+    (function () {
+      var running = document.getElementById('running');
+      window.addEventListener('scroll', function () {
+        running.classList.toggle('is-scrolled', window.scrollY > 8);
+      }, { passive: true });
 
-  <hr />
-
-  <p>Do not ask another model for five more businesses this month. You are not under-strategized. You are over-crewed. The next useful prompt is “open the URL,” or “write 200 words in the room,” or “five first sentences for Tuesday.”</p>
-
-  <footer>
-    <p>Prompt and sources: <a href="./PROMPT.md">PROMPT.md</a> · long form: <a href="./FIVE.md">FIVE.md</a></p>
-    <p>No employer material. No family names. No outreach or purchase is authorized by this brief. Dollars attached to untested offers were left off on purpose.</p>
-  </footer>
+      function bindGroup(id, key, savedId, labels) {
+        var root = document.getElementById(id);
+        var saved = document.getElementById(savedId);
+        if (!root) return;
+        var current = null;
+        try { current = localStorage.getItem(key); } catch (e) {}
+        function paint(value) {
+          root.querySelectorAll('button').forEach(function (btn) {
+            var on = btn.getAttribute('data-hole') === value || btn.getAttribute('data-pick') === value;
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          if (saved) saved.textContent = value && labels[value] ? labels[value] : '';
+        }
+        paint(current);
+        root.addEventListener('click', function (e) {
+          var btn = e.target.closest('button');
+          if (!btn) return;
+          var value = btn.getAttribute('data-hole') || btn.getAttribute('data-pick');
+          try { localStorage.setItem(key, value); } catch (err) {}
+          paint(value);
+        });
+      }
+      bindGroup('hole', 'quire-hole', 'hole-saved', {
+        apartment: 'Picked · the apartment and the dog. Stay after the noise.',
+        home: 'Picked · coming home. Rooms, not analysis.'
+      });
+      bindGroup('ballot', 'quire-factory', 'ballot-saved', {
+        none: 'Dated on this device · NONE through December. That is a finish.',
+        lamp: 'Dated on this device · The Lamp. Freeze the pack. One conversation after October.',
+        fix: 'Dated on this device · One-Fix. Three doors after October. No logo.'
+      });
+    })();
+  </script>
 </body>
 </html>
