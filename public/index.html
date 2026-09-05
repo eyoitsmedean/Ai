@@ -214,6 +214,8 @@ textarea { font-family: var(--body); }
   .titlepage.leaving { animation: none; opacity: 0; }
   .sit-rest-word, .word-reveal span { animation: none !important; opacity: 1 !important; }
   html.sitting .sit-sheet { transition: none; }
+  .breath-ring, .breath-ring.inhale, .breath-ring.hold, .breath-ring.exhale { transform: none !important; transition: border-color .4s ease; }
+  .breath-ring.inhale, .breath-ring.hold { border-color: var(--crimson); }
 }
 .tp-mark {
   width: 46px;
@@ -782,6 +784,7 @@ textarea { font-family: var(--body); }
 }
 .trust-line { font-size: 12.5px; color: var(--ink-3); line-height: 1.55; max-width: 52ch; }
 .trust-line a { color: var(--crimson); }
+.rights-line { font-size: 11.5px; color: var(--ink-4); line-height: 1.5; max-width: 60ch; margin-top: 10px; }
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
 .chip {
   background: none;
@@ -1405,6 +1408,7 @@ html.sitting .sit-sheet {
 }
 .press-card[data-format="story"] { aspect-ratio: 9 / 16; max-width: 240px; }
 .press-card[data-format="square"] { aspect-ratio: 1 / 1; }
+.press-card[data-format="grid"] { aspect-ratio: 3 / 4; }
 .press-card-kicker {
   font-size: 10px;
   letter-spacing: .2em;
@@ -1447,7 +1451,15 @@ html.sitting .sit-sheet {
   font-style: italic;
   font-size: 14px;
   color: var(--ink-3);
-  margin: -8px 0 22px;
+  margin: -8px 0 8px;
+}
+.forty-method {
+  font-family: var(--body);
+  font-size: 12.5px;
+  color: var(--ink-4);
+  max-width: 48ch;
+  line-height: 1.55;
+  margin: 0 0 22px;
 }
 @media (max-width: 640px) {
   .forty-grid { grid-template-columns: repeat(5, 1fr); }
@@ -1758,7 +1770,7 @@ html[data-review="1"] .review-ribbon { display: block; }
     </div>
     <label class="tp-trust">
       <input type="checkbox" id="ob-ack" onchange="document.getElementById('ob-open').disabled = !this.checked" />
-      <span>This is not a person, and it is not therapy, medical care, or pastoral counseling. If you are in crisis, call or text <a href="tel:988">988</a> in the U.S., or find a local helpline at <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</span>
+      <span>This is not a person, and it is not therapy, medical care, or pastoral counseling. If you are in crisis, call or text <a href="tel:988">988</a> in the U.S. (or chat at <a href="https://988lifeline.org" target="_blank" rel="noreferrer">988lifeline.org</a>), or find a local helpline at <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</span>
     </label>
     <div id="ob-ack-block">
       <button class="tp-open" id="ob-open" disabled onclick="showNeedStep()">Turn the page</button>
@@ -1982,7 +1994,7 @@ html[data-review="1"] .review-ribbon { display: block; }
             <p class="eyebrow">Correspondence</p>
             <h1 class="display">The <em>Advisor</em></h1>
             <p class="welcome">Write what is true. The reply is written by software, then His words are set on the page from the Gospels.</p>
-            <p class="trust-line">Not a person, not a pastor, not a clinician. If you are in danger: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+            <p class="trust-line">Not a person, not a pastor, not a clinician. If you are in danger: <a href="tel:988">988</a> (U.S. · call, text, or <a href="https://988lifeline.org" target="_blank" rel="noreferrer">chat</a>) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
           </div>
           <div class="suggestions" id="suggestions">
             <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
@@ -2039,7 +2051,7 @@ html[data-review="1"] .review-ribbon { display: block; }
               <div class="breath-word" id="breath-word">Peace</div>
             </div>
           </div>
-          <p class="breath-phase" id="breath-phase">Still</p>
+          <p class="breath-phase" id="breath-phase" aria-live="polite">Still</p>
           <p class="red-letter" id="breath-quote"></p>
           <p class="cite" id="breath-cite"></p>
           <p class="press-deck" id="breath-note"></p>
@@ -2095,6 +2107,8 @@ html[data-review="1"] .review-ribbon { display: block; }
             <button class="ghost on" type="button" data-format="feed" onclick="setBlessFormat('feed')">Feed 4:5</button>
             <button class="ghost" type="button" data-format="story" onclick="setBlessFormat('story')">Story 9:16</button>
             <button class="ghost" type="button" data-format="square" onclick="setBlessFormat('square')">Square</button>
+    <button class="ghost" type="button" data-format="grid" onclick="setBlessFormat('grid')">Grid 3:4</button>
+            <button class="ghost" type="button" data-format="grid" onclick="setBlessFormat('grid')" title="Fills the profile grid without a crop">Grid 3:4</button>
           </div>
           <div class="press-plate">
             <div class="press-card" id="press-card" data-format="feed">
@@ -2126,6 +2140,7 @@ html[data-review="1"] .review-ribbon { display: block; }
           <p class="press-deck" id="forty-note"></p>
           <div class="forty-grid" id="forty-grid" role="group" aria-label="Forty rooms"></div>
           <p class="forty-tally" id="forty-tally"></p>
+          <p class="forty-method">Counted the old way: Ash Wednesday to Holy Saturday, Sundays not numbered. The Missal closes Lent on Holy Thursday evening; the rooms simply keep going.</p>
           <p class="eyebrow" id="forty-room-title"></p>
           <p class="red-letter" id="forty-quote"></p>
           <p class="cite" id="forty-cite"></p>
@@ -2272,7 +2287,8 @@ html[data-review="1"] .review-ribbon { display: block; }
     <button class="ghost" type="button" onclick="startNewReader()">Begin again</button>
   </div>
   <div class="sheet-about">
-    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S. · call, text, or <a href="https://988lifeline.org" target="_blank" rel="noreferrer">chat</a>) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p class="rights-line" id="rights-line">Scripture quotations from The Authorized (King James) Version. Rights in the Authorized Version in the United Kingdom are vested in the Crown. Reproduced by permission of the Crown’s patentee, Cambridge University Press.</p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
@@ -2337,6 +2353,7 @@ html[data-review="1"] .review-ribbon { display: block; }
     <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
     <div class="crisis-actions">
       <a href="tel:988">Call or text 988 (US)</a>
+      <a href="https://988lifeline.org" target="_blank" rel="noreferrer">Chat at 988lifeline.org</a>
       <a href="https://findahelpline.com" target="_blank" rel="noreferrer">Find a helpline anywhere</a>
     </div>
     <p>If you are in immediate danger, call your local emergency number. This page is not a person.</p>
@@ -3655,12 +3672,27 @@ function setSaveBtnState(type, saved) {
   lbl.textContent = saved ? 'Kept' : (type === 'enc' ? 'Keep this' : 'Keep');
 }
 
+let sheetBlobs = {};
+let sheetBlobsFor = '';
 function openShareSheet(type) {
   pendingShareType = type;
   closeSit();
   closeSettings();
   closeBlessing();
   openSheetChrome('share-sheet');
+  // Press the three cards while the reader is choosing, so the tap can share at once.
+  const payload = sharePayload(type);
+  sheetBlobs = {};
+  sheetBlobsFor = '';
+  if (!payload) return;
+  const token = type + ':' + (payload.verse || '') + ':' + blessFormat;
+  Promise.all(['parchment', 'dawn', 'void'].map((s) => renderShareCard(payload, s, blessFormat)))
+    .then((blobs) => {
+      if (pendingShareType !== type) return;
+      sheetBlobs = { parchment: blobs[0], dawn: blobs[1], void: blobs[2] };
+      sheetBlobsFor = token;
+    })
+    .catch(() => {});
 }
 function closeShareSheet() {
   document.getElementById('share-sheet').classList.remove('on');
@@ -3669,6 +3701,12 @@ function closeShareSheet() {
 function shareWithStyle(style) {
   const type = pendingShareType;
   closeShareSheet();
+  const payload = sharePayload(type);
+  const token = type + ':' + ((payload && payload.verse) || '') + ':' + blessFormat;
+  if (payload && sheetBlobs[style] && sheetBlobsFor === token) {
+    shareBlobNow(sheetBlobs[style], payload, 'red-letter.png');
+    return;
+  }
   shareItem(type, style);
 }
 function sharePayload(type) {
@@ -3722,7 +3760,23 @@ function paintShareGround(ctx, w, h, style) {
 function shareSize(format) {
   if (format === 'story') return { w: 1080, h: 1920 };
   if (format === 'square') return { w: 1080, h: 1080 };
+  if (format === 'grid') return { w: 1080, h: 1440 };
   return { w: 1080, h: 1350 };
+}
+
+/* Safari before 18.4 ignores ctx.letterSpacing; the wordmark is tracked by hand there. */
+function drawTracked(ctx, text, x, y, spacing) {
+  if ('letterSpacing' in ctx) {
+    ctx.letterSpacing = spacing + 'px';
+    ctx.fillText(text, x, y);
+    ctx.letterSpacing = '0px';
+    return;
+  }
+  let cx = x;
+  for (const ch of text) {
+    ctx.fillText(ch, cx, y);
+    cx += ctx.measureText(ch).width + spacing;
+  }
 }
 
 function renderShareCard(payload, style, format) {
@@ -3739,9 +3793,7 @@ function renderShareCard(payload, style, format) {
   ctx.strokeRect(56, 56, w - 112, h - 112);
   ctx.fillStyle = colors.red;
   ctx.font = '500 28px "Instrument Sans", sans-serif';
-  ctx.letterSpacing = '8px';
-  ctx.fillText('RED LETTER', margin, 160);
-  ctx.letterSpacing = '0px';
+  drawTracked(ctx, 'RED LETTER', margin, 160, 8);
   ctx.fillStyle = colors.mute;
   ctx.font = 'italic 28px Fraunces, serif';
   ctx.fillText(payload.kicker || payload.theme || 'The Gospels', margin, 220);
@@ -4359,11 +4411,16 @@ function showPressLeaf(id) {
   if (known.indexOf(id) === -1) id = 'reveal';
   pressLeaf = id;
   pressTouched = true;
-  document.querySelectorAll('.press-leaf').forEach((el) => el.classList.toggle('on', el.dataset.leaf === id));
+  document.querySelectorAll('.press-leaf').forEach((el) => {
+    const on = el.dataset.leaf === id;
+    el.classList.toggle('on', on);
+    el.hidden = !on;
+  });
   document.querySelectorAll('#press-walk button').forEach((btn) => {
     const on = btn.dataset.leaf === id;
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    btn.tabIndex = on ? 0 : -1;
   });
   if (id !== 'breath') stopBreath(false);
   if (id === 'reveal') replayReveal();
@@ -4388,12 +4445,27 @@ function paintPress() {
   ];
   if (!reviewMode && !pressTouched) pressLeaf = pressLeafForHour();
   walk.innerHTML = leaves.map(([id, label]) =>
-    '<button type="button" role="tab" data-leaf="' + id + '" aria-selected="' + (id === pressLeaf ? 'true' : 'false') + '"' + (id === pressLeaf ? ' class="on"' : '') + '>' + label + '</button>'
+    '<button type="button" role="tab" id="press-tab-' + id + '" aria-controls="press-' + id + '" data-leaf="' + id + '" aria-selected="' + (id === pressLeaf ? 'true' : 'false') + '" tabindex="' + (id === pressLeaf ? '0' : '-1') + '"' + (id === pressLeaf ? ' class="on"' : '') + '>' + label + '</button>'
   ).join('');
-  walk.querySelectorAll('button').forEach((btn) => {
+  const tabs = Array.from(walk.querySelectorAll('button'));
+  tabs.forEach((btn, i) => {
     btn.onclick = () => showPressLeaf(btn.dataset.leaf);
+    btn.onkeydown = (e) => {
+      const keys = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      const next = tabs[(keys[e.key] + tabs.length) % tabs.length];
+      showPressLeaf(next.dataset.leaf);
+      next.focus();
+    };
   });
-  document.querySelectorAll('.press-leaf').forEach((el) => el.classList.toggle('on', el.dataset.leaf === pressLeaf));
+  document.querySelectorAll('.press-leaf').forEach((el) => {
+    const on = el.dataset.leaf === pressLeaf;
+    el.classList.toggle('on', on);
+    el.hidden = !on;
+    el.setAttribute('role', 'tabpanel');
+    el.setAttribute('aria-labelledby', 'press-tab-' + el.dataset.leaf);
+  });
   const rev = data.reveal || {};
   setText('reveal-kicker', rev.kicker);
   setText('reveal-cite', (rev.verse || '') + '  ·  KJV');
@@ -4456,17 +4528,16 @@ function cycleBreath(phase) {
   const ring = document.getElementById('breath-ring');
   const word = document.getElementById('breath-word');
   const label = document.getElementById('breath-phase');
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion removes the ring's swell (CSS), never the count. The words still turn.
   const map = {
-    inhale: { word: br.inhale || 'Peace', phase: 'Inhale', next: 'hold', ms: reduce ? 0 : 4000 },
-    hold: { word: br.hold || 'be', phase: 'Hold', next: 'exhale', ms: reduce ? 0 : 4000 },
-    exhale: { word: br.exhale || 'still', phase: 'Exhale', next: 'inhale', ms: reduce ? 0 : 6000 }
+    inhale: { word: br.inhale || 'Peace', phase: 'Inhale', next: 'hold', ms: 4000 },
+    hold: { word: br.hold || 'be', phase: 'Hold', next: 'exhale', ms: 4000 },
+    exhale: { word: br.exhale || 'still', phase: 'Exhale', next: 'inhale', ms: 6000 }
   };
   const step = map[phase] || map.inhale;
   if (ring) ring.className = 'breath-ring ' + phase;
   if (word) word.textContent = step.word;
   if (label) label.textContent = step.phase;
-  if (reduce) return;
   breathTimer = setTimeout(() => cycleBreath(step.next), step.ms);
 }
 
@@ -4568,7 +4639,12 @@ function lentInfo(now) {
   for (let i = 0; i <= daysFromAsh; i += 1) {
     if (addDaysLocal(ash, i).getDay() !== 0) day += 1;
   }
-  return { inLent: true, ash, day: Math.min(day, 40), sunday: today.getDay() === 0, preview: false };
+  const easter = easterSunday(year);
+  // Palm Sunday opens Holy Week; the Roman rite ends Lent on Holy Thursday evening and
+  // names the three days after it the Triduum. The rooms keep counting; the label tells the truth.
+  const holyWeek = ymdNum(today) >= ymdNum(addDaysLocal(easter, -7));
+  const triduum = ymdNum(today) >= ymdNum(addDaysLocal(easter, -3)) && (today.getDay() !== 4 || d.getHours() >= 17);
+  return { inLent: true, ash, day: Math.min(day, 40), sunday: today.getDay() === 0, holyWeek, triduum, preview: false };
 }
 function fortyInfo() {
   const info = lentInfo();
@@ -4582,8 +4658,9 @@ function longDate(d) {
 }
 function fortyKicker(info) {
   if (info.inLent) {
-    if (info.sunday) return 'Lent · Sunday · the rooms rest, and stay open';
-    return (info.preview ? 'Lent (preview) · ' : 'Lent · ') + 'Day ' + info.day + ' of Forty';
+    const season = info.triduum ? 'Triduum' : info.holyWeek ? 'Holy Week' : 'Lent';
+    if (info.sunday) return (info.holyWeek ? 'Palm Sunday' : 'Lent · Sunday') + ' · the rooms rest, and stay open';
+    return season + (info.preview ? ' (preview)' : '') + ' · Day ' + info.day + ' of Forty';
   }
   if (info.daysUntil === 1) return 'Ash Wednesday tomorrow · ' + longDate(info.ash);
   return 'Ash Wednesday · ' + longDate(info.ash) + ' · in ' + info.daysUntil + ' days';
@@ -4713,6 +4790,7 @@ function paintPressCard() {
 /* Proofs: the three real PNGs the reader would send, pulled as they type. */
 let proofTimer = null;
 let proofUrls = [];
+let proofBlobs = {};
 function scheduleProofs() {
   clearTimeout(proofTimer);
   proofTimer = setTimeout(paintProofs, 220);
@@ -4729,6 +4807,8 @@ async function paintProofs() {
   } catch (_) {
     return;
   }
+  proofBlobs = {};
+  styles.forEach(([style], i) => { proofBlobs[style] = blobs[i]; });
   proofUrls.forEach((u) => { try { URL.revokeObjectURL(u); } catch (_) {} });
   proofUrls = blobs.map((b) => URL.createObjectURL(b));
   host.innerHTML = styles.map(([style, label], i) =>
@@ -4763,13 +4843,39 @@ function blessingPayload() {
   };
 }
 
-async function sendPressBlessing(style) {
+function sendPressBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
   const nameEl = document.getElementById('blessing-for');
   const pressName = document.getElementById('press-bless-name');
   if (nameEl && pressName) nameEl.value = pressName.value;
-  await shareItem('blessing', style || 'parchment');
-  showToast('Card ready — one person, not a feed');
+  const key = style || 'parchment';
+  const ready = proofBlobs[key];
+  // The proof is already pressed; hand it to the share sheet inside the tap itself.
+  if (ready) {
+    shareBlobNow(ready, blessingPayload(), 'red-letter-blessing-' + key + '.png');
+    return;
+  }
+  shareItem('blessing', key).then(() => showToast('Card ready — one person, not a feed'));
+}
+
+/* Web Share needs the user's gesture still live. No awaits before share() on this path. */
+function shareBlobNow(blob, payload, filename) {
+  const text = payload.title + '\n\n' + (payload.note ? payload.note + '\n\n' : '') + payload.quote + '\n— ' + payload.verse;
+  try {
+    const file = new File([blob], filename || 'red-letter.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: 'Red Letter', text })
+        .then(() => showToast('Sent — one person, not a feed'))
+        .catch((err) => { if (!err || err.name !== 'AbortError') downloadBlob(blob, filename, 'Card saved'); });
+      return;
+    }
+  } catch (_) {}
+  if (navigator.share) {
+    navigator.share({ title: 'Red Letter', text }).catch(() => {});
+    downloadBlob(blob, filename, 'Card saved · the words were shared as text');
+    return;
+  }
+  downloadBlob(blob, filename, 'Card saved');
 }
 
 function pressPayload(kind) {
@@ -4934,7 +5040,9 @@ async function toggleReminder(on) {
   }
   if (!('Notification' in window)) {
     document.getElementById('reminder-toggle').checked = false;
-    showToast('Notifications aren’t available here');
+    // iOS exposes Notification only inside a Home Screen web app launched from its icon.
+    const iOS = /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.navigator.standalone;
+    showToast(iOS ? 'On iPhone, add the room to the Home Screen first, then turn this on' : 'Notifications aren’t available here');
     return;
   }
   let permission = Notification.permission;
