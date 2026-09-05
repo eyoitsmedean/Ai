@@ -42,4 +42,19 @@ class MomentEngine {
     if (moment == null) return null;
     return WidgetPayload.fromSaying(moment.word);
   }
+
+  /// Today's card plus the whole locked rotation, in slot order.
+  WidgetStore? widgetStoreFor(DateTime date) {
+    final today = widgetFor(date);
+    if (today == null) return null;
+    final rotation = <WidgetPayload>[];
+    for (final slot in catalog.daily) {
+      final locked = catalog.lock(slot);
+      if (locked == null) return null;
+      rotation.add(WidgetPayload.fromSaying(locked.word));
+    }
+    final store = WidgetStore(today: today, rotation: rotation);
+    store.assertCraftLaw();
+    return store;
+  }
 }

@@ -40,11 +40,13 @@ class WidgetBridge {
   static Future<void> sync({
     required String word,
     required String citation,
+    String? rotation,
   }) async {
     try {
       await channel.invokeMethod<void>('sync', {
         'word': word,
         'citation': citation,
+        'rotation': ?rotation,
       });
     } on MissingPluginException {
       // Widget host is iOS/Android only.
@@ -55,6 +57,8 @@ class WidgetBridge {
 class LinkBridge {
   static const channel = MethodChannel('redwords/links');
 
+  /// Returns the pending link and clears it on the host, so a widget tap
+  /// while the app is suspended routes once and only once.
   static Future<String?> initial() async {
     try {
       return await channel.invokeMethod<String>('initial');

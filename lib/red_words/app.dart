@@ -10,6 +10,9 @@ import 'theme.dart';
 
 enum AppLeaf { title, today, sit, seek, room, seven, pathDay, blessing, about, empty }
 
+/// Hosts hand the app a pending deep link; tests inject one.
+typedef PendingLink = Future<String?> Function();
+
 class RedWordsApp extends StatefulWidget {
   const RedWordsApp({
     super.key,
@@ -17,6 +20,7 @@ class RedWordsApp extends StatefulWidget {
     this.now,
     this.session,
     this.initialLink,
+    this.pendingLink,
     this.syncWidget = true,
   });
 
@@ -24,13 +28,14 @@ class RedWordsApp extends StatefulWidget {
   final DateTime? now;
   final SessionStore? session;
   final String? initialLink;
+  final PendingLink? pendingLink;
   final bool syncWidget;
 
   @override
   State<RedWordsApp> createState() => _RedWordsAppState();
 }
 
-class _RedWordsAppState extends State<RedWordsApp> {
+class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
   late final MomentEngine engine = MomentEngine(widget.catalog);
   late SessionStore session;
   AppLeaf leaf = AppLeaf.title;
@@ -45,18 +50,45 @@ class _RedWordsAppState extends State<RedWordsApp> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     session = widget.session ?? SessionStore();
     _boot();
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _consumePendingLink();
+    }
+  }
+
   bool get _hostless => widget.session != null;
+
+  Future<String?> _takeLink() async {
+    if (widget.pendingLink != null) return widget.pendingLink!();
+    if (_hostless) return null;
+    return LinkBridge.initial();
+  }
+
+  /// A widget tap while the book is open on another leaf turns to Today.
+  Future<void> _consumePendingLink() async {
+    if (!ready || widget.catalog.isEmpty) return;
+    final link = RedWordsLink.parse(await _takeLink());
+    if (RedWordsLink.isToday(link) && mounted) {
+      await _openToday();
+    }
+  }
 
   Future<void> _boot() async {
     final opened = await session.hasOpened();
     Uri? link = RedWordsLink.parse(widget.initialLink);
-    if (link == null && !_hostless) {
-      link = RedWordsLink.parse(await LinkBridge.initial());
-    }
+    link ??= RedWordsLink.parse(await _takeLink());
     AppLeaf next;
     if (widget.catalog.isEmpty || moment == null) {
       next = AppLeaf.empty;
@@ -81,9 +113,13 @@ class _RedWordsAppState extends State<RedWordsApp> {
 
   Future<void> _pushWidget() async {
     if (!widget.syncWidget) return;
-    final payload = engine.widgetFor(now);
-    if (payload == null) return;
-    await WidgetBridge.sync(word: payload.word, citation: payload.citation);
+    final store = engine.widgetStoreFor(now);
+    if (store == null) return;
+    await WidgetBridge.sync(
+      word: store.today.word,
+      citation: store.today.citation,
+      rotation: store.rotationJson(),
+    );
   }
 
   Future<void> _openToday() async {

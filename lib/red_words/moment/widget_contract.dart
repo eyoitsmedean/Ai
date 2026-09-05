@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'models.dart';
 
 /// Craft law: Widget = Word only.
@@ -46,6 +48,49 @@ class WidgetPayload {
       if (hay.contains(token.toLowerCase())) {
         throw StateError('Widget card contains forbidden chrome: $token');
       }
+    }
+  }
+}
+
+/// What crosses the App Group / SharedPreferences.
+///
+/// `word` and `citation` are today's card. `rotation` is the whole seven-slot
+/// daily cycle so the native widget can pick the right Word at each local
+/// midnight without the app ever running. Each rotation entry is itself a
+/// Word-only card.
+class WidgetStore {
+  const WidgetStore({required this.today, required this.rotation});
+
+  final WidgetPayload today;
+  final List<WidgetPayload> rotation;
+
+  static const allowedKeys = {'word', 'citation', 'rotation'};
+
+  /// Same clock as `dailyIndexFor`: floor(localMidnightEpochMs / 86400000) % length.
+  static int slotFor(DateTime date, int length) {
+    if (length <= 0) return 0;
+    final midnight = DateTime(date.year, date.month, date.day);
+    return (midnight.millisecondsSinceEpoch / 86400000).floor() % length;
+  }
+
+  String rotationJson() => jsonEncode([
+        for (final p in rotation) {'word': p.word, 'citation': p.citation},
+      ]);
+
+  Map<String, String> toMap() => {
+        'word': today.word,
+        'citation': today.citation,
+        'rotation': rotationJson(),
+      };
+
+  void assertCraftLaw() {
+    final keys = toMap().keys.toSet();
+    if (keys.difference(allowedKeys).isNotEmpty) {
+      throw StateError('Widget store has chrome keys: $keys');
+    }
+    today.assertCraftLaw();
+    for (final p in rotation) {
+      p.assertCraftLaw();
     }
   }
 }

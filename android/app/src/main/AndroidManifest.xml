@@ -33,6 +33,7 @@
             android:label="@string/widget_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="com.redwords.red_words.MIDNIGHT"/>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

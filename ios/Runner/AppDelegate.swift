@@ -4,26 +4,12 @@ import WidgetKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
-  static var initialLink: String?
+  /// Set by SceneDelegate. Under the UIScene lifecycle UIKit does not deliver
+  /// URLs to the app delegate, so this is the only capture point.
+  static var pendingLink: String?
 
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    if let url = launchOptions?[.url] as? URL {
-      AppDelegate.initialLink = url.absoluteString
-    }
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-
-  override func application(
-    _ app: UIApplication,
-    open url: URL,
-    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-  ) -> Bool {
-    AppDelegate.initialLink = url.absoluteString
-    return super.application(app, open: url, options: options)
-  }
+  static let suite = "group.com.redwords.redWords"
+  static let widgetKind = "RedWordsWidget"
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
@@ -39,10 +25,13 @@ import WidgetKit
           result(FlutterMethodNotImplemented)
           return
         }
-        let defaults = UserDefaults(suiteName: "group.com.redwords.redWords")
+        let defaults = UserDefaults(suiteName: AppDelegate.suite)
         defaults?.set(word, forKey: "word")
         defaults?.set(citation, forKey: "citation")
-        WidgetCenter.shared.reloadTimelines(ofKind: "RedWordsWidget")
+        if let rotation = args["rotation"] as? String {
+          defaults?.set(rotation, forKey: "rotation")
+        }
+        WidgetCenter.shared.reloadTimelines(ofKind: AppDelegate.widgetKind)
         result(nil)
       }
 
@@ -61,7 +50,10 @@ import WidgetKit
     FlutterMethodChannel(name: "redwords/links", binaryMessenger: messenger)
       .setMethodCallHandler { call, result in
         if call.method == "initial" {
-          result(AppDelegate.initialLink)
+          // Consume: a widget tap routes once, then the slate is clean.
+          let link = AppDelegate.pendingLink
+          AppDelegate.pendingLink = nil
+          result(link)
         } else if call.method == "tel", let number = call.arguments as? String {
           if let url = URL(string: "tel:\(number)") {
             UIApplication.shared.open(url)

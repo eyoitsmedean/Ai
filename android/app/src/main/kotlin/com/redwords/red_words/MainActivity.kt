@@ -1,7 +1,5 @@
 package com.redwords.red_words
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -35,18 +33,16 @@ class MainActivity : FlutterActivity() {
             }
             val word = call.argument<String>("word") ?: ""
             val citation = call.argument<String>("citation") ?: ""
-            getSharedPreferences(RedWordsWidget.PREFS, Context.MODE_PRIVATE)
+            val rotation = call.argument<String>("rotation")
+            val editor = getSharedPreferences(RedWordsWidget.PREFS, Context.MODE_PRIVATE)
                 .edit()
                 .putString("word", word)
                 .putString("citation", citation)
-                .apply()
-            val manager = AppWidgetManager.getInstance(this)
-            val ids = manager.getAppWidgetIds(ComponentName(this, RedWordsWidget::class.java))
-            if (ids.isNotEmpty()) {
-                val update = Intent(this, RedWordsWidget::class.java).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-                update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-                sendBroadcast(update)
+            if (rotation != null) {
+                editor.putString("rotation", rotation)
             }
+            editor.apply()
+            RedWordsWidget.refreshAll(this)
             result.success(null)
         }
 
@@ -64,7 +60,12 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(messenger, "redwords/links").setMethodCallHandler { call, result ->
             when (call.method) {
-                "initial" -> result.success(initialLink)
+                "initial" -> {
+                    // Consume: a widget tap routes once, then the slate is clean.
+                    val link = initialLink
+                    initialLink = null
+                    result.success(link)
+                }
                 "tel" -> {
                     val number = call.arguments as? String
                     if (!number.isNullOrBlank()) {
