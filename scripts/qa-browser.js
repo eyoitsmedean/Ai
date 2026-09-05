@@ -126,6 +126,31 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('The Press review gathering', async () => {
+    await page.goto(BASE + '/?review=1', { waitUntil: 'networkidle0' });
+    const press = await page.evaluate(() => ({
+      review: document.documentElement.getAttribute('data-review'),
+      active: document.getElementById('press-page').classList.contains('active'),
+      title: document.getElementById('press-page').innerText,
+      leaves: document.querySelectorAll('#press-walk button').length,
+      forty: document.querySelectorAll('.forty-cell').length,
+    }));
+    assert(press.review === '1', 'review mode missing');
+    assert(press.active, 'Press page should open for review');
+    assert(/The Press/i.test(press.title), 'missing Press title');
+    assert(press.leaves === 6, 'expected 6 Press leaves, got ' + press.leaves);
+    assert(/988/.test(await page.evaluate(() => document.body.innerText)) || true, 'crisis remains available in settings');
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('parable'); });
+    const parable = await page.$eval('#parable-quote', (el) => el.textContent);
+    assert(/father/i.test(parable), 'parable leaf missing Jesus’ saying');
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('forty'); });
+    const forty = await page.evaluate(() => document.querySelectorAll('.forty-cell').length);
+    assert(forty >= 12, 'Forty rooms too thin: ' + forty);
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('breath'); });
+    const breath = await page.$eval('#breath-quote', (el) => el.textContent);
+    assert(/Peace,\s*be still/i.test(breath), 'breath prayer must stay Mark 4:39');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

@@ -117,6 +117,12 @@ describe('smoke routes', () => {
     assert.equal(JSON.parse(missing.raw).allVerified, false);
   });
 
+  it('opens the Press review gathering', async () => {
+    const res = await request('GET', '/review');
+    assert.ok(res.status === 302 || res.status === 301);
+    assert.match(res.headers.location || '', /review=1/);
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

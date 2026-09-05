@@ -568,7 +568,7 @@ textarea { font-family: var(--body); }
   text-transform: uppercase;
   color: var(--ink-3);
 }
-.ghost:hover, .ghost.saved { border-color: var(--crimson); color: var(--crimson); }
+.ghost:hover, .ghost.saved, .ghost.on { border-color: var(--crimson); color: var(--crimson); }
 
 .word-title {
   font-family: var(--display);
@@ -1263,6 +1263,199 @@ html.sitting .sit-sheet {
   animation: rise .55s var(--ease) both;
 }
 
+/* ── The Press ── */
+.press-walk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 36px;
+}
+.press-walk button {
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 7px 11px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.press-walk button.on,
+.press-walk button:hover { border-color: var(--crimson); color: var(--crimson); }
+.press-leaf {
+  display: none;
+  margin-bottom: 56px;
+  animation: rise .4s var(--ease);
+}
+.press-leaf.on { display: block; }
+.press-deck {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-2);
+  max-width: 42ch;
+  margin: 10px 0 22px;
+  line-height: 1.6;
+}
+.press-reveal {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(26px, 5vw, 38px);
+  line-height: 1.35;
+  color: var(--crimson);
+  max-width: 18ch;
+  min-height: 4.2em;
+}
+.press-reveal span { display: inline; animation: rise .7s var(--ease) both; }
+.breath-stage {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  margin: 12px 0 20px;
+}
+.breath-ring {
+  width: min(240px, 70vw);
+  height: min(240px, 70vw);
+  border-radius: 50%;
+  border: 1px solid var(--rule-2);
+  display: grid;
+  place-items: center;
+  transition: transform 4s ease-in-out, background .4s var(--ease);
+  background: color-mix(in srgb, var(--crimson) 4%, var(--folio));
+}
+.breath-ring.inhale { transform: scale(1.12); transition-duration: 4s; }
+.breath-ring.hold { transform: scale(1.12); transition-duration: 4s; }
+.breath-ring.exhale { transform: scale(.92); transition-duration: 6s; }
+.breath-word {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(32px, 8vw, 48px);
+  color: var(--crimson);
+  letter-spacing: -0.03em;
+}
+.breath-phase {
+  text-align: center;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.parable-marks {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 22px;
+}
+.parable-marks button {
+  flex: 1;
+  height: 4px;
+  padding: 0;
+  border: 0;
+  background: var(--rule-2);
+}
+.parable-marks button.on { background: var(--crimson); }
+.parable-title {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+.examen-list { display: grid; gap: 22px; margin: 22px 0; }
+.examen-item label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 6px;
+}
+.examen-item .hint {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-3);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.bless-name {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  padding: 10px 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  outline: none;
+  margin: 8px 0 18px;
+}
+.bless-name:focus { border-bottom-color: var(--crimson); }
+.press-formats { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+.press-card {
+  width: min(100%, 320px);
+  aspect-ratio: 4 / 5;
+  margin: 8px 0 20px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+}
+.press-card[data-format="story"] { aspect-ratio: 9 / 16; max-width: 240px; }
+.press-card[data-format="square"] { aspect-ratio: 1 / 1; }
+.press-card-kicker {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.press-card-for {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  margin: 10px 0 16px;
+}
+.press-card-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.35;
+  color: var(--crimson);
+}
+.forty-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin: 18px 0 22px;
+}
+.forty-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--rule);
+  background: none;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.forty-cell:hover, .forty-cell.on { border-color: var(--crimson); color: var(--crimson); }
+.forty-cell.done { background: color-mix(in srgb, var(--crimson) 10%, transparent); color: var(--crimson); }
+@media (max-width: 640px) {
+  .forty-grid { grid-template-columns: repeat(5, 1fr); }
+}
+.review-ribbon {
+  display: none;
+  margin: 0 0 28px;
+  padding: 10px 0 14px;
+  border-bottom: 1px solid var(--gold);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+html[data-review="1"] .review-ribbon { display: block; }
+.nav-btn { font-size: 9px; }
+
 .amen {
   position: fixed;
   inset: 0;
@@ -1516,6 +1709,7 @@ html.sitting .sit-sheet {
       <button class="rail-btn" id="rail-seek" onclick="switchTab('seek')"><span class="idx">II</span><span class="lbl">Seek</span></button>
       <button class="rail-btn" id="rail-advisor" onclick="switchTab('advisor')"><span class="idx">III</span><span class="lbl">Advisor</span></button>
       <button class="rail-btn" id="rail-journal" onclick="switchTab('journal')"><span class="idx">IV</span><span class="lbl">Journal</span></button>
+      <button class="rail-btn" id="rail-press" onclick="switchTab('press')"><span class="idx">V</span><span class="lbl">Press</span></button>
     </nav>
     <div class="rail-foot">
       <div class="rail-catch" id="rail-catch" hidden></div>
@@ -1620,6 +1814,7 @@ html.sitting .sit-sheet {
           <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
           <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
           <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
+          <button class="cta cta-ghost" type="button" onclick="switchTab('press')">Open the Press</button>
         </div>
         <div class="colophon">
           <span id="folio-colophon">Set in the Gospels. Not a person.</span>
@@ -1735,6 +1930,116 @@ html.sitting .sit-sheet {
         <div class="quire" id="quire" hidden></div>
         <div id="journal-list"></div>
       </div>
+
+      <div class="page" id="press-page">
+        <p class="review-ribbon" id="review-ribbon">Reviewer’s gathering · The Press</p>
+        <p class="eyebrow" id="press-eyebrow">The atelier</p>
+        <h1 class="display">The <em>Press</em></h1>
+        <p class="lede" style="margin:14px 0 8px">Craft the book already knew: a sentence arriving, a breath, a parable turned as leaves, an evening examen, a blessing for one person, forty rooms before Lent.</p>
+        <div class="press-walk" id="press-walk" role="tablist" aria-label="The Press"></div>
+
+        <section class="press-leaf on" id="press-reveal" data-leaf="reveal">
+          <p class="eyebrow" id="reveal-kicker">A sentence arriving</p>
+          <h2 class="parable-title">Word reveal</h2>
+          <p class="press-reveal" id="reveal-quote" aria-live="polite"></p>
+          <p class="cite" id="reveal-cite"></p>
+          <p class="press-deck" id="reveal-note"></p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="replayReveal()">Hear it arrive again</button>
+            <button class="ghost" type="button" onclick="sitPress('reveal')">Sit with this</button>
+          </div>
+        </section>
+
+        <section class="press-leaf" id="press-breath" data-leaf="breath">
+          <p class="eyebrow">Inhale · hold · exhale</p>
+          <h2 class="parable-title">Breath prayer</h2>
+          <div class="breath-stage">
+            <div class="breath-ring" id="breath-ring" aria-hidden="true">
+              <div class="breath-word" id="breath-word">Peace</div>
+            </div>
+          </div>
+          <p class="breath-phase" id="breath-phase">Still</p>
+          <p class="red-letter" id="breath-quote"></p>
+          <p class="cite" id="breath-cite"></p>
+          <p class="press-deck" id="breath-note"></p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" id="breath-toggle" onclick="toggleBreath()">Begin the breath</button>
+            <button class="ghost" type="button" onclick="sitPress('breath')">Sit with this</button>
+          </div>
+        </section>
+
+        <section class="press-leaf" id="press-parable" data-leaf="parable">
+          <p class="eyebrow">Luke 15</p>
+          <h2 class="parable-title">The lost son</h2>
+          <p class="press-deck" id="parable-deck"></p>
+          <div class="parable-marks" id="parable-marks"></div>
+          <p class="eyebrow" id="parable-leaf-title"></p>
+          <p class="red-letter" id="parable-quote"></p>
+          <p class="cite" id="parable-cite"></p>
+          <p class="press-deck" id="parable-note"></p>
+          <div class="folio-turn">
+            <button class="ghost" type="button" id="parable-prev" onclick="turnParable(-1)">Previous leaf</button>
+            <button class="ghost" type="button" id="parable-next" onclick="turnParable(1)">Next leaf</button>
+          </div>
+          <div class="actions" style="margin-top:18px">
+            <button class="cta cta-primary" type="button" onclick="sitPress('parable')">Sit with this leaf</button>
+          </div>
+        </section>
+
+        <section class="press-leaf" id="press-examen" data-leaf="examen">
+          <p class="eyebrow">Compline on paper</p>
+          <h2 class="parable-title">Evening examen</h2>
+          <p class="red-letter" id="examen-quote"></p>
+          <p class="cite" id="examen-cite"></p>
+          <p class="press-deck" id="examen-note"></p>
+          <div class="examen-list" id="examen-list"></div>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="keepExamen()">Keep the evening</button>
+            <button class="ghost" type="button" onclick="sitPress('examen')">Sit with the peace</button>
+          </div>
+        </section>
+
+        <section class="press-leaf" id="press-blessing" data-leaf="blessing">
+          <p class="eyebrow">One person, not a feed</p>
+          <h2 class="parable-title">The blessing press</h2>
+          <p class="press-deck" id="bless-note-copy"></p>
+          <label class="eyebrow" for="press-bless-name">For</label>
+          <input class="bless-name" id="press-bless-name" type="text" maxlength="48" placeholder="a name…" autocomplete="off" />
+          <div class="press-formats" id="press-formats">
+            <button class="ghost on" type="button" data-format="feed" onclick="setBlessFormat('feed')">Feed 4:5</button>
+            <button class="ghost" type="button" data-format="story" onclick="setBlessFormat('story')">Story 9:16</button>
+            <button class="ghost" type="button" data-format="square" onclick="setBlessFormat('square')">Square</button>
+          </div>
+          <div class="press-card" id="press-card" data-format="feed">
+            <div>
+              <div class="press-card-kicker">Red Letter</div>
+              <div class="press-card-for" id="press-card-for">For you</div>
+              <div class="press-card-quote" id="press-card-quote"></div>
+            </div>
+            <p class="cite" id="press-card-cite"></p>
+          </div>
+          <div id="press-bless-list"></div>
+          <div class="actions" style="margin-top:18px">
+            <button class="cta cta-primary" type="button" onclick="sendPressBlessing('parchment')">Print the card</button>
+            <button class="ghost" type="button" onclick="sendPressBlessing('dawn')">Dawn</button>
+            <button class="ghost" type="button" onclick="sendPressBlessing('void')">Night</button>
+          </div>
+        </section>
+
+        <section class="press-leaf" id="press-forty" data-leaf="forty">
+          <p class="eyebrow" id="forty-kicker">Ash Wednesday 10 February 2027</p>
+          <h2 class="parable-title">Forty rooms</h2>
+          <p class="press-deck" id="forty-note"></p>
+          <div class="forty-grid" id="forty-grid"></div>
+          <p class="red-letter" id="forty-quote"></p>
+          <p class="cite" id="forty-cite"></p>
+          <p class="press-deck" id="forty-reflect"></p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="sitPress('forty')">Sit this room</button>
+            <button class="ghost" type="button" onclick="markFortyRoom()">Mark received</button>
+          </div>
+        </section>
+      </div>
     </div>
 
     <nav class="dock" id="nav">
@@ -1753,6 +2058,10 @@ html.sitting .sit-sheet {
       <button class="nav-btn" id="nav-journal" onclick="switchTab('journal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         Keep
+      </button>
+      <button class="nav-btn" id="nav-press" onclick="switchTab('press')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        Press
       </button>
     </nav>
   </div>
@@ -1878,9 +2187,16 @@ html.sitting .sit-sheet {
     <div class="sheet-title" id="blessing-title">Send a blessing</div>
     <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
   </div>
-  <p class="sit-copy">A saying, a short note, and a card. Nothing else is added.</p>
+  <p class="sit-copy">A name, a saying, a short note, and a card. Nothing else is added.</p>
+  <label class="sr-only" for="blessing-for">For whom</label>
+  <input class="bless-name" id="blessing-for" type="text" maxlength="48" placeholder="For…" autocomplete="off" />
   <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
   <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="A word for them…"></textarea>
+  <div class="press-formats" id="blessing-formats">
+    <button class="ghost on" type="button" data-format="feed" onclick="setBlessFormat('feed')">Feed</button>
+    <button class="ghost" type="button" data-format="story" onclick="setBlessFormat('story')">Story</button>
+    <button class="ghost" type="button" data-format="square" onclick="setBlessFormat('square')">Square</button>
+  </div>
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
   <div class="actions" style="margin-top:18px">
@@ -1946,6 +2262,7 @@ html.sitting .sit-sheet {
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
 <script src="/data/paths.js"></script>
+<script src="/data/press.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -1998,7 +2315,15 @@ let cmdIndex = 0;
 let cmdFiltered = [];
 let ritualsBound = false;
 let openFirstSit = false;
+let reviewMode = false;
+let forcedSeason = '';
 let currentSeason = { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' };
+let pressLeaf = 'reveal';
+let parableIndex = 0;
+let breathTimer = null;
+let breathOn = false;
+let blessFormat = 'feed';
+let fortyIndex = 0;
 
 function civilDate(y, m, d) { return new Date(y, m - 1, d); }
 function ymdNum(date) {
@@ -2049,7 +2374,19 @@ function churchYear(date) {
   return seasons.ordinary;
 }
 function applySeason() {
-  currentSeason = churchYear(new Date());
+  const forced = { advent: 1, christmas: 1, lent: 1, easter: 1, ordinary: 1 }[forcedSeason] ? forcedSeason : '';
+  currentSeason = forced
+    ? (function () {
+      const map = {
+        advent: { id: 'advent', name: 'Advent', runningHead: 'Advent', note: 'A violet thread. Waiting is the work.' },
+        christmas: { id: 'christmas', name: 'Christmas', runningHead: 'Christmas', note: 'The Word became flesh, and the paper warms.' },
+        lent: { id: 'lent', name: 'Lent', runningHead: 'Lent', note: 'Unbleached paper. The sentence is enough.' },
+        easter: { id: 'easter', name: 'Easter', runningHead: 'Easter', note: 'Gold in the rule. He is not in the tomb.' },
+        ordinary: { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' },
+      };
+      return map[forced] || churchYear(new Date());
+    }())
+    : churchYear(new Date());
   if (!document.documentElement.dataset.theme) document.documentElement.dataset.theme = 'light';
   document.documentElement.dataset.season = currentSeason.id;
   const brand = document.getElementById('brand-sub');
@@ -2108,11 +2445,26 @@ function startNewReader() {
       clearReaderStorage();
       history.replaceState({}, '', '/');
     }
+    if (q.get('review') === '1') {
+      reviewMode = true;
+      lsSet('rla-onboarded', '1');
+      document.documentElement.dataset.review = '1';
+    }
+    const season = String(q.get('season') || '').toLowerCase();
+    if (/^(advent|christmas|lent|easter|ordinary)$/.test(season)) forcedSeason = season;
   } catch (_) {}
   setWatch();
   applySeason();
   paintThemeIndex();
   bindRituals();
+  if (reviewMode) {
+    document.getElementById('onboarding').classList.add('hidden');
+    document.getElementById('app').removeAttribute('aria-hidden');
+    startApp();
+    switchTab('press');
+    showPressLeaf('reveal');
+    return;
+  }
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
@@ -2172,6 +2524,7 @@ function startApp() {
   bindRituals();
   checkMorningReminder();
   paintInstallState();
+  paintPress();
 }
 
 function switchTab(tab) {
@@ -2188,11 +2541,12 @@ function switchTab(tab) {
     rail.classList.add('active');
     rail.setAttribute('aria-current', 'page');
   }
-  const subs = { today: 'Today', seek: 'Seek', advisor: 'Advisor', journal: 'Journal' };
-  document.getElementById('header-sub').textContent = subs[tab];
-  document.title = 'Red Letter — ' + subs[tab];
+  const subs = { today: 'Today', seek: 'Seek', advisor: 'Advisor', journal: 'Journal', press: 'The Press' };
+  document.getElementById('header-sub').textContent = subs[tab] || tab;
+  document.title = 'Red Letter — ' + (subs[tab] || tab);
   if (tab === 'journal') renderJournal();
   if (tab === 'seek' && seekMode === 'letters' && !libLoaded) loadLibraryPage(true);
+  if (tab === 'press') paintPress();
 }
 
 function padDate(d) {
@@ -2770,7 +3124,7 @@ function paintSitPayload(payload) {
 }
 
 function sitWith(type) {
-  const payload = sitPayloadFor(type);
+  const payload = type && typeof type === 'object' ? type : sitPayloadFor(type);
   if (!payload) return;
   sitPayload = payload;
   sitStep = 1;
@@ -3259,8 +3613,14 @@ function paintShareGround(ctx, w, h, style) {
   return { ink: '#1B1610', red: '#8F1D1D', mute: '#7A6E5E', frame: 'rgba(27,22,16,0.14)' };
 }
 
-function renderShareCard(payload, style) {
-  const w = 1080, h = 1350;
+function shareSize(format) {
+  if (format === 'story') return { w: 1080, h: 1920 };
+  if (format === 'square') return { w: 1080, h: 1080 };
+  return { w: 1080, h: 1350 };
+}
+
+function renderShareCard(payload, style, format) {
+  const { w, h } = shareSize(format || blessFormat || 'feed');
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
   const ctx = c.getContext('2d');
@@ -3294,14 +3654,21 @@ function renderShareCard(payload, style) {
   return new Promise(resolve => c.toBlob(resolve, 'image/png'));
 }
 
+function blessingForName() {
+  const a = document.getElementById('press-bless-name');
+  const b = document.getElementById('blessing-for');
+  const name = ((a && a.value) || (b && b.value) || '').trim();
+  return name ? ('For ' + name) : 'For you';
+}
+
 async function shareItem(type, style) {
   const payload = type === 'blessing' && blessingPick
-    ? { kicker: 'A blessing', title: (document.getElementById('blessing-note').value.trim() || 'For you'), quote: blessingPick.quote, verse: blessingPick.verse }
+    ? { kicker: 'A blessing', title: blessingForName(), quote: blessingPick.quote, verse: blessingPick.verse, note: (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '' }
     : sharePayload(type);
   if (!payload) return;
   const text = payload.title + '\n\n' + payload.quote + '\n— ' + payload.verse;
   try {
-    const blob = await renderShareCard(payload, style);
+    const blob = await renderShareCard(payload, style, blessFormat);
     const file = new File([blob], 'red-letter.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], title: 'Red Letter', text });
@@ -3312,7 +3679,7 @@ async function shareItem(type, style) {
     navigator.share({ title: 'Red Letter', text }).catch(() => {});
   } else {
     try {
-      const blob = await renderShareCard(payload, style);
+      const blob = await renderShareCard(payload, style, blessFormat);
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'red-letter.png';
@@ -3790,7 +4157,8 @@ function updateBlessingPreview() {
   const preview = document.getElementById('blessing-preview');
   if (!preview || !blessingPick) return;
   const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
-  preview.innerHTML = (note ? '<div class="blessing-preview-note">' + esc(note) + '</div>' : '') +
+  preview.innerHTML = '<div class="blessing-preview-note">' + esc(blessingForName()) + '</div>' +
+    (note ? '<div class="blessing-preview-note">' + esc(note) + '</div>' : '') +
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
     '<div class="cite">' + esc(blessingPick.verse) + '</div>';
 }
@@ -3814,11 +4182,285 @@ function printSitting() {
   setTimeout(() => document.body.classList.remove('printing'), 500);
 }
 
+function pressData() { return window.RLA_PRESS || {}; }
+
+function showPressLeaf(id) {
+  pressLeaf = id;
+  document.querySelectorAll('.press-leaf').forEach((el) => el.classList.toggle('on', el.dataset.leaf === id));
+  document.querySelectorAll('#press-walk button').forEach((btn) => btn.classList.toggle('on', btn.dataset.leaf === id));
+  if (id === 'reveal') replayReveal();
+  if (id === 'breath') stopBreath(true);
+  if (id === 'parable') paintParable();
+  if (id === 'blessing') paintPressBlessing();
+  if (id === 'forty') paintForty();
+}
+
+function paintPress() {
+  const data = pressData();
+  const walk = document.getElementById('press-walk');
+  if (!walk) return;
+  const leaves = [
+    ['reveal', 'Reveal'],
+    ['breath', 'Breathe'],
+    ['parable', 'Parable'],
+    ['examen', 'Examen'],
+    ['blessing', 'Bless'],
+    ['forty', 'Forty']
+  ];
+  walk.innerHTML = leaves.map(([id, label]) =>
+    '<button type="button" role="tab" data-leaf="' + id + '"' + (id === pressLeaf ? ' class="on"' : '') + '>' + label + '</button>'
+  ).join('');
+  walk.querySelectorAll('button').forEach((btn) => {
+    btn.onclick = () => showPressLeaf(btn.dataset.leaf);
+  });
+  const rev = data.reveal || {};
+  setText('reveal-kicker', rev.kicker);
+  setText('reveal-cite', (rev.verse || '') + '  ·  KJV');
+  setText('reveal-note', rev.note);
+  const br = data.breath || {};
+  setText('breath-quote', br.quote);
+  setText('breath-cite', (br.verse || '') + '  ·  KJV');
+  setText('breath-note', br.note);
+  setText('parable-deck', (data.parable || {}).deck);
+  const ex = data.examen || {};
+  setText('examen-quote', ex.quote);
+  setText('examen-cite', (ex.verse || '') + '  ·  KJV');
+  setText('examen-note', ex.note);
+  paintExamen();
+  setText('bless-note-copy', (data.blessing || {}).note);
+  setText('forty-kicker', (data.forty || {}).kicker);
+  setText('forty-note', (data.forty || {}).note);
+  if (pressLeaf === 'reveal') replayReveal();
+  if (pressLeaf === 'parable') paintParable();
+  if (pressLeaf === 'blessing') paintPressBlessing();
+  if (pressLeaf === 'forty') paintForty();
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value || '';
+}
+
+function replayReveal() {
+  const rev = (pressData().reveal || {});
+  revealWords(document.getElementById('reveal-quote'), rev.quote || '');
+}
+
+function stopBreath(reset) {
+  breathOn = false;
+  clearTimeout(breathTimer);
+  const ring = document.getElementById('breath-ring');
+  const btn = document.getElementById('breath-toggle');
+  if (ring) ring.className = 'breath-ring';
+  if (btn) btn.textContent = 'Begin the breath';
+  if (reset) {
+    const br = pressData().breath || {};
+    setText('breath-word', br.inhale || 'Peace');
+    setText('breath-phase', 'Still');
+  }
+}
+
+function toggleBreath() {
+  if (breathOn) { stopBreath(true); return; }
+  breathOn = true;
+  const btn = document.getElementById('breath-toggle');
+  if (btn) btn.textContent = 'Stop';
+  cycleBreath('inhale');
+}
+
+function cycleBreath(phase) {
+  if (!breathOn) return;
+  const br = pressData().breath || {};
+  const ring = document.getElementById('breath-ring');
+  const word = document.getElementById('breath-word');
+  const label = document.getElementById('breath-phase');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const map = {
+    inhale: { word: br.inhale || 'Peace', phase: 'Inhale', next: 'hold', ms: reduce ? 0 : 4000 },
+    hold: { word: br.hold || 'be', phase: 'Hold', next: 'exhale', ms: reduce ? 0 : 4000 },
+    exhale: { word: br.exhale || 'still', phase: 'Exhale', next: 'inhale', ms: reduce ? 0 : 6000 }
+  };
+  const step = map[phase] || map.inhale;
+  if (ring) ring.className = 'breath-ring ' + phase;
+  if (word) word.textContent = step.word;
+  if (label) label.textContent = step.phase;
+  if (reduce) return;
+  breathTimer = setTimeout(() => cycleBreath(step.next), step.ms);
+}
+
+function paintParable() {
+  const leaves = ((pressData().parable || {}).leaves) || [];
+  if (!leaves.length) return;
+  parableIndex = Math.max(0, Math.min(parableIndex, leaves.length - 1));
+  const leaf = leaves[parableIndex];
+  const marks = document.getElementById('parable-marks');
+  if (marks) {
+    marks.innerHTML = leaves.map((_, i) => '<button type="button" aria-label="Leaf ' + (i + 1) + '"' + (i === parableIndex ? ' class="on"' : '') + '></button>').join('');
+    marks.querySelectorAll('button').forEach((btn, i) => { btn.onclick = () => { parableIndex = i; paintParable(); }; });
+  }
+  setText('parable-leaf-title', leaf.title);
+  setText('parable-quote', leaf.quote);
+  setText('parable-cite', (leaf.verse || '') + '  ·  KJV');
+  setText('parable-note', leaf.note);
+  const prev = document.getElementById('parable-prev');
+  const next = document.getElementById('parable-next');
+  if (prev) prev.disabled = parableIndex <= 0;
+  if (next) next.disabled = parableIndex >= leaves.length - 1;
+}
+
+function turnParable(dir) {
+  parableIndex += dir;
+  paintParable();
+}
+
+function paintExamen() {
+  const host = document.getElementById('examen-list');
+  const prompts = ((pressData().examen || {}).prompts) || [];
+  if (!host) return;
+  host.innerHTML = prompts.map((p) =>
+    '<div class="examen-item">' +
+      '<label for="examen-' + p.id + '">' + esc(p.label) + '</label>' +
+      '<p class="hint">' + esc(p.hint) + '</p>' +
+      '<textarea class="sit-reply" id="examen-' + p.id + '" rows="2" placeholder="One sentence…"></textarea>' +
+    '</div>'
+  ).join('');
+}
+
+function keepExamen() {
+  const prompts = ((pressData().examen || {}).prompts) || [];
+  const lines = prompts.map((p) => {
+    const val = (document.getElementById('examen-' + p.id) || {}).value || '';
+    return val.trim() ? (p.label + ': ' + val.trim()) : '';
+  }).filter(Boolean);
+  if (!lines.length) { showToast('Write one leaf first'); return; }
+  const ex = pressData().examen || {};
+  saveJournalItem({
+    id: 'examen-' + todayStr(),
+    key: 'examen-' + todayStr(),
+    type: 'examen',
+    title: 'Evening examen',
+    body: lines.join('\n'),
+    verse: ex.verse || 'John 14:27'
+  });
+  openAmen({ quote: ex.quote, verse: ex.verse, holdMs: 3200 });
+}
+
+function fortyState() {
+  const raw = parseJSON(ls('rla-forty'), null);
+  if (raw && Array.isArray(raw.done)) return raw;
+  return { started: todayStr(), done: [] };
+}
+
+function paintForty() {
+  const rooms = (window.RLA_pathList && window.RLA_pathList('forty')) || window.RLA_FORTY || [];
+  const host = document.getElementById('forty-grid');
+  if (!host) return;
+  const state = fortyState();
+  fortyIndex = Math.max(0, Math.min(fortyIndex, Math.max(rooms.length - 1, 0)));
+  host.innerHTML = rooms.map((room, i) => {
+    const done = state.done.indexOf(i) !== -1;
+    return '<button type="button" class="forty-cell' + (i === fortyIndex ? ' on' : '') + (done ? ' done' : '') + '" data-i="' + i + '">' + (i + 1) + '</button>';
+  }).join('');
+  host.querySelectorAll('button').forEach((btn) => {
+    btn.onclick = () => { fortyIndex = Number(btn.dataset.i); paintForty(); };
+  });
+  const room = rooms[fortyIndex];
+  if (room) {
+    setText('forty-quote', room.passage);
+    setText('forty-cite', (room.verse || '') + '  ·  ' + (room.title || '') + '  ·  KJV');
+    setText('forty-reflect', room.reflection || '');
+  }
+}
+
+function markFortyRoom() {
+  const state = fortyState();
+  if (state.done.indexOf(fortyIndex) === -1) state.done.push(fortyIndex);
+  lsSet('rla-forty', JSON.stringify(state));
+  paintForty();
+  showToast('Room received. A missed day stays open.');
+}
+
+function setBlessFormat(format) {
+  blessFormat = format || 'feed';
+  document.querySelectorAll('#press-formats .ghost, #blessing-formats .ghost').forEach((btn) => {
+    btn.classList.toggle('on', btn.dataset.format === blessFormat);
+  });
+  const card = document.getElementById('press-card');
+  if (card) card.dataset.format = blessFormat;
+}
+
+function paintPressBlessing() {
+  const list = document.getElementById('press-bless-list');
+  blessingSeeds().then((picks) => {
+    if (!blessingPick) blessingPick = picks[0] || null;
+    if (list) {
+      list.innerHTML = picks.map((item, index) => {
+        const selected = blessingPick && blessingPick.verse === item.verse;
+        return '<button type="button" class="blessing-item' + (selected ? ' selected' : '') + '" data-index="' + index + '">' +
+          '<span class="blessing-item-cite">' + esc(item.verse) + '</span>' +
+          '<span>' + esc(item.quote) + '</span></button>';
+      }).join('');
+      list.querySelectorAll('.blessing-item').forEach((btn) => {
+        btn.onclick = () => {
+          blessingPick = picks[Number(btn.getAttribute('data-index'))];
+          paintPressCard();
+          paintPressBlessing();
+        };
+      });
+    }
+    paintPressCard();
+  });
+}
+
+function paintPressCard() {
+  const name = (document.getElementById('press-bless-name') || {}).value || '';
+  setText('press-card-for', name.trim() ? ('For ' + name.trim()) : 'For you');
+  setText('press-card-quote', blessingPick ? ('“' + blessingPick.quote + '”') : '');
+  setText('press-card-cite', blessingPick ? blessingPick.verse + '  ·  KJV' : '');
+}
+
+async function sendPressBlessing(style) {
+  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const nameEl = document.getElementById('blessing-for');
+  const pressName = document.getElementById('press-bless-name');
+  if (nameEl && pressName) nameEl.value = pressName.value;
+  await shareItem('blessing', style || 'parchment');
+  showToast('Card ready — one person, not a feed');
+}
+
+function sitPress(kind) {
+  const data = pressData();
+  if (kind === 'reveal') {
+    return sitWith({ kicker: 'Reveal', title: 'Peace', quote: data.reveal.quote, verse: data.reveal.verse, reflection: data.reveal.note });
+  }
+  if (kind === 'breath') {
+    return sitWith({ kicker: 'Breath', title: 'Peace, be still', quote: data.breath.quote, verse: data.breath.verse, reflection: data.breath.note });
+  }
+  if (kind === 'parable') {
+    const leaf = (data.parable.leaves || [])[parableIndex] || data.parable.leaves[0];
+    return sitWith({ kicker: 'Luke 15', title: leaf.title, quote: leaf.quote, verse: leaf.verse, reflection: leaf.note });
+  }
+  if (kind === 'examen') {
+    return sitWith({ kicker: 'Examen', title: 'Peace', quote: data.examen.quote, verse: data.examen.verse, reflection: data.examen.note });
+  }
+  if (kind === 'forty') {
+    const rooms = (window.RLA_pathList && window.RLA_pathList('forty')) || [];
+    const room = rooms[fortyIndex];
+    if (!room) return;
+    return sitWith({ kicker: 'Forty', title: room.title, quote: room.passage, verse: room.verse, reflection: room.reflection });
+  }
+}
+
 const COMMANDS = [
   { label: 'Today’s reading', hint: 'Today', run: () => switchTab('today') },
   { label: 'Find encouragement', hint: 'Seek', run: () => switchTab('seek') },
   { label: 'Ask the Advisor', hint: 'Counsel', run: () => switchTab('advisor') },
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
+  { label: 'Open the Press', hint: 'Atelier', run: () => switchTab('press') },
+  { label: 'Breath prayer', hint: 'Press', run: () => { switchTab('press'); showPressLeaf('breath'); } },
+  { label: 'The lost son', hint: 'Parable', run: () => { switchTab('press'); showPressLeaf('parable'); } },
+  { label: 'Evening examen', hint: 'Compline', run: () => { switchTab('press'); showPressLeaf('examen'); } },
+  { label: 'Forty rooms', hint: 'Lent', run: () => { switchTab('press'); showPressLeaf('forty'); } },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
@@ -3966,6 +4608,10 @@ function bindRituals() {
   ritualsBound = true;
   const note = document.getElementById('blessing-note');
   if (note) note.addEventListener('input', updateBlessingPreview);
+  const blessFor = document.getElementById('blessing-for');
+  if (blessFor) blessFor.addEventListener('input', updateBlessingPreview);
+  const pressName = document.getElementById('press-bless-name');
+  if (pressName) pressName.addEventListener('input', paintPressCard);
   const amen = document.getElementById('amen');
   if (amen) amen.addEventListener('click', closeAmen);
   const cmdk = document.getElementById('cmdk');
