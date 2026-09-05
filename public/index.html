@@ -953,6 +953,7 @@ textarea { font-family: var(--body); }
 .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
 .fs-control { display: flex; gap: 6px; }
 .fs-btn { width: 36px; height: 36px; border: 1px solid var(--rule); background: none; }
+.fs-btn.wide { width: auto; padding: 0 12px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
 .fs-btn.active { border-color: var(--crimson); color: var(--crimson); }
 .sheet-about { padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13.5px; line-height: 1.65; color: var(--ink-3); }
 .sheet-about strong { color: var(--ink-2); }
@@ -1038,11 +1039,94 @@ textarea { font-family: var(--body); }
 }
 .offline-banner.on { display: block; }
 
+.path { margin: 0 0 28px; }
+.path-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.path-head .eyebrow { margin: 0; }
+.path-place {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  text-align: right;
+}
 .week-ribbon, .seven {
   display: flex;
   gap: 8px;
-  margin: 0 0 28px;
+  margin: 0;
 }
+.forty { display: flex; flex-direction: column; gap: 10px; }
+.gathering {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.gathering-name {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  opacity: .7;
+}
+.gathering.current .gathering-name { color: var(--crimson); opacity: 1; }
+.gathering.kept .gathering-name { opacity: 1; }
+.gathering-beads { display: flex; gap: 10px; flex-wrap: wrap; }
+.bead {
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  cursor: pointer;
+}
+.bead-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-2);
+  background: transparent;
+  transition: background .2s ease-out, border-color .2s ease-out;
+}
+.bead.done .bead-dot { background: var(--crimson); border-color: var(--crimson); }
+.bead.today .bead-dot {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 14%, transparent);
+}
+.bead.future { opacity: .5; }
+.bead:disabled { cursor: default; }
+.bead:not(:disabled):hover .bead-dot { border-color: var(--crimson); }
+.path-next {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--crimson);
+  text-align: left;
+}
+.path-next:hover { text-decoration: underline; text-underline-offset: 3px; }
+.path-invite {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: baseline;
+}
+.path-invite[hidden] { display: none; }
+.path-invite .flyleaf-turn { margin-top: 0; }
 .week-cell, .seven-day {
   flex: 1;
   display: flex;
@@ -1183,7 +1267,7 @@ textarea { font-family: var(--body); }
   @page { margin: 22mm 20mm; }
   .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
   .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
-  .crisis-modal, .toast, .week-ribbon, .seven, .mode-switch, .nav-btn,
+  .crisis-modal, .toast, .path, .week-ribbon, .seven, .mode-switch, .nav-btn,
   .skip-link, .titlepage { display: none !important; }
   .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
   .folio, body { background: #fff !important; }
@@ -1554,7 +1638,15 @@ html.sitting .sit-sheet {
         <div class="actions" style="margin-bottom:22px">
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
         </div>
-        <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+        <section class="path" id="path" aria-labelledby="path-name">
+          <div class="path-head">
+            <p class="eyebrow" id="path-name">Seven Days</p>
+            <span class="path-place" id="path-place"></span>
+          </div>
+          <div class="week-ribbon" id="week-ribbon"></div>
+          <button class="path-next" type="button" id="path-next" hidden></button>
+          <p class="path-invite" id="path-invite" hidden></p>
+        </section>
 
         <aside class="epigraph" id="epigraph" hidden>
           <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
@@ -1839,6 +1931,16 @@ html.sitting .sit-sheet {
       <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
       <div class="toggle-track"></div>
     </label>
+  </div>
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Path</div>
+      <div class="setting-sub" id="path-setting-sub">Seven mornings, or Forty — the longer story</div>
+    </div>
+    <div class="fs-control" role="group" aria-label="Path">
+      <button class="fs-btn wide active" type="button" id="path-btn-seven" onclick="setPathKind('seven')">Seven</button>
+      <button class="fs-btn wide" type="button" id="path-btn-forty" onclick="setPathKind('forty')">Forty</button>
+    </div>
   </div>
   <div class="setting-row">
     <div>
@@ -2163,7 +2265,7 @@ function startApp() {
   applySeason();
   markMorning();
   paintStreak(getStreakState());
-  paintSeven();
+  paintPath();
   updateDateUI();
   paintCatchword();
   paintEpigraph();
@@ -2280,23 +2382,77 @@ function paintStreak(state) {
   }
 }
 function renderWeekRibbon() {
-  paintSeven();
+  paintPath();
 }
-function sevenDays() {
-  return (window.RLA_SEVEN || []).slice();
+/* Named paths. Seven is the first week; Forty is the longer story, bound in five quires. */
+function pathName(kind) {
+  return kind === 'forty' ? 'Forty' : 'Seven Days';
 }
-function pathState() {
-  const raw = parseJSON(ls('rla-seven'), null);
+function pathKey(kind) {
+  return kind === 'forty' ? 'rla-forty' : 'rla-seven';
+}
+function pathDays(kind) {
+  if (typeof window.RLA_pathList === 'function') return window.RLA_pathList(kind).slice();
+  return ((kind === 'forty' ? window.RLA_FORTY : window.RLA_SEVEN) || []).slice();
+}
+function pathState(kind) {
+  const raw = parseJSON(ls(pathKey(kind || activePathKind())), null);
   if (raw && Array.isArray(raw.done)) return raw;
   return { started: todayStr(), done: [] };
 }
-function paintSeven() {
+function pathComplete(kind) {
+  const days = pathDays(kind);
+  return days.length > 0 && pathState(kind).done.length >= days.length;
+}
+function activePathKind() {
+  const stored = ls('rla-path-kind');
+  if (stored === 'forty' || stored === 'seven') return stored;
+  // A reader who arrives in Lent with no path yet is handed the forty leaves.
+  if (currentSeason.id === 'lent' && pathDays('forty').length && !ls('rla-seven')) return 'forty';
+  return 'seven';
+}
+function setPathKind(kind, opts) {
+  if (kind !== 'forty' && kind !== 'seven') return;
+  const changed = ls('rla-path-kind') !== kind;
+  lsSet('rla-path-kind', kind);
+  if (!ls(pathKey(kind))) lsSet(pathKey(kind), JSON.stringify({ started: todayStr(), done: [] }));
+  paintPath();
+  if (changed && !(opts && opts.quiet)) {
+    showToast(kind === 'forty' ? 'Forty leaves. One each morning, no hurry.' : 'Seven Days with His words.');
+  }
+}
+function beginForty() {
+  setPathKind('forty');
+  switchTab('today');
+  document.getElementById('path')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function beginPathAgain(kind) {
+  lsSet(pathKey(kind), JSON.stringify({ started: todayStr(), done: [] }));
+  setPathKind(kind, { quiet: true });
+  showToast(kind === 'forty' ? 'Forty begins again at Come.' : 'Seven begins again at Come.');
+}
+function paintPath() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
-  const days = sevenDays();
+  const kind = activePathKind();
+  const days = pathDays(kind);
+  const nameEl = document.getElementById('path-name');
+  const placeEl = document.getElementById('path-place');
+  const nextBtn = document.getElementById('path-next');
+  ['seven', 'forty'].forEach((k) => {
+    const btn = document.getElementById('path-btn-' + k);
+    if (btn) {
+      btn.classList.toggle('active', k === kind);
+      btn.setAttribute('aria-pressed', k === kind ? 'true' : 'false');
+    }
+  });
+  if (nameEl) nameEl.textContent = pathName(kind);
   if (!days.length) {
     host.className = 'week-ribbon';
     host.innerHTML = '';
+    if (placeEl) placeEl.textContent = '';
+    if (nextBtn) nextBtn.hidden = true;
+    paintPathInvite(kind, -1);
     const today = todayStr();
     const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     const start = weekStartStr();
@@ -2315,30 +2471,94 @@ function paintSeven() {
     }
     return;
   }
-  const state = pathState();
+  const state = pathState(kind);
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
-  host.className = 'seven';
-  host.setAttribute('aria-label', 'Seven Days with His words');
-  host.innerHTML = days.map((day, i) => {
-    const cls = done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future');
-    const locked = next >= 0 && i > next;
-    return '<button type="button" class="seven-day ' + cls + '" data-i="' + i + '"' + (locked ? ' disabled' : '') + '>' +
-      '<span class="seven-dot" aria-hidden="true"></span><span>' + esc(day.title) + '</span></button>';
-  }).join('');
-  host.querySelectorAll('.seven-day').forEach((btn) => {
-    btn.addEventListener('click', () => sitSeven(Number(btn.getAttribute('data-i'))));
-  });
+  const cellClass = (i) => (done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future'));
+  const isLocked = (i) => next >= 0 && i > next;
+  const beadLabel = (i) => 'Day ' + (i + 1) + ' · ' + days[i].title + (done.has(i) ? ' · kept' : '');
+
+  if (kind === 'forty') {
+    const quires = window.RLA_FORTY_QUIRES || [];
+    const quireOf = typeof window.RLA_quireOf === 'function' ? window.RLA_quireOf : ((i) => Math.floor(i / 8));
+    host.className = 'forty';
+    host.setAttribute('aria-label', 'Forty leaves, in five quires');
+    host.innerHTML = quires.map((q, qi) => {
+      const first = qi * 8;
+      const beads = [];
+      for (let i = first; i < Math.min(days.length, first + 8); i += 1) {
+        beads.push('<button type="button" class="bead ' + cellClass(i) + '" data-i="' + i + '" aria-label="' + esc(beadLabel(i)) + '"' +
+          (isLocked(i) ? ' disabled' : '') + '><span class="bead-dot" aria-hidden="true"></span></button>');
+      }
+      const current = next >= 0 && quireOf(next) === qi;
+      const kept = !current && (next < 0 || quireOf(next) > qi);
+      return '<div class="gathering' + (current ? ' current' : '') + (kept ? ' kept' : '') + '" role="group" aria-label="' + esc(q.title) + '">' +
+        '<span class="gathering-name">' + esc(q.title) + '</span><div class="gathering-beads">' + beads.join('') + '</div></div>';
+    }).join('');
+    host.querySelectorAll('.bead').forEach((btn) => {
+      btn.addEventListener('click', () => sitPath('forty', Number(btn.getAttribute('data-i'))));
+    });
+    if (placeEl) {
+      placeEl.textContent = next < 0
+        ? 'Forty kept'
+        : 'Day ' + (next + 1) + ' of ' + days.length + (quires[quireOf(next)] ? ' · ' + quires[quireOf(next)].title : '');
+    }
+  } else {
+    host.className = 'seven';
+    host.setAttribute('aria-label', 'Seven Days with His words');
+    host.innerHTML = days.map((day, i) => {
+      return '<button type="button" class="seven-day ' + cellClass(i) + '" data-i="' + i + '"' + (isLocked(i) ? ' disabled' : '') +
+        ' aria-label="' + esc(beadLabel(i)) + '">' +
+        '<span class="seven-dot" aria-hidden="true"></span><span>' + esc(day.title) + '</span></button>';
+    }).join('');
+    host.querySelectorAll('.seven-day').forEach((btn) => {
+      btn.addEventListener('click', () => sitPath('seven', Number(btn.getAttribute('data-i'))));
+    });
+    if (placeEl) placeEl.textContent = next < 0 ? 'Seven kept' : 'Day ' + (next + 1) + ' of ' + days.length;
+  }
+
+  if (nextBtn) {
+    if (next >= 0) {
+      nextBtn.hidden = false;
+      nextBtn.textContent = (done.size ? 'Next, ' : 'Begin with ') + days[next].title + ' — ' + days[next].verse;
+      nextBtn.onclick = () => sitPath(kind, next);
+    } else {
+      nextBtn.hidden = true;
+    }
+  }
+  paintPathInvite(kind, next);
 }
-function sitSeven(index) {
-  const day = sevenDays()[index];
+function paintPathInvite(kind, next) {
+  const el = document.getElementById('path-invite');
+  if (!el) return;
+  const hasForty = pathDays('forty').length > 0;
+  const link = (label, fn) => '<button type="button" class="flyleaf-turn" onclick="' + fn + '">' + label + '</button>';
+  let html = '';
+  if (kind === 'seven' && hasForty && next < 0) {
+    html = '<span>Seven mornings kept. Forty leaves are bound for the longer story.</span>' + link('Begin Forty', 'beginForty()') + link('Seven again', "beginPathAgain('seven')");
+  } else if (kind === 'seven' && hasForty && currentSeason.id === 'lent' && !ls('rla-forty')) {
+    html = '<span>It is Lent. Forty leaves are bound for it — one each morning until Easter.</span>' + link('Begin Forty', 'beginForty()');
+  } else if (kind === 'forty' && next < 0) {
+    html = '<span>Forty leaves kept. The words do not run out.</span>' + link('Begin again', "beginPathAgain('forty')") + link('Seven Days', "setPathKind('seven')");
+  }
+  el.innerHTML = html;
+  el.hidden = !html;
+}
+function sitPath(kind, index) {
+  const days = pathDays(kind);
+  const day = days[index];
   if (!day) return;
+  const quires = window.RLA_FORTY_QUIRES || [];
+  const quire = kind === 'forty' && typeof window.RLA_quireOf === 'function' ? quires[window.RLA_quireOf(index)] : null;
   sitPayload = {
-    kicker: 'Seven Days · ' + day.title,
+    kicker: kind === 'forty'
+      ? 'Forty · Day ' + (index + 1) + (quire ? ' · ' + quire.title : '') + ' · ' + day.title
+      : 'Seven Days · ' + day.title,
     title: day.title,
     quote: day.passage,
     verse: day.verse,
     reflection: day.reflection,
+    pathKind: kind,
     pathIndex: index,
   };
   sitStep = 1;
@@ -2355,12 +2575,15 @@ function sitSeven(index) {
   document.getElementById('sit-reply').value = '';
   showSitStep(1);
 }
-function markSevenDay(index) {
+function markPathDay(kind, index) {
   if (index == null || index < 0) return;
-  const state = pathState();
+  const k = kind === 'forty' ? 'forty' : 'seven';
+  const state = pathState(k);
   if (!state.done.includes(index)) state.done.push(index);
-  lsSet('rla-seven', JSON.stringify(state));
-  paintSeven();
+  lsSet(pathKey(k), JSON.stringify(state));
+  // Sitting with a leaf settles which path this reader is on, so the turn of a season never moves them.
+  lsSet('rla-path-kind', k);
+  paintPath();
 }
 
 function isNightOffice() {
@@ -2858,7 +3081,7 @@ function keepSitReply() {
   const quote = sitPayload.quote;
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
-  if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
+  if (sitPayload.pathIndex != null) markPathDay(sitPayload.pathKind || 'seven', sitPayload.pathIndex);
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
@@ -3822,7 +4045,8 @@ const COMMANDS = [
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
-  { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Seven Days', hint: 'Path', run: () => { setPathKind('seven', { quiet: true }); switchTab('today'); document.getElementById('path')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Forty', hint: 'Path · the longer story', run: () => beginForty() },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

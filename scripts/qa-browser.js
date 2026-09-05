@@ -126,6 +126,120 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('Seven Days is the first path, and a sitting keeps a leaf', async () => {
+    const seven = await page.evaluate(() => ({
+      name: document.getElementById('path-name').textContent,
+      place: document.getElementById('path-place').textContent,
+      next: document.getElementById('path-next').textContent,
+      invite: document.getElementById('path-invite').hidden,
+      kind: localStorage.getItem('rla-path-kind'),
+    }));
+    assert(seven.name === 'Seven Days', 'path name is ' + seven.name);
+    assert(/Day 1 of 7/.test(seven.place), 'place is ' + seven.place);
+    assert(/Begin with Come/.test(seven.next), 'next is ' + seven.next);
+    assert(seven.invite, 'no invitation before the week is kept');
+    await page.click('.seven-day.today');
+    await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 4000 });
+    const kicker = await page.$eval('#sit-kicker', (el) => el.textContent);
+    assert(/Seven Days · Come/.test(kicker), 'kicker is ' + kicker);
+    await page.evaluate(() => {
+      goSitReflect(); startSitRest(); finishSitRest();
+      document.getElementById('sit-reply').value = 'Here.';
+      keepSitReply();
+    });
+    await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
+    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
+    const after = await page.evaluate(() => ({
+      done: document.querySelectorAll('.seven-day.done').length,
+      place: document.getElementById('path-place').textContent,
+      kind: localStorage.getItem('rla-path-kind'),
+    }));
+    assert(after.done === 1, 'expected one kept leaf, got ' + after.done);
+    assert(/Day 2 of 7/.test(after.place), 'place is ' + after.place);
+    assert(after.kind === 'seven', 'sitting should settle the path');
+  });
+
+  await check('Forty is bound in five quires of eight and remembers its place', async () => {
+    await page.evaluate(() => beginForty());
+    await page.waitForFunction(() => document.getElementById('week-ribbon').classList.contains('forty'), { timeout: 4000 });
+    const forty = await page.evaluate(() => ({
+      name: document.getElementById('path-name').textContent,
+      place: document.getElementById('path-place').textContent,
+      quires: [...document.querySelectorAll('.gathering-name')].map((q) => q.textContent),
+      beads: document.querySelectorAll('.bead').length,
+      open: document.querySelectorAll('.bead:not(:disabled)').length,
+      next: document.getElementById('path-next').textContent,
+      settingOn: document.getElementById('path-btn-forty').classList.contains('active'),
+    }));
+    assert(forty.name === 'Forty', 'path name is ' + forty.name);
+    assert(/Day 1 of 40 · Come/.test(forty.place), 'place is ' + forty.place);
+    assert(forty.quires.join(' ') === 'Come Light Mercy Abide Go', 'quires: ' + forty.quires.join(' '));
+    assert(forty.beads === 40, 'expected 40 beads, got ' + forty.beads);
+    assert(forty.open === 1, 'only the next leaf should open, got ' + forty.open);
+    assert(/Begin with Come — Matthew 11:28–30/.test(forty.next), 'next is ' + forty.next);
+    assert(forty.settingOn, 'settings should show Forty active');
+
+    await page.click('.bead.today');
+    await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 4000 });
+    const kicker = await page.$eval('#sit-kicker', (el) => el.textContent);
+    assert(/Forty · Day 1 · Come · Come/.test(kicker), 'kicker is ' + kicker);
+    await page.evaluate(() => {
+      goSitReflect(); startSitRest(); finishSitRest();
+      document.getElementById('sit-reply').value = 'Laden.';
+      keepSitReply();
+    });
+    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on') && document.querySelectorAll('.bead.done').length === 1, { timeout: 10000 });
+
+    await page.reload({ waitUntil: 'networkidle0' });
+    const back = await page.evaluate(() => ({
+      forty: document.getElementById('week-ribbon').classList.contains('forty'),
+      done: document.querySelectorAll('.bead.done').length,
+      place: document.getElementById('path-place').textContent,
+      sevenKept: JSON.parse(localStorage.getItem('rla-seven')).done.length,
+      next: document.getElementById('path-next').textContent,
+    }));
+    assert(back.forty, 'Forty should survive a reload');
+    assert(back.done === 1, 'kept leaf lost on reload');
+    assert(/Day 2 of 40 · Come/.test(back.place), 'place is ' + back.place);
+    assert(back.sevenKept === 1, 'Seven progress must not be touched by Forty');
+    assert(/Next, Sparrows/.test(back.next), 'next is ' + back.next);
+  });
+
+  await check('Seven and Forty keep separate places', async () => {
+    await page.evaluate(() => setPathKind('seven'));
+    const seven = await page.evaluate(() => ({
+      cls: document.getElementById('week-ribbon').className,
+      done: document.querySelectorAll('.seven-day.done').length,
+      place: document.getElementById('path-place').textContent,
+    }));
+    assert(seven.cls === 'seven', 'ribbon class is ' + seven.cls);
+    assert(seven.done === 1, 'Seven lost its kept leaf');
+    assert(/Day 2 of 7/.test(seven.place), 'place is ' + seven.place);
+  });
+
+  await check('Lent hands a new reader the forty leaves, and only invites a reader mid-Seven', async () => {
+    await page.evaluate(() => {
+      ['rla-path-kind', 'rla-seven', 'rla-forty'].forEach((k) => localStorage.removeItem(k));
+      currentSeason = { id: 'lent', name: 'Lent', runningHead: 'Lent', note: '' };
+      paintPath();
+    });
+    const fresh = await page.evaluate(() => ({
+      forty: document.getElementById('week-ribbon').classList.contains('forty'),
+      name: document.getElementById('path-name').textContent,
+    }));
+    assert(fresh.forty && fresh.name === 'Forty', 'new reader in Lent should see Forty, saw ' + fresh.name);
+    await page.evaluate(() => {
+      localStorage.setItem('rla-seven', JSON.stringify({ started: '2027-02-01', done: [0, 1] }));
+      paintPath();
+    });
+    const mid = await page.evaluate(() => ({
+      seven: document.getElementById('week-ribbon').classList.contains('seven'),
+      invite: document.getElementById('path-invite').textContent,
+    }));
+    assert(mid.seven, 'a reader mid-Seven must not be moved');
+    assert(/It is Lent/.test(mid.invite), 'expected a Lent invitation, got: ' + mid.invite);
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
