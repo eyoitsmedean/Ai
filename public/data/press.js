@@ -71,12 +71,12 @@
     blessing: {
       kicker: 'One person, not a feed',
       title: 'The blessing press',
-      note: 'A name, a saying, a card. Film this on a real phone. The card should look printed, not generated.'
+      note: 'A name, a saying, a card. One person. Nothing else is added.'
     },
     forty: {
       kicker: 'Ash Wednesday 10 February 2027',
       title: 'Forty rooms',
-      note: 'Hallow’s payday is a named path. Seven is the week you can start tonight. Forty is the longer story, ready before Lent. Missing a day does not lock a door.'
+      note: 'Seven is the week you can start tonight. Forty is the longer story, ready before Lent. A missed day does not lock a door.'
     }
   };
 })();
