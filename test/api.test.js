@@ -123,6 +123,42 @@ describe('smoke routes', () => {
     assert.match(res.headers.location || '', /review=1/);
   });
 
+  it('carries season and leaf into the review, and drops junk', async () => {
+    const res = await request('GET', '/review?season=lent&leaf=forty');
+    const loc = res.headers.location || '';
+    assert.match(loc, /season=lent/);
+    assert.match(loc, /leaf=forty/);
+    const junk = await request('GET', '/review?season=carnival&leaf=%3Cscript%3E');
+    const bad = junk.headers.location || '';
+    assert.doesNotMatch(bad, /season=/);
+    assert.doesNotMatch(bad, /leaf=/);
+  });
+
+  it('seals every crimson sentence in the Press against the Gospel corpus', async () => {
+    const vm = require('node:vm');
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const ctx = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'public', 'data', 'press.js'), 'utf8'), ctx);
+    const press = ctx.window.RLA_PRESS;
+    assert.ok(press && press.parable && press.parable.leaves.length === 5, 'five parable leaves');
+    assert.ok(press.blessing.seeds.length >= 6, 'blessing seeds');
+    const items = [
+      { verse: press.reveal.verse, quote: press.reveal.quote },
+      { verse: press.breath.verse, quote: press.breath.quote },
+      { verse: press.examen.verse, quote: press.examen.quote },
+      ...press.parable.leaves.map((l) => ({ verse: l.verse, quote: l.quote })),
+      ...press.blessing.seeds,
+    ];
+    for (let i = 0; i < items.length; i += 12) {
+      const res = await request('POST', '/api/verify', { items: items.slice(i, i + 12) });
+      assert.equal(res.status, 200);
+      const data = JSON.parse(res.raw);
+      const failed = data.results.filter((r) => !r.ok).map((r) => r.verse + ' (' + r.reason + ')');
+      assert.deepEqual(failed, [], 'unsealed: ' + failed.join(', '));
+    }
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

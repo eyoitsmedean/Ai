@@ -151,6 +151,116 @@ async function main() {
     assert(/Peace,\s*be still/i.test(breath), 'breath prayer must stay Mark 4:39');
   });
 
+  await check('Forty keeps the church year', async () => {
+    await page.goto(BASE + '/?review=1&season=lent&leaf=forty', { waitUntil: 'networkidle0' });
+    const lent = await page.evaluate(() => ({
+      leaf: document.querySelector('.press-leaf.on')?.dataset.leaf,
+      kicker: document.getElementById('forty-kicker').textContent,
+      on: document.querySelector('.forty-cell.on')?.textContent,
+      today: document.querySelector('.forty-cell.today')?.textContent,
+      ash2027: ashWednesday(2027).toDateString(),
+      ash2026: ashWednesday(2026).toDateString(),
+      day1: lentInfo(new Date(2027, 1, 10)).day,
+      sunday: lentInfo(new Date(2027, 1, 14)).sunday,
+      last: lentInfo(new Date(2027, 2, 27)).day,
+      after: lentInfo(new Date(2027, 2, 28)).inLent,
+    }));
+    assert(lent.leaf === 'forty', 'leaf param should open Forty');
+    assert(/Lent/.test(lent.kicker) && /Day \d+ of Forty/.test(lent.kicker), 'Lent kicker: ' + lent.kicker);
+    assert(lent.on === lent.today, 'the room of the day should be selected');
+    assert(lent.ash2027 === 'Wed Feb 10 2027', 'Ash Wednesday 2027: ' + lent.ash2027);
+    assert(lent.ash2026 === 'Wed Feb 18 2026', 'Ash Wednesday 2026: ' + lent.ash2026);
+    assert(lent.day1 === 1 && lent.sunday === true && lent.last === 40 && lent.after === false, 'Lent day math off: ' + JSON.stringify(lent));
+    await page.click('#forty-mark');
+    const marked = await page.evaluate(() => ({
+      done: document.querySelectorAll('.forty-cell.done').length,
+      tally: document.getElementById('forty-tally').textContent,
+      journal: JSON.parse(localStorage.getItem('rla-journal') || '[]').filter((i) => i.type === 'forty').length,
+    }));
+    assert(marked.done === 1 && marked.journal === 1, 'marking a room should keep it in the journal');
+    assert(/1 of 40/.test(marked.tally) && /does not lock/.test(marked.tally), 'grace copy missing');
+    await page.goto(BASE + '/?review=1&leaf=forty', { waitUntil: 'networkidle0' });
+    const plain = await page.$eval('#forty-kicker', (el) => el.textContent);
+    assert(/Ash Wednesday|Lent/.test(plain), 'kicker should name the season: ' + plain);
+  });
+
+  await check('The blessing press pulls real proofs', async () => {
+    await page.goto(BASE + '/?review=1&leaf=blessing', { waitUntil: 'networkidle0' });
+    await page.type('#press-bless-name', 'Mara');
+    await page.type('#press-bless-line', 'Thinking of you this week.');
+    await page.waitForFunction(() => {
+      const imgs = [...document.querySelectorAll('#press-proofs img')];
+      return imgs.length === 3 && imgs.every((i) => i.complete && i.naturalWidth === 1080 && i.naturalHeight === 1350);
+    }, { timeout: 8000 });
+    const card = await page.evaluate(() => ({
+      for: document.getElementById('press-card-for').textContent,
+      line: document.getElementById('press-card-line').textContent,
+      cite: document.getElementById('press-card-cite').textContent,
+      payload: blessingPayload(),
+    }));
+    assert(card.for === 'For Mara', 'card should carry the name');
+    assert(/Thinking of you/.test(card.line), 'card should carry the line');
+    assert(card.payload.note === 'Thinking of you this week.' && card.payload.blessing === true, 'share payload should honor the line');
+    assert(/John 14:27|Matthew 11:28/.test(card.cite), 'default saying should bless: ' + card.cite);
+    await page.click('#press-formats [data-format="story"]');
+    await page.waitForFunction(() => [...document.querySelectorAll('#press-proofs img')].every((i) => i.complete && i.naturalHeight === 1920), { timeout: 8000 });
+  });
+
+  await check('Examen keeps the evening and hands the morning a catchword', async () => {
+    await page.goto(BASE + '/?review=1&leaf=examen', { waitUntil: 'networkidle0' });
+    await page.type('#examen-rejoice', 'A neighbor waved.');
+    await page.type('#examen-rest', 'Stillness');
+    await page.click('#examen-keep');
+    await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
+    const ex = await page.evaluate(() => ({
+      kept: !document.getElementById('examen-kept').hidden,
+      catchword: (JSON.parse(localStorage.getItem('rla-catchword') || '{}')).word,
+      item: JSON.parse(localStorage.getItem('rla-journal') || '[]')[0],
+    }));
+    assert(ex.kept, 'examen should show kept state');
+    assert(ex.catchword === 'Stillness', 'the Rest word should become the catchword: ' + ex.catchword);
+    assert(ex.item.type === 'examen' && /Rejoice: A neighbor waved/.test(ex.item.body) && ex.item.verse === 'John 14:27', 'examen journal entry malformed');
+    await page.evaluate(() => { closeAmen(); switchTab('journal'); });
+    const badges = await page.evaluate(() => [...document.querySelectorAll('.journal-item .badge')].map((b) => b.textContent));
+    assert(badges.includes('Examen'), 'journal should label the examen: ' + badges.join(','));
+  });
+
+  await check('Parable sittings are kept as parable, and the Press shares', async () => {
+    await page.goto(BASE + '/?review=1&leaf=parable', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { turnParable(1); turnParable(1); sitPress('parable'); });
+    await page.evaluate(() => { document.getElementById('sit-reply').value = 'Mercy runs first'; keepSitReply(); });
+    const kept = await page.evaluate(() => ({
+      item: JSON.parse(localStorage.getItem('rla-journal') || '[]')[0],
+      share: sharePayload('press'),
+      sitting: document.documentElement.classList.contains('sitting'),
+    }));
+    assert(kept.item.type === 'parable' && /Luke 15:18/.test(kept.item.verse), 'parable sitting should be typed: ' + JSON.stringify(kept.item));
+    assert(/The lost son/.test(kept.item.title), 'parable title should name the parable');
+    assert(kept.share && /Luke 15/.test(kept.share.verse), 'Press share payload missing');
+    assert(!kept.sitting, 'chrome should return after the sitting');
+  });
+
+  await check('Today points into the Press by the hour', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    const hint = await page.evaluate(() => ({
+      hidden: document.getElementById('press-hint').hidden,
+      text: document.getElementById('press-hint').textContent,
+      leaf: document.getElementById('press-hint').dataset.leaf,
+      expected: pressLeafForHour(),
+      dawn: pressLeafForHour(new Date(2026, 8, 5, 7)),
+      day: pressLeafForHour(new Date(2026, 8, 5, 13)),
+      night: pressLeafForHour(new Date(2026, 8, 5, 22)),
+    }));
+    assert(!hint.hidden && hint.text.length > 10, 'press hint should show on Today');
+    assert(hint.dawn === 'breath' && hint.day === 'reveal' && hint.night === 'examen', 'hour mapping off: ' + JSON.stringify(hint));
+    assert(hint.leaf === hint.expected || hint.leaf === 'journal', 'hint should follow the hour: ' + JSON.stringify(hint));
+    await page.click('#press-hint');
+    const landed = await page.evaluate(() => document.querySelector('.page.active').id);
+    assert(landed === 'press-page' || landed === 'journal-page', 'hint should open the Press or the journal: ' + landed);
+    const advisor = await page.evaluate(() => formatAI('**John 14:27**\n\n"Peace I leave with you."\n\nHe said this to a frightened room.'));
+    assert(/scripture-sit/.test(advisor), 'Advisor scripture blocks should offer Sit with this');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
