@@ -1,12 +1,12 @@
 {
   "name": "red-letter-advisor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "check": "node --check server.js && node --check public/js/app.js && node --check public/js/mobile.js"
+    "check": "node --check server.js && node --check public/js/base.js && node --check public/js/app.js && node --check public/js/mobile.js && node --check public/js/trust.js"
   },
   "engines": {
     "node": ">=18"

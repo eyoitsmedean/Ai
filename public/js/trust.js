@@ -120,7 +120,10 @@
   async function ensureIndex() {
     if (verseIndex) return verseIndex;
     try {
-      const response = await fetch('/data/corpus.json', { cache: 'force-cache' });
+      const response = await fetch(
+        typeof global.rlaUrl === 'function' ? global.rlaUrl('/data/corpus.json') : '/data/corpus.json',
+        { cache: 'force-cache' }
+      );
       const corpus = await response.json();
       buildIndex(corpus);
     } catch (_) {
@@ -275,20 +278,25 @@
     if (!root) return;
     const echo = id('amen-echo');
     const cite = id('amen-cite');
+    const verse = typeof global.cleanCitation === 'function'
+      ? global.cleanCitation(opts.verse)
+      : String(opts.verse || '').replace(/^[—–\-\s]+/, '').trim();
     if (echo) {
-      echo.textContent = opts.quote
-        ? `“${String(opts.quote).replace(/^["“]|["”]$/g, '')}”`
+      const quoteText = opts.quote
+        ? String(opts.quote).replace(/^["“]|["”]$/g, '')
         : '';
-      echo.hidden = !opts.quote;
+      // Keep Amen still: one clear echo, no stacked word-reveal ghosts
+      echo.textContent = quoteText ? `“${quoteText}”` : '';
+      echo.hidden = !quoteText;
     }
     if (cite) {
-      cite.textContent = opts.verse || '';
-      cite.hidden = !opts.verse;
+      cite.textContent = verse || '';
+      cite.hidden = !verse;
     }
     root.classList.add('on');
     root.setAttribute('aria-hidden', 'false');
     clearTimeout(amenTimer);
-    amenTimer = setTimeout(closeAmen, opts.holdMs || 2800);
+    amenTimer = setTimeout(closeAmen, opts.holdMs || 3200);
   }
 
   function closeAmen() {
@@ -301,9 +309,16 @@
 
   function amenFromLectio() {
     const quote = (id('lectio-quote') && id('lectio-quote').textContent) || '';
-    const verse = (id('lectio-cite') && id('lectio-cite').textContent) || '';
-    if (typeof global.closeLectio === 'function') global.closeLectio();
-    openAmen({ quote, verse, holdMs: 3200 });
+    const verse = typeof global.cleanCitation === 'function'
+      ? global.cleanCitation(id('lectio-cite') && id('lectio-cite').textContent)
+      : ((id('lectio-cite') && id('lectio-cite').textContent) || '');
+    const lectio = id('lectio');
+    if (lectio) lectio.classList.add('is-closing');
+    setTimeout(() => {
+      if (typeof global.closeLectio === 'function') global.closeLectio();
+      if (lectio) lectio.classList.remove('is-closing');
+      openAmen({ quote, verse, holdMs: 3600 });
+    }, 280);
   }
 
   function maybeAmenAfterLectio() {
@@ -333,12 +348,16 @@
     if (!complete || typeof MutationObserver === 'undefined') return;
     let fired = '';
     new MutationObserver(() => {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = typeof global.todayStr === 'function'
+        ? global.todayStr()
+        : (typeof global.localTodayStr === 'function' ? global.localTodayStr() : new Date().toISOString().slice(0, 10));
       if (!complete.hidden && complete.classList.contains('on') && fired !== today) {
         fired = today;
         const quote = (id('aff-quote') && id('aff-quote').textContent) || '';
-        const verse = (id('aff-verse') && id('aff-verse').textContent) || '';
-        setTimeout(() => openAmen({ quote, verse, holdMs: 3000 }), 600);
+        const verse = typeof global.cleanCitation === 'function'
+          ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
+          : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, '');
+        setTimeout(() => openAmen({ quote, verse, holdMs: 3200 }), 600);
       }
     }).observe(complete, { attributes: true, attributeFilter: ['hidden', 'class'] });
   }
@@ -445,11 +464,16 @@
       style,
     };
     closeBlessing();
-    if (global.RedLetterShare && typeof global.RedLetterShare.shareCard === 'function') {
+    const shareFn =
+      (global.RedLetterShare && global.RedLetterShare.shareCard) ||
+      global.shareCard;
+    if (typeof shareFn === 'function') {
       try {
-        await global.RedLetterShare.shareCard(payload);
+        const result = await shareFn(payload);
         if (typeof global.showToast === 'function') {
-          global.showToast('Blessing ready to send');
+          if (result === 'aborted') global.showToast('Blessing kept here');
+          else if (result === 'downloaded') global.showToast('Blessing card saved');
+          else global.showToast('Blessing ready to send');
         }
       } catch (_) {
         if (typeof global.showToast === 'function') global.showToast('Could not share blessing');
@@ -457,7 +481,6 @@
       return;
     }
     if (typeof global.openShareSheet === 'function') {
-      // Fallback: stash and open share sheet
       global.__blessingPayload = payload;
       global.openShareSheet('blessing');
     }
@@ -465,7 +488,9 @@
 
   function blessingFromToday() {
     const quote = (id('aff-quote') && id('aff-quote').textContent) || '';
-    const verse = (id('aff-verse') && id('aff-verse').textContent) || '';
+    const verse = typeof global.cleanCitation === 'function'
+      ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
+      : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, '');
     openBlessing(quote && verse ? { quote, verse, theme: 'Today' } : null);
   }
 

@@ -1,10 +1,10 @@
 {
   "name": "Red Letter",
   "short_name": "Red Letter",
-  "id": "/",
+  "id": "./",
   "description": "Daily guidance from the words Jesus actually spoke — only the red letters of the Gospels.",
-  "start_url": "/?source=pwa",
-  "scope": "/",
+  "start_url": "./?source=pwa",
+  "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "background_color": "#0E0C0B",
@@ -12,25 +12,25 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-maskable-192.png",
+      "src": "icon-maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icon-maskable-512.png",
+      "src": "icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -38,14 +38,14 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshot-narrow.png",
+      "src": "screenshot-narrow.png",
       "sizes": "1170x2532",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Today’s red letter reading"
     },
     {
-      "src": "/screenshot-wide.png",
+      "src": "screenshot-wide.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",

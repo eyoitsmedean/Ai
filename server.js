@@ -9,6 +9,33 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '256kb' }));
 
+// Simple in-memory rate limit for LLM routes (per IP)
+const rateBuckets = new Map();
+function clientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string' && forwarded.trim()) {
+    return forwarded.split(',')[0].trim();
+  }
+  return req.socket.remoteAddress || 'unknown';
+}
+function rateLimit({ limit = 40, windowMs = 60_000 } = {}) {
+  return (req, res, next) => {
+    const ip = clientIp(req);
+    const now = Date.now();
+    let bucket = rateBuckets.get(ip);
+    if (!bucket || now > bucket.reset) {
+      bucket = { count: 0, reset: now + windowMs };
+    }
+    bucket.count += 1;
+    rateBuckets.set(ip, bucket);
+    if (bucket.count > limit) {
+      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
+    }
+    return next();
+  };
+}
+const llmRateLimit = rateLimit({ limit: 30, windowMs: 60_000 });
+
 // Production security + cache headers for the PWA shell
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -374,7 +401,7 @@ app.post('/api/verify', (req, res) => {
   }
 });
 
-app.get('/api/daily', async (_req, res) => {
+app.get('/api/daily', llmRateLimit, async (_req, res) => {
   try {
     res.json(await fetchDailyContent());
   } catch (err) {
@@ -387,7 +414,7 @@ app.get('/api/daily', async (_req, res) => {
   }
 });
 
-app.post('/api/encouragement', async (req, res) => {
+app.post('/api/encouragement', llmRateLimit, async (req, res) => {
   const { theme } = req.body || {};
   if (!theme || typeof theme !== 'string') return res.status(400).json({ error: 'theme required.' });
 
@@ -418,7 +445,7 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', llmRateLimit, async (req, res) => {
   const { messages } = req.body || {};
   if (!Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'messages required.' });
   if (!messages[messages.length - 1]?.content?.trim()) return res.status(400).json({ error: 'Empty message.' });

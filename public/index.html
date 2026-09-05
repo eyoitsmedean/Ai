@@ -15,19 +15,19 @@
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:image" content="og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Red Letter" />
   <meta name="twitter:description" content="Not every verse — His words." />
-  <meta name="twitter:image" content="/og-image.png" />
+  <meta name="twitter:image" content="og-image.png" />
   <title>Red Letter</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/app.css?v=11" />
+  <link rel="stylesheet" href="css/app.css?v=12" />
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -36,25 +36,24 @@
 <!-- Onboarding: brand-first full composition -->
 <div id="onboarding" class="onboarding hidden" aria-label="Welcome">
   <div class="ob-step active" data-step="1">
-    <p class="hero-kicker" style="color:rgba(255,255,255,.45);margin-bottom:18px">Only His words</p>
-    <h1 class="ob-title" style="font-size:clamp(42px,12vw,64px);letter-spacing:-0.03em;line-height:0.95">Red<br>Letter</h1>
-    <p class="ob-sub" style="max-width:320px;margin:28px auto 36px;font-family:var(--font-read);font-size:1.15rem;font-style:italic;color:rgba(255,230,230,.82)">
-      “Come to me, all you who labor and are heavily burdened, and I will give you rest.”
-      <span style="display:block;margin-top:12px;font-size:0.78rem;font-style:normal;letter-spacing:0.08em;text-transform:uppercase;opacity:.55;font-family:var(--font-ui)">Matthew 11:28</span>
-    </p>
+    <div class="ob-cross" aria-hidden="true">✝</div>
+    <p class="ob-kicker">Only His words</p>
+    <h1 class="ob-title">Red<br>Letter</h1>
+    <p class="ob-quote">“Come to me, all you who labor and are heavily burdened, and I will give you rest.”</p>
+    <p class="ob-cite">Matthew 11:28</p>
     <button type="button" class="ob-btn" onclick="document.querySelector('.ob-step[data-step=&quot;1&quot;]').classList.remove('active');document.querySelector('.ob-step[data-step=&quot;2&quot;]').classList.add('active')">Enter</button>
     <p class="ob-note">Guidance for prayer — not a substitute for pastoral care, therapy, or crisis help.</p>
   </div>
   <div class="ob-step" data-step="2">
-    <p class="hero-kicker" style="color:rgba(255,255,255,.45);margin-bottom:12px">Begin</p>
-    <h1 class="ob-title" style="font-size:clamp(28px,8vw,40px)">Where now?</h1>
+    <p class="ob-kicker">Begin</p>
+    <h1 class="ob-title">Where now?</h1>
     <p class="ob-sub">One quiet choice.</p>
     <div class="ob-intents">
       <button type="button" class="ob-intent" onclick="selectIntent('today')"><strong>Today’s word</strong><span>A single reading</span></button>
       <button type="button" class="ob-intent" onclick="selectIntent('seek')"><strong>I need encouragement</strong><span>For a real situation</span></button>
       <button type="button" class="ob-intent" onclick="selectIntent('advisor')"><strong>I have a question</strong><span>Ask from the red letters</span></button>
     </div>
-    <button type="button" class="ob-btn" onclick="completeOnboarding('today')" style="margin-top:28px;background:transparent;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.15);box-shadow:none">Just begin</button>
+    <button type="button" class="ob-btn ob-btn-ghost" onclick="completeOnboarding('today')">Just begin</button>
   </div>
 </div>
 
@@ -82,21 +81,8 @@
   </header>
 
   <div class="pages">
-    <!-- TODAY — reading room -->
+    <!-- TODAY — reading room: hero owns the first viewport -->
     <div class="page active reading-room" id="today-page">
-      <div class="today-meta">
-        <span class="today-date" id="today-date"></span>
-        <span class="today-streak" id="today-streak-label"></span>
-      </div>
-
-      <div class="practice-track" aria-label="Today’s practice">
-        <div class="practice-step" id="ps-aff"><span class="practice-step-num">1</span> Affirmation</div>
-        <div class="practice-step" id="ps-word"><span class="practice-step-num">2</span> Word</div>
-        <div class="practice-step" id="ps-reflect"><span class="practice-step-num">3</span> Reflect</div>
-      </div>
-      <div class="week-ribbon" id="week-ribbon" aria-label="This week’s practice"></div>
-      <div class="practice-complete" id="practice-complete" hidden>Today’s practice is complete. Rest here.</div>
-
       <!-- HERO: brand + one red letter — first viewport -->
       <div class="card card-crimson hero-letter" id="aff-card">
         <div class="card-body">
@@ -116,10 +102,24 @@
                 <span id="aff-save-label">Save</span>
               </button>
               <button type="button" class="action-btn" onclick="openShareSheet('aff');markPractice('aff')">Share</button>
-              <button type="button" class="action-btn" onclick="openLectioFromAff()">Sit with this</button>
+              <button type="button" class="action-btn action-btn-primary" onclick="openLectioFromAff()">Sit with this</button>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="today-chrome">
+        <div class="today-meta">
+          <span class="today-date" id="today-date"></span>
+          <span class="today-streak" id="today-streak-label"></span>
+        </div>
+        <div class="practice-track" aria-label="Today’s practice">
+          <div class="practice-step" id="ps-aff"><span class="practice-step-num">1</span> Affirmation</div>
+          <div class="practice-step" id="ps-word"><span class="practice-step-num">2</span> Word</div>
+          <div class="practice-step" id="ps-reflect"><span class="practice-step-num">3</span> Reflect</div>
+        </div>
+        <div class="week-ribbon" id="week-ribbon" aria-label="This week’s practice"></div>
+        <div class="practice-complete" id="practice-complete" hidden>Today’s practice is complete. Rest here.</div>
       </div>
 
       <!-- Manuscript: word of the day -->
@@ -401,12 +401,13 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="/js/share-card.js?v=11"></script>
-<script src="/js/crisis.js?v=11"></script>
-<script src="/js/app.js?v=11"></script>
-<script src="/js/atelier.js?v=11"></script>
-<script src="/js/craft.js?v=11"></script>
-<script src="/js/trust.js?v=11"></script>
-<script src="/js/mobile.js?v=11"></script>
+<script src="js/base.js?v=12"></script>
+<script src="js/share-card.js?v=12"></script>
+<script src="js/crisis.js?v=12"></script>
+<script src="js/app.js?v=12"></script>
+<script src="js/atelier.js?v=12"></script>
+<script src="js/craft.js?v=12"></script>
+<script src="js/trust.js?v=12"></script>
+<script src="js/mobile.js?v=12"></script>
 </body>
 </html>

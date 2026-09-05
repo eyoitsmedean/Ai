@@ -129,7 +129,9 @@
     if (isIos() || isAndroid()) {
       button.hidden = false;
       button.classList.add('visible', 'show');
-      button.textContent = 'Add to Home';
+      button.textContent = 'Add';
+      button.setAttribute('aria-label', 'Add to Home Screen');
+      button.title = 'Add to Home Screen';
     }
 
     button.addEventListener('click', async (event) => {

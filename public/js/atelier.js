@@ -47,8 +47,13 @@
     const q = id('lectio-quote');
     const c = id('lectio-cite');
     if (!root || !q) return;
+    root.classList.remove('is-closing');
     revealWords(q, quote);
-    if (c) c.textContent = cite || '';
+    if (c) {
+      c.textContent = typeof global.cleanCitation === 'function'
+        ? global.cleanCitation(cite)
+        : String(cite || '').replace(/^[—–\-\s]+/, '');
+    }
     root.classList.add('on');
     root.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -57,7 +62,7 @@
   function closeLectio() {
     const root = id('lectio');
     if (!root) return;
-    root.classList.remove('on');
+    root.classList.remove('on', 'is-closing');
     root.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     if (typeof global.stopListening === 'function') global.stopListening();
@@ -304,13 +309,14 @@
   }
 
   Object.assign(global, {
+    setHourAtmosphere,
+    revealWords,
     openLectio,
     closeLectio,
     openLectioFromAff,
     openLectioFromWord,
     openCommandPalette,
     closeCommandPalette,
-    revealWords,
     onDailyRendered,
   });
 

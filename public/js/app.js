@@ -92,7 +92,12 @@
       .replace(/^-+|-+$/g, '');
   }
 
+  function appUrl(path) {
+    return typeof global.rlaUrl === 'function' ? global.rlaUrl(path) : path;
+  }
+
   function todayStr(date = new Date()) {
+    if (typeof global.localTodayStr === 'function') return global.localTodayStr(date);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -120,7 +125,7 @@
 
   function loadCorpus() {
     if (!corpusPromise) {
-      corpusPromise = fetch('/data/corpus.json', { cache: 'force-cache' }).then(async (response) => {
+      corpusPromise = fetch(appUrl('/data/corpus.json'), { cache: 'force-cache' }).then(async (response) => {
         if (!response.ok) throw new Error(`Corpus request failed (${response.status})`);
         const data = await response.json();
         if (!data || !Array.isArray(data.daily) || !data.encouragement || !Array.isArray(data.library)) {
@@ -342,7 +347,7 @@
     let data;
     let offlineFallback = false;
     try {
-      data = await fetchJSON('/api/daily');
+      data = await fetchJSON(appUrl('/api/daily'));
       if (!validDaily(data)) throw new Error('Daily response is malformed');
     } catch (apiError) {
       try {
@@ -408,7 +413,6 @@
     setSaveBtnState('aff', isSaved(`aff-${todayStr()}`));
     setSaveBtnState('word', isSaved(`word-${todayStr()}`));
     renderPractice(data.practice || getPractice());
-    markPractice('aff');
     watchWordReading();
     if (typeof global.onDailyRendered === 'function') global.onDailyRendered(data);
   }
@@ -481,7 +485,7 @@
     return lines.join('\n');
   }
 
-  function discussToday(shouldSend = true) {
+  function discussToday(shouldSend = false) {
     if (!dailyData || !dailyData.word) {
       showToast('Today’s word is still loading');
       return;
@@ -491,7 +495,7 @@
     markPractice('reflect');
     switchTab('advisor');
     setChatInput(prompt);
-    if (shouldSend !== false) sendMsg();
+    if (shouldSend === true) sendMsg();
   }
 
   function renderThemeGrid() {
@@ -532,7 +536,7 @@
 
     let data;
     try {
-      data = await fetchJSON('/api/encouragement', {
+      data = await fetchJSON(appUrl('/api/encouragement'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ theme }),
@@ -870,7 +874,7 @@
       let rendered = null;
       let fullText = '';
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(appUrl('/api/chat'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -1271,6 +1275,7 @@
     const panel = id('library-panel');
     const scroll = id('library-scroll');
     if (!item || !panel) return;
+    panel.hidden = false;
     if (scroll) {
       Array.from(scroll.querySelectorAll('.library-chip')).forEach((chip, chipIndex) => {
         chip.classList.toggle('active', chipIndex === index);
@@ -1513,7 +1518,7 @@
 
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch((error) => {
+      navigator.serviceWorker.register(appUrl('/sw.js')).catch((error) => {
         console.warn('Service worker registration failed', error);
       });
     }
@@ -1610,6 +1615,7 @@
         closeSettings();
         closePlus();
         if (typeof global.closeBlessing === 'function') global.closeBlessing();
+        if (typeof global.closeInstallHelp === 'function') global.closeInstallHelp();
         if (typeof global.closeAmen === 'function') global.closeAmen();
       }
     });

@@ -20,26 +20,36 @@
     return lines;
   }
 
+  function paintGrain(ctx, alpha) {
+    const image = ctx.createImageData(W, H);
+    const data = image.data;
+    for (let i = 0; i < data.length; i += 4) {
+      const n = (Math.random() * 255) | 0;
+      data[i] = n;
+      data[i + 1] = n;
+      data[i + 2] = n;
+      data[i + 3] = alpha;
+    }
+    ctx.putImageData(image, 0, 0);
+  }
+
   function paintBackground(ctx, style) {
     if (style === 'dawn') {
       const g = ctx.createLinearGradient(0, 0, 0, H);
       g.addColorStop(0, '#F7E8D4');
-      g.addColorStop(0.45, '#F0D5B8');
+      g.addColorStop(0.42, '#F0D5B8');
       g.addColorStop(1, '#C45A3A');
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
-      return { quote: '#2A1208', brand: 'rgba(42,18,8,0.45)', cite: '#8B1212', frame: 'rgba(42,18,8,0.18)' };
+      paintGrain(ctx, 18);
+      return { quote: '#2A1208', brand: 'rgba(42,18,8,0.5)', cite: '#8B1212', frame: 'rgba(42,18,8,0.2)', rule: 'rgba(139,18,18,0.35)' };
     }
     if (style === 'manuscript') {
       ctx.fillStyle = '#EDE6D8';
       ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = 'rgba(26,22,18,0.03)';
-      for (let i = 0; i < 2200; i += 1) {
-        ctx.fillRect(Math.random() * W, Math.random() * H, 2, 2);
-      }
-      return { quote: '#C41E1E', brand: 'rgba(26,22,18,0.4)', cite: '#1A1612', frame: 'rgba(26,22,18,0.14)' };
+      paintGrain(ctx, 22);
+      return { quote: '#C41E1E', brand: 'rgba(26,22,18,0.45)', cite: '#1A1612', frame: 'rgba(26,22,18,0.16)', rule: 'rgba(26,22,18,0.18)' };
     }
-    // void (default)
     const g = ctx.createLinearGradient(0, 0, W, H);
     g.addColorStop(0, '#1A0A0A');
     g.addColorStop(0.45, '#3B0C0C');
@@ -47,11 +57,12 @@
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
     const bloom = ctx.createRadialGradient(W * 0.5, H * 0.28, 20, W * 0.5, H * 0.35, H * 0.55);
-    bloom.addColorStop(0, 'rgba(196,30,30,0.45)');
+    bloom.addColorStop(0, 'rgba(196,30,30,0.48)');
     bloom.addColorStop(1, 'rgba(196,30,30,0)');
     ctx.fillStyle = bloom;
     ctx.fillRect(0, 0, W, H);
-    return { quote: '#FFF5F0', brand: 'rgba(255,255,255,0.55)', cite: 'rgba(255,180,170,0.9)', frame: 'rgba(255,255,255,0.14)' };
+    paintGrain(ctx, 28);
+    return { quote: '#FFF5F0', brand: 'rgba(255,255,255,0.58)', cite: 'rgba(255,180,170,0.92)', frame: 'rgba(255,255,255,0.16)', rule: 'rgba(255,180,170,0.35)' };
   }
 
   function drawCard({ quote, verse, theme, brand = 'Red Letter', style = 'void' }) {
@@ -60,26 +71,41 @@
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     const colors = paintBackground(ctx, style);
+    const cleanVerse = String(verse || '').replace(/^[—–\-\s]+/, '').trim();
 
     ctx.strokeStyle = colors.frame;
     ctx.lineWidth = 2;
-    ctx.strokeRect(64, 64, W - 128, H - 128);
+    ctx.strokeRect(56, 56, W - 112, H - 112);
 
     ctx.fillStyle = colors.brand;
-    ctx.font = '500 26px Figtree, system-ui, sans-serif';
+    ctx.font = '600 22px Fraunces, Georgia, serif';
     ctx.textAlign = 'center';
-    ctx.fillText('✝  RED LETTER', W / 2, 140);
+    ctx.letterSpacing = '0.22em';
+    ctx.fillText('RED LETTER', W / 2, 128);
+
+    ctx.strokeStyle = colors.rule;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 28, 152);
+    ctx.lineTo(W / 2 + 28, 152);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(W / 2, 144);
+    ctx.lineTo(W / 2, 160);
+    ctx.stroke();
 
     if (theme) {
       ctx.fillStyle = colors.cite;
-      ctx.font = '600 22px Figtree, system-ui, sans-serif';
-      ctx.fillText(String(theme).toUpperCase(), W / 2, 190);
+      ctx.font = '600 20px Figtree, system-ui, sans-serif';
+      ctx.letterSpacing = '0.16em';
+      ctx.fillText(String(theme).toUpperCase(), W / 2, 198);
     }
 
     const raw = String(quote || '').replace(/^["“]|["”]$/g, '');
     const q = `“${raw}”`;
     ctx.fillStyle = colors.quote;
     ctx.textAlign = 'center';
+    ctx.letterSpacing = '0';
     let size = q.length > 200 ? 40 : q.length > 120 ? 48 : 58;
     ctx.font = `italic 500 ${size}px Literata, Georgia, serif`;
     let lines = wrapText(ctx, q, W - 200);
@@ -96,13 +122,15 @@
     });
 
     ctx.fillStyle = colors.cite;
-    ctx.font = '600 28px Figtree, system-ui, sans-serif';
-    ctx.fillText(verse ? `— ${verse}` : '', W / 2, Math.min(y + 64, H - 220));
+    ctx.font = '600 26px Figtree, system-ui, sans-serif';
+    ctx.letterSpacing = '0.08em';
+    ctx.fillText(cleanVerse ? cleanVerse.toUpperCase() : '', W / 2, Math.min(y + 72, H - 220));
 
     ctx.fillStyle = colors.brand;
-    ctx.font = '500 22px Figtree, system-ui, sans-serif';
+    ctx.font = '500 20px Figtree, system-ui, sans-serif';
+    ctx.letterSpacing = '0.04em';
     ctx.fillText(brand, W / 2, H - 110);
-    ctx.font = '400 18px Figtree, system-ui, sans-serif';
+    ctx.font = '400 17px Figtree, system-ui, sans-serif';
     ctx.fillText('Only the words He spoke', W / 2, H - 74);
 
     return canvas;
@@ -110,6 +138,7 @@
 
   async function canvasToFile(canvas, name = 'red-letter.png') {
     const blob = await new Promise((res) => canvas.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('Canvas export unavailable');
     return new File([blob], name, { type: 'image/png' });
   }
 
@@ -133,31 +162,28 @@
         await navigator.share({ files: [file], title, text });
         return 'shared';
       }
+    } catch (err) {
+      if (err && err.name === 'AbortError') return 'aborted';
+    }
+
+    try {
       if (navigator.share) {
         await navigator.share({ title, text });
         return 'shared-text';
       }
     } catch (err) {
-      if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) {
-        return 'cancelled';
-      }
+      if (err && err.name === 'AbortError') return 'aborted';
     }
 
-    // iOS standalone often blocks <a download> — open blob preview instead
     const url = URL.createObjectURL(file);
-    const opened = global.open(url, '_blank');
-    if (!opened) {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = file.name;
-      a.rel = 'noopener';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'red-letter.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
     return 'downloaded';
   }
 
-  global.RedLetterShare = { drawCard, shareCard, canvasToFile };
+  global.drawShareCard = drawCard;
+  global.shareCard = shareCard;
 })(window);

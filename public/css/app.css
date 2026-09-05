@@ -324,6 +324,10 @@ b {
   --void: #100D0B;
   --page-tint: rgba(255, 236, 206, 0.16);
   --wash: 0.14;
+  --field:
+    radial-gradient(112% 78% at 18% 4%, #B82828 0%, rgba(184, 40, 40, 0) 58%),
+    radial-gradient(140% 118% at 88% 104%, #4A0A0A 0%, rgba(74, 10, 10, 0) 62%),
+    linear-gradient(168deg, #9A1A1A 0%, #741414 48%, #3F0909 100%);
 }
 
 :root[data-hour="day"] {
@@ -336,6 +340,10 @@ b {
   --void: #120D0C;
   --page-tint: rgba(255, 214, 178, 0.18);
   --wash: 0.22;
+  --field:
+    radial-gradient(112% 78% at 22% 0%, #C44A28 0%, rgba(196, 74, 40, 0) 55%),
+    radial-gradient(140% 118% at 88% 104%, #2A0608 0%, rgba(42, 6, 8, 0) 62%),
+    linear-gradient(168deg, #8E1717 0%, #5A1018 52%, #2A080C 100%);
 }
 
 :root[data-hour="night"] {
@@ -343,6 +351,10 @@ b {
   --page-tint: rgba(190, 196, 214, 0.07);
   --wash: 0.10;
   --grain-opacity: 0.024;
+  --field:
+    radial-gradient(100% 70% at 20% 8%, #7A1418 0%, rgba(122, 20, 24, 0) 58%),
+    radial-gradient(140% 118% at 90% 100%, #1A0406 0%, rgba(26, 4, 6, 0) 62%),
+    linear-gradient(168deg, #5C1014 0%, #3A0A0C 48%, #120608 100%);
 }
 
 :root[data-theme="dark"][data-hour="morning"],
@@ -2770,12 +2782,14 @@ body::before {
   margin-inline: auto;
   padding: 0 12px calc(12px + var(--safe-bottom));
   visibility: hidden;
+  pointer-events: none;
   transform: translateY(112%);
   transition: transform 500ms var(--ease), visibility 500ms var(--ease);
 }
 
 .plus-sheet.on {
   visibility: visible;
+  pointer-events: auto;
   transform: none;
 }
 
@@ -4039,21 +4053,33 @@ body.dark .trust-note.ok {
 .amen {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 420;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(ellipse at 50% 35%, rgba(139, 18, 18, 0.28), transparent 55%),
-    #0E0C0B;
+  background: #0E0C0B;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+  transition: opacity 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1)), visibility 0s linear 0.55s;
 }
 .amen.on {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition: opacity 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1)), visibility 0s linear 0s;
+}
+.amen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(139, 18, 18, 0.36), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.5), transparent 50%);
 }
 .amen-inner {
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: 32px 28px;
   max-width: 28rem;
@@ -4102,17 +4128,39 @@ body.dark .trust-note.ok {
 
 /* ── Send a Blessing ───────────────────────────────────────────── */
 .blessing-card {
-  max-height: min(88vh, 720px);
+  max-height: min(92dvh, 760px);
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(12px + var(--safe-bottom));
 }
+
 .blessing-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 220px;
+  max-height: 140px;
   overflow: auto;
   margin: 8px 0 16px;
   padding-right: 4px;
+}
+
+.blessing-styles {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding-top: 8px;
+  background: linear-gradient(180deg, rgba(14, 12, 11, 0), #160E0E 28%);
+}
+
+.blessing-card .share-styles {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin-top: 4px;
+  padding-top: 10px;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgba(14, 12, 11, 0), #160E0E 24%);
 }
 .blessing-item {
   text-align: left;
@@ -4361,3 +4409,227 @@ html.is-standalone {
   }
 }
 
+
+/* ═══ 31 · Chapel elevation (review craft) ═══════════════════════════════ */
+
+.ob-kicker {
+  margin: 0 0 14px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(246, 239, 230, 0.42);
+}
+
+.ob-btn-ghost {
+  margin-top: 22px;
+  color: rgba(246, 239, 230, 0.62) !important;
+  background: transparent !important;
+  border: 1px solid rgba(246, 239, 230, 0.16);
+  box-shadow: none;
+}
+
+.ob-btn-ghost:hover {
+  color: rgba(246, 239, 230, 0.9) !important;
+  background: rgba(246, 239, 230, 0.06) !important;
+}
+
+.reading-room > .hero-letter:first-child,
+.reading-room > .card-crimson:first-child {
+  min-height: calc(100dvh - var(--header-total) - var(--dock-space));
+}
+
+.today-chrome {
+  padding: 18px 0 4px;
+}
+
+.today-chrome .today-meta,
+.today-chrome .practice-track,
+.today-chrome .week-ribbon,
+.today-chrome .practice-complete {
+  /* chrome lives under the fold after the crimson field */
+}
+
+.hero-letter .card-actions,
+.card-crimson .card-actions {
+  margin-top: 22px;
+  gap: 8px;
+}
+
+.action-btn-primary {
+  background: rgba(252, 246, 239, 0.16) !important;
+  border-color: rgba(252, 246, 239, 0.32) !important;
+  color: #FCF6EF !important;
+  font-weight: 600;
+}
+
+.action-btn-primary:hover {
+  background: rgba(252, 246, 239, 0.24) !important;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+#install-btn.show,
+#install-btn.visible {
+  flex: 0 0 auto;
+  max-width: 4.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Amen above Lectio — continuous closing rite */
+.amen {
+  z-index: 420;
+  background: #0E0C0B;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1)), visibility 0s linear 0.55s;
+}
+
+.amen.on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1)), visibility 0s linear 0s;
+}
+
+.amen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 32%, rgba(139, 18, 18, 0.42), transparent 52%),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.55), transparent 48%);
+  pointer-events: none;
+}
+
+.amen-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.amen.on .amen-echo {
+  animation: fadeRise 800ms var(--ease) 120ms both;
+}
+
+.amen.on .amen-cite {
+  animation: fadeRise 700ms var(--ease) 280ms both;
+}
+
+.lectio.is-closing {
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+
+/* Blessing atelier — field ink on dark sheet (theme uses html[data-theme]) */
+.blessing-card {
+  color: rgba(252, 246, 239, 0.88);
+}
+
+.blessing-card .plus-title,
+.blessing-card .share-picker-title {
+  color: #FCF6EF;
+}
+
+.blessing-card .share-picker-sub {
+  color: rgba(252, 246, 239, 0.55);
+}
+
+.blessing-list {
+  max-height: 200px;
+}
+
+.blessing-item {
+  border: 1px solid rgba(252, 246, 239, 0.12);
+  background: rgba(252, 246, 239, 0.04);
+  color: rgba(252, 246, 239, 0.88);
+}
+
+.blessing-item:hover,
+.blessing-item.selected {
+  border-color: rgba(196, 30, 30, 0.55);
+  background: rgba(196, 30, 30, 0.14);
+}
+
+.blessing-item-verse,
+.blessing-item-cite {
+  color: rgba(255, 180, 170, 0.72);
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.blessing-item-quote {
+  color: rgba(252, 246, 239, 0.86);
+  font-family: var(--font-read);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.blessing-label {
+  color: rgba(252, 246, 239, 0.5);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.blessing-note {
+  width: 100%;
+  margin: 8px 0 14px;
+  padding: 12px 14px;
+  font-size: 16px !important;
+  color: #FCF6EF;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(252, 246, 239, 0.14);
+  border-radius: 10px;
+}
+
+.blessing-note::placeholder {
+  color: rgba(252, 246, 239, 0.35);
+}
+
+.blessing-preview {
+  margin: 0 0 14px;
+  padding: 16px;
+  min-height: 88px;
+  font-family: var(--font-read);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(252, 246, 239, 0.82);
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(196, 30, 30, 0.28), transparent 70%),
+    #160E0E;
+  border: 1px solid rgba(252, 246, 239, 0.1);
+  border-radius: 12px;
+}
+
+.practice-complete.on {
+  color: var(--crimson-deep);
+  border-top-color: rgba(196, 30, 30, 0.22);
+}
+
+:root[data-theme="dark"] .practice-complete.on {
+  color: rgba(255, 200, 190, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amen.on .amen-echo,
+  .amen.on .amen-cite,
+  .lectio.is-closing {
+    animation: none;
+    transition: none;
+  }
+}

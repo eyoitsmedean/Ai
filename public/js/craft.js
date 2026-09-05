@@ -9,7 +9,11 @@
     try { return value ? JSON.parse(value) : fallback; } catch (_) { return fallback; }
   }
   function todayStr(date = new Date()) {
-    return date.toISOString().slice(0, 10);
+    if (typeof global.localTodayStr === 'function') return global.localTodayStr(date);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
   function shiftDay(dateStr, delta) {
     const d = new Date(dateStr + 'T12:00:00');
@@ -159,11 +163,13 @@
   }
 
   let speaking = false;
+  let paused = false;
   let utterance = null;
 
   function stopListening() {
     if (global.speechSynthesis) global.speechSynthesis.cancel();
     speaking = false;
+    paused = false;
     const btn = id('lectio-listen');
     if (btn) {
       btn.textContent = 'Listen';
@@ -176,9 +182,34 @@
       if (typeof global.showToast === 'function') global.showToast('Listening isn’t available on this device');
       return;
     }
-    if (speaking) {
-      stopListening();
-      return;
+    if (speaking && !paused) {
+      try {
+        global.speechSynthesis.pause();
+        paused = true;
+        const btn = id('lectio-listen');
+        if (btn) {
+          btn.textContent = 'Resume';
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        return;
+      } catch (_) {
+        stopListening();
+        return;
+      }
+    }
+    if (speaking && paused) {
+      try {
+        global.speechSynthesis.resume();
+        paused = false;
+        const btn = id('lectio-listen');
+        if (btn) {
+          btn.textContent = 'Pause';
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        return;
+      } catch (_) {
+        stopListening();
+      }
     }
     const quote = (id('lectio-quote') && id('lectio-quote').textContent) || '';
     const cite = (id('lectio-cite') && id('lectio-cite').textContent) || '';
@@ -193,6 +224,7 @@
     utterance.onend = () => stopListening();
     utterance.onerror = () => stopListening();
     speaking = true;
+    paused = false;
     const btn = id('lectio-listen');
     if (btn) {
       btn.textContent = 'Pause';
@@ -340,7 +372,7 @@
     try {
       new Notification('Red Letter', {
         body: 'A quiet word is waiting for you today.',
-        icon: '/icon-192.png',
+        icon: (typeof global.rlaUrl === 'function' ? global.rlaUrl('/icon-192.png') : '/icon-192.png'),
         tag: 'rla-morning',
       });
       lsSet(key, '1');

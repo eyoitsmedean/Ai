@@ -1,32 +1,39 @@
-const CACHE = 'rla-v11-mobile';
-const PRECACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/css/app.css?v=11',
-  '/js/app.js?v=11',
-  '/js/share-card.js?v=11',
-  '/js/crisis.js?v=11',
-  '/js/atelier.js?v=11',
-  '/js/craft.js?v=11',
-  '/js/trust.js?v=11',
-  '/js/mobile.js?v=11',
-  '/data/corpus.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/icon-maskable-192.png',
-  '/icon-maskable-512.png',
-  '/favicon.png',
-  '/apple-touch-icon.png',
-  '/og-image.png',
+const CACHE = 'rla-v12-chapel';
+
+function scopeUrl(path) {
+  const clean = String(path || '').replace(/^\//, '');
+  return new URL(clean, self.registration.scope).href;
+}
+
+const PRECACHE_PATHS = [
+  './',
+  'index.html',
+  'manifest.json',
+  'css/app.css?v=12',
+  'js/base.js?v=12',
+  'js/app.js?v=12',
+  'js/share-card.js?v=12',
+  'js/crisis.js?v=12',
+  'js/atelier.js?v=12',
+  'js/craft.js?v=12',
+  'js/trust.js?v=12',
+  'js/mobile.js?v=12',
+  'data/corpus.json',
+  'icon-192.png',
+  'icon-512.png',
+  'icon-maskable-192.png',
+  'icon-maskable-512.png',
+  'favicon.png',
+  'apple-touch-icon.png',
+  'og-image.png',
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE).then(async (cache) => {
-      // Precache individually so one miss doesn't fail the whole install
       await Promise.all(
-        PRECACHE.map(async (url) => {
+        PRECACHE_PATHS.map(async (path) => {
+          const url = scopeUrl(path);
           try {
             await cache.add(url);
           } catch (err) {
@@ -60,17 +67,27 @@ self.addEventListener('notificationclick', (event) => {
       for (const client of clients) {
         if ('focus' in client) return client.focus();
       }
-      if (self.clients.openWindow) return self.clients.openWindow('/');
+      if (self.clients.openWindow) return self.clients.openWindow(self.registration.scope);
       return undefined;
     })
   );
 });
 
+function isApiRequest(url) {
+  try {
+    const scope = new URL(self.registration.scope);
+    const apiRoot = new URL('api/', scope);
+    return url.href.startsWith(apiRoot.href) || url.pathname.startsWith('/api/');
+  } catch (_) {
+    return url.pathname.startsWith('/api/');
+  }
+}
+
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
 
-  if (url.pathname.startsWith('/api/')) {
+  if (isApiRequest(url)) {
     e.respondWith(
       fetch(e.request).catch(() =>
         new Response(JSON.stringify({ error: 'offline', offline: true }), {
@@ -84,7 +101,7 @@ self.addEventListener('fetch', (e) => {
 
   const isHTML =
     e.request.mode === 'navigate' ||
-    url.pathname === '/' ||
+    url.pathname.endsWith('/') ||
     url.pathname.endsWith('.html') ||
     (e.request.headers.get('accept') || '').includes('text/html');
 
@@ -98,8 +115,8 @@ self.addEventListener('fetch', (e) => {
             const forRoot = res.clone();
             caches.open(CACHE).then((c) => {
               c.put(e.request, forRequest);
-              c.put('/index.html', forIndex);
-              c.put('/', forRoot);
+              c.put(scopeUrl('index.html'), forIndex);
+              c.put(scopeUrl('./'), forRoot);
             });
           }
           return res;
@@ -107,8 +124,8 @@ self.addEventListener('fetch', (e) => {
         .catch(async () => {
           const cached =
             (await caches.match(e.request)) ||
-            (await caches.match('/index.html')) ||
-            (await caches.match('/'));
+            (await caches.match(scopeUrl('index.html'))) ||
+            (await caches.match(scopeUrl('./')));
           return (
             cached ||
             new Response('<h1>Red Letter is offline</h1><p>Open once online to save readings.</p>', {
