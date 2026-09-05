@@ -449,6 +449,14 @@
       `<div class="blessing-preview-quote">“${esc(blessingPick.quote)}”</div>`,
       `<div class="blessing-preview-cite">${esc(blessingPick.verse)}</div>`,
     ].join('');
+    if (global.RedLetterShare && typeof global.RedLetterShare.prewarm === 'function') {
+      global.RedLetterShare.prewarm({
+        quote: blessingPick.quote,
+        verse: blessingPick.verse,
+        theme: note || 'A blessing for you',
+        brand: 'Red Letter',
+      });
+    }
   }
 
   async function sendBlessing(style = 'void') {

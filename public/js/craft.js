@@ -164,17 +164,42 @@
 
   let speaking = false;
   let paused = false;
-  let utterance = null;
+  let utteranceQueue = [];
+
+  // Android engines treat pause() as cancel, so offer Stop there instead.
+  const ANDROID = /Android/i.test(global.navigator.userAgent || '');
+  const ACTIVE_LABEL = ANDROID ? 'Stop' : 'Pause';
+
+  function setListenLabel(text, pressed) {
+    const btn = id('lectio-listen');
+    if (!btn) return;
+    btn.textContent = text;
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  }
 
   function stopListening() {
+    utteranceQueue = [];
     if (global.speechSynthesis) global.speechSynthesis.cancel();
     speaking = false;
     paused = false;
-    const btn = id('lectio-listen');
-    if (btn) {
-      btn.textContent = 'Listen';
-      btn.setAttribute('aria-pressed', 'false');
-    }
+    setListenLabel('Listen', false);
+  }
+
+  // Chrome silently drops a single utterance after ~15 s; sentence-sized
+  // utterances keep every one under the limit.
+  function splitSentences(text) {
+    return String(text || '')
+      .replace(/\s+/g, ' ')
+      .split(/(?<=[.!?;:])\s+(?=[A-Z“"'])/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  function pickVoice() {
+    const voices = global.speechSynthesis.getVoices();
+    return voices.find((v) => /en(-|_)US/i.test(v.lang) && /natural|premium|enhanced|samantha|google/i.test(v.name))
+      || voices.find((v) => /^en/i.test(v.lang))
+      || null;
   }
 
   function toggleListen() {
@@ -183,14 +208,14 @@
       return;
     }
     if (speaking && !paused) {
+      if (ANDROID) {
+        stopListening();
+        return;
+      }
       try {
         global.speechSynthesis.pause();
         paused = true;
-        const btn = id('lectio-listen');
-        if (btn) {
-          btn.textContent = 'Resume';
-          btn.setAttribute('aria-pressed', 'true');
-        }
+        setListenLabel('Resume', true);
         return;
       } catch (_) {
         stopListening();
@@ -201,11 +226,7 @@
       try {
         global.speechSynthesis.resume();
         paused = false;
-        const btn = id('lectio-listen');
-        if (btn) {
-          btn.textContent = 'Pause';
-          btn.setAttribute('aria-pressed', 'true');
-        }
+        setListenLabel(ACTIVE_LABEL, true);
         return;
       } catch (_) {
         stopListening();
@@ -213,24 +234,26 @@
     }
     const quote = (id('lectio-quote') && id('lectio-quote').textContent) || '';
     const cite = (id('lectio-cite') && id('lectio-cite').textContent) || '';
-    const text = `${quote.replace(/[“”]/g, '')}. ${cite.replace(/^—\s*/, '')}`;
-    utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.88;
-    utterance.pitch = 1;
-    const voices = global.speechSynthesis.getVoices();
-    const preferred = voices.find((v) => /en(-|_)US/i.test(v.lang) && /natural|premium|enhanced|samantha|google/i.test(v.name))
-      || voices.find((v) => /^en/i.test(v.lang));
-    if (preferred) utterance.voice = preferred;
-    utterance.onend = () => stopListening();
-    utterance.onerror = () => stopListening();
+    const sentences = splitSentences(quote.replace(/[“”]/g, ''));
+    const citeText = cite.replace(/^—\s*/, '').trim();
+    if (citeText) sentences.push(citeText);
+    if (!sentences.length) return;
+
+    const voice = pickVoice();
+    utteranceQueue = sentences.map((sentence, index) => {
+      const u = new SpeechSynthesisUtterance(sentence);
+      u.rate = 0.88;
+      u.pitch = 1;
+      if (voice) u.voice = voice;
+      u.onerror = () => stopListening();
+      if (index === sentences.length - 1) u.onend = () => stopListening();
+      return u;
+    });
     speaking = true;
     paused = false;
-    const btn = id('lectio-listen');
-    if (btn) {
-      btn.textContent = 'Pause';
-      btn.setAttribute('aria-pressed', 'true');
-    }
-    global.speechSynthesis.speak(utterance);
+    setListenLabel(ACTIVE_LABEL, true);
+    global.speechSynthesis.cancel();
+    utteranceQueue.forEach((u) => global.speechSynthesis.speak(u));
   }
 
   function openShareSheet(type) {
@@ -244,6 +267,11 @@
     sheet.classList.add('on');
     sheet.setAttribute('aria-hidden', 'false');
     if (overlay) overlay.classList.add('on');
+    // Render all three styles now so the style tap can share immediately.
+    const payload = buildSharePayload(type || 'aff');
+    if (payload && global.RedLetterShare && typeof global.RedLetterShare.prewarm === 'function') {
+      global.RedLetterShare.prewarm(payload);
+    }
   }
 
   function closeShareSheet() {

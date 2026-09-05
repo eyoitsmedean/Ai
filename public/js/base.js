@@ -13,10 +13,22 @@
 
   const BASE = detectBase();
 
+  // Optional remote API origin for static hosts (GitHub Pages) that have no
+  // /api routes of their own: <meta name="rla-api-base" content="https://…">
+  function detectApiBase() {
+    const meta = document.querySelector('meta[name="rla-api-base"]');
+    const value = meta && meta.getAttribute('content');
+    if (!value || !/^https?:\/\//i.test(value.trim())) return '';
+    return value.trim().replace(/\/+$/, '');
+  }
+
+  const API_BASE = detectApiBase();
+
   function rlaUrl(path) {
     const raw = String(path || '');
     if (/^https?:\/\//i.test(raw)) return raw;
     const normalized = raw.charAt(0) === '/' ? raw : `/${raw}`;
+    if (API_BASE && /^\/api\//.test(normalized)) return `${API_BASE}${normalized}`;
     return `${BASE}${normalized}`;
   }
 
@@ -36,6 +48,7 @@
 
   Object.assign(global, {
     __RLA_BASE__: BASE,
+    __RLA_API_BASE__: API_BASE,
     rlaUrl,
     localTodayStr,
     cleanCitation,

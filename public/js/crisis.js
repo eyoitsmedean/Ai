@@ -31,7 +31,11 @@
         <div class="crisis-actions">
           <a class="crisis-primary" href="tel:988">Call or text 988 (US)</a>
           <a class="crisis-secondary" href="https://988lifeline.org/" target="_blank" rel="noopener">988 Lifeline website</a>
-          <a class="crisis-secondary" href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">Find help worldwide (IASP)</a>
+          <a class="crisis-secondary" href="tel:988" data-region="ca">Call or text 9-8-8 (Canada)</a>
+          <a class="crisis-secondary" href="tel:116123">Samaritans 116 123 (UK &amp; Ireland)</a>
+          <a class="crisis-secondary" href="tel:131114">Lifeline 13 11 14 (Australia)</a>
+          <a class="crisis-secondary" href="https://findahelpline.com/" target="_blank" rel="noopener">Find a helpline in your country</a>
+          <a class="crisis-secondary" href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP crisis centres worldwide</a>
         </div>
         <p class="crisis-note">If you are in immediate danger, call your local emergency number.</p>
         <div class="crisis-footer">

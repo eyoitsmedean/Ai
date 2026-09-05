@@ -12,6 +12,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="Daily guidance from the words Jesus actually spoke — only the red letters of the Gospels." />
+  <!-- Static hosts (GitHub Pages): set content to the Railway origin, e.g. https://red-letter.up.railway.app -->
+  <meta name="rla-api-base" content="" />
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
@@ -27,8 +29,8 @@
   <link rel="preload" href="fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/literata-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/figtree-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="fonts/fonts.css?v=13" />
-  <link rel="stylesheet" href="css/app.css?v=13" />
+  <link rel="stylesheet" href="fonts/fonts.css?v=14" />
+  <link rel="stylesheet" href="css/app.css?v=14" />
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -232,6 +234,14 @@
         <div class="page-hd-eyebrow">Kept close</div>
         <h1 class="page-hd-title">My <em>Journal</em></h1>
       </div>
+      <div class="keep-nudge" id="keep-nudge" hidden role="note">
+        <p>Safari clears a site’s saved data after a week without a visit. <strong>Add Red Letter to your Home Screen</strong> and your journal stays.</p>
+        <div class="keep-nudge-actions">
+          <button type="button" class="action-btn action-btn-primary" id="keep-nudge-add">Add to Home Screen</button>
+          <button type="button" class="action-btn" id="keep-nudge-backup">Back up</button>
+          <button type="button" class="keep-nudge-dismiss" id="keep-nudge-dismiss" aria-label="Dismiss">Not now</button>
+        </div>
+      </div>
       <div id="journal-list"></div>
     </div>
   </div>
@@ -328,6 +338,17 @@
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Journal backup</div>
+      <div class="setting-sub" id="journal-backup-sub">Keep your saved words safe as a file</div>
+    </div>
+    <div class="fs-control">
+      <button type="button" class="action-btn-dark" id="journal-export-btn" onclick="exportJournal()">Back up</button>
+      <button type="button" class="action-btn-dark" onclick="document.getElementById('journal-import-input').click()">Restore</button>
+      <input type="file" id="journal-import-input" accept="application/json,.json" hidden onchange="importJournalFile(this.files && this.files[0]); this.value=''" />
+    </div>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">Clear Advisor chat</div>
       <div class="setting-sub">Removes local history</div>
     </div>
@@ -335,7 +356,7 @@
   </div>
   <div class="sheet-about">
     <p><strong>Red Letter</strong> draws only from the direct words of Jesus in Matthew, Mark, Luke, and John. Offline text uses the World English Bible (public domain).</p>
-    <p style="margin-top:10px">Crisis? Call or text <a href="tel:988">988</a> (US) · <a href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">IASP worldwide</a></p>
+    <p style="margin-top:10px">Crisis? Call or text <a href="tel:988">988</a> (US &amp; Canada) · Samaritans <a href="tel:116123">116 123</a> (UK) · Lifeline <a href="tel:131114">13 11 14</a> (AU) · <a href="https://findahelpline.com/" target="_blank" rel="noopener">Find a helpline</a></p>
   </div>
 </div>
 
@@ -402,13 +423,13 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/base.js?v=13"></script>
-<script src="js/share-card.js?v=13"></script>
-<script src="js/crisis.js?v=13"></script>
-<script src="js/app.js?v=13"></script>
-<script src="js/atelier.js?v=13"></script>
-<script src="js/craft.js?v=13"></script>
-<script src="js/trust.js?v=13"></script>
-<script src="js/mobile.js?v=13"></script>
+<script src="js/base.js?v=14"></script>
+<script src="js/share-card.js?v=14"></script>
+<script src="js/crisis.js?v=14"></script>
+<script src="js/app.js?v=14"></script>
+<script src="js/atelier.js?v=14"></script>
+<script src="js/craft.js?v=14"></script>
+<script src="js/trust.js?v=14"></script>
+<script src="js/mobile.js?v=14"></script>
 </body>
 </html>

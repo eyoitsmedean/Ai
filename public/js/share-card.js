@@ -142,7 +142,17 @@
     return new File([blob], name, { type: 'image/png' });
   }
 
-  async function shareCard(opts) {
+  // navigator.share() needs transient activation, which is a short timer
+  // started by the tap. Rendering happens when the picker opens so the tap
+  // itself has (almost) nothing to await.
+  const prepared = new Map();
+  const STYLES = ['void', 'dawn', 'manuscript'];
+
+  function cacheKey(opts) {
+    return JSON.stringify([opts.style || 'void', opts.quote || '', opts.verse || '', opts.theme || '', opts.brand || 'Red Letter']);
+  }
+
+  async function renderFile(opts) {
     try {
       if (document.fonts && document.fonts.ready) {
         await Promise.race([
@@ -151,11 +161,48 @@
         ]);
       }
     } catch (_) { /* ignore */ }
+    return canvasToFile(drawCard(opts));
+  }
 
-    const canvas = drawCard(opts);
-    const file = await canvasToFile(canvas);
+  function prewarm(base) {
+    if (!base || !base.quote) return;
+    STYLES.forEach((style) => {
+      const opts = { ...base, style };
+      const key = cacheKey(opts);
+      if (prepared.has(key)) return;
+      prepared.set(key, renderFile(opts).catch(() => null));
+    });
+    if (prepared.size > 12) {
+      const oldest = prepared.keys().next().value;
+      prepared.delete(oldest);
+    }
+  }
+
+  function activationAlive() {
+    const ua = navigator.userActivation;
+    return !ua || ua.isActive !== false;
+  }
+
+  function download(file, name) {
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    return 'downloaded';
+  }
+
+  async function shareCard(opts) {
+    const key = cacheKey(opts);
+    let file = prepared.has(key) ? await prepared.get(key) : null;
+    if (!file) file = await renderFile(opts);
     const title = opts.verse || 'Red Letter';
     const text = `${opts.quote || ''}${opts.verse ? `\n— ${opts.verse}` : ''}\n\nShared from Red Letter`;
+
+    if (!navigator.share) return download(file, 'red-letter.png');
 
     try {
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -164,26 +211,28 @@
       }
     } catch (err) {
       if (err && err.name === 'AbortError') return 'aborted';
+      // A failed share() consumed the activation; a second share() would
+      // throw NotAllowedError, so fall straight through to a download.
+      if ((err && err.name === 'NotAllowedError') || !activationAlive()) {
+        return download(file, 'red-letter.png');
+      }
     }
 
+    if (!activationAlive()) return download(file, 'red-letter.png');
+
     try {
-      if (navigator.share) {
-        await navigator.share({ title, text });
-        return 'shared-text';
-      }
+      await navigator.share({ title, text });
+      return 'shared-text';
     } catch (err) {
       if (err && err.name === 'AbortError') return 'aborted';
     }
 
-    const url = URL.createObjectURL(file);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'red-letter.png';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
-    return 'downloaded';
+    return download(file, 'red-letter.png');
   }
 
   global.drawShareCard = drawCard;
   global.shareCard = shareCard;
+  global.prewarmShareCard = prewarm;
+  // Callers in app.js / craft.js / trust.js look for this namespace.
+  global.RedLetterShare = { shareCard, drawCard, prewarm };
 })(window);

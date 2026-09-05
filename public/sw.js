@@ -1,4 +1,4 @@
-const CACHE = 'rla-v13-chapel';
+const CACHE = 'rla-v14-chapel';
 
 function scopeUrl(path) {
   const clean = String(path || '').replace(/^\//, '');
@@ -9,22 +9,22 @@ const PRECACHE_PATHS = [
   './',
   'index.html',
   'manifest.json',
-  'css/app.css?v=13',
-  'fonts/fonts.css?v=13',
+  'css/app.css?v=14',
+  'fonts/fonts.css?v=14',
   'fonts/fraunces-normal-latin.woff2',
   'fonts/fraunces-italic-latin.woff2',
   'fonts/literata-normal-latin.woff2',
   'fonts/literata-italic-latin.woff2',
   'fonts/figtree-normal-latin.woff2',
   'fonts/figtree-italic-latin.woff2',
-  'js/base.js?v=13',
-  'js/app.js?v=13',
-  'js/share-card.js?v=13',
-  'js/crisis.js?v=13',
-  'js/atelier.js?v=13',
-  'js/craft.js?v=13',
-  'js/trust.js?v=13',
-  'js/mobile.js?v=13',
+  'js/base.js?v=14',
+  'js/app.js?v=14',
+  'js/share-card.js?v=14',
+  'js/crisis.js?v=14',
+  'js/atelier.js?v=14',
+  'js/craft.js?v=14',
+  'js/trust.js?v=14',
+  'js/mobile.js?v=14',
   'data/corpus.json',
   'icon-192.png',
   'icon-512.png',

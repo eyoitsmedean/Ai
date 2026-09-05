@@ -894,7 +894,7 @@
             chatHistory.push({ role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
-            showToast('Showing saved Gospel words (offline)');
+            showToast(advisorFallbackToast(response.status));
             return;
           }
           throw new Error(`Chat request failed (${response.status})`);
@@ -932,7 +932,7 @@
             chatHistory.push({ role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
-            showToast('Showing saved Gospel words (offline)');
+            showToast(advisorFallbackToast(navigator.onLine === false ? 0 : -1));
             return;
           }
         } catch (_) { /* fall through */ }
@@ -1021,6 +1021,103 @@
     const suggestions = id('suggestions');
     if (suggestions) suggestions.style.display = '';
     showToast('Conversation cleared');
+  }
+
+  // Online but the host has no working /api (static GitHub Pages without an
+  // API base, or a server without a key) reads differently from being offline.
+  function advisorFallbackToast(status) {
+    if (navigator.onLine === false || status === 0) return 'Showing saved Gospel words (offline)';
+    if (status === 503) return 'The live Advisor needs an API key on the server — showing saved words';
+    if (status === 404 || status === 405 || status === -1) {
+      return 'The live Advisor isn’t on this host — showing saved words';
+    }
+    return 'Advisor is resting — showing saved Gospel words';
+  }
+
+  const JOURNAL_EXPORT_VERSION = 1;
+
+  function buildJournalExport() {
+    return {
+      app: 'red-letter',
+      version: JOURNAL_EXPORT_VERSION,
+      exportedAt: new Date().toISOString(),
+      journal: getJournal(),
+    };
+  }
+
+  async function exportJournal() {
+    const items = getJournal();
+    if (!items.length) {
+      showToast('Nothing saved yet — save a reading first');
+      return 'empty';
+    }
+    const json = JSON.stringify(buildJournalExport(), null, 2);
+    const name = `red-letter-journal-${todayStr()}.json`;
+    const file = new File([json], name, { type: 'application/json' });
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Red Letter journal' });
+        showToast(`Backed up ${items.length} saved ${items.length === 1 ? 'word' : 'words'}`);
+        return 'shared';
+      }
+    } catch (err) {
+      if (err && err.name === 'AbortError') return 'aborted';
+    }
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    showToast(`Backup saved — ${items.length} ${items.length === 1 ? 'word' : 'words'}`);
+    return 'downloaded';
+  }
+
+  function importJournalData(data) {
+    if (!data || data.app !== 'red-letter' || !Array.isArray(data.journal)) {
+      throw new Error('Not a Red Letter backup');
+    }
+    const incoming = data.journal.filter((item) => item && typeof item.key === 'string' && item.quote);
+    const existing = getJournal();
+    const seen = new Set(existing.map((item) => item.key));
+    const added = incoming.filter((item) => !seen.has(item.key));
+    if (added.length) {
+      const merged = existing.concat(added).sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
+      setJournal(merged);
+      syncSaveButtons();
+      syncChatSaveButtons();
+      renderJournalIfVisible();
+    }
+    return { added: added.length, skipped: incoming.length - added.length };
+  }
+
+  async function importJournalFile(file) {
+    if (!file) return null;
+    try {
+      const text = await file.text();
+      const result = importJournalData(JSON.parse(text));
+      showToast(result.added
+        ? `Restored ${result.added} saved ${result.added === 1 ? 'word' : 'words'}`
+        : 'Everything in that backup is already here');
+      return result;
+    } catch (err) {
+      showToast('That file isn’t a Red Letter backup');
+      return null;
+    }
+  }
+
+  // Chrome grants this for installed apps; Safari 17+ uses the same heuristic.
+  // It protects against quota eviction, not the Safari-tab 7-day cap — the
+  // backup above covers that.
+  function requestPersistentStorage() {
+    try {
+      if (!navigator.storage || typeof navigator.storage.persist !== 'function') return;
+      navigator.storage.persisted().then((already) => {
+        if (!already) navigator.storage.persist().catch(() => {});
+      }).catch(() => {});
+    } catch (_) { /* ignore */ }
   }
 
   function getJournal() {
@@ -1607,6 +1704,7 @@
     applySettings();
     setupChatInput();
     setupConnectivity();
+    requestPersistentStorage();
     setupInstallPrompt();
     preparePlusSheet();
     registerServiceWorker();
@@ -1644,6 +1742,11 @@
     openPlus,
     closePlus,
     clearChat,
+    exportJournal,
+    importJournalFile,
+    importJournalData,
+    buildJournalExport,
+    advisorFallbackToast,
     ls,
     lsSet,
     esc,

@@ -30,7 +30,10 @@
   function applyKeyboardInset() {
     const vv = global.visualViewport;
     if (!vv) return;
-    const inset = Math.max(0, global.innerHeight - vv.height - vv.offsetTop);
+    let inset = Math.max(0, global.innerHeight - vv.height - vv.offsetTop);
+    // Installed iOS reports visualViewport.height minus the home-indicator
+    // inset (~34px) at rest; anything under 48px is not a keyboard.
+    if (inset <= 48) inset = 0;
     document.documentElement.style.setProperty('--keyboard-inset', `${inset}px`);
     document.body.classList.toggle('keyboard-open', inset > 80);
     keyboardOpen = inset > 80;
@@ -254,6 +257,58 @@
     });
   }
 
+  /* ── Safari-tab journal nudge (ITP 7-day cap; installed apps exempt) ── */
+
+  const KEEP_NUDGE_KEY = 'rla-keep-nudge-dismissed';
+
+  function journalCount() {
+    try {
+      const raw = localStorage.getItem('rla-journal');
+      const items = raw ? JSON.parse(raw) : [];
+      return Array.isArray(items) ? items.length : 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  function shouldShowKeepNudge() {
+    if (isStandalone()) return false;
+    if (!isIos()) return false;
+    if (localStorage.getItem(KEEP_NUDGE_KEY)) return false;
+    return journalCount() >= 1;
+  }
+
+  function syncKeepNudge() {
+    const nudge = id('keep-nudge');
+    if (!nudge) return;
+    nudge.hidden = !shouldShowKeepNudge();
+  }
+
+  function setupKeepNudge() {
+    const nudge = id('keep-nudge');
+    if (!nudge) return;
+    const add = id('keep-nudge-add');
+    const backup = id('keep-nudge-backup');
+    const dismiss = id('keep-nudge-dismiss');
+    if (add) add.addEventListener('click', () => openInstallHelp());
+    if (backup) backup.addEventListener('click', () => {
+      if (typeof global.exportJournal === 'function') global.exportJournal();
+    });
+    if (dismiss) dismiss.addEventListener('click', () => {
+      localStorage.setItem(KEEP_NUDGE_KEY, new Date().toISOString());
+      nudge.hidden = true;
+    });
+    syncKeepNudge();
+    // Journal changes and tab switches re-evaluate visibility.
+    const journalTab = id('nav-journal');
+    if (journalTab) journalTab.addEventListener('click', () => setTimeout(syncKeepNudge, 50));
+    global.addEventListener('storage', syncKeepNudge);
+    const list = id('journal-list');
+    if (list && typeof MutationObserver !== 'undefined') {
+      new MutationObserver(syncKeepNudge).observe(list, { childList: true });
+    }
+  }
+
   /* ── Standalone class for CSS ─────────────────────────────────── */
 
   function markStandalone() {
@@ -269,6 +324,7 @@
     setupServiceWorkerUpdates();
     setupSpeechLifecycle();
     setupModalFocus();
+    setupKeepNudge();
     applyKeyboardInset();
   }
 

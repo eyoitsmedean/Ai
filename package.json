@@ -1,6 +1,6 @@
 {
   "name": "red-letter-advisor",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
   "main": "server.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
+    "@anthropic-ai/sdk": "^0.124.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2"

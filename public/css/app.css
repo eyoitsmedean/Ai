@@ -3787,6 +3787,53 @@ body::before {
   padding: 56px 28px 40px;
 }
 
+/* Safari-tab data-loss nudge (hidden when installed) */
+.keep-nudge {
+  margin: 0 0 18px;
+  padding: 14px 16px 12px;
+  border: 1px solid rgba(196, 30, 30, 0.28);
+  border-left: 3px solid var(--crimson);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--crimson) 6%, transparent);
+}
+
+.keep-nudge p {
+  margin: 0 0 10px;
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-2, inherit);
+}
+
+.keep-nudge-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.keep-nudge-actions .action-btn {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.keep-nudge-dismiss {
+  margin-left: auto;
+  min-height: 40px;
+  padding: 0 8px;
+  background: none;
+  border: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: inherit;
+  opacity: 0.6;
+}
+
+.keep-nudge[hidden] {
+  display: none;
+}
+
 .journal-empty-mark {
   font-size: 28px;
   color: var(--crimson);
@@ -4376,13 +4423,21 @@ textarea {
   }
 }
 
+/* Installed iOS + viewport-fit=cover: dvh/svh exclude the safe-area insets
+   (WebKit bug 254868); vh is the unit that fills the screen there. */
 html.is-standalone .app {
   width: 100% !important;
   max-width: none !important;
-  height: 100dvh !important;
+  height: 100vh !important;
   margin: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+}
+
+@media (display-mode: standalone) {
+  .app {
+    height: 100vh !important;
+  }
 }
 
 html.is-standalone {

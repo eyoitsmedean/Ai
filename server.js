@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
 const fs = require('fs');
@@ -8,6 +9,21 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '256kb' }));
+
+// Cross-origin API access for a static front end (e.g. GitHub Pages) that
+// points at this host via <meta name="rla-api-base">. Same-origin is untouched.
+const ALLOWED_ORIGINS = String(process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+if (ALLOWED_ORIGINS.length) {
+  app.use('/api', cors({
+    origin: ALLOWED_ORIGINS,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+    maxAge: 600,
+  }));
+}
 
 // Simple in-memory rate limit for LLM routes (per IP)
 const rateBuckets = new Map();
@@ -60,6 +76,25 @@ app.use(express.static(path.join(__dirname, 'public'), {
     }
   },
 }));
+
+// Opus 5 thinks by default and max_tokens caps thinking + text; effort 'low'
+// is the documented setting for chat-style, latency-sensitive replies.
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
+const MODEL_EFFORT = process.env.ANTHROPIC_EFFORT || 'low';
+function modelParams(maxTokens) {
+  return {
+    model: MODEL,
+    max_tokens: maxTokens,
+    thinking: { type: 'adaptive' },
+    output_config: { effort: MODEL_EFFORT },
+  };
+}
+function logStop(route, response) {
+  const reason = response && response.stop_reason;
+  if (reason && reason !== 'end_turn') {
+    console.warn(`[${route}] stop_reason=${reason} (raise max_tokens or lower effort)`);
+  }
+}
 
 const client = new Anthropic(
   process.env.ANTHROPIC_AUTH_TOKEN
@@ -330,12 +365,11 @@ async function fetchDailyContent() {
 
   try {
     const response = await client.messages.create({
-      model: 'claude-opus-5',
-      max_tokens: 1400,
-      thinking: { type: 'adaptive' },
+      ...modelParams(2048),
       system: DAILY_SYSTEM,
       messages: [{ role: 'user', content: "Generate today's daily affirmation and word." }],
     });
+    logStop('daily', response);
 
     const text = response.content.find(b => b.type === 'text')?.text ?? '';
     const data = JSON.parse(text);
@@ -430,12 +464,11 @@ app.post('/api/encouragement', llmRateLimit, async (req, res) => {
 
   try {
     const response = await client.messages.create({
-      model: 'claude-opus-5',
-      max_tokens: 1600,
-      thinking: { type: 'adaptive' },
+      ...modelParams(2048),
       system: ENCOURAGE_SYSTEM,
       messages: [{ role: 'user', content: `Generate encouragement for: ${theme}` }],
     });
+    logStop('encouragement', response);
     const text = response.content.find(b => b.type === 'text')?.text ?? '';
     const data = JSON.parse(text);
     data.source = 'model';
@@ -468,9 +501,7 @@ app.post('/api/chat', llmRateLimit, async (req, res) => {
   try {
     let fullText = '';
     const stream = client.messages.stream({
-      model: 'claude-opus-5',
-      max_tokens: 1400,
-      thinking: { type: 'adaptive' },
+      ...modelParams(2048),
       system: advisorSystemPrompt(),
       messages: safeMessages,
     });
@@ -480,7 +511,7 @@ app.post('/api/chat', llmRateLimit, async (req, res) => {
       res.write(`data: ${JSON.stringify({ text })}\n\n`);
     });
 
-    await stream.finalMessage();
+    logStop('chat', await stream.finalMessage());
 
     // Server-side quote lock report for client seals
     const blocks = [];
