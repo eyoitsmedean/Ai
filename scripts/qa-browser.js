@@ -168,6 +168,18 @@ async function main() {
     assert(cites[1].every((c) => !first.has(c)), 'second letter repeated ' + cites[1].join(', '));
   });
 
+  await check('the mark survives a reload', async () => {
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => switchTab('advisor'));
+    await page.waitForSelector('.msg-ai .msg-save-btn', { timeout: 6000 });
+    const state = await page.evaluate(() => ({
+      letters: document.querySelectorAll('.msg-ai').length,
+      marks: document.querySelectorAll('.msg-ai .letter-colophon').length,
+    }));
+    assert(state.letters === 2, 'expected two restored letters, got ' + state.letters);
+    assert(state.marks === 2, 'restored letters lost their mark: ' + state.marks);
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

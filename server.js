@@ -343,7 +343,6 @@ app.post('/api/chat', async (req, res) => {
     res.write('data: [DONE]\n\n');
     res.end();
   };
-  // The harness writes the letter itself from the corpus — no model, no invented verse.
   const letterpress = () => finish(composeLetter(last.content, { history: messages }).text, 'letterpress');
 
   req.on('close', () => {

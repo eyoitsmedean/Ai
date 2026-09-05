@@ -24,7 +24,7 @@ npm install
 npm start              # http://localhost:3000
 ```
 
-Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor is set by the harness itself — it hears the need you named (shame, grief, fear, doubt…), chooses sayings from the spoken corpus, and never repeats itself within a correspondence. The page marks these letters *Set from the Gospels, without a model*.
+Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor is set by the harness itself — it hears the need you named (shame, grief, fear, doubt…), answers from five spoken sayings kept for that room, and does not repeat a sentence until the room and the commons are spent, at which point it says so. The page marks these letters *Set without a model, from his words only*, and the mark stays with the letter through reloads and into the journal.
 
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
