@@ -134,6 +134,18 @@ describe('smoke routes', () => {
     assert.doesNotMatch(bad, /leaf=/);
   });
 
+  it('keeps 988 by call, text, and chat, and names the Crown’s patentee', async () => {
+    const res = await request('GET', '/index.html');
+    assert.equal(res.status, 200);
+    assert.ok((res.raw.match(/href="tel:988"/g) || []).length >= 4, '988 must be reachable from the title page, Advisor, settings, and crisis modal');
+    assert.ok(/988lifeline\.org/.test(res.raw), 'chat is a real 988 modality and must be offered');
+    assert.ok(/findahelpline\.com/.test(res.raw), 'a non-U.S. path must remain');
+    assert.ok(/Crown’s patentee, Cambridge University Press/.test(res.raw), 'the U.K. acknowledgement must be printed');
+    assert.ok(/not a person/i.test(res.raw), 'the page must say it is not a person');
+    const sw = await request('GET', '/sw.js');
+    assert.ok(/rla-phase0-v14/.test(sw.raw) && /\/data\/press\.js/.test(sw.raw), 'service worker must carry the Press offline under a fresh cache name');
+  });
+
   it('seals every crimson sentence in the Press against the Gospel corpus', async () => {
     const vm = require('node:vm');
     const fs = require('node:fs');
@@ -154,7 +166,8 @@ describe('smoke routes', () => {
       const res = await request('POST', '/api/verify', { items: items.slice(i, i + 12) });
       assert.equal(res.status, 200);
       const data = JSON.parse(res.raw);
-      const failed = data.results.filter((r) => !r.ok).map((r) => r.verse + ' (' + r.reason + ')');
+      // ok means the reference is genuine red-letter speech; the score means the words are His, not a clipping.
+      const failed = data.results.filter((r) => !r.ok || r.score < 0.92).map((r) => r.verse + ' (' + (r.ok ? 'score ' + r.score.toFixed(2) : r.reason) + ')');
       assert.deepEqual(failed, [], 'unsealed: ' + failed.join(', '));
     }
   });

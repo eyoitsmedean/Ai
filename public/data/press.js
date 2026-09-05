@@ -58,7 +58,7 @@
     examen: {
       kicker: 'Compline on paper',
       title: 'Evening examen',
-      quote: 'Peace I leave with you, my peace I give unto you.',
+      quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.',
       verse: 'John 14:27',
       prompts: [
         { id: 'rejoice', label: 'Rejoice', hint: 'Where did a kindness land today? One is enough.' },
