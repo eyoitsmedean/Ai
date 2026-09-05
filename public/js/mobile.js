@@ -154,7 +154,11 @@
 
   function setupServiceWorkerUpdates() {
     if (!('serviceWorker' in navigator)) return;
+    // First-ever install also fires controllerchange (clients.claim); only a
+    // page that already had a controller is a real update.
+    const hadController = Boolean(navigator.serviceWorker.controller);
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController) return;
       if (document.body.dataset.swRefreshing) return;
       document.body.dataset.swRefreshing = '1';
       if (typeof global.showToast === 'function') {
@@ -186,6 +190,70 @@
     });
   }
 
+  /* ── Modal focus: inert the shell while a dialog is open ───────── */
+
+  const MODAL_IDS = [
+    'lectio', 'amen', 'cmdk', 'settings-sheet', 'plus-sheet',
+    'share-sheet', 'blessing-sheet', 'install-sheet',
+  ];
+  let lastFocused = null;
+  let shellInert = false;
+
+  function isModalOpen(el) {
+    return el.classList.contains('on') && el.getAttribute('aria-hidden') !== 'true';
+  }
+
+  function anyModalOpen() {
+    return MODAL_IDS.some((name) => {
+      const el = id(name);
+      return el && isModalOpen(el);
+    });
+  }
+
+  function focusFirstIn(el) {
+    const target = el.querySelector(
+      'input:not([type="hidden"]), textarea, button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (target && typeof target.focus === 'function') {
+      try { target.focus({ preventScroll: true }); } catch (_) { target.focus(); }
+    }
+  }
+
+  function syncModalState() {
+    const open = anyModalOpen();
+    const app = id('app');
+    const onboarding = id('onboarding');
+    if (open && !shellInert) {
+      lastFocused = document.activeElement;
+      shellInert = true;
+      if (app) app.inert = true;
+      if (onboarding) onboarding.inert = true;
+      const active = MODAL_IDS.map(id).find((el) => el && isModalOpen(el));
+      if (active && !active.contains(document.activeElement)) {
+        setTimeout(() => focusFirstIn(active), 60);
+      }
+    } else if (!open && shellInert) {
+      shellInert = false;
+      if (app) app.inert = false;
+      if (onboarding) onboarding.inert = false;
+      if (lastFocused && typeof lastFocused.focus === 'function' && document.contains(lastFocused)) {
+        try { lastFocused.focus({ preventScroll: true }); } catch (_) { /* ignore */ }
+      }
+      lastFocused = null;
+    }
+  }
+
+  function setupModalFocus() {
+    if (typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(syncModalState);
+    MODAL_IDS.forEach((name) => {
+      const el = id(name);
+      if (!el) return;
+      el.setAttribute('aria-modal', 'true');
+      observer.observe(el, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
+    });
+  }
+
   /* ── Standalone class for CSS ─────────────────────────────────── */
 
   function markStandalone() {
@@ -200,6 +268,7 @@
     setupInstallButton();
     setupServiceWorkerUpdates();
     setupSpeechLifecycle();
+    setupModalFocus();
     applyKeyboardInset();
   }
 
