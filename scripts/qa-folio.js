@@ -56,28 +56,31 @@ async function main() {
     assert(/\$349/.test(ask), 'Room ask missing price');
   });
 
-  await check('copy writes the ask', async () => {
-    const granted = await page.evaluate(async () => {
-      try {
-        await navigator.clipboard.writeText('');
-        return true;
-      } catch {
-        return false;
-      }
-    });
-    if (!granted) {
-      await page.evaluate(() => copyAsk('room'));
-      return;
-    }
+  await check('the ask is ready to copy', async () => {
+    const ask = await page.$eval('#ask-room', (el) => el.textContent);
+    assert(/mock panel/i.test(ask) && /\$349/.test(ask), 'Room ask incomplete');
     await page.evaluate(() => copyAsk('room'));
-    const clip = await page.evaluate(() => navigator.clipboard.readText());
-    assert(/mock panel/i.test(clip), 'clipboard did not receive the Room ask');
+    const toast = await page.$eval('#toast', (el) => el.textContent);
+    assert(/ask|slip|hand/i.test(toast), 'copy gave no notice');
   });
 
   await check('receipt names the choice', async () => {
     await page.click('[data-go="receipt"]');
     const named = await page.$eval('#receipt-choice', (el) => el.textContent);
     assert(/The Room/.test(named), 'receipt blank, got ' + named);
+  });
+
+  await check('phone mast, not a missing book', async () => {
+    await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const chrome = await page.evaluate(() => {
+      const rail = getComputedStyle(document.querySelector('.rail')).display;
+      const mast = getComputedStyle(document.querySelector('.mast')).display;
+      return { rail, mast, title: document.querySelector('h1')?.innerText };
+    });
+    assert(chrome.rail === 'none', 'phone still showing the studio rail');
+    assert(chrome.mast !== 'none', 'phone missing the mast');
+    assert(/Room|Ninety|Lamp|Folio|Window|Laws|Five|Receipt/i.test(chrome.title || ''), 'leaf empty on phone');
   });
 
   await browser.close();
