@@ -53,6 +53,8 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 `/?fresh=1` or Settings → **Begin again** wipes `rla-*` storage on this device.
 
+`/?b=John%2014:27&n=For%20you` is a blessing. It opens the room on a leaf with the note and the verse, then turns to the title page or Today. The reference is looked up in the spoken corpus (`/api/verify`, or `library.json` when static); anything outside Matthew–John is dropped, and the note is capped at 140 characters. Nothing is stored server-side. **Send a blessing** builds this link, shares it with the card on a phone, and copies it on a desktop.
+
 ## Design
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card. Seven Days (Come, Peace, Light, Love, Forgive, Abide, Go) sit in the margin. You never have to name the church year.
@@ -60,7 +62,7 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 ## Deploy
 
 - **App (Node):** `npm start`. Bind `0.0.0.0`. Set `TRUST_PROXY=1` behind a load balancer so rate limits see the real client. Health check: `GET /api/health`.
-- **GitHub Pages:** the workflow publishes `public/` from `main`. Today and Seek work from `curated.json`. The landing lives at `welcome.html`. Advisor needs the Node host.
+- **GitHub Pages:** the workflow publishes `public/` from `main`. Today, Seek, the spoken library, the Advisor (curated letters), and blessing links all work without the Node host; assets, `manifest.json`, and `sw.js` resolve relative to the folio, so a project URL such as `…github.io/Ai/` works. The landing lives at `welcome.html`. Only rate-limited model letters need Node.
 - A process manager can use the included `Procfile` (`web: node server.js`).
 
 KJV text is public domain. Attribution is printed beside citations.

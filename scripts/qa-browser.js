@@ -86,7 +86,7 @@ async function main() {
     await page.click('#ob-ack');
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
-    await page.click('.tp-skip');
+    await page.click('#onboarding .tp-skip');
     await page.waitForFunction(() => document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
     await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 8000 });
     const quote = await page.$eval('#sit-quote', (el) => el.textContent);
@@ -227,6 +227,44 @@ async function main() {
       return document.getElementById('lib-folio-quote').textContent;
     });
     assert(folio && folio.length > 8, 'library leaf empty');
+  });
+
+  await check('a blessing link opens a leaf', async () => {
+    await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 });
+    await page.goto(BASE + '/?b=' + encodeURIComponent('John 14:27') + '&n=' + encodeURIComponent('For your Tuesday.'), { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => !document.getElementById('blessing-leaf').classList.contains('hidden'), { timeout: 6000 });
+    const leaf = await page.evaluate(() => ({
+      quote: document.getElementById('bl-quote').textContent,
+      note: document.getElementById('bl-note').textContent,
+      cite: document.getElementById('bl-cite').textContent,
+      clean: location.search === '',
+    }));
+    assert(/^“Peace I leave with you/.test(leaf.quote), 'blessing should be the exact verse, got: ' + leaf.quote.slice(0, 40));
+    assert(/For your Tuesday/.test(leaf.note), 'blessing note missing');
+    assert(/John 14:27/.test(leaf.cite), 'blessing cite missing');
+    assert(leaf.clean, 'blessing params should leave the address bar');
+    await page.evaluate(() => keepBlessing());
+    const kept = await page.evaluate(() => JSON.stringify(localStorage.getItem('rla-journal') || ''));
+    assert(/Peace I leave/.test(kept), 'kept blessing did not reach the journal');
+  });
+
+  await check('a forged blessing is dropped', async () => {
+    await page.goto(BASE + '/?b=' + encodeURIComponent('Romans 8:28'), { waitUntil: 'networkidle0' });
+    await new Promise((r) => setTimeout(r, 600));
+    const state = await page.evaluate(() => ({
+      leaf: document.getElementById('blessing-leaf').classList.contains('hidden'),
+      body: document.body.innerText,
+    }));
+    assert(state.leaf, 'non-Gospel reference opened a blessing leaf');
+    assert(!/Romans/.test(state.body), 'Paul slipped onto the page');
+  });
+
+  await check('a blessing carries a link', async () => {
+    await page.evaluate(() => {
+      blessingPick = { verse: 'Matthew 11:28', quote: 'Come unto me' };
+    });
+    const link = await page.evaluate(() => blessingLink(blessingPick, 'Rest.'));
+    assert(/\?b=Matthew\+11%3A28&n=Rest\./.test(link) || /b=Matthew(\+|%20)11%3A28/.test(link), 'blessing link malformed: ' + link);
   });
 
   await check('desktop rail, not a dock', async () => {

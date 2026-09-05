@@ -14,9 +14,9 @@
   <title>Red Letter</title>
   <meta property="og:url" content="/" />
   <meta name="application-name" content="Red Letter" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -338,6 +338,9 @@ textarea { font-family: var(--body); }
   text-transform: uppercase;
 }
 .tp-note a { color: var(--crimson); }
+.bl-note { font-style: italic; color: var(--ink-2); }
+.bl-quote { text-align: left; margin: 10px auto 6px; font-size: clamp(22px, 4.6vw, 30px); }
+#blessing-leaf .cite { margin-bottom: 26px; }
 
 /* ── Shell ── */
 .silk {
@@ -1547,6 +1550,20 @@ html.sitting .sit-sheet {
 <div class="silk" aria-hidden="true"></div>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
 
+<section id="blessing-leaf" class="titlepage hidden" role="dialog" aria-labelledby="bl-kicker">
+  <div class="tp-inner">
+    <div class="tp-mark" aria-hidden="true">R</div>
+    <div class="tp-ornament">A blessing</div>
+    <p class="tp-kicker" id="bl-kicker">Someone sent you a word</p>
+    <p class="tp-deck bl-note" id="bl-note" hidden></p>
+    <p class="red-letter bl-quote" id="bl-quote"></p>
+    <p class="cite" id="bl-cite"></p>
+    <button class="tp-open" type="button" onclick="openBlessedRoom()">Turn the page</button>
+    <button class="tp-skip" type="button" onclick="keepBlessing()">Keep this word</button>
+    <p class="tp-note">The words He actually spoke, set from the Gospels. Software, not a person.</p>
+  </div>
+</section>
+
 <section id="onboarding" class="titlepage hidden" role="dialog" aria-labelledby="tp-title">
   <div class="tp-inner">
     <div class="tp-mark" aria-hidden="true">R</div>
@@ -1983,10 +2000,12 @@ html.sitting .sit-sheet {
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
   <div class="actions" style="margin-top:18px">
-    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
-    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
-    <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
+    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send it</button>
+    <button class="ghost" type="button" onclick="copyBlessingLink()">Copy the link</button>
+    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn card</button>
+    <button class="ghost" type="button" onclick="sendBlessing('void')">Night card</button>
   </div>
+  <p class="tp-note" style="margin-top:14px">The link opens this room on a leaf with your note and the verse. No account, no app to install.</p>
 </aside>
 
 <aside class="settings-sheet" id="share-sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
@@ -2042,9 +2061,9 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
-<script src="/data/curated.js"></script>
-<script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
+<script src="./data/curated.js"></script>
+<script src="./data/advisor.js"></script>
+<script src="./data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -2062,7 +2081,12 @@ const THEMES = [
   ['Hope', 'Joy no one can take'],
 ];
 
+const BASE = (function () {
+  const m = location.pathname.match(/^(\/[^/]+\/)/);
+  return /github\.io$/i.test(location.hostname) && m ? m[1] : '/';
+})();
 let dailyData = null;
+let blessedWord = null;
 let currentEncData = null;
 let currentEncTheme = null;
 let currentSaying = null;
@@ -2197,27 +2221,128 @@ function clearReaderStorage() {
 function startNewReader() {
   if (!confirm('Start a new reader on this device? Words kept here will be cleared.')) return;
   clearReaderStorage();
-  location.href = '/';
+  location.href = BASE;
+}
+
+function parseSpokenRef(ref) {
+  const m = String(ref || '').trim().match(/^(Matthew|Mark|Luke|John)\s+(\d{1,3}):(\d{1,3})(?:\s*[–—-]\s*(\d{1,3}))?$/i);
+  if (!m) return null;
+  const book = m[1][0].toUpperCase() + m[1].slice(1).toLowerCase();
+  const start = Number(m[3]);
+  return { book, chapter: Number(m[2]), start, end: Number(m[4] || start) };
+}
+
+async function findSpoken(ref) {
+  const want = parseSpokenRef(ref);
+  if (!want) return null;
+  try {
+    const res = await fetch(BASE + 'api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ verse: ref, quote: '' }] }),
+    });
+    if (res.ok) {
+      const row = ((await res.json()).results || [])[0];
+      if (row && row.ok && row.quote) return { verse: row.verse, quote: row.quote };
+      if (row && !row.ok) return null;
+    }
+  } catch (_) {}
+  let lib = null;
+  try { lib = await loadStaticLibrary(); } catch (_) { return null; }
+  const rows = (lib.sayings || []).filter((s) => s.book === want.book && Number(s.chapter) === want.chapter);
+  const exact = rows.find((s) => Number(s.start) === want.start && Number(s.end) === want.end);
+  const cover = exact || rows.find((s) => Number(s.start) <= want.start && Number(s.end) >= want.end);
+  if (!cover) return null;
+  return { verse: cover.citation, quote: cover.text };
+}
+
+function blessingLink(pick, note) {
+  const u = new URL(BASE, location.origin);
+  u.searchParams.set('b', pick.verse);
+  const n = String(note || '').trim().slice(0, 140);
+  if (n) u.searchParams.set('n', n);
+  return u.toString();
+}
+
+async function showBlessingLeaf(ref, note) {
+  const found = await findSpoken(ref);
+  if (!found) return false;
+  blessedWord = { ...found, note: String(note || '').trim().slice(0, 140) };
+  const noteEl = document.getElementById('bl-note');
+  noteEl.textContent = blessedWord.note;
+  noteEl.hidden = !blessedWord.note;
+  document.getElementById('bl-quote').textContent = '“' + found.quote + '”';
+  document.getElementById('bl-cite').textContent = found.verse + '  ·  KJV';
+  document.getElementById('blessing-leaf').classList.remove('hidden');
+  document.getElementById('app').setAttribute('aria-hidden', 'true');
+  return true;
+}
+
+function leaveBlessingLeaf() {
+  const leaf = document.getElementById('blessing-leaf');
+  const finish = () => {
+    leaf.classList.add('hidden');
+    leaf.classList.remove('leaving');
+    if (!ls('rla-onboarded')) {
+      document.getElementById('onboarding').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('app').removeAttribute('aria-hidden');
+    startApp();
+  };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+  leaf.classList.add('leaving');
+  setTimeout(finish, 640);
+}
+
+function openBlessedRoom() {
+  leaveBlessingLeaf();
+}
+
+function keepBlessing() {
+  if (blessedWord) {
+    const key = 'bless-' + Date.now();
+    saveJournalItem({
+      id: key,
+      key,
+      type: 'bless',
+      title: blessedWord.note || 'A blessing sent to you',
+      body: blessedWord.quote,
+      verse: blessedWord.verse,
+    });
+    showToast('Kept in the journal');
+  }
+  leaveBlessingLeaf();
 }
 
 (function init() {
+  let blessRef = '';
+  let blessNote = '';
   try {
     const q = new URLSearchParams(location.search);
-    if (q.get('fresh') === '1' || q.get('demo') === '1') {
-      clearReaderStorage();
-      history.replaceState({}, '', '/');
-    }
+    if (q.get('fresh') === '1' || q.get('demo') === '1') clearReaderStorage();
+    blessRef = q.get('b') || '';
+    blessNote = q.get('n') || '';
+    if ([...q.keys()].length) history.replaceState({}, '', location.pathname);
   } catch (_) {}
   setWatch();
   applySeason();
   paintThemeIndex();
   bindRituals();
-  if (!ls('rla-onboarded')) {
-    document.getElementById('onboarding').classList.remove('hidden');
+  const openDoor = () => {
+    if (!ls('rla-onboarded')) {
+      document.getElementById('onboarding').classList.remove('hidden');
+      document.getElementById('app').setAttribute('aria-hidden', 'true');
+      return;
+    }
+    startApp();
+  };
+  if (blessRef) {
     document.getElementById('app').setAttribute('aria-hidden', 'true');
+    showBlessingLeaf(blessRef, blessNote).then((shown) => { if (!shown) openDoor(); });
     return;
   }
-  startApp();
+  openDoor();
 })();
 
 function setWatch() {
@@ -2519,16 +2644,17 @@ function paintThemeIndex() {
 
 async function loadCurated() {
   if (curatedPacks) return curatedPacks;
-  const res = await fetch('/curated.json');
+  const res = await fetch(BASE + 'curated.json');
   curatedPacks = await res.json();
   return curatedPacks;
 }
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily?date=' + encodeURIComponent(todayStr()));
+    const res = await fetch(BASE + 'api/daily?date=' + encodeURIComponent(todayStr()));
+    if (!res.ok) throw new Error('api ' + res.status);
     dailyData = await res.json();
-    if (dailyData.error) throw new Error(dailyData.error);
+    if (!dailyData || dailyData.error || !dailyData.affirmation || !dailyData.word) throw new Error('bad daily');
   } catch (e) {
     try {
       const cur = await loadCurated();
@@ -2575,7 +2701,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch(BASE + 'api/encouragement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -2712,7 +2838,7 @@ function filterStaticLibrary({ book, q, theme, limit, offset }) {
 
 async function loadStaticLibrary() {
   if (staticLibrary) return staticLibrary;
-  const res = await fetch('/library.json');
+  const res = await fetch(BASE + 'library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
   return staticLibrary;
@@ -2726,7 +2852,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch(BASE + 'api/library?' + params.toString());
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -3137,7 +3263,7 @@ async function sendMsg(preset) {
   let opened = false;
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch(BASE + 'api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
@@ -3288,7 +3414,7 @@ function renderJournal() {
     list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Write a line above, or keep a sitting. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with', note: 'A line' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with', note: 'A line', bless: 'Sent to you' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -3923,14 +4049,14 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch(BASE + 'api/library?limit=24');
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
     }
   } catch (_) {}
   try {
-    const res = await fetch('/library.json');
+    const res = await fetch(BASE + 'library.json');
     const data = await res.json();
     return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
   } catch (_) {
@@ -3985,11 +4111,64 @@ function updateBlessingPreview() {
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
     '<div class="cite">' + esc(blessingPick.verse) + '</div>';
 }
+function blessingNote() {
+  const el = document.getElementById('blessing-note');
+  return (el && el.value.trim()) || '';
+}
+function countBlessing() {
+  const n = Number(ls('rla-blessed') || 0) + 1;
+  lsSet('rla-blessed', String(n));
+}
+async function copyBlessingLink() {
+  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const link = blessingLink(blessingPick, blessingNote());
+  try {
+    await navigator.clipboard.writeText(link);
+    countBlessing();
+    showToast('Link copied — paste it to someone');
+  } catch (_) {
+    prompt('Copy this link', link);
+  }
+}
 async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const note = blessingNote();
+  const link = blessingLink(blessingPick, note);
+  const text = (note ? note + '\n\n' : '') + '“' + blessingPick.quote + '”\n— ' + blessingPick.verse + '\n' + link;
+  const payload = { kicker: 'A blessing', title: note || 'For you', quote: blessingPick.quote, verse: blessingPick.verse };
   closeBlessing();
-  await shareItem('blessing', style || 'parchment');
-  showToast('Blessing ready to send');
+  if (navigator.share) {
+    try {
+      const blob = await renderShareCard(payload, style || 'parchment');
+      const file = new File([blob], 'red-letter-blessing.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'A blessing', text });
+      } else {
+        await navigator.share({ title: 'A blessing', text, url: link });
+      }
+      countBlessing();
+      showToast('Sent');
+      return;
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    countBlessing();
+    showToast('Link copied — paste it to someone');
+  } catch (_) {
+    prompt('Copy this link', link);
+  }
+  if (style && style !== 'parchment') {
+    try {
+      const blob = await renderShareCard(payload, style);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'red-letter-blessing.png';
+      a.click();
+    } catch (_) {}
+  }
 }
 
 function printSitting() {
@@ -4100,7 +4279,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch(BASE + 'api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
@@ -4146,7 +4325,7 @@ function checkMorningReminder() {
   const key = 'rla-reminded-' + todayStr();
   if (ls(key) === '1') return;
   try {
-    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: '/icon-192.png', tag: 'rla-morning' });
+    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: BASE + 'icon-192.png', tag: 'rla-morning' });
     lsSet(key, '1');
   } catch (_) {}
 }
@@ -4227,7 +4406,7 @@ function bindRituals() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register(BASE + 'sw.js').catch(() => {});
 }
 </script>
 </body>
