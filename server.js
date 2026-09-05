@@ -53,7 +53,9 @@ app.use(express.static(path.join(__dirname, 'public'), {
     if (filePath.endsWith('sw.js')) {
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Service-Worker-Allowed', '/');
-    } else if (/\.(?:js|css|png|jpg|jpeg|webp|woff2)$/i.test(filePath)) {
+    } else if (/\.woff2$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (/\.(?:js|css|png|jpg|jpeg|webp)$/i.test(filePath)) {
       res.setHeader('Cache-Control', 'public, max-age=3600');
     }
   },
