@@ -643,7 +643,24 @@ class AboutPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Quoted verses are the public-domain King James Version (1769). Nothing is invented to fill a blank page.',
+            'Quoted verses are the King James Version (1769). Nothing is invented to fill a blank page.',
+            style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Rights in the Authorized (King James) Version of the Bible in the United Kingdom are vested in the Crown and administered by the Crown’s patentee, Cambridge University Press.',
+            key: const Key('about-rights'),
+            style: TextStyle(height: 1.5, fontSize: 13, color: paper.colors.inkMuted),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Privacy',
+            style: TextStyle(letterSpacing: 1.4, fontSize: 12, color: paper.colors.gold),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Red Words collects nothing. No account, no analytics, no network. The only things written on this device are whether the title leaf has been turned and the seven-day Word rotation the home-screen widget reads.',
+            key: const Key('about-privacy'),
             style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
           ),
           const SizedBox(height: 28),

@@ -84,6 +84,25 @@ void main() {
         findsNothing);
   });
 
+  testWidgets('About carries the rights line and the privacy statement in-app', (tester) async {
+    await tester.pumpWidget(
+      RedWordsApp(
+        catalog: catalog(),
+        now: DateTime(2026, 9, 2, 8),
+        session: SessionStore(opened: true),
+        syncWidget: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('About'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('about-rights')), findsOneWidget);
+    expect(find.textContaining('Cambridge University Press'), findsOneWidget);
+    expect(find.byKey(const Key('about-privacy')), findsOneWidget);
+    expect(find.textContaining('collects nothing'), findsOneWidget);
+    expect(find.textContaining('988'), findsOneWidget);
+  });
+
   testWidgets('Seven Days opens Come without shame chrome', (tester) async {
     await tester.pumpWidget(
       RedWordsApp(
