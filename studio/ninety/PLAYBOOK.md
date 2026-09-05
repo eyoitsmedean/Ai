@@ -288,7 +288,9 @@ If the URL is not live by 30 September, Advent is still possible in November —
 
 ## The path · *Watch with me*
 
-Four weeks. Twenty-eight rooms. All speech already in this repo (Seven Days, Forty extras, curated packs). KJV. Verified Jesus. No invented verse.
+**Built.** Four weeks. Twenty-eight rooms. Wired into the Seven Days ribbon as `RLA_ADVENT` in `data/paths.js`. From Advent Sunday through Christmas the ribbon becomes *Watch with me* on its own — four stacked weeks, rooms opened by the calendar (not by streak), a missed day stays open, the sitting keeps the room on the device. KJV. Every line verified red-letter in `test/paths.test.js`. No repeats. No invented verse.
+
+Preview out of season: `/?path=advent&day=6`. Force the old ribbon in season: `/?path=seven`.
 
 ### Week 1 · Watch · 29 Nov – 5 Dec  
 *This is the only week inside the 90-day proof.*
@@ -303,47 +305,47 @@ Four weeks. Twenty-eight rooms. All speech already in this repo (Seven Days, For
 | 4 Fri | Abide | John 15:4–5 | Fruit comes from staying close. **90-day close.** |
 | 5 Sat | Go | Matthew 28:20 | The last word of the seven is presence. |
 
-That is Seven Days in seasonal clothes. You already built the ribbon. Name it *Watch with me.* Do not rebuild the shell.
+That is Seven Days in seasonal clothes. The shell was not rebuilt.
 
 ### Week 2 · Wait · 6–12 Dec
 
-| Day | Room | Verse |
-| --- | --- | --- |
-| 6 | Troubled | John 14:1 |
-| 7 | Overcome | John 16:33 |
-| 8 | Bread | John 6:35 |
-| 9 | Shepherd | John 10:11 |
-| 10 | Always | Matthew 28:20 |
-| 11 | Willing | Matthew 26:39 |
-| 12 | Ninety-nine | Luke 15:4–5 |
+| Day | Room | Verse | Why this morning |
+| --- | --- | --- | --- |
+| 6 | Watch | Matthew 25:13 | Advent is attention you keep, not a countdown you control. |
+| 7 | Troubled | John 14:1 | He speaks to a room about to break. |
+| 8 | Enough | Matthew 6:34 | He hands you back today, and only today. |
+| 9 | Flock | Luke 12:32 | Little is the size he chooses to give to. |
+| 10 | Sparrows | Luke 12:7 | Counted is the opposite of forgotten. |
+| 11 | Bread | John 6:35 | Hunger is honest. He names himself as enough. |
+| 12 | Lost | Luke 15:4–5 | You are not an acceptable loss. |
 
 ### Week 3 · Prepare · 13–19 Dec
 
-| Day | Room | Verse |
-| --- | --- | --- |
-| 13 | Peacemakers | Matthew 5:9 |
-| 14 | Anointed | Luke 4:18 |
-| 15 | Sent | John 20:21 |
-| 16 | Sufficient | Matthew 6:34 |
-| 17 | Little flock | Luke 12:32 |
-| 18 | Comfortless | John 14:18 |
-| 19 | First | Matthew 6:33 |
+| Day | Room | Verse | Why this morning |
+| --- | --- | --- | --- |
+| 13 | Kingdom | Matthew 4:17 | His first sermon is one sentence. Closer than you think. |
+| 14 | First | Matthew 6:33 | The list does not shrink. The order changes. |
+| 15 | Thirst | John 7:37 | Thirst is the ticket. |
+| 16 | Ask | Matthew 7:7 | Three verbs and a door. |
+| 17 | Anointed | Luke 4:18 | Toward the poor, the broken, the locked. |
+| 18 | Mourn | Matthew 5:4 | December has empty chairs. He does not hurry grief. |
+| 19 | Mercy | Matthew 9:13 | He says who he came for. If you are not qualified, you are on the list. |
 
 ### Week 4 · Near · 20–26 Dec
 
-| Day | Room | Verse |
-| --- | --- | --- |
-| 20 | Still | Mark 4:39 |
-| 21 | Sparrows | Luke 12:7 |
-| 22 | Joy | John 15:11 |
-| 23 | Sorrow | John 16:22 |
-| 24 | Light of the world | Matthew 5:14 |
-| 25 | Bread reprise | John 6:35 |
-| 26 | With you | Matthew 28:20 |
+| Day | Room | Verse | Why this morning |
+| --- | --- | --- | --- |
+| 20 | Still | Mark 4:39 | Three words to a storm. |
+| 21 | Lift | Luke 21:28 | The longest night. He says where to look. |
+| 22 | Sorrow | John 16:22 | He names the sorrow first. Then a joy nobody can repossess. |
+| 23 | Joy | John 15:11 | Joy is his, left in you, meant to be full. |
+| 24 | Prepare | John 14:2–3 | The night before, a room is made ready. He is the one preparing, and the one coming. |
+| 25 | Here | John 12:46 | *I am come a light into the world.* Arrival. The paper warms. |
+| 26 | Comfort | John 14:18 | *I will not leave you comfortless: I will come to you.* The whole path. |
 
-Christmas Day does not need a new architecture. The paper warms. The sentence stays his.
+Christmas Day did not need a new architecture. The paper warms. The sentence stays his.
 
-**Implementation rule.** If wiring 28 rooms costs more than one November evening, ship Week 1 as Seven Days and keep weeks 2–4 as this table for January. A named week that ten humans can sit beats an unfinished 28.
+**What is still yours to do.** Nothing in code. Put the URL on HTTPS in September (one sitting). Sit week one as a user. Send ten. Count day-2. If you catch yourself redesigning the ribbon in November, close the editor — it already works.
 
 ## Three clips (camera roll, posted or not)
 
