@@ -41,7 +41,11 @@ npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`. `test/corpus.test.js` checks every Gospel chapter against KJV verse counts so a dropped verse can never shift a citation again; `test/paths.test.js` verifies every Seven and Forty leaf against the corpus.
 
-`npm run qa` drives a first session in headless Chrome (title page, lectio, Seven, Forty, Lent). It needs a running server and system Chrome.
+**Cutting the frame.** The KJV has no quotation marks, so "And Jesus answering said unto them," must be removed before a verse is printed in red. `lib/scripture.js` does this with three ordered rules — a named speaker (`Jesus`, the evangelist's capitalised `the Lord`), a pronoun frame at the start of a speech block, a narrator `, saying,` — and keeps parable speech whole (when Jesus says "His lord said unto him, Well done", those are His words). Cases the rules cannot decide are reviewed by hand in `data/spoken-overrides.json`; `""` there means the map marks a verse that is not His speech (Luke 13:14 is the synagogue ruler). `npm run audit` lists every red letter that still opens like narration; `test/spoken.test.js` fails on any named frame and requires each remaining pronoun frame to be listed as reviewed parable speech. The red letters follow the KJV red-letter tradition (Klopsch, 1899); like most KJV editions the room sets John 3:16–21 as His words, and Room settings says so.
+
+**The ledger.** LAUNCH's four signals are counted on the reader's device (`rla-ledger`: open, lectio, blessing, advisor, sevenStart, sevenDone; sixty days) and read in Room settings. Nothing leaves the device unless *Share anonymous counts* is on; then completed days are sent once each as plain totals — no name, no device id — to `POST /api/signal`, which appends to `data/signals.jsonl` (gitignored; `RLA_SIGNAL_PATH` overrides). `GET /api/signal/summary?days=30` returns the four LAUNCH ratios with their denominators; because no id travels, "active" is device-days, not unique devices, and the response says so. The toggle only appears when `/api/health` answers, so it is absent on GitHub Pages.
+
+`npm run qa` drives a first session in headless Chrome (title page, lectio, Seven, Forty, Lent, the ledger). It needs a running server and system Chrome.
 
 ## Design
 

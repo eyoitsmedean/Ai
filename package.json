@@ -8,6 +8,7 @@
     "dev": "node server.js",
     "test": "node --test test/*.test.js",
     "spoken": "node scripts/build-spoken.js",
+    "audit": "node scripts/audit-spoken.js",
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
     "qa": "node scripts/qa-browser.js"
