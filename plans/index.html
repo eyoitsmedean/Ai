@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<title>Ninety Days — five ways to earn, one at a time</title>
-<meta name="description" content="Five 90-day business plans sized to 4.5 hours a week, a newborn in October, and a clean room. Sell before you build." />
+<title>Ninety Days — Build. Baby. Build.</title>
+<meta name="description" content="Build. Baby. Build. Five 90-day business plans sized to 4.5 hours a week, a newborn in October, and a clean room. Sell before you build." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -55,10 +55,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .counter b{color:var(--ink);font-weight:600}
 
 /* Title page */
-.title{padding:34px 0 26px}
+.title{padding-top:34px;padding-bottom:26px}
 .title h1{font-family:var(--display);font-weight:500;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px}
 .title h1 em{font-style:italic;font-weight:560;color:var(--crimson)}
 .title p.lede{font-size:1.12rem;max-width:36rem;margin:0 0 18px;color:var(--ink)}
+.movements{display:grid;grid-template-columns:5fr 4fr 4fr;gap:6px;margin-top:22px}
+.mv{border:1px solid var(--rule);border-radius:12px;padding:12px 14px 11px;background:var(--folio);position:relative;overflow:hidden;min-height:96px}
+.mv.baby{background:var(--advent);border-color:transparent}
+.mv.baby .sc,.mv.baby .n{color:var(--advent-ink)}
+.mv.now{box-shadow:0 0 0 1px var(--crimson) inset;border-color:var(--crimson)}
+.mv .n{font-family:var(--display);font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+.mv .n em{font-style:italic;font-weight:560;color:var(--crimson)}
+.mv .sc{display:block;font-size:.66rem;margin-bottom:5px}
+.mv .dt{font-family:var(--ui);font-size:.76rem;color:var(--muted);margin-top:5px;line-height:1.4}
+.mv .fill{position:absolute;left:0;bottom:0;height:3px;background:var(--crimson);width:0;transition:width .5s var(--ease)}
+.mv.baby .fill{background:var(--advent-ink)}
+@media (max-width:640px){.movements{grid-template-columns:1fr}.mv{min-height:0}}
 .title .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule)}
 .fact .sc{display:block;margin-bottom:4px}
 .fact .v{font-family:var(--display);font-size:1.25rem;font-weight:500;letter-spacing:-.01em}
@@ -146,6 +158,10 @@ p{margin:0 0 1em}
 .block p{font-size:1rem}
 
 /* Weeks */
+.mvh{display:flex;align-items:baseline;gap:12px;margin:18px 0 4px}
+.mvh:first-of-type{margin-top:4px}
+.mvh .n{font-family:var(--display);font-size:1.15rem;font-weight:500;letter-spacing:-.01em}
+.mvh.baby .n{color:var(--advent-ink);font-style:italic}
 .weeks{list-style:none;margin:0;padding:0}
 .weeks li{display:grid;grid-template-columns:76px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--rule);font-size:.98rem}
 .weeks li:last-child{border-bottom:1px solid var(--rule)}
@@ -240,7 +256,7 @@ table.cmp td b{font-weight:600}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* Colophon */
-footer{padding:40px 0 60px;color:var(--muted);font-size:.9rem}
+footer{padding-top:40px;padding-bottom:60px;color:var(--muted);font-size:.9rem}
 footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--paper);font-family:var(--ui);font-size:.82rem;padding:9px 14px;border-radius:999px;transition:all .25s var(--ease);pointer-events:none;z-index:50}
@@ -272,9 +288,10 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 </header>
 
 <div class="wrap title" id="top">
-  <h1>Five ways to earn.<br /><em>Run one.</em></h1>
-  <p class="lede">Five business plans sized to the life you actually have: about four and a half optional hours a week, a newborn arriving in October, and a clean room around your day job. Every plan makes you attempt a sale before it lets you build anything.</p>
+  <h1>Build. <em>Baby.</em> Build.</h1>
+  <p class="lede">Ninety days in three movements. Sell and deliver until the birth. Then nothing, for at least thirty days. Then open the doors again into Veterans Day and Advent. Five ways to earn inside that shape — run one.</p>
   <p class="note">Everything on this page is an estimate, not a promise. Compliments are not demand. Only the ledger counts.</p>
+  <div class="movements" id="movements" aria-label="The three movements"></div>
   <div class="facts">
     <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
     <div class="fact"><span class="sc">Real hours</span><span class="v">≈ 40 of 58</span></div>
@@ -303,7 +320,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <li><b>Sell before you build.</b> Every plan's first week is a message to a stranger, not a document. Ten unpaid build hours is the ceiling before someone has said yes with money.</li>
     <li><b>One engine.</b> Pick one plan to actually run. One more may run in the background if its work is finished before the baby arrives. Two engines is none.</li>
     <li><b>Four and a half hours.</b> Tuesday sixty, Thursday ninety, Saturday sixty, Sunday fifteen. That is the whole budget. If a week needs more, the plan is wrong, not the week.</li>
-    <li><b>Protected weeks are protected.</b> From the day the baby arrives until at least thirty days after, optional work is zero. Links stay live. Auto-replies do the talking. Nothing restarts on a date; it restarts when both of you say yes.</li>
+    <li><b>Baby is a phase, not a pause.</b> From the day the baby arrives until at least thirty days after, optional work is zero. Links stay live. Auto-replies do the talking. Nothing restarts on a date; the second Build begins when both of you say yes.</li>
     <li><b>Clean room.</b> Personal devices, accounts, time, and words. No client in insurance, benefits, HR, staffing, or finance. Nothing from work: no contacts, templates, decks, language. Read your outside-work clause once, yourself, before the first paid job. If it's ambiguous, one written question.</li>
     <li><b>Payment beats praise.</b> "I'd totally buy that" is not a data point. A deposit is. Log only money. Thirty percent of every dollar goes to the tax jar the day it arrives.</li>
   </ol>
@@ -367,10 +384,10 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
   <div class="head"><span class="n">v</span><h2>Thirteen weeks</h2><span class="sc">Adjusts to the birth</span></div>
   <div class="cal-head">
     <label>Baby arrives <input type="date" id="baby" min="2026-09-04" max="2026-12-03" /></label>
-    <div class="legend"><span><i class="p"></i>Protected (birth + 30 days)</span><span><i class="t"></i>This week</span><span><i class="s"></i>Season</span></div>
+    <div class="legend"><span><i class="p"></i>Baby (birth + 30 days)</span><span><i class="t"></i>This week</span><span><i class="s"></i>Season</span></div>
   </div>
   <div class="cal" id="cal"></div>
-  <p class="note" style="margin-top:12px">The date is an assumption until it isn't. Change it and the protected weeks move. Protection ends when both of you say yes, not when the shading does.</p>
+  <p class="note" style="margin-top:12px">The date is an assumption until it isn't. Change it and the Baby weeks move. The second Build begins when both of you say yes, not when the shading does.</p>
 </section>
 
 <section id="ledger" class="wrap">
@@ -447,14 +464,14 @@ const PLANS = [
   what:'One fix, shipped: a mobile booking path that works, click-to-call above the fold, an FAQ that answers the five questions their reviews keep asking, a review-reply library in their voice, fixed hours/photos/services on the Google Business Profile, or a one-page landing for their best service. Plus a ninety-second before/after screen recording they can watch on their phone.',
   why:'You direct coding agents like a crew chief — this repository is the proof. A shop quotes $2,000 and three weeks for what you can ship in a two-hour block. And you write copy that sounds like a person, which is the whole difference on a phone screen. The Friction Audit you already designed in your notes is the pitch; this just charges for the fix instead of the report.',
   weeks:[
-    ['1','4–10 Sep','Set up a Stripe Payment Link for $350 (ten minutes). Save the three scripts to your phone. From Google Maps, list twenty businesses with 3.5–4.6 stars and a website that annoys you on a phone. Record the first five sixty-second phone videos — you, trying to book, narrating — and send them.'],
-    ['2','11–17 Sep','Send five more. Reply to everyone within a day. First sale: build Thursday, deliver Friday with the before/after video. Ask for one sentence you can quote.'],
-    ['3','18–24 Sep','Send five. Deliver. Post the before/after once, with permission — one sentence, no hashtags.'],
-    ['4','25 Sep–1 Oct','Send five. Deliver. If anyone says "we also have this problem with quotes / scheduling / new hires" — that is Plan V. Write it down.'],
-    ['5','2–8 Oct','Last sends before the baby. Deliver everything you\'ve sold. Set the auto-reply. Go home.'],
-    ['6–9','9 Oct–5 Nov','Protected. Nothing. The link stays live. Auto-reply: "Home with a newborn until [date]. I\'ll reply then — and I\'ll still fix it by a Friday."'],
-    ['10','6–12 Nov','Re-open. Reply to the backlog. Send five videos. Small Business Saturday (28 Nov) is the natural hook: "one fix before the holidays."'],
-    ['11–13','13 Nov–3 Dec','Five a week, deliver Fridays. Take no new work after 27 Nov unless it ships by 3 Dec.']
+    ['1','4–10 Sep','Set up a Stripe Payment Link for $350 (ten minutes). Save the three scripts to your phone. From Google Maps, list twenty businesses with 3.5–4.6 stars and a website that annoys you on a phone. Record the first five sixty-second phone videos — you, trying to book, narrating — and send them.','a'],
+    ['2','11–17 Sep','Send five more. Reply to everyone within a day. First sale: build Thursday, deliver Friday with the before/after video. Ask for one sentence you can quote.','a'],
+    ['3','18–24 Sep','Send five. Deliver. Post the before/after once, with permission — one sentence, no hashtags.','a'],
+    ['4','25 Sep–1 Oct','Send five. Deliver. If anyone says "we also have this problem with quotes / scheduling / new hires" — that is Plan V. Write it down.','a'],
+    ['5','2–8 Oct','Last sends before the baby. Deliver everything you\'ve sold. Set the auto-reply. Go home.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing. The link stays live. Auto-reply: "Home with a newborn until [date]. I\'ll reply then — and I\'ll still fix it by a Friday."','b'],
+    ['10','6–12 Nov','Re-open. Reply to the backlog. Send five videos. Small Business Saturday (28 Nov) is the natural hook: "one fix before the holidays."','c'],
+    ['11–13','13 Nov–3 Dec','Five a week, deliver Fridays. Take no new work after 27 Nov unless it ships by 3 Dec.','c']
   ],
   checks:[
     'Read your outside-work / conflict clause once. Local trades outside your employer\'s markets are clear — or one written question is sent before the first paid job.',
@@ -468,7 +485,7 @@ const PLANS = [
     'Second paid fix delivered.',
     'One before/after posted publicly.',
     'Auto-reply set; queue closed before the baby.',
-    'Re-opened after the protected weeks; five sent.',
+    'Re-opened for the second Build; five sent.',
     'Fourth paid fix — base case reached.',
     'Every dollar in the ledger; 30% moved to the tax jar.'
   ],
@@ -505,16 +522,16 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
   what:'"Advent with His words" — twenty-eight days (Sun 29 Nov → Sat 26 Dec) of one saying, one line of reflection, one blank line to answer. Typeset like the app: paper, ink, red for His speech. A PDF for the phone and for print-at-home. The same content becomes an in-app Advent path — the church-year retint already exists. Then, if the PDF sells, the Year: "keep the lamp lit" for $59.99 unlocks the live Advisor.',
   why:'Nobody owns "the red letters" as a premium brand — you wrote that, and you were right. You already have the corpus, the design language, the forty-day path, share cards, and five ad scripts. The only missing piece is a thing with a price. Advent is the rehearsal for Lent (Ash Wednesday, 10 Feb 2027), which your own research says is the payday.',
   weeks:[
-    ['1','4–10 Sep','Choose twenty-eight sayings from data/paths.js and lib/curated.js. Write nothing new yet.'],
-    ['2','11–17 Sep','Draft the reflections — one line each, the app\'s voice. Lay out the PDF from the app\'s print and broadside styles. One evening.'],
-    ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 link with file delivery (Stripe or Lemon Squeezy) and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.'],
-    ['4','25 Sep–1 Oct','Make four Advent share cards (the card code exists) and one face-free vertical video: hands, paper, one red sentence. Save them. Schedule nothing.'],
-    ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Close the laptop.'],
-    ['6–9','9 Oct–5 Nov','Protected. Nothing. Pages stays up.'],
-    ['10','6–12 Nov','(1 Nov falls in the protected window if the baby comes mid-October — open pre-orders the first evening you are allowed to.) Post the video and one card. Send the five leaders their copies.'],
-    ['11','13–19 Nov','One card, one post. Answer replies.'],
-    ['12','20–26 Nov','22 Nov: deliver the PDF to every buyer. Black Friday and Small Business Saturday: one post, no discount. "The words are free. The book is $12."'],
-    ['13','27 Nov–3 Dec','Advent begins 29 Nov; the in-app path goes live. Ten or more PDFs sold → build the $59.99 year gate in December. Fewer → stay free and aim at Lent.']
+    ['1','4–10 Sep','Choose twenty-eight sayings from data/paths.js and lib/curated.js. Write nothing new yet.','a'],
+    ['2','11–17 Sep','Draft the reflections — one line each, the app\'s voice. Lay out the PDF from the app\'s print and broadside styles. One evening.','a'],
+    ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 link with file delivery (Stripe or Lemon Squeezy) and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.','a'],
+    ['4','25 Sep–1 Oct','Make four Advent share cards (the card code exists) and one face-free vertical video: hands, paper, one red sentence. Save them. Schedule nothing.','a'],
+    ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Close the laptop.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing. Pages stays up.','b'],
+    ['10','6–12 Nov','(1 Nov falls inside Baby if the birth is mid-October — open pre-orders the first evening of the second Build.) Post the video and one card. Send the five leaders their copies.','c'],
+    ['11','13–19 Nov','One card, one post. Answer replies.','c'],
+    ['12','20–26 Nov','22 Nov: deliver the PDF to every buyer. Black Friday and Small Business Saturday: one post, no discount. "The words are free. The book is $12."','c'],
+    ['13','27 Nov–3 Dec','Advent begins 29 Nov; the in-app path goes live. Ten or more PDFs sold → build the $59.99 year gate in December. Fewer → stay free and aim at Lent.','c']
   ],
   checks:[
     'Twenty-eight sayings picked (existing corpus only; KJV, public domain).',
@@ -565,14 +582,14 @@ If one of these sentences lands, send it to one person — not a feed.
   what:'A consent-first conversation (60–75 minutes, in person or by phone), a truth-marked transcript, an 8–12 minute edited audio vignette, a four-page keepsake (photos, captions, source notes), and a 30–60 second original motif made in Ableton. Private by default. The narrator controls topics, cuts, and access, and can stop at any time. "No artifact" is a valid ending.',
   why:'Veterans talk to veterans differently. You have spent a career teaching people to listen for the real sentence. You have the truth discipline never to invent a detail, the typesetting taste to make a keepsake feel like a book, and a Push 2 on the desk. Storyworth sells prompts; Remento sells an app; nobody sells a veteran-to-veteran audio heirloom with music. Your own frontier notes called this the best life-plus-differentiation bet. It is also the same muscle as the coming-home chapter.',
   weeks:[
-    ['1','4–10 Sep','Write the one-page offer and a plain consent sheet: purpose, topics off-limits, who may hear it, withdrawal, deletion, AI transcription yes or no.'],
-    ['2–3','11–24 Sep','Record ONE sample with a consenting fellow veteran or family friend. Edit it. Write the motif. Time everything honestly.'],
-    ['4','25 Sep–1 Oct','Design the keepsake template in Red Letter\'s paper and type. Choose a three-minute excerpt you are allowed to share. Get that permission in writing.'],
-    ['5','2–8 Oct','Draft the Veterans Day post and messages to two local veteran organizations. Save them. Stop.'],
-    ['6–9','9 Oct–5 Nov','Protected. Nothing.'],
-    ['10','6–12 Nov','Post the excerpt. Message the Legion or VFW post and one veteran-family group. Email the ten people who would know someone. Take up to three deposits ($250) for Christmas delivery.'],
-    ['11–12','13–26 Nov','Schedule interviews — phone is fine. Record one or two.'],
-    ['13','27 Nov–3 Dec','Edit the first. Deliveries land by 20 Dec, just past the window; deposits count now.']
+    ['1','4–10 Sep','Write the one-page offer and a plain consent sheet: purpose, topics off-limits, who may hear it, withdrawal, deletion, AI transcription yes or no.','a'],
+    ['2–3','11–24 Sep','Record ONE sample with a consenting fellow veteran or family friend. Edit it. Write the motif. Time everything honestly.','a'],
+    ['4','25 Sep–1 Oct','Design the keepsake template in Red Letter\'s paper and type. Choose a three-minute excerpt you are allowed to share. Get that permission in writing.','a'],
+    ['5','2–8 Oct','Draft the Veterans Day post and messages to two local veteran organizations. Save them. Stop.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing.','b'],
+    ['10','6–12 Nov','Post the excerpt. Message the Legion or VFW post and one veteran-family group. Email the ten people who would know someone. Take up to three deposits ($250) for Christmas delivery.','c'],
+    ['11–12','13–26 Nov','Schedule interviews — phone is fine. Record one or two.','c'],
+    ['13','27 Nov–3 Dec','Edit the first. Deliveries land by 20 Dec, just past the window; deposits count now.','c']
   ],
   checks:[
     'One-page offer written: what, who controls what, price, delivery date.',
@@ -621,13 +638,13 @@ Delivery by 20 Dec. If he decides he'd rather not, you get the deposit back and 
   what:'One recorded sixty-minute rehearsal of their actual upcoming interview with you as the hiring manager; a one-page "Five Sentences" card — how they say what they did in words a civilian manager hears; one text check-in the morning of.',
   why:'You made this transition — Marine to sales floor to senior director — and you have spent years teaching people to talk like humans instead of like a résumé. You have sat on the hiring side. Interview coaches charge $100–300 an hour and almost none have worn the uniform. This is coaching an individual job-seeker, not selling enablement — the line your own notes draw.',
   weeks:[
-    ['1','4–10 Sep','Read your outside-work clause. Write the offer — one screen. $149 Stripe link. Offer two free sessions to veterans you know in exchange for a sentence you can quote.'],
-    ['2','11–17 Sep','Run the two free sessions. Build the Five Sentences card from them. Post once on LinkedIn: one true transition moment of yours, no lesson attached.'],
-    ['3','18–24 Sep','Post once. Message the Boise State veterans center and one transition group with the offer.'],
-    ['4','25 Sep–1 Oct','First paid session. Post the permitted quote.'],
-    ['5','2–8 Oct','Sessions as booked. Book nothing inside the protected window.'],
-    ['6–9','9 Oct–5 Nov','Protected. Nothing. Auto-reply.'],
-    ['10–13','6 Nov–3 Dec','Re-open. One post a week. Sessions Tuesday and Thursday evenings. Stop at the fifth paid session if that is all the room you have — five is the base case.']
+    ['1','4–10 Sep','Read your outside-work clause. Write the offer — one screen. $149 Stripe link. Offer two free sessions to veterans you know in exchange for a sentence you can quote.','a'],
+    ['2','11–17 Sep','Run the two free sessions. Build the Five Sentences card from them. Post once on LinkedIn: one true transition moment of yours, no lesson attached.','a'],
+    ['3','18–24 Sep','Post once. Message the Boise State veterans center and one transition group with the offer.','a'],
+    ['4','25 Sep–1 Oct','First paid session. Post the permitted quote.','a'],
+    ['5','2–8 Oct','Sessions as booked. Book nothing inside Baby.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing. Auto-reply.','b'],
+    ['10–13','6 Nov–3 Dec','Re-open. One post a week. Sessions Tuesday and Thursday evenings. Stop at the fifth paid session if that is all the room you have — five is the base case.','c']
   ],
   checks:[
     'Outside-work clause read; any ambiguity resolved in writing before the first paid session.',
@@ -678,11 +695,11 @@ You already did the hard part, years ago.`]
   what:'Two interviews (the owner, plus the two people who touch it), a one-page process map that shows where it actually breaks, checklists and message templates for each step, an exceptions list ("when you should NOT follow this"), and a twenty-minute recorded walkthrough the owner can play for the team. Version-dated and owner-approved. Not HR, legal, or safety guidance.',
   why:'You build operating systems compulsively — your notes are the proof. Pointed at your own life it is your failure mode; pointed at someone else\'s business it is the most valuable thing you do. You have run enablement for hundreds of people. Agents draft the documents in minutes; you do the part that matters — the second question, the exceptions, and making it sound like a human wrote it. Your own venture studio ranked this first. It only lacked a buyer. Plan I finds the buyer.',
   weeks:[
-    ['1–2','4–17 Sep','Nothing to sell yet. Write the one-page scope: what\'s in, what\'s out, two weeks, $1,500, half up front, not HR-legal-safety. Keep it in your Notes.'],
-    ['3–4','18 Sep–1 Oct','When a One-Fix client mentions a broken process — one will — say the scope out loud. If yes, take the deposit. Interview the owner (45 min) and two staff (20 min each) in one week.'],
-    ['5','2–8 Oct','Draft everything with agents in one two-hour block; spend the next hour cutting it in half. Record the walkthrough. Deliver before the baby, or set delivery for Week 11 and say so.'],
-    ['6–9','9 Oct–5 Nov','Protected. Nothing.'],
-    ['10–13','6 Nov–3 Dec','Deliver the open engagement. If a second One-Fix client asks, take one more for December delivery. Stop there.']
+    ['1–2','4–17 Sep','Nothing to sell yet. Write the one-page scope: what\'s in, what\'s out, two weeks, $1,500, half up front, not HR-legal-safety. Keep it in your Notes.','a'],
+    ['3–4','18 Sep–1 Oct','When a One-Fix client mentions a broken process — one will — say the scope out loud. If yes, take the deposit. Interview the owner (45 min) and two staff (20 min each) in one week.','a'],
+    ['5','2–8 Oct','Draft everything with agents in one two-hour block; spend the next hour cutting it in half. Record the walkthrough. Deliver before the baby, or set delivery for Week 11 and say so.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing.','b'],
+    ['10–13','6 Nov–3 Dec','Deliver the open engagement. If a second One-Fix client asks, take one more for December delivery. Stop there.','c']
   ],
   checks:[
     'One-page scope written (in / out / two weeks / $1,500 / half up front / not HR-legal-safety).',
@@ -747,6 +764,15 @@ function load(){
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 
+/* ---------------- Movements ---------------- */
+const MOVES = {
+  a:{name:'Build',  sub:'before the birth · sell, deliver, close the queues'},
+  b:{name:'Baby',   sub:'birth + 30 days · zero optional hours'},
+  c:{name:'Build',  sub:'after · re-open into Veterans Day and Advent'}
+};
+function babyDate(){ return new Date(S.baby+'T00:00:00'); }
+function moveOf(d){ const b=babyDate(), e=addDays(b,30); return d<b ? 'a' : (d<=e ? 'b' : 'c'); }
+
 /* ---------------- Helpers ---------------- */
 const $ = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
@@ -765,8 +791,30 @@ function renderCounter(){
   const el = $('#counter');
   if(now < START){ el.innerHTML = `Begins <b>Fri 4 Sep</b><br>ends Thu 3 Dec 2026`; return; }
   if(now > END){ el.innerHTML = `<b>Ninety days done.</b><br>Open the ledger.`; return; }
-  const d = dayIndex(now); const w = Math.min(13, Math.ceil(d/7));
-  el.innerHTML = `<b>Day ${d}</b> of 90 · Week ${w}<br>${fmt(now)} → 3 Dec 2026`;
+  const d = dayIndex(now); const w = Math.min(13, Math.ceil(d/7)); const mv = moveOf(now);
+  el.innerHTML = `<b>Day ${d}</b> of 90 · Week ${w} · <b>${MOVES[mv].name}</b><br>${fmt(now)} → 3 Dec 2026`;
+}
+
+function renderMovements(){
+  const now = new Date(); now.setHours(0,0,0,0);
+  const b = babyDate(), e = addDays(b,30);
+  const spans = [
+    {k:'a', from:START, to:addDays(b,-1)},
+    {k:'b', from:b, to:e},
+    {k:'c', from:addDays(e,1), to:END}
+  ];
+  $('#movements').innerHTML = spans.map(s=>{
+    const days = Math.max(0, Math.round((s.to - s.from)/86400000) + 1);
+    const done = now < s.from ? 0 : now > s.to ? 1 : ((now - s.from)/86400000 + 1) / days;
+    const cur = now >= s.from && now <= s.to;
+    const nm = s.k==='b' ? `<em>${MOVES[s.k].name}</em>` : MOVES[s.k].name;
+    return `<div class="mv ${s.k==='b'?'baby':''} ${cur?'now':''}">
+      <span class="sc">${s.k==='a'?'First movement':s.k==='b'?'Second':'Third'}${cur?' · now':''}</span>
+      <div class="n">${nm}</div>
+      <div class="dt">${fmt(s.from)} – ${fmt(s.to)} · ${days} days<br>${esc(MOVES[s.k].sub.split(' · ')[1])}</div>
+      <i class="fill" style="width:${Math.round(done*100)}%"></i>
+    </div>`;
+  }).join('');
 }
 
 /* ---------------- Tonight ---------------- */
@@ -774,6 +822,11 @@ function renderTonight(){
   $('#tonight-plan').innerHTML = PLANS.map(p=>`<button data-p="${p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
   $$('#tonight-min button').forEach(b=>b.classList.toggle('on', Number(b.dataset.m)===S.tonightMin));
   const p = planById(S.tonightPlan);
+  const now = new Date(); now.setHours(0,0,0,0);
+  if(moveOf(now)==='b'){
+    $('#tonight-move').innerHTML = `<small>Baby · every plan</small>Nothing is the move. The links are live. Whatever minutes you have belong upstairs.`;
+    return;
+  }
   $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}</small>${esc(p.tonight[S.tonightMin])}`;
 }
 $('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); });
@@ -787,7 +840,6 @@ function renderStrip(){
 function renderPlan(){
   const p = planById(S.active); const c = S.checks[p.id]||{}; const done = doneCount(p);
   const babyDate = new Date(S.baby+'T00:00:00');
-  const isProt = (label)=> /Protected/.test(label);
   $('#plan').innerHTML = `
   <article class="plan leaf" id="plan-${p.id}">
     <div class="sc role"><span class="red">Plan ${p.num}</span> · ${esc(p.role)}</div>
@@ -805,9 +857,11 @@ function renderPlan(){
     </div>
     <div class="block" style="margin-top:6px"><h4>Why you</h4><p>${esc(p.why)}</p></div>
 
-    <div class="block" style="margin-top:22px"><h4>The thirteen weeks</h4>
-      <ul class="weeks">${p.weeks.map(w=>`<li class="${isProt(w[2])?'protected':''}"><div class="w"><b>Week ${esc(w[0])}</b>${esc(w[1])}</div><div>${esc(w[2])}</div></li>`).join('')}</ul>
-      <p class="note" style="margin-top:8px">Protected weeks assume the baby arrives around ${fmt(babyDate)}. Change the date in the calendar and treat the shaded weeks as the ones that move.</p>
+    <div class="block" style="margin-top:22px"><h4>Build · Baby · Build</h4>
+      ${['a','b','c'].map(ph=>{ const rows=p.weeks.filter(w=>w[3]===ph); if(!rows.length) return '';
+        return `<div class="mvh ${ph==='b'?'baby':''}"><span class="n">${MOVES[ph].name}</span><span class="sc">${MOVES[ph].sub}</span></div>
+        <ul class="weeks">${rows.map(w=>`<li class="${ph==='b'?'protected':''}"><div class="w"><b>Week ${esc(w[0])}</b>${esc(w[1])}</div><div>${esc(w[2])}</div></li>`).join('')}</ul>`; }).join('')}
+      <p class="note" style="margin-top:8px">The Baby weeks assume the birth around ${fmt(babyDate)}. Change the date in the calendar and treat the shaded weeks as the ones that move.</p>
     </div>
 
     <div class="block" style="margin-top:22px"><h4>Checklist · ${done} of ${p.checks.length}</h4>
@@ -859,7 +913,7 @@ function renderCal(){
     const a = addDays(START, w*7), b = addDays(a,6);
     const prot = a<=protEnd && b>=baby;
     const isNow = now>=a && now<=b;
-    const phase = prot ? 'Protected · zero optional hours' : (b<baby ? 'Before · sell and deliver' : 'After · re-open, season');
+    const phase = prot ? 'Baby · zero optional hours' : (b<baby ? 'Build · sell and deliver' : 'Build · re-open, season');
     const events = EVENTS.filter(e=>e.d>=a && e.d<=b);
     const shown = prot ? events.filter(e=>e.season) : events;
     const plans = [...new Set(shown.filter(e=>e.plan).map(e=>e.plan))];
@@ -873,7 +927,7 @@ function renderCal(){
   }
   $('#cal').innerHTML = html;
 }
-$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); });
+$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); renderMovements(); renderCounter(); renderTonight(); });
 
 /* ---------------- Ledger ---------------- */
 function renderLedger(){
@@ -912,7 +966,7 @@ const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting)
 $$('main section').forEach(s=>io.observe(s));
 
 /* ---------------- Go ---------------- */
-function renderAll(){ renderCounter(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); }
+function renderAll(){ renderCounter(); renderMovements(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); }
 renderAll();
 })();
 </script>
