@@ -38,6 +38,18 @@ This Linux agent cannot compile a signed IPA. The iOS project is archive-ready w
 8. Organizer → Distribute App → App Store Connect → Upload
 9. App Store Connect → TestFlight → wait for processing → add testers → **Submit for Review** is optional; Internal Testing is enough for Kid's Day
 
+## App Store Connect fields the reviewer will check
+
+| Field | What to enter | Why |
+| --- | --- | --- |
+| Privacy Policy URL | A public URL serving the text of [`PRIVACY.md`](PRIVACY.md) | Guideline 5.1.1(i): every app needs a privacy policy link in metadata **and** in-app. The About leaf already carries the in-app statement. |
+| App Privacy questionnaire | "Data Not Collected" | Nothing leaves the device; no SDKs. |
+| Review notes | "All Scripture is the King James Version (1769), quoted verbatim from a locked corpus; the app cannot display text that is not in that corpus." | Guideline 1.1.5 rejects "inaccurate or misleading quotations of religious texts." The corpus lock is the compliance mechanism. |
+| Screenshots | Today, Sit, Seven Days, Seek, and the widget | Guideline 4.2 judges "app-like" functionality; show the rooms, not only the card. |
+| Availability | **Decide UK.** Rights in the KJV in the United Kingdom are vested in the Crown and administered by Cambridge University Press; its imprint notice waives permission only for liturgical or non-commercial educational use up to 500 verses. Either request permission from CUP's Permissions Department before enabling the UK, or exclude the UK at first release. | Rights, not review. |
+
+Google Play: complete the Data safety form as "No data collected" and paste the same privacy URL.
+
 ## First-run QA on a phone
 
 - First open: title leaf, then **Turn the page**
@@ -45,6 +57,9 @@ This Linux agent cannot compile a signed IPA. The iOS project is archive-ready w
 - Long-press home screen → Widget → **Word** (not a badge, not a streak)
 - Tap the widget → app opens Today (`redwords://today`)
 - The card is the sentence + citation only
+- **Unopened-day test:** set the phone's date forward one day (Settings → General → Date & Time, automatic off), return to the home screen. The card should show a different sentence without opening the app. Set the date back.
+- **Warm-start test:** open the app, go to Seek, press home, tap the widget. You should land on Today, not Seek.
+- Small widget: shows the citation, and the opening clause only when it ends on punctuation. Medium and large show the whole sentence.
 
 ## Android artifacts produced on Linux (not store-signed)
 
