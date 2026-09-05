@@ -46,7 +46,13 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 ## Deploy
 
-- **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **App (Node):** `npm start` on any host with Node 18+. Bind is `0.0.0.0`. HTTPS belongs on the reverse proxy.
+- **iPhone:** Safari → Share → Add to Home Screen. The room opens standalone. His words stay on the phone. This is also what keeps the journal: WebKit deletes a site's script storage after seven days of Safari use without a visit, and home-screen apps are exempt ([webkit.org/tracking-prevention](https://webkit.org/tracking-prevention/)). The room asks for persistent storage after the first kept sit and offers Settings → **Keep a copy** as a no-account backup.
+- **Android:** Chrome → Install app / Add to Home screen. Same paper, same corpus.
+- **Privacy policy:** `/privacy` — link it in App Store Connect → App Information → Privacy Policy URL and in Play Console → Data safety. It is also reachable in-app from Settings without an account (Guideline 5.1.1(i)).
+- **Store shells:** `npx cap add android` and `npx cap add ios`, then `npm run android` / `npm run ios`. The WebView loads `public/`. Chat works offline from the curated Advisor; a live key is optional.
+- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Blessing pages and the Advisor API need the Node host.
 
-KJV text is public domain. Attribution is printed beside citations.
+A blessing is a URL (`/b/…`) — one cream page, no install wall.
+
+KJV text is public domain in most of the world. In the United Kingdom, printing or importing the Authorised Version is a Crown prerogative administered by Cambridge University Press; a *sold* printed chapbook shipped into the UK needs CUP permission. Attribution (KJV) is printed beside citations.

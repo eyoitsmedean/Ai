@@ -54,6 +54,30 @@
     const raw = String(text || '').trim();
     if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
 
+    const needs = (window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs) || [];
+    if (needs.length) {
+      const q = raw.toLowerCase();
+      let bestNeed = null;
+      let bestScore = 0;
+      for (let i = 0; i < needs.length; i++) {
+        const row = needs[i];
+        let n = 0;
+        const words = row.carry.toLowerCase().split(/\s+/);
+        for (let w = 0; w < words.length; w++) {
+          if (words[w].length > 3 && q.indexOf(words[w]) !== -1) n += 1;
+        }
+        if (q.indexOf(row.carry.toLowerCase()) !== -1) n += 8;
+        if (n > bestScore) { bestNeed = row; bestScore = n; }
+      }
+      if (bestNeed && bestScore >= 2) {
+        return formatPack(
+          'I hear what you are carrying. Before advice, a sentence He actually spoke.',
+          [{ verse: bestNeed.verse, quote: bestNeed.quote, context: bestNeed.carry }],
+          'Sit with this. The page can close.'
+        );
+      }
+    }
+
     if (CRISIS.test(raw)) {
       const crisis =
         'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';

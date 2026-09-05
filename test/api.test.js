@@ -91,9 +91,29 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /John 14:1/);
+    assert.match(letter, /Let not your heart be troubled/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('serves the concordance of need', async () => {
+    const all = await request('GET', '/api/concordance');
+    assert.equal(all.status, 200);
+    const data = JSON.parse(all.raw);
+    assert.ok(data.count >= 80);
+    assert.ok(data.needs.some((n) => n.verse === 'John 8:11'));
+    const hit = await request('GET', '/api/concordance?q=' + encodeURIComponent('I feel shame'));
+    const found = JSON.parse(hit.raw);
+    assert.ok(found.matches.some((m) => /John 8:11/.test(m.verse)));
+  });
+
+  it('serves the studio Codex', async () => {
+    const res = await request('GET', '/codex');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /The Red Letter Codex/);
+    assert.match(res.raw, /noindex/);
+    assert.doesNotMatch(res.raw, /Ask <em>Him<\/em>/);
+    assert.match(res.raw, /The model is not a person/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {
@@ -115,6 +135,49 @@ describe('smoke routes', () => {
     const missing = await request('POST', '/api/verify', { verse: '' });
     assert.equal(missing.status, 200);
     assert.equal(JSON.parse(missing.raw).allVerified, false);
+  });
+
+  it('mints and serves a blessing page', async () => {
+    const minted = await request('POST', '/api/blessing', {
+      verse: 'John 14:27',
+      quote: 'Peace I leave with you, my peace I give unto you.',
+      note: 'For you',
+    });
+    assert.equal(minted.status, 200);
+    const data = JSON.parse(minted.raw);
+    assert.ok(data.token);
+    const page = await request('GET', '/b/' + data.token);
+    assert.equal(page.status, 200);
+    assert.match(page.raw, /Peace I leave with you/);
+    assert.match(page.raw, /Sit with this/);
+    assert.match(page.raw, /<meta property="og:title" content="John 14:27 — a blessing"/);
+    assert.match(page.raw, /<meta property="og:description" content="“Peace I leave with you/);
+    assert.match(page.raw, /twitter:card/);
+  });
+
+  it('serves the privacy page in the same paper', async () => {
+    const res = await request('GET', '/privacy');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What stays/);
+    assert.match(res.raw, /no accounts/i);
+    assert.match(res.raw, /988/);
+    assert.match(res.raw, /seven days/);
+    assert.doesNotMatch(res.raw, /Plus/);
+  });
+
+  it('keeps the crisis leaf and the copy controls in the room', async () => {
+    const res = await request('GET', '/');
+    assert.match(res.raw, /id="carry-crisis"/);
+    assert.match(res.raw, /exportJournalFile/);
+    assert.match(res.raw, /importJournalFile/);
+    assert.match(res.raw, /id="privacy-link"/);
+    assert.match(res.raw, /navigator\.storage\.persist/);
+  });
+
+  it('sends production headers', async () => {
+    const res = await request('GET', '/');
+    assert.equal(res.headers['x-content-type-options'], 'nosniff');
+    assert.match(res.headers['content-security-policy'] || '', /default-src 'self'/);
   });
 
   it('searches the spoken library', async () => {

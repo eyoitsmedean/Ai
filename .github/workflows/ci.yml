@@ -14,3 +14,10 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
+      - name: Smoke against a live server
+        run: |
+          node server.js &
+          pid=$!
+          sleep 2
+          node scripts/smoke.js http://127.0.0.1:3000
+          kill $pid

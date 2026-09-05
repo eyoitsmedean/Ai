@@ -96,8 +96,73 @@ async function main() {
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');
     assert(text.includes('988'), 'missing crisis line');
+    assert(text.includes('id="return-ribbon"'), 'missing day-two ribbon');
+    assert(text.includes('id="seven-close"'), 'missing Seven Days last page');
+    assert(text.includes('id="last-leaf"'), 'Advisor must grow a last leaf');
+    assert(text.includes('id="mode-carry"'), 'missing Concordance of Need');
+    assert(text.includes('printChapbook'), 'missing chapbook');
+    assert(text.includes('addSitToChatBubble'), 'Advisor must end in Sit');
+    assert(text.includes('encodeBlessingClient'), 'blessing page missing');
+    assert(!text.includes('Five letters for today'), 'must not meter His words');
+    assert(!text.includes('FREE_CHATS'), 'must not paywall the Advisor');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
+    assert(!/prefers-color-scheme:\s*dark/.test(text) || text.includes('media="(prefers-color-scheme: dark)"'), 'theme-color media is ok');
+  });
+
+  await check('blessing page', async () => {
+    const minted = await req('/api/blessing', {
+      method: 'POST',
+      body: JSON.stringify({
+        verse: 'Matthew 11:28',
+        quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+        note: 'For a friend',
+      }),
+    });
+    assert(minted.res.ok && minted.json?.token, 'could not mint blessing');
+    const page = await req('/b/' + minted.json.token);
+    assert(page.res.ok, 'blessing HTTP ' + page.res.status);
+    assert(/Come unto me/i.test(page.text), 'blessing missing His words');
+    assert(/Sit with this/i.test(page.text), 'blessing missing sit');
+    assert(/988/.test(page.text), 'blessing missing crisis');
+  });
+
+  await check('privacy page', async () => {
+    const { res, text } = await req('/privacy');
+    assert(res.ok, 'privacy not 200');
+    assert(/on the phone/i.test(text) && /988/.test(text), 'privacy missing promises');
+    assert(!/Plus/.test(text), 'privacy must not sell Plus');
+  });
+
+  await check('blessing previews as the sentence', async () => {
+    const minted = await req('/api/blessing', {
+      method: 'POST',
+      body: JSON.stringify({ verse: 'John 8:11', quote: 'Neither do I condemn thee: go, and sin no more.' }),
+    });
+    const page = await req('/b/' + minted.json.token);
+    assert(/og:title" content="John 8:11/.test(page.text), 'og:title should be the verse');
+    assert(/og:description" content="“Neither do I condemn thee/.test(page.text), 'og:description should be His words');
+  });
+
+  await check('studio Codex', async () => {
+    const { res, text } = await req('/codex');
+    assert(res.ok, 'codex not 200');
+    assert(/The Red Letter Codex/i.test(text), 'codex title missing');
+    assert(/noindex/.test(text), 'codex must not index');
+    assert(!/Ask <em>Him<\/em>/i.test(text), 'codex must not ship Ask Him as a voice');
+    assert(/The model is not a person/.test(text), 'codex must keep the covenant');
+  });
+
+  await check('concordance of need', async () => {
+    const { res, json } = await req('/api/concordance?q=' + encodeURIComponent('I thought I had to leave the room'));
+    assert(res.ok && json.matches?.length, 'concordance empty');
+    assert(json.matches.some((m) => /John 8:11/.test(m.verse)), 'shame must keep John 8:11');
+  });
+
+  await check('security headers', async () => {
+    const { res } = await req('/');
+    assert(res.headers.get('x-content-type-options') === 'nosniff', 'nosniff missing');
+    assert(/default-src 'self'/.test(res.headers.get('content-security-policy') || ''), 'CSP missing');
   });
 
   if (fails.length) {
