@@ -10,6 +10,7 @@ const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/sche
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 const { encodeBlessing, decodeBlessing, blessingPage } = require('./lib/blessing');
 const { securityHeaders } = require('./lib/headers');
+const { matchNeed, sealedNeeds, bestNeed, formatNeedLetter } = require('./lib/concordance');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -256,6 +257,14 @@ app.get('/api/themes', (req, res) => {
   res.json({ themes: themeNames() });
 });
 
+app.get('/api/concordance', (req, res) => {
+  const q = typeof req.query.q === 'string' ? req.query.q.slice(0, 160) : '';
+  if (!q) {
+    return res.json({ count: sealedNeeds().length, needs: sealedNeeds() });
+  }
+  res.json({ count: sealedNeeds().length, matches: matchNeed(q, { limit: 8 }) });
+});
+
 app.post('/api/verify', (req, res) => {
   if (!rateLimit(`verify:${clientKey(req)}`, 60, 60 * 1000)) {
     return res.status(429).json({ error: 'Please return later.' });
@@ -390,7 +399,8 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    const hit = bestNeed(last.content);
+    return finish(hit ? formatNeedLetter(hit) : FALLBACK_LETTER);
   }
 
   try {
@@ -447,6 +457,11 @@ app.post('/api/waitlist', (req, res) => {
     fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
   }
   res.json({ ok: true });
+});
+
+app.get('/codex', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'codex.html'));
 });
 
 app.get('/welcome', (req, res) => {

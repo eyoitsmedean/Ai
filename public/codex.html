@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>The Red Letter Codex — a studio book for review</title>
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #F4EFE4;
+      --folio: #FBF7EE;
+      --ink: #1B1610;
+      --mute: #7A6E5E;
+      --rule: rgba(27,22,16,.12);
+      --rule-2: rgba(27,22,16,.22);
+      --crimson: #8F1D1D;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; }
+    .grain { pointer-events: none; position: fixed; inset: 0; opacity: .045; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .nav { position: sticky; top: 0; z-index: 6; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+    .nav-in { max-width: 40rem; margin: 0 auto; padding: .75rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-family: 'Instrument Sans', sans-serif; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+    .nav a { color: var(--crimson); text-decoration: none; }
+    .book { position: relative; z-index: 1; max-width: 40rem; margin: 0 auto; padding: 3.2rem 1.4rem 8rem; }
+    .half { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 2rem 0 4rem; }
+    .mark { width: 64px; height: 64px; border: 1px solid var(--crimson); border-radius: 50%; display: grid; place-items: center; font-family: Fraunces, Georgia, serif; font-style: italic; font-size: 32px; color: var(--crimson); margin: 0 auto 1.8rem; }
+    .kicker { font-family: 'Instrument Sans', sans-serif; letter-spacing: .28em; text-transform: uppercase; font-size: 11px; color: var(--mute); text-align: center; margin-bottom: 1.1rem; }
+    h1 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: clamp(46px, 10vw, 78px); letter-spacing: -.04em; line-height: .92; text-align: center; }
+    h1 em { font-style: italic; color: var(--crimson); }
+    .deck { font-style: italic; font-size: 1.28rem; color: #4A4034; text-align: center; max-width: 28ch; margin: 1.5rem auto 0; line-height: 1.45; }
+    .quote { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--crimson); font-size: clamp(1.4rem, 3.6vw, 1.85rem); line-height: 1.38; text-align: center; max-width: 20ch; margin: 2.4rem auto .7rem; }
+    .cite { font-family: 'Instrument Sans', sans-serif; letter-spacing: .16em; text-transform: uppercase; font-size: 11px; color: var(--mute); text-align: center; }
+    .toc { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 1.5rem 0; margin: 2.6rem 0 3.2rem; }
+    .toc a { display: grid; grid-template-columns: 2.4rem 1fr auto; gap: .7rem; align-items: baseline; text-decoration: none; color: inherit; padding: .48rem 0; font-size: 1.04rem; }
+    .toc em { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--crimson); font-size: .95rem; }
+    .toc .dot { color: var(--mute); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-family: 'Instrument Sans', sans-serif; }
+    .running { font-family: 'Instrument Sans', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); margin: 3.8rem 0 .85rem; }
+    h2 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: clamp(1.85rem, 4.2vw, 2.45rem); letter-spacing: -.03em; line-height: 1.08; margin-bottom: .95rem; }
+    h3 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 1.28rem; letter-spacing: -.02em; margin: 1.7rem 0 .5rem; }
+    p, li { font-size: 1.06rem; line-height: 1.72; color: #2A241C; }
+    p + p { margin-top: 1rem; }
+    .lede { font-size: 1.2rem; }
+    ul, ol { margin: .85rem 0 1rem 1.15rem; }
+    li { margin: .38rem 0; }
+    .rule { height: 1px; background: var(--rule); margin: 2.1rem 0; }
+    .plate { background: var(--folio); border: 1px solid var(--rule); padding: 1.2rem 1.2rem 1.25rem; margin: 1.25rem 0; }
+    .plate .k { font-family: 'Instrument Sans', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); margin-bottom: .5rem; }
+    .red { color: var(--crimson); font-style: italic; font-family: Fraunces, Georgia, serif; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 1rem 0 1.4rem; }
+    th, td { text-align: left; vertical-align: top; padding: .58rem .4rem; border-top: 1px solid var(--rule); line-height: 1.45; }
+    th { font-family: 'Instrument Sans', sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--mute); font-weight: 500; }
+    td.carry { font-family: Fraunces, Georgia, serif; }
+    td.verse { font-family: 'Instrument Sans', sans-serif; font-size: .76rem; letter-spacing: .06em; text-transform: uppercase; color: var(--crimson); white-space: nowrap; }
+    td.quote { font-style: italic; color: var(--crimson); font-family: Fraunces, Georgia, serif; }
+    .shot { margin: 1.15rem 0; padding: 0 0 0 1rem; border-left: 1px solid var(--crimson); }
+    .shot strong { font-family: Fraunces, Georgia, serif; font-weight: 500; }
+    .refuse { color: #4A4034; }
+    .colo { margin-top: 4.4rem; padding-top: 1.3rem; border-top: 1px solid var(--rule); font-size: .92rem; color: var(--mute); line-height: 1.7; text-align: center; }
+    .folio { background: var(--folio); border: 1px solid var(--rule-2); padding: 1.35rem 1.25rem 1.4rem; margin: 1.35rem 0; box-shadow: 0 18px 40px rgba(27,22,16,.06); }
+    .folio .eye { font-family: 'Instrument Sans', sans-serif; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--mute); margin-bottom: .55rem; }
+    .folio h4 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 1.55rem; letter-spacing: -.03em; margin-bottom: .55rem; }
+    .folio h4 em { font-style: italic; color: var(--crimson); }
+    .steps { display: grid; gap: .7rem; margin: 1.1rem 0; }
+    .steps div { display: grid; grid-template-columns: 2.1rem 1fr; gap: .7rem; align-items: start; }
+    .steps b { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--crimson); font-weight: 500; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin: 1.1rem 0; }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+    .live { font-family: 'Instrument Sans', sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--crimson); }
+    .later { font-family: 'Instrument Sans', sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--mute); }
+    .check { list-style: none; margin-left: 0; }
+    .check li { padding-left: 1.4rem; position: relative; }
+    .check li::before { content: "☐"; position: absolute; left: 0; color: var(--crimson); }
+    .theme-h { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--crimson); margin: 1.6rem 0 .4rem; font-size: 1.15rem; }
+    .num { font-variant-numeric: lining-nums; }
+    @media print {
+      .nav, .grain { display: none; }
+      .book { padding: 0; max-width: none; }
+      .half { min-height: auto; }
+      h2 { break-before: page; }
+      h2:first-of-type { break-before: auto; }
+      .folio, .plate { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <nav class="nav">
+    <div class="nav-in">
+      <span>The Codex · studio only</span>
+      <span>
+        <a href="/?fresh=1">Open the room</a>
+        · <a href="#concordance">Concordance</a>
+        · <a href="#now">What is live</a>
+        · <button type="button" onclick="window.print()" style="border:0;background:none;color:#8F1D1D;font:inherit;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">Print</button>
+      </span>
+    </div>
+  </nav>
+  <article class="book">
+    <header class="half">
+      <div class="mark" aria-hidden="true">R</div>
+      <p class="kicker">A studio book · not a guest face · noindex</p>
+      <h1>The Red <em>Letter</em><br>Codex</h1>
+      <p class="deck">Build the ideas until they have a grammar, a last page, and a price that does not become a gate.</p>
+      <p class="quote">The words of Jesus are the interface. Everything else is furniture.</p>
+      <p class="cite">Studio rule · Ordinary Time · <span id="codex-date"></span></p>
+    </header>
+
+    <p class="lede">This book is for you. The guest never sees it. It takes the sitting’s eight ideas and writes them until a stranger could ship from the page. Where the room already does the work, the Codex names the remaining millimeter and marks it <span class="live">live</span>. Where it does not, it specifies the leaf, the copy, and the test, and marks it <span class="later">specified</span>.</p>
+    <p>The job of this object is not to inspire. It is to make the next temptation expensive. If a later idea violates the covenant, the idea is wrong — not the covenant.</p>
+
+    <nav class="toc" aria-label="Contents">
+      <a href="#i"><em>I</em> The farm we actually own <span class="dot">claim</span></a>
+      <a href="#ii"><em>II</em> The covenant <span class="dot">wall</span></a>
+      <a href="#iii"><em>III</em> A blessing is a page <span class="dot">protocol</span></a>
+      <a href="#iv"><em>IV</em> The Advisor that ends <span class="dot">last leaf</span></a>
+      <a href="#v"><em>V</em> Tuesday <span class="dot">day two</span></a>
+      <a href="#vi"><em>VI</em> The last page of Seven <span class="dot">close</span></a>
+      <a href="#vii"><em>VII</em> Offline is the ad <span class="dot">five films</span></a>
+      <a href="#viii"><em>VIII</em> Sell the object <span class="dot">chapbook</span></a>
+      <a href="#concordance"><em>IX</em> The Concordance of Need <span class="dot">the IP</span></a>
+      <a href="#x"><em>X</em> What we refuse <span class="dot">house</span></a>
+      <a href="#xi"><em>XI</em> Money without Bible Chat <span class="dot">lamp</span></a>
+      <a href="#copy"><em>XII</em> Locked copy <span class="dot">type</span></a>
+      <a href="#now"><em>XIII</em> What is live tonight <span class="dot">room</span></a>
+      <a href="#xii"><em>XIV</em> How you know it is true <span class="dot">press</span></a>
+    </nav>
+
+    <p class="running" id="i">Chapter I</p>
+    <h2>The farm we actually own</h2>
+    <p>YouVersion owns reading. Hallow owns a season and a celebrity voice. Bible Chat owns a TikTok question and then burns the trust on a weekly SKU. Glorify owns a feed that looks like rest. Nobody owns this sentence:</p>
+    <div class="plate">
+      <p class="k">The claim</p>
+      <p class="red">Live daily life guided only by the words Jesus spoke.</p>
+    </div>
+    <p>That claim is not a feature list. It is a constraint. The product is smaller than a Bible and more honest than a chatbot. The moat is not the model. The moat is a sealed corpus, a concordance of need, a blessing that leaves as a page, and a conversation that is allowed to end.</p>
+    <table>
+      <thead><tr><th>House</th><th>They own</th><th>We do not become</th></tr></thead>
+      <tbody>
+        <tr><td>YouVersion</td><td>The reading streak, the square, the plan</td><td>A thinner Bible with a nicer typeface</td></tr>
+        <tr><td>Hallow</td><td>Advent, a voice, a celebrity novena</td><td>A season with a paywall on silence</td></tr>
+        <tr><td>Bible Chat</td><td>The first question, then a weekly gate</td><td>Reviews that rot when pain meets a SKU</td></tr>
+        <tr><td>Glorify</td><td>A feed that looks like rest</td><td>A timeline of other people’s mornings</td></tr>
+        <tr><td>Red Letter</td><td>The map from a human sentence onto His speech</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p>If we add Paul, we become a Bible app. If we add a feed, we become Glorify. If we add a weekly price, we become the reviews we said we would not write. The farm is the red letters plus the map. Deepen the map. Do not widen the field.</p>
+
+    <p class="running" id="ii">Chapter II</p>
+    <h2>The covenant</h2>
+    <p>Print this on the wall. If a later idea violates it, the idea is wrong.</p>
+    <ol>
+      <li>His words are never locked. Lectio, Seek, Seven Days, the curated Advisor, the commonplace, the concordance — free.</li>
+      <li>The model is never Jesus. The page is a guide. The citation is the authority.</li>
+      <li>A missed day is never a failure state. Paths wait. Rooms do not skip.</li>
+      <li>Night paper and quiet hour stay off until chosen. The OS does not turn the chapel on.</li>
+      <li>Crimson is speech, not chrome. The printer’s <em>R</em> is the only ornament.</li>
+      <li>One other person is the whole social graph. No likes. No rooms. No parish dashboard.</li>
+      <li>Crisis is a person: 988, a helpline, not a longer letter.</li>
+    </ol>
+    <p>When money exists it buys a lamp — live retrieval, extra seasonal paths, a printed object — never the sentences themselves. The free surface must already be a complete morning.</p>
+
+    <p class="running" id="iii">Chapter III</p>
+    <h2>A blessing is a page</h2>
+    <p><span class="live">Live.</span> YouVersion won a decade with a square. We already ship the card. The idea that changes the house is the URL.</p>
+    <div class="folio">
+      <p class="eye">Specimen · /b/{token}</p>
+      <p class="kicker" style="text-align:left;letter-spacing:.2em;margin-bottom:.6rem">A blessing · one person</p>
+      <h4>Come unto me, all ye that labour and are heavy laden, and I will give you <em>rest</em>.</h4>
+      <p class="cite" style="text-align:left;margin:0 0 1rem">Matthew 11:28 · KJV</p>
+      <p>For a friend. Not a sermon. A word for them.</p>
+      <p style="margin-top:1rem;font-size:.92rem;color:#7A6E5E">Sit with this · Open the room<br>His words, on a page. No feed. No likes.</p>
+    </div>
+    <h3>The protocol, complete</h3>
+    <div class="steps">
+      <div><b>1</b><p>The sender chooses a sealed saying and may write one note (280 characters). Not a sermon. A word for them.</p></div>
+      <div><b>2</b><p>The token is a base64url JSON of <code>{ v, q, n }</code>. The verse must parse as Matthew–John. The quote is the corpus text, not a paraphrase. If lookup fails, the page does not mint.</p></div>
+      <div><b>3</b><p>Share prefers the system sheet with <code>url</code> first. If the phone will not share a URL, copy the link. The PNG is the fallback, never the product.</p></div>
+      <div><b>4</b><p>The recipient lands on a page that works with JavaScript off. Sit deep-links <code>/?b=token</code> and opens lectio on that saying. No install wall. No “open in app.”</p></div>
+      <div><b>5</b><p>iMessage should preview the sentence, not the chrome. OG title is the verse. OG description is the first clause of the quote.</p></div>
+      <div><b>6</b><p>We do not count opens for a leaderboard. If we ever count, we count whether they sat — privately, on their device.</p></div>
+      <div><b>7</b><p>Rate: thirty blessings an hour from one address. This is not a broadcast tool.</p></div>
+    </div>
+    <h3>Copy, locked</h3>
+    <ul>
+      <li>Kicker: <em>A blessing · one person</em></li>
+      <li>Empty note: no second line. Do not invent “Thinking of you.”</li>
+      <li>Colophon: <em>His words, on a page. No feed. No likes.</em></li>
+      <li>Never: “I asked Jesus for you.” Never: “From your AI pastor.” Never: “Open in app.”</li>
+    </ul>
+    <h3>Acceptance</h3>
+    <p>A stranger can open the link on a locked-down phone, read the sentence, and sit without creating an account. If the first screen is a store badge, the blessing failed.</p>
+
+    <p class="running" id="iv">Chapter IV</p>
+    <h2>The Advisor that ends</h2>
+    <p><span class="live">Live.</span> Bible Chat wins by never hanging up. We win by closing the book. After two letters the composer leaves. Keep writing is an escape, once. Then the leaf returns.</p>
+    <div class="folio">
+      <p class="eye">Specimen · last leaf</p>
+      <p class="kicker" style="text-align:left;margin-bottom:.5rem">The letter is enough</p>
+      <h4>These are the <em>words</em></h4>
+      <p>Sit with one. The page can close. You do not owe the Advisor another turn.</p>
+      <p style="margin-top:1rem;font-size:.95rem">Sit with this · Begin a new letter · Keep writing</p>
+    </div>
+    <h3>Turn budget</h3>
+    <table>
+      <thead><tr><th>Turn</th><th>What the page does</th><th>What it must not do</th></tr></thead>
+      <tbody>
+        <tr><td class="num">0</td><td>Chips. “What are you carrying?”</td><td>A personality. A name for the model.</td></tr>
+        <tr><td class="num">1</td><td>Hear them. One sealed saying from the concordance if it has a line. Sit with this.</td><td>A second theological paragraph.</td></tr>
+        <tr><td class="num">2</td><td>If they write again, one more letter — then the last leaf. Composer gone.</td><td>A third empty field.</td></tr>
+        <tr><td>Keep</td><td>One extra turn. The button then leaves.</td><td>An unlock that lasts the day.</td></tr>
+        <tr><td>New</td><td>Clears today’s thread. Suggestions return.</td><td>A feed of last night’s pain for the next guest.</td></tr>
+      </tbody>
+    </table>
+    <h3>What the letter may do</h3>
+    <p>Empathy in ink, not theology. Placeholders or sealed quotes only. If the concordance has a line for what they typed, that line is the letter. The model does not get to be more interesting than John 8:11. Shame maps there until the corpus itself changes. Gravity in the matcher exists so “I feel shame” cannot lose to “I feel invisible” because both contain <em>feel</em>.</p>
+    <h3>Crisis</h3>
+    <p>The last leaf never appears on top of 988. If the writer is in danger, the modal is the interface. The concordance is not a counselor. Amen never steals the next tap.</p>
+    <h3>Acceptance</h3>
+    <p>A guest who asks twice sees Sit, not a third empty field. If we are afraid to end the chat, we have become the other product.</p>
+
+    <p class="running" id="v">Chapter V</p>
+    <h2>Tuesday</h2>
+    <p><span class="live">Live — the ribbon.</span> Day 1 is solved. The product is Tuesday. The second session must not be Day 1 with a different bead.</p>
+    <div class="folio">
+      <p class="eye">Specimen · return ribbon</p>
+      <p class="kicker" style="text-align:left;margin-bottom:.5rem">Welcome back</p>
+      <h4>The sentence <em>waited</em>.</h4>
+      <p>Yesterday you sat with Matthew 11:28.</p>
+    </div>
+    <h3>State machine</h3>
+    <table>
+      <thead><tr><th>They</th><th>The flyleaf</th><th>Seven Days</th></tr></thead>
+      <tbody>
+        <tr><td>Sat yesterday, not today</td><td>Ribbon names yesterday’s verse. Today’s word sits under it.</td><td>The next unsat room. No skip.</td></tr>
+        <tr><td>Sat today</td><td>No ribbon. The catchword stays in the mast until dawn.</td><td>Re-sitting a finished room is allowed.</td></tr>
+        <tr><td>Missed three mornings</td><td>No streak language. No “you broke it.”</td><td>The bead they had not sat is still the next room.</td></tr>
+        <tr><td>Finished seven</td><td>The last page. The book may close.</td><td>Begin again is a verb, not an autoplay.</td></tr>
+      </tbody>
+    </table>
+    <p>Dates are local morning, never UTC. A guest in Honolulu must not lose Tuesday because the server is in Virginia. The catchword from their reply stays until dawn. Today’s word arrives <em>under</em> the ribbon, like a book opening to a new leaf with the previous silk still visible.</p>
+    <h3>Acceptance</h3>
+    <p>A tester who sits Monday, returns Tuesday, and sees only a dashboard has failed the product. They should see a sentence they already know, then a new one.</p>
+
+    <p class="running" id="vi">Chapter VI</p>
+    <h2>The last page of Seven</h2>
+    <p><span class="live">Live.</span> Day 7 is not “begin again” in the same breath as the Amen. The book is allowed to close.</p>
+    <div class="folio">
+      <p class="eye">The story the seven days tell</p>
+      <p class="red" style="font-size:1.25rem;line-height:1.55">Come · Peace · Light · Love · Forgive · Abide · Go</p>
+      <p style="margin-top:.7rem">If Day 7 is low, the days are not a story. If it is high, film it.</p>
+    </div>
+    <ul>
+      <li>One new room per local morning. Re-sitting a finished room is allowed. Skipping ahead is not.</li>
+      <li>When seven are sat, the last page lists the seven titles and citations.</li>
+      <li>Verbs: <em>Print a chapbook</em>, <em>Bless someone</em> with one of the seven, <em>Begin Seven Days again</em>, <em>Rest here</em>.</li>
+      <li>Forty remains data until Lent. Do not ship a 365. The Benedictine move is to return to the same seven.</li>
+    </ul>
+    <p>Grace may hold a morning count. The path does not punish. Beads mark place. Missing a day never skips a room.</p>
+
+    <p class="running" id="vii">Chapter VII</p>
+    <h2>Offline is the ad</h2>
+    <p>The room already works with no key. Say it. Do not say “AI Bible.” Film on a phone. Handwriting or a face. His words on screen in crimson. No doves. Spend the first dollars on seven-day return, not CPI.</p>
+    <div class="shot">
+      <strong>1. The lamp is out · 8s</strong>
+      <p>Airplane mode. Thumb opens Red Letter. Matthew 11:28 still sits in crimson. Super: <em>His words stay on the phone.</em> CTA: <em>A quiet page. Free.</em> Do not: Wi-Fi icon, cloud, “works offline” as a feature badge.</p>
+    </div>
+    <div class="shot">
+      <strong>2. Tuesday · 12s</strong>
+      <p>Face, no stock church. “I sat yesterday.” Cut to the return ribbon. Super: <em>The sentence waited.</em> CTA: <em>Open the page.</em> Do not: a calendar grid, a flame streak.</p>
+    </div>
+    <div class="shot">
+      <strong>3. Shame · 10s</strong>
+      <p>Type “I thought I had to leave the room.” John 8:11. Sit with this. Never “Ask Him.” Super: <em>He still knows how to lift a face.</em> CTA: <em>Sit with this.</em></p>
+    </div>
+    <div class="shot">
+      <strong>4. The blessing · 9s</strong>
+      <p>Send to Mom. The URL opens on her lock screen as a page, not a screenshot of chrome. Super: <em>One person. No feed.</em> CTA: <em>Send a page.</em></p>
+    </div>
+    <div class="shot">
+      <strong>5. The close · 8s</strong>
+      <p>Second Advisor turn. The composer leaves. “These are the words.” Super: <em>The page can close.</em> CTA: <em>A quiet page.</em></p>
+    </div>
+    <p>The first media buy is not awareness. It is whether Tuesday returns. If the ad cannot be the product, do not run it.</p>
+
+    <p class="running" id="viii">Chapter VIII</p>
+    <h2>Sell the object</h2>
+    <p><span class="live">Print a chapbook — live as a PDF from the journal.</span> <span class="later">The $18 object and the lamp are specified, not sold.</span></p>
+    <div class="grid2">
+      <div class="plate">
+        <p class="k">The chapbook</p>
+        <p>5.5 × 8.5 in, short grain. Title page, catchwords of the year, sittings (note + red letter + cite), colophon. PDF from the room is free. Printed: <strong>$18</strong> once, plus post. Never watermark “made with AI.” The wordmark is the printer’s R.</p>
+      </div>
+      <div class="plate">
+        <p class="k">The lamp, later</p>
+        <p>Year <strong>$59.99</strong>. Month $9.99, never led. Trial after they have kept a week. Live Advisor and Lent Forty are the paid cloth. The words stay free. No weekly SKU. Ever.</p>
+      </div>
+    </div>
+    <h3>What we do not sell</h3>
+    <p>Weekly access. A verse of the day behind a wall. Extra Jesus. Seats for a parish dashboard. Five letters for today. Plus on the welcome page.</p>
+    <h3>The object is how we stay honest</h3>
+    <p>A subscription can become a gate in a quarter. An object cannot. If money is needed before Lent, print the chapbook. If money is needed after a year, light the lamp. If someone asks for a weekly price, the answer is already in the covenant.</p>
+
+    <p class="running" id="concordance">Chapter IX</p>
+    <h2>The Concordance of Need</h2>
+    <p>This is the IP. Not more Jesus content. A map from life onto a small corpus. Eighty human sentences (we shipped <span id="conc-n">eighty-eight</span>) mapped onto sealed red-letters. The model does not get to be cleverer than the map. Seek → <em>Carrying</em> is the guest face. The table below is the studio face — generated from the same file the room uses, so this book cannot drift from the product.</p>
+    <div class="plate">
+      <p class="k">Rules for adding a line</p>
+      <ol>
+        <li>The carry is something a person would type at 1 a.m. Not a theme name.</li>
+        <li>The verse must seal. If lookup fails, the line does not ship.</li>
+        <li>One verse per line. If two verses are needed, write two lines.</li>
+        <li>Do not add Paul. Do not add a psalm because it “feels right.”</li>
+        <li>Shame maps to John 8:11 until the corpus itself changes.</li>
+        <li><code>feel</code> is a stopword. Gravity exists so shame cannot lose to loneliness.</li>
+      </ol>
+    </div>
+    <p id="conc-count" class="kicker" style="text-align:left;letter-spacing:.14em">Sealed lines</p>
+    <div id="conc-groups"></div>
+    <p>To add a line: edit <code>lib/concordance.js</code>, run <code>npm run concordance</code>, watch the seal test fail if the verse is wrong. That is the whole editorial process.</p>
+
+    <p class="running" id="x">Chapter X</p>
+    <h2>What we refuse</h2>
+    <p class="refuse">These look like growth. They are how the house is lost.</p>
+    <table>
+      <thead><tr><th>Temptation</th><th>The sentence that kills it</th></tr></thead>
+      <tbody>
+        <tr><td>Margin conversations / small groups</td><td>A shared page becomes a feed in a month. The graph is one blessing.</td></tr>
+        <tr><td>Parish dashboard</td><td>Pastors need a URL, not seats and analytics.</td></tr>
+        <tr><td>Kids’ “He said”</td><td>YouVersion owns that room. A quiet adult page a sixteen-year-old can use is rarer.</td></tr>
+        <tr><td>Accounts to sync the journal</td><td>Local-first is the taste. A printed chapbook is the backup.</td></tr>
+        <tr><td>Ask Him</td><td>The model is not a person. The copy already learned this.</td></tr>
+        <tr><td>OS dark chapel</td><td>Night paper is a vow, not a media query.</td></tr>
+        <tr><td>Streak shame</td><td>Beads mark place. Missing a day never skips a room.</td></tr>
+        <tr><td>A second dark welcome</td><td>One book. Cream. Matthew 11:28.</td></tr>
+        <tr><td>Weekly Plus</td><td>Reviews rot when pain meets a paywall.</td></tr>
+        <tr><td>Putting this Codex in the dock</td><td>The guest never sees the studio.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="running" id="xi">Chapter XI</p>
+    <h2>Money without becoming Bible Chat</h2>
+    <p>Reviews rot when pain meets a paywall. The free surface must be complete: sit, seek, seven, a sealed letter, a blessing page, a chapbook of what they kept. Paid is extra cloth on a body that already stands.</p>
+    <table>
+      <thead><tr><th>Measure</th><th>Why it is allowed</th><th>What we do not measure as virtue</th></tr></thead>
+      <tbody>
+        <tr><td>Day-1 lectio finished</td><td>They sat. The product happened.</td><td>Session length</td></tr>
+        <tr><td>Tuesday return</td><td>The real design</td><td>DAU as a religion</td></tr>
+        <tr><td>Day-7 of Seven</td><td>The story held</td><td>A 365 upsell</td></tr>
+        <tr><td>Blessings sent</td><td>One person, not a graph</td><td>Open-rate leaderboards</td></tr>
+        <tr><td>Advisor letters that <em>end</em></td><td>We hung up</td><td>Turns per session</td></tr>
+        <tr><td>Chapbooks printed</td><td>They kept something</td><td>Export as a feature list</td></tr>
+      </tbody>
+    </table>
+    <p>A short morning that closes is the product working. If the dashboard wants more time in app, hide the dashboard.</p>
+
+    <p class="running" id="copy">Chapter XII</p>
+    <h2>Locked copy</h2>
+    <p>These lines are set. Do not improve them in a growth meeting.</p>
+    <table>
+      <thead><tr><th>Surface</th><th>The line</th></tr></thead>
+      <tbody>
+        <tr><td>Claim</td><td>Live daily life guided only by the words Jesus spoke.</td></tr>
+        <tr><td>Interface</td><td>The words of Jesus are the interface. Everything else is furniture.</td></tr>
+        <tr><td>Offline</td><td>His words stay on the phone.</td></tr>
+        <tr><td>Advisor</td><td>These are the words. The page can close.</td></tr>
+        <tr><td>Tuesday</td><td>The sentence waited.</td></tr>
+        <tr><td>Blessing</td><td>A blessing · one person. No feed. No likes.</td></tr>
+        <tr><td>Welcome</td><td>Open the page. Never Plus. Never Ask Him.</td></tr>
+        <tr><td>Trust</td><td>Not a person, not a pastor, not a clinician. 988.</td></tr>
+        <tr><td>Carrying</td><td>Name the sentence. The page keeps one red-letter for it. Nothing is invented.</td></tr>
+        <tr><td>Chapbook</td><td>A small book of kept lines. Not a feed.</td></tr>
+        <tr><td>Crisis</td><td>988 (U.S., call or text) · findahelpline.com</td></tr>
+      </tbody>
+    </table>
+
+    <p class="running" id="now">Chapter XIII</p>
+    <h2>What is live tonight</h2>
+    <p>Open these. They are not mockups. They are the room.</p>
+    <table>
+      <thead><tr><th>Idea</th><th>Where</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td>Quiet Page / bound book</td><td><a href="/?fresh=1">/?fresh=1</a></td><td class="live">Live</td></tr>
+        <tr><td>Welcome is the same paper</td><td><a href="/welcome">/welcome</a></td><td class="live">Live</td></tr>
+        <tr><td>Blessing as a page</td><td>Today → Send a blessing → /b/{token}</td><td class="live">Live</td></tr>
+        <tr><td>Advisor that ends</td><td>Ask · two turns · last leaf</td><td class="live">Live</td></tr>
+        <tr><td>Tuesday ribbon</td><td>Sit Monday. Return Tuesday.</td><td class="live">Live</td></tr>
+        <tr><td>Seven last page</td><td>Path → last leaf when seven are sat</td><td class="live">Live</td></tr>
+        <tr><td>Concordance of Need</td><td>Seek → Carrying · 88 sealed lines</td><td class="live">Live</td></tr>
+        <tr><td>Chapbook</td><td>Journal → Print a chapbook</td><td class="live">Live (PDF)</td></tr>
+        <tr><td>Offline words</td><td>Airplane mode. Today and Carrying still open.</td><td class="live">Live</td></tr>
+        <tr><td>$18 printed object</td><td>—</td><td class="later">Specified</td></tr>
+        <tr><td>Annual lamp $59.99</td><td>—</td><td class="later">Specified · not before a kept week</td></tr>
+        <tr><td>Five films</td><td>Chapter VII</td><td class="later">Shot lists · not shot</td></tr>
+      </tbody>
+    </table>
+    <p>The Codex is not in the dock. It is this URL. If a guest can find it from Today, we failed the studio rule.</p>
+
+    <p class="running" id="xii">Chapter XIV</p>
+    <h2>How you know it is true</h2>
+    <ul class="check">
+      <li>Open <code>/?fresh=1</code>. The title page is paper. 988 is on it. Turn the page. Lectio opens.</li>
+      <li>Sit. Amen does not steal the next tap.</li>
+      <li>Tuesday: the ribbon names yesterday’s verse.</li>
+      <li>Seek → Carrying: type “I cannot forgive them.” A sealed line appears. Sit.</li>
+      <li>Advisor: two turns, then “These are the words.” Sit with this. Keep writing once; the leaf returns.</li>
+      <li>Bless: copy the link. Open it in a private window. His words, no chrome of an app.</li>
+      <li>Journal: Print a chapbook. It looks like a small press, not a settings dump.</li>
+      <li>Airplane mode: Today and the concordance still open.</li>
+      <li>Shame still finds John 8:11. Crisis still finds 988.</li>
+      <li>This book still says <code>noindex</code>. The guest never sees it.</li>
+    </ul>
+    <p>If any of those fail, this book is decoration. If they hold, the ideas are no longer ideas. They are the room.</p>
+
+    <p class="colo">
+      Set in Fraunces and Source Serif 4 on the Quiet Page paper.<br>
+      Not for the guest. For the person who has to decide what not to build.<br>
+      Red Letter · The Codex · <span id="codex-date-2"></span><br>
+      <span style="display:inline-block;margin-top:1rem;font-family:Fraunces,Georgia,serif;font-style:italic;color:#8F1D1D;font-size:1.4rem">R</span>
+    </p>
+  </article>
+  <script>
+    const when = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('codex-date').textContent = when;
+    document.getElementById('codex-date-2').textContent = when;
+    function escapeHtml(value) {
+      return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    fetch('/concordance.json').then((r) => r.json()).then((data) => {
+      const needs = (data && data.needs) || [];
+      document.getElementById('conc-n').textContent = needs.length;
+      document.getElementById('conc-count').textContent = needs.length + ' sealed lines · KJV · living table';
+      const host = document.getElementById('conc-groups');
+      const groups = {};
+      needs.forEach((row) => {
+        const theme = row.theme || 'Other';
+        if (!groups[theme]) groups[theme] = [];
+        groups[theme].push(row);
+      });
+      host.innerHTML = Object.keys(groups).map((theme) => {
+        const rows = groups[theme].map((row) => (
+          '<tr><td class="carry">' + escapeHtml(row.carry) + '</td><td class="quote">“' + escapeHtml(row.quote) + '”</td><td class="verse">' + escapeHtml(row.verse) + '</td></tr>'
+        )).join('');
+        return '<h3 class="theme-h">' + escapeHtml(theme) + ' · ' + groups[theme].length + '</h3>' +
+          '<table><thead><tr><th>They carry</th><th>He said</th><th>Kept</th></tr></thead><tbody>' + rows + '</tbody></table>';
+      }).join('');
+    }).catch(() => {
+      document.getElementById('conc-count').textContent = 'Concordance could not be opened. Run npm run concordance.';
+    });
+  </script>
+</body>
+</html>

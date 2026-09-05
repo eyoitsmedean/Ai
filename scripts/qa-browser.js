@@ -136,6 +136,17 @@ async function main() {
     await page.waitForFunction(() => /John|Matthew/i.test(document.getElementById('chat-messages')?.innerText || ''), { timeout: 20000 });
     const sit = await page.$('#sit-from-letter');
     assert(sit, 'Sit with this missing');
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+    await page.type('#chat-input', 'I still cannot lift my face');
+    await page.click('#send-btn');
+    await page.waitForFunction(() => !document.getElementById('last-leaf')?.hidden, { timeout: 20000 });
+    const leaf = await page.$eval('#last-leaf', (el) => el.innerText);
+    assert(/These are the words/i.test(leaf), 'last leaf missing close');
+    await page.click('#nav-seek');
+    await page.click('#mode-carry');
+    await page.waitForFunction(() => document.getElementById('carry-pane') && !document.getElementById('carry-pane').hidden, { timeout: 4000 });
+    const carry = await page.evaluate(() => document.getElementById('carry-list')?.innerText || '');
+    assert(/John|Matthew|Luke|Mark/i.test(carry), 'carrying concordance empty');
     await page.click('#nav-today');
     await page.evaluate(() => { if (typeof blessingFromToday === 'function') blessingFromToday(); });
     await page.waitForSelector('#blessing-sheet.on', { timeout: 8000 });

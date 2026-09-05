@@ -91,9 +91,28 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /John 14:1/);
+    assert.match(letter, /Let not your heart be troubled/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('serves the concordance of need', async () => {
+    const all = await request('GET', '/api/concordance');
+    assert.equal(all.status, 200);
+    const data = JSON.parse(all.raw);
+    assert.ok(data.count >= 80);
+    assert.ok(data.needs.some((n) => n.verse === 'John 8:11'));
+    const hit = await request('GET', '/api/concordance?q=' + encodeURIComponent('I feel shame'));
+    const found = JSON.parse(hit.raw);
+    assert.ok(found.matches.some((m) => /John 8:11/.test(m.verse)));
+  });
+
+  it('serves the studio Codex', async () => {
+    const res = await request('GET', '/codex');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /The Red Letter Codex/);
+    assert.match(res.raw, /noindex/);
+    assert.doesNotMatch(res.raw, /Ask Him/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

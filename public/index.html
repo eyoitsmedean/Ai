@@ -897,6 +897,37 @@ textarea { font-family: var(--body); }
 .gate h3 { font-family: var(--display); font-size: 22px; font-weight: 500; margin-bottom: 8px; }
 .gate p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; }
 
+.last-leaf {
+  margin: 28px 0 12px;
+  padding: 26px 0 10px;
+  border-top: 1px solid var(--rule);
+}
+.last-leaf[hidden] { display: none; }
+.last-leaf .sit-copy { margin: 0 0 18px; max-width: 34ch; }
+
+.carry-row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule);
+  padding: 18px 0;
+}
+.carry-row:last-child { border-bottom: 1px solid var(--rule); }
+.carry-need {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.carry-quote {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+  line-height: 1.45;
+}
+
 /* Journal */
 .journal-empty { padding: 48px 8px; max-width: 36ch; }
 .journal-empty-title { font-family: var(--display); font-size: 28px; font-weight: 500; margin-bottom: 8px; }
@@ -1691,7 +1722,15 @@ html.sitting .sit-sheet {
         <p class="lede" id="seek-lede" style="margin:14px 0 8px">Twelve rooms. Each one opened with the sentences He actually said.</p>
         <div class="mode-switch" role="tablist" aria-label="Seek">
           <button class="mode-btn on" id="mode-rooms" role="tab" aria-selected="true" onclick="setSeekMode('rooms')">Rooms</button>
+          <button class="mode-btn" id="mode-carry" role="tab" aria-selected="false" onclick="setSeekMode('carry')">Carrying</button>
           <button class="mode-btn" id="mode-letters" role="tab" aria-selected="false" onclick="setSeekMode('letters')">The letters</button>
+        </div>
+
+        <div class="seek-pane" id="carry-pane" hidden>
+          <label class="sr-only" for="carry-q">What are you carrying</label>
+          <input class="lib-search" id="carry-q" type="search" placeholder="What are you carrying?" autocomplete="off" />
+          <p class="lib-meta" id="carry-meta">Eighty human sentences. One sealed red-letter each.</p>
+          <div id="carry-list"></div>
         </div>
 
         <div class="seek-pane" id="rooms-pane">
@@ -1774,6 +1813,16 @@ html.sitting .sit-sheet {
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
+          <aside class="last-leaf" id="last-leaf" hidden>
+            <p class="eyebrow">The letter is enough</p>
+            <h2 class="display" style="font-size:28px;margin-bottom:10px">These are the <em>words</em></h2>
+            <p class="sit-copy">Sit with one. The page can close. You do not owe the Advisor another turn.</p>
+            <div class="actions">
+              <button class="cta cta-primary" type="button" id="last-sit" onclick="sitLastLetter()">Sit with this</button>
+              <button class="ghost" type="button" onclick="beginNewLetter()">Begin a new letter</button>
+              <button class="ghost" type="button" id="keep-writing" onclick="keepWriting()">Keep writing</button>
+            </div>
+          </aside>
         </div>
         <div class="composer">
           <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
@@ -1787,6 +1836,9 @@ html.sitting .sit-sheet {
         <p class="eyebrow">A commonplace book</p>
         <h1 class="display">Your <em>journal</em></h1>
         <div class="quire" id="quire" hidden></div>
+        <div class="actions" style="margin-bottom:22px">
+          <button class="ghost" type="button" onclick="printChapbook()">Print a chapbook</button>
+        </div>
         <div id="journal-list"></div>
       </div>
     </div>
@@ -1920,7 +1972,7 @@ html.sitting .sit-sheet {
     <button class="ghost" type="button" onclick="startNewReader()">Begin again</button>
   </div>
   <div class="sheet-about">
-    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. His words stay on the phone. The cloud is optional. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
@@ -2015,6 +2067,7 @@ html.sitting .sit-sheet {
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
 <script src="/data/paths.js"></script>
+<script src="/data/concordance.js"></script>
 <script>
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
@@ -2658,24 +2711,36 @@ function showThemeGrid() {
 }
 
 function setSeekMode(mode) {
-  seekMode = mode === 'letters' ? 'letters' : 'rooms';
+  seekMode = mode === 'letters' ? 'letters' : (mode === 'carry' ? 'carry' : 'rooms');
   const rooms = seekMode === 'rooms';
+  const letters = seekMode === 'letters';
+  const carry = seekMode === 'carry';
   document.getElementById('mode-rooms').classList.toggle('on', rooms);
-  document.getElementById('mode-letters').classList.toggle('on', !rooms);
+  document.getElementById('mode-letters').classList.toggle('on', letters);
+  const carryBtn = document.getElementById('mode-carry');
+  if (carryBtn) {
+    carryBtn.classList.toggle('on', carry);
+    carryBtn.setAttribute('aria-selected', carry ? 'true' : 'false');
+  }
   document.getElementById('mode-rooms').setAttribute('aria-selected', rooms ? 'true' : 'false');
-  document.getElementById('mode-letters').setAttribute('aria-selected', rooms ? 'false' : 'true');
+  document.getElementById('mode-letters').setAttribute('aria-selected', letters ? 'true' : 'false');
   document.getElementById('rooms-pane').hidden = !rooms;
-  document.getElementById('letters-pane').hidden = rooms;
-  document.getElementById('seek-eyebrow').textContent = rooms ? 'A small hymnal' : 'The spoken corpus';
-  document.getElementById('seek-title').innerHTML = rooms ? 'Words of <em>encouragement</em>' : 'The <em>letters</em>';
-  document.getElementById('seek-lede').textContent = rooms
-    ? 'Twelve rooms. Each one opened with the sentences He actually said.'
-    : 'Every saying in Matthew, Mark, Luke, and John — His speech only, not the narrator.';
+  document.getElementById('letters-pane').hidden = !letters;
+  const carryPane = document.getElementById('carry-pane');
+  if (carryPane) carryPane.hidden = !carry;
+  document.getElementById('seek-eyebrow').textContent = carry ? 'A concordance' : (rooms ? 'A small hymnal' : 'The spoken corpus');
+  document.getElementById('seek-title').innerHTML = carry ? 'What are you <em>carrying</em>' : (rooms ? 'Words of <em>encouragement</em>' : 'The <em>letters</em>');
+  document.getElementById('seek-lede').textContent = carry
+    ? 'Name the sentence. The page keeps one red-letter for it. Nothing is invented.'
+    : rooms
+      ? 'Twelve rooms. Each one opened with the sentences He actually said.'
+      : 'Every saying in Matthew, Mark, Luke, and John — His speech only, not the narrator.';
   document.getElementById('seek-page').scrollTop = 0;
-  if (!rooms) {
+  if (letters) {
     closeLibFolio();
     if (!libLoaded) loadLibraryPage(true);
   }
+  if (carry) paintConcordance(document.getElementById('carry-q') && document.getElementById('carry-q').value);
 }
 
 function setLibBook(book) {
@@ -3091,6 +3156,7 @@ function restoreLetters() {
   });
   document.getElementById('suggestions').style.display = 'none';
   setComposerEnabled(true);
+  maybeCloseLetter();
 }
 
 function useSuggestion(btn) {
@@ -3195,6 +3261,7 @@ async function sendMsg(preset) {
     document.getElementById('typing').classList.remove('on');
     document.getElementById('send-btn').disabled = false;
     setComposerEnabled(true);
+    maybeCloseLetter();
     scrollChat();
   }
 }
@@ -3202,6 +3269,205 @@ async function sendMsg(preset) {
 function setComposerEnabled(on) {
   chatInput.disabled = !on;
   document.getElementById('send-btn').disabled = !on;
+}
+
+function assistantTurns() {
+  return chatHistory.filter((m) => m.role === 'assistant').length;
+}
+
+function keepWritingState() {
+  const raw = ls('rla-keep-writing-' + todayStr());
+  if (raw === 'open' || raw === 'used') return raw;
+  return '';
+}
+
+function maybeCloseLetter() {
+  const leaf = document.getElementById('last-leaf');
+  const composer = document.querySelector('#advisor-page .composer');
+  if (!leaf) return;
+  const extra = keepWritingState();
+  const turns = assistantTurns();
+  let close = false;
+  if (extra === 'open') close = turns >= 3;
+  else if (extra === 'used') close = turns >= 3;
+  else close = turns >= 2;
+  if (close && extra === 'open') lsSet('rla-keep-writing-' + todayStr(), 'used');
+  leaf.hidden = !close;
+  if (composer) composer.style.display = close ? 'none' : '';
+  if (close) setComposerEnabled(false);
+  const keepBtn = document.getElementById('keep-writing');
+  if (keepBtn) keepBtn.hidden = extra === 'used' || extra === 'open';
+}
+
+function sitLastLetter() {
+  const last = [...chatHistory].reverse().find((m) => m.role === 'assistant');
+  if (!last) return;
+  const quote = extractFirstQuote(last.content);
+  const verse = extractFirstVerse(last.content);
+  if (!quote) { showToast('Keep a line first'); return; }
+  sitPayload = {
+    kicker: 'The letter',
+    title: verse || 'A saying',
+    quote,
+    verse,
+    reflection: 'These are the words. Notice the one that stays.',
+  };
+  sitStep = 1;
+  openSheetChrome('sit-sheet');
+  paintSitPayload(sitPayload);
+  showSitStep(1);
+}
+
+function beginNewLetter() {
+  chatHistory = [];
+  persistLetters();
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  document.getElementById('suggestions').style.display = '';
+  lsSet('rla-keep-writing-' + todayStr(), '');
+  const leaf = document.getElementById('last-leaf');
+  if (leaf) leaf.hidden = true;
+  const keepBtn = document.getElementById('keep-writing');
+  if (keepBtn) keepBtn.hidden = false;
+  const composer = document.querySelector('#advisor-page .composer');
+  if (composer) composer.style.display = '';
+  setComposerEnabled(true);
+  chatInput.focus();
+}
+
+function keepWriting() {
+  if (keepWritingState() === 'used') {
+    showToast('The page already closed once. Sit, or begin a new letter.');
+    return;
+  }
+  lsSet('rla-keep-writing-' + todayStr(), 'open');
+  const leaf = document.getElementById('last-leaf');
+  if (leaf) leaf.hidden = true;
+  const composer = document.querySelector('#advisor-page .composer');
+  if (composer) composer.style.display = '';
+  setComposerEnabled(true);
+  showToast('One more turn. Then the page can close.');
+  chatInput.focus();
+}
+
+function concordanceNeeds() {
+  return (window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs) || [];
+}
+
+function matchConcordanceClient(query, limit) {
+  const q = String(query || '').trim().toLowerCase();
+  const rows = concordanceNeeds();
+  if (!q) return rows.slice(0, limit || 12);
+  const stop = { the:1, and:1, for:1, you:1, your:1, that:1, this:1, with:1, from:1, have:1, not:1, but:1, are:1, was:1, feel:1, felt:1, just:1, really:1, very:1, like:1 };
+  const words = q.split(/\s+/).filter((w) => w.length > 2 && !stop[w]);
+  const gravity = [
+    [/shame|ashamed|condemn|lift my face|leave the room/, /John 8:11/, 28],
+    [/died|death|grief|grieve|mourn|funeral|tomb/, /John 11:25/, 22],
+    [/tomorrow|cannot sleep|can't sleep|cant sleep|already here/, /Matthew 6:34/, 22],
+    [/cannot forgive|can't forgive|cant forgive|forgive them/, /Matthew 6:14/, 18],
+  ];
+  return rows.map((row) => {
+    let score = 0;
+    const hay = (row.carry + ' ' + row.theme + ' ' + row.quote).toLowerCase();
+    if (hay.includes(q) || q.includes(String(row.carry || '').toLowerCase())) score += 20;
+    words.forEach((w) => {
+      if (row.carry.toLowerCase().includes(w)) score += 6;
+      if (String(row.theme || '').toLowerCase().includes(w)) score += 3;
+    });
+    gravity.forEach((g) => { if (g[0].test(q) && g[1].test(row.verse)) score += g[2]; });
+    return { ...row, score };
+  }).filter((r) => r.score > 0).sort((a, b) => b.score - a.score).slice(0, limit || 8);
+}
+
+function ensureConcordance(done) {
+  if (concordanceNeeds().length) { if (done) done(); return; }
+  fetch('/concordance.json').then((r) => r.json()).then((data) => {
+    window.RLA_CONCORDANCE = data;
+    if (done) done();
+  }).catch(() => { if (done) done(); });
+}
+
+function paintConcordance(query) {
+  const list = document.getElementById('carry-list');
+  const meta = document.getElementById('carry-meta');
+  if (!list) return;
+  if (!concordanceNeeds().length) {
+    ensureConcordance(() => paintConcordance(query));
+    return;
+  }
+  const rows = matchConcordanceClient(query, query ? 8 : 16);
+  if (meta) {
+    meta.textContent = query
+      ? (rows.length ? rows.length + ' sealed lines' : 'Nothing invented. Try a feeling.')
+      : concordanceNeeds().length + ' sealed lines. Name what you are carrying.';
+  }
+  list.innerHTML = rows.map((row) => (
+    '<button type="button" class="carry-row" data-id="' + esc(row.id) + '">' +
+      '<div class="carry-need">' + esc(row.carry) + '</div>' +
+      '<div class="carry-quote">“' + esc(row.quote) + '”</div>' +
+      '<p class="cite">' + esc(row.verse) + '  ·  KJV</p>' +
+    '</button>'
+  )).join('');
+  list.querySelectorAll('.carry-row').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const row = concordanceNeeds().find((n) => n.id === btn.getAttribute('data-id'));
+      if (!row) return;
+      sitPayload = {
+        kicker: 'Carrying',
+        title: row.verse,
+        quote: row.quote,
+        verse: row.verse,
+        reflection: row.carry,
+      };
+      sitStep = 1;
+      openSheetChrome('sit-sheet');
+      paintSitPayload(sitPayload);
+      showSitStep(1);
+    });
+  });
+}
+
+function printChapbook() {
+  const items = getJournal().filter((i) => i && (i.body || i.verse)).slice(0, 24);
+  const sits = items.filter((i) => i.type === 'sit');
+  const last = getLastSit();
+  const season = (currentSeason && currentSeason.name) || 'Ordinary Time';
+  const lines = (sits.length ? sits : items).map((i) => {
+    const note = String(i.body || '').split('\n')[0];
+    const quote = String(i.body || '').split('\n\n').slice(-1)[0] || i.body || '';
+    return { title: i.title || i.verse || 'A line', note, quote, verse: i.verse || '' };
+  });
+  if (!lines.length && last) {
+    lines.push({ title: last.verse || 'A sitting', note: last.note || '', quote: last.quote, verse: last.verse });
+  }
+  if (!lines.length) { showToast('Keep a line first'); return; }
+  const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>A chapbook — Red Letter</title>'
+    + '<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">'
+    + '<style>@page{size:5.5in 8.5in;margin:.85in .8in 1in;}*{box-sizing:border-box;}body{margin:0;background:#F4EFE4;color:#1B1610;font-family:"Source Serif 4",Georgia,serif;}'
+    + '.mark{font-family:Fraunces,serif;font-style:italic;font-size:32px;color:#8F1D1D;width:48px;height:48px;border:1px solid rgba(27,22,16,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 0 28px;}'
+    + 'h1{font-family:Fraunces,serif;font-weight:500;font-size:36px;letter-spacing:-.03em;margin:0 0 8px;}'
+    + '.kicker{font-family:Instrument Sans,sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7A6E5E;margin:0 0 28px;}'
+    + '.slip{page-break-inside:avoid;padding:22px 0 8px;border-top:1px solid rgba(27,22,16,.12);}'
+    + '.need{font-family:Fraunces,serif;font-size:18px;margin:0 0 10px;}'
+    + '.quote{color:#8F1D1D;font-style:italic;font-size:16px;line-height:1.5;margin:0 0 8px;}'
+    + '.cite{font-family:Instrument Sans,sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8F1D1D;}'
+    + '.colo{margin-top:36px;font-size:12px;color:#7A6E5E;line-height:1.6;}</style></head><body>'
+    + '<div class="mark">R</div><h1>A small book<br>of kept lines</h1>'
+    + '<p class="kicker">' + season + ' · ' + new Date().getFullYear() + ' · Not a feed</p>'
+    + lines.map((l) => '<div class="slip"><p class="need">' + esc(l.note || l.title) + '</p><p class="quote">“' + esc(String(l.quote).replace(/^["“]|["”]$/g, '')) + '”</p><p class="cite">' + esc(l.verse) + ' · KJV</p></div>').join('')
+    + '<p class="colo">His words stay on the page. The cloud is optional. Red Letter · a chapbook, not a product screenshot.</p></body></html>';
+  let frame = document.getElementById('print-frame');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'print-frame';
+    frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+    document.body.appendChild(frame);
+  }
+  const doc = frame.contentDocument;
+  doc.open();
+  doc.write(html);
+  doc.close();
+  setTimeout(() => { frame.contentWindow.focus(); frame.contentWindow.print(); }, 400);
 }
 
 function addBubble(role, text) {
@@ -4097,6 +4363,8 @@ function printSitting() {
 const COMMANDS = [
   { label: 'Today’s reading', hint: 'Today', run: () => switchTab('today') },
   { label: 'Find encouragement', hint: 'Seek', run: () => switchTab('seek') },
+  { label: 'What are you carrying', hint: 'Concordance', run: () => { switchTab('seek'); setTimeout(() => setSeekMode('carry'), 40); } },
+  { label: 'Print a chapbook', hint: 'Object', run: () => printChapbook() },
   { label: 'Ask the Advisor', hint: 'Counsel', run: () => switchTab('advisor') },
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
@@ -4246,6 +4514,8 @@ function bindRituals() {
   ritualsBound = true;
   const note = document.getElementById('blessing-note');
   if (note) note.addEventListener('input', updateBlessingPreview);
+  const carry = document.getElementById('carry-q');
+  if (carry) carry.addEventListener('input', () => paintConcordance(carry.value));
   const amen = document.getElementById('amen');
   if (amen) amen.addEventListener('click', closeAmen);
   const cmdk = document.getElementById('cmdk');

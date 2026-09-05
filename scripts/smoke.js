@@ -98,6 +98,9 @@ async function main() {
     assert(text.includes('988'), 'missing crisis line');
     assert(text.includes('id="return-ribbon"'), 'missing day-two ribbon');
     assert(text.includes('id="seven-close"'), 'missing Seven Days last page');
+    assert(text.includes('id="last-leaf"'), 'Advisor must grow a last leaf');
+    assert(text.includes('id="mode-carry"'), 'missing Concordance of Need');
+    assert(text.includes('printChapbook'), 'missing chapbook');
     assert(text.includes('addSitToChatBubble'), 'Advisor must end in Sit');
     assert(text.includes('encodeBlessingClient'), 'blessing page missing');
     assert(!text.includes('Five letters for today'), 'must not meter His words');
@@ -122,6 +125,20 @@ async function main() {
     assert(/Come unto me/i.test(page.text), 'blessing missing His words');
     assert(/Sit with this/i.test(page.text), 'blessing missing sit');
     assert(/988/.test(page.text), 'blessing missing crisis');
+  });
+
+  await check('studio Codex', async () => {
+    const { res, text } = await req('/codex');
+    assert(res.ok, 'codex not 200');
+    assert(/The Red Letter Codex/i.test(text), 'codex title missing');
+    assert(/noindex/.test(text), 'codex must not index');
+    assert(!/Ask Him/i.test(text), 'codex must not say Ask Him');
+  });
+
+  await check('concordance of need', async () => {
+    const { res, json } = await req('/api/concordance?q=' + encodeURIComponent('I thought I had to leave the room'));
+    assert(res.ok && json.matches?.length, 'concordance empty');
+    assert(json.matches.some((m) => /John 8:11/.test(m.verse)), 'shame must keep John 8:11');
   });
 
   await check('security headers', async () => {

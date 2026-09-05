@@ -1,4 +1,4 @@
-const CACHE = 'rla-prod-v1';
+const CACHE = 'rla-prod-v2';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -6,9 +6,11 @@ const PRECACHE = [
   '/manifest.json',
   '/curated.json',
   '/library.json',
+  '/concordance.json',
   '/data/advisor.js',
   '/data/curated.js',
   '/data/paths.js',
+  '/data/concordance.js',
   '/icon-192.png',
   '/icon-512.png',
   '/icon-maskable-192.png',
