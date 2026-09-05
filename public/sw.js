@@ -1,16 +1,18 @@
-const CACHE = 'rla-v13';
+const CACHE = 'rla-v14';
+const ROOT = new URL('./', self.location).pathname;
 const PRECACHE = [
-  '/index.html',
-  '/welcome.html',
-  '/manifest.json',
-  '/curated.json',
-  '/library.json',
-  '/data/advisor.js',
-  '/data/curated.js',
-  '/data/paths.js',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
+  './',
+  './index.html',
+  './welcome.html',
+  './manifest.json',
+  './curated.json',
+  './library.json',
+  './data/advisor.js',
+  './data/curated.js',
+  './data/paths.js',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (e) => {
@@ -32,8 +34,9 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return;
 
-  if (url.pathname.startsWith('/api/')) {
+  if (url.pathname.startsWith(ROOT + 'api/')) {
     e.respondWith(
       fetch(e.request).catch(() =>
         new Response(JSON.stringify({ error: 'offline', offline: true }), {
@@ -47,7 +50,7 @@ self.addEventListener('fetch', (e) => {
 
   const isDocument =
     e.request.mode === 'navigate' ||
-    url.pathname === '/' ||
+    url.pathname === ROOT ||
     url.pathname.endsWith('.html') ||
     (e.request.headers.get('accept') || '').includes('text/html');
 
@@ -61,7 +64,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((cached) => cached || caches.match('/index.html')))
+        .catch(() => caches.match(e.request).then((cached) => cached || caches.match(new URL('./index.html', self.location).href)))
     );
     return;
   }
@@ -70,7 +73,7 @@ self.addEventListener('fetch', (e) => {
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request)
         .then((res) => {
-          if (res && res.ok && url.origin === self.location.origin) {
+          if (res && res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(e.request, copy));
           }

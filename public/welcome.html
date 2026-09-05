@@ -71,7 +71,7 @@
       const email = document.getElementById('email').value.trim();
       const msg = document.getElementById('wait-msg');
       try {
-        const res = await fetch('/api/waitlist', {
+        const res = await fetch('./api/waitlist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
