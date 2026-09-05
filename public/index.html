@@ -905,6 +905,22 @@ textarea { font-family: var(--body); }
 .last-leaf[hidden] { display: none; }
 .last-leaf .sit-copy { margin: 0 0 18px; max-width: 34ch; }
 
+.carry-crisis {
+  margin: 16px 0 8px;
+  padding: 20px 0 8px;
+  border-top: 1px solid var(--crimson);
+}
+.carry-crisis[hidden] { display: none; }
+.carry-crisis .sit-copy { max-width: 40ch; }
+.storage-note {
+  margin-bottom: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.storage-note[hidden] { display: none; }
+.privacy-link { color: var(--crimson); text-decoration: none; border-bottom: 1px solid var(--rule-2); }
 .carry-row {
   display: block;
   width: 100%;
@@ -1730,6 +1746,13 @@ html.sitting .sit-sheet {
           <label class="sr-only" for="carry-q">What are you carrying</label>
           <input class="lib-search" id="carry-q" type="search" placeholder="What are you carrying?" autocomplete="off" />
           <p class="lib-meta" id="carry-meta">Eighty human sentences. One sealed red-letter each.</p>
+          <aside class="carry-crisis" id="carry-crisis" hidden role="status">
+            <p class="eyebrow">A person first</p>
+            <h3 class="display" style="font-size:24px;margin-bottom:10px">This page is not the <em>help</em> you need right now</h3>
+            <p class="sit-copy">If you are thinking about ending your life, please reach a human. In the U.S., call or text <a href="tel:988">988</a> — free, 24 hours, and you do not have to be sure. Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+            <p class="red-letter" style="margin-top:14px">Come unto me, all ye that labour and are heavy laden, and I will give you rest.</p>
+            <p class="cite">Matthew 11:28  ·  KJV</p>
+          </aside>
           <div id="carry-list"></div>
         </div>
 
@@ -1966,13 +1989,26 @@ html.sitting .sit-sheet {
   </div>
   <div class="setting-row">
     <div>
+      <div class="setting-label">Keep a copy</div>
+      <div class="setting-sub" id="copy-sub">Your journal lives only on this phone. Save a file you own; bring it back on any device.</div>
+    </div>
+    <div class="fs-control">
+      <button class="ghost" type="button" id="export-btn" onclick="exportJournalFile()">Save</button>
+      <button class="ghost" type="button" onclick="document.getElementById('import-file').click()">Bring back</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden onchange="importJournalFile(this.files && this.files[0]); this.value = '';" />
+    </div>
+  </div>
+  <div class="setting-row">
+    <div>
       <div class="setting-label">New reader</div>
       <div class="setting-sub">Wipe this device so the next person does not inherit a journal</div>
     </div>
     <button class="ghost" type="button" onclick="startNewReader()">Begin again</button>
   </div>
   <div class="sheet-about">
+    <p id="storage-note" class="storage-note" hidden>Safari clears a site’s saved words after seven days of not opening it. A room kept on the home screen is exempt. If you read in a Safari tab, keep a copy.</p>
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. His words stay on the phone. The cloud is optional. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p style="margin-top:12px"><a href="/privacy" id="privacy-link" class="privacy-link">Privacy — what stays on the phone</a></p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
@@ -3059,6 +3095,7 @@ function keepSitReply() {
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
   if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
+  requestPersistentRoom();
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
@@ -3391,6 +3428,14 @@ function paintConcordance(query) {
   const list = document.getElementById('carry-list');
   const meta = document.getElementById('carry-meta');
   if (!list) return;
+  const crisis = document.getElementById('carry-crisis');
+  if (looksLikeCrisisClient(query)) {
+    if (crisis) crisis.hidden = false;
+    list.innerHTML = '';
+    if (meta) meta.textContent = 'Before a verse, a person.';
+    return;
+  }
+  if (crisis) crisis.hidden = true;
   if (!concordanceNeeds().length) {
     ensureConcordance(() => paintConcordance(query));
     return;
@@ -3455,19 +3500,29 @@ function printChapbook() {
     + '<div class="mark">R</div><h1>A small book<br>of kept lines</h1>'
     + '<p class="kicker">' + season + ' · ' + new Date().getFullYear() + ' · Not a feed</p>'
     + lines.map((l) => '<div class="slip"><p class="need">' + esc(l.note || l.title) + '</p><p class="quote">“' + esc(String(l.quote).replace(/^["“]|["”]$/g, '')) + '”</p><p class="cite">' + esc(l.verse) + ' · KJV</p></div>').join('')
-    + '<p class="colo">His words stay on the page. The cloud is optional. Red Letter · a chapbook, not a product screenshot.</p></body></html>';
+    + '<p class="colo">His words stay on the page. The cloud is optional. Quotations are King James Version (KJV). Red Letter · a chapbook, not a product screenshot.</p></body></html>';
+  if (isIOS()) {
+    // WebKit on iOS prints the parent page from an iframe; a real window prints itself.
+    const win = window.open('', '_blank');
+    if (!win) { showToast('Allow pop-ups to print the chapbook'); return; }
+    win.document.open();
+    win.document.write(html + '<script>setTimeout(function(){window.focus();window.print();},600);<\/script>');
+    win.document.close();
+    return;
+  }
   let frame = document.getElementById('print-frame');
   if (!frame) {
     frame = document.createElement('iframe');
     frame.id = 'print-frame';
-    frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:100px;opacity:0;border:0;pointer-events:none;';
     document.body.appendChild(frame);
   }
   const doc = frame.contentDocument;
   doc.open();
   doc.write(html);
   doc.close();
-  setTimeout(() => { frame.contentWindow.focus(); frame.contentWindow.print(); }, 400);
+  setTimeout(() => { frame.contentWindow.focus(); frame.contentWindow.print(); }, 600);
 }
 
 function addBubble(role, text) {
@@ -3749,6 +3804,7 @@ function openSettings() {
   closeSit();
   closeBlessing();
   closeShareSheet();
+  paintStorageNote();
   openSheetChrome('settings-sheet');
 }
 function closeSettings() {
@@ -3878,6 +3934,96 @@ function firstCatchword(text) {
 }
 function getLastSit() {
   return parseJSON(ls('rla-last-sit'), null);
+}
+
+/* Durability. Safari clears script storage after seven days of Safari use
+   without a visit unless the room is on the home screen; persist() is a
+   request the browser may grant, never a promise. */
+let persistAsked = false;
+function requestPersistentRoom() {
+  if (persistAsked) return;
+  persistAsked = true;
+  try {
+    if (navigator.storage && typeof navigator.storage.persist === 'function') {
+      navigator.storage.persist().then((granted) => {
+        lsSet('rla-persist', granted ? '1' : '0');
+        paintStorageNote();
+      }).catch(() => {});
+    }
+  } catch (_) {}
+}
+function paintStorageNote() {
+  const note = document.getElementById('storage-note');
+  if (!note) return;
+  const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+  const safariTab = isIOS() && !standalone;
+  note.hidden = !safariTab;
+}
+
+const EXPORT_KEYS = ['rla-journal', 'rla-last-sit', 'rla-seven', 'rla-catchword', 'rla-onboarded', 'rla-fs', 'rla-dark', 'rla-forty'];
+function exportJournalFile() {
+  const data = { app: 'red-letter', version: 1, exported: new Date().toISOString(), keys: {} };
+  EXPORT_KEYS.forEach((k) => {
+    const v = ls(k);
+    if (v != null) data.keys[k] = v;
+  });
+  const journal = getJournal();
+  if (!journal.length && !getLastSit()) { showToast('Keep a line first'); return; }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const name = 'red-letter-' + todayStr() + '.json';
+  try {
+    const file = new File([blob], name, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && isTouch()) {
+      navigator.share({ files: [file], title: 'Red Letter — a copy of what you kept' }).catch(() => downloadBlob(blob, name));
+      return;
+    }
+  } catch (_) {}
+  downloadBlob(blob, name);
+}
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+  showToast('A copy is yours');
+}
+function isTouch() {
+  return (navigator.maxTouchPoints || 0) > 0;
+}
+function importJournalFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(String(reader.result || ''));
+      if (!data || data.app !== 'red-letter' || !data.keys || typeof data.keys !== 'object') throw new Error('shape');
+      const incoming = parseJSON(data.keys['rla-journal'], null);
+      if (incoming != null && !Array.isArray(incoming)) throw new Error('journal');
+      const current = getJournal();
+      const seen = new Set(current.map((i) => i && (i.key || i.id)));
+      const merged = current.slice();
+      (incoming || []).forEach((item) => {
+        if (item && typeof item === 'object' && !seen.has(item.key || item.id)) merged.push(item);
+      });
+      lsSet('rla-journal', JSON.stringify(merged));
+      ['rla-last-sit', 'rla-seven', 'rla-catchword', 'rla-forty'].forEach((k) => {
+        if (data.keys[k] != null && ls(k) == null) lsSet(k, data.keys[k]);
+      });
+      if (!ls('rla-onboarded') && data.keys['rla-onboarded']) lsSet('rla-onboarded', data.keys['rla-onboarded']);
+      renderJournal();
+      paintReturnRibbon();
+      if (typeof paintSeven === 'function') paintSeven();
+      showToast('Your words are back');
+    } catch (_) {
+      showToast('That file is not a Red Letter copy');
+    }
+  };
+  reader.onerror = () => showToast('That file could not be read');
+  reader.readAsText(file);
 }
 function getCatchword() {
   const saved = parseJSON(ls('rla-catchword'), null);
@@ -4152,7 +4298,8 @@ function installStepsHtml() {
   if (isIOS()) {
     return '<li>Tap the <strong>Share</strong> button in Safari (the square with an arrow).</li>' +
       '<li>Scroll and tap <strong>Add to Home Screen</strong>.</li>' +
-      '<li>Tap <strong>Add</strong>. The room opens like an app — no store, no account.</li>';
+      '<li>Tap <strong>Add</strong>. The room opens like an app — no store, no account.</li>' +
+      '<li>This matters: Safari clears a site’s saved words after seven days of not opening it. A room on the home screen is exempt, so your journal waits.</li>';
   }
   if (isAndroid()) {
     return '<li>Open the Chrome menu (three dots).</li>' +

@@ -150,6 +150,28 @@ describe('smoke routes', () => {
     assert.equal(page.status, 200);
     assert.match(page.raw, /Peace I leave with you/);
     assert.match(page.raw, /Sit with this/);
+    assert.match(page.raw, /<meta property="og:title" content="John 14:27 — a blessing"/);
+    assert.match(page.raw, /<meta property="og:description" content="“Peace I leave with you/);
+    assert.match(page.raw, /twitter:card/);
+  });
+
+  it('serves the privacy page in the same paper', async () => {
+    const res = await request('GET', '/privacy');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What stays/);
+    assert.match(res.raw, /no accounts/i);
+    assert.match(res.raw, /988/);
+    assert.match(res.raw, /seven days/);
+    assert.doesNotMatch(res.raw, /Plus/);
+  });
+
+  it('keeps the crisis leaf and the copy controls in the room', async () => {
+    const res = await request('GET', '/');
+    assert.match(res.raw, /id="carry-crisis"/);
+    assert.match(res.raw, /exportJournalFile/);
+    assert.match(res.raw, /importJournalFile/);
+    assert.match(res.raw, /id="privacy-link"/);
+    assert.match(res.raw, /navigator\.storage\.persist/);
   });
 
   it('sends production headers', async () => {

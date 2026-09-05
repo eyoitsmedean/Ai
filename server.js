@@ -464,6 +464,11 @@ app.get('/codex', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'codex.html'));
 });
 
+app.get('/privacy', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   const welcome = path.join(__dirname, 'public', 'welcome.html');

@@ -127,6 +127,23 @@ async function main() {
     assert(/988/.test(page.text), 'blessing missing crisis');
   });
 
+  await check('privacy page', async () => {
+    const { res, text } = await req('/privacy');
+    assert(res.ok, 'privacy not 200');
+    assert(/on the phone/i.test(text) && /988/.test(text), 'privacy missing promises');
+    assert(!/Plus/.test(text), 'privacy must not sell Plus');
+  });
+
+  await check('blessing previews as the sentence', async () => {
+    const minted = await req('/api/blessing', {
+      method: 'POST',
+      body: JSON.stringify({ verse: 'John 8:11', quote: 'Neither do I condemn thee: go, and sin no more.' }),
+    });
+    const page = await req('/b/' + minted.json.token);
+    assert(/og:title" content="John 8:11/.test(page.text), 'og:title should be the verse');
+    assert(/og:description" content="“Neither do I condemn thee/.test(page.text), 'og:description should be His words');
+  });
+
   await check('studio Codex', async () => {
     const { res, text } = await req('/codex');
     assert(res.ok, 'codex not 200');

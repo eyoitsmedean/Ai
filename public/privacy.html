@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <title>Privacy — what stays on the phone · Red Letter</title>
+  <meta name="description" content="Red Letter keeps your journal on your device. No accounts. No analytics. The cloud is optional." />
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#F4EFE4; --folio:#FBF7EE; --ink:#1B1610; --mute:#7A6E5E; --rule:rgba(27,22,16,.12); --crimson:#8F1D1D; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--paper); color:var(--ink); font-family:'Source Serif 4',Georgia,serif; }
+    main { max-width:36rem; margin:0 auto; padding:calc(40px + env(safe-area-inset-top,0px)) 22px calc(64px + env(safe-area-inset-bottom,0px)); }
+    .mark { width:48px; height:48px; border:1px solid var(--crimson); border-radius:50%; display:grid; place-items:center; font-family:Fraunces,Georgia,serif; font-style:italic; font-size:24px; color:var(--crimson); margin-bottom:22px; }
+    .kicker { font-family:'Instrument Sans',sans-serif; letter-spacing:.26em; text-transform:uppercase; font-size:11px; color:var(--mute); margin-bottom:12px; }
+    h1 { font-family:Fraunces,Georgia,serif; font-weight:500; font-size:clamp(34px,7vw,48px); letter-spacing:-.03em; line-height:1.02; margin-bottom:18px; }
+    h1 em { font-style:italic; color:var(--crimson); }
+    h2 { font-family:Fraunces,Georgia,serif; font-weight:500; font-size:1.3rem; letter-spacing:-.02em; margin:1.8rem 0 .5rem; }
+    p, li { font-size:1.04rem; line-height:1.7; color:#2A241C; }
+    p + p { margin-top:.9rem; }
+    ul { margin:.6rem 0 .6rem 1.1rem; }
+    li { margin:.3rem 0; }
+    .plate { background:var(--folio); border:1px solid var(--rule); padding:1rem 1.1rem; margin:1.1rem 0; }
+    .plate .k { font-family:'Instrument Sans',sans-serif; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin-bottom:.4rem; }
+    table { width:100%; border-collapse:collapse; margin:.8rem 0 1.2rem; font-size:.95rem; }
+    th, td { text-align:left; vertical-align:top; padding:.5rem .3rem; border-top:1px solid var(--rule); line-height:1.5; }
+    th { font-family:'Instrument Sans',sans-serif; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); font-weight:500; }
+    a { color:var(--crimson); }
+    .foot { margin-top:2.4rem; padding-top:1rem; border-top:1px solid var(--rule); font-size:.9rem; color:var(--mute); line-height:1.6; }
+    .back { display:inline-block; margin-bottom:1.6rem; font-family:'Instrument Sans',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; color:var(--crimson); }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">← Open the room</a>
+    <div class="mark" aria-hidden="true">R</div>
+    <p class="kicker">Privacy · a plain page</p>
+    <h1>What stays <em>on the phone</em></h1>
+    <p>Red Letter is a reading room for the words Jesus spoke in Matthew, Mark, Luke, and John. It is software, not a person. It is built so that what you write stays with you.</p>
+
+    <h2>There are no accounts</h2>
+    <p>You never sign in. There is no profile, no email required to read, no password. Your journal, your sittings, your Seven Days, and the words you keep are stored in your browser on this device, and nowhere else, unless you choose to send something.</p>
+
+    <div class="plate">
+      <p class="k">One sentence</p>
+      <p>Nothing you write is stored on our server. The server holds the sealed Gospel text and, when a letter is written, forwards your words once and forgets them.</p>
+    </div>
+
+    <h2>What leaves the phone, and when</h2>
+    <table>
+      <thead><tr><th>You do</th><th>What is sent</th><th>Kept on the server?</th></tr></thead>
+      <tbody>
+        <tr><td>Read Today, Seek, Carrying, Seven Days</td><td>Requests for the sealed text. No personal data.</td><td>No</td></tr>
+        <tr><td>Write to the Advisor</td><td>Your message is sent to our server. If a language-model key is configured by the host, the message is forwarded to that model provider to write the letter; if not, a sealed letter is chosen locally with no model.</td><td>No. Not logged. Not used to train anything.</td></tr>
+        <tr><td>Send a blessing</td><td>The verse, His words, and your optional note are encoded into the link itself. The server does not store the blessing.</td><td>No</td></tr>
+        <tr><td>Leave an email on the welcome page</td><td>Your email address, to send one note if the room grows.</td><td>Yes, until you ask us to remove it.</td></tr>
+        <tr><td>Keep a copy</td><td>A file is created on your device. You choose where it goes.</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What we do not do</h2>
+    <ul>
+      <li>No analytics, no advertising identifiers, no tracking pixels, no third-party scripts except the typefaces from Google Fonts.</li>
+      <li>No selling or sharing of anything you write.</li>
+      <li>No reading of your journal by anyone. We cannot; it is not on our servers.</li>
+      <li>No notifications unless you turn the morning reminder on, and then only from your own device.</li>
+    </ul>
+
+    <h2>How your words can be lost, and how to keep them</h2>
+    <p>Because everything lives in your browser, clearing site data or “Begin again” erases it. On iPhone, Safari removes a site’s saved data after seven days of using Safari without opening that site; a room added to the home screen is exempt. In the room, Settings → <em>Keep a copy</em> saves a file you own and can bring back on any device.</p>
+
+    <h2>Crisis</h2>
+    <p>Red Letter is not therapy, medical care, or pastoral counseling. If you are in danger: call or text <a href="tel:988">988</a> in the U.S. (free, 24 hours) or find a local line at <a href="https://findahelpline.com" rel="noreferrer">findahelpline.com</a>. When the room notices crisis language it shows these lines first.</p>
+
+    <h2>Children</h2>
+    <p>Red Letter is written for adults and is not directed to children under 13. It collects no personal information from anyone.</p>
+
+    <h2>Changes</h2>
+    <p>If this page changes, the date below changes. There is no other notice, because there is no account to notify.</p>
+
+    <p class="foot">Red Letter · This page is the privacy policy for the web app and any store edition of it. · Quoted scripture is King James Version (KJV). · Last set: September 2026.</p>
+  </main>
+</body>
+</html>

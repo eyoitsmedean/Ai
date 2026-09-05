@@ -21,6 +21,10 @@ On a real phone: open the same URL over your LAN, then **Add to Home Screen** (S
 | 4–6 | Today: the sentence, seven beads, **Send a blessing**. | The blessing is a page they can copy. The card still saves if Share will not. |
 | 6–8 | Advisor: “I feel so much shame” or whatever they are carrying. Sit with this. | If they type crisis language, 988 must appear. That is the test, not a failure. |
 
+## If the guest wants to keep the room
+
+Have them add it to the home screen before they leave. On iPhone that is the only thing that keeps the journal past a week of Safari use. If they will not install, Settings → **Keep a copy** hands them a file.
+
 ## Do not
 
 - Apologize for the quiet. Offer skip.

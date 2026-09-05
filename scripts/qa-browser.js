@@ -155,6 +155,112 @@ async function main() {
     await page.evaluate(() => closeBlessing());
   });
 
+  await check('Carrying puts a person before a verse', async () => {
+    await page.click('#nav-seek');
+    await page.click('#mode-carry');
+    await page.waitForFunction(() => !document.getElementById('carry-pane').hidden, { timeout: 4000 });
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = ''; q.dispatchEvent(new Event('input')); });
+    await page.type('#carry-q', 'I want to die');
+    await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden, { timeout: 4000 });
+    const state = await page.evaluate(() => ({
+      crisis: document.getElementById('carry-crisis').innerText,
+      rows: document.querySelectorAll('#carry-list .carry-row').length,
+      tel: !!document.querySelector('#carry-crisis a[href="tel:988"]'),
+    }));
+    assert(/988/.test(state.crisis), 'crisis leaf missing 988');
+    assert(state.tel, 'crisis leaf missing tel:988');
+    assert(state.rows === 0, 'verse table shown on top of crisis');
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'I cannot forgive them'; q.dispatchEvent(new Event('input')); });
+    await page.waitForFunction(() => document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length > 0, { timeout: 4000 });
+  });
+
+  await check('Keep a copy round-trips the journal', async () => {
+    const exported = await page.evaluate(() => {
+      const journalBefore = JSON.parse(localStorage.getItem('rla-journal') || '[]');
+      const captured = [];
+      const realCreate = URL.createObjectURL;
+      URL.createObjectURL = (blob) => { captured.push(blob); return 'blob:qa'; };
+      const realClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () {};
+      exportJournalFile();
+      URL.createObjectURL = realCreate;
+      HTMLAnchorElement.prototype.click = realClick;
+      return captured[0] ? captured[0].text().then((t) => ({ text: t, before: journalBefore.length })) : null;
+    });
+    assert(exported && exported.before > 0, 'nothing exported');
+    const data = JSON.parse(exported.text);
+    assert(data.app === 'red-letter' && data.keys['rla-journal'], 'export shape wrong');
+    const restored = await page.evaluate(async (text) => {
+      localStorage.removeItem('rla-journal');
+      localStorage.removeItem('rla-last-sit');
+      const file = new File([text], 'copy.json', { type: 'application/json' });
+      importJournalFile(file);
+      await new Promise((r) => setTimeout(r, 300));
+      return {
+        journal: JSON.parse(localStorage.getItem('rla-journal') || '[]').length,
+        lastSit: !!localStorage.getItem('rla-last-sit'),
+      };
+    }, exported.text);
+    assert(restored.journal === exported.before, 'journal did not come back: ' + restored.journal + ' vs ' + exported.before);
+    assert(restored.lastSit, 'last sit did not come back');
+    const bad = await page.evaluate(async () => {
+      const before = localStorage.getItem('rla-journal');
+      importJournalFile(new File(['{"app":"other"}'], 'x.json', { type: 'application/json' }));
+      await new Promise((r) => setTimeout(r, 300));
+      return localStorage.getItem('rla-journal') === before;
+    });
+    assert(bad, 'a foreign file changed the journal');
+  });
+
+  await check('Tuesday: the ribbon names yesterday', async () => {
+    await page.evaluate(() => {
+      const d = new Date(); d.setDate(d.getDate() - 1);
+      const y = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const sit = JSON.parse(localStorage.getItem('rla-last-sit') || '{}');
+      sit.date = y; sit.verse = sit.verse || 'Matthew 11:28';
+      localStorage.setItem('rla-last-sit', JSON.stringify(sit));
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => !document.getElementById('onboarding') || document.getElementById('onboarding').classList.contains('hidden'), { timeout: 6000 });
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); if (typeof closeSit === 'function') closeSit(); });
+    const ribbon = await page.evaluate(() => {
+      const el = document.getElementById('return-ribbon');
+      return { hidden: el.hidden, text: el.innerText };
+    });
+    assert(!ribbon.hidden, 'return ribbon hidden on day two');
+    assert(/Yesterday you sat with (Matthew|Mark|Luke|John)/.test(ribbon.text), 'ribbon does not name the verse: ' + ribbon.text);
+  });
+
+  await check('offline: the words stay on the phone', async () => {
+    await page.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, { timeout: 15000 }).catch(() => {});
+    await page.evaluate(async () => {
+      const keys = await caches.keys();
+      const c = await caches.open(keys.find((k) => /rla-/.test(k)) || 'rla-prod-v3');
+      await Promise.all(['/', '/index.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/paths.js', '/curated.json']
+        .map((u) => c.add(u).catch(() => null)));
+    });
+    await page.setOfflineMode(true);
+    let offlineOk = false;
+    try {
+      await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
+      offlineOk = await page.evaluate(() => !!document.getElementById('today-page') && /Red Letter/i.test(document.body.innerText) && !!(window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs && window.RLA_CONCORDANCE.needs.length));
+    } finally {
+      await page.setOfflineMode(false);
+    }
+    assert(offlineOk, 'room did not open offline with the concordance');
+    await page.reload({ waitUntil: 'networkidle0' });
+  });
+
+  await check('privacy is one tap from Settings', async () => {
+    const link = await page.$eval('#privacy-link', (a) => a.getAttribute('href'));
+    assert(link === '/privacy', 'privacy link missing in Settings');
+    const res = await page.goto(BASE + '/privacy', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'privacy HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/on the phone/i.test(copy) && /988/.test(copy) && /no accounts/i.test(copy), 'privacy page missing its promises');
+    assert(!/Plus/.test(copy), 'privacy must not sell Plus');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
