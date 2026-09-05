@@ -1076,6 +1076,35 @@ textarea { font-family: var(--body); }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
 
+/* Watch with me — four weeks of seven, stacked like quires. */
+.advent { display: flex; flex-direction: column; gap: 14px; margin: 0 0 28px; }
+.advent-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.advent-head strong { font-weight: 500; color: var(--crimson); }
+.advent-week { display: flex; flex-direction: column; gap: 8px; }
+.advent-week-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+}
+.advent-week-name.now { color: var(--crimson); }
+.advent-week .seven { margin: 0; gap: 4px; }
+.advent-week .seven-day { font-size: 10px; letter-spacing: .06em; text-align: center; }
+.advent-week .seven-day.open:not(.done) .seven-dot { border-color: var(--ink-3); }
+
 .epigraph {
   margin: 0 0 36px;
   padding: 0 0 0 16px;
@@ -2030,6 +2059,14 @@ function adventSunday(year) {
   const start = civilDate(year, 11, 27);
   return addDaysLocal(start, (7 - start.getDay()) % 7);
 }
+function adventDayIndex(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  const year = d.getMonth() < 6 ? d.getFullYear() - 1 : d.getFullYear();
+  const start = adventSunday(year);
+  const a = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const b = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+  return Math.round((a - b) / 86400000);
+}
 function churchYear(date) {
   const d = date instanceof Date ? date : new Date(date || Date.now());
   const year = d.getFullYear();
@@ -2282,18 +2319,74 @@ function paintStreak(state) {
 function renderWeekRibbon() {
   paintSeven();
 }
-function sevenDays() {
-  return (window.RLA_SEVEN || []).slice();
+/* The ribbon carries one path at a time. Ordinary days: Seven Days.
+   Advent through Christmas: Watch with me, twenty-eight rooms opened by the
+   calendar, not by streak. `?path=advent[&day=N]` previews it out of season. */
+function activePath() {
+  const params = new URLSearchParams(location.search);
+  const preview = params.get('path');
+  const advent = window.RLA_ADVENT;
+  const inSeason = currentSeason.id === 'advent' || currentSeason.id === 'christmas';
+  const wantAdvent = preview === 'advent' || (inSeason && preview !== 'seven');
+  if (wantAdvent && advent && Array.isArray(advent.days) && advent.days.length === 28) {
+    const now = new Date();
+    const startYear = now.getMonth() < 6 ? now.getFullYear() - 1 : now.getFullYear();
+    let index = adventDayIndex(now);
+    if (params.has('day')) index = Number(params.get('day')) - 1;
+    const openThrough = Math.max(0, Math.min(27, Number.isFinite(index) ? index : 0));
+    return {
+      id: 'advent',
+      name: advent.name || 'Watch with me',
+      weeks: advent.weeks || [],
+      days: advent.days.slice(),
+      openThrough: openThrough,
+      key: 'rla-advent-' + startYear,
+    };
+  }
+  return { id: 'seven', name: 'Seven Days', weeks: null, days: (window.RLA_SEVEN || []).slice(), openThrough: null, key: 'rla-seven' };
 }
-function pathState() {
-  const raw = parseJSON(ls('rla-seven'), null);
+function sevenDays() {
+  return activePath().days;
+}
+function pathState(key) {
+  const raw = parseJSON(ls(key || activePath().key), null);
   if (raw && Array.isArray(raw.done)) return raw;
   return { started: todayStr(), done: [] };
+}
+function paintAdvent(host, path) {
+  const state = pathState(path.key);
+  const done = new Set(state.done || []);
+  const open = path.openThrough;
+  const kept = path.days.filter((_, i) => done.has(i)).length;
+  const weekNow = Math.floor(open / 7);
+  host.className = 'advent';
+  host.setAttribute('aria-label', path.name + ', an Advent path of twenty-eight rooms');
+  const head = '<div class="advent-head"><span><strong>' + esc(path.name) + '</strong> · Advent</span>' +
+    '<span>Room ' + (open + 1) + ' of 28' + (kept ? ' · ' + kept + ' kept' : '') + '</span></div>';
+  const weeks = path.weeks.map((name, w) => {
+    const cells = path.days.slice(w * 7, w * 7 + 7).map((day, j) => {
+      const i = w * 7 + j;
+      const cls = done.has(i) ? 'done' : (i === open ? 'today' : (i > open ? 'future' : 'open'));
+      const locked = i > open;
+      return '<button type="button" class="seven-day ' + cls + '" data-i="' + i + '"' + (locked ? ' disabled' : '') +
+        ' aria-label="' + esc(day.title) + ', ' + esc(day.verse) + (locked ? ', not yet' : '') + '">' +
+        '<span class="seven-dot" aria-hidden="true"></span><span>' + esc(day.title) + '</span></button>';
+    }).join('');
+    const roman = ['I', 'II', 'III', 'IV'][w] || String(w + 1);
+    return '<div class="advent-week"><span class="advent-week-name' + (w === weekNow ? ' now' : '') + '">' + roman + ' · ' + esc(name) + '</span>' +
+      '<div class="seven">' + cells + '</div></div>';
+  }).join('');
+  host.innerHTML = head + weeks;
+  host.querySelectorAll('.seven-day').forEach((btn) => {
+    btn.addEventListener('click', () => sitSeven(Number(btn.getAttribute('data-i'))));
+  });
 }
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
-  const days = sevenDays();
+  const path = activePath();
+  if (path.id === 'advent') { paintAdvent(host, path); return; }
+  const days = path.days;
   if (!days.length) {
     host.className = 'week-ribbon';
     host.innerHTML = '';
@@ -2315,7 +2408,7 @@ function paintSeven() {
     }
     return;
   }
-  const state = pathState();
+  const state = pathState(path.key);
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
   host.className = 'seven';
@@ -2331,10 +2424,12 @@ function paintSeven() {
   });
 }
 function sitSeven(index) {
-  const day = sevenDays()[index];
+  const path = activePath();
+  const day = path.days[index];
   if (!day) return;
+  const week = path.weeks && path.weeks[day.week] ? ' · ' + path.weeks[day.week] : '';
   sitPayload = {
-    kicker: 'Seven Days · ' + day.title,
+    kicker: path.name + week + ' · ' + day.title,
     title: day.title,
     quote: day.passage,
     verse: day.verse,
@@ -2357,9 +2452,10 @@ function sitSeven(index) {
 }
 function markSevenDay(index) {
   if (index == null || index < 0) return;
-  const state = pathState();
+  const key = activePath().key;
+  const state = pathState(key);
   if (!state.done.includes(index)) state.done.push(index);
-  lsSet('rla-seven', JSON.stringify(state));
+  lsSet(key, JSON.stringify(state));
   paintSeven();
 }
 
@@ -3822,7 +3918,7 @@ const COMMANDS = [
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
-  { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Open the path', hint: 'Seven Days · Watch with me', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

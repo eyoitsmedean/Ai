@@ -1,6 +1,7 @@
 const { describe, it } = require('node:test');
 const { deepEqual, equal } = require('node:assert/strict');
 const {
+  adventDayIndex,
   adventSunday,
   ashWednesday,
   churchYear,
@@ -26,6 +27,20 @@ describe('adventSunday', () => {
     equal(ymd(adventSunday(2025)), 20251130);
     equal(ymd(adventSunday(2026)), 20261129);
     equal(ymd(adventSunday(2027)), 20271128);
+  });
+});
+
+describe('adventDayIndex', () => {
+  it('counts rooms from Advent Sunday', () => {
+    equal(adventDayIndex(new Date(2026, 10, 29)), 0);
+    equal(adventDayIndex(new Date(2026, 11, 4)), 5);
+    equal(adventDayIndex(new Date(2026, 11, 25)), 26);
+    equal(adventDayIndex(new Date(2026, 11, 26)), 27);
+  });
+
+  it('is negative before Advent and keeps counting into January', () => {
+    equal(adventDayIndex(new Date(2026, 8, 5)) < 0, true);
+    equal(adventDayIndex(new Date(2027, 0, 2)), 34);
   });
 });
 
