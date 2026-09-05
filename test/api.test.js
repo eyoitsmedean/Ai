@@ -112,7 +112,8 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.match(res.raw, /The Red Letter Codex/);
     assert.match(res.raw, /noindex/);
-    assert.doesNotMatch(res.raw, /Ask Him/);
+    assert.doesNotMatch(res.raw, /Ask <em>Him<\/em>/);
+    assert.match(res.raw, /The model is not a person/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

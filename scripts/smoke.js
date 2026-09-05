@@ -132,7 +132,8 @@ async function main() {
     assert(res.ok, 'codex not 200');
     assert(/The Red Letter Codex/i.test(text), 'codex title missing');
     assert(/noindex/.test(text), 'codex must not index');
-    assert(!/Ask Him/i.test(text), 'codex must not say Ask Him');
+    assert(!/Ask <em>Him<\/em>/i.test(text), 'codex must not ship Ask Him as a voice');
+    assert(/The model is not a person/.test(text), 'codex must keep the covenant');
   });
 
   await check('concordance of need', async () => {
