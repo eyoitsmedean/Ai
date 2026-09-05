@@ -939,6 +939,10 @@ textarea { font-family: var(--body); }
 .sheet-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--rule); }
+.ledger-row > div { flex: 1; }
+.ledger { display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; margin: 12px 0 0; font-size: 14px; color: var(--ink-soft); }
+.ledger dt { margin: 0; }
+.ledger dd { margin: 0; font-variant-numeric: tabular-nums; color: var(--ink); text-align: right; }
 .setting-label { font-size: 15px; }
 .setting-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
 .toggle { position: relative; width: 44px; height: 26px; flex-shrink: 0; }
@@ -1967,8 +1971,26 @@ html.sitting .sit-sheet {
     </div>
     <button class="ghost" type="button" onclick="startNewReader()">Begin again</button>
   </div>
+  <div class="setting-row ledger-row">
+    <div>
+      <div class="setting-label">The ledger</div>
+      <div class="setting-sub" id="ledger-sub">Counted on this device only. Nothing is sent.</div>
+      <dl class="ledger" id="ledger" aria-live="polite"></dl>
+    </div>
+  </div>
+  <div class="setting-row" id="share-counts-row" hidden>
+    <div>
+      <div class="setting-label">Share anonymous counts</div>
+      <div class="setting-sub">Once a day, send the ledger’s day totals — no name, no device id, no words you wrote</div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="share-counts-toggle" onchange="toggleShareCounts(this.checked)" />
+      <div class="toggle-track"></div>
+    </label>
+  </div>
   <div class="sheet-about">
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+    <p style="margin-top:12px">The red letters follow the King James red-letter tradition begun in 1899. The Greek has no quotation marks, so where a speech ends is an editor’s call; like most KJV editions this room sets John 3:16–21 as His words. Where editions differ, the citation is always printed so you can read the page for yourself.</p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
@@ -2274,6 +2296,8 @@ function startApp() {
   bindRituals();
   checkMorningReminder();
   paintInstallState();
+  signal('open');
+  shareLedgerIfDue();
 }
 
 function switchTab(tab) {
@@ -2583,7 +2607,141 @@ function markPathDay(kind, index) {
   lsSet(pathKey(k), JSON.stringify(state));
   // Sitting with a leaf settles which path this reader is on, so the turn of a season never moves them.
   lsSet('rla-path-kind', k);
+  if (k === 'seven') {
+    if (state.done.length === 1) signal('sevenStart');
+    if (state.done.length === pathDays('seven').length) signal('sevenDone');
+  }
   paintPath();
+}
+
+/* The ledger — the launch signals from LAUNCH.md, counted on this device and kept for sixty days.
+   Nothing leaves the device unless "Share anonymous counts" is on; then only completed days are sent,
+   each once, as totals with no identifier. A day is a row: { open, lectio, blessing, advisor, sevenStart, sevenDone }. */
+const LEDGER_KEY = 'rla-ledger';
+const LEDGER_DAYS = 60;
+const LEDGER_EVENTS = ['open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone'];
+
+function ledger() {
+  const raw = parseJSON(ls(LEDGER_KEY), null);
+  if (raw && raw.days && typeof raw.days === 'object') return raw;
+  return { firstOpen: null, days: {}, sent: [] };
+}
+function saveLedger(book) {
+  const keep = Object.keys(book.days).sort().slice(-LEDGER_DAYS);
+  const days = {};
+  keep.forEach((d) => { days[d] = book.days[d]; });
+  book.days = days;
+  book.sent = (book.sent || []).filter((d) => days[d]).slice(-LEDGER_DAYS);
+  lsSet(LEDGER_KEY, JSON.stringify(book));
+}
+function signal(name) {
+  if (!LEDGER_EVENTS.includes(name)) return;
+  const book = ledger();
+  const day = todayStr();
+  if (!book.firstOpen) book.firstOpen = day;
+  const row = book.days[day] || (book.days[day] = {});
+  if (name === 'open' && row.open) return;
+  row[name] = (row[name] || 0) + 1;
+  saveLedger(book);
+}
+function daysApart(a, b) {
+  const [ay, am, ad] = a.split('-').map(Number);
+  const [by, bm, bd] = b.split('-').map(Number);
+  return Math.round((Date.UTC(by, bm - 1, bd) - Date.UTC(ay, am - 1, ad)) / 86400000);
+}
+function ledgerSummary() {
+  const book = ledger();
+  const today = todayStr();
+  const days = Object.keys(book.days).sort();
+  const sum = (name, filter) => days.filter(filter || (() => true)).reduce((n, d) => n + (book.days[d][name] || 0), 0);
+  const week = (d) => daysApart(d, today) < 7;
+  const first = book.firstOpen;
+  const firstRow = first ? book.days[first] || {} : {};
+  return {
+    firstOpen: first,
+    daysOpenThisWeek: days.filter((d) => week(d) && book.days[d].open).length,
+    day1Lectio: Boolean(first && firstRow.lectio),
+    sittings: sum('lectio'),
+    blessings: sum('blessing'),
+    advisor: sum('advisor'),
+    sevenStarted: sum('sevenStart') > 0,
+    sevenDone: sum('sevenDone') > 0,
+  };
+}
+function paintLedger() {
+  const el = document.getElementById('ledger');
+  if (!el) return;
+  const s = ledgerSummary();
+  const yes = (b) => (b ? 'yes' : 'not yet');
+  const rows = [
+    ['First morning', s.firstOpen ? s.firstOpen : '—'],
+    ['Sat on the first day', yes(s.day1Lectio)],
+    ['Mornings opened this week', String(s.daysOpenThisWeek)],
+    ['Sittings kept', String(s.sittings)],
+    ['Blessings sent', String(s.blessings)],
+    ['Letters to the Advisor', String(s.advisor)],
+    ['Seventh leaf of Seven', s.sevenStarted ? (s.sevenDone ? 'kept' : 'on the way') : 'not begun'],
+  ];
+  el.innerHTML = rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+  const sub = document.getElementById('ledger-sub');
+  if (sub) sub.textContent = ls('rla-share-counts') === '1'
+    ? 'Counted on this device. Day totals are shared once a day, without a name or id.'
+    : 'Counted on this device only. Nothing is sent.';
+}
+
+/* Sharing: completed days that have not been sent, as plain totals. The row for the first morning carries
+   newOpen and day1Lectio so the server can compute LAUNCH's Day-1 rate without any identifier. */
+function unsentLedgerRows() {
+  const book = ledger();
+  const today = todayStr();
+  const sent = new Set(book.sent || []);
+  return Object.keys(book.days).sort()
+    .filter((d) => d < today && !sent.has(d))
+    .map((d) => {
+      const r = book.days[d];
+      const row = { day: d };
+      LEDGER_EVENTS.forEach((k) => { if (r[k]) row[k] = r[k]; });
+      if (d === book.firstOpen) {
+        row.newOpen = 1;
+        if (r.lectio) row.day1Lectio = 1;
+      }
+      return row;
+    });
+}
+async function shareLedgerIfDue() {
+  if (ls('rla-share-counts') !== '1') return;
+  const rows = unsentLedgerRows();
+  if (!rows.length) return;
+  try {
+    const res = await fetch('/api/signal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ v: 1, rows }),
+    });
+    if (!res.ok) return;
+    const book = ledger();
+    book.sent = (book.sent || []).concat(rows.map((r) => r.day));
+    saveLedger(book);
+  } catch (_) {}
+}
+function toggleShareCounts(on) {
+  lsSet('rla-share-counts', on ? '1' : '0');
+  paintLedger();
+  if (on) shareLedgerIfDue();
+}
+async function paintShareCountsRow() {
+  const row = document.getElementById('share-counts-row');
+  const toggle = document.getElementById('share-counts-toggle');
+  if (!row || !toggle) return;
+  toggle.checked = ls('rla-share-counts') === '1';
+  if (window.__apiAlive == null) {
+    try {
+      const res = await fetch('/api/health', { cache: 'no-store' });
+      const body = res.ok ? await res.json() : null;
+      window.__apiAlive = Boolean(body && body.ok);
+    } catch (_) { window.__apiAlive = false; }
+  }
+  row.hidden = !window.__apiAlive;
 }
 
 function isNightOffice() {
@@ -3081,6 +3239,7 @@ function keepSitReply() {
   const quote = sitPayload.quote;
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
+  signal('lectio');
   if (sitPayload.pathIndex != null) markPathDay(sitPayload.pathKind || 'seven', sitPayload.pathIndex);
   closeSit();
   showToast('Kept in the journal');
@@ -3209,6 +3368,7 @@ async function sendMsg(preset) {
 
   chatHistory.push({ role: 'user', content: text });
   addBubble('user', text);
+  signal('advisor');
   document.getElementById('typing').classList.add('on');
   scrollChat();
   const aiBubble = createStreamBubble();
@@ -3551,6 +3711,8 @@ function openSettings() {
   closeSit();
   closeBlessing();
   closeShareSheet();
+  paintLedger();
+  paintShareCountsRow();
   openSheetChrome('settings-sheet');
 }
 function closeSettings() {
@@ -4021,6 +4183,7 @@ async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
   closeBlessing();
   await shareItem('blessing', style || 'parchment');
+  signal('blessing');
   showToast('Blessing ready to send');
 }
 
