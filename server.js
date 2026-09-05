@@ -491,6 +491,12 @@ app.get('/welcome', (req, res) => {
   res.sendFile(source);
 });
 
+app.get('/folio', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(__dirname, 'folio', 'index.html'));
+});
+
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
   if (path.extname(req.path)) {

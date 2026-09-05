@@ -13,7 +13,8 @@
     "spoken": "node scripts/build-spoken.js",
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
-    "qa": "node scripts/qa-browser.js"
+    "qa": "node scripts/qa-browser.js",
+    "qa:folio": "node scripts/qa-folio.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
