@@ -8,6 +8,7 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { composeLetter } = require('./lib/letter');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -208,6 +209,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     anthropic: Boolean(client),
+    advisor: client ? 'model' : 'letterpress',
     themes: themeNames().length,
   });
 });
@@ -294,20 +296,6 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
-
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -348,12 +336,14 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
-  const finish = (body) => {
+  const finish = (body, source) => {
     const verified = verifyAndSubstitute(body);
+    write({ meta: { source } });
     streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
+  const letterpress = () => finish(composeLetter(last.content, { history: messages }).text, 'letterpress');
 
   req.on('close', () => {
     if (!res.writableEnded) {
@@ -362,7 +352,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return letterpress();
   }
 
   try {
@@ -390,7 +380,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     await stream.finalMessage();
-    finish(raw);
+    finish(raw, 'model');
   } catch (err) {
     console.error('Chat error:', err.message);
     if (!res.headersSent) {
@@ -398,7 +388,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    letterpress();
   }
 });
 

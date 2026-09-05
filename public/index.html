@@ -1378,6 +1378,13 @@ html.sitting .sit-sheet {
 }
 .trust-seal.ok { color: var(--gold); }
 .trust-seal.warn { color: var(--crimson); }
+.letter-colophon {
+  margin-top: 14px;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-4);
+}
 .scripture-block.scripture-verified { border-left-color: var(--gold); }
 
 .crisis-modal {
@@ -2948,7 +2955,8 @@ function restoreLetters() {
     else {
       const stream = createStreamBubble();
       updateStreamBubble(stream, m.content);
-      addSaveToChatBubble(stream, m.content, 'A letter');
+      addSaveToChatBubble(stream, m.content, 'A letter', m.source);
+      if (m.source === 'letterpress') markLetterpress(stream.wrap);
       sealLetter(stream.bubble);
     }
   });
@@ -2991,12 +2999,13 @@ async function sendMsg(preset) {
   const aiBubble = createStreamBubble();
   let fullText = '';
   let opened = false;
+  let source = '';
 
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory })
+      body: JSON.stringify({ messages: modelMessages() })
     });
     if (res.status === 429) throw new Error('slow');
     if (!res.ok && !res.body) throw new Error('fail');
@@ -3015,6 +3024,7 @@ async function sendMsg(preset) {
         if (raw === '[DONE]') break;
         try {
           const p = JSON.parse(raw);
+          if (p.meta && p.meta.source) { source = p.meta.source; continue; }
           if (p.replace != null) {
             if (!opened) {
               opened = true;
@@ -3039,9 +3049,10 @@ async function sendMsg(preset) {
     }
     if (!fullText.trim()) throw new Error('empty');
     bumpChat();
-    chatHistory.push({ role: 'assistant', content: fullText });
+    chatHistory.push({ role: 'assistant', content: fullText, source: source || 'model' });
     persistLetters();
-    addSaveToChatBubble(aiBubble, fullText, text);
+    addSaveToChatBubble(aiBubble, fullText, text, source);
+    if (source === 'letterpress') markLetterpress(aiBubble.wrap);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
     const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
@@ -3057,9 +3068,10 @@ async function sendMsg(preset) {
       'Rest is offered to the exhausted, not the already-composed.',
     ].join('\n');
     updateStreamBubble(aiBubble, fallback);
-    chatHistory.push({ role: 'assistant', content: fallback });
+    chatHistory.push({ role: 'assistant', content: fallback, source: 'letterpress' });
     persistLetters();
-    addSaveToChatBubble(aiBubble, fallback, text);
+    addSaveToChatBubble(aiBubble, fallback, text, 'letterpress');
+    markLetterpress(aiBubble.wrap);
   } finally {
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
@@ -3107,18 +3119,32 @@ function updateStreamBubble({ bubble }, text) {
   bubble.innerHTML = formatAI(text);
 }
 
-function addSaveToChatBubble({ wrap }, text, question) {
+function addSaveToChatBubble({ wrap }, text, question, source) {
   wrap.querySelector('.letter').innerHTML = formatAI(text);
   const saveBtn = document.createElement('button');
   saveBtn.className = 'msg-save-btn';
   saveBtn.textContent = 'Keep in the journal';
   saveBtn.onclick = () => {
     const id = 'chat-' + Date.now();
-    saveJournalItem({ id, key: id, type: 'chat', title: question.length > 60 ? question.slice(0, 60) + '…' : question, body: text, verse: extractFirstVerse(text) });
+    saveJournalItem({ id, key: id, type: 'chat', title: question.length > 60 ? question.slice(0, 60) + '…' : question, body: text, verse: extractFirstVerse(text), source: source || 'model' });
     saveBtn.textContent = 'Kept';
     saveBtn.disabled = true;
   };
   wrap.appendChild(saveBtn);
+}
+
+function markLetterpress(wrap) {
+  if (!wrap || wrap.querySelector('.letter-colophon')) return;
+  const note = document.createElement('div');
+  note.className = 'letter-colophon';
+  note.textContent = 'Set without a model, from His words only.';
+  const letter = wrap.querySelector('.letter');
+  if (letter && letter.nextSibling) wrap.insertBefore(note, letter.nextSibling);
+  else wrap.appendChild(note);
+}
+
+function modelMessages() {
+  return chatHistory.map((m) => ({ role: m.role, content: m.content }));
 }
 
 function scrollChat() {
@@ -3156,6 +3182,7 @@ function renderJournal() {
       <div class="journal-title">${esc(item.title)}</div>
       <div class="journal-body">${esc(item.body)}</div>
       ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
+      ${item.source === 'letterpress' ? '<div class="letter-colophon">Set without a model, from His words only.</div>' : ''}
     </div>`;
   }).join('');
 }
