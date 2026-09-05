@@ -11,7 +11,8 @@
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
     "qa": "node scripts/qa-browser.js",
-    "moments": "node scripts/export-moments.js"
+    "moments": "node scripts/export-moments.js",
+    "folio": "node scripts/export-moments.js && node scripts/build-folio.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

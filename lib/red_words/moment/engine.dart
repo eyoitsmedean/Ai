@@ -1,6 +1,7 @@
 import 'catalog.dart';
 import 'church_year.dart';
 import 'models.dart';
+import 'office.dart';
 import 'widget_contract.dart';
 
 /// Same clock as `dailyForDate` in `lib/curated.js`.
@@ -26,6 +27,15 @@ class MomentEngine {
   ChurchSeason seasonOn(DateTime date) => churchYear(date);
 
   ThemeRoom? room(String name) => catalog.themes[name];
+
+  DailyOffice officeAt(DateTime time) => DailyOffice.at(time);
+
+  List<PathDay> get seven {
+    return catalog.seven
+        .map(catalog.lockPath)
+        .whereType<PathDay>()
+        .toList();
+  }
 
   WidgetPayload? widgetFor(DateTime date) {
     final moment = forDate(date);

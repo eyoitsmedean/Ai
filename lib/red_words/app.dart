@@ -8,7 +8,7 @@ import 'platform/session.dart';
 import 'screens/pages.dart';
 import 'theme.dart';
 
-enum AppLeaf { title, today, sit, seek, room, about, empty }
+enum AppLeaf { title, today, sit, seek, room, seven, pathDay, blessing, about, empty }
 
 class RedWordsApp extends StatefulWidget {
   const RedWordsApp({
@@ -35,6 +35,7 @@ class _RedWordsAppState extends State<RedWordsApp> {
   late SessionStore session;
   AppLeaf leaf = AppLeaf.title;
   ThemeRoom? openedRoom;
+  PathDay? openedDay;
   bool ready = false;
 
   DateTime get now => widget.now ?? DateTime.now();
@@ -126,8 +127,12 @@ class _RedWordsAppState extends State<RedWordsApp> {
         if (current == null) return const EmptyPage();
         return TodayPage(
           moment: current,
+          office: engine.officeAt(now),
+          seven: engine.seven,
           onSit: () => setState(() => leaf = AppLeaf.sit),
           onSeek: () => setState(() => leaf = AppLeaf.seek),
+          onSeven: () => setState(() => leaf = AppLeaf.seven),
+          onBless: () => setState(() => leaf = AppLeaf.blessing),
           onAbout: () => setState(() => leaf = AppLeaf.about),
         );
       case AppLeaf.sit:
@@ -160,6 +165,37 @@ class _RedWordsAppState extends State<RedWordsApp> {
         return RoomPage(
           room: room,
           onBack: () => setState(() => leaf = AppLeaf.seek),
+        );
+      case AppLeaf.seven:
+        return SevenPage(
+          days: engine.seven,
+          onBack: () => setState(() => leaf = AppLeaf.today),
+          onOpen: (day) => setState(() {
+            openedDay = day;
+            leaf = AppLeaf.pathDay;
+          }),
+        );
+      case AppLeaf.pathDay:
+        final day = openedDay;
+        if (day == null) {
+          return SevenPage(
+            days: engine.seven,
+            onBack: () => setState(() => leaf = AppLeaf.today),
+            onOpen: (next) => setState(() {
+              openedDay = next;
+              leaf = AppLeaf.pathDay;
+            }),
+          );
+        }
+        return PathDayPage(
+          day: day,
+          onBack: () => setState(() => leaf = AppLeaf.seven),
+        );
+      case AppLeaf.blessing:
+        if (current == null) return const EmptyPage();
+        return BlessingPage(
+          moment: current,
+          onBack: () => setState(() => leaf = AppLeaf.today),
         );
       case AppLeaf.about:
         return AboutPage(onBack: () => setState(() => leaf = AppLeaf.today));

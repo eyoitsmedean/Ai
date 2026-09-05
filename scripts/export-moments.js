@@ -66,6 +66,31 @@ for (let i = 0; i < 7; i++) {
   });
 }
 
+const SEVEN_DAYS = [
+  { title: 'Come', theme: 'Rest', verse: 'Matthew 11:28–29', reflection: 'Day one is not a program. It is an invitation. Come as you are — laden, not finished.' },
+  { title: 'Peace', theme: 'Peace', verse: 'John 14:27', reflection: 'The world offers a pause. He leaves a gift. You do not have to manufacture calm to receive it.' },
+  { title: 'Light', theme: 'Light', verse: 'John 8:12', reflection: 'Dark seasons are real. He does not deny them. Following is how the next step becomes visible.' },
+  { title: 'Love', theme: 'Love', verse: 'John 13:34', reflection: 'The mark is not an argument. It is how you treat the person next to you today.' },
+  { title: 'Forgive', theme: 'Forgiveness', verse: 'Matthew 18:21–22', reflection: 'Mercy is a way of life, not a single heroic act. One name is enough for this day.' },
+  { title: 'Abide', theme: 'Abide', verse: 'John 15:4–5', reflection: 'Fruit comes from staying close, not from straining alone. Remain. That is the work.' },
+  { title: 'Go', theme: 'Presence', verse: 'Matthew 28:20', reflection: 'The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.' },
+];
+
+const seven = SEVEN_DAYS.map((day) => {
+  const hit = lookup(day.verse);
+  if (!hit) throw new Error(`Seven Days missing verse: ${day.verse}`);
+  return {
+    title: day.title,
+    theme: day.theme,
+    verse: hit.citation,
+    passage: hit.text,
+    reflection: day.reflection,
+    translation: 'KJV',
+    verified: true,
+    source: 'curated',
+  };
+});
+
 const citations = new Set();
 function collect(cite) {
   if (cite) citations.add(cite);
@@ -77,6 +102,7 @@ for (const slot of catalog.daily) {
 for (const pack of Object.values(themes)) {
   for (const p of pack.passages) collect(p.verse);
 }
+for (const day of seven) collect(day.verse);
 
 const verses = {};
 for (const cite of [...citations].sort()) {
@@ -96,7 +122,7 @@ const outDir = path.join(__dirname, '..', 'assets', 'moments');
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(
   path.join(outDir, 'catalog.json'),
-  JSON.stringify({ ...catalog, themes, verses }, null, 2) + '\n'
+  JSON.stringify({ ...catalog, seven, themes, verses }, null, 2) + '\n'
 );
 
 const goldenDir = path.join(__dirname, '..', 'test', 'goldens');
@@ -106,4 +132,4 @@ fs.writeFileSync(
   JSON.stringify({ daily: dailyGoldens, themeNames: themeNames() }, null, 2) + '\n'
 );
 
-console.log(`exported ${catalog.daily.length} daily slots, ${Object.keys(themes).length} rooms, ${Object.keys(verses).length} verses`);
+console.log(`exported ${catalog.daily.length} daily slots, ${seven.length} seven-days, ${Object.keys(themes).length} rooms, ${Object.keys(verses).length} verses`);

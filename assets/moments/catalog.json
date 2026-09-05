@@ -126,6 +126,78 @@
       "source": "curated"
     }
   ],
+  "seven": [
+    {
+      "title": "Come",
+      "theme": "Rest",
+      "verse": "Matthew 11:28–29",
+      "passage": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+      "reflection": "Day one is not a program. It is an invitation. Come as you are — laden, not finished.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Peace",
+      "theme": "Peace",
+      "verse": "John 14:27",
+      "passage": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+      "reflection": "The world offers a pause. He leaves a gift. You do not have to manufacture calm to receive it.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Light",
+      "theme": "Light",
+      "verse": "John 8:12",
+      "passage": "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+      "reflection": "Dark seasons are real. He does not deny them. Following is how the next step becomes visible.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Love",
+      "theme": "Love",
+      "verse": "John 13:34",
+      "passage": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
+      "reflection": "The mark is not an argument. It is how you treat the person next to you today.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Forgive",
+      "theme": "Forgiveness",
+      "verse": "Matthew 18:22",
+      "passage": "I say not unto thee, Until seven times: but, Until seventy times seven.",
+      "reflection": "Mercy is a way of life, not a single heroic act. One name is enough for this day.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Abide",
+      "theme": "Abide",
+      "verse": "John 15:4–5",
+      "passage": "Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.",
+      "reflection": "Fruit comes from staying close, not from straining alone. Remain. That is the work.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "title": "Go",
+      "theme": "Presence",
+      "verse": "Matthew 28:20",
+      "passage": "Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.",
+      "reflection": "The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    }
+  ],
   "themes": {
     "Anxiety & Worry": {
       "theme": "Anxiety & Worry",
@@ -458,6 +530,11 @@
       "text": "I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:",
       "redLetter": true
     },
+    "John 13:34": {
+      "citation": "John 13:34",
+      "text": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
+      "redLetter": true
+    },
     "John 14:1": {
       "citation": "John 14:1",
       "text": "Let not your heart be troubled: ye believe in God, believe also in me.",
@@ -481,6 +558,11 @@
     "John 15:13": {
       "citation": "John 15:13",
       "text": "Greater love hath no man than this, that a man lay down his life for his friends.",
+      "redLetter": true
+    },
+    "John 15:4–5": {
+      "citation": "John 15:4–5",
+      "text": "Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.",
       "redLetter": true
     },
     "John 15:9": {
@@ -563,9 +645,19 @@
       "text": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
       "redLetter": true
     },
+    "Matthew 11:28–29": {
+      "citation": "Matthew 11:28–29",
+      "text": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+      "redLetter": true
+    },
     "Matthew 11:29": {
       "citation": "Matthew 11:29",
       "text": "Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+      "redLetter": true
+    },
+    "Matthew 18:22": {
+      "citation": "Matthew 18:22",
+      "text": "I say not unto thee, Until seven times: but, Until seventy times seven.",
       "redLetter": true
     },
     "Matthew 28:20": {

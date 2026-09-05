@@ -86,6 +86,32 @@ class ThemeRoom {
   final String closing;
 }
 
+class PathDay {
+  const PathDay({
+    required this.title,
+    required this.theme,
+    required this.word,
+    required this.reflection,
+  });
+
+  final String title;
+  final String theme;
+  final Saying word;
+  final String reflection;
+
+  factory PathDay.fromJson(Map<String, dynamic> json) {
+    return PathDay(
+      theme: (json['theme'] ?? '').toString(),
+      title: (json['title'] ?? '').toString(),
+      word: Saying(
+        citation: (json['verse'] ?? '').toString(),
+        text: (json['passage'] ?? '').toString(),
+      ),
+      reflection: (json['reflection'] ?? '').toString(),
+    );
+  }
+}
+
 class ChurchSeason {
   const ChurchSeason({
     required this.id,

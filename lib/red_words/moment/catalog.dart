@@ -8,9 +8,11 @@ class MomentCatalog {
     required this.daily,
     required this.themes,
     required this.verses,
+    this.seven = const [],
   });
 
   final List<DailyMoment> daily;
+  final List<PathDay> seven;
   final Map<String, ThemeRoom> themes;
   final Map<String, Saying> verses;
 
@@ -71,7 +73,27 @@ class MomentCatalog {
         }
       });
     }
-    return MomentCatalog(daily: daily, themes: themes, verses: verses);
+    final seven = <PathDay>[];
+    final sevenRaw = root['seven'];
+    if (sevenRaw is List) {
+      for (final item in sevenRaw) {
+        if (item is Map<String, dynamic>) {
+          seven.add(PathDay.fromJson(item));
+        }
+      }
+    }
+    return MomentCatalog(daily: daily, seven: seven, themes: themes, verses: verses);
+  }
+
+  PathDay? lockPath(PathDay day) {
+    final canonical = lookup(day.word.citation);
+    if (canonical == null || canonical.text.isEmpty) return null;
+    return PathDay(
+      title: day.title,
+      theme: day.theme,
+      word: canonical,
+      reflection: day.reflection,
+    );
   }
 
   Saying? lookup(String citation) {
