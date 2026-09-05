@@ -243,6 +243,63 @@
     }
     .week p { margin: 0; font-size: 0.92rem; }
     .kill { border-left: 3px solid var(--crimson); padding-left: 0.9rem; }
+    details.papers {
+      margin-top: 1.35rem;
+      border-top: 1px solid var(--ink);
+      padding-top: 0.85rem;
+    }
+    details.papers > summary {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      cursor: pointer;
+      list-style: none;
+    }
+    details.papers > summary::-webkit-details-marker { display: none; }
+    details.papers > summary::after {
+      content: " · unfold";
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    details.papers[open] > summary::after { content: " · fold"; }
+    .papers-body { margin-top: 1rem; }
+    .papers-body h4 {
+      font-family: Fraunces, serif;
+      font-style: italic;
+      font-weight: 650;
+      font-size: 1.05rem;
+      margin: 1.15rem 0 0.4rem;
+    }
+    .minute {
+      display: grid;
+      grid-template-columns: 4.6rem 1fr;
+      gap: 0.35rem 0.8rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.95rem;
+    }
+    .minute b {
+      font-family: "Instrument Sans", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      font-weight: 600;
+    }
+    .night {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      margin: 0.8rem 0 0;
+    }
+    .night article h4 { margin-top: 0; color: var(--crimson); }
+    .oath {
+      border: 1px solid var(--ink);
+      padding: 1.1rem 1.15rem;
+      font-style: italic;
+    }
     footer.colophon { text-align: center; font-size: 0.88rem; padding: 2rem 0 0; }
     .chosen-banner {
       display: none;
@@ -267,7 +324,7 @@
       nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
       main { padding: 1.2rem 1rem 4rem; }
       .leaf { padding: 1.3rem 1.05rem 1.5rem; }
-      .grid-2, .grid-3, .laws, .weeks { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .laws, .weeks, .night { grid-template-columns: 1fr; }
       table { font-size: 0.86rem; }
     }
     @media print {
@@ -276,6 +333,8 @@
       .shell { display: block; }
       .leaf { box-shadow: none; break-inside: avoid; }
       body[class*="focus-"] .plan { display: block !important; }
+      details.papers { border-top: 1px solid #1b1610; }
+      details.papers > summary::after { content: none; }
     }
   </style>
 </head>
@@ -298,6 +357,11 @@
       <a class="toc" href="#plan-III">III · The Handoff<small>Workflow Rescue · $1,500</small></a>
       <a class="toc" href="#plan-IV">IV · The Storefront<small>Friction Audit · $295</small></a>
       <a class="toc" href="#plan-V">V · The Folio<small>Red Letter · Advent</small></a>
+      <p class="eyebrow">Working papers</p>
+      <a class="toc" href="#night">Night queue</a>
+      <a class="toc" href="#saturday">Saturday field kit</a>
+      <a class="toc" href="#math">Unit economics</a>
+      <a class="toc" href="#oath">Clean-room oath</a>
       <p class="eyebrow">Close</p>
       <a class="toc" href="#pick">Pick in 20 minutes</a>
       <a class="toc" href="#sunday">Sunday close</a>
@@ -312,7 +376,11 @@
           <div class="stat"><div class="n">1</div><div class="k">Active plan. Never five.</div></div>
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
-        <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026 from your repos, Notion, X, Hugging Face, and cloud-agent history. Public copy is family-safe. The private Notion twin carries your real names and page links.</p>
+        <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; working papers deepened 5 September 2026. Sources: this repo, Notion “My Life,” public GitHub, Hugging Face, X voice, cloud-agent history. Public copy is family-safe. The private Notion twin carries your real names and page links.</p>
+        <div class="actions">
+          <button class="btn" type="button" id="unfoldAll">Unfold all working papers</button>
+          <button class="btn ghost" type="button" id="foldAll">Fold them</button>
+        </div>
       </article>
 
       <article class="leaf" id="you">
@@ -457,6 +525,48 @@
         <h3>Copy — availability line</h3>
         <div class="copy" data-copy="I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
         <p class="kill"><strong>Kill.</strong> Experience you cannot substantiate. IP language that needs a lawyer you will not ask. A trial that wants agent-written scores. Monitoring that cannot be isolated. Hours that shove bedtime.</p>
+        <details class="papers">
+          <summary>Working papers · The Lamp</summary>
+          <div class="papers-body">
+            <h4>Five truth gates · Dean alone</h4>
+            <p>Agents may research listings. You apply, interview, and score. Unknown is allowed. Blocked kills the plan — do not apply “to see.”</p>
+            <ol>
+              <li>Years in L&amp;D you can substantiate without employer files.</li>
+              <li>Years in sales / GTM you can substantiate the same way.</li>
+              <li>Slide and artifact fluency on <em>public</em> examples.</li>
+              <li>Outside-work / IP language you can live with without calling a work lawyer.</li>
+              <li>Consent to monitoring on a device you can isolate.</li>
+            </ol>
+            <h4>Unit economics</h4>
+            <div style="overflow:auto">
+              <table>
+                <thead><tr><th>Rate</th><th>5 hrs × 8 wks</th><th>6.5 hrs × 8 wks</th><th>8 hrs × 8 wks</th></tr></thead>
+                <tbody>
+                  <tr><td>$80 listed</td><td>$3,200</td><td>$4,160</td><td>$5,120</td></tr>
+                  <tr><td>$100 (studio base path)</td><td>$4,000</td><td>$5,200</td><td>$6,400</td></tr>
+                  <tr><td>$120 listed</td><td>$4,800</td><td>$6,240</td><td>$7,680</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Artifact cycle is <strong>40–70 minutes</strong> including rubric re-read. At $100/hr that is $67–$117 per artifact. Eight hours is 7–12 artifacts, not 20. Do not batch-score. Admin and policy time counts. After the first paid week, if realized contribution falls below about $80/all-in hour because the queue is idle, Park — that is supply dying, not you slowing down. Selection probability is unknown. Net is less after tax. Modeled folio base remains <strong>$4,000 for a 40-hour engagement</strong> if accepted.</p>
+            <h4>Device isolation</h4>
+            <ul>
+              <li>Personal machine. Personal account. No employer SSO, files, chat, or browser profile.</li>
+              <li>LLM policy printed or saved locally. Re-read it the <em>morning of</em> every task, not the night before.</li>
+              <li>If a task asks you to paste a work deck into a model: refuse and Close.</li>
+              <li>Agents must not write scores or justifications. A trial that wants that is a kill.</li>
+            </ul>
+            <h4>Application packet · you write this</h4>
+            <p>Availability line (copy above). Two public-safe stories of judging a messy training artifact — no client names. Confirm you will not use an LLM to score. Do not paste Growth Academy language. Do not mention the employer. If clearance is unknown, the packet stays in the drawer.</p>
+            <h4>Night queue</h4>
+            <div class="night">
+              <article class="card"><h4>15</h4><p>Re-read the LLM policy out loud. One paragraph. Stop.</p></article>
+              <article class="card"><h4>30</h4><p>Score one synthetic artifact against a public rubric. Write the score in ink. Do not ask a model to justify it.</p></article>
+              <article class="card"><h4>60</h4><p>Fill the five truth gates, or complete one real evaluation if already accepted. Device isolated. Policy on the desk.</p></article>
+            </div>
+            <p class="tiny" style="margin-top:0.8rem"><a href="https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator" target="_blank" rel="noopener">L&amp;D listing</a> · <a href="https://work.mercor.com/jobs/list_AAABnp6MSjuxnR5XDmVL1Ypb/general-sales-gtm-evaluator" target="_blank" rel="noopener">Sales / GTM listing</a> · <a href="https://talent.docs.mercor.com/policies/llm-usage" target="_blank" rel="noopener">LLM usage policy</a></p>
+          </div>
+        </details>
         <div class="actions">
           <button class="btn" type="button" data-choose="I">I choose The Lamp</button>
           <a class="btn ghost" href="https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator" target="_blank" rel="noopener">Open L&amp;D listing</a>
@@ -502,6 +612,38 @@
         <h3>Copy — the ask</h3>
         <div class="copy" data-copy="If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.">If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.</div>
         <p class="kill"><strong>Kill.</strong> Recording without consent. Stolen interview questions. Guarantees. Sessions that repeatedly eat bedtime. Acquisition hours exceeding delivery hours after 40 asks.</p>
+        <details class="papers">
+          <summary>Working papers · The Room</summary>
+          <div class="papers-body">
+            <h4>Unit economics</h4>
+            <p><strong>$349</strong> / 75 live + 45 prep = 120 minutes = <strong>about $174/hr before acquisition</strong>. Fold ~30 minutes of ask-time per booked session and you are nearer $120–$150. Calendar tax is the real cost: two evening sessions a week maximum. Do not discount below $249. Three-session $795 only after two clean singles. 4 paid = $1,396. 6 = $2,094. 8 = $2,792.</p>
+            <h4>75-minute run-of-show</h4>
+            <div class="minute"><b>0–5</b><span>Land and consent. No recording unless they ask and you agree in the same sentence.</span></div>
+            <div class="minute"><b>5–12</b><span>They state the real stakes in one minute. You restate. If there is no dated event, this is a fit-call leftover — end kindly.</span></div>
+            <div class="minute"><b>12–24</b><span>They run the 12-minute Northwind case.</span></div>
+            <div class="minute"><b>24–40</b><span>Mock panel. You play skeptical CFO, tired ops director, hopeful HR. Public-knowledge questions only. No insider questions. No “what would your current company do.”</span></div>
+            <div class="minute"><b>40–58</b><span>Notes: three changes, one preserved strength. No pile-on. Write them where they can see.</span></div>
+            <div class="minute"><b>58–70</b><span>Seven-day drill: one 12-minute run on days 1, 3, and 6; one panel question they write themselves on day 4; rest days are rest.</span></div>
+            <div class="minute"><b>70–75</b><span>Payment already collected. Referral ask only if it felt useful — adjacent company, not theirs if it overlaps work.</span></div>
+            <h4>Northwind Outfitters · synthetic case</h4>
+            <p>Fictional outdoor-gear retailer. The candidate must pitch a 90-day store-manager training rollout before holiday peak. Constraints you hand them at minute 12: no new headcount, $40k budget, four stores. The panel will ask how they will know it worked in week six. You never use a real retailer’s numbers, a real enablement deck, or a question you heard at work. If their real interview is in an industry you serve at work, you still use Northwind — you do not simulate their employer.</p>
+            <h4>Fit-call gate · 15 minutes</h4>
+            <ol>
+              <li>Is there a dated event (interview, panel, board) in the next 30 days?</li>
+              <li>Can they pay $349 without a company PO?</li>
+              <li>Are they outside the employer graph?</li>
+            </ol>
+            <p>Any no: wish them well. The fit call is not a free rehearsal. Do not gift a custom case.</p>
+            <h4>Ten humans (write names on paper, not in this public file)</h4>
+            <p>Old classmates, church, veterans, music friends, public posts. Zero current employer staff, candidates, or clients. Do not message them the night you list them.</p>
+            <h4>Night queue</h4>
+            <div class="night">
+              <article class="card"><h4>15</h4><p>Write the eight-line offer. Price on the first line. Stop.</p></article>
+              <article class="card"><h4>30</h4><p>Outline Northwind: 12-minute pitch, three panelists, one trap question that is public-knowledge only.</p></article>
+              <article class="card"><h4>60</h4><p>Finish offer + case + ten names. No messages tonight.</p></article>
+            </div>
+          </div>
+        </details>
         <div class="actions">
           <button class="btn" type="button" data-choose="II">I choose The Room</button>
         </div>
@@ -540,6 +682,43 @@
         <h3>Copy — outreach</h3>
         <div class="copy" data-copy="Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / nobody called me back] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / “nobody called me back”] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
         <p class="kill"><strong>Kill.</strong> They want an agency retainer. They need logins you should not have. The process is safety-critical. You recognize the firm from work. Delivery will take nights you do not have.</p>
+        <details class="papers">
+          <summary>Working papers · The Handoff</summary>
+          <div class="papers-body">
+            <h4>Scope lock</h4>
+            <p>One process. At most five people. Two revisions. First review in 10 business days, final in 15. No software overhaul. No insurance, benefits, HR, or safety training. Invoice <strong>50% to start, 50% on acceptance</strong>. Standard price <strong>$2,250</strong> only after a paid beta teaches you the real hours. Do not start this plan while The Lamp is still Pursue.</p>
+            <h4>20-hour budget</h4>
+            <div style="overflow:auto">
+              <table>
+                <thead><tr><th>Bucket</th><th>Hours</th><th>If it blows</th></tr></thead>
+                <tbody>
+                  <tr><td>Diagnostic + notes</td><td>3</td><td>Cut polish, keep the one-process limit</td></tr>
+                  <tr><td>Process map</td><td>5</td><td>Boxes and owners beat pretty arrows</td></tr>
+                  <tr><td>SOP + job aid</td><td>5</td><td>One aid, not a handbook</td></tr>
+                  <tr><td>Owner / metric card + 30-day test</td><td>3</td><td>The test is not optional</td></tr>
+                  <tr><td>Reviews (two)</td><td>2</td><td>Revision 3 is out of scope</td></tr>
+                  <tr><td>Admin / invoice</td><td>2</td><td>Cap; do not hide email time</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Beta $1,500 / 20 hours = $75. Studio model about $108/hr at $2,250 over 20 hours. After two paid units, stop below $60/all-in hour, more than 20% revision churn, or more than 15% admin. Unpaid sample capped at 10 hours — ugly at hour 10 is a pass.</p>
+            <h4>Cedar &amp; Pine Home Care · synthetic</h4>
+            <p>Fictional independent home-maintenance firm. The weekly wound: a tech finishes a visit, photos live on a personal phone, the office cannot invoice until Thursday, the owner finds out from a review that “nobody sent the recap.” Map <strong>estimate → schedule → field → proof → invoice</strong>. Job aid is a photo checklist. Owner card is “who texts the recap by 6pm.” 30-day test: percent of jobs invoiced within 24 hours.</p>
+            <h4>20 Maps asks</h4>
+            <p>Public Google listings only. Name, public page, one review-signal you can quote. Never the employer book. One 20-minute diagnostic. No free custom build. No pitch if the problem is not frequent.</p>
+            <h4>Diagnostic script · 20 minutes</h4>
+            <div class="minute"><b>0–4</b><span>What happens every week that still requires you?</span></div>
+            <div class="minute"><b>4–10</b><span>Where do photos, owners, or invoices drop? Ask for frequency, not feelings.</span></div>
+            <div class="minute"><b>10–16</b><span>Who touches it (must be ≤5)? What would “done” look like in 30 days?</span></div>
+            <div class="minute"><b>16–20</b><span>If it fits: 50/50, 15 days, one process. If not: thank them. Do not invent a retainer.</span></div>
+            <h4>Night queue</h4>
+            <div class="night">
+              <article class="card"><h4>15</h4><p>List Cedar &amp; Pine failure modes: dropped photo, missing owner, invoice lag. Stop.</p></article>
+              <article class="card"><h4>30</h4><p>Sketch five boxes. Owners blank is fine.</p></article>
+              <article class="card"><h4>60</h4><p>Write one SOP page for “proof of work.” Hour 10 of the sample still wins over polish.</p></article>
+            </div>
+          </div>
+        </details>
         <div class="actions">
           <button class="btn" type="button" data-choose="III">I choose The Handoff</button>
         </div>
@@ -578,6 +757,31 @@
         <h3>Copy — the note</h3>
         <div class="copy" data-copy="I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.">I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.</div>
         <p class="kill"><strong>Kill.</strong> They want you in Analytics. They want fake reviews. The job needs accessibility certification you will not give. You cannot separate fact from guess. It takes more than two evenings.</p>
+        <details class="papers">
+          <summary>Working papers · The Storefront</summary>
+          <div class="papers-body">
+            <h4>Why the floor is broken on purpose</h4>
+            <p>$295 / 4 hours ≈ $74. $295 / 3.5 hours ≈ $84. After five paid, raise to <strong>$450</strong> or fold the pattern into The Handoff. This is cash and evidence, not a career. If a rehearsal exceeds 8 hours including QA, shrink the deliverable or kill.</p>
+            <h4>3.5-hour template</h4>
+            <div class="minute"><b>0:20</b><span>Google Business Profile: hours, categories, photos, review themes you can quote.</span></div>
+            <div class="minute"><b>0:40</b><span>Mobile homepage: primary CTA, tap targets, phone vs form.</span></div>
+            <div class="minute"><b>0:50</b><span>Path to book / call / estimate. Screenshot every stall. Do not submit a form.</span></div>
+            <div class="minute"><b>0:40</b><span>Write five frictions, each with a URL or screenshot timestamp, labeled <em>observation</em> not inference.</span></div>
+            <div class="minute"><b>0:30</b><span>Rewrite one CTA or FAQ sentence.</span></div>
+            <div class="minute"><b>0:15</b><span>Name one thing not to change yet.</span></div>
+            <div class="minute"><b>0:15</b><span>Measurement note (“watch missed-call tags for 14 days”) — not a revenue claim. Remainder is QA and send.</span></div>
+            <h4>Observation vs inference</h4>
+            <p><strong>Observation:</strong> “The Book button is below the fold on a 390-wide phone; the call number is in the header.” <strong>Inference you will not write as fact:</strong> “You are losing $4,000 a month.” Required label on every send: observational hypotheses — not verified revenue loss, legal advice, or accessibility certification.</p>
+            <h4>Saturday field kit</h4>
+            <p>Phone, personal hotspot, screenshot folder named for the synthetic or paid job, timer, the $295 note with two blanks. Ten listings from Maps in one town you already drive. No form submits. No ranking promises. If a shop is one you recognize from work, skip it.</p>
+            <h4>Night queue</h4>
+            <div class="night">
+              <article class="card"><h4>15</h4><p>Pick one Maps listing. Screenshot the profile. Do not call.</p></article>
+              <article class="card"><h4>30</h4><p>Walk the mobile path to Call or Book. Write two stalls as observations.</p></article>
+              <article class="card"><h4>60</h4><p>Time a full synthetic audit against the 3.5-hour template. Record minutes.</p></article>
+            </div>
+          </div>
+        </details>
         <div class="actions">
           <button class="btn" type="button" data-choose="IV">I choose The Storefront</button>
         </div>
@@ -626,10 +830,195 @@ A quiet page for the words Jesus spoke. Free.">I was carrying Tuesday on Monday.
 [Matthew 6:34 or John 14:27 in crimson]
 A quiet page for the words Jesus spoke. Free.</div>
         <p class="kill"><strong>Kill as a 90-day cash plan</strong> if you need money this quarter — switch to The Lamp. Keep building Red Letter as craft on crumbs. Kill the product itself only if you start locking verses, adding Paul, or pretending the model is Him.</p>
+        <details class="papers">
+          <summary>Working papers · The Folio</summary>
+          <div class="papers-body">
+            <h4>Never lock</h4>
+            <p>His words. Lectio. Seek. Seven Days. The curated Advisor. The commonplace. Never weekly price. Never “talk to God.” When money exists: 7-day live Advisor, then <strong>$59.99 year / $9.99 month</strong>. Trial after they have kept a week, not after they have seen a gate.</p>
+            <h4>Ads you can film (LAUNCH.md 1, 3, 4)</h4>
+            <ol>
+              <li><strong>Anxiety.</strong> “I was carrying Tuesday on Monday. Then I sat with one sentence.” Matthew 6:34 or John 14:27 in crimson. CTA: A quiet page. Free.</li>
+              <li><strong>Blessing.</strong> Film sending a card to someone you love. No voiceover except the verse. CTA: Send a blessing. Not a screenshot of an app.</li>
+              <li><strong>Ask Him.</strong> Type “I am afraid of the future.” Advisor answers with Matthew 14:27. CTA: Only the red letters. Every line cited. Never run this as if the model were God.</li>
+            </ol>
+            <p>Phone vertical. Face or handwriting. $0 paid until three people you love finish Day 1. First $200 on Meta only if Day-7 is worth watching.</p>
+            <h4>Healthy signals</h4>
+            <div style="overflow:auto">
+              <table>
+                <thead><tr><th>Signal</th><th>Healthy</th><th>If low</th></tr></thead>
+                <tbody>
+                  <tr><td>Day-1 lectio completed</td><td>&gt;40% of new opens</td><td>Onboarding is too long</td></tr>
+                  <tr><td>Day-7 of Seven Days</td><td>&gt;18% of those who started</td><td>The days are not a story</td></tr>
+                  <tr><td>Blessing sent</td><td>&gt;8% of WAU</td><td>The button is still furniture</td></tr>
+                  <tr><td>Advisor used</td><td>&gt;25% of WAU</td><td>They did not feel heard</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h4>Calendar honesty</h4>
+            <p>Advent begins <strong>29 November 2026</strong> — inside these 90 days. Lent 2027: Ash Wednesday <strong>10 February</strong>, Easter 28 March. That is the commercial season you already marked. Do not pretend Advent is Hallow’s Pray40. Film a named wait. Build Forty in the background if energy remains — it is not this quarter’s cash.</p>
+            <h4>Night queue</h4>
+            <div class="night">
+              <article class="card"><h4>15</h4><p>Open <code>/?fresh=1</code>. Sit with one sentence. Do not open the codebase.</p></article>
+              <article class="card"><h4>30</h4><p>Send one blessing to one real person. Confirm the card actually leaves the phone.</p></article>
+              <article class="card"><h4>60</h4><p>Film ad 1 vertical. No edit tonight.</p></article>
+            </div>
+          </div>
+        </details>
         <div class="actions">
           <button class="btn" type="button" data-choose="V">I choose The Folio</button>
           <a class="btn ghost" href="../public/index.html">Open Red Letter</a>
         </div>
+      </article>
+
+      <article class="leaf" id="night">
+        <p class="eyebrow">When the window is 15, 30, or 60 minutes</p>
+        <h2>Night queue</h2>
+        <p>Do not open five plans. Open the one you chose. If you have not chosen, the only legal night queue is the twenty-minute pick — or rest.</p>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>15 minutes</th>
+                <th>30 minutes</th>
+                <th>60 minutes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pick">
+                <td><strong>I Lamp</strong></td>
+                <td>Re-read the LLM policy out loud.</td>
+                <td>Score one synthetic artifact in ink.</td>
+                <td>Five truth gates, or one real eval on an isolated device.</td>
+              </tr>
+              <tr>
+                <td><strong>II Room</strong></td>
+                <td>Eight-line offer. Price first.</td>
+                <td>Northwind outline. Public-knowledge trap only.</td>
+                <td>Offer + case + ten names. No messages.</td>
+              </tr>
+              <tr>
+                <td><strong>III Handoff</strong></td>
+                <td>Cedar &amp; Pine failure modes.</td>
+                <td>Five boxes. Owners blank is fine.</td>
+                <td>One SOP page. Hour 10 still wins.</td>
+              </tr>
+              <tr>
+                <td><strong>IV Storefront</strong></td>
+                <td>One Maps screenshot. Do not call.</td>
+                <td>Walk mobile path. Two observations.</td>
+                <td>Time the 3.5-hour template on a synthetic shop.</td>
+              </tr>
+              <tr>
+                <td><strong>V Folio</strong></td>
+                <td><code>/?fresh=1</code>. One sentence. No codebase.</td>
+                <td>Send one blessing. Confirm it leaves.</td>
+                <td>Film ad 1 vertical. No edit.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">Two evenings maximum. Quality review is never the first thing cut. If the household window is not confirmed, this table is furniture.</p>
+      </article>
+
+      <article class="leaf" id="saturday">
+        <p class="eyebrow">One errand, not a second job</p>
+        <h2>Saturday field kit</h2>
+        <p>Only if The Storefront or The Handoff is the chosen plan. Otherwise Saturday is family.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>The Storefront · ten walks</h3>
+            <ul>
+              <li>Phone, personal hotspot, timer.</li>
+              <li>Screenshot folder named for the town, not the client’s legal name until they have paid.</li>
+              <li>The $295 note with two observation blanks.</li>
+              <li>Ten Maps listings in a town you already drive: plumber, landscaper, cleaner, restoration.</li>
+              <li>No form submit. No ranking promise. Skip any shop you recognize from work.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>The Handoff · twenty listings</h3>
+            <ul>
+              <li>Public Google pages only. Never the employer book.</li>
+              <li>Capture: name, URL, one review-signal you can quote.</li>
+              <li>Qualified means a recurring handoff you can see from the outside (scheduling, invoicing, “nobody called back”).</li>
+              <li>Do not contact until the Cedar &amp; Pine sample has hit hour 10 or “done.”</li>
+              <li>One 20-minute diagnostic per yes — not a free custom build.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="leaf" id="math">
+        <p class="eyebrow">Hypotheses except where a listing is cited</p>
+        <h2>Unit economics on one page</h2>
+        <p>After the first paid unit, realized contribution must clear about $100 per all-in hour or you reprice, rescope, or kill. The Storefront is the allowed exception: cash and evidence, then raise or fold.</p>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Price</th>
+                <th>All-in time</th>
+                <th>If-it-works cash</th>
+                <th>$ / hour</th>
+                <th>Floor?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pick">
+                <td>I Lamp</td>
+                <td>$80–$120/hr listed (30 Aug 2026)</td>
+                <td>5–8 hrs/wk billed, 40–70 min/artifact</td>
+                <td>$3,200–$7,680</td>
+                <td>$80–$120</td>
+                <td>Meets if supply is real</td>
+              </tr>
+              <tr>
+                <td>II Room</td>
+                <td>$349 / 75 min</td>
+                <td>120 min delivery; more with asks</td>
+                <td>$1,396–$2,792</td>
+                <td>~$120–$174</td>
+                <td>Meets on delivery; watch acquisition</td>
+              </tr>
+              <tr>
+                <td>III Handoff</td>
+                <td>$1,500 beta → $2,250</td>
+                <td>20 hours locked</td>
+                <td>$1,500–$4,500</td>
+                <td>$75 beta / ~$108 at standard</td>
+                <td>Beta is below; standard is the test</td>
+              </tr>
+              <tr>
+                <td>IV Storefront</td>
+                <td>$295</td>
+                <td>3.5–4 hours</td>
+                <td>$1,770–$2,950</td>
+                <td>~$74–$84</td>
+                <td>Below on purpose. Raise or fold after five.</td>
+              </tr>
+              <tr>
+                <td>V Folio</td>
+                <td>$59.99/yr later; $0 now</td>
+                <td>Craft hours, not a rate</td>
+                <td>$0–$2,000 honest</td>
+                <td>n/a</td>
+                <td>Wrong tool if you need a rate</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">“If it works” assumes the household gate stays green and you actually send the asks. It is a betting card, not a forecast.</p>
+      </article>
+
+      <article class="leaf" id="oath">
+        <p class="eyebrow">Before any external action</p>
+        <h2>Clean-room oath</h2>
+        <div class="oath">
+          I will not use employer clients, language, data, devices, or time. I will not sell a story that begins “I saw this at work.” I will not message anyone I only know through the job. I will not put a work artifact into a model. I will not lock scripture, sell a weekly paywall, or pretend a model is Him. I will not run two plans. I will not steal sleep. Payment beats praise. Stop is a finish.
+        </div>
+        <p class="tiny" style="margin-top:1rem">This page does not authorize applications, outreach, purchases, or publishing. You do.</p>
       </article>
 
       <article class="leaf" id="pick">
@@ -660,7 +1049,7 @@ A quiet page for the words Jesus spoke. Free.</div>
         <p class="muted">Sources: this repository (Red Letter product, <code>LAUNCH.md</code>, <code>MARKET_STRATEGY.md</code>), Notion workspace “My Life” (DeanOS, Venture Studio, M4, side-hustle shelf, Newborn Mode, This week), public GitHub <code>eyoitsmedean/Ai</code>, Hugging Face <code>nowaymyguy</code> (no repos), X <code>@Muricaenjoyer</code> (voice, not a channel), Cursor cloud-agent history (native-app ship attempts, Muse, QA). Granola was not signed in. Employer knowledge bases were not used as ingredients.</p>
         <p class="muted">This page does not authorize applications, outreach, purchases, or publishing. You do.</p>
         <footer class="colophon">
-          Printed for one person · 4 September 2026 · The words of a plan should be as quiet as the work
+          Printed for one person · 5 September 2026 · Working papers folded until you ask
         </footer>
       </article>
     </main>
@@ -705,6 +1094,12 @@ A quiet page for the words Jesus spoke. Free.</div>
     });
     const saved = localStorage.getItem("ninety-days-plan");
     if (saved && names[saved]) applyChoice(saved);
+    function setPapers(open) {
+      document.querySelectorAll("details.papers").forEach((d) => { d.open = open; });
+    }
+    document.getElementById("unfoldAll").addEventListener("click", () => setPapers(true));
+    document.getElementById("foldAll").addEventListener("click", () => setPapers(false));
+    window.addEventListener("beforeprint", () => setPapers(true));
   </script>
 </body>
 </html>
