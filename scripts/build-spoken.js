@@ -26,7 +26,8 @@ for (const [cite, marker] of Object.entries(red)) {
   const [ch, vs] = rest.split(':');
   const full = cleanKjv(kjv.books[book]?.[ch]?.[vs] || '');
   if (!full) continue;
-  const text = marker && marker !== 'full' ? cleanKjv(marker) : extractSpoken(full, cite);
+  const previousRed = Boolean(red[`${book} ${ch}:${Number(vs) - 1}`]);
+  const text = marker && marker !== 'full' ? cleanKjv(marker) : extractSpoken(full, cite, { previousRed });
   if (!text) continue;
   if (!spoken.books[book]) spoken.books[book] = {};
   if (!spoken.books[book][ch]) spoken.books[book][ch] = {};
