@@ -1,6 +1,12 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
+
+const SIGNAL_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'rla-signals-')), 'signals.jsonl');
+process.env.RLA_SIGNAL_PATH = SIGNAL_FILE;
 const app = require('../server');
 
 let server;
@@ -122,5 +128,76 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
+  });
+});
+
+function dayAgo(n) {
+  return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+}
+
+describe('the ledger (/api/signal)', () => {
+  it('keeps plain day totals and answers the four launch questions', async () => {
+    const first = await request('POST', '/api/signal', {
+      v: 1,
+      rows: [
+        { day: dayAgo(3), open: 1, lectio: 1, sevenStart: 1, newOpen: 1, day1Lectio: 1 },
+        { day: dayAgo(2), open: 1, blessing: 1 },
+        { day: dayAgo(1), open: 1, advisor: 2 },
+      ],
+    });
+    assert.equal(first.status, 200, first.raw);
+    assert.equal(JSON.parse(first.raw).kept, 3);
+
+    const second = await request('POST', '/api/signal', {
+      v: 1,
+      rows: [{ day: dayAgo(2), open: 1, newOpen: 1 }],
+    });
+    assert.equal(second.status, 200);
+
+    const summary = JSON.parse((await request('GET', '/api/signal/summary?days=30')).raw);
+    assert.equal(summary.deviceDays, 4);
+    assert.equal(summary.totals.newOpen, 2);
+    assert.equal(summary.launch.day1LectioPct.value, 50);
+    assert.equal(summary.launch.day1LectioPct.target, 40);
+    assert.equal(summary.launch.sevenDonePct.value, 0);
+    assert.equal(summary.launch.blessingPct.value, 25);
+    assert.equal(summary.launch.advisorPct.value, 50);
+    assert.match(summary.launch.blessingPct.of, /no id is sent/);
+
+    const stored = fs.readFileSync(SIGNAL_FILE, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    assert.equal(stored.length, 4);
+    for (const row of stored) {
+      assert.deepEqual(
+        Object.keys(row).filter((k) => !['day', 'receivedAt', 'open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone', 'newOpen', 'day1Lectio'].includes(k)),
+        [],
+        'a stored row carries nothing but day totals',
+      );
+    }
+  });
+
+  it('refuses anything that is not a completed day of small integer totals', async () => {
+    const cases = [
+      { v: 1, rows: [{ day: dayAgo(0), open: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1, email: 'x@y.z' }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1.5 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 999 }] },
+      { v: 1, rows: [{ day: dayAgo(1), day1Lectio: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1 }, { day: dayAgo(1), open: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(90), open: 1 }] },
+      { v: 1, rows: [] },
+      { v: 2, rows: [{ day: dayAgo(1), open: 1 }] },
+      { rows: 'nope' },
+    ];
+    for (const body of cases) {
+      const res = await request('POST', '/api/signal', body);
+      assert.equal(res.status, 400, JSON.stringify(body));
+    }
+  });
+
+  it('caps the summary window and never caches it', async () => {
+    const res = await request('GET', '/api/signal/summary?days=9999');
+    assert.equal(res.status, 200);
+    assert.equal(JSON.parse(res.raw).days, 365);
+    assert.equal(res.headers['cache-control'], 'no-store');
   });
 });
