@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../engine/moment.dart';
+import '../engine/widget_bridge.dart';
 import '../engine/widget_contract.dart';
 
 class LocalStore {
@@ -35,5 +36,6 @@ class LocalStore {
     await prefs.setString(WidgetKeys.word, widget.word);
     await prefs.setString(WidgetKeys.citation, widget.citation);
     await prefs.setString(WidgetKeys.thread, widget.thread);
+    await WidgetBridge.push(widget);
   }
 }

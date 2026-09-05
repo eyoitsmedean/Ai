@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../brand.dart';
-import '../engine/crisis.dart';
 import '../engine/pack.dart';
 import '../engine/retrieve.dart';
 import 'saying_view.dart';
-import 'shell.dart';
+import 'crisis_button.dart';
 
 class AskTab extends StatefulWidget {
   const AskTab({super.key, required this.pack, required this.dark});
@@ -85,11 +84,7 @@ class _AskTabState extends State<AskTab> {
               style: const TextStyle(height: 1.45, color: Brand.ink),
             ),
           if (result.kind == AskKind.crisis)
-            TextButton(
-              key: const Key('crisis-988'),
-              onPressed: openCrisisLine,
-              child: const Text(Crisis.telUri),
-            ),
+            const CrisisButton(key: Key('crisis-988')),
         ],
       ],
     );

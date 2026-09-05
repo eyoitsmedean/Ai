@@ -54,8 +54,22 @@ struct RedWordsWidgetView: View {
             ThreadMark()
         }
         .padding()
-        .containerBackground(Color(red: 0.96, green: 0.94, blue: 0.90), for: .widget)
+        .widgetBackground(Color(red: 0.96, green: 0.94, blue: 0.90))
         .widgetURL(URL(string: "redwords://today"))
+    }
+}
+
+extension View {
+    /// containerBackground(_:for:) is iOS 17+. On iOS 17 a widget without it renders
+    /// "Please adopt containerBackground API"; on the 15.0 target it does not compile
+    /// unguarded. Below 17, plain background is the correct call.
+    @ViewBuilder
+    func widgetBackground(_ color: Color) -> some View {
+        if #available(iOSApplicationExtension 17.0, iOS 17.0, *) {
+            containerBackground(color, for: .widget)
+        } else {
+            background(color)
+        }
     }
 }
 

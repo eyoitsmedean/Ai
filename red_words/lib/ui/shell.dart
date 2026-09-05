@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../brand.dart';
 import '../engine/crisis.dart';
@@ -8,6 +7,7 @@ import '../engine/moment.dart';
 import '../engine/pack.dart';
 import '../store/local_store.dart';
 import 'ask_tab.dart';
+import 'crisis_button.dart';
 import 'saved_tab.dart';
 import 'settings_tab.dart';
 import 'today_tab.dart';
@@ -120,13 +120,6 @@ class EngineController extends StateNotifier<EngineState> {
   }
 }
 
-Future<bool> openCrisisLine() {
-  return launchUrl(
-    Uri.parse(Crisis.telUri),
-    mode: LaunchMode.externalApplication,
-  );
-}
-
 class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key});
 
@@ -211,11 +204,7 @@ class LoadFailPage extends StatelessWidget {
             const SizedBox(height: 16),
             const Text(Crisis.copy),
             const SizedBox(height: 24),
-            TextButton(
-              key: const Key('crisis-988'),
-              onPressed: openCrisisLine,
-              child: const Text('988'),
-            ),
+            const CrisisButton(key: Key('crisis-988'), label: '988'),
           ],
         ),
       ),

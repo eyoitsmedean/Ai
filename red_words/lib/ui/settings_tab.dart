@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../brand.dart';
 import '../engine/crisis.dart';
 import '../engine/moment.dart';
+import 'crisis_button.dart';
 import 'shell.dart';
 
 class SettingsTab extends ConsumerWidget {
@@ -28,11 +29,7 @@ class SettingsTab extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         const Text(Crisis.copy),
-        TextButton(
-          key: const Key('crisis-988'),
-          onPressed: openCrisisLine,
-          child: const Text(Crisis.telUri),
-        ),
+        const CrisisButton(key: Key('crisis-988')),
         const SizedBox(height: 24),
         const Text(
           'World English Bible. Public domain. Gospels only — words Jesus spoke. Reflections are not Scripture.',
