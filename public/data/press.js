@@ -71,12 +71,21 @@
     blessing: {
       kicker: 'One person, not a feed',
       title: 'The blessing press',
-      note: 'A name, a saying, a card. One person. Nothing else is added.'
+      note: 'A name, a saying, a card. One person. Nothing else is added.',
+      seeds: [
+        { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.' },
+        { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
+        { verse: 'Matthew 28:20', quote: 'Lo, I am with you alway, even unto the end of the world.' },
+        { verse: 'John 16:33', quote: 'These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.' },
+        { verse: 'Luke 12:32', quote: 'Fear not, little flock; for it is your Father\u2019s good pleasure to give you the kingdom.' },
+        { verse: 'Matthew 5:9', quote: 'Blessed are the peacemakers: for they shall be called the children of God.' },
+        { verse: 'John 15:9', quote: 'As the Father hath loved me, so have I loved you: continue ye in my love.' },
+        { verse: 'Mark 5:34', quote: 'Daughter, thy faith hath made thee whole; go in peace, and be whole of thy plague.' }
+      ]
     },
     forty: {
-      kicker: 'Ash Wednesday 10 February 2027',
       title: 'Forty rooms',
-      note: 'Seven is the week you can start tonight. Forty is the longer story, ready before Lent. A missed day does not lock a door.'
+      note: 'Seven is the week you can start tonight. Forty is the longer story: in Lent the room of the day is set for you; before Lent, walk them at your own pace. Sundays rest. A missed day does not lock a door.'
     }
   };
 })();

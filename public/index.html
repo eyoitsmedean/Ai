@@ -898,8 +898,9 @@ textarea { font-family: var(--body); }
   font-family: var(--body);
   color: var(--ink-2);
   line-height: 1.6;
+  white-space: pre-line;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1440,9 +1441,88 @@ html.sitting .sit-sheet {
 }
 .forty-cell:hover, .forty-cell.on { border-color: var(--crimson); color: var(--crimson); }
 .forty-cell.done { background: color-mix(in srgb, var(--crimson) 10%, transparent); color: var(--crimson); }
+.forty-cell.today { box-shadow: inset 0 0 0 1px var(--gold); }
+.forty-tally {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  margin: -8px 0 22px;
+}
 @media (max-width: 640px) {
   .forty-grid { grid-template-columns: repeat(5, 1fr); }
 }
+.press-hint {
+  display: block;
+  background: none;
+  border: 0;
+  padding: 0 0 18px;
+  margin: -6px 0 6px;
+  text-align: left;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.press-hint:hover { color: var(--crimson); }
+.press-kept {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold);
+  margin: 0 0 16px;
+}
+.eyebrow-soft { color: var(--ink-4); letter-spacing: 0; text-transform: none; }
+.bless-line { margin: 6px 0 18px; }
+.press-plate {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.press-card-line {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: -8px 0 14px;
+  line-height: 1.5;
+}
+.press-proof-col { flex: 1 1 200px; min-width: 200px; }
+.press-proofs { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.proof {
+  background: none;
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+}
+.proof img {
+  width: 96px;
+  height: auto;
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow);
+  transition: transform .3s var(--ease);
+}
+.proof:hover img { transform: translateY(-2px); }
+.proof span { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-4); }
+.scripture-sit {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.scripture-sit:hover { color: var(--crimson); }
 .review-ribbon {
   display: none;
   margin: 0 0 28px;
@@ -1748,6 +1828,7 @@ html[data-review="1"] .review-ribbon { display: block; }
         <div class="actions" style="margin-bottom:22px">
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
         </div>
+        <button class="press-hint" id="press-hint" type="button" onclick="openPressForHour()" hidden></button>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
 
         <aside class="epigraph" id="epigraph" hidden>
@@ -1983,6 +2064,8 @@ html[data-review="1"] .review-ribbon { display: block; }
           </div>
           <div class="actions" style="margin-top:18px">
             <button class="cta cta-primary" type="button" onclick="sitPress('parable')">Sit with this leaf</button>
+            <button class="ghost" type="button" onclick="sharePress('parable')">Share card</button>
+            <button class="ghost" type="button" onclick="printPress('parable')">Print this leaf</button>
           </div>
         </section>
 
@@ -1993,8 +2076,9 @@ html[data-review="1"] .review-ribbon { display: block; }
           <p class="cite" id="examen-cite"></p>
           <p class="press-deck" id="examen-note"></p>
           <div class="examen-list" id="examen-list"></div>
+          <p class="press-kept" id="examen-kept" hidden></p>
           <div class="actions">
-            <button class="cta cta-primary" type="button" onclick="keepExamen()">Keep the evening</button>
+            <button class="cta cta-primary" type="button" id="examen-keep" onclick="keepExamen()">Keep the evening</button>
             <button class="ghost" type="button" onclick="sitPress('examen')">Sit with the peace</button>
           </div>
         </section>
@@ -2005,38 +2089,51 @@ html[data-review="1"] .review-ribbon { display: block; }
           <p class="press-deck" id="bless-note-copy"></p>
           <label class="eyebrow" for="press-bless-name">For</label>
           <input class="bless-name" id="press-bless-name" type="text" maxlength="48" placeholder="a name…" autocomplete="off" />
-          <div class="press-formats" id="press-formats">
+          <label class="eyebrow" for="press-bless-line">A line of your own <span class="eyebrow-soft">· optional</span></label>
+          <textarea class="sit-reply bless-line" id="press-bless-line" rows="1" maxlength="140" placeholder="Thinking of you this week…"></textarea>
+          <div class="press-formats" id="press-formats" role="group" aria-label="Card format">
             <button class="ghost on" type="button" data-format="feed" onclick="setBlessFormat('feed')">Feed 4:5</button>
             <button class="ghost" type="button" data-format="story" onclick="setBlessFormat('story')">Story 9:16</button>
             <button class="ghost" type="button" data-format="square" onclick="setBlessFormat('square')">Square</button>
           </div>
-          <div class="press-card" id="press-card" data-format="feed">
-            <div>
-              <div class="press-card-kicker">Red Letter</div>
-              <div class="press-card-for" id="press-card-for">For you</div>
-              <div class="press-card-quote" id="press-card-quote"></div>
+          <div class="press-plate">
+            <div class="press-card" id="press-card" data-format="feed">
+              <div>
+                <div class="press-card-kicker">Red Letter</div>
+                <div class="press-card-for" id="press-card-for">For you</div>
+                <div class="press-card-line" id="press-card-line" hidden></div>
+                <div class="press-card-quote" id="press-card-quote"></div>
+              </div>
+              <p class="cite" id="press-card-cite"></p>
             </div>
-            <p class="cite" id="press-card-cite"></p>
+            <div class="press-proof-col">
+              <p class="eyebrow">Proofs · tap one to save it</p>
+              <div class="press-proofs" id="press-proofs" aria-live="polite"></div>
+            </div>
           </div>
+          <p class="eyebrow" style="margin-top:6px">Choose the saying</p>
           <div id="press-bless-list"></div>
           <div class="actions" style="margin-top:18px">
-            <button class="cta cta-primary" type="button" onclick="sendPressBlessing('parchment')">Print the card</button>
-            <button class="ghost" type="button" onclick="sendPressBlessing('dawn')">Dawn</button>
-            <button class="ghost" type="button" onclick="sendPressBlessing('void')">Night</button>
+            <button class="cta cta-primary" type="button" onclick="sendPressBlessing('parchment')">Send the card</button>
+            <button class="ghost" type="button" onclick="sendPressBlessing('dawn')">Send · Dawn</button>
+            <button class="ghost" type="button" onclick="sendPressBlessing('void')">Send · Night</button>
           </div>
         </section>
 
         <section class="press-leaf" id="press-forty" data-leaf="forty">
-          <p class="eyebrow" id="forty-kicker">Ash Wednesday 10 February 2027</p>
+          <p class="eyebrow" id="forty-kicker">Ash Wednesday</p>
           <h2 class="parable-title">Forty rooms</h2>
           <p class="press-deck" id="forty-note"></p>
-          <div class="forty-grid" id="forty-grid"></div>
+          <div class="forty-grid" id="forty-grid" role="group" aria-label="Forty rooms"></div>
+          <p class="forty-tally" id="forty-tally"></p>
+          <p class="eyebrow" id="forty-room-title"></p>
           <p class="red-letter" id="forty-quote"></p>
           <p class="cite" id="forty-cite"></p>
           <p class="press-deck" id="forty-reflect"></p>
           <div class="actions">
             <button class="cta cta-primary" type="button" onclick="sitPress('forty')">Sit this room</button>
-            <button class="ghost" type="button" onclick="markFortyRoom()">Mark received</button>
+            <button class="ghost" type="button" id="forty-mark" onclick="markFortyRoom()">Mark received</button>
+            <button class="ghost" type="button" onclick="sharePress('forty')">Share card</button>
           </div>
         </section>
       </div>
@@ -2319,11 +2416,14 @@ let reviewMode = false;
 let forcedSeason = '';
 let currentSeason = { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' };
 let pressLeaf = 'reveal';
+let pressTouched = false;
+let pressShareKind = '';
 let parableIndex = 0;
 let breathTimer = null;
 let breathOn = false;
 let blessFormat = 'feed';
 let fortyIndex = 0;
+let fortyTouched = false;
 
 function civilDate(y, m, d) { return new Date(y, m - 1, d); }
 function ymdNum(date) {
@@ -2452,6 +2552,8 @@ function startNewReader() {
     }
     const season = String(q.get('season') || '').toLowerCase();
     if (/^(advent|christmas|lent|easter|ordinary)$/.test(season)) forcedSeason = season;
+    const leaf = String(q.get('leaf') || '').toLowerCase();
+    if (/^(reveal|breath|parable|examen|blessing|forty)$/.test(leaf)) { pressLeaf = leaf; pressTouched = true; }
   } catch (_) {}
   setWatch();
   applySeason();
@@ -2462,7 +2564,7 @@ function startNewReader() {
     document.getElementById('app').removeAttribute('aria-hidden');
     startApp();
     switchTab('press');
-    showPressLeaf('reveal');
+    showPressLeaf(pressLeaf);
     return;
   }
   if (!ls('rla-onboarded')) {
@@ -2744,6 +2846,7 @@ function updateDateUI() {
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('vespers-card').hidden = !evening;
   if (evening) paintVespers();
+  paintPressHint();
 }
 
 function paintThemeIndex() {
@@ -3204,8 +3307,8 @@ function keepSitReply() {
   saveJournalItem({
     id: key,
     key,
-    type: 'sit',
-    title: sitPayload.verse || 'A sitting',
+    type: sitPayload.journalType || 'sit',
+    title: sitPayload.journalTitle || sitPayload.verse || 'A sitting',
     body: (note ? note + '\n\n' : '') + sitPayload.quote,
     verse: sitPayload.verse,
   });
@@ -3213,6 +3316,7 @@ function keepSitReply() {
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
   if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
+  if (sitPayload.fortyIndex != null) markFortyRoom(sitPayload.fortyIndex, true);
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
@@ -3498,7 +3602,7 @@ function renderJournal() {
     list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a sitting, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with', examen: 'Examen', forty: 'Forty', parable: 'Parable' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -3572,6 +3676,8 @@ function sharePayload(type) {
   if (type === 'word' && dailyData) return { kicker: dailyData.word.theme, title: dailyData.word.title, quote: dailyData.word.passage, verse: dailyData.word.verse };
   if (type === 'enc' && currentEncData) return { kicker: currentEncTheme, title: currentEncData.headline, quote: currentEncData.passages?.[0]?.quote || currentEncData.opening, verse: currentEncData.passages?.[0]?.verse || '' };
   if (type === 'lib' && currentSaying) return { kicker: currentSaying.book, title: currentSaying.citation, quote: currentSaying.text, verse: currentSaying.citation };
+  if (type === 'press') return pressPayload(pressShareKind || pressLeaf);
+  if (type === 'sit' && sitPayload) return sitPayload;
   return null;
 }
 
@@ -3620,37 +3726,68 @@ function shareSize(format) {
 }
 
 function renderShareCard(payload, style, format) {
-  const { w, h } = shareSize(format || blessFormat || 'feed');
+  const fmt = format || blessFormat || 'feed';
+  const { w, h } = shareSize(fmt);
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
   const ctx = c.getContext('2d');
   const colors = paintShareGround(ctx, w, h, style || 'parchment');
+  const margin = 96;
+  const maxW = w - margin * 2;
   ctx.strokeStyle = colors.frame;
   ctx.strokeRect(48, 48, w - 96, h - 96);
   ctx.strokeRect(56, 56, w - 112, h - 112);
   ctx.fillStyle = colors.red;
   ctx.font = '500 28px "Instrument Sans", sans-serif';
   ctx.letterSpacing = '8px';
-  ctx.fillText('RED LETTER', 96, 160);
+  ctx.fillText('RED LETTER', margin, 160);
   ctx.letterSpacing = '0px';
   ctx.fillStyle = colors.mute;
   ctx.font = 'italic 28px Fraunces, serif';
-  ctx.fillText(payload.kicker || payload.theme || 'The Gospels', 96, 220);
-  ctx.fillStyle = colors.ink;
-  ctx.font = '500 54px Fraunces, serif';
-  let y = 320;
-  wrapLines(ctx, payload.title || payload.theme || '', w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 66; });
-  y += 24;
-  ctx.fillStyle = colors.red;
-  ctx.font = 'italic 42px Fraunces, serif';
-  wrapLines(ctx, payload.quote, w - 200).forEach(line => { ctx.fillText(line, 96, y); y += 56; });
-  y += 20;
+  ctx.fillText(payload.kicker || payload.theme || 'The Gospels', margin, 220);
+
+  // Measure the leaf first so long sayings shrink to fit and short ones sit where the eye rests.
+  const quote = String(payload.quote || '').replace(/^["“]|["”]$/g, '');
+  const blocks = [];
+  const title = payload.title || payload.theme || '';
+  const titleSize = payload.blessing ? 64 : 54;
+  if (title) {
+    ctx.font = (payload.blessing ? 'italic ' : '') + '500 ' + titleSize + 'px Fraunces, serif';
+    blocks.push({ font: ctx.font, color: colors.ink, lines: wrapLines(ctx, title, maxW), lh: titleSize * 1.22, gap: 26 });
+  }
+  if (payload.note) {
+    ctx.font = 'italic 30px "Source Serif 4", Georgia, serif';
+    blocks.push({ font: ctx.font, color: colors.ink, lines: wrapLines(ctx, payload.note, maxW), lh: 42, gap: 30 });
+  }
+  const bottomReserve = 250;
+  const top = fmt === 'square' ? 280 : 320;
+  const room = h - bottomReserve - top;
+  const used = () => blocks.reduce((n, b) => n + b.lines.length * b.lh + b.gap, 0);
+  let quoteSize = payload.blessing ? 46 : 42;
+  for (;;) {
+    ctx.font = 'italic ' + quoteSize + 'px Fraunces, serif';
+    const lines = wrapLines(ctx, '“' + quote + '”', maxW);
+    const height = lines.length * quoteSize * 1.34;
+    if (used() + height <= room || quoteSize <= 26) {
+      blocks.push({ font: ctx.font, color: colors.red, lines, lh: quoteSize * 1.34, gap: 24 });
+      break;
+    }
+    quoteSize -= 2;
+  }
+  // Short leaves float toward the optical centre; long ones start at the head margin.
+  let y = Math.max(top, (h - used()) / 2 - (fmt === 'story' ? 40 : 20));
+  blocks.forEach((b) => {
+    ctx.font = b.font;
+    ctx.fillStyle = b.color;
+    b.lines.forEach((line) => { ctx.fillText(line, margin, y); y += b.lh; });
+    y += b.gap;
+  });
   ctx.fillStyle = colors.mute;
   ctx.font = '500 24px "Instrument Sans", sans-serif';
-  ctx.fillText((payload.verse || '') + '   ·   KJV', 96, Math.min(y + 20, h - 140));
+  ctx.fillText((payload.verse || '') + '   ·   KJV', margin, Math.min(y, h - 150));
   ctx.fillStyle = colors.red;
   ctx.font = 'italic 26px Fraunces, serif';
-  ctx.fillText('The words He actually spoke.', 96, h - 110);
+  ctx.fillText(payload.blessing ? 'Sent to one person, not a feed.' : 'The words He actually spoke.', margin, h - 110);
   return new Promise(resolve => c.toBlob(resolve, 'image/png'));
 }
 
@@ -3662,11 +3799,9 @@ function blessingForName() {
 }
 
 async function shareItem(type, style) {
-  const payload = type === 'blessing' && blessingPick
-    ? { kicker: 'A blessing', title: blessingForName(), quote: blessingPick.quote, verse: blessingPick.verse, note: (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '' }
-    : sharePayload(type);
+  const payload = type === 'blessing' && blessingPick ? blessingPayload() : sharePayload(type);
   if (!payload) return;
-  const text = payload.title + '\n\n' + payload.quote + '\n— ' + payload.verse;
+  const text = payload.title + '\n\n' + (payload.note ? payload.note + '\n\n' : '') + payload.quote + '\n— ' + payload.verse;
   try {
     const blob = await renderShareCard(payload, style, blessFormat);
     const file = new File([blob], 'red-letter.png', { type: 'image/png' });
@@ -3795,7 +3930,8 @@ function formatAI(text) {
           }
           parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
             '</div><div class="scripture-quote">' + esc(q) + '</div>' +
-            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
+            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') +
+            '<button type="button" class="scripture-sit">Sit with this</button></div>');
           i = j; continue;
         }
       }
@@ -3880,8 +4016,10 @@ function paintQuire(items) {
   const last = getLastSit();
   if (last && last.catchword) words.push(last.catchword);
   (items || []).forEach((item) => {
-    if (item.type !== 'sit') return;
-    const noteLine = String(item.body || '').split('\n')[0];
+    if (['sit', 'parable', 'forty', 'examen'].indexOf(item.type) === -1) return;
+    const lines = String(item.body || '').split('\n');
+    const rest = lines.find((l) => /^Rest:/.test(l));
+    const noteLine = item.type === 'examen' ? String(rest || lines[0]).replace(/^\w+:\s*/, '') : lines[0];
     const word = firstCatchword(noteLine);
     if (word) words.push(word);
   });
@@ -4169,8 +4307,8 @@ async function sendBlessing(style) {
   showToast('Blessing ready to send');
 }
 
-function printSitting() {
-  const p = sitPayload || (dailyData && dailyData.word
+function printSitting(payload) {
+  const p = (payload && payload.quote ? payload : null) || sitPayload || (dailyData && dailyData.word
     ? { quote: dailyData.word.passage, verse: dailyData.word.verse }
     : null);
   if (!p) { showToast('Nothing to print yet'); return; }
@@ -4184,13 +4322,54 @@ function printSitting() {
 
 function pressData() { return window.RLA_PRESS || {}; }
 
+/* The Press follows the watch: breath at dawn, the sentence by day, the examen after vespers. */
+function pressLeafForHour(now) {
+  const h = (now || new Date()).getHours();
+  if (h >= 17 || h < 6) return 'examen';
+  if (h < 11) return 'breath';
+  return 'reveal';
+}
+function pressHourCopy(now) {
+  const leaf = pressLeafForHour(now);
+  if (leaf === 'examen') {
+    if (ls('rla-examen-' + todayStr()) === '1') return { leaf: 'journal', text: 'Examen kept tonight · read it in the journal' };
+    return { leaf, text: (isNightOffice() ? 'Compline' : 'Vespers') + ' in the Press · an evening examen, four short leaves' };
+  }
+  if (leaf === 'breath') return { leaf, text: 'Dawn in the Press · a breath prayer over Mark 4:39' };
+  return { leaf, text: 'The Press · a sentence arriving, one word at a time' };
+}
+function paintPressHint() {
+  const el = document.getElementById('press-hint');
+  if (!el) return;
+  const copy = pressHourCopy();
+  el.textContent = copy.text + ' →';
+  el.dataset.leaf = copy.leaf;
+  el.hidden = false;
+}
+function openPressForHour() {
+  const el = document.getElementById('press-hint');
+  const leaf = (el && el.dataset.leaf) || pressLeafForHour();
+  if (leaf === 'journal') { switchTab('journal'); return; }
+  switchTab('press');
+  showPressLeaf(leaf);
+}
+
 function showPressLeaf(id) {
+  const known = ['reveal', 'breath', 'parable', 'examen', 'blessing', 'forty'];
+  if (known.indexOf(id) === -1) id = 'reveal';
   pressLeaf = id;
+  pressTouched = true;
   document.querySelectorAll('.press-leaf').forEach((el) => el.classList.toggle('on', el.dataset.leaf === id));
-  document.querySelectorAll('#press-walk button').forEach((btn) => btn.classList.toggle('on', btn.dataset.leaf === id));
+  document.querySelectorAll('#press-walk button').forEach((btn) => {
+    const on = btn.dataset.leaf === id;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  if (id !== 'breath') stopBreath(false);
   if (id === 'reveal') replayReveal();
   if (id === 'breath') stopBreath(true);
   if (id === 'parable') paintParable();
+  if (id === 'examen') paintExamenState();
   if (id === 'blessing') paintPressBlessing();
   if (id === 'forty') paintForty();
 }
@@ -4207,12 +4386,14 @@ function paintPress() {
     ['blessing', 'Bless'],
     ['forty', 'Forty']
   ];
+  if (!reviewMode && !pressTouched) pressLeaf = pressLeafForHour();
   walk.innerHTML = leaves.map(([id, label]) =>
-    '<button type="button" role="tab" data-leaf="' + id + '"' + (id === pressLeaf ? ' class="on"' : '') + '>' + label + '</button>'
+    '<button type="button" role="tab" data-leaf="' + id + '" aria-selected="' + (id === pressLeaf ? 'true' : 'false') + '"' + (id === pressLeaf ? ' class="on"' : '') + '>' + label + '</button>'
   ).join('');
   walk.querySelectorAll('button').forEach((btn) => {
     btn.onclick = () => showPressLeaf(btn.dataset.leaf);
   });
+  document.querySelectorAll('.press-leaf').forEach((el) => el.classList.toggle('on', el.dataset.leaf === pressLeaf));
   const rev = data.reveal || {};
   setText('reveal-kicker', rev.kicker);
   setText('reveal-cite', (rev.verse || '') + '  ·  KJV');
@@ -4227,9 +4408,10 @@ function paintPress() {
   setText('examen-cite', (ex.verse || '') + '  ·  KJV');
   setText('examen-note', ex.note);
   paintExamen();
+  paintExamenState();
   setText('bless-note-copy', (data.blessing || {}).note);
-  setText('forty-kicker', (data.forty || {}).kicker);
   setText('forty-note', (data.forty || {}).note);
+  paintPressHint();
   if (pressLeaf === 'reveal') replayReveal();
   if (pressLeaf === 'parable') paintParable();
   if (pressLeaf === 'blessing') paintPressBlessing();
@@ -4326,11 +4508,24 @@ function paintExamen() {
   ).join('');
 }
 
+function paintExamenState() {
+  const kept = ls('rla-examen-' + todayStr()) === '1';
+  const el = document.getElementById('examen-kept');
+  if (el) {
+    el.hidden = !kept;
+    el.textContent = kept ? 'Kept tonight. The page is in your journal; you may write again and it will be kept once.' : '';
+  }
+  const btn = document.getElementById('examen-keep');
+  if (btn) btn.textContent = kept ? 'Keep it again' : 'Keep the evening';
+}
+
 function keepExamen() {
   const prompts = ((pressData().examen || {}).prompts) || [];
+  const answers = {};
   const lines = prompts.map((p) => {
-    const val = (document.getElementById('examen-' + p.id) || {}).value || '';
-    return val.trim() ? (p.label + ': ' + val.trim()) : '';
+    const val = ((document.getElementById('examen-' + p.id) || {}).value || '').trim();
+    if (val) answers[p.id] = val;
+    return val ? (p.label + ': ' + val) : '';
   }).filter(Boolean);
   if (!lines.length) { showToast('Write one leaf first'); return; }
   const ex = pressData().examen || {};
@@ -4338,10 +4533,16 @@ function keepExamen() {
     id: 'examen-' + todayStr(),
     key: 'examen-' + todayStr(),
     type: 'examen',
-    title: 'Evening examen',
+    title: (isNightOffice() ? 'Compline' : 'Vespers') + ' · Evening examen',
     body: lines.join('\n'),
     verse: ex.verse || 'John 14:27'
   });
+  lsSet('rla-examen-' + todayStr(), '1');
+  // The word the reader asked to be held through the night becomes tomorrow's catchword.
+  rememberSitting({ quote: ex.quote, verse: ex.verse, note: answers.rest || answers.release || lines[0], office: 'Examen' });
+  paintExamenState();
+  paintPressHint();
+  showToast('Kept the evening');
   openAmen({ quote: ex.quote, verse: ex.verse, holdMs: 3200 });
 }
 
@@ -4351,33 +4552,109 @@ function fortyState() {
   return { started: todayStr(), done: [] };
 }
 
+/* Lent is forty days without its Sundays: Ash Wednesday to Holy Saturday. */
+function ashWednesday(year) { return addDaysLocal(easterSunday(year), -46); }
+function lentInfo(now) {
+  const d = now || new Date();
+  const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  let year = today.getFullYear();
+  if (ymdNum(today) >= ymdNum(easterSunday(year))) year += 1;
+  const ash = ashWednesday(year);
+  const daysFromAsh = Math.round((today - ash) / 86400000);
+  if (daysFromAsh < 0) {
+    return { inLent: false, ash, daysUntil: -daysFromAsh, preview: false };
+  }
+  let day = 0;
+  for (let i = 0; i <= daysFromAsh; i += 1) {
+    if (addDaysLocal(ash, i).getDay() !== 0) day += 1;
+  }
+  return { inLent: true, ash, day: Math.min(day, 40), sunday: today.getDay() === 0, preview: false };
+}
+function fortyInfo() {
+  const info = lentInfo();
+  if (!info.inLent && forcedSeason === 'lent') {
+    return { inLent: true, ash: info.ash, day: 12, sunday: false, preview: true };
+  }
+  return info;
+}
+function longDate(d) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function fortyKicker(info) {
+  if (info.inLent) {
+    if (info.sunday) return 'Lent · Sunday · the rooms rest, and stay open';
+    return (info.preview ? 'Lent (preview) · ' : 'Lent · ') + 'Day ' + info.day + ' of Forty';
+  }
+  if (info.daysUntil === 1) return 'Ash Wednesday tomorrow · ' + longDate(info.ash);
+  return 'Ash Wednesday · ' + longDate(info.ash) + ' · in ' + info.daysUntil + ' days';
+}
+function fortyRooms() {
+  return (window.RLA_pathList && window.RLA_pathList('forty')) || window.RLA_FORTY || [];
+}
+
 function paintForty() {
-  const rooms = (window.RLA_pathList && window.RLA_pathList('forty')) || window.RLA_FORTY || [];
+  const rooms = fortyRooms();
   const host = document.getElementById('forty-grid');
   if (!host) return;
   const state = fortyState();
+  const info = fortyInfo();
+  if (!fortyTouched) {
+    if (info.inLent) fortyIndex = Math.max(0, Math.min(info.day - 1, rooms.length - 1));
+    else {
+      const next = rooms.findIndex((_, i) => state.done.indexOf(i) === -1);
+      fortyIndex = next < 0 ? 0 : next;
+    }
+  }
   fortyIndex = Math.max(0, Math.min(fortyIndex, Math.max(rooms.length - 1, 0)));
+  setText('forty-kicker', fortyKicker(info));
   host.innerHTML = rooms.map((room, i) => {
     const done = state.done.indexOf(i) !== -1;
-    return '<button type="button" class="forty-cell' + (i === fortyIndex ? ' on' : '') + (done ? ' done' : '') + '" data-i="' + i + '">' + (i + 1) + '</button>';
+    const todayRoom = info.inLent && i === info.day - 1;
+    const label = 'Room ' + (i + 1) + (room.title ? ' · ' + room.title : '') + (done ? ' · received' : '');
+    return '<button type="button" class="forty-cell' + (i === fortyIndex ? ' on' : '') + (done ? ' done' : '') + (todayRoom ? ' today' : '') + '" data-i="' + i + '" aria-label="' + esc(label) + '">' + (i + 1) + '</button>';
   }).join('');
   host.querySelectorAll('button').forEach((btn) => {
-    btn.onclick = () => { fortyIndex = Number(btn.dataset.i); paintForty(); };
+    btn.onclick = () => { fortyIndex = Number(btn.dataset.i); fortyTouched = true; paintForty(); };
   });
+  const received = state.done.filter((i) => i < rooms.length).length;
+  const tally = document.getElementById('forty-tally');
+  if (tally) {
+    tally.textContent = received
+      ? received + ' of ' + rooms.length + ' rooms received. A missed day does not lock a door.'
+      : rooms.length + ' rooms. Sit one, mark it received, and the door stays open behind you.';
+  }
   const room = rooms[fortyIndex];
   if (room) {
+    setText('forty-room-title', 'Room ' + (fortyIndex + 1) + ' · ' + (room.title || ''));
     setText('forty-quote', room.passage);
-    setText('forty-cite', (room.verse || '') + '  ·  ' + (room.title || '') + '  ·  KJV');
+    setText('forty-cite', (room.verse || '') + '  ·  KJV');
     setText('forty-reflect', room.reflection || '');
   }
+  const mark = document.getElementById('forty-mark');
+  if (mark) mark.textContent = state.done.indexOf(fortyIndex) !== -1 ? 'Received' : 'Mark received';
 }
 
-function markFortyRoom() {
+function markFortyRoom(index, quiet) {
+  const i = index == null ? fortyIndex : index;
+  const rooms = fortyRooms();
+  const room = rooms[i];
+  if (!room) return;
   const state = fortyState();
-  if (state.done.indexOf(fortyIndex) === -1) state.done.push(fortyIndex);
+  const already = state.done.indexOf(i) !== -1;
+  if (!already) state.done.push(i);
   lsSet('rla-forty', JSON.stringify(state));
+  if (!already) {
+    saveJournalItem({
+      id: 'forty-' + i,
+      key: 'forty-' + i,
+      type: 'forty',
+      title: 'Room ' + (i + 1) + ' · ' + (room.title || 'Forty'),
+      body: room.passage,
+      verse: room.verse
+    });
+  }
   paintForty();
-  showToast('Room received. A missed day stays open.');
+  if (!quiet) showToast(already ? 'Already received. The door stays open.' : 'Room received. A missed day stays open.');
 }
 
 function setBlessFormat(format) {
@@ -4387,11 +4664,16 @@ function setBlessFormat(format) {
   });
   const card = document.getElementById('press-card');
   if (card) card.dataset.format = blessFormat;
+  if (pressLeaf === 'blessing') scheduleProofs();
 }
 
 function paintPressBlessing() {
   const list = document.getElementById('press-bless-list');
-  blessingSeeds().then((picks) => {
+  blessingSeeds().then((library) => {
+    // Sayings that bless lead; the wider library follows.
+    const seeds = ((pressData().blessing || {}).seeds) || [];
+    const seen = new Set(seeds.map((s) => s.verse));
+    const picks = seeds.concat(library.filter((s) => !seen.has(s.verse))).slice(0, 24);
     if (!blessingPick) blessingPick = picks[0] || null;
     if (list) {
       list.innerHTML = picks.map((item, index) => {
@@ -4412,11 +4694,73 @@ function paintPressBlessing() {
   });
 }
 
+function pressBlessLine() {
+  const el = document.getElementById('press-bless-line');
+  return ((el && el.value) || '').trim();
+}
 function paintPressCard() {
   const name = (document.getElementById('press-bless-name') || {}).value || '';
+  const line = pressBlessLine();
   setText('press-card-for', name.trim() ? ('For ' + name.trim()) : 'For you');
+  setText('press-card-line', line);
+  const lineEl = document.getElementById('press-card-line');
+  if (lineEl) lineEl.hidden = !line;
   setText('press-card-quote', blessingPick ? ('“' + blessingPick.quote + '”') : '');
   setText('press-card-cite', blessingPick ? blessingPick.verse + '  ·  KJV' : '');
+  scheduleProofs();
+}
+
+/* Proofs: the three real PNGs the reader would send, pulled as they type. */
+let proofTimer = null;
+let proofUrls = [];
+function scheduleProofs() {
+  clearTimeout(proofTimer);
+  proofTimer = setTimeout(paintProofs, 220);
+}
+async function paintProofs() {
+  const host = document.getElementById('press-proofs');
+  if (!host || !blessingPick) return;
+  const payload = blessingPayload();
+  const styles = [['parchment', 'Parchment'], ['dawn', 'Dawn'], ['void', 'Night']];
+  const size = shareSize(blessFormat);
+  let blobs;
+  try {
+    blobs = await Promise.all(styles.map(([style]) => renderShareCard(payload, style, blessFormat)));
+  } catch (_) {
+    return;
+  }
+  proofUrls.forEach((u) => { try { URL.revokeObjectURL(u); } catch (_) {} });
+  proofUrls = blobs.map((b) => URL.createObjectURL(b));
+  host.innerHTML = styles.map(([style, label], i) =>
+    '<button type="button" class="proof" data-style="' + style + '" aria-label="Save the ' + label + ' card">' +
+      '<img src="' + proofUrls[i] + '" alt="' + label + ' proof · ' + esc(payload.title) + '" width="' + size.w + '" height="' + size.h + '" />' +
+      '<span>' + label + ' · ' + size.w + '×' + size.h + '</span>' +
+    '</button>'
+  ).join('');
+  host.querySelectorAll('.proof').forEach((btn, i) => {
+    btn.onclick = () => downloadBlob(blobs[i], 'red-letter-blessing-' + styles[i][0] + '.png', 'Card saved · ' + styles[i][1]);
+  });
+}
+function downloadBlob(blob, name, toast) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  if (toast) showToast(toast);
+}
+
+function blessingPayload() {
+  const sheetNote = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
+  return {
+    kicker: 'A blessing',
+    title: blessingForName(),
+    quote: blessingPick ? blessingPick.quote : '',
+    verse: blessingPick ? blessingPick.verse : '',
+    note: pressBlessLine() || sheetNote,
+    blessing: true
+  };
 }
 
 async function sendPressBlessing(style) {
@@ -4428,27 +4772,42 @@ async function sendPressBlessing(style) {
   showToast('Card ready — one person, not a feed');
 }
 
-function sitPress(kind) {
+function pressPayload(kind) {
   const data = pressData();
-  if (kind === 'reveal') {
-    return sitWith({ kicker: 'Reveal', title: 'Peace', quote: data.reveal.quote, verse: data.reveal.verse, reflection: data.reveal.note });
+  kind = kind || pressLeaf;
+  if (kind === 'reveal' && data.reveal) {
+    return { kicker: 'A sentence arriving', title: 'Peace', quote: data.reveal.quote, verse: data.reveal.verse, reflection: data.reveal.note, journalType: 'sit' };
   }
-  if (kind === 'breath') {
-    return sitWith({ kicker: 'Breath', title: 'Peace, be still', quote: data.breath.quote, verse: data.breath.verse, reflection: data.breath.note });
+  if (kind === 'breath' && data.breath) {
+    return { kicker: 'Breath prayer', title: 'Peace, be still', quote: data.breath.quote, verse: data.breath.verse, reflection: data.breath.note, journalType: 'sit' };
   }
-  if (kind === 'parable') {
-    const leaf = (data.parable.leaves || [])[parableIndex] || data.parable.leaves[0];
-    return sitWith({ kicker: 'Luke 15', title: leaf.title, quote: leaf.quote, verse: leaf.verse, reflection: leaf.note });
+  if (kind === 'parable' && data.parable) {
+    const leaves = data.parable.leaves || [];
+    const leaf = leaves[parableIndex] || leaves[0];
+    if (!leaf) return null;
+    return { kicker: 'The lost son · ' + leaf.title, title: leaf.title, quote: leaf.quote, verse: leaf.verse, reflection: leaf.note, journalType: 'parable', journalTitle: 'The lost son · ' + leaf.title };
   }
-  if (kind === 'examen') {
-    return sitWith({ kicker: 'Examen', title: 'Peace', quote: data.examen.quote, verse: data.examen.verse, reflection: data.examen.note });
+  if (kind === 'examen' && data.examen) {
+    return { kicker: 'Examen', title: 'Peace', quote: data.examen.quote, verse: data.examen.verse, reflection: data.examen.note, journalType: 'sit' };
   }
   if (kind === 'forty') {
-    const rooms = (window.RLA_pathList && window.RLA_pathList('forty')) || [];
-    const room = rooms[fortyIndex];
-    if (!room) return;
-    return sitWith({ kicker: 'Forty', title: room.title, quote: room.passage, verse: room.verse, reflection: room.reflection });
+    const room = fortyRooms()[fortyIndex];
+    if (!room) return null;
+    return { kicker: 'Forty · Room ' + (fortyIndex + 1), title: room.title, quote: room.passage, verse: room.verse, reflection: room.reflection, journalType: 'forty', journalTitle: 'Room ' + (fortyIndex + 1) + ' · ' + (room.title || 'Forty'), fortyIndex };
   }
+  return null;
+}
+function sitPress(kind) {
+  const payload = pressPayload(kind);
+  if (payload) sitWith(payload);
+}
+function sharePress(kind) {
+  pressShareKind = kind || pressLeaf;
+  openShareSheet('press');
+}
+function printPress(kind) {
+  const payload = pressPayload(kind);
+  if (payload) printSitting(payload);
 }
 
 const COMMANDS = [
@@ -4457,7 +4816,10 @@ const COMMANDS = [
   { label: 'Ask the Advisor', hint: 'Counsel', run: () => switchTab('advisor') },
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Open the Press', hint: 'Atelier', run: () => switchTab('press') },
+  { label: 'This hour in the Press', hint: 'Office', run: () => openPressForHour() },
+  { label: 'Word reveal', hint: 'Press', run: () => { switchTab('press'); showPressLeaf('reveal'); } },
   { label: 'Breath prayer', hint: 'Press', run: () => { switchTab('press'); showPressLeaf('breath'); } },
+  { label: 'Bless someone by name', hint: 'Press', run: () => { switchTab('press'); showPressLeaf('blessing'); setTimeout(() => document.getElementById('press-bless-name')?.focus(), 80); } },
   { label: 'The lost son', hint: 'Parable', run: () => { switchTab('press'); showPressLeaf('parable'); } },
   { label: 'Evening examen', hint: 'Compline', run: () => { switchTab('press'); showPressLeaf('examen'); } },
   { label: 'Forty rooms', hint: 'Lent', run: () => { switchTab('press'); showPressLeaf('forty'); } },
@@ -4612,6 +4974,21 @@ function bindRituals() {
   if (blessFor) blessFor.addEventListener('input', updateBlessingPreview);
   const pressName = document.getElementById('press-bless-name');
   if (pressName) pressName.addEventListener('input', paintPressCard);
+  const pressLine = document.getElementById('press-bless-line');
+  if (pressLine) pressLine.addEventListener('input', paintPressCard);
+  const chat = document.getElementById('chat-messages');
+  if (chat) {
+    chat.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('.scripture-sit');
+      if (!btn) return;
+      const block = btn.closest('.scripture-block');
+      const verse = (block.querySelector('.scripture-verse') || {}).textContent || '';
+      const quote = (block.querySelector('.scripture-quote') || {}).textContent || '';
+      const ctx = (block.querySelector('.scripture-ctx') || {}).textContent || '';
+      if (!quote) return;
+      sitWith({ kicker: 'From a letter', title: verse, quote, verse, reflection: ctx || 'The Advisor set this on the page. Sit with the sentence, not the reply.' });
+    });
+  }
   const amen = document.getElementById('amen');
   if (amen) amen.addEventListener('click', closeAmen);
   const cmdk = document.getElementById('cmdk');
