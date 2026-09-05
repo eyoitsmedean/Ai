@@ -303,8 +303,9 @@ app.post('/api/chat', async (req, res) => {
   res.setHeader('X-Accel-Buffering', 'no');
   if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
+  const gone = () => res.writableEnded || res.destroyed;
   const write = (payload) => {
-    res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    if (!gone()) res.write(`data: ${JSON.stringify(payload)}\n\n`);
   };
 
   const streamText = (text) => {
@@ -316,17 +317,12 @@ app.post('/api/chat', async (req, res) => {
 
   const crisis = looksLikeCrisis(last.content);
   const finish = (body) => {
+    if (gone()) return;
     const verified = verifyAndSubstitute(body);
     streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
-
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) {}
-    }
-  });
 
   if (!client) {
     return finish(FALLBACK_LETTER);
