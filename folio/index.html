@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Ninety Days · One Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #F4EFE4;
+      --folio: #FBF7EE;
+      --ink: #1B1610;
+      --ink-2: #4A4034;
+      --ink-3: #7A6E5E;
+      --rule: rgba(27, 22, 16, 0.10);
+      --crimson: #8F1D1D;
+      --gold: #8A6A28;
+      --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      --body: 'Source Serif 4', 'Palatino Linotype', Palatino, serif;
+      --ui: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      --rail: 248px;
+      --mast: 56px;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    html, body { min-height: 100%; background: var(--paper); color: var(--ink); }
+    body {
+      font-family: var(--body);
+      line-height: 1.6;
+      overflow: hidden;
+    }
+    .grain {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: .045;
+      z-index: 8;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { cursor: pointer; background: none; border: 0; }
+    a { color: var(--crimson); }
+
+    .rail {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--rail);
+      padding: 28px 22px 32px;
+      border-right: 1px solid var(--rule);
+      background: var(--paper);
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mark {
+      width: 42px; height: 42px;
+      border: 1px solid var(--crimson);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: var(--display);
+      font-style: italic;
+      color: var(--crimson);
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    .rail-kicker {
+      font-family: var(--ui);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-size: 10px;
+      color: var(--ink-3);
+      margin-bottom: 18px;
+    }
+    .rail button.nav {
+      text-align: left;
+      padding: 7px 0;
+      font-family: var(--ui);
+      font-size: 13px;
+      color: var(--ink-2);
+      border-bottom: 1px solid transparent;
+    }
+    .rail button.nav em { font-family: var(--display); font-style: italic; font-weight: 500; color: var(--ink); }
+    .rail button.nav.on { color: var(--crimson); }
+    .rail button.nav.paper { opacity: .38; }
+    .rail-clock {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+    .rail-clock strong {
+      display: block;
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: 22px;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      margin-bottom: 4px;
+    }
+
+    .mast {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--mast);
+      padding: 0 18px;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      z-index: 5;
+    }
+    .mast-name { font-family: var(--display); font-size: 18px; }
+    .mast-name em { font-style: italic; color: var(--crimson); }
+
+    .stage {
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: var(--rail);
+      overflow: auto;
+      padding: 56px 56px 80px;
+    }
+    .leaf {
+      display: none;
+      max-width: 62ch;
+      margin: 0 auto;
+      animation: turn .42s var(--ease);
+    }
+    .leaf.on { display: block; }
+    @keyframes turn {
+      from { opacity: 0; transform: translateY(10px) rotate(.15deg); }
+      to { opacity: 1; transform: none; }
+    }
+    .eyebrow {
+      font-family: var(--ui);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--ink-3);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: clamp(42px, 7vw, 72px);
+      letter-spacing: -.03em;
+      line-height: .95;
+      margin-bottom: 18px;
+    }
+    h1 em { font-style: italic; color: var(--crimson); }
+    h2 {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: 28px;
+      letter-spacing: -.02em;
+      margin: 28px 0 10px;
+    }
+    .deck {
+      font-style: italic;
+      font-size: 20px;
+      color: var(--ink-2);
+      max-width: 34ch;
+      margin-bottom: 22px;
+    }
+    .lede { color: var(--ink-2); margin-bottom: 20px; }
+    .cite {
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--ink-3);
+      margin: 8px 0 24px;
+    }
+    .quote {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(22px, 3.4vw, 30px);
+      color: var(--crimson);
+      line-height: 1.35;
+      max-width: 22ch;
+      margin: 8px 0 10px;
+    }
+    .callout {
+      border-left: 2px solid var(--crimson);
+      padding: 10px 0 10px 16px;
+      margin: 18px 0 24px;
+      color: var(--ink-2);
+    }
+    .callout strong { color: var(--crimson); font-weight: 500; }
+    .law {
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: 8px 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--rule);
+      font-size: 16px;
+    }
+    .law:last-child { border-bottom: 1px solid var(--rule); }
+    .law b {
+      font-family: var(--display);
+      font-style: italic;
+      color: var(--crimson);
+      font-weight: 500;
+    }
+    .index {
+      margin: 8px 0 28px;
+    }
+    .index-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 2.4rem 1fr auto;
+      gap: 12px;
+      align-items: baseline;
+      padding: 14px 0;
+      border-top: 1px solid var(--rule);
+      text-align: left;
+    }
+    .index-row:last-child { border-bottom: 1px solid var(--rule); }
+    .index-num { font-family: var(--display); font-style: italic; color: var(--crimson); }
+    .index-name { font-family: var(--display); font-size: 22px; letter-spacing: -.02em; }
+    .index-hint { font-size: 13px; color: var(--ink-3); max-width: 22ch; text-align: right; }
+    .money {
+      background: var(--folio);
+      border: 1px solid var(--rule);
+      padding: 16px 18px;
+      margin: 16px 0 22px;
+    }
+    .money .fig {
+      font-family: var(--display);
+      font-size: 28px;
+      letter-spacing: -.02em;
+    }
+    .money p { color: var(--ink-2); font-size: 15px; margin-top: 6px; }
+    .weeks { margin: 8px 0 22px; }
+    .week {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--rule);
+      font-size: 15px;
+    }
+    .week:last-child { border-bottom: 1px solid var(--rule); }
+    .week time {
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--crimson);
+    }
+    .slip {
+      background: var(--folio);
+      border: 1px dashed rgba(143, 29, 29, .35);
+      padding: 16px 18px;
+      margin: 16px 0;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+    .checks { margin: 10px 0 20px; }
+    .checks label {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-top: 1px solid var(--rule);
+      font-size: 15px;
+    }
+    .checks label:last-child { border-bottom: 1px solid var(--rule); }
+    .gates { margin: 12px 0 20px; }
+    .gate {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .gate:last-child { border-bottom: 1px solid var(--rule); }
+    .seg { display: flex; gap: 4px; }
+    .seg button {
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 8px;
+      border: 1px solid var(--rule);
+      color: var(--ink-3);
+    }
+    .seg button.on { border-color: var(--crimson); color: var(--crimson); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 8px; }
+    .cta, .ghost {
+      font-family: var(--ui);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      padding: 12px 16px;
+    }
+    .cta { background: var(--crimson); color: #FBF7EE; }
+    .ghost { border-bottom: 1px solid rgba(143,29,29,.4); color: var(--crimson); padding-left: 0; padding-right: 0; }
+    .catch {
+      margin-top: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--ink-3);
+      font-size: 13px;
+      font-style: italic;
+    }
+    .catch button { color: var(--crimson); font-style: italic; }
+    .humans, .receipt-field, .note {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      background: transparent;
+      padding: 8px 2px;
+      margin: 6px 0 12px;
+      resize: vertical;
+    }
+    .humans { min-height: 180px; }
+    .note { min-height: 72px; }
+    .stamp {
+      display: none;
+      font-family: var(--ui);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    body.chosen-lamp #leaf-room .stamp,
+    body.chosen-lamp #leaf-handoff .stamp,
+    body.chosen-lamp #leaf-storefront .stamp,
+    body.chosen-lamp #leaf-redletter .stamp,
+    body.chosen-room #leaf-lamp .stamp,
+    body.chosen-room #leaf-handoff .stamp,
+    body.chosen-room #leaf-storefront .stamp,
+    body.chosen-room #leaf-redletter .stamp,
+    body.chosen-handoff #leaf-lamp .stamp,
+    body.chosen-handoff #leaf-room .stamp,
+    body.chosen-handoff #leaf-storefront .stamp,
+    body.chosen-handoff #leaf-redletter .stamp,
+    body.chosen-storefront #leaf-lamp .stamp,
+    body.chosen-storefront #leaf-room .stamp,
+    body.chosen-storefront #leaf-handoff .stamp,
+    body.chosen-storefront #leaf-redletter .stamp,
+    body.chosen-redletter #leaf-lamp .stamp,
+    body.chosen-redletter #leaf-room .stamp,
+    body.chosen-redletter #leaf-handoff .stamp,
+    body.chosen-redletter #leaf-storefront .stamp { display: block; }
+
+    .picker-step { display: none; }
+    .picker-step.on { display: block; }
+    .choice-pill {
+      display: inline-block;
+      border: 1px solid var(--crimson);
+      color: var(--crimson);
+      padding: 4px 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-family: var(--ui);
+      font-size: 11px;
+      margin-bottom: 12px;
+    }
+    .rest-screen {
+      padding: 8px 0 4px;
+    }
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--ink);
+      color: var(--folio);
+      padding: 10px 14px;
+      font-family: var(--ui);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .28s var(--ease);
+      z-index: 9;
+    }
+    #toast.on { opacity: 1; transform: translateX(-50%); }
+
+    @media (max-width: 860px) {
+      .rail { display: none; }
+      .mast { display: flex; }
+      .stage { left: 0; top: var(--mast); padding: 28px 20px 96px; }
+      .index-row { grid-template-columns: 2rem 1fr; }
+      .index-hint { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .leaf { animation: none; }
+    }
+    @media print {
+      .grain, .rail, .mast, .actions, .catch, #toast, .seg { display: none !important; }
+      body { overflow: auto; background: white; }
+      .stage { position: static; padding: 0; left: 0; }
+      .leaf { display: none !important; animation: none; max-width: none; }
+      body.print-all .leaf, body.print-one .leaf.print-me { display: block !important; page-break-after: always; }
+      .slip { border-style: solid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <a class="sr" href="#stage">Skip to the page</a>
+
+  <aside class="rail" aria-label="Signatures">
+    <div class="mark" aria-hidden="true">90</div>
+    <div class="rail-kicker">One plan</div>
+    <button class="nav on" data-go="title" type="button">Title</button>
+    <button class="nav" data-go="window" type="button">The <em>window</em></button>
+    <button class="nav" data-go="laws" type="button">Seven <em>laws</em></button>
+    <button class="nav" data-go="five" type="button">The <em>five</em></button>
+    <button class="nav" data-go="picker" type="button">Twenty <em>minutes</em></button>
+    <button class="nav" data-go="lamp" type="button">I · The <em>Lamp</em></button>
+    <button class="nav" data-go="room" type="button">II · The <em>Room</em></button>
+    <button class="nav" data-go="handoff" type="button">III · The <em>Handoff</em></button>
+    <button class="nav" data-go="storefront" type="button">IV · The <em>Storefront</em></button>
+    <button class="nav" data-go="redletter" type="button">V · The <em>Folio</em></button>
+    <button class="nav" data-go="receipt" type="button">Choice <em>receipt</em></button>
+    <button class="nav" data-go="sunday" type="button">Sunday <em>close</em></button>
+    <button class="nav" data-go="parked" type="button">Parked</button>
+    <button class="nav" data-go="colophon" type="button">Colophon</button>
+    <div class="rail-clock">
+      <strong id="days-left">—</strong>
+      <span id="clock-line">4 Sep → 3 Dec · Advent 29 Nov</span>
+    </div>
+  </aside>
+
+  <header class="mast">
+    <div class="mast-name">Ninety <em>Days</em></div>
+    <button class="ghost" type="button" onclick="go('five')">The five</button>
+  </header>
+
+  <main class="stage" id="stage">
+
+    <article class="leaf on" id="leaf-title" data-catch="Window">
+      <p class="eyebrow">Decision pack · not a sprint</p>
+      <h1>Ninety <em>Days</em></h1>
+      <p class="deck">One plan. Eight hours a week. Payment beats praise.</p>
+      <p class="quote">Opening this page authorizes nothing.</p>
+      <p class="cite">No application · no outreach · no purchase · no publish</p>
+      <p class="lede">This is the paper folio the hub promised: five executable bets collapsed onto leaves you can turn, choose, copy, and print. It does not replace <em>This week</em>. M4 remains the only DeanOS sprint until you write a new receipt.</p>
+      <div class="callout">
+        <strong>Window first.</strong> The household window is still unconfirmed. If it is not Confirmed, rest is the right screen. Newborn Mode still beats every dollar figure in this book.
+      </div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="go('window')">Turn the page</button>
+        <button class="ghost" type="button" onclick="go('picker')">Begin twenty minutes</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-window" data-catch="Laws">
+      <p class="eyebrow">Home still wins</p>
+      <h1>The <em>window</em></h1>
+      <p class="deck">If the house is not confirmed, close the book.</p>
+      <p class="lede">Protection lasts at least thirty days after birth, and longer if recovery, home load, or sleep need it. Dean reopened consideration of optional capacity. That authorizes internal preparation — not a household obligation, and not an external commitment.</p>
+      <div class="callout">
+        <strong>Record only one word.</strong> Confirmed / Not confirmed / Not needed. “Not needed” is valid only when the block cannot shift shared care, bedtime, meals, logistics, or recovery. Uncertainty is a no.
+      </div>
+      <p class="lede">Tuesday 8 September: Growth Academy Week 2 is the job, not this folio. Brooks turns three in October — that week is household, not hustle.</p>
+      <div class="gates" id="window-gates">
+        <div class="gate">
+          <span>Weekly mutually workable window</span>
+          <div class="seg" data-key="window">
+            <button type="button" data-val="confirmed">Confirmed</button>
+            <button type="button" data-val="not">Not confirmed</button>
+            <button type="button" data-val="unneeded">Not needed</button>
+          </div>
+        </div>
+      </div>
+      <div class="rest-screen" id="window-rest" hidden>
+        <p class="quote">Rest is the right screen.</p>
+        <p class="lede">You can still read the five as paper. You cannot choose a plan, copy an ask, or authorize a first hour until the window is Confirmed or genuinely Not needed.</p>
+      </div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="go('laws')">The seven laws</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-laws" data-catch="Five">
+      <p class="eyebrow">How this book is bound</p>
+      <h1>Seven <em>laws</em></h1>
+      <div class="law"><b>I</b><span><strong>One.</strong> The other four stay paper.</span></div>
+      <div class="law"><b>II</b><span><strong>Home.</strong> Unconfirmed window → only rest or required work.</span></div>
+      <div class="law"><b>III</b><span><strong>Clean room.</strong> No employer graph, language, data, devices, or time.</span></div>
+      <div class="law"><b>IV</b><span><strong>Payment.</strong> Compliments are not demand.</span></div>
+      <div class="law"><b>V</b><span><strong>Eight hours</strong> all-in, two evenings max.</span></div>
+      <div class="law"><b>VI</b><span><strong>Floor ~$100/hr</strong> after the first paid unit — or reprice, rescope, kill. Storefront may sit below the floor as cash and evidence only.</span></div>
+      <div class="law"><b>VII</b><span><strong>Stop is a finish.</strong> Unknown is allowed.</span></div>
+      <p class="lede" style="margin-top:22px">Default grocery pick: <em>Lamp</em>. Default if clearance blocks Lamp: <em>Room</em>. Default owned-IP pick: <em>Folio</em> — and admit December may pay nothing.</p>
+    </article>
+
+    <article class="leaf" id="leaf-five" data-catch="Picker">
+      <p class="eyebrow">Five bets · not a sixth OS</p>
+      <h1>The <em>five</em></h1>
+      <p class="lede">You already designed five 90-day paths. This pack collapses them into five executable bets a new dad can actually run, with kill rules and copy-paste asks.</p>
+      <div class="index">
+        <button class="index-row" type="button" onclick="go('lamp')"><span class="index-num">I</span><span class="index-name">The Lamp</span><span class="index-hint">$3,200–$7,680 if accepted</span></button>
+        <button class="index-row" type="button" onclick="go('room')"><span class="index-num">II</span><span class="index-name">The Room</span><span class="index-hint">$349 rehearsal</span></button>
+        <button class="index-row" type="button" onclick="go('handoff')"><span class="index-num">III</span><span class="index-name">The Handoff</span><span class="index-hint">$1,500 beta</span></button>
+        <button class="index-row" type="button" onclick="go('storefront')"><span class="index-num">IV</span><span class="index-name">The Storefront</span><span class="index-hint">$295 same-week cash</span></button>
+        <button class="index-row" type="button" onclick="go('redletter')"><span class="index-num">V</span><span class="index-name">The Folio</span><span class="index-hint">Advent URL · honest $0</span></button>
+      </div>
+      <p class="lede">Clock: 4 September 2026 → 3 December 2026. Advent begins 29 November. Ash Wednesday 2027 is 10 February — Lent is next quarter’s payday, not this one’s.</p>
+      <div class="actions">
+        <button class="cta" type="button" onclick="go('picker')">Pick in twenty minutes</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-picker" data-catch="Lamp">
+      <p class="eyebrow">A ritual, not a spreadsheet</p>
+      <h1>Twenty <em>minutes</em></h1>
+      <p class="deck" id="picker-clock">A sitting to name one plan — or none tonight.</p>
+
+      <div class="picker-step on" data-step="0">
+        <p class="choice-pill">0–3 minutes</p>
+        <h2>Is the household window Confirmed?</h2>
+        <p class="lede">If no or unknown, close. Newborn Mode still beats every figure in this book.</p>
+        <div class="actions">
+          <button class="cta" type="button" onclick="pickerAnswer('window','confirmed')">Confirmed — continue</button>
+          <button class="ghost" type="button" onclick="pickerAnswer('window','not')">Not confirmed</button>
+          <button class="ghost" type="button" onclick="pickerAnswer('window','unneeded')">Not needed</button>
+        </div>
+      </div>
+
+      <div class="picker-step" data-step="rest">
+        <p class="quote">Close the book.</p>
+        <p class="lede">You did the honest thing. The five stay paper. Required work and the house still win. None tonight is a complete choice.</p>
+        <div class="actions">
+          <button class="cta" type="button" onclick="choose('none')">Write “None tonight”</button>
+          <button class="ghost" type="button" onclick="go('sunday')">Sunday close</button>
+        </div>
+      </div>
+
+      <div class="picker-step" data-step="1">
+        <p class="choice-pill">3–8 minutes</p>
+        <h2>The Lamp’s five truth gates</h2>
+        <p class="lede">L&amp;D years · Sales/GTM years · slide fluency · outside-work/IP · monitoring consent. Any Blocked answer kills this plan. Do not apply “to see.”</p>
+        <div class="gates" id="lamp-gates"></div>
+        <div class="actions">
+          <button class="cta" type="button" onclick="pickerLamp()">If all Clear → choose The Lamp</button>
+          <button class="ghost" type="button" onclick="pickerNext(2)">A gate is blocked or unknown — continue</button>
+        </div>
+      </div>
+
+      <div class="picker-step" data-step="2">
+        <p class="choice-pill">8–12 minutes</p>
+        <h2>Ten humans for $349 — or a Maps walk?</h2>
+        <p class="lede">Can you name ten people outside the employer graph? That is The Room. Would you rather walk public booking paths on a phone? That is The Storefront.</p>
+        <div class="actions">
+          <button class="cta" type="button" onclick="choose('room')">Ten humans — The Room</button>
+          <button class="ghost" type="button" onclick="choose('storefront')">Maps walks — The Storefront</button>
+          <button class="ghost" type="button" onclick="pickerNext(3)">Neither — continue</button>
+        </div>
+      </div>
+
+      <div class="picker-step" data-step="3">
+        <p class="choice-pill">12–16 minutes</p>
+        <h2>Twenty asks and a 15-day delivery?</h2>
+        <p class="lede">Only then The Handoff. Do not start it while The Lamp is still Pursue.</p>
+        <div class="actions">
+          <button class="cta" type="button" onclick="choose('handoff')">Yes — The Handoff</button>
+          <button class="ghost" type="button" onclick="pickerNext(4)">No — continue</button>
+        </div>
+      </div>
+
+      <div class="picker-step" data-step="4">
+        <p class="choice-pill">16–20 minutes</p>
+        <h2>Accept $0 cash for Advent?</h2>
+        <p class="lede">Only then The Folio — Red Letter. Owned IP and craft. December may pay nothing. If you need grocery money, this is the wrong leaf.</p>
+        <div class="actions">
+          <button class="cta" type="button" onclick="choose('redletter')">Yes — The Folio</button>
+          <button class="ghost" type="button" onclick="choose('none')">None tonight</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-lamp" data-catch="Room">
+      <p class="stamp">The other four stay paper</p>
+      <p class="eyebrow">Plan I · fastest cash · no clients</p>
+      <h1>The <em>Lamp</em></h1>
+      <p class="deck">Paid human evaluation of AI-written L&amp;D and GTM artifacts. Selection, hours, and net pay are unproven.</p>
+      <div class="money">
+        <div class="fig">$3,200–$7,680 gross</div>
+        <p>If accepted and supplied 5–8 hours weekly for about eight weeks. Studio base: $4,000 / 40 hours. Tax, idle weeks, and rejection are not in that number. Cap: eight hours a week.</p>
+      </div>
+      <h2>When to pick it</h2>
+      <p class="lede">You want grocery money and the five truth gates are Clear. Platforms pay people who already train humans to score model output against a rubric. Agents may research. Dean alone applies, interviews, and evaluates.</p>
+      <h2>First sixty minutes</h2>
+      <div class="checks">
+        <label><input type="checkbox" data-check="lamp-1" /> Open the M4 runbook. Fill the five truth boxes. Unknown is allowed.</label>
+        <label><input type="checkbox" data-check="lamp-2" /> Any Blocked answer → this plan is dead. Do not apply “to see.”</label>
+        <label><input type="checkbox" data-check="lamp-3" /> If Pursue: save the LLM usage policy. Stop for the night.</label>
+      </div>
+      <h2>Twelve weeks</h2>
+      <div class="weeks">
+        <div class="week"><time>Wk 1 · 4–10 Sep</time><span>Truth decisions only. Twenty minutes. Use the launcher.</span></div>
+        <div class="week"><time>Wk 2 · 11–17 Sep</time><span>Apply in your own words if Pursue and clearance. Availability: up to eight hours, self-scheduled.</span></div>
+        <div class="week"><time>Wk 3 · 18–24 Sep</time><span>Interview or trial, human-authored. Personal device.</span></div>
+        <div class="week"><time>Wk 4 · 25 Sep–1 Oct</time><span>Finish trial. Re-read the policy the morning of every task.</span></div>
+        <div class="week"><time>Wk 5 · 2–8 Oct</time><span>First billed hours, or Park if supply is zero.</span></div>
+        <div class="week"><time>Wk 6–7</time><span>Bill. Track all-in hours including admin. Stop if sleep or home load fails.</span></div>
+        <div class="week"><time>Wk 8 · 23–29 Oct</time><span>Bill. Brooks turns three this month — protect the household.</span></div>
+        <div class="week"><time>Wk 9–11</time><span>Bill or Close if hours exceed eight.</span></div>
+        <div class="week"><time>Wk 12 · 20 Nov–3 Dec</time><span>Close the quarter. Count gross vs hours. Continue, Park, or Close.</span></div>
+      </div>
+      <h2>The letter · availability</h2>
+      <div class="slip" id="ask-lamp">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement's current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
+      <p class="lede">Listings live on the Lamp page: L&amp;D Evaluator, Sales/GTM Evaluator, and the LLM usage policy. External action still held until the five gates are Clear and Pursue.</p>
+      <div class="callout"><strong>Kill.</strong> Unsubstantiated years. IP language you will not clear. Agent-written scores. Monitoring you cannot isolate. A task that wants employer material in a model. Hours that shove bedtime.</div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="choose('lamp')">I choose The Lamp</button>
+        <button class="ghost" type="button" onclick="copyAsk('lamp')">Copy the ask</button>
+        <button class="ghost" type="button" onclick="printOne('lamp')">Print this leaf</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-room" data-catch="Handoff">
+      <p class="stamp">The other four stay paper</p>
+      <p class="eyebrow">Plan II · $349 · 75 minutes · fastest human yes</p>
+      <h1>The <em>Room</em></h1>
+      <p class="deck">High-stakes rehearsal. Original case. Mock panel. Three changes. One preserved strength. Seven-day drill. No outcome guarantee.</p>
+      <div class="money">
+        <div class="fig">$1,396–$2,792</div>
+        <p>Four paid is $1,396. Eight is $2,792. Live 75 minutes plus about 45 minutes prep. Two evening sessions a week max. Do not discount below $249. Three-session $795 only after two clean singles.</p>
+      </div>
+      <h2>When to pick it</h2>
+      <p class="lede">Lamp is blocked and you can name ten humans outside work. You already dominate rooms. Sell that once, to people you do not meet through work. Never the employer graph.</p>
+      <h2>First sixty minutes</h2>
+      <div class="checks">
+        <label><input type="checkbox" data-check="room-1" /> Eight-line offer. Price $349. Included / excluded: no insider questions, no outcome guarantee.</label>
+        <label><input type="checkbox" data-check="room-2" /> One 12-minute fictional case — not an industry you serve at work.</label>
+        <label><input type="checkbox" data-check="room-3" /> List ten humans outside the employer graph. Do not message them tonight.</label>
+      </div>
+      <h2>Ten humans</h2>
+      <textarea class="humans" id="ten-humans" placeholder="1.&#10;2.&#10;3."></textarea>
+      <h2>Twelve weeks</h2>
+      <div class="weeks">
+        <div class="week"><time>Wk 1 · 4–10 Sep</time><span>Offer, fictional case, Venmo or Stripe, calendar link. No logo.</span></div>
+        <div class="week"><time>Wk 2 · 11–17 Sep</time><span>Five personal messages. Zero blasts.</span></div>
+        <div class="week"><time>Wk 3 · 18–24 Sep</time><span>Five more messages. Two 15-minute fit calls. Then paid.</span></div>
+        <div class="week"><time>Wk 4 · 25 Sep–1 Oct</time><span>First paid session or a dated no.</span></div>
+        <div class="week"><time>Wk 5–7</time><span>Deliver. Ask for one referral in an adjacent company. Count acquisition hours vs delivery.</span></div>
+        <div class="week"><time>Wk 8 · 23–29 Oct</time><span>Protect October household load. Max two evenings.</span></div>
+        <div class="week"><time>Wk 9–11</time><span>Continue only if at least two paid. Deliver or Park.</span></div>
+        <div class="week"><time>Wk 12</time><span>Keep if four paid. Kill if fewer than two paid after 40 asks.</span></div>
+      </div>
+      <h2>The letter · the ask</h2>
+      <div class="slip" id="ask-room">If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I'm opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.</div>
+      <div class="callout"><strong>Kill.</strong> Recording without consent. Stolen interview questions. Guarantees. Anyone from work. Sessions that eat bedtime. Acquisition hours greater than delivery after 40 asks.</div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="choose('room')">I choose The Room</button>
+        <button class="ghost" type="button" onclick="copyAsk('room')">Copy the ask</button>
+        <button class="ghost" type="button" onclick="printOne('room')">Print this leaf</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-handoff" data-catch="Store">
+      <p class="stamp">The other four stay paper</p>
+      <p class="eyebrow">Plan III · $1,500 beta · highest ticket</p>
+      <h1>The <em>Handoff</em></h1>
+      <p class="deck">One messy process becomes a map, SOP, job aid, owner card, and a 30-day test.</p>
+      <div class="money">
+        <div class="fig">$1,500–$4,500</div>
+        <p>One beta is $1,500. Two is $3,000. Unpaid sample at most 10 hours. Invoice 50/50. Standard $2,250 only after a paid beta teaches real hours. After two paid units, stop below about $60/all-in hour, more than 20% revision churn, or more than 15% admin.</p>
+      </div>
+      <h2>When to pick it</h2>
+      <p class="lede">You will send twenty asks and protect a 15-day delivery. Buyer: independent consultancy or founder-led home/property firm. Never insurance, benefits, HR, safety, or anyone in the employer ecosystem. Do not start while The Lamp is still Pursue.</p>
+      <h2>First sixty minutes</h2>
+      <div class="checks">
+        <label><input type="checkbox" data-check="hand-1" /> Open the fictional premium home-maintenance case: estimate → schedule → field → proof → invoice.</label>
+        <label><input type="checkbox" data-check="hand-2" /> Write the failure modes you will map. Stop. Do not hunt buyers tonight.</label>
+      </div>
+      <h2>Twelve weeks</h2>
+      <div class="weeks">
+        <div class="week"><time>Wk 1 · 4–10 Sep</time><span>Finish synthetic sample. Ugly at hour 10 is a pass.</span></div>
+        <div class="week"><time>Wk 2 · 11–17 Sep</time><span>Five public Maps listings. Notes only. No contact yet if the sample is unfinished.</span></div>
+        <div class="week"><time>Wk 3–6</time><span>Asks 1–20 from public listings. One 20-minute diagnostic. No free custom build. Park if zero conversations.</span></div>
+        <div class="week"><time>Wk 7–10</time><span>Paid beta starts, or Park. First review day 10. Final day 15. Protect October.</span></div>
+        <div class="week"><time>Wk 11–12</time><span>Collect remainder. Second beta or reprice to $2,250. Kill at 40 asks and $0.</span></div>
+      </div>
+      <h2>The letter · outreach</h2>
+      <div class="slip" id="ask-handoff">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I'm validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
+      <div class="callout"><strong>Kill.</strong> Retainer seekers. Logins you should not have. Safety-critical process. A firm you recognize from work. Nights you do not have.</div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="choose('handoff')">I choose The Handoff</button>
+        <button class="ghost" type="button" onclick="copyAsk('handoff')">Copy the ask</button>
+        <button class="ghost" type="button" onclick="printOne('handoff')">Print this leaf</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-storefront" data-catch="Folio">
+      <p class="stamp">The other four stay paper</p>
+      <p class="eyebrow">Plan IV · $295 · same-week cash · under the floor on purpose</p>
+      <h1>The <em>Storefront</em></h1>
+      <p class="deck">Walk a public book/call path on a phone. Five evidence-linked frictions. One rewritten CTA. One do-not-change. No login. No SEO promise.</p>
+      <div class="money">
+        <div class="fig">$1,770–$2,950</div>
+        <p>Six jobs is $1,770. Ten is $2,950. At four hours that is about $74/hour — below the $100 floor. This is cash and evidence, not a career. After five paid, raise to $450 or fold into The Handoff.</p>
+      </div>
+      <h2>When to pick it</h2>
+      <p class="lede">You would rather walk a public booking path than coach a stranger. Front Range plumbers, landscapers, cleaners, restoration. Public pages only. Fits a nap window.</p>
+      <h2>First sixty minutes</h2>
+      <div class="checks">
+        <label><input type="checkbox" data-check="store-1" /> Label a synthetic company. Time a full audit. If it exceeds 8 hours including QA, shrink or kill.</label>
+        <label><input type="checkbox" data-check="store-2" /> Do not contact a live business tonight.</label>
+      </div>
+      <h2>Twelve weeks</h2>
+      <div class="weeks">
+        <div class="week"><time>Wk 1 · 4–10 Sep</time><span>Synthetic rehearsal only. Record minutes.</span></div>
+        <div class="week"><time>Wk 2 · 11–17 Sep</time><span>Ten public paths. Ten short notes. No form submits.</span></div>
+        <div class="week"><time>Wk 3–7</time><span>First paid job or a dated no. Deliver within five days. Never post, never log in. Decide: raise to $450 or keep.</span></div>
+        <div class="week"><time>Wk 8 · 23–29 Oct</time><span>Protect October household. Max two evenings.</span></div>
+        <div class="week"><time>Wk 9–12</time><span>Continue only if hours stay under eight. One operational pain becomes The Handoff, not a second audit. Raise, fold, or stop.</span></div>
+      </div>
+      <h2>The letter · the note</h2>
+      <div class="slip" id="ask-storefront">I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I'll send the one-page scope and can turn it around this week.</div>
+      <p class="lede">Required later label: observational hypotheses — not verified revenue loss, legal advice, or accessibility certification.</p>
+      <div class="callout"><strong>Kill.</strong> Analytics logins. Fake reviews. Certification requests. Cannot separate fact from guess. More than two evenings.</div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="choose('storefront')">I choose The Storefront</button>
+        <button class="ghost" type="button" onclick="copyAsk('storefront')">Copy the ask</button>
+        <button class="ghost" type="button" onclick="printOne('storefront')">Print this leaf</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-redletter" data-catch="Receipt">
+      <p class="stamp">The other four stay paper</p>
+      <p class="eyebrow">Plan V · owned product · Advent window · honest cash may be $0</p>
+      <h1>The <em>Folio</em></h1>
+      <p class="deck">Red Letter is already built. These ninety days end at Advent. Lent 2027 is still the real payday.</p>
+      <div class="money">
+        <div class="fig">$0–$2,000 honest</div>
+        <p>A new faith PWA with zero keepers will probably make $0–$500 by 3 December. A miracle attach might touch $2,000. If you need grocery money, choose The Lamp and let Red Letter live on crumbs.</p>
+      </div>
+      <h2>What you never lock</h2>
+      <p class="lede">Never lock scripture, lectio, Seek, Seven Days, curated Advisor, or the commonplace. Never weekly price. Never “talk to God.” When money exists: 7-day live Advisor, then $59.99 year / $9.99 month.</p>
+      <h2>First sixty minutes</h2>
+      <div class="checks">
+        <label><input type="checkbox" data-check="folio-1" /> A URL you can text. GitHub Pages counts.</label>
+        <label><input type="checkbox" data-check="folio-2" /> Sit as a stranger: /?fresh=1.</label>
+        <label><input type="checkbox" data-check="folio-3" /> Send one blessing to one real person. If the button is furniture, that is the only bug tonight.</label>
+      </div>
+      <h2>Twelve weeks</h2>
+      <div class="weeks">
+        <div class="week"><time>Wk 1 · 4–10 Sep</time><span>HTTPS, PWA on your phone, guest wipe. Fix Day-1 lectio, not features.</span></div>
+        <div class="week"><time>Wk 2–3</time><span>Film LAUNCH ads 1, 3, and 4. Face or handwriting. $0 paid. Three people you love finish Day 1 before any spend.</span></div>
+        <div class="week"><time>Wk 4–6</time><span>Waitlist live. Blessing actually sends. Seven people through Seven Days, or diagnose Day-7 drop. Count blessings per weekly active.</span></div>
+        <div class="week"><time>Wk 7–8</time><span>First $200 on Meta only if D7 is worth watching. Then protect October. Crumbs only.</span></div>
+        <div class="week"><time>Wk 9–10</time><span>Advent clothes sketched. Named path or “wait with this sentence.” Scripture still free.</span></div>
+        <div class="week"><time>Wk 11–12</time><span>Stripe annual only after keepers exist. Never weekly. Advent begins 29 November. Forty-for-Lent is background.</span></div>
+      </div>
+      <h2>Eight-second ad</h2>
+      <div class="slip" id="ask-redletter">I was carrying Tuesday on Monday. Then I sat with one sentence.
+[Matthew 6:34 or John 14:27 in crimson]
+A quiet page for the words Jesus spoke. Free.</div>
+      <p class="lede">Healthy: Day-1 lectio &gt;40% · Day-7 of Seven &gt;18% · blessing &gt;8% WAU · Advisor &gt;25% WAU.</p>
+      <div class="callout"><strong>Kill as a cash plan</strong> if you need money this quarter — switch to The Lamp. Kill the product only if you lock verses, add Paul, or pretend the model is Him.</div>
+      <div class="actions">
+        <button class="cta" type="button" onclick="choose('redletter')">I choose The Folio</button>
+        <button class="ghost" type="button" onclick="copyAsk('redletter')">Copy the ad</button>
+        <button class="ghost" type="button" onclick="printOne('redletter')">Print this leaf</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-receipt" data-catch="Sunday">
+      <p class="eyebrow">Write it once</p>
+      <h1>Choice <em>receipt</em></h1>
+      <p class="lede">The choice is not real until it is written here. Do not start a second plan.</p>
+      <p class="cite" id="receipt-choice">No plan chosen</p>
+      <label class="sr" for="receipt-window">Household window</label>
+      <p>Household window</p>
+      <input class="receipt-field" id="receipt-window" placeholder="Confirmed / Not confirmed / Not needed" />
+      <label class="sr" for="receipt-auth">External action authorized tonight</label>
+      <p>External action authorized tonight</p>
+      <input class="receipt-field" id="receipt-auth" placeholder="No / Yes — one named step" />
+      <label class="sr" for="receipt-reason">Reason — one sentence</label>
+      <p>Reason — one sentence</p>
+      <textarea class="note" id="receipt-reason" placeholder="Because…"></textarea>
+      <div class="actions">
+        <button class="cta" type="button" onclick="saveReceipt()">Keep the receipt</button>
+        <button class="ghost" type="button" onclick="printReceipt()">Print the receipt</button>
+      </div>
+    </article>
+
+    <article class="leaf" id="leaf-sunday" data-catch="Parked">
+      <p class="eyebrow">Three minutes</p>
+      <h1>Sunday <em>close</em></h1>
+      <div class="law"><b>1</b><span>Did this make the week lighter, or become another dashboard?</span></div>
+      <div class="law"><b>2</b><span>Money, a dated no, or a blocked gate — or only motion?</span></div>
+      <div class="law"><b>3</b><span>Continue / Park 30 days / Close. Park creates no reminder.</span></div>
+      <textarea class="note" id="sunday-note" placeholder="Write the close…"></textarea>
+      <p class="lede">Then close the book. Authority still wins: <em>This week</em>. Home, sleep, family needs, and required work still win.</p>
+    </article>
+
+    <article class="leaf" id="leaf-parked" data-catch="Colophon">
+      <p class="eyebrow">On purpose</p>
+      <h1>What stays <em>paper</em></h1>
+      <p class="lede">Veteran memory-to-music, family adventure, Ableton album, owner-judgment library, agent-operations tabletop, ProofOps, and every 6–18 month asset stay on the parked shelf. They cannot feed the house in ninety days without stealing the house.</p>
+      <p class="lede">This pack does not replace This week. Opening it authorizes nothing.</p>
+    </article>
+
+    <article class="leaf" id="leaf-colophon" data-catch="Title">
+      <p class="eyebrow">Set in Fraunces and Source Serif 4</p>
+      <h1>A printer’s <em>note</em></h1>
+      <p class="lede">Typeset from the Ninety Days hub and its five signatures, 4 September 2026. The words are Dean’s. The paper is the same room as Red Letter because the person who has to choose already knows this ink.</p>
+      <p class="lede">X voice only — not a funnel. Hugging Face has nothing to sell. Granola was not signed in. OneDigital knowledge was not used as an ingredient.</p>
+      <p class="quote">Stop is a finish.</p>
+      <p class="cite">Unknown is allowed</p>
+    </article>
+
+    <div class="catch">
+      <span id="leaf-num">i</span>
+      <button type="button" id="catchword" onclick="turn(1)">Window →</button>
+    </div>
+  </main>
+
+  <div id="toast" role="status"></div>
+
+<script>
+const LEAVES = ['title','window','laws','five','picker','lamp','room','handoff','storefront','redletter','receipt','sunday','parked','colophon'];
+const NAMES = {
+  none: 'None tonight',
+  lamp: 'I · The Lamp',
+  room: 'II · The Room',
+  handoff: 'III · The Handoff',
+  storefront: 'IV · The Storefront',
+  redletter: 'V · The Folio',
+};
+const GATES = [
+  ['ld', 'L&D years you can stand behind'],
+  ['gtm', 'Sales / GTM years you can stand behind'],
+  ['slides', 'Slide fluency without employer decks'],
+  ['ip', 'Outside-work / IP you will clear'],
+  ['monitor', 'Monitoring consent you can isolate'],
+];
+const END = new Date(2026, 11, 3);
+const KEY = 'nd-folio-v1';
+let page = 'title';
+
+function state() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; }
+}
+function save(patch) {
+  const next = { ...state(), ...patch };
+  localStorage.setItem(KEY, JSON.stringify(next));
+  paintChoice(next.choice);
+  return next;
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('on'), 1800);
+}
+function go(id) {
+  page = id;
+  document.querySelectorAll('.leaf').forEach((el) => el.classList.toggle('on', el.id === 'leaf-' + id));
+  document.querySelectorAll('.rail .nav').forEach((el) => el.classList.toggle('on', el.getAttribute('data-go') === id));
+  const leaf = document.getElementById('leaf-' + id);
+  const catchword = (leaf && leaf.dataset.catch) || 'Turn';
+  document.getElementById('catchword').textContent = catchword + ' →';
+  document.getElementById('leaf-num').textContent = roman(LEAVES.indexOf(id) + 1);
+  document.getElementById('stage').scrollTop = 0;
+  save({ page: id });
+}
+function roman(n) {
+  const map = ['','i','ii','iii','iv','v','vi','vii','viii','ix','x','xi','xii','xiii','xiv'];
+  return map[n] || String(n);
+}
+function turn(dir) {
+  const i = LEAVES.indexOf(page);
+  const next = LEAVES[Math.max(0, Math.min(LEAVES.length - 1, i + dir))];
+  go(next);
+}
+function windowOpen(s) {
+  return s.window === 'confirmed' || s.window === 'unneeded';
+}
+function paintWindow() {
+  const s = state();
+  document.querySelectorAll('[data-key="window"] button').forEach((b) => {
+    b.classList.toggle('on', b.dataset.val === s.window);
+  });
+  const rest = document.getElementById('window-rest');
+  if (rest) rest.hidden = !(s.window === 'not' || !s.window);
+}
+function paintChoice(choice) {
+  document.body.classList.remove('chosen-lamp','chosen-room','chosen-handoff','chosen-storefront','chosen-redletter');
+  if (choice && choice !== 'none') document.body.classList.add('chosen-' + choice);
+  document.querySelectorAll('.rail .nav').forEach((el) => {
+    const id = el.getAttribute('data-go');
+    const plans = ['lamp','room','handoff','storefront','redletter'];
+    el.classList.toggle('paper', Boolean(choice && choice !== 'none' && plans.includes(id) && id !== choice));
+  });
+  const rec = document.getElementById('receipt-choice');
+  if (rec) rec.textContent = choice ? NAMES[choice] : 'No plan chosen';
+}
+function paintGates() {
+  const host = document.getElementById('lamp-gates');
+  if (!host || host.dataset.ready) return;
+  const s = state();
+  host.innerHTML = GATES.map(([key, label]) => {
+    const val = (s.gates && s.gates[key]) || '';
+    return `<div class="gate"><span>${label}</span><div class="seg" data-gate="${key}">
+      <button type="button" data-val="clear" class="${val==='clear'?'on':''}">Clear</button>
+      <button type="button" data-val="unknown" class="${val==='unknown'?'on':''}">Unknown</button>
+      <button type="button" data-val="blocked" class="${val==='blocked'?'on':''}">Blocked</button>
+    </div></div>`;
+  }).join('');
+  host.dataset.ready = '1';
+}
+function pickerShow(step) {
+  document.querySelectorAll('.picker-step').forEach((el) => {
+    el.classList.toggle('on', el.getAttribute('data-step') === String(step));
+  });
+}
+function pickerAnswer(key, val) {
+  const s = save({ [key]: val });
+  paintWindow();
+  if (key === 'window') {
+    if (windowOpen(s)) pickerShow(1);
+    else pickerShow('rest');
+  }
+}
+function pickerNext(step) { pickerShow(step); }
+function pickerLamp() {
+  const s = state();
+  const gates = s.gates || {};
+  const blocked = GATES.some(([k]) => gates[k] === 'blocked');
+  const unknown = GATES.some(([k]) => !gates[k] || gates[k] === 'unknown');
+  if (blocked) {
+    toast('A blocked gate kills The Lamp');
+    pickerShow(2);
+    return;
+  }
+  if (unknown) {
+    toast('Unknown is allowed — do not apply to see');
+    pickerShow(2);
+    return;
+  }
+  choose('lamp');
+}
+function choose(plan) {
+  const s = state();
+  if (plan !== 'none' && !windowOpen(s)) {
+    toast('The window is not open');
+    go('window');
+    return;
+  }
+  save({ choice: plan });
+  document.getElementById('receipt-window').value = s.window || '';
+  if (plan === 'none') {
+    document.getElementById('receipt-auth').value = 'No';
+    go('receipt');
+    toast('None tonight is a finish');
+    return;
+  }
+  go(plan);
+  toast('I choose ' + NAMES[plan]);
+}
+async function copyAsk(plan) {
+  const el = document.getElementById('ask-' + plan);
+  if (!el) return;
+  try {
+    await navigator.clipboard.writeText(el.textContent.trim());
+    toast('The ask is on the slip');
+  } catch {
+    toast('Copy the slip by hand');
+  }
+}
+function printOne(id) {
+  document.querySelectorAll('.leaf').forEach((el) => el.classList.toggle('print-me', el.id === 'leaf-' + id || el.id === 'leaf-receipt' || el.id === 'leaf-laws'));
+  document.body.classList.add('print-one');
+  window.print();
+  document.body.classList.remove('print-one');
+}
+function printReceipt() {
+  document.querySelectorAll('.leaf').forEach((el) => el.classList.toggle('print-me', el.id === 'leaf-receipt' || el.id === 'leaf-laws'));
+  document.body.classList.add('print-one');
+  window.print();
+  document.body.classList.remove('print-one');
+}
+function saveReceipt() {
+  save({
+    receiptWindow: document.getElementById('receipt-window').value,
+    receiptAuth: document.getElementById('receipt-auth').value,
+    receiptReason: document.getElementById('receipt-reason').value,
+  });
+  toast('The receipt is kept on this device');
+}
+function paintClock() {
+  const now = new Date();
+  const days = Math.max(0, Math.ceil((END - now) / 86400000));
+  document.getElementById('days-left').textContent = days + ' days';
+  const week = now < new Date(2026, 8, 11) ? 'Week I · truth only' : 'Toward Advent';
+  document.getElementById('clock-line').textContent = week + ' · Advent 29 Nov';
+}
+function bind() {
+  document.querySelectorAll('.rail .nav').forEach((el) => {
+    el.addEventListener('click', () => go(el.getAttribute('data-go')));
+  });
+  document.querySelectorAll('[data-key="window"] button').forEach((b) => {
+    b.addEventListener('click', () => {
+      save({ window: b.dataset.val });
+      paintWindow();
+    });
+  });
+  document.getElementById('lamp-gates')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-val]');
+    const seg = e.target.closest('[data-gate]');
+    if (!btn || !seg) return;
+    const gates = { ...(state().gates || {}), [seg.dataset.gate]: btn.dataset.val };
+    save({ gates });
+    seg.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === btn));
+  });
+  document.querySelectorAll('[data-check]').forEach((box) => {
+    const s = state();
+    box.checked = Boolean(s.checks && s.checks[box.dataset.check]);
+    box.addEventListener('change', () => {
+      const checks = { ...(state().checks || {}), [box.dataset.check]: box.checked };
+      save({ checks });
+    });
+  });
+  const humans = document.getElementById('ten-humans');
+  if (humans) {
+    humans.value = state().humans || '';
+    humans.addEventListener('input', () => save({ humans: humans.value }));
+  }
+  ['receipt-window','receipt-auth','receipt-reason','sunday-note'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const map = { 'receipt-window': 'receiptWindow', 'receipt-auth': 'receiptAuth', 'receipt-reason': 'receiptReason', 'sunday-note': 'sunday' };
+    el.value = state()[map[id]] || '';
+    el.addEventListener('input', () => save({ [map[id]]: el.value }));
+  });
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'j') turn(1);
+    if (e.key === 'ArrowLeft' || e.key === 'k') turn(-1);
+  });
+}
+
+paintGates();
+paintWindow();
+paintChoice(state().choice);
+paintClock();
+bind();
+if (state().page) go(state().page);
+else go('title');
+</script>
+</body>
+</html>

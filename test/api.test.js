@@ -79,6 +79,14 @@ describe('smoke routes', () => {
     assert.equal(res.status, 404);
   });
 
+  it('serves the private ninety-days decision folio', async () => {
+    const res = await request('GET', '/folio');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /I choose The Lamp/);
+    assert.match(res.raw, /Opening this page authorizes nothing/);
+    assert.match(res.raw, /noindex/);
+  });
+
   it('rejects an unknown encouragement theme', async () => {
     const res = await request('POST', '/api/encouragement', { theme: 'Astrology' });
     assert.equal(res.status, 400);
