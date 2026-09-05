@@ -1,6 +1,64 @@
-# Android assembleRelease proof
+# Android release build proof
 
-Run on this Linux agent, 2026-09-02.
+Two independent runs on Linux agents. Both green.
+
+## Run 2 — 2026-09-05 (fresh VM, toolchain reinstalled from scratch)
+
+Flutter stable (framework `d3b14c8769`, Dart 3.13.2), Android SDK 36 / build-tools 36.0.0, Gradle 9.3.1, AGP 9.1.0, OpenJDK 21.
+
+```
+flutter analyze          No issues found!
+flutter test             +39: All tests passed!
+
+flutter build apk --release
+Running Gradle task 'assembleRelease'...   157.5s
+✓ Built build/app/outputs/flutter-apk/app-release.apk (49.7MB)
+
+flutter build appbundle --release
+Running Gradle task 'bundleRelease'...       6.2s
+✓ Built build/app/outputs/bundle/release/app-release.aab (49.2MB)
+```
+
+Play Console only accepts an **AAB**; the APK is for sideload QA on founder phones.
+
+`aapt dump badging app-release.apk`:
+
+```
+package: name='com.redwords.redwords' versionCode='1' versionName='1.0.0' compileSdkVersion='36'
+sdkVersion:'24'
+targetSdkVersion:'36'
+application-label:'Red Words'
+```
+
+Compiled manifest (post-R8, post-shrinkResources) still has:
+
+- `<queries>` with `tel` data — `tel:988` launcher intent can resolve
+- `redwords://today` deep link (`scheme="redwords"`, `host="today"`)
+- `com.redwords.red_words.SayingWidgetProvider` receiver, `APPWIDGET_UPDATE`
+
+Bundled Scripture pack read back out of the AAB (`base/assets/flutter_assets/assets/sayings.json`): **100 sayings**, first `anxiety-mt-6-34` / Matthew 6:34, books = John, Luke, Mark, Matthew only.
+
+Signing — **not** the Android debug cert:
+
+```
+apksigner verify --print-certs app-release.apk
+Signer #1 certificate DN: CN=Red Words Placeholder, O=Red Words, C=US
+
+jarsigner -verify app-release.aab
+jar verified.
+- Signed by "CN=Red Words Placeholder, O=Red Words, C=US"
+```
+
+R8/ProGuard ran: `build/app/outputs/mapping/release/mapping.txt` (7.3 MB), `usage.txt`, `seeds.txt`, `configuration.txt` present.
+
+SHA-256:
+
+```
+fcccacb1608d8f68766bbe9d08bcb6070566b2b425e8be84c4184ca54d1adabe  app-release.apk
+b70bc73d23330286d1bab5a68fc79c318b41ecf9345eb4019af917c17db08420  app-release.aab
+```
+
+## Run 1 — 2026-09-02
 
 ```
 flutter build apk --release
@@ -9,25 +67,8 @@ BUILD SUCCESSFUL in 2m 42s
 ✓ Built build/app/outputs/flutter-apk/app-release.apk (49.7MB)
 ```
 
-`aapt dump badging`:
+Same badging, same placeholder signer. APK SHA-256 `d8c340c417b67fb3b4fa1dc65f5c79fe54aa10387054bf74965c992b34284ed5`.
 
-```
-package: name='com.redwords.redwords' versionCode='1' versionName='1.0.0'
-sdkVersion:'24'
-targetSdkVersion:'36'
-application-label:'Red Words'
-```
+## Not Play-uploadable yet
 
-SHA-256 of that local APK: `d8c340c417b67fb3b4fa1dc65f5c79fe54aa10387054bf74965c992b34284ed5`
-
-Signing: **not** the Android debug cert. `apksigner verify --print-certs`:
-
-```
-Verifies
-Verified using v2 scheme (APK Signature Scheme v2): true
-Signer #1 certificate DN: CN=Red Words Placeholder, O=Red Words, C=US
-```
-
-Local placeholder keystore only (`/tmp/redwords-placeholder.jks`). This APK is **not** Play-uploadable. Dean must replace `android/key.properties` with the real upload keystore.
-
-R8/ProGuard: enabled for release (`isMinifyEnabled = true`).
+Both runs used a local placeholder keystore (`/tmp/redwords-placeholder.jks`, gitignored `android/key.properties`). Dean must replace `android/key.properties` with the real Play upload keystore and rebuild the AAB. Nothing else changes.

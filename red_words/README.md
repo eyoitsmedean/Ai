@@ -44,13 +44,14 @@ storeFile=/absolute/path/to/dean-upload.jks
 
 R8/ProGuard is on for release (`android/app/proguard-rules.pro`).
 
-Without Dean’s keystore, `flutter build apk --release` on this machine used a **local placeholder keystore** so Gradle could assemble. That APK must not go to Play.
+Without Dean’s keystore, release builds on this machine used a **local placeholder keystore** so Gradle could assemble. Those artifacts must not go to Play.
 
 ```bash
-flutter build apk --release
-# or
-cd android && ./gradlew :app:assembleRelease
+flutter build appbundle --release   # Play upload: build/app/outputs/bundle/release/app-release.aab
+flutter build apk --release         # sideload QA: build/app/outputs/flutter-apk/app-release.apk
 ```
+
+Play Console accepts only the AAB. With the real `key.properties` in place, the same two commands produce the uploadable bundle — no other change needed.
 
 ## iOS / TestFlight
 
