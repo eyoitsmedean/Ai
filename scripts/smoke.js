@@ -210,7 +210,8 @@ async function main() {
     assert(sw.includes("addEventListener('push'"), 'sw missing push handler');
     assert(sw.includes("addEventListener('notificationclick'"), 'sw missing notificationclick');
     assert(sw.includes('showNotification'), 'sw does not show notifications');
-    assert(!sw.includes("'rla-v24'"), 'sw cache version not bumped');
+    assert(!sw.includes("'rla-v24'") && !sw.includes("'rla-v25'"), 'sw cache version not bumped');
+    assert(sw.includes('url.origin !== self.location.origin') && sw.includes("status: 504"), 'sw must skip cross-origin and never resolve undefined');
   });
 
   await check('advisor threads + voice shell', async () => {

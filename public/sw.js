@@ -1,4 +1,4 @@
-const CACHE = 'rla-v25';
+const CACHE = 'rla-v26';
 const PRECACHE = [
   '/',
   '/offline',
@@ -68,6 +68,7 @@ self.addEventListener('notificationclick', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
+  if (url.origin !== self.location.origin) return;
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
@@ -115,7 +116,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => cached);
+        .catch(() => cached || new Response('', { status: 504, statusText: 'offline' }));
       return cached || network;
     })
   );

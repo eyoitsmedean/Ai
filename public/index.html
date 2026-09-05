@@ -75,6 +75,7 @@ html.theme-dark body,
 :root[data-fs="sm"]{--scale:.9}
 :root[data-fs="lg"]{--scale:1.12}
 html,body{height:100%;font-family:var(--font-ui);font-size:calc(16px * var(--scale));background:var(--mesh);color:var(--ink);overscroll-behavior:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{position:fixed;inset:0;width:100%;overflow:hidden}
 button{font-family:var(--font-ui);cursor:pointer;touch-action:manipulation;min-height:var(--touch)}
 textarea,input,select{font-family:var(--font-ui);font-size:16px}
 :focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
@@ -2710,7 +2711,7 @@ function closeEncounter(action) {
   encounterEmbers?.stop?.();
   encounterEmbers = null;
   const overlay = document.getElementById('encounter-overlay');
-  if (!overlay) return;
+  if (!overlay || !overlay.classList.contains('open')) return;
   lsSet(encounterKey(), '1');
   overlay.classList.add('fade-out');
   scheduleEncounter(() => {
@@ -3347,6 +3348,7 @@ function finishOnboarding() {
   } catch (_) {}
   const ob = document.getElementById('onboarding');
   if (ob) {
+    if (ob.contains(document.activeElement)) document.activeElement.blur();
     ob.classList.add('hidden');
     ob.setAttribute('aria-hidden', 'true');
   }
@@ -4612,6 +4614,9 @@ function isIOS() {
 
 function maybeShowInstallBanner() {
   if (isStandalone() || ls('rla-install-dismiss') === '1') return;
+  // Earn the ask: never on the first day, and never while the encounter is on screen.
+  if (parseInt(ls('rla-day-num') || '1', 10) < 2) return;
+  if (document.getElementById('encounter-overlay')?.classList.contains('open')) return;
   const banner = document.getElementById('install-banner');
   const copy = document.getElementById('install-copy');
   const yes = document.getElementById('install-yes');
@@ -4661,8 +4666,12 @@ function wireKeyboardInset() {
   const apply = () => {
     const vv = window.visualViewport;
     if (!vv) return;
-    const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    const composing = document.activeElement === document.getElementById('chat-input');
+    let inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    // Only treat a large, composer-triggered shrink as the soft keyboard; ignore URL-bar jitter.
+    if (!composing || inset < 120 || inset > window.innerHeight * 0.65) inset = 0;
     document.documentElement.style.setProperty('--kb', inset + 'px');
+    if (window.scrollY || window.scrollX) window.scrollTo(0, 0);
   };
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', apply);
@@ -4672,8 +4681,18 @@ function wireKeyboardInset() {
   const input = document.getElementById('chat-input');
   input?.addEventListener('focus', () => document.body.classList.add('kb-open'));
   input?.addEventListener('blur', () => {
-    document.body.classList.remove('kb-open');
-    document.documentElement.style.setProperty('--kb', '0px');
+    // Let a tap on Send/Mic land before the nav returns and shifts the layout.
+    setTimeout(() => {
+      if (document.activeElement === input) return;
+      document.body.classList.remove('kb-open');
+      document.documentElement.style.setProperty('--kb', '0px');
+    }, 120);
+  });
+  // Keep the keyboard up and the layout still while tapping composer buttons.
+  ['chat-send', 'chat-mic'].forEach((id) => {
+    const btn = document.getElementById(id);
+    btn?.addEventListener('pointerdown', (e) => { if (document.activeElement === input) e.preventDefault(); });
+    btn?.addEventListener('mousedown', (e) => { if (document.activeElement === input) e.preventDefault(); });
   });
 }
 
