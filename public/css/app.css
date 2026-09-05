@@ -4153,14 +4153,38 @@ body.dark .trust-note.ok {
   background: linear-gradient(180deg, rgba(14, 12, 11, 0), #160E0E 28%);
 }
 
+/* Flex children must not squash to min-height; the card scrolls instead */
+.blessing-card > * {
+  flex-shrink: 0;
+}
+
 .blessing-card .share-styles {
   position: sticky;
   bottom: 0;
   z-index: 2;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   margin-top: 4px;
-  padding-top: 10px;
-  padding-bottom: 4px;
-  background: linear-gradient(180deg, rgba(14, 12, 11, 0), #160E0E 24%);
+  margin-bottom: 10px;
+  padding-top: 12px;
+  padding-bottom: 6px;
+  background: #13100E;
+  box-shadow: 0 -18px 18px -8px #13100E;
+}
+
+.blessing-card .share-style {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px 10px;
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.blessing-card .swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
 }
 .blessing-item {
   text-align: left;
@@ -4234,6 +4258,10 @@ body.dark .trust-note.ok {
   font-style: italic;
   font-size: 1.05rem;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .blessing-preview-cite {
   margin-top: 10px;

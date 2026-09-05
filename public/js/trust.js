@@ -312,13 +312,13 @@
     const verse = typeof global.cleanCitation === 'function'
       ? global.cleanCitation(id('lectio-cite') && id('lectio-cite').textContent)
       : ((id('lectio-cite') && id('lectio-cite').textContent) || '');
-    const lectio = id('lectio');
-    if (lectio) lectio.classList.add('is-closing');
+    // Amen (z 420) rises over Lectio (z 400) first; Lectio leaves underneath
+    // once Amen is opaque, so Today never flashes through.
+    if (typeof global.stopListening === 'function') global.stopListening();
+    openAmen({ quote, verse, holdMs: 3600 });
     setTimeout(() => {
       if (typeof global.closeLectio === 'function') global.closeLectio();
-      if (lectio) lectio.classList.remove('is-closing');
-      openAmen({ quote, verse, holdMs: 3600 });
-    }, 280);
+    }, 650);
   }
 
   function maybeAmenAfterLectio() {
@@ -429,11 +429,12 @@
       })
       .join('');
 
+    // Selecting must not re-render (which would reorder and scroll the list).
     list.querySelectorAll('.blessing-item').forEach((button) => {
       button.addEventListener('click', () => {
         const index = Number(button.getAttribute('data-index'));
         blessingPick = picks[index];
-        renderBlessingList(blessingPick);
+        list.querySelectorAll('.blessing-item').forEach((b) => b.classList.toggle('selected', b === button));
         updateBlessingPreview();
       });
     });
