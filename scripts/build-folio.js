@@ -67,15 +67,28 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
+const catchwordSkip = new Set([
+  'these', 'things', 'that', 'unto', 'have', 'from', 'shall', 'they', 'them',
+  'this', 'into', 'your', 'their', 'with', 'been', 'were', 'said', 'saith',
+  'spoken', 'before', 'after', 'which', 'there', 'about', 'would', 'could',
+  'should', 'might', 'what', 'when', 'where',
+]);
+
 function catchword(passage) {
   const words = String(passage)
     .replace(/[^A-Za-z\s]/g, ' ')
     .split(/\s+/)
     .filter(Boolean);
-  return words.find((w) => w.length > 3) || words[0] || 'Peace';
+  return (
+    words.find((w) => w.length >= 4 && !catchwordSkip.has(w.toLowerCase())) ||
+    words.find((w) => w.length > 3) ||
+    words[0] ||
+    'Peace'
+  );
 }
 
-const restWord = catchword(today.word.passage);
+const restWordRaw = catchword(today.word.passage);
+const restWord = restWordRaw ? restWordRaw[0].toUpperCase() + restWordRaw.slice(1) : 'Peace';
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -95,7 +108,7 @@ const html = `<!DOCTYPE html>
   --ui: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 52px; }
 html, body { background: #c9bea8; color: var(--ink); font-family: var(--ui); }
 body {
   min-height: 100vh;
@@ -133,6 +146,7 @@ body {
   padding: 64px 64px 72px 80px;
   border-bottom: 1px solid var(--rule);
   counter-increment: leaf;
+  scroll-margin-top: 52px;
 }
 .leaf::after {
   content: counter(leaf, decimal-leading-zero);

@@ -341,7 +341,7 @@ class _SitPageState extends State<SitPage> {
       case 2:
         return Center(
           child: Text(
-            catchword(moment.word.text),
+            _titleCase(catchword(moment.word.text)),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'serif',
@@ -675,6 +675,11 @@ class CrisisNote extends StatelessWidget {
       ],
     );
   }
+}
+
+String _titleCase(String word) {
+  if (word.isEmpty) return word;
+  return '${word[0].toUpperCase()}${word.substring(1)}';
 }
 
 Future<void> launchDialer(String number) async {

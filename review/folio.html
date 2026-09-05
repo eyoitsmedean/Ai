@@ -16,7 +16,7 @@
   --ui: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 52px; }
 html, body { background: #c9bea8; color: var(--ink); font-family: var(--ui); }
 body {
   min-height: 100vh;
@@ -54,6 +54,7 @@ body {
   padding: 64px 64px 72px 80px;
   border-bottom: 1px solid var(--rule);
   counter-increment: leaf;
+  scroll-margin-top: 52px;
 }
 .leaf::after {
   content: counter(leaf, decimal-leading-zero);
@@ -329,7 +330,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
       <div class="phone">
         <div class="notch"></div>
         <p class="ph-head">Rest</p>
-        <p class="ph-catch">These</p>
+        <p class="ph-catch">peace</p>
         <p class="ph-dock">Next</p>
       </div>
       <p class="caption">III. One word from the sentence</p>

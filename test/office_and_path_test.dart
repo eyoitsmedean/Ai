@@ -23,7 +23,13 @@ void main() {
 
   test('catchword is a real word from the sentence', () {
     expect(catchword('Peace I leave with you'), 'Peace');
-    expect(catchword('Lo, I am with you always'), 'with');
+    expect(catchword('Lo, I am with you always'), 'always');
+    expect(
+      catchword(
+        'These things I have spoken unto you, that in me ye might have peace.',
+      ),
+      'peace',
+    );
   });
 
   test('Seven Days are seven locked Gospel rooms', () {

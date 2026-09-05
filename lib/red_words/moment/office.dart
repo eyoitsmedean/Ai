@@ -79,12 +79,52 @@ class DailyOffice {
   String vespersPromptOn(DateTime time) => vespersPrompts[time.weekday % 7];
 }
 
+const _catchwordSkip = {
+  'these',
+  'things',
+  'that',
+  'unto',
+  'have',
+  'from',
+  'shall',
+  'they',
+  'them',
+  'this',
+  'into',
+  'your',
+  'their',
+  'with',
+  'been',
+  'were',
+  'said',
+  'saith',
+  'spoken',
+  'before',
+  'after',
+  'which',
+  'there',
+  'about',
+  'would',
+  'could',
+  'should',
+  'might',
+  'what',
+  'when',
+  'where',
+};
+
+/// Letterpress catchword: a weighty word from the saying, not a particle.
 String catchword(String passage) {
   final words = passage
       .replaceAll(RegExp(r"[^A-Za-z\s]"), ' ')
       .split(RegExp(r'\s+'))
       .where((w) => w.isNotEmpty)
       .toList();
+  for (final word in words) {
+    if (word.length >= 4 && !_catchwordSkip.contains(word.toLowerCase())) {
+      return word;
+    }
+  }
   for (final word in words) {
     if (word.length > 3) return word;
   }
