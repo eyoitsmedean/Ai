@@ -1,17 +1,17 @@
 require('dotenv').config();
 const express = require('express');
-const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
-const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
+const { DAILY_SCHEMA, ENCOURAGE_SCHEMA } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { resolveModel, createProvider } = require('./lib/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
+const MODEL = resolveModel();
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
 
@@ -27,22 +27,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
   },
 }));
 
-function usableSecret(value) {
-  if (!value) return false;
-  const v = String(value).trim();
-  if (!v) return false;
-  if (/your_api_key|changeme|placeholder|xxx|example/i.test(v)) return false;
-  return true;
-}
-
-const hasAnthropic = usableSecret(process.env.ANTHROPIC_API_KEY) || usableSecret(process.env.ANTHROPIC_AUTH_TOKEN);
-const client = hasAnthropic
-  ? new Anthropic(
-      process.env.ANTHROPIC_AUTH_TOKEN
-        ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
-        : { apiKey: process.env.ANTHROPIC_API_KEY }
-    )
-  : null;
+const client = createProvider();
 
 const buckets = new Map();
 
@@ -150,35 +135,14 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-async function generateStructured(system, user, schema, maxTokens) {
-  try {
-    return await client.messages.create({
-      model: MODEL,
-      max_tokens: maxTokens,
-      system,
-      messages: [{ role: 'user', content: user }],
-      ...structuredFormat(schema),
-    });
-  } catch (err) {
-    console.error('Structured output fallback:', err.message);
-    return client.messages.create({
-      model: MODEL,
-      max_tokens: maxTokens,
-      thinking: { type: 'adaptive' },
-      system,
-      messages: [{ role: 'user', content: user }],
-    });
-  }
-}
-
 async function generateDailyFromModel() {
-  const response = await generateStructured(
-    DAILY_SYSTEM,
-    "Generate today's daily affirmation and word.",
-    DAILY_SCHEMA,
-    1400
-  );
-  const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+  const text = await client.generateStructured({
+    system: DAILY_SYSTEM,
+    user: "Generate today's daily affirmation and word.",
+    schema: DAILY_SCHEMA,
+    schemaName: 'daily_page',
+    maxTokens: 1400,
+  });
   return verifyJsonQuotes(parseModelJson(text));
 }
 
@@ -207,7 +171,10 @@ async function fetchDailyContent() {
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
-    anthropic: Boolean(client),
+    live: Boolean(client),
+    anthropic: Boolean(client) && client.name === 'anthropic',
+    provider: MODEL.provider,
+    model: MODEL.id,
     themes: themeNames().length,
   });
 });
@@ -279,13 +246,13 @@ app.post('/api/encouragement', async (req, res) => {
   }
 
   try {
-    const response = await generateStructured(
-      ENCOURAGE_SYSTEM,
-      `Generate encouragement for: ${theme}`,
-      ENCOURAGE_SCHEMA,
-      1600
-    );
-    const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+    const text = await client.generateStructured({
+      system: ENCOURAGE_SYSTEM,
+      user: `Generate encouragement for: ${theme}`,
+      schema: ENCOURAGE_SCHEMA,
+      schemaName: 'encouragement',
+      maxTokens: 1600,
+    });
     const data = verifyJsonQuotes({ ...parseModelJson(text), theme });
     res.json(data);
   } catch (err) {
@@ -376,20 +343,11 @@ app.post('/api/chat', async (req, res) => {
       };
     });
 
-    const stream = client.messages.stream({
-      model: MODEL,
-      max_tokens: 1400,
-      thinking: { type: 'adaptive' },
+    const raw = await client.streamText({
       system: ADVISOR_SYSTEM,
       messages: modelMessages,
+      maxTokens: 1400,
     });
-
-    let raw = '';
-    stream.on('text', (text) => {
-      raw += text;
-    });
-
-    await stream.finalMessage();
     finish(raw);
   } catch (err) {
     console.error('Chat error:', err.message);
