@@ -47,6 +47,8 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(data.themes, 12);
+    assert.ok(['anthropic', 'openai'].includes(data.provider));
+    assert.equal(typeof data.model, 'string');
   });
 
   it('serves a verified daily page', async () => {

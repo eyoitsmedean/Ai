@@ -19,7 +19,7 @@ This is not a person, and it is not therapy, medical care, or pastoral counselin
 ## Run it
 
 ```bash
-cp .env.example .env   # add ANTHROPIC_API_KEY if you want live generation
+cp .env.example .env   # add an API key if you want live generation
 npm install
 npm start              # http://localhost:3000
 ```
@@ -27,11 +27,14 @@ npm start              # http://localhost:3000
 Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
 
 ```
-ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
-ANTHROPIC_MODEL=claude-opus-5
+MODEL=claude-opus-5    # or gpt-6-astra
+ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN — for claude-* models
+OPENAI_API_KEY=        # for gpt-* models
 PORT=3000
 API_ACCESS_KEY=        # optional gate for /api/*
 ```
+
+Model choices live in `lib/models.js`: **Claude Opus 5** (Anthropic, default) and **GPT-6 Astra** (OpenAI). The provider is inferred from the model id; `ANTHROPIC_MODEL` is still honored for older `.env` files. `GET /api/health` reports the active `provider` and `model`.
 
 ```bash
 npm test
