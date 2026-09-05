@@ -3812,10 +3812,35 @@ body::before {
   align-items: center;
 }
 
+/* The nudge sits on the light page, not the crimson field: give its buttons
+   page-ink colours instead of the field defaults. */
 .keep-nudge-actions .action-btn {
   min-height: 40px;
   padding: 0 14px;
   font-size: 13px;
+  white-space: nowrap;
+  color: var(--ink);
+  border-color: rgba(28, 24, 20, 0.22);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.keep-nudge-actions .action-btn-primary,
+.keep-nudge-actions .action-btn-primary:hover {
+  color: #FCF6EF !important;
+  background: var(--crimson) !important;
+  border-color: var(--crimson) !important;
+}
+
+html[data-theme="dark"] .keep-nudge-actions .action-btn {
+  color: var(--ink);
+  border-color: rgba(252, 246, 239, 0.22);
+  background: rgba(252, 246, 239, 0.06);
+}
+
+.setting-row .fs-control .action-btn-dark {
+  white-space: nowrap;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .keep-nudge-dismiss {

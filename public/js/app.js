@@ -1079,7 +1079,9 @@
     if (!data || data.app !== 'red-letter' || !Array.isArray(data.journal)) {
       throw new Error('Not a Red Letter backup');
     }
-    const incoming = data.journal.filter((item) => item && typeof item.key === 'string' && item.quote);
+    const incoming = data.journal.filter(
+      (item) => item && typeof item.key === 'string' && (item.body || item.quote)
+    );
     const existing = getJournal();
     const seen = new Set(existing.map((item) => item.key));
     const added = incoming.filter((item) => !seen.has(item.key));
