@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
+const fs = require('fs');
 const zlib = require('zlib');
+const webpush = require('web-push');
 const {
   corpus,
   verifyPassage,
@@ -364,6 +366,131 @@ app.get('/api/health', (_req, res) => {
     freeChatLimit: FREE_CHAT_LIMIT,
     env: IS_PROD ? 'production' : 'development',
   });
+});
+
+/* ═══ WEB PUSH — morning red letter (installed iOS 16.4+ and Android) ═══ */
+const PUSH_STORE = process.env.PUSH_STORE || path.join(__dirname, 'data', 'push-store.json');
+let pushStore = { vapid: null, subs: {} };
+try {
+  pushStore = JSON.parse(fs.readFileSync(PUSH_STORE, 'utf8'));
+  pushStore.subs = pushStore.subs || {};
+} catch (_) {}
+if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  pushStore.vapid = { publicKey: process.env.VAPID_PUBLIC_KEY, privateKey: process.env.VAPID_PRIVATE_KEY };
+} else if (!pushStore.vapid) {
+  pushStore.vapid = webpush.generateVAPIDKeys();
+  savePushStore();
+}
+webpush.setVapidDetails(
+  process.env.VAPID_SUBJECT || 'mailto:hello@redletter.app',
+  pushStore.vapid.publicKey,
+  pushStore.vapid.privateKey
+);
+function savePushStore() {
+  try {
+    fs.mkdirSync(path.dirname(PUSH_STORE), { recursive: true });
+    fs.writeFileSync(PUSH_STORE, JSON.stringify(pushStore));
+  } catch (err) {
+    console.error('push store write failed:', err.message);
+  }
+}
+function localHM(tz) {
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+    const h = parts.find((p) => p.type === 'hour')?.value || '00';
+    const m = parts.find((p) => p.type === 'minute')?.value || '00';
+    return (h === '24' ? '00' : h) + ':' + m;
+  } catch (_) {
+    const d = new Date();
+    return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  }
+}
+function localDay(tz) {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: tz }).format(new Date());
+  } catch (_) {
+    return todayKey();
+  }
+}
+async function sendMorningPush(sub) {
+  const daily = await getDaily();
+  const w = daily.word || {};
+  const quote = String(w.passage || '').replace(/^["“]|["”]$/g, '');
+  const body = quote.length > 140 ? quote.slice(0, 137).replace(/\s+\S*$/, '') + '…' : quote;
+  const payload = JSON.stringify({
+    title: 'Red Letter · ' + (w.verse || 'today'),
+    body: body || 'One red letter is waiting for you today.',
+    tag: 'rla-morning',
+    url: '/?tab=today&source=push',
+  });
+  await webpush.sendNotification(sub.subscription, payload, { TTL: 3600 * 6 });
+}
+async function pushTick() {
+  const entries = Object.entries(pushStore.subs);
+  let dirty = false;
+  for (const [id, sub] of entries) {
+    const tz = sub.tz || 'UTC';
+    const day = localDay(tz);
+    if (sub.lastSent === day) continue;
+    if (localHM(tz) !== (sub.time || '07:30')) continue;
+    try {
+      await sendMorningPush(sub);
+      sub.lastSent = day;
+      dirty = true;
+    } catch (err) {
+      if (err.statusCode === 404 || err.statusCode === 410) {
+        delete pushStore.subs[id];
+        dirty = true;
+      } else {
+        console.error('push failed:', err.statusCode || err.message);
+      }
+    }
+  }
+  if (dirty) savePushStore();
+}
+setInterval(() => pushTick().catch(() => {}), 60 * 1000);
+
+app.get('/api/push/key', (_req, res) => {
+  res.json({ publicKey: pushStore.vapid.publicKey });
+});
+
+app.post('/api/push/subscribe', (req, res) => {
+  const { subscription, time, tz } = req.body || {};
+  if (!subscription?.endpoint || !subscription?.keys?.p256dh) {
+    return res.status(400).json({ error: 'invalid_subscription' });
+  }
+  if (Object.keys(pushStore.subs).length > 50000) {
+    return res.status(503).json({ error: 'capacity' });
+  }
+  const id = getClientId(req);
+  pushStore.subs[id] = {
+    subscription,
+    time: /^\d{2}:\d{2}$/.test(String(time)) ? time : '07:30',
+    tz: typeof tz === 'string' && tz.length < 64 ? tz : 'UTC',
+    lastSent: pushStore.subs[id]?.lastSent || null,
+    updatedAt: Date.now(),
+  };
+  savePushStore();
+  res.json({ ok: true, time: pushStore.subs[id].time, tz: pushStore.subs[id].tz });
+});
+
+app.post('/api/push/unsubscribe', (req, res) => {
+  const id = getClientId(req);
+  delete pushStore.subs[id];
+  savePushStore();
+  res.json({ ok: true });
+});
+
+app.post('/api/push/test', async (req, res) => {
+  const id = getClientId(req);
+  const sub = pushStore.subs[id];
+  if (!sub) return res.status(404).json({ error: 'not_subscribed' });
+  try {
+    await sendMorningPush(sub);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(502).json({ error: 'push_failed', detail: err.statusCode || err.message });
+  }
 });
 
 app.post('/api/waitlist', (req, res) => {

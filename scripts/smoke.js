@@ -183,6 +183,47 @@ async function main() {
     assert(html.includes('Offline') || html.includes('offline'), 'offline page copy');
   });
 
+  await check('web push: VAPID key + subscribe lifecycle', async () => {
+    const key = await req('/api/push/key');
+    assert(key.res.ok && /^[A-Za-z0-9_-]{80,90}$/.test(key.json.publicKey || ''), 'VAPID public key malformed');
+    const bad = await req('/api/push/subscribe', { method: 'POST', body: JSON.stringify({ subscription: {} }) });
+    assert(bad.res.status === 400, 'subscribe should reject invalid subscription');
+    const fake = {
+      endpoint: 'https://updates.push.services.mozilla.com/wpush/v2/smoke-' + Date.now(),
+      keys: { p256dh: 'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM', auth: 'tBHItJI5svbpez7KI4CCXg' },
+    };
+    const sub = await req('/api/push/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ subscription: fake, time: '07:30', tz: 'America/New_York' }),
+    });
+    assert(sub.res.ok && sub.json.ok && sub.json.tz === 'America/New_York', 'subscribe failed');
+    const test = await req('/api/push/test', { method: 'POST', body: '{}' });
+    assert(test.res.status === 200 || test.res.status === 502, 'test push should attempt delivery (got ' + test.res.status + ')');
+    const un = await req('/api/push/unsubscribe', { method: 'POST', body: '{}' });
+    assert(un.res.ok && un.json.ok, 'unsubscribe failed');
+    const gone = await req('/api/push/test', { method: 'POST', body: '{}' });
+    assert(gone.res.status === 404, 'subscription should be removed after unsubscribe');
+  });
+
+  await check('service worker: push + notificationclick + cache bump', async () => {
+    const sw = await (await fetch(BASE + '/sw.js')).text();
+    assert(sw.includes("addEventListener('push'"), 'sw missing push handler');
+    assert(sw.includes("addEventListener('notificationclick'"), 'sw missing notificationclick');
+    assert(sw.includes('showNotification'), 'sw does not show notifications');
+    assert(!sw.includes("'rla-v24'"), 'sw cache version not bumped');
+  });
+
+  await check('advisor threads + voice shell', async () => {
+    const html = await (await fetch(BASE + '/')).text();
+    for (const id of ['advisor-bar', 'resume-row', 'threads-sheet', 'thread-list', 'chat-mic', 'reminder-desc']) {
+      assert(html.includes('id="' + id + '"'), 'missing #' + id);
+    }
+    for (const fn of ['saveCurrentThread', 'openThread', 'deleteThread', 'resumeLastThread', 'toggleVoice', 'subscribePush', 'unsubscribePush', 'sendTestPush']) {
+      assert(html.includes('function ' + fn), 'missing ' + fn + '()');
+    }
+    assert(html.includes("'threads-sheet'"), 'threads sheet not wired to Android back');
+  });
+
   await check('library search payload', async () => {
     const { json } = await req('/api/library');
     assert(json.passages.some((p) => /parable/i.test(p.note || '')), 'parable notes missing for filter');

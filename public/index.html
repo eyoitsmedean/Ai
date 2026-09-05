@@ -231,6 +231,30 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .chat-input{flex:1;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;font-size:16px;resize:none;max-height:100px;background:var(--surface-2);color:var(--ink);min-height:var(--touch)}
 .chat-send{width:var(--touch);height:var(--touch);min-height:var(--touch);background:var(--crimson);border:none;border-radius:var(--r-sm);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send:disabled{opacity:.4}
+.chat-mic{width:var(--touch);height:var(--touch);min-height:var(--touch);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--ink-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;transition:color .2s,border-color .2s}
+.chat-mic.hidden{display:none}
+.chat-mic.listening{color:#fff;background:var(--crimson);border-color:var(--crimson)}
+.chat-mic.listening::after{content:"";position:absolute;inset:-4px;border-radius:calc(var(--r-sm) + 4px);border:2px solid var(--crimson);opacity:.6;animation:micPulse 1.4s ease-out infinite}
+@keyframes micPulse{0%{transform:scale(.92);opacity:.7}100%{transform:scale(1.18);opacity:0}}
+.ghost-btn{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--ink-soft);font-weight:500;font-size:calc(13px * var(--scale));min-height:var(--touch);padding:0 14px}
+.advisor-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px 4px}
+.advisor-bar.hidden{display:none}
+.advisor-bar-title{font-size:calc(12px * var(--scale));color:var(--ink-muted);text-transform:uppercase;letter-spacing:.8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.advisor-bar-actions{display:flex;gap:6px;flex-shrink:0}
+.advisor-bar-actions button{background:none;border:1px solid var(--border);border-radius:999px;color:var(--ink-soft);font-size:calc(12px * var(--scale));font-weight:500;padding:0 12px;min-height:36px;display:inline-flex;align-items:center;gap:6px}
+.resume-row{margin:8px 14px 0;display:flex}
+.resume-row.hidden{display:none}
+.resume-chip{flex:1;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r-sm);padding:12px 14px;text-align:left;color:var(--ink);min-height:var(--touch)}
+.resume-chip small{display:block;font-size:calc(11px * var(--scale));color:var(--ink-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+.resume-chip span{font-size:calc(14px * var(--scale));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.thread-list{display:flex;flex-direction:column;gap:8px}
+.thread-item{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 12px 12px 14px}
+.thread-item.current{border-color:var(--gold)}
+.thread-open{flex:1;text-align:left;background:none;border:none;color:var(--ink);min-height:var(--touch);padding:0}
+.thread-open strong{display:block;font-size:calc(14px * var(--scale));font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.thread-open small{display:block;font-size:calc(11px * var(--scale));color:var(--ink-muted);margin-top:2px}
+.thread-del{background:none;border:none;color:var(--ink-muted);min-width:var(--touch);min-height:var(--touch);font-size:16px}
+.thread-empty{font-size:calc(13px * var(--scale));color:var(--ink-muted);text-align:center;padding:24px 0}
 
 /* Library */
 .filter-chips{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -920,6 +944,19 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     </section>
     <section class="page" id="advisor-page" data-tab="advisor">
       <div class="chat-scroll" id="chat-scroll">
+        <div class="advisor-bar hidden" id="advisor-bar">
+          <div class="advisor-bar-title" id="advisor-bar-title">Conversation</div>
+          <div class="advisor-bar-actions">
+            <button type="button" onclick="openThreads()" aria-label="Saved conversations">Saved</button>
+            <button type="button" onclick="newThread()" aria-label="New conversation">+ New</button>
+          </div>
+        </div>
+        <div class="resume-row hidden" id="resume-row">
+          <button type="button" class="resume-chip" id="resume-chip" onclick="resumeLastThread()">
+            <div style="min-width:0"><small>Continue where you left off</small><span id="resume-title"></span></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
         <div class="quota-bar hidden" id="quota-bar">
           <span><strong id="quota-bar-num">5</strong> free conversations left today</span>
           <button type="button" onclick="openPaywall()">Unlock Plus</button>
@@ -950,6 +987,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
       </div>
       <div class="chat-input-bar">
         <textarea class="chat-input" id="chat-input" rows="1" placeholder="Share what's weighing on you…" aria-label="Message" enterkeyhint="send" autocomplete="off"></textarea>
+        <button type="button" class="chat-mic hidden" id="chat-mic" onclick="toggleVoice()" aria-label="Speak your message" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></button>
         <button type="button" class="chat-send" id="chat-send" onclick="sendChat()" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
     </section>
@@ -1001,17 +1039,24 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%">
       <div>
         <div class="setting-label">Morning reminder</div>
-        <div class="setting-desc">While the app is open. iPhone home-screen apps cannot schedule background alerts — add a calendar reminder if you need one.</div>
+        <div class="setting-desc" id="reminder-desc">Today’s red letter, delivered to your lock screen each morning.</div>
       </div>
       <button type="button" class="ob-toggle" id="reminder-toggle" onclick="toggleReminder()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button>
     </div>
-    <input type="time" class="time-input" id="reminder-time" value="07:30" onchange="saveReminderTime()" aria-label="Reminder time" />
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="time" class="time-input" id="reminder-time" value="07:30" onchange="saveReminderTime()" aria-label="Reminder time" style="flex:1" />
+      <button type="button" class="ghost-btn" onclick="sendTestPush()" style="min-height:var(--touch);padding:0 14px;font-size:13px">Send a test</button>
+    </div>
   </div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">About</div>
     <p class="about-text">The Red Letter Advisor guides you using only the direct words of Jesus from the four Gospels. Every quote is verified against the World English Bible.</p></div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">Crisis resources</div>
     <div class="crisis-links"><a class="crisis-link" href="tel:988">US &amp; Canada: Call or text 988</a><a class="crisis-link" href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">Find help worldwide (IASP)</a></div></div>
   <button type="button" class="danger-btn" onclick="resetOnboarding()">Reset onboarding</button>
+</div></div>
+<div class="sheet" id="threads-sheet"><div class="sheet-hd"><h2 class="sheet-title">Saved conversations</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
+<div class="sheet-body"><p class="about-text" style="margin-bottom:14px">Kept only on this device. Nothing you share here leaves your phone except the words sent to the Advisor.</p>
+  <div class="thread-list" id="thread-list"></div>
 </div></div>
 <div class="sheet" id="paywall-sheet"><div class="sheet-hd"><h2 class="sheet-title">Red Letter Plus</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
 <div class="sheet-body"><p class="about-text">You’ve used today’s free Advisor conversations. Unlimited Red Letter Advisor guidance, premium share cards, and deeper habit craft — Plus is how we keep the corpus free for everyone.</p>
@@ -3666,8 +3711,10 @@ async function sendChat() {
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
+  if (listening) recog?.stop();
   chatMessages.push({ role: 'user', content: text });
   appendMsg('user', esc(text));
+  document.getElementById('resume-row')?.classList.add('hidden');
   chatStreaming = true;
   document.getElementById('chat-send').disabled = true;
   const assistantWrap = appendMsg('assistant', '<span class="text-cursor">▋</span>');
@@ -3723,13 +3770,192 @@ async function sendChat() {
         } catch {}
       }
     }
-    chatMessages.push({ role: 'assistant', content: full });
+    chatMessages.push({ role: 'assistant', content: full, html: bubble.innerHTML, crisis });
+    saveCurrentThread();
   } catch {
     bubble.innerHTML = '<p>Unable to reach the Advisor. Check your connection and try again.</p>';
   }
   chatStreaming = false;
   document.getElementById('chat-send').disabled = false;
   scrollChat();
+}
+
+/* ═══ ADVISOR THREADS (device-only) ═══ */
+const THREAD_MAX = 30;
+let currentThreadId = null;
+
+function loadThreads() {
+  try { return JSON.parse(ls('rla-threads') || '[]'); } catch (_) { return []; }
+}
+function storeThreads(list) {
+  lsSet('rla-threads', JSON.stringify(list.slice(0, THREAD_MAX)));
+}
+function threadTitle(msgs) {
+  const first = msgs.find((m) => m.role === 'user')?.content || 'Conversation';
+  const clean = first.replace(/\s+/g, ' ').trim();
+  return clean.length > 64 ? clean.slice(0, 61).replace(/\s+\S*$/, '') + '…' : clean;
+}
+function saveCurrentThread() {
+  if (!chatMessages.length) return;
+  const list = loadThreads();
+  if (!currentThreadId) currentThreadId = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const existing = list.findIndex((t) => t.id === currentThreadId);
+  const thread = {
+    id: currentThreadId,
+    title: threadTitle(chatMessages),
+    updatedAt: Date.now(),
+    messages: chatMessages.map((m) => ({ role: m.role, content: m.content, html: m.html, crisis: !!m.crisis })),
+  };
+  if (existing >= 0) list.splice(existing, 1);
+  list.unshift(thread);
+  storeThreads(list);
+  lsSet('rla-thread-current', currentThreadId);
+  updateAdvisorBar();
+}
+function clearChatView() {
+  const box = document.getElementById('chat-messages');
+  if (box) box.innerHTML = '';
+  ['chat-welcome', 'advisor-hero', 'suggestions', 'advisor-trust'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+  document.getElementById('advisor-context')?.classList.add('hidden');
+}
+function newThread() {
+  if (chatStreaming) return;
+  chatMessages = [];
+  currentThreadId = null;
+  lsSet('rla-thread-current', '');
+  clearChatView();
+  updateAdvisorBar();
+  closeSheets();
+  document.getElementById('chat-input')?.focus();
+}
+function openThread(id) {
+  if (chatStreaming) return;
+  const thread = loadThreads().find((t) => t.id === id);
+  if (!thread) return;
+  clearChatView();
+  chatMessages = thread.messages.map((m) => ({ role: m.role, content: m.content, html: m.html, crisis: m.crisis }));
+  currentThreadId = thread.id;
+  lsSet('rla-thread-current', thread.id);
+  for (const m of chatMessages) {
+    if (m.role === 'user') appendMsg('user', esc(m.content));
+    else appendMsg('assistant', m.html || formatAI(m.content), { crisis: m.crisis });
+  }
+  updateAdvisorBar();
+  closeSheets();
+  goTab('advisor');
+  setTimeout(scrollChat, 60);
+}
+function deleteThread(id) {
+  const list = loadThreads().filter((t) => t.id !== id);
+  storeThreads(list);
+  if (currentThreadId === id) {
+    chatMessages = [];
+    currentThreadId = null;
+    lsSet('rla-thread-current', '');
+    clearChatView();
+  }
+  renderThreadList();
+  updateAdvisorBar();
+  showToast('Conversation removed');
+}
+function resumeLastThread() {
+  const id = ls('rla-thread-current') || loadThreads()[0]?.id;
+  if (id) openThread(id);
+}
+function updateAdvisorBar() {
+  const bar = document.getElementById('advisor-bar');
+  const title = document.getElementById('advisor-bar-title');
+  const resume = document.getElementById('resume-row');
+  const resumeTitle = document.getElementById('resume-title');
+  const threads = loadThreads();
+  const active = chatMessages.length > 0;
+  if (bar) bar.classList.toggle('hidden', !active && !threads.length);
+  if (title) title.textContent = active ? threadTitle(chatMessages) : (threads.length + ' saved');
+  const last = threads.find((t) => t.id === ls('rla-thread-current')) || threads[0];
+  const showResume = !active && !!last;
+  if (resume) resume.classList.toggle('hidden', !showResume);
+  if (resumeTitle && last) resumeTitle.textContent = last.title;
+}
+function relTime(ts) {
+  const d = Date.now() - ts;
+  const m = Math.round(d / 60000);
+  if (m < 2) return 'just now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.round(m / 60);
+  if (h < 24) return h + ' hr ago';
+  const days = Math.round(h / 24);
+  return days === 1 ? 'yesterday' : days + ' days ago';
+}
+function renderThreadList() {
+  const box = document.getElementById('thread-list');
+  if (!box) return;
+  const threads = loadThreads();
+  if (!threads.length) {
+    box.innerHTML = '<p class="thread-empty">No saved conversations yet. Whatever you bring to the Advisor is kept here, on this device.</p>';
+    return;
+  }
+  box.innerHTML = threads.map((t) =>
+    '<div class="thread-item' + (t.id === currentThreadId ? ' current' : '') + '">' +
+      '<button type="button" class="thread-open" onclick="openThread(\'' + t.id + '\')"><strong>' + esc(t.title) + '</strong>' +
+      '<small>' + Math.ceil(t.messages.length / 2) + ' exchange' + (t.messages.length > 2 ? 's' : '') + ' · ' + relTime(t.updatedAt) + '</small></button>' +
+      '<button type="button" class="thread-del" onclick="deleteThread(\'' + t.id + '\')" aria-label="Delete conversation">✕</button>' +
+    '</div>'
+  ).join('');
+}
+function openThreads() {
+  renderThreadList();
+  document.getElementById('sheet-backdrop').classList.add('open');
+  document.getElementById('threads-sheet').classList.add('open');
+}
+
+/* ═══ VOICE INPUT ═══ */
+let recog = null;
+let listening = false;
+function voiceSupported() {
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+}
+function initVoice() {
+  const mic = document.getElementById('chat-mic');
+  if (!mic || !voiceSupported()) return;
+  mic.classList.remove('hidden');
+}
+function toggleVoice() {
+  const mic = document.getElementById('chat-mic');
+  const input = document.getElementById('chat-input');
+  if (listening) { recog?.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice input isn’t available here'); return; }
+  const base = input.value.trim();
+  recog = new SR();
+  recog.lang = navigator.language || 'en-US';
+  recog.interimResults = true;
+  recog.continuous = false;
+  recog.onstart = () => {
+    listening = true;
+    mic?.classList.add('listening');
+    mic?.setAttribute('aria-pressed', 'true');
+    input.placeholder = 'Listening…';
+  };
+  recog.onresult = (e) => {
+    let text = '';
+    for (const r of e.results) text += r[0].transcript;
+    input.value = (base ? base + ' ' : '') + text.trim();
+  };
+  recog.onerror = (e) => {
+    if (e.error === 'not-allowed') showToast('Allow microphone access to speak');
+    else if (e.error !== 'aborted' && e.error !== 'no-speech') showToast('Couldn’t hear that — try again');
+  };
+  recog.onend = () => {
+    listening = false;
+    mic?.classList.remove('listening');
+    mic?.setAttribute('aria-pressed', 'false');
+    input.placeholder = "Share what's weighing on you…";
+    if (input.value.trim()) input.focus();
+  };
+  try { recog.start(); } catch (_) { showToast('Couldn’t start the microphone'); }
 }
 
 document.getElementById('chat-input')?.addEventListener('keydown', e => {
@@ -4244,6 +4470,8 @@ async function toggleReminder() {
     lsSet('rla-reminder', '0');
     btn?.classList.remove('on');
     btn?.setAttribute('aria-pressed', 'false');
+    await unsubscribePush();
+    updateReminderCopy(false);
     showToast('Reminder off');
     return;
   }
@@ -4255,8 +4483,82 @@ async function toggleReminder() {
   if (!ls('rla-reminder-time')) lsSet('rla-reminder-time', '07:30');
   btn?.classList.add('on');
   btn?.setAttribute('aria-pressed', 'true');
+  const pushed = await subscribePush();
   scheduleLocalReminder();
-  showToast('Morning reminder set for ' + (ls('rla-reminder-time') || '07:30'));
+  updateReminderCopy(pushed);
+  showToast(pushed
+    ? 'His word will arrive at ' + (ls('rla-reminder-time') || '07:30') + ' — even when the app is closed'
+    : 'Morning reminder set for ' + (ls('rla-reminder-time') || '07:30'));
+}
+
+async function unsubscribePush() {
+  lsSet('rla-push', '0');
+  try {
+    const reg = await navigator.serviceWorker?.ready;
+    const sub = await reg?.pushManager?.getSubscription();
+    if (sub) await sub.unsubscribe();
+    await api('/api/push/unsubscribe', { method: 'POST', body: '{}' });
+  } catch (_) {}
+}
+
+function urlB64ToUint8(b64) {
+  const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+  const raw = atob((b64 + pad).replace(/-/g, '+').replace(/_/g, '/'));
+  return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+}
+
+function pushSupported() {
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+}
+
+async function subscribePush() {
+  if (!pushSupported()) return false;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      const keyRes = await api('/api/push/key');
+      const { publicKey } = await keyRes.json();
+      sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8(publicKey) });
+    }
+    const res = await api('/api/push/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({
+        subscription: sub.toJSON(),
+        time: ls('rla-reminder-time') || '07:30',
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      }),
+    });
+    if (!res.ok) return false;
+    lsSet('rla-push', '1');
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function updateReminderCopy(pushed) {
+  const desc = document.getElementById('reminder-desc');
+  if (!desc) return;
+  if (pushed || ls('rla-push') === '1') {
+    desc.textContent = 'Today’s red letter, delivered to your lock screen — even when the app is closed.';
+  } else if (isIOS() && !isStandalone()) {
+    desc.textContent = 'Add Red Letter to your Home Screen first — iPhone only delivers reminders to installed apps.';
+  } else if (!pushSupported()) {
+    desc.textContent = 'Reminders fire while the app is open on this browser.';
+  } else {
+    desc.textContent = 'Today’s red letter, delivered to your lock screen each morning.';
+  }
+}
+
+async function sendTestPush() {
+  if (ls('rla-push') !== '1') { showToast('Turn the reminder on first'); return; }
+  try {
+    const res = await api('/api/push/test', { method: 'POST', body: '{}' });
+    showToast(res.ok ? 'Sent — check your notifications' : 'Could not send. Try toggling the reminder.');
+  } catch (_) {
+    showToast('Could not reach the server');
+  }
 }
 
 function saveReminderTime() {
@@ -4264,6 +4566,7 @@ function saveReminderTime() {
   lsSet('rla-reminder-time', v);
   if (ls('rla-reminder') === '1') {
     scheduleLocalReminder();
+    if (ls('rla-push') === '1') subscribePush();
     showToast('Reminder time updated');
   }
 }
@@ -4278,6 +4581,7 @@ function scheduleLocalReminder() {
 
 function maybeFireReminder() {
   if (ls('rla-reminder') !== '1') return;
+  if (ls('rla-push') === '1') return;
   if (Notification.permission !== 'granted') return;
   const time = ls('rla-reminder-time') || '07:30';
   const now = new Date();
@@ -4395,7 +4699,7 @@ function wireAndroidBack() {
   const ids = [
     'sit-overlay','midday-overlay','amen-overlay','cmd-overlay','breath-overlay',
     'parable-overlay','focus-overlay','rest-overlay','lectio-overlay','silence-overlay',
-    'encounter-overlay','garden-detail','share-modal','settings-sheet','paywall-sheet',
+    'encounter-overlay','garden-detail','share-modal','settings-sheet','paywall-sheet','threads-sheet',
   ];
   ids.forEach((id) => {
     const el = document.getElementById(id);
@@ -4449,6 +4753,9 @@ function initApp() {
     indicator.style.width = w + 'px';
   }
   if (ls('rla-reminder') === '1') scheduleLocalReminder();
+  updateReminderCopy(ls('rla-push') === '1');
+  updateAdvisorBar();
+  initVoice();
   wireKeyboardInset();
   wireAndroidBack();
   maybeShowInstallBanner();

@@ -1,4 +1,4 @@
-const CACHE = 'rla-v24';
+const CACHE = 'rla-v25';
 const PRECACHE = [
   '/',
   '/offline',
@@ -31,6 +31,38 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('message', (e) => {
   if (e.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
+self.addEventListener('push', (e) => {
+  let data = {};
+  try { data = e.data ? e.data.json() : {}; } catch (_) { data = { body: e.data && e.data.text() }; }
+  const title = data.title || 'Red Letter';
+  e.waitUntil(
+    self.registration.showNotification(title, {
+      body: data.body || 'One red letter is waiting for you today.',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      tag: data.tag || 'rla-morning',
+      renotify: false,
+      data: { url: data.url || '/?tab=today' },
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const target = new URL((e.notification.data && e.notification.data.url) || '/', self.location.origin).href;
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const client of list) {
+        if ('focus' in client) {
+          client.navigate ? client.navigate(target).then((c) => c && c.focus()) : client.focus();
+          return;
+        }
+      }
+      return self.clients.openWindow(target);
+    })
+  );
 });
 
 self.addEventListener('fetch', (e) => {

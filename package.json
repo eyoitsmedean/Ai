@@ -3,7 +3,9 @@
   "version": "1.1.0",
   "description": "Red Letter Advisor — daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
   "main": "server.js",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
@@ -15,6 +17,7 @@
     "@anthropic-ai/sdk": "^0.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "web-push": "^3.6.7"
   }
 }
