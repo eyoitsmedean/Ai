@@ -6,6 +6,16 @@ const app = require('../server');
 let server;
 let base;
 
+function sseText(raw) {
+  return raw
+    .split('\n')
+    .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+    .map((line) => {
+      try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+    })
+    .join('');
+}
+
 function request(method, path, body) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
@@ -84,16 +94,36 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
     assert.equal(res.headers['x-accel-buffering'], 'no');
-    const letter = res.raw
-      .split('\n')
-      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
-      .map((line) => {
-        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
-      })
-      .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    const letter = sseText(res.raw);
+    // Without a model the harness writes the letter itself, from the need the writer named.
+    assert.match(letter, /Luke 12:32/);
+    assert.match(letter, /Fear not, little flock/);
+    assert.doesNotMatch(letter, /\{\{/, 'placeholders must be filled with corpus text');
+    assert.match(res.raw, /"source":"letterpress"/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('writes a different letter for a different need', async () => {
+    const shame = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I feel so much shame' }],
+    });
+    const shameLetter = sseText(shame.raw);
+    assert.match(shameLetter, /Luke 15:4/);
+    assert.doesNotMatch(shameLetter, /little flock/);
+    const grief = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'my mother died last week' }],
+    });
+    const griefLetter = sseText(grief.raw);
+    assert.match(griefLetter, /Matthew 5:4/);
+    assert.match(griefLetter, /Blessed are they that mourn/);
+  });
+
+  it('keeps the crisis notice ahead of the letter', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to die' }],
+    });
+    const letter = sseText(res.raw);
+    assert.ok(letter.indexOf('988') < letter.indexOf('**'), '988 must come before the first passage');
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

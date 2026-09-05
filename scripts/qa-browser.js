@@ -126,6 +126,48 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('Advisor hears the need without a model', async () => {
+    await page.evaluate(() => switchTab('advisor'));
+    await page.type('#chat-input', 'I feel so much shame');
+    await page.click('#send-btn');
+    await page.waitForFunction(
+      () => document.querySelectorAll('.msg-ai .scripture-block').length >= 2,
+      { timeout: 10000 }
+    );
+    const letter = await page.evaluate(() => {
+      const wrap = [...document.querySelectorAll('.msg-ai')].pop();
+      return {
+        text: wrap.innerText,
+        cites: [...wrap.querySelectorAll('.scripture-verse')].map((e) => e.textContent.trim()),
+        colophon: !!wrap.querySelector('.letter-colophon'),
+      };
+    });
+    assert(letter.cites.some((c) => /Luke 15:4/.test(c)), 'shame should meet the lost sheep, got ' + letter.cites.join(', '));
+    assert(!/\{\{/.test(letter.text), 'placeholder leaked into the page');
+    assert(letter.colophon, 'letter should say it was set without a model');
+    await page.waitForFunction(
+      () => [...document.querySelectorAll('.msg-ai')].pop().querySelectorAll('.trust-seal.ok').length >= 2,
+      { timeout: 8000 }
+    );
+  });
+
+  await check('second letter does not repeat the first', async () => {
+    await page.type('#chat-input', 'I still feel ashamed');
+    await page.click('#send-btn');
+    await page.waitForFunction(
+      () => document.querySelectorAll('.msg-ai').length >= 2 &&
+        [...document.querySelectorAll('.msg-ai')].pop().querySelector('.msg-save-btn'),
+      { timeout: 10000 }
+    );
+    const cites = await page.evaluate(() =>
+      [...document.querySelectorAll('.msg-ai')].map((w) =>
+        [...w.querySelectorAll('.scripture-verse')].map((e) => e.textContent.trim()))
+    );
+    const first = new Set(cites[0]);
+    assert(cites[1].length >= 1, 'second letter has no passage');
+    assert(cites[1].every((c) => !first.has(c)), 'second letter repeated ' + cites[1].join(', '));
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

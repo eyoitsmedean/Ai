@@ -1378,6 +1378,13 @@ html.sitting .sit-sheet {
 }
 .trust-seal.ok { color: var(--gold); }
 .trust-seal.warn { color: var(--crimson); }
+.letter-colophon {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
 .scripture-block.scripture-verified { border-left-color: var(--gold); }
 
 .crisis-modal {
@@ -2991,6 +2998,7 @@ async function sendMsg(preset) {
   const aiBubble = createStreamBubble();
   let fullText = '';
   let opened = false;
+  let source = '';
 
   try {
     const res = await fetch('/api/chat', {
@@ -3015,6 +3023,7 @@ async function sendMsg(preset) {
         if (raw === '[DONE]') break;
         try {
           const p = JSON.parse(raw);
+          if (p.meta && p.meta.source) { source = p.meta.source; continue; }
           if (p.replace != null) {
             if (!opened) {
               opened = true;
@@ -3042,6 +3051,7 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fullText });
     persistLetters();
     addSaveToChatBubble(aiBubble, fullText, text);
+    if (source === 'letterpress') markLetterpress(aiBubble.wrap);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
     const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
@@ -3060,6 +3070,7 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fallback });
     persistLetters();
     addSaveToChatBubble(aiBubble, fallback, text);
+    markLetterpress(aiBubble.wrap);
   } finally {
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
@@ -3119,6 +3130,14 @@ function addSaveToChatBubble({ wrap }, text, question) {
     saveBtn.disabled = true;
   };
   wrap.appendChild(saveBtn);
+}
+
+function markLetterpress(wrap) {
+  if (!wrap || wrap.querySelector('.letter-colophon')) return;
+  const note = document.createElement('div');
+  note.className = 'letter-colophon';
+  note.textContent = 'Set from the Gospels, without a model';
+  wrap.appendChild(note);
 }
 
 function scrollChat() {
