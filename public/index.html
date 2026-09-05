@@ -2329,7 +2329,6 @@ function startApp() {
   loadDailyContent();
   openBlessingFromUrl();
   openTabFromUrl();
-  restoreLetters();
   bindRituals();
   checkMorningReminder();
   paintInstallState();
@@ -3161,6 +3160,9 @@ chatInput.addEventListener('input', () => {
   chatInput.style.height = 'auto';
   chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
 });
+// Today's letters come back only once the composer exists; calling this from
+// init() threw before `chatInput` was initialized and left the room half-built.
+restoreLetters();
 
 function chatsToday() {
   const raw = JSON.parse(ls('rla-chats') || '{"d":"","n":0}');

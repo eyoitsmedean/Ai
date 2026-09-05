@@ -156,9 +156,8 @@ async function main() {
   });
 
   await check('Carrying puts a person before a verse', async () => {
-    await page.click('#nav-seek');
-    await page.click('#mode-carry');
-    await page.waitForFunction(() => !document.getElementById('carry-pane').hidden, { timeout: 4000 });
+    await page.evaluate(() => { closeSheets(); switchTab('seek'); setSeekMode('carry'); });
+    await page.waitForFunction(() => !document.getElementById('carry-pane').hidden && document.getElementById('seek-page').classList.contains('active'), { timeout: 4000 });
     await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = ''; q.dispatchEvent(new Event('input')); });
     await page.type('#carry-q', 'I want to die');
     await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden, { timeout: 4000 });
@@ -210,6 +209,23 @@ async function main() {
       return localStorage.getItem('rla-journal') === before;
     });
     assert(bad, 'a foreign file changed the journal');
+  });
+
+  await check('reopening with today’s letters does not break the room', async () => {
+    const saved = await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith('rla-letters-')));
+    assert(saved, 'expected today’s letters to be persisted');
+    const errorsBefore = consoleErrors.length;
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+    const state = await page.evaluate(() => ({
+      letters: document.querySelectorAll('#chat-messages .letter').length,
+      leaf: !document.getElementById('last-leaf').hidden,
+      carryBound: typeof exportJournalFile === 'function' && typeof matchConcordanceClient === 'function',
+    }));
+    assert(consoleErrors.length === errorsBefore, 'reload threw: ' + consoleErrors.slice(errorsBefore).join(' | '));
+    assert(state.letters >= 2, 'letters did not come back');
+    assert(state.leaf, 'last leaf should still be closed after reload');
+    assert(state.carryBound, 'script did not finish on reload');
   });
 
   await check('Tuesday: the ribbon names yesterday', async () => {
