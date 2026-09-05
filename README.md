@@ -1,3 +1,9 @@
+# Red Words
+
+The production iPhone and Android app is **`red_words/`** — Flutter, offline, World English Bible, Gospels only. See `red_words/README.md`, `red_words/PRODUCTION_QA.md`, and `red_words/TESTFLIGHT.md`.
+
+The older browser folio below remains in this repo. It is not the store app.
+
 # Red Letter
 
 A quiet reading room for the **words Jesus actually spoke**.
