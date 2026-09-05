@@ -182,6 +182,21 @@ async function main() {
     await page.goto(BASE + '/?review=1&leaf=forty', { waitUntil: 'networkidle0' });
     const plain = await page.$eval('#forty-kicker', (el) => el.textContent);
     assert(/Ash Wednesday|Lent/.test(plain), 'kicker should name the season: ' + plain);
+    const week = await page.evaluate(() => ({
+      palm: fortyKicker(lentInfo(new Date(2027, 2, 21, 9))),
+      holyTue: fortyKicker(lentInfo(new Date(2027, 2, 23, 9))),
+      thuMorning: fortyKicker(lentInfo(new Date(2027, 2, 25, 9))),
+      thuEvening: fortyKicker(lentInfo(new Date(2027, 2, 25, 19))),
+      holySat: fortyKicker(lentInfo(new Date(2027, 2, 27, 12))),
+      midLent: fortyKicker(lentInfo(new Date(2027, 2, 3, 12))),
+      method: document.querySelector('.forty-method')?.textContent || '',
+    }));
+    assert(/^Palm Sunday/.test(week.palm), 'Palm Sunday label: ' + week.palm);
+    assert(/^Holy Week · Day 36 of Forty/.test(week.holyTue), 'Holy Week label: ' + week.holyTue);
+    assert(/^Holy Week/.test(week.thuMorning) && /^Triduum · Day 38/.test(week.thuEvening), 'Triduum should begin Thursday evening: ' + week.thuMorning + ' / ' + week.thuEvening);
+    assert(/^Triduum · Day 40 of Forty/.test(week.holySat), 'Holy Saturday: ' + week.holySat);
+    assert(/^Lent · Day/.test(week.midLent), 'mid-Lent stays Lent: ' + week.midLent);
+    assert(/Sundays not numbered/.test(week.method) && /Holy Thursday/.test(week.method), 'counting method must be stated');
   });
 
   await check('The blessing press pulls real proofs', async () => {
@@ -204,6 +219,56 @@ async function main() {
     assert(/John 14:27|Matthew 11:28/.test(card.cite), 'default saying should bless: ' + card.cite);
     await page.click('#press-formats [data-format="story"]');
     await page.waitForFunction(() => [...document.querySelectorAll('#press-proofs img')].every((i) => i.complete && i.naturalHeight === 1920), { timeout: 8000 });
+    await page.click('#press-formats [data-format="grid"]');
+    await page.waitForFunction(() => [...document.querySelectorAll('#press-proofs img')].every((i) => i.complete && i.naturalWidth === 1080 && i.naturalHeight === 1440), { timeout: 8000 });
+    // The share must happen inside the tap: no await between the click and navigator.share.
+    const shared = await page.evaluate(() => {
+      const calls = [];
+      navigator.canShare = (d) => !!(d && d.files && d.files.length);
+      navigator.share = (d) => { calls.push({ sync: true, files: (d.files || []).map((f) => [f.name, f.type, f.size]) }); return Promise.resolve(); };
+      const before = Date.now();
+      sendPressBlessing('dawn');
+      const within = Date.now() - before;
+      return { calls, within, cached: Object.keys(proofBlobs).sort() };
+    });
+    assert(shared.cached.join(',') === 'dawn,parchment,void', 'three proofs should be cached: ' + shared.cached);
+    assert(shared.calls.length === 1 && shared.calls[0].sync, 'share must be called synchronously from the tap');
+    assert(shared.calls[0].files[0][1] === 'image/png' && shared.calls[0].files[0][2] > 20000, 'a real PNG should be handed to the sheet');
+  });
+
+  await check('Breath keeps counting when motion is reduced, and the Press is a keyboard tablist', async () => {
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.goto(BASE + '/?review=1&leaf=breath', { waitUntil: 'networkidle0' });
+    await page.click('#breath-toggle');
+    const p0 = await page.$eval('#breath-phase', (el) => el.textContent);
+    await new Promise((r) => setTimeout(r, 4300));
+    const p1 = await page.evaluate(() => ({
+      phase: document.getElementById('breath-phase').textContent,
+      transform: getComputedStyle(document.getElementById('breath-ring')).transform,
+      live: document.getElementById('breath-phase').getAttribute('aria-live'),
+    }));
+    assert(p0 === 'Inhale' && p1.phase === 'Hold', 'the count must advance without motion: ' + p0 + ' → ' + p1.phase);
+    assert(p1.transform === 'none' && p1.live === 'polite', 'ring must not swell under reduced motion; phase must announce');
+    await page.click('#breath-toggle');
+    const tabs = await page.evaluate(() => {
+      const t = [...document.querySelectorAll('#press-walk [role="tab"]')];
+      return {
+        controls: t.every((b) => b.getAttribute('aria-controls') === 'press-' + b.dataset.leaf && document.getElementById(b.getAttribute('aria-controls'))),
+        roving: t.filter((b) => b.tabIndex === 0).length,
+        panels: [...document.querySelectorAll('.press-leaf')].every((p) => p.getAttribute('role') === 'tabpanel' && p.getAttribute('aria-labelledby') === 'press-tab-' + p.dataset.leaf),
+        hidden: [...document.querySelectorAll('.press-leaf')].filter((p) => p.hidden).length,
+      };
+    });
+    assert(tabs.controls && tabs.panels, 'tabs and panels must be wired with aria-controls / aria-labelledby');
+    assert(tabs.roving === 1 && tabs.hidden === 5, 'one tab in the tab order, five panels hidden: ' + JSON.stringify(tabs));
+    await page.focus('#press-tab-breath');
+    await page.keyboard.press('ArrowRight');
+    const afterRight = await page.evaluate(() => ({ leaf: document.querySelector('.press-leaf.on')?.dataset.leaf, focus: document.activeElement?.id }));
+    assert(afterRight.leaf === 'parable' && afterRight.focus === 'press-tab-parable', 'ArrowRight should move and select: ' + JSON.stringify(afterRight));
+    await page.keyboard.press('End');
+    const atEnd = await page.$eval('.press-leaf.on', (el) => el.dataset.leaf);
+    assert(atEnd === 'forty', 'End should reach Forty: ' + atEnd);
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
   });
 
   await check('Examen keeps the evening and hands the morning a catchword', async () => {
