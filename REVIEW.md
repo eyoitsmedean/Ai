@@ -30,13 +30,32 @@ Season paper: `/review?season=lent` (also previews Forty *in* Lent) · `advent` 
 
 ## What must stay true
 
-- No invented Jesus. Every crimson sentence is KJV speech — `npm test` seals every Press quote against the corpus.
+- No invented Jesus. Every crimson sentence is KJV speech — `npm test` seals every Press quote against the corpus, and a clipping shorter than the sense of the verse no longer counts as the verse.
 - The chatbot is never called Him.
 - A missed Forty day does not lock a door.
-- 988 remains in the title page, the Advisor head, and settings.
+- 988 remains in the title page, the Advisor head, and settings — by call, text, or chat.
 - Chrome still leaves the room when you Sit.
+
+## What the hardening pass changed, and why
+
+Each line traces to a source that was actually read, not remembered.
+
+- **Holy Week is named.** From Palm Sunday the Forty kicker says *Holy Week*; from Thursday evening, *Triduum*. The Roman Missal closes Lent at the Mass of the Lord’s Supper (General Norms 28); the rooms keep the devotional count — Ash Wednesday to Holy Saturday, Sundays not numbered — and a line under the grid says so. USCCB’s 2027 calendar confirms Ash Wednesday 10 February and Easter 28 March.
+- **The card leaves the phone on the first tap.** Web Share demands the tap still be live; Safari has dropped shares that waited on async work. The proofs are pressed while you type, so *Send* hands a finished PNG to the sheet with nothing awaited in between. Same for the general share sheet.
+- **The wordmark stays tracked on older iPhones.** Canvas `letterSpacing` arrived in Safari 18.4; before that it was silently ignored. The card now spaces the letters by hand when the property is missing.
+- **Grid 3:4 (1080×1440).** Several 2026 guides report Instagram now takes 3:4 natively so a post fills both feed and profile grid uncropped. Offered as the fourth format; the evidence is secondary, so it is optional and last.
+- **The breath counts without motion.** With *Reduce Motion* on, the ring no longer swells but the count still turns — Inhale, Hold, Exhale — and the phase is announced to screen readers. Before, it stalled on the first word. The copy still makes no medical claim: trials find slow, attended breathing helps and the exact ratio matters little.
+- **The Press is a real tablist.** Arrow keys, Home, End; one tab in the tab order; each leaf a labelled panel; the five you are not reading are hidden from assistive tech too.
+- **The Crown’s patentee is named.** KJV is public domain in the U.S.; in the U.K. it sits under royal prerogative administered by Cambridge University Press, whose permission text asks for an acknowledgement (printed in settings) and *KJV* after quotations (already on every card). Distribution to U.K. readers of the full spoken library is a question for counsel before that launch, not for code.
+- **On iPhone, the reminder toggle tells you what to do.** iOS exposes notifications only to a web app launched from the Home Screen; the toast now says so instead of shrugging.
+
+## Open for you to decide
+
+- U.K. posture for the full library (over 500 verses) — legal, not engineering.
+- `data/scripture.js` still holds a dormant World English Bible fetch; the server never imports it. Delete, or keep for a licensed-translation future?
+- Keep Grid 3:4 once a Meta primary page is found, or drop it.
 
 ## Checks
 
-- `npm test` — 41 route and content tests, including the Press seal and the `/review` deep links.
-- `node scripts/qa-browser.js` — 12 browser walks: Forty’s church-year math (Ash Wednesday 2026/2027, Sundays, Day 40, Easter), the proofs at 1080×1350 and 1080×1920, the examen catchword, parable journaling, the hourly hint.
+- `npm test` — 43 route and content tests, including the Press seal (reference *and* score), the clipping guard, the 988 modalities, the Cambridge line, and the `/review` deep links.
+- `node scripts/qa-browser.js` — 13 browser walks: Forty’s church-year math (Ash Wednesday 2026/2027, Sundays, Day 40, Palm Sunday, Holy Week, Triduum), the proofs at 1080×1350 / 1920 / 1440, a synchronous share from the tap, the examen catchword, parable journaling, the hourly hint, the breath under reduced motion, and the keyboard tablist.
