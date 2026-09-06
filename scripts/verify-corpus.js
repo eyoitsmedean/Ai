@@ -28,21 +28,30 @@ function loose(s) {
   return norm(s).toLowerCase().replace(/[^a-z0-9' ]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+const MAX_ATTEMPTS = 7;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 async function fetchWeb(ref, attempt = 0) {
   const url = 'https://bible-api.com/' + encodeURIComponent(ref.replace(/[–—]/g, '-')) + '?translation=web';
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-    if (res.status === 429 && attempt < 4) {
-      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
-      return fetchWeb(ref, attempt + 1);
+    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const body = await res.text();
+    let data = null;
+    try { data = JSON.parse(body); } catch (_) {}
+    // bible-api rate-limits with a 200 "Retry later" text body as well as 429s.
+    if (res.status === 429 || !data || /retry later/i.test(body)) {
+      if (attempt < MAX_ATTEMPTS) {
+        await sleep(Math.min(30000, 2000 * 2 ** attempt));
+        return fetchWeb(ref, attempt + 1);
+      }
+      return null;
     }
-    if (!res.ok) return null;
-    const data = await res.json();
+    if (!res.ok || data.error) return null;
     // Whitespace-normalize only; keep WEB's typographic quotes for alignment output.
     return { text: String(data.text || '').replace(/\s+/g, ' ').trim(), verses: data.verses || [] };
   } catch (err) {
-    if (attempt < 3) {
-      await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+    if (attempt < MAX_ATTEMPTS) {
+      await sleep(Math.min(30000, 1500 * 2 ** attempt));
       return fetchWeb(ref, attempt + 1);
     }
     return null;
@@ -78,7 +87,7 @@ async function fetchWebCached(ref) {
   const k = ref.replace(/[–—]/g, '-').toLowerCase();
   if (!webCache.has(k)) {
     webCache.set(k, await fetchWeb(ref));
-    await new Promise((r) => setTimeout(r, 350));
+    await sleep(Number(process.env.VERIFY_DELAY_MS || 600));
   }
   return webCache.get(k);
 }
