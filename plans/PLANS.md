@@ -4,7 +4,7 @@ Plain-text twin of [`plans/index.html`](./index.html). Open the HTML for the int
 
 **Three movements.** Build (4 Sep → the birth, about 5 weeks): sell, deliver, close the queues. Baby (birth + 30 days): zero optional hours; links stay live. Build (→ 3 Dec, about 3–4 weeks): re-open into Veterans Day and Advent. The playbook assumes the birth around 10 Oct; the HTML moves the phases when you set the real date.
 
-**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Real hours:** about 40 of a nominal 58 (4.5/week, minus the Baby weeks) · **Base case, one engine:** $2,500–4,000 · **Floor:** $350
+**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Real hours:** about 39 of a nominal 59 (4.5/week × 13 weeks, minus the 31 Baby days) · **Base case, recommended stack (I + II):** $1,350, stretch $4,000 · **Floor:** $350
 
 Everything here is an estimate, not a promise. Compliments are not demand. Only the ledger counts.
 
@@ -35,24 +35,44 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 | Role | Plan | Why |
 | --- | --- | --- |
 | **Engine** | I · One-Fix Friday | Highest probability of a first dollar. Local, visual, bounded, two-hour builds. |
-| **Background** | II · Red Letter — Advent | Already built. Finish in September, launch 1 Nov, sleep in between. The rehearsal for Lent. |
-| **Seasonal** | III · The Voice Capsule | One sample before the baby. Sell in Veterans Day week. Deliver for Christmas. |
+| **Background** | II · Red Letter — Advent | Already built. Finish in September, set 1 Nov to launch by itself, sleep in between. The rehearsal for Lent. |
+| **Swap** | III · The Voice Capsule | The most *you* of the five — and it does not fit beside Advent (see the hours below). Advent now and the Capsule at Memorial Day, or the Capsule now and Advent stays free. |
 | **Optional** | IV · The Civilian Interview | Fastest to sell, easiest to stop. Swap for Plan I if you'd rather talk to veterans than plumbers. |
-| **Upsell** | V · Workflow Rescue | Never sold cold. The answer to a question a One-Fix client will ask. |
+| **Upsell** | V · Workflow Rescue | Never sold cold. The answer to a question a One-Fix client will ask — and eleven hours found inside the same budget. |
 
-Base case for Engine + Background + Seasonal ≈ $2,700. With one Rescue ≈ $4,200. Floor if only the first One-Fix sells: $350.
+### Does it fit? — the hours
+
+Planning estimates against 4.5 optional hours per Build week; Baby is zero by rule. With the birth on 10 Oct there are about **23 hours before** (5.1 Build weeks) and **15.5 after** (3.4 Build weeks). The HTML recomputes this from the real date.
+
+| Plan | Before the birth | After | Base cash |
+| --- | --- | --- | --- |
+| I · One-Fix Friday (3 h / Build week) | 15.5 h | 10.5 h | $700 + $350 |
+| II · Advent (1.5 h / Sept week + 2.5 in Nov) | 7.5 h | 2.5 h | $300 |
+| III · Voice Capsule (7 h sample + 7 h per capsule) | 7 h | 14 h | $990 |
+| IV · Civilian Interview (1 h / week + 1.5 h per session) | 9.5 h | 8 h | $298 + $447 |
+| V · Workflow Rescue (one client, either Build) | 11 h | 11 h | $1,500 |
+| **Available** | **23 h** | **15.5 h** | |
+
+- **I + II** (recommended): 23 h before, 13 h after — fits, with two hours to spare after the birth and none before. Base $1,350, stretch $4,000.
+- **I + II + III**: over by 7 h before and 11.5 h after. It does not fit. This is why the Capsule is a swap, not an addition.
+- **I + III**: fits before (22.5 h); over by 9 h after unless One-Fix stops sending in November. Base $2,040.
+- **V** on top of anything: eleven hours that must come out of One-Fix's sends in the same Build. Take it when asked; drop the sends that week.
+
+The old headline — "Engine + Background + Seasonal ≈ $2,700" — assumed hours that do not exist. It is gone.
 
 ---
 
 ## Side by side
 
-| # | Plan | Price | 90-day cash (floor · base · stretch) | Hours | First dollar |
-| --- | --- | --- | --- | --- | --- |
-| I | One-Fix Friday | $350 flat, refund if it doesn't help | $350 · **$1,400** · $2,800 | 3–3.5 / wk in selling weeks | Fri 18 Sep |
-| II | Red Letter — Advent edition | $12 PDF; $59.99 year only after 10 PDFs | $0 · **$300** · $1,200 | 1.5 / wk, mostly September | Sun 1 Nov (pre-orders) |
-| III | The Voice Capsule | $495 founding (first 3); $750–950 after | $0 · **$990** · $1,485 | 6–8 per capsule, cap 3 | Wed 11 Nov (deposits) |
-| IV | The Civilian Interview | $149 founding (first 5); $199 after | $149 · **$800** · $1,600 | 1.5 per session + 1 / wk outreach | Fri 25 Sep |
-| V | Workflow Rescue | $1,500 fixed, half up front | $0 · **$1,500** · $3,000 | 10–12 all-in, one client | When a client says "and also…" |
+| # | Plan | Price | 90-day cash (floor · base · stretch) | The arithmetic behind the base | Hours in the window | First dollar |
+| --- | --- | --- | --- | --- | --- | --- |
+| I | One-Fix Friday | $350 flat, refund if it doesn't help | $350 · **$1,050** · $2,800 | ~40 videos sent → 3 paid (≈ 1 in 13); stretch 8 | ≈ 26 h (3 / Build week) | Fri 18 Sep |
+| II | Red Letter — Advent edition | $12 PDF; $59.99 year only after 10 PDFs | $0 · **$300** · $1,200 | 25 PDFs; stretch 60 PDFs + 8 Years | ≈ 10 h | Sun 1 Nov (pre-orders) |
+| III | The Voice Capsule | $495 founding (first 3); $750–950 after | $0 · **$990** · $1,485 | 2 capsules paid in full; stretch 3 | ≈ 21 h (+ unpaid sample) | Wed 11 Nov (deposits) |
+| IV | The Civilian Interview | $149 founding (first 5); $199 after | $149 · **$745** · $1,340 | 5 × $149; stretch + 3 × $199 | ≈ 17.5 h | Fri 25 Sep |
+| V | Workflow Rescue | $1,500 fixed, half up front | $0 · **$1,500** · $3,000 | 1 client; stretch 2 | ≈ 11 h, one Build | When a client says "and also…" |
+
+The conversion assumptions are the weakest numbers on this page. Nobody has data on how a sixty-second phone video converts with Treasure Valley plumbers. Your first twenty sends are that data; the kill rules exist so you stop before the assumption costs more than an evening.
 
 ---
 
@@ -80,7 +100,7 @@ Base case for Engine + Background + Seasonal ≈ $2,700. With one Rescue ≈ $4,
 - **What they get:** "Advent with His words" — 28 days (Sun 29 Nov → Sat 26 Dec), one saying, one line of reflection, one blank line. PDF for phone and print. The same content becomes an in-app Advent path (the church-year retint exists). If the PDF sells, the Year: $59.99 unlocks the live Advisor.
 - **Why you:** nobody owns "the red letters" as a premium brand — you wrote that. Corpus, design language, forty-day path, share cards, and five ad scripts already exist. Only the thing with a price is missing. Advent rehearses Lent (Ash Wednesday 10 Feb 2027), which your research calls the payday.
 
-**Build.** W1 pick 28 sayings from `data/paths.js` and `lib/curated.js` · W2 reflections, lay out the PDF from the app's print styles · W3 type pass, export, $12 link with file delivery (test-buy it), app on a real URL · W4 four share cards, one face-free vertical video, saved · W5 message five small-group leaders (free copies for sharing) **Baby.** W6–9 nothing. **Build.** W10 pre-orders open the first evening allowed, post once, send leaders their copies · W11 one card, one post · W12 22 Nov deliver; Black Friday post, no discount · W13 Advent begins 29 Nov, in-app path live; ≥10 PDFs → build the year gate in December, else stay free and aim at Lent.
+**Build.** W1 pick 28 sayings from `data/paths.js` and `lib/curated.js` · W2 reflections, lay out the PDF from the app's print styles · W3 type pass, export, $12 link with file delivery (test-buy it), app on a real URL · W4 four share cards, one face-free vertical video, saved · W5 message five small-group leaders (free copies for sharing); then set 1 Nov to happen without you — link live, launch post scheduled, leaders holding their copies. **Baby.** W6–9 nothing; on 1 Nov the scheduled post goes out and pre-orders open on their own (a live link is not a working hour). **Build.** W10 first evening back: answer replies, post the video and one card · W11 one card, one post · W12 22 Nov deliver; Black Friday post, no discount · W13 Advent begins 29 Nov, in-app path live; ≥10 PDFs → build the year gate in December, else stay free and aim at Lent.
 
 **Kill rule.** Fewer than three pre-orders by 15 Nov → deliver to whoever bought, don't build the year, keep the words free, point everything at Lent.
 
@@ -88,7 +108,7 @@ Base case for Engine + Background + Seasonal ≈ $2,700. With one Rescue ≈ $4,
 
 ---
 
-## III · The Voice Capsule — seasonal
+## III · The Voice Capsule — the swap
 
 > One hour with a veteran about one chapter. Their family receives ten minutes of his voice, a keepsake, and a short piece of music written for it.
 
@@ -137,11 +157,21 @@ Base case for Engine + Background + Seasonal ≈ $2,700. With one Rescue ≈ $4,
 ## Money & paper
 
 - **Waterfall.** Every dollar splits the same day: 30% to a tax jar, the rest to the household buffer. Nothing speculative. Nothing reinvested until a plan has paid twice. Allowed purchases in ninety days: a domain (~$12) and, if needed, a call recorder (~$10).
-- **Tax.** Side income is taxable from the first dollar. Net self-employment earnings past $400 mean Schedule C and self-employment tax; estimated payments may apply. Keep every receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. Not tax advice.
-- **Your name.** Invoice under your legal name and you need no filing to begin. A trade name in Idaho needs an Assumed Business Name filing with the Secretary of State (small fee; confirm current). An LLC waits until something has paid three times.
+- **Tax.** Side income is taxable from the first dollar. Net self-employment earnings of $400 or more in a year mean Schedule C, Schedule SE, and self-employment tax; estimated payments may apply ([IRS](https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center)). Stripe's standard domestic-card rate is 2.9% + 30¢ per successful transaction ([Stripe pricing](https://stripe.com/us/pricing)), so a $350 fix nets about $339.55. Keep every receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. Not tax advice.
+- **Your name.** Invoice under your legal name and you need no filing to begin. A trade name in Idaho ("One-Fix Friday" on a Stripe page counts) needs a Certificate of Assumed Business Name with the Secretary of State: $25 online through SOSBiz, $45 on paper, no renewal ([Idaho SOS business forms](https://sos.idaho.gov/business-forms/)). An LLC waits until something has paid three times. Facts checked 6 Sep 2026.
 - **Employer line.** Read your agreements yourself; paste them nowhere. Grey area → one written question before the first paid job. Until answered, insurance, benefits, HR, staffing, and finance are off-limits buyers.
 - **Family gate.** If a week's work steals sleep or quietly moves load onto your partner, it stops. "Nothing this week" is a valid entry.
 
 ---
 
 *Built from this repository, its market research, and your own venture notes. Personal details were deliberately left out because the repository is public.*
+
+---
+
+## Status
+
+- **Deliverables:** `plans/index.html` (interactive; state in `localStorage` key `ninety.v1`), this file, `npm run plans` (serves `plans/` on port 3010 for a phone on the same Wi-Fi).
+- **Verified:** headless-browser checks of the budget panel (default I + II fits; I + II + III over; state survives reload; birth date moves hours, calendar, movements, ledger target; reset restores defaults); no console errors; external facts above checked against the linked sources on 6 Sep 2026.
+- **Not verified, by nature:** every conversion assumption. They are labelled as such and each plan has a kill rule and a date.
+- **Open decisions (yours):** the real birth date; Advent or the Capsule for the second Build; whether the outside-work clause needs the one written question before the first paid fix.
+- **Next executable step:** Week 1 of Plan I — the Stripe link, three scripts on the phone, the list of twenty, five videos sent.

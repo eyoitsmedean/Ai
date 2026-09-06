@@ -252,7 +252,37 @@ table.cmp{width:100%;border-collapse:collapse;font-size:.92rem}
 table.cmp th{font-family:var(--ui);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:8px 8px;border-bottom:1px solid var(--rule)}
 table.cmp td{padding:10px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
 table.cmp td:first-child{font-family:var(--display);font-style:italic;color:var(--crimson);white-space:nowrap}
+table.cmp td:nth-child(5){min-width:118px}
 table.cmp td b{font-weight:600}
+
+/* Budget */
+table.bud{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:14px}
+table.bud th{font-family:var(--ui);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:8px 8px;border-bottom:1px solid var(--rule)}
+table.bud td{padding:9px 8px;border-bottom:1px solid var(--rule);vertical-align:middle}
+table.bud td.pl{font-family:var(--display);font-size:1rem;font-weight:500}
+table.bud td.pl i{font-style:italic;color:var(--crimson);margin-right:6px}
+table.bud td.cash{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+table.bud td.cash b{color:var(--ink);font-weight:600}
+table.bud label{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-family:var(--ui);font-size:.85rem;color:var(--muted);white-space:nowrap}
+table.bud label input{appearance:none;width:18px;height:18px;border:1px solid var(--rule-strong);border-radius:5px;background:var(--paper);display:grid;place-items:center;transition:all .18s;flex:none}
+table.bud label input:checked{background:var(--crimson);border-color:var(--crimson)}
+table.bud label input:checked::after{content:'';width:5px;height:9px;border:solid var(--paper);border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+table.bud label input:checked + span{color:var(--ink)}
+table.bud tfoot td{border-bottom:0;padding-top:12px;vertical-align:top}
+table.bud tfoot .sc{display:block;margin-bottom:4px}
+.gauge{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;margin-top:6px}
+.gauge i{display:block;height:100%;background:var(--ink);width:0;transition:width .4s var(--ease)}
+.gauge.over i{background:var(--crimson)}
+.gh{font-family:var(--ui);font-size:.82rem;color:var(--muted);white-space:nowrap}
+.gh b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.gh.over b{color:var(--crimson)}
+.verdict{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:.98rem}
+.verdict.over{color:var(--ink)}
+.verdict .sc{display:block;margin-bottom:4px}
+@media (max-width:640px){table.bud th:nth-child(4),table.bud td:nth-child(4){display:none}table.bud .bl{display:none}table.bud td{padding-left:4px;padding-right:4px}table.bud td.pl{font-size:.95rem}}
+
+/* Focus */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--crimson);outline-offset:2px;border-radius:4px}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* Colophon */
@@ -294,9 +324,9 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
   <div class="movements" id="movements" aria-label="The three movements"></div>
   <div class="facts">
     <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
-    <div class="fact"><span class="sc">Real hours</span><span class="v">≈ 40 of 58</span></div>
-    <div class="fact"><span class="sc">Base case, one engine</span><span class="v">$2,500 – $4,000</span></div>
-    <div class="fact"><span class="sc">Floor</span><span class="v">$350</span></div>
+    <div class="fact"><span class="sc">Real hours</span><span class="v" id="f-hours">≈ 38 of 58</span></div>
+    <div class="fact"><span class="sc">Your base case</span><span class="v" id="f-base">$1,350</span></div>
+    <div class="fact"><span class="sc">Floor</span><span class="v" id="f-floor">$350</span></div>
   </div>
 </div>
 
@@ -342,12 +372,23 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
   <div class="leaf">
     <div class="stack">
       <div class="tier"><span class="sc">Engine</span><div><b><button class="link" data-go="fix">I · One-Fix Friday</button></b><p>Highest probability of a first dollar. Local, visual, bounded, two-hour builds. Uses the one skill you have that almost nobody in a small town has: directing agents to ship in an evening.</p></div></div>
-      <div class="tier"><span class="sc">Background</span><div><b><button class="link" data-go="red">II · Red Letter — Advent</button></b><p>Already built. Finish the Advent companion in September, launch 1 Nov, sleep in between. Low cash now; it is the rehearsal for Lent, which your own research calls the payday.</p></div></div>
-      <div class="tier"><span class="sc">Seasonal</span><div><b><button class="link" data-go="voice">III · The Voice Capsule</button></b><p>One sample before the baby. Sell only in the week of Veterans Day. Deliver for Christmas. The most <em>you</em> of the five.</p></div></div>
+      <div class="tier"><span class="sc">Background</span><div><b><button class="link" data-go="red">II · Red Letter — Advent</button></b><p>Already built. Finish the Advent companion in September, set 1 Nov to launch by itself, sleep in between. Low cash now; it is the rehearsal for Lent, which your own research calls the payday.</p></div></div>
+      <div class="tier"><span class="sc">Swap</span><div><b><button class="link" data-go="voice">III · The Voice Capsule</button></b><p>The most <em>you</em> of the five — and it does not fit beside Advent. Its September sample and two November capsules take the same hours. Choose: Advent now and the Capsule at Memorial Day, or the Capsule now and Advent stays free. The panel below does the arithmetic.</p></div></div>
       <div class="tier"><span class="sc">Optional</span><div><b><button class="link" data-go="interview">IV · The Civilian Interview</button></b><p>Fastest to sell, easiest to stop. Run it instead of Plan I if you'd rather talk to veterans than to plumbers.</p></div></div>
-      <div class="tier"><span class="sc">Upsell</span><div><b><button class="link" data-go="rescue">V · Workflow Rescue</button></b><p>Never sold cold. It is the answer to a question a One-Fix client will ask you. One in the window is $1,500.</p></div></div>
+      <div class="tier"><span class="sc">Upsell</span><div><b><button class="link" data-go="rescue">V · Workflow Rescue</button></b><p>Never sold cold. It is the answer to a question a One-Fix client will ask you. One in the window is $1,500 — and about eleven hours you must find inside the same budget.</p></div></div>
     </div>
-    <p class="note" style="margin:16px 0 0">Base case for Engine + Background + Seasonal: roughly $2,700. With one Rescue: roughly $4,200. Floor if only the first One-Fix sells: $350. These are planning numbers, not forecasts.</p>
+    <p class="note" style="margin:16px 0 0">Every number on this page is a planning estimate, not a forecast. Each plan's card shows the arithmetic behind its base case; the panel below shows whether the hours exist.</p>
+  </div>
+
+  <div class="leaf" style="margin-top:14px" id="budget">
+    <h3 style="margin-bottom:4px">Does it fit?</h3>
+    <p class="note">Tick what you intend to run in each Build. Hours are planning estimates against four and a half a week; Baby is zero by rule. Cash is each plan's base case. The date in the calendar moves all of it.</p>
+    <table class="bud">
+      <thead><tr><th>Plan</th><th><span class="bl">Build · </span>before</th><th><span class="bl">Build · </span>after</th><th style="text-align:right">Base cash</th></tr></thead>
+      <tbody id="bud"></tbody>
+      <tfoot id="bud-foot"></tfoot>
+    </table>
+    <div class="verdict" id="bud-verdict"></div>
   </div>
 
   <div class="leaf tonight" style="margin-top:14px">
@@ -377,7 +418,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <tbody id="cmp"></tbody>
   </table>
   </div>
-  <p class="note" style="margin-top:12px">Cash is floor · base · stretch. "Fit" is the honest answer to: does this use something only you have? Everything is before tax, tools, and the time it takes to find the buyer.</p>
+  <p class="note" style="margin-top:12px">Cash is floor · base · stretch; each plan's card shows the arithmetic behind its base. Hours in the window follow the birth date. "Fit" is the honest answer to: does this use something only you have? Everything is before tax, tools, and the time it takes to find the buyer.</p>
 </section>
 
 <section id="calendar" class="wrap">
@@ -422,9 +463,10 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <h3>The waterfall</h3>
     <p>Every dollar that arrives is split the same day: <b>30% to a tax jar</b> (a separate savings account is enough), the rest to the household buffer. Nothing speculative. Nothing reinvested until a plan has paid twice. The only purchases allowed in these ninety days are a domain (about $12) and, if you need it, a call-recording app (about $10).</p>
     <h3>Tax, plainly</h3>
-    <p>Side income is taxable from the first dollar. Once net self-employment earnings pass <b>$400</b> in the year you file Schedule C and pay self-employment tax; quarterly estimated payments may apply. Keep every Stripe receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. This page is not tax advice.</p>
+    <p>Side income is taxable from the first dollar. Net self-employment earnings of <b>$400 or more</b> in a year mean you file Schedule C and Schedule SE and pay self-employment tax; quarterly estimated payments may apply. Stripe's standard rate for domestic cards is <b>2.9% + 30¢</b> per successful transaction, so a $350 fix nets about $339.55. Keep every receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. This page is not tax advice.</p>
     <h3>Your name on the invoice</h3>
-    <p>Invoice under your own legal name and you need no filing to begin. If you trade under a name that isn't yours, Idaho requires an Assumed Business Name filing with the Secretary of State (a small fee; confirm the current amount). An LLC can wait until something has paid three times.</p>
+    <p>Invoice under your own legal name and you need no filing to begin. If you trade under a name that isn't yours ("One-Fix Friday" on a Stripe page counts), Idaho requires a Certificate of Assumed Business Name with the Secretary of State: <b>$25 filed online</b> through SOSBiz, $45 on paper, no renewal. An LLC can wait until something has paid three times.</p>
+    <p class="note" style="margin-top:-6px">Checked 6 Sep 2026: <a href="https://stripe.com/us/pricing">Stripe pricing</a> · <a href="https://sos.idaho.gov/business-forms/">Idaho Secretary of State, business forms</a> · <a href="https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center">IRS self-employed tax center</a>. Rates change; the links don't.</p>
     <h3>The employer line</h3>
     <p>Read your own agreements once — outside work, conflicts, confidentiality, invention assignment. Do it yourself; don't paste them anywhere. If a plan sits in a grey area, one written question before the first paid job. Until you have a written answer, treat insurance, benefits, HR, staffing, and financial services as off-limits buyers, and keep every artifact on your own devices and accounts.</p>
     <h3>The family gate</h3>
@@ -456,8 +498,10 @@ const PLANS = [
   id:'fix', num:'I', name:'One-Fix Friday', role:'The engine. Run this one.',
   line:'I find the one thing on your website or Google profile that loses you customers on a phone — and I fix it by Friday.',
   price:'$350 flat', priceNote:'Refund if it doesn\'t help',
-  cash:{floor:350, base:1400, stretch:2800},
-  hours:'3–3.5 hrs / week', hoursNote:'in selling weeks',
+  cash:{floor:350, base:1050, stretch:2800},
+  assume:'Base: about forty videos sent across the two Builds → three paid fixes at $350 (roughly one in thirteen). Floor: the first one. Stretch: eight, which needs a referral or two. The one-in-thirteen is a guess with no data behind it — your first twenty sends are the data, and the kill rule is what it costs to find out.',
+  hrs:{a:n=>3*n, c:n=>3*n}, cashBy:{a:700, c:350},
+  hours:'≈ 3 hrs / week', hoursNote:'in Build weeks',
   first:'Fri 18 Sep', firstNote:'Week 2',
   fit:'High — agent-directed builds, human copy',
   who:'Owner-run local service businesses within thirty minutes of you: plumbers, HVAC, electricians, barbers, groomers, detailers, gyms, coffee, landscapers, med-spa, dentists, chiropractors. Never: insurance, benefits, HR, staffing, financial services, or anyone connected to your employer.',
@@ -486,7 +530,7 @@ const PLANS = [
     'One before/after posted publicly.',
     'Auto-reply set; queue closed before the baby.',
     'Re-opened for the second Build; five sent.',
-    'Fourth paid fix — base case reached.',
+    'Third paid fix — base case reached.',
     'Every dollar in the ledger; 30% moved to the tax jar.'
   ],
   scripts:[
@@ -515,7 +559,9 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
   line:'The app is built. Sell the one thing you can finish before the baby: a printed-feeling Advent companion of the words He spoke — then let the season carry it.',
   price:'$12 PDF', priceNote:'$59.99 year only after ten PDFs sell',
   cash:{floor:0, base:300, stretch:1200},
-  hours:'1.5 hrs / week', hoursNote:'almost all in September',
+  assume:'Base: twenty-five PDFs at $12 = $300. Stretch: sixty PDFs ($720) plus eight Years at $59.99 ($480). Floor: zero — the words stay free either way. The year gate is built only after ten PDFs have sold.',
+  hrs:{a:n=>1.5*Math.min(n,5), c:()=>2.5}, cashBy:{a:0, c:300},
+  hours:'≈ 10 hrs total', hoursNote:'1.5 / week in September · 2.5 in November',
   first:'Sun 1 Nov', firstNote:'pre-orders · delivered 22 Nov',
   fit:'High — the corpus, the design, the copy all exist',
   who:'The reader in your own market strategy: 28–45, loves Jesus more than religious noise, already screenshots verses, wants application not seminary. Small-group and women\'s-study leaders who share one thing a week. Gift-buyers in the last week of November.',
@@ -526,9 +572,9 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
     ['2','11–17 Sep','Draft the reflections — one line each, the app\'s voice. Lay out the PDF from the app\'s print and broadside styles. One evening.','a'],
     ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 link with file delivery (Stripe or Lemon Squeezy) and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.','a'],
     ['4','25 Sep–1 Oct','Make four Advent share cards (the card code exists) and one face-free vertical video: hands, paper, one red sentence. Save them. Schedule nothing.','a'],
-    ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Close the laptop.','a'],
-    ['6–9','9 Oct–5 Nov','Baby. Nothing. Pages stays up.','b'],
-    ['10','6–12 Nov','(1 Nov falls inside Baby if the birth is mid-October — open pre-orders the first evening of the second Build.) Post the video and one card. Send the five leaders their copies.','c'],
+    ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Then set 1 Nov to happen without you: the $12 link is already live, the launch post is scheduled, the leaders have their copies. Close the laptop.','a'],
+    ['6–9','9 Oct–5 Nov','Baby. Nothing. Pages stays up. On 1 Nov the scheduled post goes out and pre-orders open on their own — a live link is not a working hour.','b'],
+    ['10','6–12 Nov','First evening of the second Build: answer the replies that arrived, post the video and one card.','c'],
     ['11','13–19 Nov','One card, one post. Answer replies.','c'],
     ['12','20–26 Nov','22 Nov: deliver the PDF to every buyer. Black Friday and Small Business Saturday: one post, no discount. "The words are free. The book is $12."','c'],
     ['13','27 Nov–3 Dec','Advent begins 29 Nov; the in-app path goes live. Ten or more PDFs sold → build the $59.99 year gate in December. Fewer → stay free and aim at Lent.','c']
@@ -541,7 +587,8 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
     'App on a real URL and installable.',
     'Four share cards and one vertical video saved.',
     'Five small-group leaders messaged with the free-copy offer.',
-    'Pre-orders open; posted once.',
+    'Launch post scheduled for 1 Nov; link live before the birth.',
+    'Pre-orders opened on 1 Nov without you.',
     'Three paid pre-orders — your own proof rule.',
     '22 Nov: PDF delivered to buyers.',
     '29 Nov: in-app Advent path live.',
@@ -571,11 +618,13 @@ If one of these sentences lands, send it to one person — not a feed.
   tonight:{0:'Nothing is the move. Pages is up. Go to bed.',15:'Pick three sayings for Advent from data/paths.js.',45:'Write seven one-line reflections in the app\'s voice.',90:'Lay out the PDF from the app\'s print styles. Export a first draft.'}
 },
 {
-  id:'voice', num:'III', name:'The Voice Capsule', role:'Seasonal. One sample before the baby. Sell in Veterans Day week. Deliver for Christmas.',
+  id:'voice', num:'III', name:'The Voice Capsule', role:'The swap. One sample before the baby. Sell in Veterans Day week. Deliver for Christmas — instead of Advent, not beside it.',
   line:'One hour with a veteran about one chapter. Their family receives ten minutes of his voice, a keepsake, and a short piece of music written for it.',
   price:'$495 founding', priceNote:'first three · $750–950 after',
   cash:{floor:0, base:990, stretch:1485},
-  hours:'6–8 hrs per capsule', hoursNote:'cap at three',
+  assume:'Base: two capsules at $495 = $990 — deposits inside the window, balances at delivery by 20 Dec. Stretch: three = $1,485. Floor: zero. Each capsule is six to eight hours; the sample in September is the seventh you don\'t get paid for.',
+  hrs:{a:()=>7, c:()=>14}, cashBy:{a:0, c:990},
+  hours:'6–8 hrs per capsule', hoursNote:'+ one unpaid sample · cap at three',
   first:'Wed 11 Nov', firstNote:'Veterans Day · deposits',
   fit:'Highest — veteran, listener, musician, typesetter',
   who:'The adult child or spouse of a veteran, any era, who has said "I wish I had Dad\'s voice telling that story." Reunion groups. A veteran choosing his own legacy artifact. The buyer is usually 35–60, buying a Christmas gift that isn\'t a thing.',
@@ -630,7 +679,9 @@ Delivery by 20 Dec. If he decides he'd rather not, you get the deposit back and 
   id:'interview', num:'IV', name:'The Civilian Interview', role:'Optional. Fastest to sell, cleanest to deliver, easiest to stop.',
   line:'Sixty minutes of rehearsal for a veteran\'s next interview. I play the hiring manager. You leave with your five sentences.',
   price:'$149 founding', priceNote:'first five · $199 after',
-  cash:{floor:149, base:800, stretch:1600},
+  cash:{floor:149, base:745, stretch:1340},
+  assume:'Base: five founding sessions at $149 = $745. Floor: one. Stretch: five founding plus three at $199 = $1,342. Two free sessions come first and earn only a quotable sentence.',
+  hrs:{a:n=>n+4.5, c:n=>n+4.5}, cashBy:{a:298, c:447},
   hours:'1.5 hrs per session', hoursNote:'+ 1 hr / week outreach',
   first:'Fri 25 Sep', firstNote:'Week 4',
   fit:'High — you made this exact transition',
@@ -688,6 +739,8 @@ You already did the hard part, years ago.`]
   line:'Two weeks. One process that lives in the owner\'s head. I hand it back as a map, checklists, and a recorded walkthrough the team will actually use.',
   price:'$1,500 fixed', priceNote:'half up front',
   cash:{floor:0, base:1500, stretch:3000},
+  assume:'Base: one client at $1,500, half up front. Stretch: two. Floor: zero, because it is never pitched — it exists only as the answer to a One-Fix client\'s question, so it needs Plan I running.',
+  hrs:{a:()=>11, c:()=>11}, cashBy:{a:1500, c:1500}, either:true,
   hours:'10–12 hrs all-in', hoursNote:'one client, maybe two',
   first:'When a client says "and also…"', firstNote:'expected Week 3–4 or Week 11',
   fit:'High — your failure mode is their asset',
@@ -744,7 +797,7 @@ const EVENTS = [
   {d:new Date(2026,9,2),  t:'Kill check: 40 videos, 0 sales?', plan:'I'},
   {d:new Date(2026,9,5),  t:'Kill check: 0 paid sessions?', plan:'IV'},
   {d:new Date(2026,9,8),  t:'Close every queue. Auto-replies on.'},
-  {d:new Date(2026,10,1), t:'Pre-orders open (first evening allowed)', plan:'II', season:true},
+  {d:new Date(2026,10,1), t:'Pre-orders open by themselves (scheduled in Sept)', plan:'II', season:true},
   {d:new Date(2026,10,11),t:'Veterans Day · deposits', plan:'III', season:true},
   {d:new Date(2026,10,15),t:'Kill checks: <3 pre-orders? No Rescue ask?', plan:'II'},
   {d:new Date(2026,10,20),t:'Kill check: 0 deposits?', plan:'III'},
@@ -759,8 +812,8 @@ const EVENTS = [
 let S = load();
 function load(){
   try{ const s = JSON.parse(localStorage.getItem(KEY)||'{}');
-    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45}, s);
-  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45}; }
+    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, stack:{fix:{a:true,c:true}, red:{a:true,c:true}}}, s);
+  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, stack:{fix:{a:true,c:true}, red:{a:true,c:true}}}; }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 
@@ -772,6 +825,38 @@ const MOVES = {
 };
 function babyDate(){ return new Date(S.baby+'T00:00:00'); }
 function moveOf(d){ const b=babyDate(), e=addDays(b,30); return d<b ? 'a' : (d<=e ? 'b' : 'c'); }
+
+/* ---------------- Budget ----------------
+   Weeks of Build on each side of Baby (fractional), 4.5 optional hours per Build week,
+   and each plan's planning-estimate hours for that side. Baby is zero by rule. */
+const WEEK_HOURS = 4.5;
+function buildWeeks(){
+  const b = babyDate(), e = addDays(b,30);
+  const days = (x,y)=> Math.max(0, Math.round((y - x)/86400000) + 1);
+  return { a: days(START, addDays(b,-1))/7, c: days(addDays(e,1), END)/7 };
+}
+function on(pid, m){ return !!(S.stack[pid] && S.stack[pid][m]); }
+function budget(){
+  const wk = buildWeeks();
+  const avail = { a: wk.a*WEEK_HOURS, c: wk.c*WEEK_HOURS };
+  const rows = PLANS.map(p=>{
+    const h = { a: p.hrs.a(wk.a), c: p.hrs.c(wk.c) };
+    const used = { a: on(p.id,'a') ? h.a : 0, c: on(p.id,'c') ? h.c : 0 };
+    let cash = 0;
+    if(p.either) cash = (on(p.id,'a')||on(p.id,'c')) ? p.cash.base : 0;
+    else cash = (on(p.id,'a') ? p.cashBy.a : 0) + (on(p.id,'c') ? p.cashBy.c : 0);
+    const any = on(p.id,'a')||on(p.id,'c');
+    return { p, h, used, cash, any };
+  });
+  const used = { a: rows.reduce((s,r)=>s+r.used.a,0), c: rows.reduce((s,r)=>s+r.used.c,0) };
+  const base = rows.reduce((s,r)=>s+r.cash,0);
+  const stretch = rows.filter(r=>r.any).reduce((s,r)=>s+r.p.cash.stretch,0);
+  const floors = rows.filter(r=>r.any && r.p.cash.floor>0).map(r=>r.p.cash.floor);
+  const floor = floors.length ? Math.min(...floors) : 0;
+  return { wk, avail, used, rows, base, stretch, floor };
+}
+const h1 = n => (Math.round(n*2)/2).toLocaleString('en-US',{maximumFractionDigits:1});
+function windowHours(p, wk){ return p.either ? p.hrs.a(wk.a) : p.hrs.a(wk.a) + p.hrs.c(wk.c); }
 
 /* ---------------- Helpers ---------------- */
 const $ = (s,el=document)=>el.querySelector(s);
@@ -817,10 +902,51 @@ function renderMovements(){
   }).join('');
 }
 
+function renderBudget(){
+  const B = budget();
+  $('#bud').innerHTML = B.rows.map(r=>`<tr>
+    <td class="pl"><i>${r.p.num}</i>${esc(r.p.name)}${r.p.either?`<br><span class="note" style="font-family:var(--body);font-size:.8rem">one client — tick the Build you expect it in</span>`:''}</td>
+    ${['a','c'].map(m=>`<td><label><input type="checkbox" data-p="${r.p.id}" data-m="${m}" ${on(r.p.id,m)?'checked':''}><span>${h1(r.h[m])} h</span></label></td>`).join('')}
+    <td class="cash">${r.any?`<b>${money(r.cash)}</b>`:'—'}</td>
+  </tr>`).join('');
+  const cell = m => { const o = B.used[m] > B.avail[m] + 0.25; const pct = B.avail[m] ? Math.min(100, B.used[m]/B.avail[m]*100) : 0;
+    return `<td><span class="sc">${m==='a'?'Before':'After'}</span><div class="gh ${o?'over':''}"><b>${h1(B.used[m])}</b> of ${h1(B.avail[m])} h</div><div class="gauge ${o?'over':''}"><i style="width:${pct}%"></i></div></td>`; };
+  $('#bud-foot').innerHTML = `<tr><td class="pl" style="font-family:var(--ui);font-size:.85rem;color:var(--muted)">Planned</td>${cell('a')}${cell('c')}<td class="cash"><span class="sc" style="display:block;margin-bottom:4px">Base</span><b>${money(B.base)}</b></td></tr>`;
+  const overA = B.used.a - B.avail.a, overC = B.used.c - B.avail.c;
+  const over = overA > 0.25 || overC > 0.25;
+  let text;
+  if(!over){
+    text = `<span class="sc">Fits</span>${h1(B.used.a+B.used.c)} of ${h1(B.avail.a+B.avail.c)} real hours. Base case ${money(B.base)}, stretch ${money(B.stretch)}, floor ${money(B.floor)}. Whatever is left over is not slack — it is the buffer a newborn will spend for you.`;
+  } else {
+    const parts = [];
+    if(overA > 0.25) parts.push(`${h1(overA)} h before the birth`);
+    if(overC > 0.25) parts.push(`${h1(overC)} h after`);
+    const both = ['a','c'].some(m=> on('red',m) && on('voice',m));
+    const hint = both ? 'Advent and the Capsule are both ticked — that is the swap. One of them waits.' : 'Something comes out. Untick until the bars are black; the week is not going to grow.';
+    text = `<span class="sc">Over</span>By ${parts.join(' and ')}. ${hint}`;
+  }
+  const v = $('#bud-verdict'); v.innerHTML = text; v.classList.toggle('over', over);
+  renderFacts(B);
+}
+function renderFacts(B){
+  B = B || budget();
+  const real = B.avail.a + B.avail.c, nominal = 13*WEEK_HOURS;
+  $('#f-hours').textContent = `≈ ${Math.round(real)} of ${Math.round(nominal)}`;
+  $('#f-base').textContent = money(B.base);
+  $('#f-floor').textContent = money(B.floor);
+}
+$('#bud').addEventListener('change', e=>{
+  const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
+  S.stack[cb.dataset.p] = S.stack[cb.dataset.p] || {};
+  S.stack[cb.dataset.p][cb.dataset.m] = cb.checked;
+  save(); renderBudget(); renderLedger();
+  const again = $(`#bud input[data-p="${cb.dataset.p}"][data-m="${cb.dataset.m}"]`); if(again) again.focus();
+});
+
 /* ---------------- Tonight ---------------- */
 function renderTonight(){
-  $('#tonight-plan').innerHTML = PLANS.map(p=>`<button data-p="${p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
-  $$('#tonight-min button').forEach(b=>b.classList.toggle('on', Number(b.dataset.m)===S.tonightMin));
+  $('#tonight-plan').innerHTML = PLANS.map(p=>`<button data-p="${p.id}" aria-pressed="${S.tonightPlan===p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
+  $$('#tonight-min button').forEach(b=>{ const onb = Number(b.dataset.m)===S.tonightMin; b.classList.toggle('on', onb); b.setAttribute('aria-pressed', onb); });
   const p = planById(S.tonightPlan);
   const now = new Date(); now.setHours(0,0,0,0);
   if(moveOf(now)==='b'){
@@ -829,7 +955,7 @@ function renderTonight(){
   }
   $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}</small>${esc(p.tonight[S.tonightMin])}`;
 }
-$('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); });
+$('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
 $('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightMin=Number(b.dataset.m); save(); renderTonight(); });
 
 /* ---------------- Plans ---------------- */
@@ -839,7 +965,7 @@ function renderStrip(){
 }
 function renderPlan(){
   const p = planById(S.active); const c = S.checks[p.id]||{}; const done = doneCount(p);
-  const babyDate = new Date(S.baby+'T00:00:00');
+  const babyDate = new Date(S.baby+'T00:00:00'); const wk = buildWeeks();
   $('#plan').innerHTML = `
   <article class="plan leaf" id="plan-${p.id}">
     <div class="sc role"><span class="red">Plan ${p.num}</span> · ${esc(p.role)}</div>
@@ -851,6 +977,7 @@ function renderPlan(){
       <div class="kpi"><span class="sc">Time</span><div class="v">${esc(p.hours)}<small>${esc(p.hoursNote)}</small></div></div>
       <div class="kpi"><span class="sc">First dollar</span><div class="v">${esc(p.first)}<small>${esc(p.firstNote)}</small></div></div>
     </div>
+    <p class="note assume" style="margin:-10px 0 22px"><b style="color:var(--ink);font-weight:600">The arithmetic.</b> ${esc(p.assume)} ${p.either ? `About ${h1(windowHours(p,wk))} hours, in whichever Build the client appears.` : `About ${h1(windowHours(p,wk))} hours in this window if it runs in both Builds.`}</p>
     <div class="cols two">
       <div class="block"><h4>Who pays</h4><p>${esc(p.who)}</p></div>
       <div class="block"><h4>What they get</h4><p>${esc(p.what)}</p></div>
@@ -900,7 +1027,8 @@ $$('[data-go]').forEach(b=>b.addEventListener('click', ()=>{ S.active=b.dataset.
 
 /* ---------------- Compare ---------------- */
 function renderCompare(){
-  $('#cmp').innerHTML = PLANS.map(p=>`<tr><td>${p.num}</td><td><b>${esc(p.name)}</b><br><span class="note">${esc(p.role)}</span></td><td>${esc(p.price)}</td><td>${money(p.cash.floor)} · <b>${money(p.cash.base)}</b> · ${money(p.cash.stretch)}</td><td>${esc(p.hours)}</td><td>${esc(p.first)}</td><td>${esc(p.fit)}</td></tr>`).join('');
+  const wk = buildWeeks();
+  $('#cmp').innerHTML = PLANS.map(p=>`<tr><td>${p.num}</td><td><b>${esc(p.name)}</b><br><span class="note">${esc(p.role)}</span></td><td>${esc(p.price)}</td><td>${money(p.cash.floor)} · <b>${money(p.cash.base)}</b> · ${money(p.cash.stretch)}</td><td>${esc(p.hours)}<br><span class="note">≈ ${h1(windowHours(p,wk))} h in the window</span></td><td>${esc(p.first)}</td><td>${esc(p.fit)}</td></tr>`).join('');
 }
 
 /* ---------------- Calendar ---------------- */
@@ -927,7 +1055,7 @@ function renderCal(){
   }
   $('#cal').innerHTML = html;
 }
-$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); renderMovements(); renderCounter(); renderTonight(); });
+$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); renderMovements(); renderCounter(); renderTonight(); renderBudget(); renderCompare(); renderLedger(); });
 
 /* ---------------- Ledger ---------------- */
 function renderLedger(){
@@ -936,9 +1064,9 @@ function renderLedger(){
   const dateIn = $('#add input[name=date]'); if(!dateIn.value){ const t=new Date(); dateIn.value = t.toISOString().slice(0,10); }
   const total = S.ledger.reduce((s,e)=>s+Number(e.amount||0),0);
   $('#total').textContent = money(total);
-  const recBase = Math.round((1400+300+990)/100)*100;
-  $('#total-sub').textContent = total===0 ? `Base case for the recommended stack is about ${money(recBase)}. Tax jar so far: $0.`
-    : `${Math.round(total/recBase*100)}% of the recommended base case · tax jar should hold ${money(total*0.3)}.`;
+  const recBase = budget().base;
+  $('#total-sub').textContent = total===0 ? (recBase ? `Base case for your stack is ${money(recBase)}. Tax jar so far: $0.` : `Nothing is ticked in “Does it fit?” yet. Tax jar so far: $0.`)
+    : (recBase ? `${Math.round(total/recBase*100)}% of your stack's base case · tax jar should hold ${money(total*0.3)}.` : `Tax jar should hold ${money(total*0.3)}.`);
   $('#bars').innerHTML = PLANS.map(p=>{ const got = S.ledger.filter(e=>e.plan===p.id).reduce((s,e)=>s+Number(e.amount||0),0); const pct = Math.min(100, p.cash.base? got/p.cash.base*100 : 0);
     return `<div class="bar" title="${esc(p.name)}"><span class="num">${p.num}</span><div class="track"><i style="width:${pct}%"></i></div><span class="amt"><b>${money(got)}</b> / ${money(p.cash.base)}</span></div>`; }).join('');
   if(!S.ledger.length){ $('#entries').innerHTML = `<div class="empty">Nothing yet. That is the honest starting line.</div>`; return; }
@@ -966,7 +1094,7 @@ const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting)
 $$('main section').forEach(s=>io.observe(s));
 
 /* ---------------- Go ---------------- */
-function renderAll(){ renderCounter(); renderMovements(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); }
+function renderAll(){ renderCounter(); renderMovements(); renderBudget(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); }
 renderAll();
 })();
 </script>
