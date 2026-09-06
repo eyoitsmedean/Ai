@@ -223,6 +223,16 @@ describe('spoken corpus', () => {
     assert.match(books.Matthew['22']['14'], /^For many are called, but few are chosen/);
   });
 
+  it('drops what the model may not say, wherever it puts it', () => {
+    assert.equal(verifyAndSubstitute('**John 14:27** “God helps those who help themselves.”'), '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”');
+    assert.equal(verifyAndSubstitute('**Psalm 23:1**\n“The LORD is my shepherd; I shall not want.”\nHe leads.'), 'He leads.');
+    assert.equal(verifyAndSubstitute('**Matthew 4:9**\n“All these things will I give thee.”\nctx'), 'ctx');
+    assert.equal(verifyAndSubstitute('Your mother is gone. Jesus said, “God helps those who help themselves and their families always.” Rest now.'), 'Your mother is gone. Rest now.');
+    assert.equal(verifyAndSubstitute('Proverbs 13:24 says spare the rod. But peace is near.'), 'But peace is near.');
+    assert.equal(verifyAndSubstitute('Hold on.\n“Your mother will come back to you if you only believe hard enough tonight.”\nAmen.'), 'Hold on.\nAmen.');
+    assert.equal(verifyAndSubstitute('He said “Peace I leave with you, my peace I give unto you” to frightened men.'), 'He said “Peace I leave with you, my peace I give unto you” to frightened men.');
+  });
+
   it('strips the evangelist intro but keeps speech inside parables', () => {
     assert.equal(spokenAt('Mark', 11, 22), 'Have faith in God.');
     assert.match(spokenAt('Luke', 13, 8), /^And he answering said unto him, Lord, let it alone/);
