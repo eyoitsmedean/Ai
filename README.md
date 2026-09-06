@@ -45,6 +45,8 @@ npm run qa       # first-session browser walk (needs Chrome)
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
 
+`npm run eval` runs the Advisor evaluation set — fifty questions across life, crisis, hostile, off-scope, forgery, and edge cases (`eval/questions.json`) — through the same letter path the server uses, and writes `eval/results.md` with every letter in full. Five gates: a Gospel citation is present; every quote is the exact KJV speech for its citation; nothing outside Matthew–John and no forbidden phrase; the human-help notice appears exactly when the question is crisis-shaped, before scripture; a cited saying belongs to the room the question names. CI fails if any gate fails. `node scripts/eval.js --url http://host` runs it against a live server (the model path, if that server has a key). `CLAUDE.md` is the system of record for decisions; `RELEASE.md` marks each release item verified or unverified.
+
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
 
 `GET /api/health` reports version, saying count, and whether Anthropic is configured. Placeholder keys such as `your_api_key_here` are treated as unset.
