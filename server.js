@@ -3,7 +3,8 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE, looksLikeMedical, MEDICAL_NOTICE, looksLikeOffScope, OFFSCOPE_NOTICE, looksLikeIdentity, IDENTITY_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote } = require('./lib/scripture');
+const safety = require('./lib/safety');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -387,14 +388,12 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
-  const medical = !crisis && looksLikeMedical(last.content);
-  const identity = !crisis && !medical && looksLikeIdentity(last.content);
-  const offScope = !crisis && !medical && !identity && looksLikeOffScope(last.content);
+  const routed = safety.route(last.content);
+  const crisis = routed.kind === 'crisis';
+  const offScope = routed.kind === 'offscope';
   const finish = (body) => {
     const verified = verifyAndSubstitute(body);
-    const prefix = crisis ? CRISIS_NOTICE : medical ? MEDICAL_NOTICE : identity ? IDENTITY_NOTICE : offScope ? OFFSCOPE_NOTICE : '';
-    streamText(prefix + verified);
+    streamText(routed.notice + verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };

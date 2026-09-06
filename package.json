@@ -16,6 +16,7 @@
     "qa:mobile": "node scripts/qa-mobile.js",
     "demo": "node scripts/demo-humans.js",
     "eval": "node scripts/eval.js",
+    "safety": "node scripts/build-safety.js",
     "cap:sync": "npx cap sync",
     "android": "npx cap sync android && npx cap open android",
     "ios": "npx cap sync ios && npx cap open ios"

@@ -182,8 +182,20 @@ async function main() {
     assert(/988/.test(state.crisis), 'crisis leaf missing 988');
     assert(state.tel, 'crisis leaf missing tel:988');
     assert(state.rows === 0, 'verse table shown on top of crisis');
+    // Passive phrasings and means must be heard in the room exactly as on the server.
+    for (const passive of ['nobody would notice if I was gone', 'I have the pills ready', 'i wanna kms']) {
+      await page.evaluate((s) => { const q = document.getElementById('carry-q'); q.value = s; q.dispatchEvent(new Event('input')); }, passive);
+      await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length === 0, { timeout: 4000 })
+        .catch(() => { throw new Error('Carrying did not hear: ' + passive); });
+    }
+    const shared = await page.evaluate(() => !!(window.RLA_SAFETY && window.RLA_SAFETY.crisis && window.RLA_SAFETY.crisis.length > 40));
+    assert(shared, 'shared safety bundle (/data/safety.js) not loaded');
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'my dog died of an overdose of joy'; q.dispatchEvent(new Event('input')); });
+    await page.waitForFunction(() => document.getElementById('carry-crisis').hidden, { timeout: 4000 }).catch(() => { throw new Error('false crisis on "overdose of joy"'); });
     await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'I cannot forgive them'; q.dispatchEvent(new Event('input')); });
     await page.waitForFunction(() => document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length > 0, { timeout: 4000 });
+    const first = await page.$eval('#carry-list .carry-row .cite', (el) => el.textContent);
+    assert(/Matthew 6:14/.test(first), 'Carrying did not land on Matthew 6:14 for forgiveness: ' + first);
   });
 
   await check('Keep a copy round-trips the journal', async () => {
@@ -265,7 +277,7 @@ async function main() {
     await page.evaluate(async () => {
       const keys = await caches.keys();
       const c = await caches.open(keys.find((k) => /rla-/.test(k)) || 'rla-prod-v3');
-      await Promise.all(['/', '/index.html', '/privacy.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/paths.js', '/curated.json']
+      await Promise.all(['/', '/index.html', '/privacy.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/safety.js', '/data/paths.js', '/curated.json']
         .map((u) => c.add(u).catch(() => null)));
     });
     await page.setOfflineMode(true);
@@ -274,6 +286,11 @@ async function main() {
     try {
       await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
       offlineOk = await page.evaluate(() => !!document.getElementById('today-page') && /Red Letter/i.test(document.body.innerText) && !!(window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs && window.RLA_CONCORDANCE.needs.length));
+      // The offline Advisor must hear a passive crisis line and put 988 before any verse.
+      const offlineLetter = await page.evaluate(() => (typeof window.RLA_advise === 'function' ? window.RLA_advise('I have the pills ready') : ''));
+      assert(offlineLetter.indexOf('988') >= 0 && offlineLetter.indexOf('988') < offlineLetter.indexOf('**'), 'offline Advisor did not put 988 before the verse: ' + offlineLetter.slice(0, 120));
+      const offlineNeed = await page.evaluate(() => (typeof window.RLA_advise === 'function' ? window.RLA_advise('I feel so much shame') : ''));
+      assert(/John 8:11/.test(offlineNeed), 'offline Advisor did not find John 8:11 for shame');
       await page.goto(BASE + '/privacy', { waitUntil: 'domcontentloaded', timeout: 15000 });
       privacyOffline = await page.evaluate(() => /What stays/.test(document.body.innerText));
     } finally {

@@ -25,17 +25,20 @@ A quiet reading room for the words Jesus spoke in Matthew, Mark, Luke, and John 
 ## Decisions made 2026-09-06 (this session; ASSUMED where the brief was silent)
 
 - **Concordance floor.** On the no-key path `bestNeed` requires score ≥ `NEED_FLOOR` (14); below it the standing letter (John 14:27 + Matthew 11:28) is sent. Rationale: single-word hits (score 6–7) sent "I want revenge" to Mark 4:39. Precision over recall for a room that claims "the map, not the model."
-- **Crisis pattern widened** to the C-SSRS screener phrasings and 988 warning-sign language (passive ideation). Sources: cssrs.columbia.edu; SAMHSA 988 warning-signs card PEP23-08-03-001. Crisis inputs always get the standing letter, never a death/mourning verse.
-- **Medical notice** for medication / diagnosis / treatment questions: no directive, names the prescriber as the decision-owner.
-- **Identity notice** for "Are you Jesus?" and "chatbot pretending to be Jesus": plainly software, not Him.
-- **Scope notice** for other books, other voices, and chores; the room never quotes Psalms, Paul, or the Quran. Books that are first names (Job, James, Peter, Daniel) are deliberately not triggers.
+- **One safety module.** `lib/safety.js` holds every routing pattern and notice; `npm run safety` generates `public/data/safety.js` so Carrying, the Advisor modal, and the offline Advisor hear exactly what the server hears. `test/safety.test.js` fails if they drift. Precedence: crisis → medical → identity → decision → scope.
+- **Crisis pattern widened** to the C-SSRS screener phrasings, 988 warning-sign language, slang and misspellings (kms, unalive, sucide), past tense and theological ("if I killed myself"), means and plans (pills ready, bought a gun, how much tylenol, wrote the letter to my kids, gave the dog away and said goodbye), and third person ("my son says he wants to die" — the notice now speaks to the one who loves them). Sources: cssrs.columbia.edu; SAMHSA 988 warning-signs card PEP23-08-03-001; the Breaker's 2026-09-06 probe. Crisis inputs always get the standing letter, never a death/mourning verse. "I want the pain to stop" and "I can't take it anymore" were deliberately dropped as triggers (toothaches, bad bosses).
+- **Medical notice** only for treatment *decisions* (stop/skip/instead of/rather pray); prescription glasses and a praying therapist are not medical.
+- **Identity notice** for "Are you Jesus?" and "chatbot pretending to be Jesus": plainly software, not Him. Bare "robot" is not a trigger.
+- **Decision notice** for stay/leave/sue/give/quit questions: the room will not make the decision, and says so.
+- **Scope notice** only when a book name looks like a citation or a request to quote ("Psalm 23", "what did Paul say", "read me Genesis"); "my friend Paul died" and "a revelation about my marriage" are needs. Chores (résumé, joke, weather, homework) need a request verb.
+- **Concordance coverage boost.** A question that restates ≥ 60 % of a carry line's tokens is that line ("I am not a Christian. Can I still read this?" → John 6:37). Eight gravity rules added (dying, money, exhausted, far from God, sick child → Mark 5:36, lost → Luke 15:20, lied → John 8:11); "dying to see my grandkids" is excluded as idiom. The client Carrying matcher now receives the stop list, gravity, and floor from `public/data/concordance.js`.
 - **Rate limit** is configurable via `CHAT_RATE_PER_MIN` (default 40) so the evaluation harness can run in-process.
-- **Evaluation set** lives in `eval/questions.json`; `npm run eval` writes `eval/RESULTS.md`. Add failing phrasings there before touching a pattern.
+- **Evaluation set** lives in `eval/questions.json` (86 rows in nine categories, including `ordinary` sentences that must trigger nothing); `npm run eval` writes `eval/RESULTS.md`. Add failing phrasings there before touching a pattern.
 
 ## Where things live
 
 - `public/index.html` — the room (monolith, no build step) · `public/codex.html` — the founder's studio book at `/codex` (never linked for guests) · `public/privacy.html` — `/privacy`
-- `lib/scripture.js` — corpus, verification, notices · `lib/concordance.js` — Concordance of Need (88 sealed lines) · `lib/blessing.js` — `/b/{token}` pages
+- `lib/scripture.js` — corpus, verification · `lib/safety.js` — crisis/medical/identity/decision/scope routing and notices · `lib/concordance.js` — Concordance of Need (88 sealed lines) · `lib/blessing.js` — `/b/{token}` pages
 - `scripts/` — smoke, qa-browser, qa-mobile, demo-humans, eval, build-concordance
 - `RELEASE.md` — every claim VERIFIED or UNVERIFIED, plus the on-device checklist · `DEMO.md` — hosting a guest · `LAUNCH.md` — the 90 days · `DESIGN.md` — type and paper
 

@@ -2114,6 +2114,7 @@ html.sitting .sit-sheet {
 </article>
 
 <script src="/data/curated.js"></script>
+<script src="/data/safety.js"></script>
 <script src="/data/advisor.js"></script>
 <script src="/data/paths.js"></script>
 <script src="/data/concordance.js"></script>
@@ -3433,25 +3434,38 @@ function matchConcordanceClient(query, limit) {
   const q = String(query || '').trim().toLowerCase();
   const rows = concordanceNeeds();
   if (!q) return rows.slice(0, limit || 12);
-  const stop = { the:1, and:1, for:1, you:1, your:1, that:1, this:1, with:1, from:1, have:1, not:1, but:1, are:1, was:1, feel:1, felt:1, just:1, really:1, very:1, like:1 };
-  const words = q.split(/\s+/).filter((w) => w.length > 2 && !stop[w]);
-  const gravity = [
-    [/shame|ashamed|condemn|lift my face|leave the room/, /John 8:11/, 28],
-    [/died|death|grief|grieve|mourn|funeral|tomb/, /John 11:25/, 22],
-    [/tomorrow|cannot sleep|can't sleep|cant sleep|already here/, /Matthew 6:34/, 22],
-    [/cannot forgive|can't forgive|cant forgive|forgive them/, /Matthew 6:14/, 18],
-  ];
+  // Stop list, gravity, and floor ship with the concordance (built from lib/concordance.js),
+  // so Carrying lands on the same page the server would.
+  const scoring = (window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.scoring) || {};
+  const stop = new Set(scoring.stop || ['the', 'and', 'for', 'you', 'your', 'that', 'this', 'with', 'from', 'have', 'not', 'but', 'are', 'was', 'feel', 'felt', 'just', 'really', 'very', 'like']);
+  const tok = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9\s']/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !stop.has(w));
+  const words = tok(q);
+  const wordSet = new Set(words);
+  const qPlain = words.join(' ');
+  const gravity = (scoring.gravity || [
+    ['\\b(shame|ashamed|condemn|lift my face|leave the room)\\b', 'John 8:11', 28],
+    ['\\b(died|death|grief|grieve|mourn|funeral|tomb)\\b', 'John 11:25', 22],
+    ['\\b(tomorrow|cannot sleep|can\'t sleep|cant sleep|already here)\\b', 'Matthew 6:34', 22],
+    ['\\b(cannot forgive|can\'t forgive|cant forgive|forgive them)\\b', 'Matthew 6:14', 18],
+  ]).map((g) => [new RegExp(g[0], 'i'), new RegExp(g[1]), g[2]]);
   return rows.map((row) => {
     let score = 0;
-    const hay = (row.carry + ' ' + row.theme + ' ' + row.quote).toLowerCase();
-    if (hay.includes(q) || q.includes(String(row.carry || '').toLowerCase())) score += 20;
+    const carry = String(row.carry || '').toLowerCase();
+    const hay = (carry + ' ' + row.theme + ' ' + row.quote).toLowerCase();
+    const carryTokens = tok(carry);
+    if (hay.includes(q) || q.includes(carry) || (carryTokens.length >= 2 && qPlain.includes(carryTokens.join(' ')))) score += 20;
+    if (carryTokens.length >= 2) {
+      const coverage = carryTokens.filter((t) => wordSet.has(t)).length / carryTokens.length;
+      if (coverage >= 0.8) score += 18; else if (coverage >= 0.6) score += 12;
+    }
     words.forEach((w) => {
-      if (row.carry.toLowerCase().includes(w)) score += 6;
+      if (carry.includes(w)) score += 6;
       if (String(row.theme || '').toLowerCase().includes(w)) score += 3;
+      if (String(row.quote || '').toLowerCase().includes(w)) score += 1;
     });
     gravity.forEach((g) => { if (g[0].test(q) && g[1].test(row.verse)) score += g[2]; });
     return { ...row, score };
-  }).filter((r) => r.score > 0).sort((a, b) => b.score - a.score).slice(0, limit || 8);
+  }).filter((r) => r.score > 0).sort((a, b) => b.score - a.score || a.carry.localeCompare(b.carry)).slice(0, limit || 8);
 }
 
 function ensureConcordance(done) {
@@ -4614,23 +4628,13 @@ function closeCommandPalette() {
   root.setAttribute('aria-hidden', 'true');
 }
 
-// Mirrors CRISIS_PATTERN in lib/scripture.js: explicit ideation plus the
-// passive phrasings from the C-SSRS screener and the 988 warning-sign list.
-const CRISIS_PATTERN_CLIENT = new RegExp([
-  'suicid', 'kill(?:ing)? myself', 'end (?:my|it) (?:life|all)', 'take my (?:own )?life', 'end my life',
-  'wan(?:t|na) to die', 'wish(?:ed|ing)? (?:i (?:were|was) dead|i (?:could|would) die|to die|i (?:was|were) never born)',
-  '(?:go|going) to sleep and (?:not|never) wake up', 'not (?:be )?alive anymore', 'self[-\\s]?harm',
-  'hurt(?:ing)? myself', 'cut(?:ting)? myself', 'hang myself', 'overdos',
-  '(?:don\'?t|do not|dont) want to (?:live|be here|be alive|wake up)', 'better off (?:dead|without me)',
-  'no (?:reason|point) (?:to live|in living|to (?:go|be) on|to be here|to keep going)',
-  '(?:life|it) (?:is|isn\'?t|is not) (?:not )?worth living',
-  'can\'?t (?:go on|do this anymore|keep going|take it anymore)', 'cannot (?:go on|do this anymore|keep going|take it anymore)',
-  '(?:a )?burden to (?:everyone|everybody|my family|them|others)',
-  'nobody would (?:miss|notice|care if)', 'no one would (?:miss|notice|care if)',
-  'want (?:it|everything|the pain) to (?:end|stop|be over)', 'planning (?:my|to end my) (?:death|life)',
-].join('|'), 'i');
+// The phrasings live in lib/safety.js and are shipped as /data/safety.js so the
+// room hears the same sentences as the server, online and offline.
+const CRISIS_FALLBACK_CLIENT = /\b(suicid|kill(?:ing|ed)? myself|end my life|wan(?:t|na) to die|self[-\s]?harm|hurt myself|cut myself|overdos|better off dead|no reason to live|kms|unalive)\b/i;
 function looksLikeCrisisClient(text) {
-  return CRISIS_PATTERN_CLIENT.test(String(text || ''));
+  const S = window.RLA_SAFETY;
+  const re = (S && Array.isArray(S.crisis) && S.crisis.length) ? new RegExp(S.crisis.join('|'), 'i') : CRISIS_FALLBACK_CLIENT;
+  return re.test(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {
