@@ -77,23 +77,76 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
-  it('streams a verified letter for chat', async () => {
+  function parseStream(raw) {
+    const frames = raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)); } catch (_) { return {}; }
+      });
+    return {
+      text: frames.map((f) => f.text || '').join(''),
+      replace: frames.filter((f) => typeof f.replace === 'string').map((f) => f.replace),
+      verify: frames.find((f) => f.verify)?.verify,
+      done: /\[DONE\]/.test(raw),
+    };
+  }
+
+  it('streams a verified letter shaped by the question', async () => {
     const res = await request('POST', '/api/chat', {
       messages: [{ role: 'user', content: 'I am afraid of the future' }],
     });
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
     assert.equal(res.headers['x-accel-buffering'], 'no');
-    const letter = res.raw
-      .split('\n')
-      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
-      .map((line) => {
-        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
-      })
-      .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
-    assert.match(res.raw, /\[DONE\]/);
+    const stream = parseStream(res.raw);
+    assert.ok(stream.done);
+    // Fear pack leads: Luke 12:32 "Fear not, little flock" is the first curated passage.
+    assert.match(stream.text, /\*\*Luke 12:32\*\*\n“Fear not, little flock/);
+    // Every bold citation is followed by a quoted verse line, no placeholder leaks.
+    assert.doesNotMatch(stream.text, /\{\{/);
+    assert.equal(stream.replace.length, 1);
+    assert.equal(stream.replace[0], stream.text);
+    assert.ok(stream.verify, 'server emits a verify frame');
+    assert.equal(stream.verify.source, 'server');
+    assert.equal(stream.verify.translation, 'KJV');
+    assert.ok(stream.verify.total >= 2);
+    assert.equal(stream.verify.allVerified, true);
+  });
+
+  it('prefixes the crisis notice and still verifies', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to die and I do not see a reason to live' }],
+    });
+    const stream = parseStream(res.raw);
+    assert.match(stream.text, /^If you are in danger/);
+    assert.match(stream.text, /988/);
+    assert.equal(stream.verify.allVerified, true);
+  });
+
+  it('keeps the most recent turns instead of rejecting a long local history', async () => {
+    const messages = [];
+    for (let i = 0; i < 30; i += 1) {
+      messages.push({ role: 'user', content: `turn ${i}` });
+      messages.push({ role: 'assistant', content: `reply ${i}` });
+    }
+    messages.push({ role: 'user', content: 'I feel so alone tonight' });
+    const res = await request('POST', '/api/chat', { messages });
+    assert.equal(res.status, 200);
+    const stream = parseStream(res.raw);
+    assert.match(stream.text, /\*\*John 14:18\*\*/);
+    assert.ok(stream.done);
+  });
+
+  it('rejects an over-long last message and an invalid role', async () => {
+    const long = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'x'.repeat(2001) }],
+    });
+    assert.equal(long.status, 400);
+    const role = await request('POST', '/api/chat', {
+      messages: [{ role: 'system', content: 'hi' }],
+    });
+    assert.equal(role.status, 400);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

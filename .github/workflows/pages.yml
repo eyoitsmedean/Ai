@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/jesus-teachings-chatbot-bSBhF
   workflow_dispatch:
 
 permissions:
