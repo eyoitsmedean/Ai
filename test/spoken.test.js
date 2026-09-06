@@ -20,6 +20,7 @@ const REVIEWED_PARABLE_SPEECH = {
   'Luke 16:2': 'the rich man, in the parable of the unjust steward',
   'Luke 16:5': 'the steward',
   'Luke 16:24': 'the rich man in torment',
+  'Luke 18:4': 'the judge, in the parable of the importunate widow',
   'Luke 19:13': 'the nobleman, in the parable of the pounds',
   'John 7:38': 'His own sentence — "He that believeth on me, as the scripture hath said"',
 };
