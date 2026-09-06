@@ -60,7 +60,7 @@ Every asset URL carries `?v=N` and the service worker cache is `rla-vN-chapel`. 
 
 - `npm test` — node:test suites (routes, corpus, retrieval, safety detectors, fake-SDK stream path).
 - `node scripts/smoke.js https://your-host` — nine endpoint checks against a deployed server.
-- `npm run eval` — the 57-question evaluation set against a running server (`--url` for a remote host). The product rate limit is 10 letters a minute per client; the runner waits the window out and retries, or start a local server with `RATE_LIMIT_OFF=1` to run the set in seconds. Never set `RATE_LIMIT_OFF` in production — the boot log warns when it is on.
+- `npm run eval` — the 98-question evaluation set against a running server (`--url` for a remote host). The product rate limit is 10 letters a minute per client; the runner waits the window out and retries, or start a local server with `RATE_LIMIT_OFF=1` to run the set in seconds. Never set `RATE_LIMIT_OFF` in production — the boot log warns when it is on.
 - `docs/DEVICE-CHECKLIST.md` — the five-minute pass on a real iPhone and Android phone.
 - `RELEASE.md` — what has actually been verified for this build, and what has not.
 
