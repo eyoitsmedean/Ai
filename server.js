@@ -229,8 +229,12 @@ Include 3–4 passages. Use only real, verifiable red-letter verses; the page ve
 
 const dailyCache = new Map();
 
-function todayKey() {
-  return new Date().toISOString().slice(0, 10);
+// Local date, matching dailyForDate(); a UTC key would hold yesterday's
+// curated page for hours on a host west of Greenwich.
+function todayKey(date = new Date()) {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${m}-${d}`;
 }
 
 async function generateStructured(route, system, user, schema, maxTokens) {
