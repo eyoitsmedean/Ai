@@ -36,6 +36,18 @@ Season paper: `/review?season=lent` (also previews Forty *in* Lent) · `advent` 
 - 988 remains in the title page, the Advisor head, and settings — by call, text, or chat.
 - Chrome still leaves the room when you Sit.
 
+## The corpus was not whole — now it is
+
+The seal is only as good as the text behind it. An audit of every one of the 3,779 Gospel verses against two independent public-domain KJV sources (bible-api.com’s KJV and the aruljohn/Bible-kjv text; they agree with each other on every count and every disputed line) found that `data/gospels-kjv.json` had dropped one verse in each of six chapters — Matthew 2:16, 22:1, 26:38; Mark 4:40, 7:11, 8:8 — and every verse after each of them was shifted up by one. The red-letter map uses true numbering, so 45 sayings were being served with a neighbouring verse’s words. The worst: *Matthew 26:39* carried the narrator’s “And he cometh unto the disciples, and findeth them asleep…” as His speech, and the Advisor would have substituted it into a letter as verified scripture. Mark 8:38 was missing from the spoken library altogether. The public file this corpus was evidently built from has the same six gaps, which is why an earlier check against it found nothing.
+
+`scripts/repair-corpus.js` inserts the six verses (text agreed by both sources) and is safe to rerun; `spoken-gospels.json` and `library.json` are rebuilt. A test now pins all 89 chapters to their canonical verse counts, so this cannot silently recur. Two marginal notes (“many ancient copies add…”, “this verse is not found in most of the Greek copies”) were also leaking into displayed text at Luke 10:22 and 17:36; they are filtered now.
+
+The stricter seal then caught four hand-typed quotations that were not the KJV: “always” for *alway* (Matthew 28:20, in three files), and three spans that skipped words inside a cited range (Matthew 5:14–16 without v.15, Luke 7:47–48, John 11:25 cut to seven words). All are corrected to the corpus text, and every quotation in every client data file (155 of them) is sealed by `npm test`.
+
+## Forty, in the order of the church year
+
+The rooms used to be the 28 daily words followed by 12 extras, which put a post-resurrection commission on Maundy Thursday and the cross on Holy Tuesday, and used John 16:33 twice. The order is now explicit in `public/data/paths.js` and stated there: Ash Wednesday opens on Matthew 6:6, the Gospel of the day; the Monday after the Sunday of the Temptation is the wilderness (Matthew 4:4, new); the last Lenten Friday is Gethsemane; Holy Week runs the ransom, the shepherd who gives his life, love your enemies, the new commandment on Maundy Thursday, paradise on Good Friday, and *I am the resurrection, and the life* on Holy Saturday. Forty rooms, forty distinct sayings, all sealed.
+
 ## What the hardening pass changed, and why
 
 Each line traces to a source that was actually read, not remembered.
@@ -57,5 +69,5 @@ Each line traces to a source that was actually read, not remembered.
 
 ## Checks
 
-- `npm test` — 43 route and content tests, including the Press seal (reference *and* score), the clipping guard, the 988 modalities, the Cambridge line, and the `/review` deep links.
+- `npm test` — 48 route and content tests: canonical verse counts for all 89 chapters, the six restored verses, the note filter, forty distinct rooms in church-year order, every quotation in every data file sealed at ≥0.92, the Press seal, the 988 modalities, the Cambridge line, and the `/review` deep links.
 - `node scripts/qa-browser.js` — 13 browser walks: Forty’s church-year math (Ash Wednesday 2026/2027, Sundays, Day 40, Palm Sunday, Holy Week, Triduum), the proofs at 1080×1350 / 1920 / 1440, a synchronous share from the tap, the examen catchword, parable journaling, the hourly hint, the breath under reduced motion, and the keyboard tablist.
