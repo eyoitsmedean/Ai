@@ -471,7 +471,7 @@ window.RLA_CURATED = {
     "passages": [
       {
         "verse": "Matthew 28:20",
-        "quote": "Lo, I am with you always, even unto the end of the world.",
+        "quote": "Lo, I am with you alway, even unto the end of the world.",
         "context": "His final Gospel promise is presence that does not expire."
       },
       {
@@ -544,8 +544,8 @@ window.RLA_CURATED = {
         "context": "He names tribulation honestly — then plants cheer in his victory."
       },
       {
-        "verse": "Matthew 5:14–16",
-        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid. Let your light so shine before men.",
+        "verse": "Matthew 5:14",
+        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid.",
         "context": "Hope becomes visible when light is lived, not only felt."
       },
       {
@@ -664,8 +664,8 @@ window.RLA_CURATED = {
         "context": "Before the body is mended, the deeper wound is named and released."
       },
       {
-        "verse": "Luke 7:47–48",
-        "quote": "Her sins, which are many, are forgiven; for she loved much. Thy sins are forgiven.",
+        "verse": "Luke 7:47",
+        "quote": "Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.",
         "context": "A public sinner is given a public pardon and a place at his feet."
       }
     ],

@@ -1,17 +1,24 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
+  // Self-harm is judged by the page's shared check (looksLikeCrisisClient, mirrored from the server).
   const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  function inCrisis(text) {
+    return typeof window.looksLikeCrisisClient === 'function' ? window.looksLikeCrisisClient(text) : CRISIS.test(text);
+  }
+  // Mirrored from DANGER_RE in lib/scripture.js; test/eval.test.js keeps them in step.
+  const DANGER = /\b(?:(?:he|she|they|my (?:dad|father|mom|mother|husband|wife|partner|boyfriend|girlfriend|stepdad|stepfather|stepmom|brother|son|uncle))\s+(?:hit|hits|beat|beats|punched|punches|choked|chokes|strangled|kicked|kicks|slapped|slaps|threatened to kill|threatens to kill|threatened me|threatens me)\b(?!\s+(?:me\s+|us\s+)?(?:at|in|to|by)\b)|(?:hit|hits|beat|beats|punched|choked|strangled|slapped)\s+(?:me|my mom|my mother|my kids|my child|my daughter|my son)\b(?!\s+(?:at|in|to|by)\b)|abus(?:e|es|ed|ing|ive)\s+(?:me|us|my|her|him)\b|(?:sexually|physically)\s+abus\w*|molest\w*|raped?\b|rape[sd]?\s+me|domestic violence|not safe at home|afraid (?:of|to go) home|afraid he(?:'ll| will) (?:hurt|kill)|he(?:'ll| will) kill me|scared (?:he|she)(?:'ll| will) hurt)\b/i;
+  const DANGER_NOTICE = 'If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\n\n';
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },
     { theme: 'Fear', hear: 'Fear is shrinking the future. You do not have to pretend the waves are small.', close: 'Courage is not the absence of fear. It is hearing “it is I” in the middle of it.', keys: ['fear', 'afraid', 'scared', 'terrified', 'fright', 'dread', 'unsafe'] },
-    { theme: 'Grief & Loss', hear: 'Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.', close: 'Your tears are seen. Comfort is company within pain — not a dismissal of it.', keys: ['grief', 'griev', 'loss', 'lost someone', 'died', 'death', 'mourn', 'funeral', 'widow', 'passed away'] },
-    { theme: 'Loneliness', hear: 'Loneliness can convince you that you are unseen. You are not an interruption.', close: 'You are someone Jesus calls friend. Presence does not expire at the end of a text thread.', keys: ['lonely', 'alone', 'no one', 'isolated', 'abandoned', 'left out', 'forgotten'] },
-    { theme: 'Forgiveness', hear: 'Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.', close: 'Mercy is often a road, not a moment. Take the next honest step.', keys: ['forgiv', 'resent', 'bitter', 'grudge', 'hate them', 'can\'t let go', 'cant let go'] },
-    { theme: 'Shame & Guilt', hear: 'Shame wants you out of the room. He still knows how to lift a face.', close: 'You are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.', keys: ['shame', 'guilt', 'guilty', 'ashamed', 'disgusted with myself', 'unworthy', 'failure', 'messed up', 'sinned'] },
-    { theme: 'Suffering & Pain', hear: 'Pain is not a riddle you failed to solve. He names tribulation and still says come.', close: 'Your pain is not a failure of faith. Rest is offered to the laden, not the finished.', keys: ['pain', 'hurt', 'hurting', 'suffer', 'sick', 'ill', 'chronic', 'broken body', 'ache'] },
-    { theme: 'Conflict & Relationships', hear: 'Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.', close: 'You do not have to finish the story today. You can take the next faithful step toward them.', keys: ['conflict', 'fight', 'argu', 'marriage', 'spouse', 'divorce', 'relationship', 'angry at', 'my husband', 'my wife', 'my friend'] },
+    { theme: 'Grief & Loss', hear: 'Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.', close: 'Your tears are seen. Comfort is company within pain — not a dismissal of it.', keys: ['grief', 'griev', 'loss', 'lost someone', 'died', 'death', 'dying', 'mourn', 'funeral', 'widow', 'passed away', 'hospice', 'miscarriage', 'stillborn', 'dementia', 'alzheimer', 'friends are dead', 'friends are gone'] },
+    { theme: 'Loneliness', hear: 'Loneliness can convince you that you are unseen. You are not an interruption.', close: 'You are someone Jesus calls friend. Presence does not expire at the end of a text thread.', keys: ['lonely', 'alone', 'no one', 'nobody', 'isolated', 'abandoned', 'left out', 'forgotten', 'waiting to die', 'just waiting'] },
+    { theme: 'Forgiveness', hear: 'Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.', close: 'Mercy is often a road, not a moment. Take the next honest step.', keys: ['forgiv', 'resent', 'bitter', 'grudge', 'hate them', 'can\'t let go', 'cant let go', 'betray', 'cheating', 'cheated', 'affair'] },
+    { theme: 'Shame & Guilt', hear: 'Shame wants you out of the room. He still knows how to lift a face.', close: 'You are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.', keys: ['shame', 'guilt', 'guilty', 'ashamed', 'disgusted with myself', 'unworthy', 'failure', 'messed up', 'sinned', 'relapse', 'filthy', 'regret'] },
+    { theme: 'Suffering & Pain', hear: 'Pain is not a riddle you failed to solve. He names tribulation and still says come.', close: 'Your pain is not a failure of faith. Rest is offered to the laden, not the finished.', keys: ['pain', 'hurt', 'hurting', 'suffer', 'sick', 'ill', 'chronic', 'broken body', 'ache', 'exhausted', 'so tired', 'burnt out', 'bullied', 'numb'] },
+    { theme: 'Conflict & Relationships', hear: 'Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.', close: 'You do not have to finish the story today. You can take the next faithful step toward them.', keys: ['conflict', 'fight', 'argu', 'marriage', 'spouse', 'divorce', 'relationship', 'angry at', 'not speaking', 'barely speaks'] },
     { theme: 'Purpose & Direction', hear: 'Direction-anxiety wants a five-year map. He offers a first thing and a following.', close: 'You do not need the whole map. You need the next yes.', keys: ['purpose', 'direction', 'lost', 'career', 'calling', 'what should i do', 'confused', 'plan', 'future job', 'meaning'] },
     { theme: 'Faith & Doubt', hear: 'Doubt is not a firing offense in the Gospels. He lets a doubter touch the wound.', close: 'Faith is not the absence of questions. It is staying close enough to touch.', keys: ['doubt', 'unbelief', 'don\'t believe', 'dont believe', 'struggling to believe', 'questioning', 'is god real', 'where is god'] },
     { theme: 'Peace', hear: 'The world offers a pause between problems. He offers a peace that can sit in a troubled room and still be itself.', close: 'His peace is not the absence of storms. It is his presence within them.', keys: ['peace', 'calm', 'restless heart', 'troubled', 'quiet my'] },
@@ -54,13 +61,23 @@
     const raw = String(text || '').trim();
     if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
 
-    if (CRISIS.test(raw)) {
+    if (inCrisis(raw)) {
       const crisis =
-        'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
+        'If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\n\n';
       return crisis + formatPack(
-        'While you reach a human who can help, here is a word he spoke to the heavy-laden.',
-        passagesFor('Suffering & Pain'),
+        'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
+        passagesFor('Peace'),
         'You are not alone in this hour. Please go toward help now.'
+      );
+    }
+    if (DANGER.test(raw)) {
+      const byYou = /\b(?:allowed to (?:beat|hit|hurt)|i (?:want|wanna|am going|'m going|might|could) (?:to )?(?:hit|beat|hurt|kill) (?:my|him|her|them)|i (?:hit|beat|hurt) (?:my|him|her)|afraid (?:of what )?i(?:'ll| will| might) (?:do|hurt|hit))\b/i.test(raw);
+      return DANGER_NOTICE + formatPack(
+        byYou
+          ? 'You asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.'
+          : 'What happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.',
+        passagesFor('Suffering & Pain'),
+        'You deserve to be safe. Please let a person help you get there.'
       );
     }
 
@@ -84,6 +101,6 @@
     { title: 'Love', theme: 'Love', verse: 'John 13:34', passage: 'A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.', reflection: 'The mark is not an argument. It is how you treat the person next to you today.' },
     { title: 'Forgive', theme: 'Forgiveness', verse: 'Matthew 18:21–22', passage: 'I say not unto thee, Until seven times: but, Until seventy times seven.', reflection: 'Mercy is a way of life, not a single heroic act. One name is enough for this day.' },
     { title: 'Abide', theme: 'Abide', verse: 'John 15:4–5', passage: 'Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches.', reflection: 'Fruit comes from staying close, not from straining alone. Remain. That is the work.' },
-    { title: 'Go', theme: 'Presence', verse: 'Matthew 28:20', passage: 'Lo, I am with you always, even unto the end of the world.', reflection: 'The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.' }
+    { title: 'Go', theme: 'Presence', verse: 'Matthew 28:20', passage: 'Lo, I am with you alway, even unto the end of the world.', reflection: 'The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.' }
   ];
 })();
