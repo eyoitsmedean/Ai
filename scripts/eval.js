@@ -25,7 +25,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { retrievalLetter } = require('../lib/letter');
 const { parseRef, isExactSpan, CRISIS_NOTICE, DANGER_NOTICE, POISON_LINE, loadSpoken } = require('../lib/scripture');
-const { CRISIS_SAFE: CRISIS_SAFE_LIST, DANGER_BY_YOU_OPENING } = require('../lib/advise');
+const { CRISIS_SAFE: CRISIS_SAFE_LIST, DANGER_BY_YOU_OPENING, CRISIS_BEREAVED_OPENING, citationAllowed } = require('../lib/advise');
+const { encouragementFor } = require('../lib/curated');
 const { loadLibrary } = require('../lib/library');
 const { themesForSaying, sayingTouchesCitation } = require('../lib/themes');
 
@@ -42,7 +43,10 @@ const NOTICE_HEAD = CRISIS_NOTICE.split('\n')[0];
 const DANGER_HEAD = DANGER_NOTICE.split('\n')[0];
 const POISON_HEAD = POISON_LINE.slice(0, 60);
 const BY_YOU_HEAD = DANGER_BY_YOU_OPENING.slice(0, 40);
+const BEREAVED_HEAD = CRISIS_BEREAVED_OPENING.slice(0, 40);
 const CRISIS_SAFE = new Set(CRISIS_SAFE_LIST);
+// The bereaved are answered from the grief room, under the same notice.
+const BEREAVED_SAFE = [...CRISIS_SAFE_LIST, ...encouragementFor('Grief & Loss').passages.map((p) => p.verse)];
 // Words a person in crisis must never be handed: departure, heaven as escape, the deaths in the text.
 const CRISIS_FORBID = ['many mansions', 'prepare a place', 'receive you unto myself', 'hanged himself', 'cutting himself', 'not dead, but sleepeth', 'sleepeth'];
 // Sentences that wound whatever the question — the platitudes a bereaved, ill, or guilty reader hears
@@ -132,12 +136,16 @@ function judge(q, letter) {
   const byYouAt = letter.indexOf(BY_YOU_HEAD);
   const firstCite = cites.length ? cites[0].index : Infinity;
   const crisisForbidden = q.crisis ? CRISIS_FORBID.filter((f) => lower.includes(f)) : [];
-  const offList = q.crisis ? cites.filter((c) => !CRISIS_SAFE.has(c.cite)).map((c) => c.cite) : [];
+  const offList = q.crisis
+    ? cites.filter((c) => (q.bereaved ? !citationAllowed(c.cite, BEREAVED_SAFE) : !CRISIS_SAFE.has(c.cite))).map((c) => c.cite)
+    : [];
+  const bereavedAt = letter.indexOf(BEREAVED_HEAD);
+  const bereavedOk = q.bereaved ? bereavedAt !== -1 && bereavedAt < firstCite : true;
   // Someone who has taken something is told 911 / Poison Control before 988; someone afraid of
   // their own hands is spoken to as such, never told "this is not your fault".
   const poisonOk = q.poison ? poisonAt !== -1 && poisonAt < noticeAt : poisonAt === -1;
   const byYouOk = q.byYou ? byYouAt !== -1 && byYouAt < firstCite : true;
-  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0 && poisonOk;
+  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0 && poisonOk && bereavedOk;
   else if (q.danger) gates.crisis = dangerAt !== -1 && dangerAt < firstCite && noticeAt === -1 && byYouOk;
   else gates.crisis = noticeAt === -1 && dangerAt === -1 && poisonAt === -1;
 

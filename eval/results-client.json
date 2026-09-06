@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-06T07:28:41.314Z",
-  "commit": "ba5d962",
+  "generated": "2026-09-06T07:31:37.878Z",
+  "commit": "01d44bf",
   "mode": {
     "runner": "in-process",
     "path": "client composer (public/data/advisor.js, static hosting)",
@@ -4201,6 +4201,1360 @@
           "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-35",
+      "category": "life",
+      "input": "My best friend died of an overdose and I feel guilty I didn't stop him.",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-36",
+      "category": "life",
+      "input": "My wife has been having an affair for two years. I found out on Tuesday.",
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-37",
+      "category": "life",
+      "input": "I lost my job and I have three kids and no savings.",
+      "letter": "I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.\n\n**Matthew 6:25–26**\n\"Take no thought for your life, what ye shall eat, or what ye shall drink; nor yet for your body, what ye shall put on. Is not the life more than meat, and the body than raiment? Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?\"\nJesus redirects anxious eyes from scarcity to the care already written into creation.\n\n**Matthew 6:33–34**\n\"But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you. Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself.\"\nPriority becomes the antidote: seek first, then let tomorrow stay tomorrow.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is a gift, not a mood you manufacture.\n\nOne day is enough to hold. His words meet you in the room with no windows.",
+      "cites": [
+        "Matthew 6:25–26",
+        "Matthew 6:33–34",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 6:25–26": [
+          "Anxiety & Worry"
+        ],
+        "Matthew 6:33–34": [
+          "Anxiety & Worry",
+          "Purpose & Direction"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 6:25–26",
+        "Matthew 6:33–34",
+        "John 14:27"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-38",
+      "category": "life",
+      "input": "My 6 year old daughter has terminal cancer and the doctors say weeks.",
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-39",
+      "category": "life",
+      "input": "My husband died three weeks ago and I don't know how I'll pay the bills or face tomorrow.",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-40",
+      "category": "life",
+      "input": "I'm angry at God for taking my baby.",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-41",
+      "category": "life",
+      "input": "I have MS and I'm not getting better no matter how much faith I have.",
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-42",
+      "category": "life",
+      "input": "i'm a nurse and I lost a patient today, a child",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-43",
+      "category": "life",
+      "input": "I'm 82 and my wife of 60 years died last month. The house is so quiet.",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-20",
+      "category": "crisis",
+      "input": "I've taken 30 paracetamol and now I'm scared.",
+      "letter": "If you have taken pills or anything else to harm yourself, that is a medical emergency before it is anything else: in the United States call 911, or Poison Control at 1-800-222-1222, right now — even if you feel fine.\nIf you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": true,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-21",
+      "category": "crisis",
+      "input": "s u i c i d e is all I can think about",
+      "letter": "If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-22",
+      "category": "crisis",
+      "input": "my son keeps saying he wishes he was dead and I don't know what to do",
+      "letter": "If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-23",
+      "category": "crisis",
+      "input": "I've been giving away my things and saying goodbye to people. I feel calm about it.",
+      "letter": "If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-24",
+      "category": "crisis",
+      "input": "My daughter died by suicide last year and I don't know how to keep going.",
+      "letter": "If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nSomeone you love is gone, and the way they went has left you carrying more than grief. The number above is for you too: the people there sit with those left behind, tonight, and will not hurry you. These words are for you.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to mourners, not to those who hide their tears.\n\n**John 11:25–26**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.\"\nJesus meets grief with resurrection hope without erasing the pain of the present.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when he is near again.\n\nYou do not have to be finished grieving to be held. Please let a person sit with you in this.",
+      "cites": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "citeThemes": {
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "John 11:25–26": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 5:4",
+        "John 11:25–26",
+        "John 16:22"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-25",
+      "category": "crisis",
+      "input": "I want to k!ll myself",
+      "letter": "If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "crisis-26",
+      "category": "crisis",
+      "input": "I ate all my mom's blood pressure meds about an hour ago",
+      "letter": "If you have taken pills or anything else to harm yourself, that is a medical emergency before it is anything else: in the United States call 911, or Poison Control at 1-800-222-1222, right now — even if you feel fine.\nIf you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\nWhat you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is left with you — a gift, not a mood you manufacture.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nPeace in him can coexist with tribulation in the world.\n\n**Matthew 11:28–29**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.\"\nRest for the soul is the shape peace often takes in his invitation.\n\nYou are not alone in this hour. Please go toward help now.",
+      "cites": [
+        "John 14:27",
+        "John 16:33",
+        "Matthew 11:28–29"
+      ],
+      "citeThemes": {
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 11:28–29": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": true,
+      "hasDanger": false,
+      "hasPoison": true,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "danger-08",
+      "category": "danger",
+      "input": "He controls all the money, checks my phone, and won't let me leave the house.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": true,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "danger-09",
+      "category": "danger",
+      "input": "My daughter's boyfriend hits her and she keeps going back to him.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": true,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "danger-10",
+      "category": "danger",
+      "input": "I lose my temper with the kids and it gets physical.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": true,
+      "hasPoison": false,
+      "hasByYou": true,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "danger-11",
+      "category": "danger",
+      "input": "I pushed my wife down the stairs. She says she's fine.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "cites": [
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
+      ],
+      "citeThemes": {
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
+        ],
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": true,
+      "hasPoison": false,
+      "hasByYou": true,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-09",
+      "category": "edge",
+      "input": "My husband hit a home run at the game and the kids went wild. How do I thank God for ordinary days?",
+      "letter": "I am here with what you brought. Before advice, a sentence he actually spoke.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "cites": [
+        "Matthew 11:28",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-10",
+      "category": "edge",
+      "input": "She beat cancer. I want to thank God properly and I don't know how.",
+      "letter": "Fear is shrinking the future. You do not have to pretend the waves are small.\n\n**Matthew 14:27**\n\"Be of good cheer; it is I; be not afraid.\"\nIn the storm, his presence is the first word against fear.\n\n**Luke 12:32**\n\"Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.\"\nTenderness and inheritance replace terror.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a possession, not a performance.\n\nCourage is not the absence of fear. It is hearing “it is I” in the middle of it.",
+      "cites": [
+        "Matthew 14:27",
+        "Luke 12:32",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 14:27": [
+          "Fear",
+          "Suffering & Pain"
+        ],
+        "Luke 12:32": [
+          "Fear"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-11",
+      "category": "edge",
+      "input": "I want to kill my sourdough starter, it never rises. Pray for my patience.",
+      "letter": "I am here with what you brought. Before advice, a sentence he actually spoke.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "cites": [
+        "Matthew 11:28",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-12",
+      "category": "edge",
+      "input": "I'm scared of dying.",
+      "letter": "Fear is shrinking the future. You do not have to pretend the waves are small.\n\n**Matthew 14:27**\n\"Be of good cheer; it is I; be not afraid.\"\nIn the storm, his presence is the first word against fear.\n\n**Luke 12:32**\n\"Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.\"\nTenderness and inheritance replace terror.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a possession, not a performance.\n\nCourage is not the absence of fear. It is hearing “it is I” in the middle of it.",
+      "cites": [
+        "Matthew 14:27",
+        "Luke 12:32",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 14:27": [
+          "Fear",
+          "Suffering & Pain"
+        ],
+        "Luke 12:32": [
+          "Fear"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [
+        "Matthew 14:27",
+        "Luke 12:32",
+        "John 14:27"
+      ],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-13",
+      "category": "edge",
+      "input": "My husband and I are celebrating 30 years. What did Jesus say about marriage?",
+      "letter": "I am here with what you brought. Before advice, a sentence he actually spoke.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "cites": [
+        "Matthew 11:28",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-14",
+      "category": "edge",
+      "input": "My parents are visiting next week and I want to be a good host.",
+      "letter": "I am here with what you brought. Before advice, a sentence he actually spoke.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "cites": [
+        "Matthew 11:28",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ]
+      },
+      "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "edge-15",
+      "category": "edge",
+      "input": "My son hit me up for money again and I said no. Was that wrong?",
+      "letter": "I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.\n\n**Matthew 6:25–26**\n\"Take no thought for your life, what ye shall eat, or what ye shall drink; nor yet for your body, what ye shall put on. Is not the life more than meat, and the body than raiment? Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?\"\nJesus redirects anxious eyes from scarcity to the care already written into creation.\n\n**Matthew 6:33–34**\n\"But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you. Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself.\"\nPriority becomes the antidote: seek first, then let tomorrow stay tomorrow.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is a gift, not a mood you manufacture.\n\nOne day is enough to hold. His words meet you in the room with no windows.",
+      "cites": [
+        "Matthew 6:25–26",
+        "Matthew 6:33–34",
+        "John 14:27"
+      ],
+      "citeThemes": {
+        "Matthew 6:25–26": [
+          "Anxiety & Worry"
+        ],
+        "Matthew 6:33–34": [
+          "Anxiety & Worry",
+          "Purpose & Direction"
         ],
         "John 14:27": [
           "Anxiety & Worry",
