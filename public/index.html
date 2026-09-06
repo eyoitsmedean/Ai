@@ -1972,6 +1972,7 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
+<script src="./data/crisis.js"></script>
 <script src="./data/curated.js"></script>
 <script src="./data/advisor.js"></script>
 <script src="./data/paths.js"></script>
@@ -3978,7 +3979,7 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return typeof window.RLA_looksLikeCrisis === 'function' && window.RLA_looksLikeCrisis(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {

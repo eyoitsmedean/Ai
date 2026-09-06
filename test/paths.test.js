@@ -17,7 +17,7 @@ function loadBrowserData() {
 
 describe('public/data mirrors data/', () => {
   it('ships the same paths.js and advisor.js the tests verify', () => {
-    ['paths.js', 'advisor.js', 'curated.js'].forEach((file) => {
+    ['paths.js', 'advisor.js', 'curated.js', 'crisis.js'].forEach((file) => {
       const a = fs.readFileSync(path.join(__dirname, '..', 'data', file), 'utf8');
       const b = fs.readFileSync(path.join(__dirname, '..', 'public', 'data', file), 'utf8');
       assert.equal(a, b, `${file} differs between data/ and public/data/`);

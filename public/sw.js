@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v13';
+const CACHE = 'rla-phase0-v14';
 /* Resolve against the worker's own folder so the app works at the origin root
    (node server.js) and under a project path (GitHub Pages /Ai/). */
 const ROOT = new URL('./', self.location.href);
@@ -9,6 +9,7 @@ const PRECACHE = [
   'manifest.json',
   'curated.json',
   'library.json',
+  'data/crisis.js',
   'data/advisor.js',
   'data/curated.js',
   'data/paths.js',
