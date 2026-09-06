@@ -2432,10 +2432,10 @@ async function loadDailyContent() {
   } catch (e) {
     try {
       const cur = await loadCurated();
-      const pack = Array.isArray(cur.daily)
-      ? cur.daily[Math.abs(Math.floor((Date.now() / 86400000) % cur.daily.length))]
-      : cur.daily;
-    dailyData = pack;
+      // Same rotation as the server: the day turns at local midnight.
+      const now = new Date();
+      const localDay = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 86400000);
+      dailyData = Array.isArray(cur.daily) ? cur.daily[localDay % cur.daily.length] : cur.daily;
     } catch (_) {
       document.getElementById('aff-skel').innerHTML = '<p class="lede">The morning page could not be fetched. Refresh when you have a connection.</p>';
       return;
@@ -3057,17 +3057,18 @@ async function sendMsg(preset) {
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
     const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text, chatHistory) : '';
+    const commons = ((window.RLA_CURATED || {}).commons || []).slice(0, 2);
     const fallback = living || [
-      'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
+      'Before anything else, sentences He actually spoke.',
+      ...commons.map((p) => `\n**${p.verse}**\n“${p.quote}”\n${p.context}`),
       '',
-      '**John 14:27**',
-      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-      'A troubled heart is the intended reader of this line.',
-      '',
-      '**Matthew 11:28**',
-      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-      'Rest is offered to the exhausted, not the already-composed.',
+      'You can sit with one line. Nothing else is required of this hour.',
     ].join('\n');
+    if (!living && !commons.length) {
+      updateStreamBubble(aiBubble, 'The room could not be opened. Refresh when you have a connection.');
+      return;
+    }
+    bumpChat();
     updateStreamBubble(aiBubble, fallback);
     chatHistory.push({ role: 'assistant', content: fallback, source: 'letterpress' });
     persistLetters();

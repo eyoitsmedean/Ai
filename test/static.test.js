@@ -20,18 +20,20 @@ function loadBrowserGlobals() {
   const window = {};
   const sandbox = { window, self: window, module: undefined };
   sandbox.globalThis = sandbox;
-  for (const name of ['curated.js', 'letterpress.js', 'advisor.js']) {
+  for (const name of ['curated.js', 'letterpress.js', 'advisor.js', 'paths.js']) {
     const src = fs.readFileSync(path.join(ROOT, 'public', 'data', name), 'utf8');
     vm.runInNewContext(src, sandbox);
   }
   return window;
 }
 
-// A quote is honest when it is the canonical text or an unaltered excerpt of it.
+// A quote is honest when it is the canonical text, letter for letter, or an unaltered excerpt of it.
 function assertCanonical(verse, quote, where) {
   const v = verifyQuote(verse, quote);
   assert.ok(v.ok, `${where}: ${verse} is not a spoken saying (${v.reason})`);
-  assert.ok(v.score >= 0.9, `${where}: ${verse} text is altered (score ${v.score.toFixed(2)})\n  shipped: ${quote}\n  canon:   ${v.quote}`);
+  const canon = lookup(verse).text.toLowerCase();
+  const shipped = String(quote).toLowerCase().replace(/[.:;,!?]+$/, '');
+  assert.ok(canon.includes(shipped), `${where}: ${verse} text is altered\n  shipped: ${quote}\n  canon:   ${v.quote}`);
   assert.ok(isRedLetter(verse), `${where}: ${verse} is not red letter`);
 }
 
@@ -61,13 +63,19 @@ describe('static artifacts', () => {
       assertCanonical(p.verse, p.quote, 'commons');
       checked += 1;
     }
-    const { RLA_SEVEN, RLA_CURATED } = loadBrowserGlobals();
-    for (const day of RLA_SEVEN) {
-      assertCanonical(day.verse, day.passage, `seven ${day.title}`);
-      checked += 1;
+    for (const [name, days] of Object.entries(json.paths)) {
+      for (const day of days) {
+        assertCanonical(day.verse, day.passage, `${name} ${day.title}`);
+        assert.equal(day.passage, lookup(day.verse).text, `${name} ${day.title} is not the whole saying`);
+        checked += 1;
+      }
     }
+    const { RLA_SEVEN, RLA_FORTY, RLA_CURATED } = loadBrowserGlobals();
     assert.deepEqual(plain(RLA_CURATED), json);
-    assert.ok(checked >= 80, `only ${checked} quotes checked`);
+    assert.deepEqual(plain(RLA_SEVEN), json.paths.seven);
+    assert.deepEqual(plain(RLA_FORTY), json.paths.forty);
+    assert.equal(RLA_SEVEN.length, 7);
+    assert.ok(checked >= 100, `only ${checked} quotes checked`);
   });
 });
 
@@ -101,6 +109,23 @@ describe('the static Advisor is the server Advisor', () => {
     const second = window.RLA_advise('still ashamed', [{ role: 'assistant', content: letter }]);
     assert.doesNotMatch(second, /Luke 15:4\*\*/);
     assert.match(second, /^You have stayed with this/);
+  });
+
+  it('does not re-read a room opening after a crisis notice stood before it', () => {
+    const first = window.RLA_advise('I want to die, I am so ashamed', []);
+    assert.match(first, /^If you are in danger/);
+    assert.match(first, /Shame says you are the lost sheep/);
+    const second = window.RLA_advise('still ashamed', [{ role: 'assistant', content: first }]);
+    assert.doesNotMatch(second, /lost sheep/);
+    assert.match(second, /^You have stayed with this/);
+  });
+
+  it('counts abbreviated citations from a model turn as already sent', () => {
+    const letter = press.composeLetter('I feel ashamed', {
+      packs: THEMES, commons: COMMONS,
+      history: [{ role: 'assistant', content: 'Remember Lk. 15:4 and luke 15:7.' }],
+    });
+    assert.ok(!letter.citations.includes('Luke 15:4') && !letter.citations.includes('Luke 15:7'), letter.citations.join(', '));
   });
 
   it('keeps every room in the browser data', () => {

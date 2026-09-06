@@ -145,10 +145,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Sit still for two minutes. Name one thing that belongs only to this day. Leave the rest on the table.",
-      "closing": "You do not have to finish the future tonight.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 6:27",
@@ -160,7 +156,11 @@ window.RLA_CURATED = {
           "quote": "Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls. For my yoke is easy, and my burden is light.",
           "context": "The yoke is easy because it is shared. Rest is the promise, not the prerequisite."
         }
-      ]
+      ],
+      "closing": "You do not have to finish the future tonight.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Grief & Loss": {
       "theme": "Grief & Loss",
@@ -184,10 +184,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Say the name of what you miss. Then read John 11:25 aloud, slowly, as if it were spoken into this room.",
-      "closing": "You are allowed to mourn. You are not alone in it.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "John 16:20",
@@ -199,7 +195,11 @@ window.RLA_CURATED = {
           "quote": "In my Father's house are many mansions: if it were not so, I would have told you. I go to prepare a place for you.",
           "context": "A place is being prepared for you, in a house you have not seen."
         }
-      ]
+      ],
+      "closing": "You are allowed to mourn. You are not alone in it.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Forgiveness": {
       "theme": "Forgiveness",
@@ -223,10 +223,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Write one sentence you wish you could say. Then write one blessing you can actually offer — even if it is only “I will not rehearse this harm today.”",
-      "closing": "You can take the next honest step. You do not have to finish the whole road before evening.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 18:22",
@@ -238,7 +234,11 @@ window.RLA_CURATED = {
           "quote": "Father, forgive them; for they know not what they do.",
           "context": "He forgave while the harm was still happening. The road begins before the apology."
         }
-      ]
+      ],
+      "closing": "You can take the next honest step. You do not have to finish the whole road before evening.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Loneliness": {
       "theme": "Loneliness",
@@ -262,10 +262,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Place a chair across from you. Read John 14:18 as if it were spoken from that chair. Sit with it for one minute.",
-      "closing": "The room is less empty than it feels.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 18:20",
@@ -277,7 +273,11 @@ window.RLA_CURATED = {
           "quote": "Henceforth I call you not servants; for the servant knoweth not what his lord doeth: but I have called you friends; for all things that I have heard of my Father I have made known unto you.",
           "context": "Not servant. Friend. The word is His, not yours to earn."
         }
-      ]
+      ],
+      "closing": "The room is less empty than it feels.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Conflict & Relationships": {
       "theme": "Conflict & Relationships",
@@ -301,10 +301,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Before you reply, pray one honest sentence for the other person. Then speak only what still needs saying.",
-      "closing": "You can be clear and still be kind.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 5:9",
@@ -316,7 +312,11 @@ window.RLA_CURATED = {
           "quote": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
           "context": "The measure of love is His, not the other person’s behaviour. You are not asked to earn it back."
         }
-      ]
+      ],
+      "closing": "You can be clear and still be kind.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Fear": {
       "theme": "Fear",
@@ -340,10 +340,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "When fear spikes, say aloud: “Fear not, little flock.” Then name one next faithful step the size of this hour.",
-      "closing": "You are held more tightly than the thing that scares you.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 14:27",
@@ -355,7 +351,11 @@ window.RLA_CURATED = {
           "quote": "Fear ye not therefore, ye are of more value than many sparrows.",
           "context": "Your value is the argument he makes against fear."
         }
-      ]
+      ],
+      "closing": "You are held more tightly than the thing that scares you.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Purpose & Direction": {
       "theme": "Purpose & Direction",
@@ -379,10 +379,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Write one way you can shine without performing — a kindness, a truth, a piece of work done well.",
-      "closing": "You do not need the whole map. You need the next honest step in the light.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 4:19",
@@ -394,7 +390,11 @@ window.RLA_CURATED = {
           "quote": "Ye have not chosen me, but I have chosen you, and ordained you, that ye should go and bring forth fruit, and that your fruit should remain: that whatsoever ye shall ask of the Father in my name, he may give it you.",
           "context": "You were chosen before you chose. The fruit is not your invention."
         }
-      ]
+      ],
+      "closing": "You do not need the whole map. You need the next honest step in the light.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Faith & Doubt": {
       "theme": "Faith & Doubt",
@@ -418,10 +418,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Tell Jesus the part you cannot see. Then read John 20:29 and let the blessing rest on that exact place.",
-      "closing": "You can bring the question. You do not have to bring the proof.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Mark 9:23",
@@ -433,7 +429,11 @@ window.RLA_CURATED = {
           "quote": "But I have prayed for thee, that thy faith fail not: and when thou art converted, strengthen thy brethren.",
           "context": "Before the failure, He had already prayed for the one who would fail. Your faith is being kept for you."
         }
-      ]
+      ],
+      "closing": "You can bring the question. You do not have to bring the proof.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Suffering & Pain": {
       "theme": "Suffering & Pain",
@@ -457,10 +457,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Lie down or sit. Place a hand on the place that hurts. Pray Matthew 11:28 as if it were spoken to that place alone.",
-      "closing": "Your pain is seen. It is not the end of the story.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 11:29–30",
@@ -472,7 +468,11 @@ window.RLA_CURATED = {
           "quote": "Blessed are ye that hunger now: for ye shall be filled. Blessed are ye that weep now: for ye shall laugh.",
           "context": "Weeping is blessed, not diagnosed. Laughter is spoken over it as a promise, not a demand."
         }
-      ]
+      ],
+      "closing": "Your pain is seen. It is not the end of the story.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Shame & Guilt": {
       "theme": "Shame & Guilt",
@@ -496,10 +496,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Name the shame in one sentence. Then read Luke 15:7 and imagine the joy is about you, specifically.",
-      "closing": "You are not too far for the shepherd to walk.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "John 8:11",
@@ -511,7 +507,11 @@ window.RLA_CURATED = {
           "quote": "For the Son of man is come to seek and to save that which was lost.",
           "context": "Lost is the condition He came for, not the one He avoids."
         }
-      ]
+      ],
+      "closing": "You are not too far for the shepherd to walk.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Peace": {
       "theme": "Peace",
@@ -535,10 +535,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Breathe out slowly four times. On each breath, say: “Peace, be still.” Let the words be for your body first.",
-      "closing": "The sea in you can hear Him too.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "Matthew 11:29",
@@ -550,7 +546,11 @@ window.RLA_CURATED = {
           "quote": "Let not your heart be troubled: ye believe in God, believe also in me.",
           "context": "A troubled heart is spoken to, not shamed."
         }
-      ]
+      ],
+      "closing": "The sea in you can hear Him too.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     },
     "Hope": {
       "theme": "Hope",
@@ -574,10 +574,6 @@ window.RLA_CURATED = {
         }
       ],
       "practice": "Write one true hard thing. Under it, write John 16:22. Keep both sentences. That is hope with its feet on the ground.",
-      "closing": "The last word over your life is not the night you are in.",
-      "translation": "KJV",
-      "verified": true,
-      "source": "curated",
       "more": [
         {
           "verse": "John 14:2–3",
@@ -589,7 +585,11 @@ window.RLA_CURATED = {
           "quote": "Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.",
           "context": "The gift is a kingdom. The receiver is a little flock."
         }
-      ]
+      ],
+      "closing": "The last word over your life is not the night you are in.",
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
     }
   },
   "commons": [
@@ -624,5 +624,186 @@ window.RLA_CURATED = {
       "context": "The storm is addressed by name. Calm is spoken, not negotiated."
     }
   ],
+  "paths": {
+    "seven": [
+      {
+        "title": "Come",
+        "theme": "Rest",
+        "verse": "Matthew 11:28–29",
+        "passage": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+        "reflection": "Day one is not a program. It is an invitation. Come as you are — laden, not finished."
+      },
+      {
+        "title": "Peace",
+        "theme": "Peace",
+        "verse": "John 14:27",
+        "passage": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+        "reflection": "The world offers a pause. He leaves a gift. You do not have to manufacture calm to receive it."
+      },
+      {
+        "title": "Light",
+        "theme": "Light",
+        "verse": "John 8:12",
+        "passage": "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+        "reflection": "Dark seasons are real. He does not deny them. Following is how the next step becomes visible."
+      },
+      {
+        "title": "Love",
+        "theme": "Love",
+        "verse": "John 13:34",
+        "passage": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
+        "reflection": "The mark is not an argument. It is how you treat the person next to you today."
+      },
+      {
+        "title": "Forgive",
+        "theme": "Forgiveness",
+        "verse": "Matthew 18:22",
+        "passage": "I say not unto thee, Until seven times: but, Until seventy times seven.",
+        "reflection": "Mercy is a way of life, not a single heroic act. One name is enough for this day."
+      },
+      {
+        "title": "Abide",
+        "theme": "Abide",
+        "verse": "John 15:4–5",
+        "passage": "Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.",
+        "reflection": "Fruit comes from staying close, not from straining alone. Remain. That is the work."
+      },
+      {
+        "title": "Go",
+        "theme": "Presence",
+        "verse": "Matthew 28:20",
+        "passage": "Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.",
+        "reflection": "The last word of the seven is not goodbye. It is presence that does not expire. Go — He goes too."
+      }
+    ],
+    "forty": [
+      {
+        "title": "Come",
+        "theme": "Rest",
+        "verse": "Matthew 11:28–29",
+        "passage": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+        "reflection": "Day one is not a program. It is an invitation. Come as you are — laden, not finished."
+      },
+      {
+        "title": "Peace",
+        "theme": "Peace",
+        "verse": "John 14:27",
+        "passage": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+        "reflection": "The world offers a pause. He leaves a gift. You do not have to manufacture calm to receive it."
+      },
+      {
+        "title": "Light",
+        "theme": "Light",
+        "verse": "John 8:12",
+        "passage": "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+        "reflection": "Dark seasons are real. He does not deny them. Following is how the next step becomes visible."
+      },
+      {
+        "title": "Love",
+        "theme": "Love",
+        "verse": "John 13:34",
+        "passage": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
+        "reflection": "The mark is not an argument. It is how you treat the person next to you today."
+      },
+      {
+        "title": "Forgive",
+        "theme": "Forgiveness",
+        "verse": "Matthew 18:22",
+        "passage": "I say not unto thee, Until seven times: but, Until seventy times seven.",
+        "reflection": "Mercy is a way of life, not a single heroic act. One name is enough for this day."
+      },
+      {
+        "title": "Abide",
+        "theme": "Abide",
+        "verse": "John 15:4–5",
+        "passage": "Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.",
+        "reflection": "Fruit comes from staying close, not from straining alone. Remain. That is the work."
+      },
+      {
+        "title": "Go",
+        "theme": "Presence",
+        "verse": "Matthew 28:20",
+        "passage": "Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.",
+        "reflection": "The last word of the seven is not goodbye. It is presence that does not expire. Go — He goes too."
+      },
+      {
+        "title": "Resurrection",
+        "theme": "Life",
+        "verse": "John 11:25–26",
+        "passage": "I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die. Believest thou this?",
+        "reflection": "He does not offer a theory of death. He offers himself in the middle of it."
+      },
+      {
+        "title": "Bread",
+        "theme": "Hunger",
+        "verse": "John 6:35",
+        "passage": "I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.",
+        "reflection": "Hunger is honest. He does not scold it. He names himself as enough."
+      },
+      {
+        "title": "Shepherd",
+        "theme": "Care",
+        "verse": "John 10:11",
+        "passage": "I am the good shepherd: the good shepherd giveth his life for the sheep.",
+        "reflection": "Care that costs nothing is a hireling. He stays when it is expensive."
+      },
+      {
+        "title": "Troubled",
+        "theme": "Peace",
+        "verse": "John 14:1",
+        "passage": "Let not your heart be troubled: ye believe in God, believe also in me.",
+        "reflection": "He speaks to a room about to break. Belief here is company, not a quiz."
+      },
+      {
+        "title": "Overcome",
+        "theme": "Courage",
+        "verse": "John 16:33",
+        "passage": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
+        "reflection": "He tells the truth about the world first. Cheer is not denial."
+      },
+      {
+        "title": "Paradise",
+        "theme": "Mercy",
+        "verse": "Luke 23:43",
+        "passage": "Verily I say unto thee, To day shalt thou be with me in paradise.",
+        "reflection": "A dying thief is given today, not a waitlist. Mercy does not arrive late."
+      },
+      {
+        "title": "Peacemakers",
+        "theme": "Peace",
+        "verse": "Matthew 5:9",
+        "passage": "Blessed are the peacemakers: for they shall be called the children of God.",
+        "reflection": "Peace is made, not merely felt. One reconciling step is enough for this day."
+      },
+      {
+        "title": "Anointed",
+        "theme": "Purpose",
+        "verse": "Luke 4:18",
+        "passage": "The Spirit of the Lord is upon me, because he hath anointed me to preach the gospel to the poor; he hath sent me to heal the brokenhearted, to preach deliverance to the captives, and recovering of sight to the blind, to set at liberty them that are bruised,",
+        "reflection": "His purpose statement is toward the poor, the broken, the locked. That is the work."
+      },
+      {
+        "title": "Sent",
+        "theme": "Go",
+        "verse": "John 20:21",
+        "passage": "Peace be unto you: as my Father hath sent me, even so send I you.",
+        "reflection": "Peace first. Then a sending. You do not go unaccompanied."
+      },
+      {
+        "title": "Willing",
+        "theme": "Surrender",
+        "verse": "Matthew 26:39",
+        "passage": "O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt.",
+        "reflection": "He does not pretend the cup is sweet. Honesty and obedience can sit in one sentence."
+      },
+      {
+        "title": "Ninety-nine",
+        "theme": "Seeking",
+        "verse": "Luke 15:4–5",
+        "passage": "What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it? And when he hath found it, he layeth it on his shoulders, rejoicing.",
+        "reflection": "You are not an acceptable loss. He goes after the one, and He is glad when He finds you."
+      }
+    ]
+  },
   "translation": "KJV"
 };

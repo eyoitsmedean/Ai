@@ -3,25 +3,31 @@
  * Derive every static artifact from lib/curated.js, so GitHub Pages ships the
  * same corpus-verified sayings the server does.
  *
- *   public/curated.json      — Today rotation, Seek rooms (with `more`), commons
- *   data/curated.js          — the same object as window.RLA_CURATED
- *   public/data/*.js         — browser copies of data/{curated,letterpress,advisor,paths}.js
+ *   public/curated.json      — Today rotation, Seek rooms (with `more`), commons, named paths
+ *   public/data/curated.js   — the same object as window.RLA_CURATED
+ *   public/data/*.js         — browser copies of data/{letterpress,advisor,paths}.js
  *
  * Usage: node scripts/build-curated.js [--check]
  * --check exits 1 if any artifact on disk differs from what would be written.
  */
 const fs = require('fs');
 const path = require('path');
-const { THEMES, COMMONS, dailyRotation, encouragementFor, themeNames } = require('../lib/curated');
+const { THEMES, COMMONS, SEVEN, FORTY, dailyRotation, themeNames } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
 function curatedObject() {
   const packs = {};
   for (const name of themeNames()) {
-    packs[name] = { ...encouragementFor(name), more: THEMES[name].more || [] };
+    packs[name] = { ...THEMES[name], more: THEMES[name].more || [], translation: 'KJV', verified: true, source: 'curated' };
   }
-  return { daily: dailyRotation(), packs, commons: COMMONS, translation: 'KJV' };
+  return {
+    daily: dailyRotation(),
+    packs,
+    commons: COMMONS,
+    paths: { seven: SEVEN, forty: FORTY },
+    translation: 'KJV',
+  };
 }
 
 function artifacts() {
@@ -35,7 +41,6 @@ function artifacts() {
   ].join('\n');
   const out = {
     'public/curated.json': json,
-    'data/curated.js': js,
     'public/data/curated.js': js,
   };
   for (const name of ['letterpress.js', 'advisor.js', 'paths.js']) {

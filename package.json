@@ -1,7 +1,7 @@
 {
   "name": "red-letter-advisor",
   "version": "1.0.0",
-  "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
+  "description": "Red Letter — a quiet reading room for the words Jesus actually spoke (KJV), with an Advisor that writes from them without a model",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

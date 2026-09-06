@@ -57,17 +57,19 @@
     closing: 'A line can be read again. You do not have to find a new one.',
   };
 
-  var REF_RE = /\b(Matthew|Mark|Luke|John)\s+(\d{1,3})\s*:\s*(\d{1,3})(?:\s*[–—-]\s*(\d{1,3}))?/g;
+  var BOOKS = { matthew: 'Matthew', matt: 'Matthew', mt: 'Matthew', mark: 'Mark', mk: 'Mark', mrk: 'Mark', luke: 'Luke', lk: 'Luke', luk: 'Luke', john: 'John', jn: 'John', jhn: 'John' };
+  var REF_RE = /\b(Matthew|Matt|Mt|Mark|Mk|Mrk|Luke|Lk|Luk|John|Jn|Jhn)\.?\s+(\d{1,3})\s*:\s*(\d{1,3})(?:\s*[–—-]\s*(\d{1,3}))?/gi;
 
   function parseRefs(text) {
     var out = [];
     var m;
-    var re = new RegExp(REF_RE.source, 'g');
+    var re = new RegExp(REF_RE.source, 'gi');
     while ((m = re.exec(String(text || '')))) {
+      var book = BOOKS[m[1].toLowerCase()];
       var start = Number(m[3]);
       var end = m[4] ? Number(m[4]) : start;
-      if (end < start) continue;
-      out.push({ book: m[1], chapter: Number(m[2]), start: start, end: end });
+      if (!book || end < start) continue;
+      out.push({ book: book, chapter: Number(m[2]), start: start, end: end });
     }
     return out;
   }
@@ -121,7 +123,7 @@
     opts = opts || {};
     var packs = opts.packs || {};
     var commons = opts.commons || [];
-    var history = opts.history || [];
+    var history = Array.isArray(opts.history) ? opts.history : [];
     var raw = String(text || '').trim();
     var themes = guessThemes(raw, Object.keys(packs));
     var primary = themes[0] || null;
@@ -144,8 +146,11 @@
     for (var c = 0; c < commons.length; c++) add(commons[c]);
 
     // A room's opening names its first sentences, so it is read only the first time in that room.
+    // A crisis notice may stand before the letter; look past it.
     var firstTimeHere = Boolean(primary) && !history.some(function (m) {
-      return m && m.role === 'assistant' && typeof m.content === 'string' && m.content.indexOf(packs[primary].opening) === 0;
+      if (!m || m.role !== 'assistant' || typeof m.content !== 'string') return false;
+      var content = m.content.indexOf(CRISIS_NOTICE) === 0 ? m.content.slice(CRISIS_NOTICE.length) : m.content;
+      return content.indexOf(packs[primary].opening) === 0;
     });
 
     var opening;
@@ -192,14 +197,11 @@
 
   return {
     CRISIS_NOTICE: CRISIS_NOTICE,
-    GENERIC: GENERIC,
-    LETTER_LENGTH: LETTER_LENGTH,
     NEED_CUES: NEED_CUES,
     citedBefore: citedBefore,
     composeLetter: composeLetter,
     guessThemes: guessThemes,
     looksLikeCrisis: looksLikeCrisis,
-    parseRefs: parseRefs,
     renderLetter: renderLetter,
   };
 });
