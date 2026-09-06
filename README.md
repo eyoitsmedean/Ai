@@ -34,6 +34,8 @@ PORT=3000
 API_ACCESS_KEY=        # optional gate for /api/*
 ```
 
+Node 22 or newer is required (`.nvmrc` is set).
+
 Model choices live in `lib/models.js`: **Claude Opus 5** (Anthropic, default) and **GPT-6 Astra** (OpenAI). The provider is inferred from the model id; `ANTHROPIC_MODEL` is still honored for older `.env` files. `GET /api/health` reports the active `provider`, `model`, and the available `models`.
 
 Notes for **GPT-6 Astra** (`gpt-6-astra`, released 3 September 2026): it runs over the Responses API with strict JSON-schema output for Today and Seek, and streamed text for the Advisor. Requests are sent with `store: false` so the reader's words are not kept in OpenAI's stored-response history. `OPENAI_REASONING_EFFORT` accepts `low`, `medium`, `high`, `xhigh`, or `max` (Astra rejects `none`); unset leaves the provider default. It is priced at $10 / $50 per million input / output tokens and needs a paid usage tier — see the [model page](https://developers.openai.com/api/docs/models/gpt-6-astra).

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
   "main": "server.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
