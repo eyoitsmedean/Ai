@@ -1,6 +1,8 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const { MODEL_CHOICES, DEFAULT_MODEL, providerFor, resolveModel, createProvider } = require('../lib/models');
+const {
+  MODEL_CHOICES, DEFAULT_MODEL, OPENAI_REASONING_EFFORTS, reasoningEffort, providerFor, resolveModel, createProvider,
+} = require('../lib/models');
 
 describe('model choices', () => {
   it('offers Claude Opus 5 and GPT-6 Astra', () => {
@@ -20,6 +22,25 @@ describe('model choices', () => {
     assert.deepEqual(resolveModel({}), { id: 'claude-opus-5', provider: 'anthropic' });
     assert.deepEqual(resolveModel({ ANTHROPIC_MODEL: 'claude-sonnet-5' }), { id: 'claude-sonnet-5', provider: 'anthropic' });
     assert.deepEqual(resolveModel({ MODEL: 'gpt-6-astra', ANTHROPIC_MODEL: 'claude-opus-5' }), { id: 'gpt-6-astra', provider: 'openai' });
+  });
+
+  it('accepts only the reasoning efforts Astra supports', () => {
+    assert.deepEqual(OPENAI_REASONING_EFFORTS, ['low', 'medium', 'high', 'xhigh', 'max']);
+    assert.equal(reasoningEffort(undefined), null);
+    assert.equal(reasoningEffort(''), null);
+    assert.equal(reasoningEffort(' High '), 'high');
+    assert.equal(reasoningEffort('max'), 'max');
+    const warn = console.warn;
+    const warned = [];
+    console.warn = (msg) => warned.push(msg);
+    try {
+      assert.equal(reasoningEffort('none'), null);
+      assert.equal(reasoningEffort('minimal'), null);
+    } finally {
+      console.warn = warn;
+    }
+    assert.equal(warned.length, 2);
+    assert.match(warned[0], /none/);
   });
 
   it('only builds a provider when the matching key is usable', () => {

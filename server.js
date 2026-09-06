@@ -7,7 +7,7 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
-const { resolveModel, createProvider } = require('./lib/models');
+const { MODEL_CHOICES, resolveModel, createProvider } = require('./lib/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -175,6 +175,7 @@ app.get('/api/health', (req, res) => {
     anthropic: Boolean(client) && client.name === 'anthropic',
     provider: MODEL.provider,
     model: MODEL.id,
+    models: MODEL_CHOICES.map((m) => m.id),
     themes: themeNames().length,
   });
 });
