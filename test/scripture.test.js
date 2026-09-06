@@ -15,7 +15,12 @@ const {
   spokenAt,
   fillPlaceholders,
   loadCorpus,
+  NARRATOR_PREFIXES,
+  POISON_LINE,
+  CRISIS_NOTICE,
+  DANGER_NOTICE,
 } = require('../lib/scripture');
+const { retrievalLetter } = require('../lib/letter');
 const { retrieveSayings, guessThemes } = require('../lib/retrieve');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
 const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
@@ -233,10 +238,53 @@ describe('spoken corpus', () => {
     assert.equal(verifyAndSubstitute('He said “Peace I leave with you, my peace I give unto you” to frightened men.'), 'He said “Peace I leave with you, my peace I give unto you” to frightened men.');
   });
 
+  it('leaves no orphan when a quotation is split, short, or under a look-alike heading', () => {
+    // A quotation the model broke across two lines: the tail must not survive as prose.
+    const split = verifyAndSubstitute('Hear this.\n\n**John 14:27**\n“Peace I leave with you,\nmy peace I give unto you.”\nHe leaves peace.');
+    assert.equal(split, 'Hear this.\n\n**John 14:27**\n“' + spokenAt('John', 14, 27) + '”\nHe leaves peace.');
+    // Three-word fabrications in prose go; a real short phrase of His stays.
+    assert.equal(verifyAndSubstitute('Jesus said “just let go.” Stay with that. He also said “trust the process” and it works.'), 'Stay with that.');
+    assert.equal(verifyAndSubstitute('He said “Peace, be still.” Stay with that.'), 'He said “Peace, be still.” Stay with that.');
+    // A heading that only looks like a citation, and whatever it vouched for.
+    assert.equal(verifyAndSubstitute('**Jn 14.27**\n“x”\n\nGo well.'), 'Go well.');
+    assert.equal(verifyAndSubstitute('**Jesus said**\n“Everything happens for a reason.”\n\nGo well.'), 'Go well.');
+    assert.equal(verifyAndSubstitute('**John 14:27**\n“Peace”\n\nGo well.'), '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”\nGo well.');
+  });
+
   it('strips the evangelist intro but keeps speech inside parables', () => {
     assert.equal(spokenAt('Mark', 11, 22), 'Have faith in God.');
     assert.match(spokenAt('Luke', 13, 8), /^And he answering said unto him, Lord, let it alone/);
     assert.match(spokenAt('Matthew', 10, 38), /^And he that taketh not his cross/);
+    // The explicit list: each prefix matches the verse it names, and the trimmed verse begins with His words.
+    const corpus = loadCorpus().books;
+    for (const [cite, prefix] of Object.entries(NARRATOR_PREFIXES)) {
+      const p = parseRef(cite);
+      const full = cleanKjv(corpus[p.book][p.chapter][p.start]);
+      assert.ok(full.startsWith(prefix), `${cite} does not begin with its listed prefix`);
+      assert.equal(spokenAt(p.book, p.chapter, p.start), full.slice(prefix.length).trim(), cite);
+    }
+    assert.match(spokenAt('Luke', 22, 31), /^Simon, Simon, behold/);
+    assert.match(spokenAt('Mark', 9, 19), /^O faithless generation/);
+    assert.match(spokenAt('John', 16, 19), /^Do ye enquire among yourselves/);
+    // Characters inside His parables keep their "and he said": that is His narration.
+    assert.match(spokenAt('Luke', 16, 2), /^And he called him, and said unto him/);
+    assert.match(spokenAt('Matthew', 25, 24), /^Then he which had received the one talent/);
+    assert.match(spokenAt('Luke', 15, 29), /^And he answering said to his father/);
+  });
+
+  it('puts 911 and Poison Control ahead of 988 when something was taken', () => {
+    const taken = retrievalLetter("I took too many pills an hour ago and now I'm scared.");
+    assert.ok(taken.startsWith(POISON_LINE), 'emergency line must come first');
+    assert.ok(taken.indexOf(POISON_LINE) < taken.indexOf(CRISIS_NOTICE.split('\n')[0]));
+    assert.match(taken, /1-800-222-1222/);
+    const wish = retrievalLetter('I want to die.');
+    assert.ok(wish.startsWith(CRISIS_NOTICE.split('\n')[0]));
+    assert.doesNotMatch(wish, /Poison Control/);
+    assert.doesNotMatch(retrievalLetter('I drank the whole bottle of wine and I feel ashamed.'), /988|Poison Control/);
+    const byYou = retrievalLetter('I want to hit my kid.');
+    assert.ok(byYou.startsWith(DANGER_NOTICE.split('\n')[0]));
+    assert.match(byYou, /You asked about hurting someone/);
+    assert.doesNotMatch(byYou, /not your fault/);
   });
 
   it('uses the spoken span for Mark 4:39 and John 8:12', () => {

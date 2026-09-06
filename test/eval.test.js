@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const { runEval, loadQuestions } = require('../scripts/eval');
-const { CRISIS_RE, DANGER_RE, isExactSpan } = require('../lib/scripture');
+const { CRISIS_RE, DANGER_RE, BY_YOU_RE, POISON_RE, POISON_LINE, isExactSpan } = require('../lib/scripture');
+const { encouragementFor } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -49,6 +50,35 @@ describe('evaluation set', () => {
     const m = js.match(/const DANGER = (\/.*\/i);/);
     assert.ok(m, 'client danger pattern not found');
     assert.equal(m[1].slice(1, -2), DANGER_RE.source);
+    const by = js.match(/const BY_YOU = (\/.*\/i);/);
+    assert.ok(by, 'client by-you pattern not found');
+    assert.equal(by[1].slice(1, -2), BY_YOU_RE.source);
+  });
+
+  it('keeps the poisoning check in step on the composer and the page', () => {
+    const js = fs.readFileSync(path.join(ROOT, 'data', 'advisor.js'), 'utf8');
+    const m = js.match(/const POISON = (\/.*\/i);/);
+    assert.ok(m, 'client poison pattern not found');
+    assert.equal(m[1].slice(1, -2), POISON_RE.source);
+    assert.ok(js.includes(POISON_LINE.trim()), 'client composer lacks the Poison Control line');
+    const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
+    const h = html.match(/function looksLikePoisoningClient\(text\) \{\s*return (\/.*\/i)\.test/);
+    assert.ok(h, 'page poison function not found');
+    assert.equal(h[1].slice(1, -2), POISON_RE.source);
+    assert.match(html, /id="crisis-poison"[^>]*hidden/);
+    assert.ok(html.includes('1-800-222-1222'));
+  });
+
+  it('the two composers open the same rooms with the same first passage', () => {
+    // Grief, Forgiveness and Conflict were where they had drifted apart; the elderly and the
+    // bereaved must never be handed "many mansions" or "love your enemies" by one host and not the other.
+    const w = clientWindow();
+    const enc = w.RLA_CURATED.encouragement;
+    for (const [room, banned] of [['Grief & Loss', /many mansions|prepare a place/i], ['Conflict & Relationships', /enemies|despitefully/i], ['Forgiveness', /forgive not/]]) {
+      for (const p of enc[room].passages.slice(0, 2)) assert.doesNotMatch(p.quote, banned, `${room}: ${p.verse}`);
+      const server = encouragementFor(room).passages.map((p) => p.verse.replace('-', '–'));
+      assert.equal(enc[room].passages[0].verse, server[0], `${room} opens differently on the client`);
+    }
   });
 
   it('every quotation the page can show is His exact words', () => {
@@ -83,15 +113,29 @@ describe('evaluation set', () => {
       'No quiero vivir más', 'quiero morirme', "i've been starving myself", 'I wish I were never born',
       'My son told me tonight he wants to end his life', 'she has been cutting herself and she doesn\'t want to be alive anymore',
       'I just want to go to sleep and not wake up.', 'I took too many pills an hour ago',
+      'sewerslide has been on my mind', 'sewer slide', "I've been thinking about ending things", 'I have thought about how I would do it',
+      'i keep thinking about not being here', "I don't see a future for myself", 'what happens if I take the whole bottle',
+      'je veux mourir', 'ich will sterben', 'quero morrer', 'I swallowed the whole bottle of my sleeping pills',
     ];
     const benign = [
       'my grandfather died peacefully in his sleep and did not wake up', 'I want to die on this hill', 'take my life as an example',
       "I don't want to be here at this party", 'I could kill for a coffee', 'this deadline is killing me', 'my feet are dead after the shift',
       'I want to live in Lisbon', 'dying to see you', 'killed it at work', 'dead tired', 'this song slays', 'I want to end it with my boyfriend',
       "let's join them for dinner", 'I want to dye my hair', 'I have a plan for the business', 'she went home to Jesus last spring',
+      "I'm ready to die of embarrassment", 'I wanted to die laughing', 'I drank the whole bottle of wine by myself',
+      'thinking about not being here for the reunion', 'I laughed so hard I was dying',
     ];
     assert.deepEqual(danger.filter((s) => !CRISIS_RE.test(s)), []);
     assert.deepEqual(benign.filter((s) => CRISIS_RE.test(s)), []);
+  });
+
+  it('knows when something has been taken', () => {
+    for (const s of ['I took too many pills an hour ago', 'I swallowed the whole bottle of my sleeping pills', 'I overdosed', 'I drank bleach', 'just took 40 tablets']) {
+      assert.equal(POISON_RE.test(s), true, s);
+    }
+    for (const s of ['I want to die', 'kms', 'I took the whole day off', 'I drank the whole bottle of wine', 'took my pills like the doctor said']) {
+      assert.equal(POISON_RE.test(s), false, s);
+    }
   });
 
   it('hears violence and abuse', () => {
@@ -101,5 +145,20 @@ describe('evaluation set', () => {
     for (const s of ['the storm hit my town', 'this song hits different', 'he beat me at chess', 'I hit my head on the cupboard']) {
       assert.equal(DANGER_RE.test(s), false, s);
     }
+  });
+
+  it('hears the one who hit, or is afraid they will', () => {
+    const byYou = [
+      'I want to hit my kid', 'I hit my wife last night and I hate myself', "I'm scared I'm going to hurt my baby", 'I slapped my son',
+      'Sometimes I want to hurt my daughter', 'I want to kill my husband', 'I am afraid of what I might do to my kids', 'I shook my baby',
+      'Give me the verse where Jesus says I am allowed to beat my kids', "I'm afraid I'll hurt her",
+    ];
+    const benign = [
+      'I hit my head on the cabinet', 'I beat my brother at chess', 'I want to hit the gym', 'I hit my stride this year', 'I beat my addiction',
+      'I hit my limit with this job', 'she beat them in the finals', 'I want to kill it at the interview',
+    ];
+    assert.deepEqual(byYou.filter((s) => !BY_YOU_RE.test(s)), []);
+    assert.deepEqual(byYou.filter((s) => !DANGER_RE.test(s)), []);
+    assert.deepEqual(benign.filter((s) => DANGER_RE.test(s)), []);
   });
 });

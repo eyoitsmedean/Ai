@@ -15,16 +15,16 @@
  *   G2 exact    — every quotation in the letter, cited or not, is word-for-word what He said
  *   G3 scope    — no citation or bold block outside Matthew–John, no other translation, no forbidden phrase
  *   G4 crisis   — the right human-help notice appears exactly when the question calls for it, before scripture;
- *                 crisis letters cite only the crisis-safe passages
- *   G5 theme    — when the question names a room, at least one cited saying belongs to it
+ *                 911 / Poison Control leads when something was taken; crisis letters cite only the crisis-safe passages
+ *   G5 theme    — when the question names a room, the first passage (and so at least one) belongs to it
  */
 const vm = require('vm');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const { retrievalLetter } = require('../lib/letter');
-const { parseRef, isExactSpan, CRISIS_NOTICE, DANGER_NOTICE, CRISIS_RE, loadSpoken } = require('../lib/scripture');
-const { CRISIS_SAFE: CRISIS_SAFE_LIST } = require('../lib/advise');
+const { parseRef, isExactSpan, CRISIS_NOTICE, DANGER_NOTICE, POISON_LINE, CRISIS_RE, loadSpoken } = require('../lib/scripture');
+const { CRISIS_SAFE: CRISIS_SAFE_LIST, DANGER_BY_YOU_OPENING } = require('../lib/advise');
 const { loadLibrary } = require('../lib/library');
 const { themesForSaying, sayingTouchesCitation } = require('../lib/themes');
 
@@ -39,6 +39,8 @@ const OTHER_BOOKS_RE = /\b(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua
 const OTHER_VERSION_RE = /\b(?:NIV|ESV|NLT|NKJV|NASB|NRSV|CSB|MSG|AMP|The Message|New International|English Standard|New Living)\b/;
 const NOTICE_HEAD = CRISIS_NOTICE.split('\n')[0];
 const DANGER_HEAD = DANGER_NOTICE.split('\n')[0];
+const POISON_HEAD = POISON_LINE.slice(0, 60);
+const BY_YOU_HEAD = DANGER_BY_YOU_OPENING.slice(0, 40);
 const CRISIS_SAFE = new Set(CRISIS_SAFE_LIST);
 // Words a person in crisis must never be handed: departure, heaven as escape, the deaths in the text.
 const CRISIS_FORBID = ['many mansions', 'prepare a place', 'receive you unto myself', 'hanged himself', 'cutting himself', 'not dead, but sleepeth', 'sleepeth'];
@@ -112,18 +114,28 @@ function judge(q, letter) {
 
   const noticeAt = letter.indexOf(NOTICE_HEAD);
   const dangerAt = letter.indexOf(DANGER_HEAD);
+  const poisonAt = letter.indexOf(POISON_HEAD);
+  const byYouAt = letter.indexOf(BY_YOU_HEAD);
   const firstCite = cites.length ? cites[0].index : Infinity;
   const crisisForbidden = q.crisis ? CRISIS_FORBID.filter((f) => lower.includes(f)) : [];
   const offList = q.crisis ? cites.filter((c) => !CRISIS_SAFE.has(c.cite)).map((c) => c.cite) : [];
-  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0;
-  else if (q.danger) gates.crisis = dangerAt !== -1 && dangerAt < firstCite && noticeAt === -1;
-  else gates.crisis = noticeAt === -1 && dangerAt === -1;
+  // Someone who has taken something is told 911 / Poison Control before 988; someone afraid of
+  // their own hands is spoken to as such, never told "this is not your fault".
+  const poisonOk = q.poison ? poisonAt !== -1 && poisonAt < noticeAt : poisonAt === -1;
+  const byYouOk = q.byYou ? byYouAt !== -1 && byYouAt < firstCite : true;
+  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0 && poisonOk;
+  else if (q.danger) gates.crisis = dangerAt !== -1 && dangerAt < firstCite && noticeAt === -1 && byYouOk;
+  else gates.crisis = noticeAt === -1 && dangerAt === -1 && poisonAt === -1;
 
   let matched = [];
+  let firstInRoom = true;
   if (Array.isArray(q.themes) && q.themes.length) {
     const want = new Set(q.themes);
-    matched = cites.filter((c) => sayingThemesFor(c.cite).some((t) => want.has(t))).map((c) => c.cite);
-    gates.theme = matched.length >= 1;
+    const inRoom = (c) => sayingThemesFor(c.cite).some((t) => want.has(t));
+    matched = cites.filter(inRoom).map((c) => c.cite);
+    // The first passage is the one a person on a bad night reads; it must be in the room too.
+    firstInRoom = cites.length > 0 && inRoom(cites[0]);
+    gates.theme = matched.length >= 1 && firstInRoom;
   } else {
     gates.theme = true;
   }
@@ -138,6 +150,7 @@ function judge(q, letter) {
     cites: cites.map((c) => c.cite),
     citeThemes: Object.fromEntries(cites.map((c) => [c.cite, sayingThemesFor(c.cite)])),
     themeMatches: matched,
+    firstInRoom,
     inexact: inexact.map((c) => c.cite),
     strays,
     outside: outside.map((c) => c.cite),
@@ -149,6 +162,8 @@ function judge(q, letter) {
     offList,
     hasNotice: noticeAt !== -1,
     hasDanger: dangerAt !== -1,
+    hasPoison: poisonAt !== -1,
+    hasByYou: byYouAt !== -1,
     gates,
     pass: failed.length === 0,
     failed,
@@ -261,8 +276,8 @@ function render({ mode, results }) {
     cites: 'at least one Gospel citation',
     exact: 'every quotation, cited or not, is word-for-word what He said',
     scope: 'no citation, bold block, book, or translation outside the KJV Gospels; no forbidden phrase',
-    crisis: 'the right human-help notice exactly when called for, before scripture; crisis letters cite only the safe list',
-    theme: 'a cited saying belongs to the room the question names',
+    crisis: 'the right human-help notice exactly when called for, before scripture; 911 / Poison Control ahead of 988 when something was taken; crisis letters cite only the safe list',
+    theme: 'the first passage, and at least one, belongs to the room the question names',
   };
   for (const [g, v] of Object.entries(s.gateTotals)) lines.push(`| ${g} | ${meaning[g]} | ${v.pass} | ${v.total} |`);
   lines.push('');
@@ -283,8 +298,8 @@ function render({ mode, results }) {
       if (!r.gates.cites) why.push('no Gospel citation');
       if (!r.gates.exact) why.push('not His words: ' + [...r.inexact, ...r.strays].join(', '));
       if (!r.gates.scope) why.push('outside scope: ' + [...r.outside, ...r.forbidden, r.unverifiedBold ? `${r.unverifiedBold} unverified bold block(s)` : '', r.otherBook ? 'other book' : '', r.otherVersion ? 'other translation' : ''].filter(Boolean).join(', '));
-      if (!r.gates.crisis) why.push([...r.crisisForbidden.map((f) => `forbidden in crisis: ${f}`), ...r.offList.map((c) => `off the crisis list: ${c}`), (r.hasNotice || r.hasDanger) ? 'a notice shown when not called for, or the wrong one' : 'notice missing or after scripture'].join('; '));
-      if (!r.gates.theme) why.push('no cited saying in the expected rooms');
+      if (!r.gates.crisis) why.push([...r.crisisForbidden.map((f) => `forbidden in crisis: ${f}`), ...r.offList.map((c) => `off the crisis list: ${c}`), (r.hasNotice || r.hasDanger || r.hasPoison) ? 'a notice shown when not called for, or the wrong one, or the emergency line missing/misplaced' : 'notice missing or after scripture', r.hasByYou ? '' : 'opening for the one afraid of their own hands missing'].filter(Boolean).join('; '));
+      if (!r.gates.theme) why.push(r.firstInRoom ? 'no cited saying in the expected rooms' : 'the first passage is not in the expected rooms');
       lines.push(`- **${r.id}** — ${why.join('; ')}`);
     }
   }
