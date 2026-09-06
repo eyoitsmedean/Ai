@@ -35,7 +35,7 @@ API_ACCESS_KEY=        # optional gate for /api/*
 
 ```bash
 npm test
-npm run eval     # 149-question evaluation set against the live Advisor → eval/RESULTS.md
+npm run eval     # 149-question evaluation set + frozen held-out detection number → eval/RESULTS.md
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
 
