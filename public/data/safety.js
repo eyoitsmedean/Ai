@@ -228,9 +228,33 @@
     const c = cues(text);
     return (c.deathSelf || c.explicit || c.intent) && !c.fear && !c.griefOther;
   }
-  const DEATH_VERSES = /^(John 11:25|John 11:26|John 10:10|Matthew 5:4)$/;
+  // Verses that read as an answer to "I want to die": resurrection, the
+  // thief who comes to kill, blessed are they that mourn.
+  const DEATH_VERSES = { 'john 11': [25, 26], 'john 10': [10], 'matthew 5': [4] };
+  const CITE = /^\s*\**\s*(matthew|mark|luke|john|matt|mt|mk|lk|jn)\.?\s+(\d+)\s*:\s*(\d+)(?:\s*[-–—]\s*(\d+))?\s*\**\s*(?:\(?kjv\)?)?\s*$/i;
+  const BOOKS = { matt: 'matthew', mt: 'matthew', mk: 'mark', lk: 'luke', jn: 'john' };
+  function isDeathVerse(verse) {
+    const m = CITE.exec(String(verse || ''));
+    if (!m) return false;
+    const book = BOOKS[m[1].toLowerCase()] || m[1].toLowerCase();
+    const list = DEATH_VERSES[book + ' ' + Number(m[2])];
+    if (!list) return false;
+    const start = Number(m[3]);
+    const end = m[4] ? Number(m[4]) : start;
+    return list.some((v) => v >= start && v <= end);
+  }
   function verseSafeFor(text, verse) {
-    return !(mentionsOwnDeath(text) && DEATH_VERSES.test(String(verse || '')));
+    return !(mentionsOwnDeath(text) && isDeathVerse(verse));
+  }
+  // A whole letter: every bold citation line must be safe for what was written.
+  function letterSafeFor(text, letter) {
+    if (!mentionsOwnDeath(text)) return true;
+    const lines = String(letter || '').split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      const m = /^\s*\*\*(.+?)\*\*\s*$/.exec(lines[i]);
+      if (m && isDeathVerse(m[1])) return false;
+    }
+    return true;
   }
 
   // ---- medical: a treatment DECISION, not a mention -----------------------------
@@ -330,6 +354,7 @@
     looksLikeCrisis,
     mentionsOwnDeath,
     verseSafeFor,
+    letterSafeFor,
     looksLikeMedical: test(MEDICAL),
     looksLikeIdentity: test(IDENTITY),
     looksLikeDecision: test(DECISION),

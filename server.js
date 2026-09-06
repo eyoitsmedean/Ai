@@ -360,6 +360,9 @@ app.post('/api/chat', async (req, res) => {
     return res.status(400).json({ error: 'Empty message.' });
   }
   if (last.content.length > 2000) return res.status(400).json({ error: 'Message is too long.' });
+  // Tests may stand in a fake model here (app.locals.chatClient) to exercise
+  // the model path without a key. Production never sets it.
+  const model = app.locals.chatClient !== undefined ? app.locals.chatClient : client;
   for (const m of messages) {
     if (!m || (m.role !== 'user' && m.role !== 'assistant') || typeof m.content !== 'string') {
       return res.status(400).json({ error: 'Invalid message list.' });
@@ -388,23 +391,28 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
+  // Listen on the response, not the request: since Node 16 the request's
+  // 'close' fires as soon as its body has been read, which on the model path
+  // is before the model has answered — ending the stream with nothing in it.
+  let gone = false;
+  res.on('close', () => { gone = true; });
+
   const routed = safety.route(last.content);
   const crisis = routed.kind === 'crisis';
   const offScope = routed.kind === 'offscope';
   const finish = (body) => {
-    const verified = verifyAndSubstitute(body);
+    if (gone || res.writableEnded) return;
+    let verified = verifyAndSubstitute(body);
+    // Holds on both paths: if the model set a resurrection, mourning, or
+    // "kill and destroy" verse under a first-person mention of death, the
+    // standing letter goes out instead. Not a matter of model judgment.
+    if (!safety.letterSafeFor(last.content, verified)) verified = verifyAndSubstitute(FALLBACK_LETTER);
     streamText(routed.notice + verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
 
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) {}
-    }
-  });
-
-  if (!client) {
+  if (!model) {
     // Crisis and off-scope asks get the standing letter (peace, rest), never a
     // page chosen by a stray word. Independently of whether the crisis scorer
     // fired, a first-person mention of one's own death never fetches a
@@ -425,7 +433,7 @@ app.post('/api/chat', async (req, res) => {
       };
     });
 
-    const stream = client.messages.stream({
+    const stream = model.messages.stream({
       model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },

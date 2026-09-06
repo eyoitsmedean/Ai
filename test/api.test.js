@@ -96,6 +96,49 @@ describe('smoke routes', () => {
     assert.match(res.raw, /\[DONE\]/);
   });
 
+  it('the model path cannot set a resurrection verse under "I want to die"', async () => {
+    // A stand-in model that does what the prompt forbids: answers a first-person
+    // wish to die with the resurrection verse, as a range.
+    const fakeModel = (text) => ({
+      messages: {
+        stream() {
+          const handlers = {};
+          return {
+            on(evt, cb) { handlers[evt] = cb; },
+            // A real model answers after the request body has been consumed;
+            // the stream must survive that gap (Node ≥16 fires req 'close' early).
+            async finalMessage() {
+              await new Promise((r) => setTimeout(r, 30));
+              if (handlers.text) handlers.text(text);
+              return {};
+            },
+          };
+        },
+      },
+    });
+    const letterOf = (raw) => raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; } })
+      .join('');
+    try {
+      app.locals.chatClient = fakeModel('I hear you.\n\n**John 11:25-26**\n“I am the resurrection, and the life”\nHe speaks of life after death.');
+      const bad = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'I want to die' }] });
+      const badLetter = letterOf(bad.raw);
+      assert.equal(bad.status, 200);
+      assert.match(badLetter, /988/, 'crisis notice still leads');
+      assert.doesNotMatch(badLetter, /John 11:2[56]|resurrection/i, 'death verse must be replaced');
+      assert.match(badLetter, /John 14:27/, 'standing letter goes out instead');
+
+      // The same stand-in answering grief for another keeps its verse: the block is about the speaker.
+      app.locals.chatClient = fakeModel('I am sorry.\n\n**John 11:25**\n“I am the resurrection, and the life”\nSit with it.');
+      const grief = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'My mother died last night' }] });
+      assert.match(letterOf(grief.raw), /John 11:25/);
+    } finally {
+      delete app.locals.chatClient;
+    }
+  });
+
   it('serves the concordance of need', async () => {
     const all = await request('GET', '/api/concordance');
     assert.equal(all.status, 200);

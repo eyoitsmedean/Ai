@@ -61,6 +61,20 @@ describe('safety routing', () => {
     assert.equal(safety.verseSafeFor('My dad died and I do not know how to pray', 'John 11:25'), true, 'grief for another may hear John 11:25');
     assert.equal(safety.verseSafeFor('I feel so much shame', 'John 8:11'), true);
   });
+  it('the death-verse block reads ranges, aliases, and whole letters', () => {
+    const ask = 'I want to die';
+    assert.equal(safety.verseSafeFor(ask, 'John 11:25-26'), false, 'range containing 25');
+    assert.equal(safety.verseSafeFor(ask, 'John 11:23-27'), false, 'wider range containing 25');
+    assert.equal(safety.verseSafeFor(ask, 'John 11:27'), true, 'neighbouring verse is not blocked');
+    assert.equal(safety.verseSafeFor(ask, 'Jn 10:10'), false, 'book alias');
+    assert.equal(safety.verseSafeFor(ask, 'Matthew 5:3-5 KJV'), false, 'range with translation tag');
+    assert.equal(safety.verseSafeFor(ask, 'Matthew 5:3'), true);
+    const bad = 'Hear this.\n\n**John 11:25-26**\n“I am the resurrection, and the life…”\n\nSit with it.';
+    const good = 'Hear this.\n\n**John 14:27**\n“Peace I leave with you…”';
+    assert.equal(safety.letterSafeFor(ask, bad), false);
+    assert.equal(safety.letterSafeFor(ask, good), true);
+    assert.equal(safety.letterSafeFor('My dad died last night', bad), true, 'grief for another may hear the resurrection');
+  });
   it('crisis outranks medical when someone names the pills', () => {
     assert.equal(safety.route('I have the pills ready').kind, 'crisis');
     assert.equal(safety.route('Should I stop taking my antidepressants and trust God instead?').kind, 'medical');
