@@ -1,10 +1,12 @@
-# Production host for The Red Letter Advisor (API + PWA)
+# Production host for The Red Letter Advisor (verified API + PWA)
 FROM node:22-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
-COPY server.js ./
+COPY server.js index.html ./
+COPY lib ./lib
+COPY data ./data
 COPY public ./public
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \

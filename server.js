@@ -2,57 +2,53 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const pkg = require('./package.json');
+const {
+  parseModelJson,
+  verifyAndSubstitute,
+  verifyJsonQuotes,
+  verifyQuote,
+  fillPlaceholders,
+  looksLikeCrisis,
+  CRISIS_NOTICE,
+} = require('./lib/scripture');
+const { THEMES, dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
+const { searchLibrary, sayingCount } = require('./lib/library');
+const { sayingTouchesCitation } = require('./lib/themes');
+const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
+const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { holdPlaceholders } = require('./lib/stream');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+const THEME_SET = new Set(themeNames());
+const MAX_CHAT_MESSAGES = 24;
 
+// Railway, Render and Fly terminate TLS one hop away; without this every
+// visitor shares the proxy's address in the rate limiter.
+app.set('trust proxy', 1);
+
+// A 24-message conversation with 8 000-character turns is ~200 kB of JSON.
 app.use(express.json({ limit: '256kb' }));
 
-// Cross-origin API access for a static front end (e.g. GitHub Pages) that
-// points at this host via <meta name="rla-api-base">. Same-origin is untouched.
+// Cross-origin API access for a static front end (GitHub Pages) that points at
+// this host via <meta name="rla-api-base">. Same-origin traffic is untouched.
 const ALLOWED_ORIGINS = String(process.env.ALLOWED_ORIGINS || '')
   .split(',')
-  .map((o) => o.trim().replace(/\/$/, ''))
+  .map((o) => o.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 if (ALLOWED_ORIGINS.length) {
   app.use('/api', cors({
     origin: ALLOWED_ORIGINS,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'X-Api-Key'],
     maxAge: 600,
   }));
 }
 
-// Simple in-memory rate limit for LLM routes (per IP)
-const rateBuckets = new Map();
-function clientIp(req) {
-  const forwarded = req.headers['x-forwarded-for'];
-  if (typeof forwarded === 'string' && forwarded.trim()) {
-    return forwarded.split(',')[0].trim();
-  }
-  return req.socket.remoteAddress || 'unknown';
-}
-function rateLimit({ limit = 40, windowMs = 60_000 } = {}) {
-  return (req, res, next) => {
-    const ip = clientIp(req);
-    const now = Date.now();
-    let bucket = rateBuckets.get(ip);
-    if (!bucket || now > bucket.reset) {
-      bucket = { count: 0, reset: now + windowMs };
-    }
-    bucket.count += 1;
-    rateBuckets.set(ip, bucket);
-    if (bucket.count > limit) {
-      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
-    }
-    return next();
-  };
-}
-const llmRateLimit = rateLimit({ limit: 30, windowMs: 60_000 });
-
-// Production security + cache headers for the PWA shell
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -69,24 +65,49 @@ app.use(express.static(path.join(__dirname, 'public'), {
     if (filePath.endsWith('sw.js')) {
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Service-Worker-Allowed', '/');
+    } else if (/\.html$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache');
     } else if (/\.woff2$/i.test(filePath)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    } else if (/\.(?:js|css|png|jpg|jpeg|webp)$/i.test(filePath)) {
+    } else if (/\.(?:js|css|png|jpg|jpeg|webp|json)$/i.test(filePath)) {
+      // index.html cache-busts js/css with ?v=; the SW owns offline copies.
       res.setHeader('Cache-Control', 'public, max-age=3600');
     }
   },
 }));
 
-// Opus 5 thinks by default and max_tokens caps thinking + text; effort 'low'
-// is the documented setting for chat-style, latency-sensitive replies.
+/* ── Model ────────────────────────────────────────────────────────── */
+
+function usableSecret(value) {
+  if (!value) return false;
+  const v = String(value).trim();
+  if (!v) return false;
+  if (/your_api_key|changeme|placeholder|xxx|example/i.test(v)) return false;
+  return true;
+}
+
+const hasAnthropic = usableSecret(process.env.ANTHROPIC_API_KEY) || usableSecret(process.env.ANTHROPIC_AUTH_TOKEN);
+const client = hasAnthropic
+  ? new Anthropic(
+      process.env.ANTHROPIC_AUTH_TOKEN
+        ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
+        : { apiKey: process.env.ANTHROPIC_API_KEY }
+    )
+  : null;
+
+// Opus 5 thinks by default and max_tokens caps thinking + text. Effort 'low'
+// is the documented setting for latency-sensitive chat; structured output
+// (`format`) lives in the same output_config object.
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const MODEL_EFFORT = process.env.ANTHROPIC_EFFORT || 'low';
-function modelParams(maxTokens) {
+function modelParams(maxTokens, extra = {}) {
+  const outputConfig = { effort: MODEL_EFFORT };
+  if (extra.output_config && extra.output_config.format) outputConfig.format = extra.output_config.format;
   return {
     model: MODEL,
     max_tokens: maxTokens,
     thinking: { type: 'adaptive' },
-    output_config: { effort: MODEL_EFFORT },
+    output_config: outputConfig,
   };
 }
 function logStop(route, response) {
@@ -96,179 +117,41 @@ function logStop(route, response) {
   }
 }
 
-const client = new Anthropic(
-  process.env.ANTHROPIC_AUTH_TOKEN
-    ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
-    : { apiKey: process.env.ANTHROPIC_API_KEY }
-);
+/* ── Rate limiting + access gate ──────────────────────────────────── */
 
-const CORPUS_PATH = path.join(__dirname, 'public', 'data', 'corpus.json');
-let corpusCache = null;
-let verseCatalogCache = null;
+const buckets = new Map();
 
-function loadCorpus() {
-  if (corpusCache) return corpusCache;
-  corpusCache = JSON.parse(fs.readFileSync(CORPUS_PATH, 'utf8'));
-  return corpusCache;
-}
-
-function normalizeCitation(cite) {
-  return String(cite || '')
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .replace(/[–—]/g, '-')
-    .replace(/\s*-\s*/g, '-')
-    .trim();
-}
-
-function normalizeQuote(quote) {
-  return String(quote || '')
-    .toLowerCase()
-    .replace(/[“”"'`]/g, '')
-    .replace(/[^\w\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function citationKeys(cite) {
-  const norm = normalizeCitation(cite);
-  const keys = new Set([norm]);
-  const match = norm.match(/^(matthew|mark|luke|john)\s+(\d+):(\d+)(?:[a-z])?(?:-(\d+)(?:[a-z])?)?$/i);
-  if (match) {
-    const book = match[1];
-    const chapter = match[2];
-    const start = Number(match[3]);
-    const end = match[4] ? Number(match[4]) : start;
-    keys.add(`${book} ${chapter}:${start}`);
-    if (end !== start) keys.add(`${book} ${chapter}:${start}-${end}`);
-    for (let verse = start; verse <= end; verse += 1) keys.add(`${book} ${chapter}:${verse}`);
-  }
-  return [...keys];
-}
-
-function quoteOverlap(a, b) {
-  const left = normalizeQuote(a);
-  const right = normalizeQuote(b);
-  if (!left || !right) return 0;
-  if (left === right) return 1;
-  if (left.includes(right) || right.includes(left)) {
-    return Math.min(left.length, right.length) / Math.max(left.length, right.length);
-  }
-  const leftWords = new Set(left.split(' ').filter((w) => w.length > 3));
-  const rightWords = right.split(' ').filter((w) => w.length > 3);
-  if (!rightWords.length) return 0;
-  let hits = 0;
-  rightWords.forEach((word) => {
-    if (leftWords.has(word)) hits += 1;
-  });
-  return hits / rightWords.length;
-}
-
-function buildVerseCatalog() {
-  if (verseCatalogCache) return verseCatalogCache;
-  const corpus = loadCorpus();
-  const list = [];
-  const byKey = new Map();
-
-  function register(verse, quote, theme) {
-    if (!verse || !quote) return;
-    const entry = { verse: String(verse).trim(), quote: String(quote).trim(), theme: theme || '' };
-    list.push(entry);
-    citationKeys(entry.verse).forEach((key) => {
-      if (!byKey.has(key)) byKey.set(key, []);
-      byKey.get(key).push(entry);
-    });
-  }
-
-  (corpus.verses || []).forEach((item) => register(item.verse, item.quote, item.theme));
-  (corpus.daily || []).forEach((day) => {
-    if (day.affirmation) register(day.affirmation.verse, day.affirmation.quote, day.word && day.word.theme);
-    if (day.word) register(day.word.verse, day.word.passage, day.word.theme);
-  });
-  Object.values(corpus.encouragement || {}).forEach((pack) => {
-    (pack.passages || []).forEach((passage) => register(passage.verse, passage.quote, pack.theme));
-  });
-  (corpus.library || []).forEach((item) => register(item.verse, item.quote, item.theme));
-
-  const seen = new Set();
-  const unique = list.filter((item) => {
-    const key = `${normalizeCitation(item.verse)}|${normalizeQuote(item.quote).slice(0, 80)}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  verseCatalogCache = { list: unique, byKey };
-  return verseCatalogCache;
-}
-
-function verifyCitation(verse, quote) {
-  const { byKey } = buildVerseCatalog();
-  const matches = [];
-  citationKeys(verse).forEach((key) => {
-    const found = byKey.get(key);
-    if (found) matches.push(...found);
-  });
-  if (!matches.length) {
-    return { verse, verified: false, reason: 'unknown-citation', score: 0 };
-  }
-  if (!quote) {
-    return { verse, verified: true, reason: 'citation-known', score: 0.7, match: matches[0] };
-  }
-  let best = null;
-  let bestScore = 0;
-  matches.forEach((entry) => {
-    const score = quoteOverlap(entry.quote, quote);
-    if (!best || score > bestScore) {
-      bestScore = score;
-      best = entry;
+function rateLimit(key, limit, windowMs) {
+  const now = Date.now();
+  if (buckets.size > 4000) {
+    for (const [k, slot] of buckets) {
+      if (now > slot.reset) buckets.delete(k);
     }
-  });
-  if (bestScore >= 0.55) {
-    return { verse, verified: true, reason: 'quote-match', score: bestScore, match: best };
   }
-  return {
-    verse,
-    verified: false,
-    reason: 'quote-mismatch',
-    score: bestScore,
-    expected: best ? best.quote : null,
-    match: best,
-  };
+  const slot = buckets.get(key) || { count: 0, reset: now + windowMs };
+  if (now > slot.reset) {
+    slot.count = 0;
+    slot.reset = now + windowMs;
+  }
+  slot.count += 1;
+  buckets.set(key, slot);
+  return slot.count <= limit;
 }
 
-function catalogPromptBlock() {
-  const { list } = buildVerseCatalog();
-  const lines = list.slice(0, 80).map((item) => {
-    const short = item.quote.length > 160 ? `${item.quote.slice(0, 160)}…` : item.quote;
-    return `- ${item.verse}: "${short}"`;
-  });
-  return `VERIFIED WEB RED-LETTER CATALOG (prefer these exact citations and wording; do not invent outside this list unless absolutely necessary, and if you must, say you are offering the closest teaching):\n${lines.join('\n')}`;
+function clientKey(req) {
+  return req.ip || 'local';
 }
 
-function advisorSystemPrompt() {
-  return `${ADVISOR_SYSTEM}
-
-${catalogPromptBlock()}
-
-QUOTE LOCK:
-• When a catalog verse fits, quote it verbatim from the catalog above.
-• Never invent a citation or paraphrase Jesus' words.
-• If unsure of exact wording, use a shorter verified phrase from the catalog rather than guessing.`;
+function gate(req, res, next) {
+  if (!ACCESS_KEY) return next();
+  const sent = req.get('x-api-key');
+  if (sent !== ACCESS_KEY) return res.status(401).json({ error: 'Unauthorized.' });
+  next();
 }
 
-function dayIndex(listLength) {
-  const start = new Date(new Date().getFullYear(), 0, 0);
-  const diff = Date.now() - start;
-  const day = Math.floor(diff / 86400000);
-  return listLength ? day % listLength : 0;
-}
+app.use('/api', gate);
 
-function offlineDaily() {
-  const corpus = loadCorpus();
-  const list = corpus.daily || [];
-  return list[dayIndex(list.length)] || list[0];
-}
+/* ── Prompts ──────────────────────────────────────────────────────── */
 
 const ADVISOR_SYSTEM = `You are "The Red Letter Advisor" — a deeply compassionate guide who helps people with life's real struggles using exclusively the direct words of Jesus Christ from the four Gospels: Matthew, Mark, Luke, and John.
 
@@ -276,29 +159,26 @@ RESPONSE STRUCTURE — follow this exactly every time:
 
 1. EMPATHY (2–3 sentences): Open by truly meeting the person where they are. Name what they're feeling specifically. Make them feel genuinely heard before offering anything. Keep this conversational, not theological.
 
-2. SCRIPTURE (2–4 passages): For each passage, use this exact format with a blank line between passages:
+2. SCRIPTURE (2–4 passages): For each passage, emit ONLY a placeholder citation on its own line, then one sentence of context. Never write the words of the verse yourself.
 
-**Book Chapter:Verse**
-"Exact words Jesus spoke — verbatim, no paraphrase, no additions."
+{{John 14:27}}
 One sentence explaining why this speaks directly to their situation.
 
 3. CLOSING (1 sentence): A gentle, hopeful line that invites reflection without pressure.
 
 STRICT RULES:
-• Only quote the direct words of Jesus in Matthew, Mark, Luke, and John. Never quote Paul, prophets, or other authors.
-• Every quote must be verbatim scripture — never fabricate or paraphrase a single word.
-• Prefer World English Bible (WEB) wording when recalling verses; if unsure of exact wording, choose a shorter verified phrase and cite accurately rather than inventing.
-• Cite every verse in bold on its own line: **Matthew 5:44**
-• Put the exact Jesus quote on the next line, in curly quotes "like this."
-• Put the one-sentence context on the line after the quote.
-• Separate each passage block with a blank line.
-• If no direct red-letter parallel exists, say so honestly and offer the closest relevant teaching.
+• Only cite sayings from the ALLOWED SAYINGS list attached to the user's message.
+• Never invent, paraphrase, or type out a verse. The page will insert the exact KJV speech from the placeholder.
+• Use the exact marker form {{Book Chapter:Verse}} on its own line.
+• Never quote Paul, prophets, or other authors.
+• If no allowed saying fits, say so honestly and use the closest allowed marker.
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
+• Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
 
 SAFETY:
-• You are not a pastor, therapist, or crisis counselor.
-• If the user expresses suicidal ideation, self-harm intent, or immediate danger, do NOT give spiritual advice as the main response. Briefly acknowledge their pain, urge them to contact emergency services or the 988 Suicide & Crisis Lifeline (call/text 988 in the US) or https://www.iasp.info/suicidalthoughts/ internationally, and keep any scripture secondary and non-prescriptive.
+• Never claim to be a person, a pastor, a clinician, or emergency care.
+• If the writer expresses suicidal ideation, self-harm intent, or immediate danger, do NOT give spiritual advice as the main response. Briefly acknowledge their pain, urge them toward human help first (call or text 988 in the US; https://findahelpline.com elsewhere), and keep any scripture secondary and non-prescriptive.
 • Never tell someone to endure abuse, stay in danger, or avoid professional help.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
@@ -320,7 +200,7 @@ Return ONLY valid JSON (no markdown, no fences) with this exact structure:
 }
 
 Rules:
-- Every quote must be actual Jesus speech from the four Gospels (WEB preferred).
+- Every quote must be actual Jesus speech from the four Gospels. The page verifies each citation against the KJV and replaces your wording with the recorded text.
 - The affirmation must feel personal and specific, not generic.
 - Choose a theme that is timeless and emotionally resonant.
 - Today is ${new Date().toDateString()} — choose content appropriate for the day.`;
@@ -343,220 +223,443 @@ Return ONLY valid JSON (no markdown fences) with this structure:
   "closing": "One warm, non-pressuring closing line"
 }
 
-Include 3–4 passages. Use only real, verifiable red-letter verses (WEB preferred). Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
+Include 3–4 passages. Use only real, verifiable red-letter verses; the page verifies each citation against the KJV. Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
+
+/* ── Daily + encouragement (structured, verified) ─────────────────── */
 
 const dailyCache = new Map();
 
-function todayKey() { return new Date().toISOString().slice(0, 10); }
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
 
-function hasApiCredentials() {
-  return Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+async function generateStructured(route, system, user, schema, maxTokens) {
+  try {
+    const response = await client.messages.create({
+      ...modelParams(maxTokens, structuredFormat(schema)),
+      system,
+      messages: [{ role: 'user', content: user }],
+    });
+    logStop(route, response);
+    return response;
+  } catch (err) {
+    console.error(`[${route}] structured output fallback:`, err.message);
+    const response = await client.messages.create({
+      ...modelParams(maxTokens),
+      system,
+      messages: [{ role: 'user', content: user }],
+    });
+    logStop(route, response);
+    return response;
+  }
+}
+
+function textOf(response) {
+  return response.content.find((b) => b.type === 'text')?.text ?? '';
+}
+
+async function generateDailyFromModel() {
+  const response = await generateStructured(
+    'daily',
+    DAILY_SYSTEM,
+    "Generate today's daily affirmation and word.",
+    DAILY_SCHEMA,
+    2048
+  );
+  const data = verifyJsonQuotes(parseModelJson(textOf(response)));
+  if (!data.verified) throw new Error('Daily content failed verification');
+  return { ...data, source: 'model' };
 }
 
 async function fetchDailyContent() {
   const key = todayKey();
   if (dailyCache.has(key)) return dailyCache.get(key);
 
-  if (!hasApiCredentials()) {
-    const offline = offlineDaily();
-    dailyCache.set(key, { ...offline, source: 'corpus' });
-    return dailyCache.get(key);
+  if (!client) {
+    const curated = dailyForDate();
+    dailyCache.set(key, curated);
+    return curated;
   }
 
   try {
-    const response = await client.messages.create({
-      ...modelParams(2048),
-      system: DAILY_SYSTEM,
-      messages: [{ role: 'user', content: "Generate today's daily affirmation and word." }],
-    });
-    logStop('daily', response);
-
-    const text = response.content.find(b => b.type === 'text')?.text ?? '';
-    const data = JSON.parse(text);
-    data.source = 'model';
+    const data = await generateDailyFromModel();
     dailyCache.set(key, data);
     return data;
   } catch (err) {
-    console.error('Daily model error, using corpus:', err.message);
-    const offline = offlineDaily();
-    dailyCache.set(key, { ...offline, source: 'corpus-fallback' });
-    return dailyCache.get(key);
+    console.error('Daily model fallback:', err.message);
+    const curated = { ...dailyForDate(), source: 'curated-fallback' };
+    dailyCache.set(key, curated);
+    return curated;
   }
 }
 
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, api: hasApiCredentials(), name: 'red-letter-advisor' });
+app.get('/api/health', (req, res) => {
+  res.json({
+    ok: true,
+    name: pkg.name,
+    version: pkg.version,
+    anthropic: Boolean(client),
+    api: Boolean(client),
+    model: client ? MODEL : null,
+    translation: 'KJV',
+    themes: themeNames().length,
+    sayings: sayingCount(),
+  });
 });
 
-app.get('/api/corpus', (_req, res) => {
-  try {
-    res.json(loadCorpus());
-  } catch (err) {
-    res.status(500).json({ error: 'Corpus unavailable.' });
+app.get('/api/daily', async (req, res) => {
+  if (!rateLimit(`daily:${clientKey(req)}`, 60, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later for the morning page.' });
   }
-});
-
-app.get('/api/verses', (_req, res) => {
-  try {
-    const { list } = buildVerseCatalog();
-    res.json({ translation: 'WEB', count: list.length, verses: list });
-  } catch (err) {
-    res.status(500).json({ error: 'Verse catalog unavailable.' });
-  }
-});
-
-app.post('/api/verify', (req, res) => {
-  try {
-    const citations = Array.isArray(req.body?.citations) ? req.body.citations : [];
-    if (!citations.length && typeof req.body?.text === 'string') {
-      const text = req.body.text;
-      const citationLine =
-        /\*\*((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[a-z])?(?:\s*[–\-—]\s*\d+(?:[a-z])?)?)\*\*/gi;
-      const found = [];
-      let match;
-      while ((match = citationLine.exec(text)) !== null) {
-        found.push({ verse: match[1], quote: '' });
-      }
-      const results = found.map((item) => verifyCitation(item.verse, item.quote));
-      return res.json({
-        total: results.length,
-        verified: results.filter((item) => item.verified).length,
-        results,
-      });
-    }
-    const results = citations.map((item) =>
-      verifyCitation(item?.verse || item?.citation || '', item?.quote || '')
-    );
-    res.json({
-      total: results.length,
-      verified: results.filter((item) => item.verified).length,
-      results,
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Verification failed.' });
-  }
-});
-
-app.get('/api/daily', llmRateLimit, async (_req, res) => {
   try {
     res.json(await fetchDailyContent());
   } catch (err) {
     console.error('Daily error:', err.message);
-    try {
-      res.json({ ...offlineDaily(), source: 'corpus-error-fallback' });
-    } catch {
-      res.status(500).json({ error: 'Failed to generate daily content.' });
-    }
+    res.status(500).json({ error: 'Failed to generate daily content.' });
   }
 });
 
-app.post('/api/encouragement', llmRateLimit, async (req, res) => {
-  const { theme } = req.body || {};
-  if (!theme || typeof theme !== 'string') return res.status(400).json({ error: 'theme required.' });
+app.get('/api/themes', (req, res) => {
+  res.json({ themes: themeNames() });
+});
 
-  const corpus = loadCorpus();
-  const offline = corpus.encouragement?.[theme];
-
-  if (!hasApiCredentials()) {
-    if (offline) return res.json({ ...offline, source: 'corpus' });
-    return res.status(404).json({ error: 'Theme not found.' });
+app.post('/api/verify', (req, res) => {
+  if (!rateLimit(`verify:${clientKey(req)}`, 60, 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
   }
+  const body = req.body || {};
+  const list = Array.isArray(body.items) ? body.items : Array.isArray(body.citations) ? body.citations : [body];
+  if (list.length > 12) return res.status(400).json({ error: 'Too many citations.' });
+  const results = list.slice(0, 12).map((item) => {
+    const verse = typeof item?.verse === 'string' ? item.verse.slice(0, 80)
+      : typeof item?.citation === 'string' ? item.citation.slice(0, 80) : '';
+    const quote = typeof item?.quote === 'string' ? item.quote.slice(0, 2000) : '';
+    if (!verse) return { ok: false, verified: false, reason: 'missing-verse', verse: '', quote: '' };
+    const verified = verifyQuote(verse, quote);
+    return {
+      ok: Boolean(verified.ok),
+      verified: Boolean(verified.ok),
+      verse: verified.citation || verse,
+      quote: verified.quote || quote,
+      score: verified.score || 0,
+      reason: verified.reason || (verified.ok ? 'quote-match' : 'unknown-ref'),
+    };
+  });
+  const verifiedCount = results.filter((row) => row.ok).length;
+  res.json({
+    translation: 'KJV',
+    total: results.length,
+    verified: verifiedCount,
+    results,
+    allVerified: results.length > 0 && verifiedCount === results.length,
+  });
+});
+
+app.get('/api/library', (req, res) => {
+  if (!rateLimit(`lib:${clientKey(req)}`, 120, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const rawBook = typeof req.query.book === 'string' ? req.query.book.trim() : '';
+  const book = ['Matthew', 'Mark', 'Luke', 'John'].includes(rawBook) ? rawBook : '';
+  const q = typeof req.query.q === 'string' ? req.query.q.slice(0, 80) : '';
+  const theme = typeof req.query.theme === 'string' ? req.query.theme.slice(0, 80) : '';
+  res.json(searchLibrary({ book, q, theme, limit: req.query.limit, offset: req.query.offset }));
+});
+
+app.post('/api/encouragement', async (req, res) => {
+  const theme = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
+  if (!theme || theme.length > 80) return res.status(400).json({ error: 'theme required.' });
+  if (!THEME_SET.has(theme)) return res.status(400).json({ error: 'Unknown theme.' });
+  if (!rateLimit(`enc:${clientKey(req)}`, 20, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later for more encouragement.' });
+  }
+
+  const curated = encouragementFor(theme);
+  if (!client) return res.json(curated);
 
   try {
-    const response = await client.messages.create({
-      ...modelParams(2048),
-      system: ENCOURAGE_SYSTEM,
-      messages: [{ role: 'user', content: `Generate encouragement for: ${theme}` }],
-    });
-    logStop('encouragement', response);
-    const text = response.content.find(b => b.type === 'text')?.text ?? '';
-    const data = JSON.parse(text);
-    data.source = 'model';
-    res.json(data);
+    const response = await generateStructured(
+      'encouragement',
+      ENCOURAGE_SYSTEM,
+      `Generate encouragement for: ${theme}`,
+      ENCOURAGE_SCHEMA,
+      2048
+    );
+    const data = verifyJsonQuotes({ ...parseModelJson(textOf(response)), theme });
+    // A pack that lost most of its passages to verification reads thin;
+    // the curated page is the better experience.
+    if (!Array.isArray(data.passages) || data.passages.length < 2) {
+      return res.json({ ...curated, source: 'curated-fallback' });
+    }
+    res.json({ ...data, source: 'model' });
   } catch (err) {
-    console.error('Encouragement error:', err.message);
-    if (offline) return res.json({ ...offline, source: 'corpus-fallback' });
-    res.status(500).json({ error: 'Failed to generate encouragement.' });
+    console.error('Encouragement fallback:', err.message);
+    res.json({ ...curated, source: 'curated-fallback' });
   }
 });
 
-app.post('/api/chat', llmRateLimit, async (req, res) => {
-  const { messages } = req.body || {};
-  if (!Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'messages required.' });
-  if (!messages[messages.length - 1]?.content?.trim()) return res.status(400).json({ error: 'Empty message.' });
+/* ── Advisor ──────────────────────────────────────────────────────── */
 
-  if (!hasApiCredentials()) {
-    return res.status(503).json({ error: 'Advisor requires an API key on the server.' });
+const CITE_LINE_RE = /^\*\*((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[a-z])?(?:\s*[–\-—]\s*\d+(?:[a-z])?)?)\*\*\s*$/i;
+
+// Walks the final letter and checks every bold citation + quote line against
+// the corpus, so the page can seal passages with the server's verdict instead
+// of re-deriving it from a different translation.
+function verifyReport(text) {
+  const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
+  const results = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const cite = lines[i].trim().match(CITE_LINE_RE);
+    if (!cite) continue;
+    let next = i + 1;
+    while (next < lines.length && !lines[next].trim()) next += 1;
+    const quoteLine = next < lines.length ? lines[next].trim() : '';
+    const quote = /^["“]/.test(quoteLine) ? quoteLine.replace(/^["“]+/, '').replace(/["”]+\s*$/, '') : '';
+    const v = verifyQuote(cite[1], quote);
+    results.push({
+      verse: v.citation || cite[1],
+      verified: Boolean(v.ok),
+      reason: v.reason || (v.ok ? 'quote-match' : 'unknown-ref'),
+      score: typeof v.score === 'number' ? v.score : v.ok ? 1 : 0,
+    });
   }
+  const verified = results.filter((r) => r.verified).length;
+  return {
+    source: 'server',
+    translation: 'KJV',
+    total: results.length,
+    verified,
+    unverified: results.length - verified,
+    results,
+    allVerified: results.length > 0 && verified === results.length,
+  };
+}
 
-  const safeMessages = messages
-    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-    .slice(-20)
-    .map(m => ({ role: m.role, content: String(m.content).slice(0, 8000) }));
+function curatedContextFor(saying, themes) {
+  for (const name of themes) {
+    const pack = THEMES[name];
+    if (!pack) continue;
+    const hit = (pack.passages || []).find((p) => sayingTouchesCitation(saying, p.verse));
+    if (hit && hit.context) return hit.context;
+  }
+  return '';
+}
+
+const FALLBACK_LETTER = [
+  'I am here with you, and I will not rush past what you just named.',
+  '',
+  '{{John 14:27}}',
+  'These words meet a troubled heart without asking it to perform calm first.',
+  '',
+  '{{Matthew 11:28}}',
+  'The invitation is for the exhausted — including this moment.',
+  '',
+  'Sit with these two sentences. You do not have to solve the whole day.',
+].join('\n');
+
+function wordCount(text) {
+  return String(text || '').trim().split(/\s+/).filter(Boolean).length;
+}
+
+// Without a model, the letter is still shaped by what was written. Curated
+// theme passages come first (short, chosen by hand, each with a context line);
+// library retrieval fills in only when no theme matches, and long multi-verse
+// spans are skipped because they read badly as a reply.
+function fallbackLetter(query) {
+  let retrieved;
+  try {
+    retrieved = retrieveSayings(query, { limit: 6 });
+  } catch (_) {
+    return FALLBACK_LETTER;
+  }
+  const themes = retrieved.themes || [];
+  const blocks = [];
+  const used = new Set();
+  const push = (citation, context) => {
+    const key = String(citation).toLowerCase();
+    if (used.has(key) || blocks.length >= 3) return;
+    used.add(key);
+    blocks.push(`{{${citation}}}\n${context}`);
+  };
+
+  if (themes[0] && THEMES[themes[0]]) {
+    THEMES[themes[0]].passages.slice(0, 2).forEach((p) => push(p.verse, p.context));
+  }
+  if (themes[1] && THEMES[themes[1]]) {
+    THEMES[themes[1]].passages.slice(0, 1).forEach((p) => push(p.verse, p.context));
+  }
+  for (const saying of retrieved.sayings || []) {
+    if (blocks.length >= 3) break;
+    if (wordCount(saying.text) > 45) continue;
+    push(saying.citation, curatedContextFor(saying, themes) || 'Kept here exactly as it was spoken, for this moment.');
+  }
+  if (blocks.length < 2) return FALLBACK_LETTER;
+
+  return [
+    'I am here with you, and I will not rush past what you just named.',
+    '',
+    blocks.join('\n\n'),
+    '',
+    'Sit with these words for a minute. You do not have to solve the whole day.',
+  ].join('\n');
+}
+
+app.post('/api/chat', async (req, res) => {
+  const raw = req.body?.messages;
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return res.status(400).json({ error: 'messages required.' });
+  }
+  for (const m of raw) {
+    if (!m || (m.role !== 'user' && m.role !== 'assistant') || typeof m.content !== 'string') {
+      return res.status(400).json({ error: 'Invalid message list.' });
+    }
+    if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
+  }
+  // The page keeps a long local history; the model only needs the recent turns.
+  const messages = raw.slice(-MAX_CHAT_MESSAGES);
+  const last = messages[messages.length - 1];
+  if (!last.content.trim()) return res.status(400).json({ error: 'Empty message.' });
+  if (last.content.length > 2000) return res.status(400).json({ error: 'Message is too long.' });
+
+  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+    return res.status(429).json({ error: 'A little space, then ask again.' });
+  }
 
   res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
+  const send = (payload) => {
+    if (!res.writableEnded) res.write(`data: ${JSON.stringify(payload)}\n\n`);
+  };
+  const streamText = (text) => {
+    const chunk = 24;
+    for (let i = 0; i < text.length; i += chunk) send({ text: text.slice(i, i + chunk) });
+  };
+  const crisis = looksLikeCrisis(last.content);
+  const finish = (finalText) => {
+    // `replace` is the authoritative letter: the page swaps it in so any
+    // verse the model typed itself is shown as the recorded text.
+    send({ replace: finalText });
+    send({ verify: verifyReport(finalText) });
+    if (!res.writableEnded) {
+      res.write('data: [DONE]\n\n');
+      res.end();
+    }
+  };
+  const finishWithLetter = (letter) => {
+    const body = `${crisis ? CRISIS_NOTICE : ''}${verifyAndSubstitute(letter)}`;
+    streamText(body);
+    finish(body);
+  };
+
+  req.on('close', () => {
+    if (!res.writableEnded) {
+      try { res.end(); } catch (_) { /* already closed */ }
+    }
+  });
+
+  if (!client) return finishWithLetter(fallbackLetter(last.content));
+
+  let streamed = '';
   try {
-    let fullText = '';
+    const retrieved = retrieveSayings(last.content);
+    const allow = formatAllowList(retrieved.sayings);
+    const modelMessages = messages.map((m, i) => {
+      if (i !== messages.length - 1) return { role: m.role, content: m.content };
+      return {
+        role: 'user',
+        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}`,
+      };
+    });
+
+    if (crisis) {
+      streamed += CRISIS_NOTICE;
+      send({ text: CRISIS_NOTICE });
+    }
+
     const stream = client.messages.stream({
       ...modelParams(2048),
-      system: advisorSystemPrompt(),
-      messages: safeMessages,
+      system: ADVISOR_SYSTEM,
+      messages: modelMessages,
     });
 
-    stream.on('text', (text) => {
-      fullText += text;
-      res.write(`data: ${JSON.stringify({ text })}\n\n`);
+    // Tokens go out as they arrive, except that an unclosed {{ is held back
+    // until its }} lands so the reader only ever sees the recorded verse.
+    let rawText = '';
+    let pending = '';
+    const flushPending = (force) => {
+      const { flush, rest } = holdPlaceholders(pending, force);
+      pending = rest;
+      if (!flush) return;
+      const filled = fillPlaceholders(flush);
+      streamed += filled;
+      send({ text: filled });
+    };
+    stream.on('text', (delta) => {
+      rawText += delta;
+      pending += delta;
+      flushPending(false);
     });
 
-    logStop('chat', await stream.finalMessage());
+    const final = await stream.finalMessage();
+    logStop('chat', final);
+    flushPending(true);
 
-    // Server-side quote lock report for client seals
-    const blocks = [];
-    const lines = fullText.replace(/\r\n?/g, '\n').split('\n');
-    for (let i = 0; i < lines.length; i += 1) {
-      const citeMatch = lines[i].trim().match(
-        /^\*\*((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[a-z])?(?:\s*[–\-—]\s*\d+(?:[a-z])?)?)\*\*\s*$/i
-      );
-      if (!citeMatch) continue;
-      let next = i + 1;
-      while (next < lines.length && !lines[next].trim()) next += 1;
-      const quoteLine = next < lines.length ? lines[next].trim() : '';
-      let quote = '';
-      if (/^["“]/.test(quoteLine)) {
-        quote = quoteLine.replace(/^["“]+/, '').replace(/["”]+\s*$/, '');
-      }
-      blocks.push(verifyCitation(citeMatch[1], quote));
-    }
-    res.write(
-      `data: ${JSON.stringify({
-        verify: {
-          total: blocks.length,
-          verified: blocks.filter((item) => item.verified).length,
-          results: blocks,
-        },
-      })}\n\n`
-    );
-    res.write('data: [DONE]\n\n');
-    res.end();
+    if (!rawText.trim()) return finishWithLetter(fallbackLetter(last.content));
+    finish(`${crisis ? CRISIS_NOTICE : ''}${verifyAndSubstitute(rawText)}`);
   } catch (err) {
     console.error('Chat error:', err.message);
-    if (!res.headersSent) return res.status(500).json({ error: 'Failed to respond.' });
-    res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
-    res.end();
+    if (streamed.trim()) {
+      // Something already reached the page; hand it the verified fallback as
+      // a replacement rather than a torn letter.
+      const body = `${crisis ? CRISIS_NOTICE : ''}${verifyAndSubstitute(fallbackLetter(last.content))}`;
+      finish(body);
+    } else {
+      finishWithLetter(fallbackLetter(last.content));
+    }
   }
+});
+
+app.post('/api/waitlist', (req, res) => {
+  const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
+    return res.status(400).json({ error: 'A real email is needed.' });
+  }
+  if (!rateLimit(`wait:${clientKey(req)}`, 6, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const dest = path.join(__dirname, 'data', 'waitlist.json');
+  let rows = [];
+  try { rows = JSON.parse(fs.readFileSync(dest, 'utf8')); } catch (_) { /* first signup */ }
+  if (!Array.isArray(rows)) rows = [];
+  if (!rows.some((r) => r.email === email)) {
+    rows.push({ email, at: new Date().toISOString() });
+    fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
+  }
+  res.json({ ok: true });
+});
+
+app.get('/welcome', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
+  res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`✝  The Red Letter Advisor → http://localhost:${PORT}`);
-  if (!hasApiCredentials()) {
-    console.log('   (No Anthropic credentials — serving corpus offline mode for daily/encourage)');
-  }
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✝  The Red Letter Advisor v${pkg.version} → http://localhost:${PORT}`);
+    if (!client) {
+      console.log('   No Anthropic credentials — Today, Seek and the Advisor serve verified curated pages.');
+    }
+  });
+}
+
+module.exports = app;

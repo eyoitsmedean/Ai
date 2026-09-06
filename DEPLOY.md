@@ -9,13 +9,22 @@ Two hosting shapes are supported. Pick one; both are exercised by the QA suites.
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | yes for live Advisor | — | Without it `/api/daily` and `/api/encouragement` serve the corpus and `/api/chat` returns 503; the app shows saved words. |
+| `ANTHROPIC_API_KEY` | yes for live Advisor | — | Without it every route still answers with verified KJV pages: Today and Seek from the curated rotation, the Advisor with a short letter retrieved for the question. |
 | `ANTHROPIC_MODEL` | no | `claude-opus-5` | Pinned model ID. |
 | `ANTHROPIC_EFFORT` | no | `low` | `output_config.effort`. Opus 5 thinks by default; `low` is the documented setting for chat-style replies. Raise to `medium` only if you also raise `max_tokens` in `server.js`. |
 | `ALLOWED_ORIGINS` | only for shape B | — | Comma-separated origins allowed to call `/api/*` cross-origin, e.g. `https://eyoitsmedean.github.io`. Unset = same-origin only. |
+| `API_ACCESS_KEY` | no | — | Requires `X-Api-Key` on every `/api/*` call. The browser app never sends one, so setting this turns the deployment into a private API for scripts; leave unset for the public PWA. |
 | `PORT` | no | `3000` | Railway injects this. |
 
 3. Watch logs for `stop_reason=max_tokens` warnings. None expected at `low`; if they appear, raise `max_tokens` in `modelParams()`.
+4. Trust the proxy: `app.set('trust proxy', 1)` is on so Railway's `X-Forwarded-For` gives the rate limiter real client addresses. If you front the container with a second proxy, raise the hop count.
+
+### What the server guarantees
+
+- The Advisor model never types a verse. It emits `{{John 14:27}}` markers from an allow-list retrieved for the question; the server substitutes the recorded KJV text as tokens stream and holds back any unfinished `{{` so the page never shows a half-filled marker.
+- Every letter ends with two extra SSE frames: `replace` (the authoritative letter) and `verify` (per-citation verdicts). The page seals passages from that verdict; the on-device WEB index is only used for offline replies.
+- Daily and encouragement JSON are requested as structured output and verified the same way; a pack that loses passages to verification falls back to the curated page.
+- `npm test` (48 tests, run by `.github/workflows/ci.yml` on every push) covers routes, verification, streaming hold-back and the church-year calendar.
 
 ## B. GitHub Pages front end + Railway API
 
@@ -30,11 +39,11 @@ Pages serves `public/` from `main` at `https://<user>.github.io/Ai/`. It has no 
 
    `base.js` then routes every `/api/*` fetch to that origin; assets stay relative.
 3. On Railway set `ALLOWED_ORIGINS=https://<user>.github.io`. The server answers `OPTIONS` preflights with `Access-Control-Allow-Origin: <origin>` and `Vary: Origin`; other origins get no header.
-4. Leave the meta empty and the Pages build is a corpus-only demo; the Advisor toast says "isn't on this host" rather than "offline".
+4. Leave the meta empty and the Pages build is a corpus-only demo (WEB text from `public/data/corpus.json`); the Advisor toast says "isn't on this host" rather than "offline".
 
 ## Cache versioning
 
-Every asset URL carries `?v=N` and the service worker cache is `rla-vN-chapel`. Bump both together (`sed -i 's/?v=14/?v=15/g' public/index.html public/sw.js` and the `CACHE` constant). Installed clients pick the new worker up within the hour (`reg.update()` runs hourly) or on next launch.
+Every asset URL carries `?v=N` and the service worker cache is `rla-vN-chapel`. Bump both together (`sed -i 's/?v=15/?v=16/g' public/index.html public/sw.js` and the `CACHE` constant). Installed clients pick the new worker up within the hour (`reg.update()` runs hourly) or on next launch.
 
 ## iOS notes (verified against WebKit sources)
 

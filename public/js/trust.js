@@ -225,6 +225,10 @@
 
   function annotateMessage(contentEl, report) {
     if (!contentEl || !report || !report.total) return;
+    const fromServer = report.source === 'server';
+    const indexName = fromServer
+      ? `the ${report.translation || 'KJV'} Gospel corpus on the server`
+      : 'the saved WEB red-letter index on this device';
     contentEl.querySelectorAll('.scripture-block').forEach((block) => {
       const verseEl = block.querySelector('.scripture-verse');
       const quoteEl = block.querySelector('.scripture-quote');
@@ -235,13 +239,13 @@
         : '';
       const result = report.results.find(
         (item) => normalizeCitation(item.verse) === normalizeCitation(verse)
-      ) || verifyCitation(verse, quote);
+      ) || (fromServer ? { verified: false } : verifyCitation(verse, quote));
       const seal = document.createElement('div');
       seal.className = result.verified ? 'trust-seal verified' : 'trust-seal caution';
       seal.textContent = result.verified ? 'Verified red letter' : 'Needs human check';
       seal.title = result.verified
-        ? 'This citation matches our saved WEB red-letter index'
-        : 'This citation was not confirmed against the local Gospel index — read carefully';
+        ? `This citation and its wording match ${indexName}`
+        : `This citation was not confirmed against ${indexName} — read carefully`;
       block.appendChild(seal);
       if (!result.verified) block.classList.add('scripture-unverified');
       else block.classList.add('scripture-verified');
@@ -250,23 +254,37 @@
     if (report.unverified > 0) {
       const note = document.createElement('div');
       note.className = 'trust-note';
-      note.innerHTML =
-        'One or more citations could not be confirmed against our saved red-letter index. Prefer the sealed passages above, or open Seek for verified readings.';
+      note.textContent =
+        `One or more citations could not be confirmed against ${indexName}. Prefer the sealed passages above, or open Seek for verified readings.`;
       contentEl.appendChild(note);
     } else if (report.verified > 0) {
       const note = document.createElement('div');
       note.className = 'trust-note ok';
       note.textContent =
         report.verified === 1
-          ? 'Citation sealed against the local Gospel index.'
-          : `${report.verified} citations sealed against the local Gospel index.`;
+          ? `Citation sealed against ${indexName}.`
+          : `${report.verified} citations sealed against ${indexName}.`;
       contentEl.appendChild(note);
     }
   }
 
-  async function sealAdvisorMessage(contentEl, text) {
+  // The live Advisor's verses are substituted from the server's KJV corpus, so
+  // its verdict is authoritative; the local WEB index only judges offline
+  // replies (its wording differs enough from KJV to mis-flag live text).
+  async function sealAdvisorMessage(contentEl, text, serverReport) {
     if (!contentEl) return null;
-    const report = await verifyResponse(text);
+    const usable = serverReport
+      && serverReport.source === 'server'
+      && Array.isArray(serverReport.results)
+      && serverReport.total > 0;
+    const report = usable
+      ? {
+          ...serverReport,
+          unverified: typeof serverReport.unverified === 'number'
+            ? serverReport.unverified
+            : serverReport.total - (serverReport.verified || 0),
+        }
+      : await verifyResponse(text);
     annotateMessage(contentEl, report);
     return report;
   }

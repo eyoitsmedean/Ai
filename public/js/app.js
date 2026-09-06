@@ -709,7 +709,7 @@
         if (rendered) {
           addChatSaveButton(rendered, message.content, lastQuestion);
           if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
-            global.RedLetterTrust.sealAdvisorMessage(rendered.content, message.content);
+            global.RedLetterTrust.sealAdvisorMessage(rendered.content, message.content, message.seal || null);
           }
         }
       }
@@ -873,6 +873,7 @@
 
       let rendered = null;
       let fullText = '';
+      let serverReport = null;
       try {
         const response = await fetch(appUrl('/api/chat'), {
           method: 'POST',
@@ -880,7 +881,10 @@
             'Content-Type': 'application/json',
             Accept: 'text/event-stream',
           },
-          body: JSON.stringify({ messages: chatHistory }),
+          // The server keeps 24 turns; sending fewer keeps the request small.
+          body: JSON.stringify({
+            messages: chatHistory.slice(-20).map((m) => ({ role: m.role, content: m.content })),
+          }),
         });
         if (!response.ok) {
           const offline = await buildOfflineAdvisorReply(text);
@@ -903,19 +907,27 @@
 
         setTyping(false);
         rendered = createMessage('assistant', '', true);
-        await readSSE(response, (chunk) => {
+        const onChunk = (chunk) => {
           fullText += chunk;
           updateStreamMessage(rendered, fullText, true);
           scrollChat();
-        });
+        };
+        // The server's final frames carry the authoritative letter (verses
+        // substituted from the corpus) and its verification verdict.
+        onChunk._onReplace = (letter) => { fullText = letter; };
+        onChunk._onVerify = (report) => { serverReport = report; };
+        await readSSE(response, onChunk);
         if (!fullText.trim()) throw new Error('The Advisor returned an empty response');
 
         updateStreamMessage(rendered, fullText, false);
         addChatSaveButton(rendered, fullText, text);
         if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
-          global.RedLetterTrust.sealAdvisorMessage(rendered.content, fullText);
+          global.RedLetterTrust.sealAdvisorMessage(rendered.content, fullText, serverReport);
         }
-        chatHistory.push({ role: 'assistant', content: fullText });
+        // Keep the server verdict with the letter so a reload seals it the same way.
+        chatHistory.push(serverReport && serverReport.source === 'server'
+          ? { role: 'assistant', content: fullText, seal: serverReport }
+          : { role: 'assistant', content: fullText });
         persistChat();
         incrementChatCount();
       } catch (error) {
@@ -970,6 +982,9 @@
       const payload = JSON.parse(payloadText);
       if (payload.error) throw new Error(payload.error);
       if (payload.verify && typeof onText._onVerify === 'function') onText._onVerify(payload.verify);
+      if (typeof payload.replace === 'string' && typeof onText._onReplace === 'function') {
+        onText._onReplace(payload.replace);
+      }
       if (typeof payload.text === 'string') onText(payload.text);
       return false;
     };
