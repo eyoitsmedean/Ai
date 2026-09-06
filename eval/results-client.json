@@ -1,9 +1,9 @@
 {
-  "generated": "2026-09-06T06:56:21.107Z",
-  "commit": "5cc86ed",
+  "generated": "2026-09-06T07:04:17.475Z",
+  "commit": "a9a6ede",
   "mode": {
     "runner": "in-process",
-    "path": "client composer (data/advisor.js, static hosting)",
+    "path": "client composer (public/data/advisor.js, static hosting)",
     "anthropic": false,
     "model": null
   },

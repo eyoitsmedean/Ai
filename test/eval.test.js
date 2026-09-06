@@ -13,7 +13,7 @@ function clientWindow() {
   const w = {};
   const ctx = vm.createContext({ window: w });
   w.looksLikeCrisisClient = (t) => CRISIS_RE.test(String(t || ''));
-  for (const f of ['curated.js', 'advisor.js', 'paths.js']) vm.runInContext(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'), ctx);
+  for (const f of ['curated.js', 'advisor.js', 'paths.js']) vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', f), 'utf8'), ctx);
   return w;
 }
 
@@ -46,7 +46,7 @@ describe('evaluation set', () => {
   });
 
   it('keeps the client danger check in step with the server', () => {
-    const js = fs.readFileSync(path.join(ROOT, 'data', 'advisor.js'), 'utf8');
+    const js = fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8');
     const m = js.match(/const DANGER = (\/.*\/i);/);
     assert.ok(m, 'client danger pattern not found');
     assert.equal(m[1].slice(1, -2), DANGER_RE.source);
@@ -56,7 +56,7 @@ describe('evaluation set', () => {
   });
 
   it('keeps the poisoning check in step on the composer and the page', () => {
-    const js = fs.readFileSync(path.join(ROOT, 'data', 'advisor.js'), 'utf8');
+    const js = fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8');
     const m = js.match(/const POISON = (\/.*\/i);/);
     assert.ok(m, 'client poison pattern not found');
     assert.equal(m[1].slice(1, -2), POISON_RE.source);

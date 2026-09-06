@@ -5,7 +5,7 @@
  *   node scripts/eval.js                 # in-process, retrieval advisor (no model key needed)
  *   node scripts/eval.js --url http://127.0.0.1:3000   # against a live server (model path if it has a key)
  *     — start that server with CHAT_PER_MINUTE=120 and run with EVAL_PACE_MS=600 to finish in about a minute
- *   node scripts/eval.js --client        # the browser composer used on static hosting (data/advisor.js)
+ *   node scripts/eval.js --client        # the browser composer used on static hosting (public/data/advisor.js)
  *   node scripts/eval.js --no-fail       # write results but exit 0 even on gate failures
  *
  * Writes eval/results.md and eval/results.json. Exits 1 if any gate fails.
@@ -191,8 +191,8 @@ function clientComposer() {
   const ctx = vm.createContext({ window: w });
   // The page defines looksLikeCrisisClient from the same pattern; test/eval.test.js proves the mirror.
   w.looksLikeCrisisClient = (t) => CRISIS_RE.test(String(t || ''));
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'data', 'curated.js'), 'utf8'), ctx);
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'data', 'advisor.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'curated.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8'), ctx);
   _client = w.RLA_advise;
   return _client;
 }
@@ -230,7 +230,7 @@ async function letterFromServer(url, input, attempt = 0) {
 async function runEval({ url = '', client = false } = {}) {
   const questions = loadQuestions();
   let mode = { runner: 'in-process', path: 'retrieval', anthropic: false, model: null };
-  if (client) mode = { runner: 'in-process', path: 'client composer (data/advisor.js, static hosting)', anthropic: false, model: null };
+  if (client) mode = { runner: 'in-process', path: 'client composer (public/data/advisor.js, static hosting)', anthropic: false, model: null };
   if (url) {
     const health = await (await fetch(url.replace(/\/$/, '') + '/api/health')).json();
     mode = { runner: url, path: health.anthropic ? 'model+verify' : 'retrieval', anthropic: Boolean(health.anthropic), model: health.anthropic ? health.model : null, version: health.version };
