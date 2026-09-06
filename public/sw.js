@@ -1,9 +1,10 @@
-const CACHE = 'rla-phase0-v11';
+const CACHE = 'rla-phase0-v12';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',
   '/curated.json',
   '/library.json',
+  '/data/letterpress.js',
   '/data/advisor.js',
   '/data/curated.js',
   '/data/paths.js',
