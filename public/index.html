@@ -3583,7 +3583,17 @@ async function loadDaily() {
     offline = true;
   }
   dailyData = data;
-  document.getElementById('offline-banner').classList.toggle('hidden', !offline && !data.offline);
+  const banner = document.getElementById('offline-banner');
+  if (offline || !navigator.onLine) {
+    banner.textContent = 'You’re offline — showing verified passages from our library.';
+    banner.classList.remove('hidden');
+  } else if (data.offline) {
+    // Server answered from the corpus (no AI configured): honest, not alarming.
+    banner.textContent = 'Today’s word comes straight from the verified library.';
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
   document.getElementById('today-date').textContent = formatDate();
   renderCarry();
   document.getElementById('today-greeting').textContent = greeting();
