@@ -3181,7 +3181,7 @@ function renderJournal() {
       </button>
       <div class="journal-type-row"><span class="badge">${TYPE_LABELS[typeKey] || 'Kept'}</span><span class="journal-date">${date}</span></div>
       <div class="journal-title">${esc(item.title)}</div>
-      <div class="journal-body">${esc(item.body)}</div>
+      <div class="journal-body">${esc(typeKey === 'chat' ? plainLetter(item.body) : item.body)}</div>
       ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
       ${item.source === 'letterpress' ? '<div class="letter-colophon">Set without a model, from His words only.</div>' : ''}
     </div>`;
@@ -3471,6 +3471,13 @@ function formatAI(text) {
     i++;
   }
   return parts.join('');
+}
+
+function plainLetter(text) {
+  return String(text || '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1 —')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
 }
 
 function extractFirstVerse(text) {

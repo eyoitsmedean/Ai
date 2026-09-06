@@ -34,11 +34,17 @@ API_ACCESS_KEY=        # optional gate for /api/*
 ```
 
 ```bash
-npm test
-npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
+npm test          # API, corpus, letterpress, and static-artifact checks
+npm run spoken    # rebuild data/spoken-gospels.json and public/library.json
+npm run curated   # regenerate public/curated.json and public/data/ from lib/curated.js
+npm run smoke     # against a running server
+npm run qa        # first session in a real browser, against a running server
+npm run qa:static # the page alone, as GitHub Pages serves it — no API host
 ```
 
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
+
+Curated sayings have one source, `lib/curated.js`, where every passage is looked up in the corpus. Everything the static page ships — `public/curated.json`, `public/data/curated.js` — is generated from it and the test suite fails if an artifact is stale or any shipped quote is not canonical red-letter text. The letter engine, `data/letterpress.js`, is one file that runs unchanged in Node and in the browser.
 
 ## Design
 
@@ -47,6 +53,6 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **GitHub Pages:** the workflow publishes `public/`. Today, Seek, and the Advisor all work from the generated data with no API host; the Advisor runs the same letterpress the server does, in the browser. Live model generation needs the Node app.
 
 KJV text is public domain. Attribution is printed beside citations.
