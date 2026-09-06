@@ -183,7 +183,7 @@ The currency at risk is hours, not dollars — every plan spends almost no money
 
 ## What's checked
 
-Every claim this playbook leans on, with how much to trust it. **Verified** — a primary or independent source was opened this session. **Sourced** — secondary sources, not cross-checked against a primary. **Knowledge** — general knowledge, uncited; could be stale. **Estimated** — a planning number with its basis and no data behind it yet. **Your notes** — taken from your own Notion and Drive during the build.
+Every claim this playbook leans on, with how much to trust it. **Verified** — a primary or independent source was opened this session. **Sourced** — secondary sources, not cross-checked against a primary. **Knowledge** — general knowledge, uncited; could be stale. **Estimated** — a planning number with its basis and no data behind it yet. **Your notes** — taken from your own Notion and Drive during the build. Prices, fees, and platform terms go stale: treat any Verified row as due for a recheck after 31 Dec 2026, and before you rely on it for the Lent run.
 
 | Claim | Label | Source | Checked | If it's wrong |
 | --- | --- | --- | --- | --- |
