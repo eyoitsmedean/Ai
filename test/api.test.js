@@ -177,7 +177,8 @@ describe('smoke routes', () => {
     assert.ok(/Crown’s patentee, Cambridge University Press/.test(res.raw), 'the U.K. acknowledgement must be printed');
     assert.ok(/not a person/i.test(res.raw), 'the page must say it is not a person');
     const sw = await request('GET', '/sw.js');
-    assert.ok(/rla-phase0-v16/.test(sw.raw) && /\/data\/press\.js/.test(sw.raw), 'service worker must carry the Press offline under a fresh cache name');
+    const cacheVersion = Number((sw.raw.match(/rla-phase0-v(\d+)/) || [])[1]);
+    assert.ok(cacheVersion >= 17 && /\/data\/press\.js/.test(sw.raw) && /\/config\.js/.test(sw.raw), 'service worker must carry the Press and config offline under a fresh cache name (v17+), got v' + cacheVersion);
   });
 
   function loadClientData(files) {
