@@ -63,36 +63,70 @@ describe('KJV corpus', () => {
 
   it('narrator frames are the corpus’s own words, verse by verse', () => {
     const frames = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'narrator-frames.json'), 'utf8'));
-    assert.ok(Object.keys(frames).length >= 70);
+    assert.ok(Object.keys(frames).length >= 140);
     for (const [cite, frame] of Object.entries(frames)) {
       const [book, cv] = cite.split(' ');
       const [c, v] = cv.split(':');
       const full = cleanKjv(corpus.books[book][c][v]);
-      assert.ok(full.startsWith(frame.intro), `${cite}: intro is not how the verse begins`);
+      assert.ok(frame.intro || frame.tail, `${cite}: empty frame`);
+      if (frame.intro) assert.ok(full.startsWith(frame.intro), `${cite}: intro is not how the verse begins`);
       if (frame.tail) assert.ok(full.endsWith(frame.tail), `${cite}: tail is not how the verse ends`);
     }
   });
 
-  it('the spoken corpus opens with His words, not the narrator’s', () => {
+  it('custom markers in the red-letter map are the verse’s own text, letter for letter', () => {
+    const red = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'red-letter-source.json'), 'utf8')).verses;
+    const frames = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'narrator-frames.json'), 'utf8'));
+    let checked = 0;
+    for (const [cite, marker] of Object.entries(red)) {
+      const [book, cv] = cite.split(' ');
+      if (!corpus.books[book] || marker === 'full' || frames[cite]) continue;
+      const [c, v] = cv.split(':');
+      const full = cleanKjv(corpus.books[book][c][v]);
+      assert.ok(full.includes(cleanKjv(marker)), `${cite}: marker is not in the verse: ${marker}`);
+      checked += 1;
+    }
+    assert.ok(checked > 400, `only ${checked} markers checked`);
+  });
+
+  it('the spoken corpus opens and closes with His words, not the narrator’s or anyone else’s', () => {
     const spoken = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'spoken-gospels.json'), 'utf8')).books;
     // Inside a parable He narrates his own characters; those stay.
-    const inParable = new Set(['Matthew 12:44', 'Luke 13:8', 'Luke 15:26', 'Luke 15:29', 'Luke 16:2', 'Luke 16:24', 'Luke 19:13']);
-    const narrator = [
-      /^[^,.;:!?]{0,90}\bJesus\b/,
-      /^((And|But|Then|Now|When) )?(he|Jesus)( also)? (answered|answering|said|saith|spake|cried|called)\b[^,]{0,60}, /i,
-    ];
+    const inParable = new Set([
+      'Matthew 12:44', 'Matthew 20:3', 'Matthew 20:4', 'Matthew 20:5', 'Matthew 20:6', 'Matthew 20:9', 'Matthew 21:37', 'Matthew 22:8',
+      'Matthew 25:3', 'Matthew 25:10', 'Matthew 25:16', 'Matthew 25:18', 'Matthew 25:20', 'Matthew 25:22', 'Matthew 25:24',
+      'Mark 2:26', 'Mark 12:2', 'Mark 12:4', 'Mark 12:5', 'Mark 12:8',
+      'Luke 6:4', 'Luke 13:7', 'Luke 13:8', 'Luke 14:18', 'Luke 15:15', 'Luke 15:20', 'Luke 15:26', 'Luke 15:29',
+      'Luke 16:2', 'Luke 16:5', 'Luke 16:7', 'Luke 16:24', 'Luke 19:13', 'Luke 20:10', 'Luke 20:11', 'Luke 20:12', 'John 10:35',
+    ]);
+    const speechOrMotion = /\b(said|saith|answered|answering|spake|cried|called|charged|began|taught|took|went|came|departed|lifted|turned|looked|beheld|sent|arose|sat|stood)\b/;
+    const firstPerson = /\b(I|me|my|ye|you|thou|thee|thy|your|verily)\b/;
+    const others = /\b(the people|his disciples|some of his disciples|the ruler|they said one to another|a voice)\b/;
     for (const [book, chapters] of Object.entries(spoken)) {
       for (const [c, verses] of Object.entries(chapters)) {
         for (const [v, text] of Object.entries(verses)) {
           const cite = `${book} ${c}:${v}`;
           if (inParable.has(cite)) continue;
-          for (const re of narrator) assert.doesNotMatch(text, re, `${cite} keeps the narrator: ${text.slice(0, 80)}`);
+          const first = text.split(/[,:;.!?]/)[0];
+          const narrator = /\bJesus\b/.test(first) || (/\b(he|they|she)\b/i.test(first) && speechOrMotion.test(first) && !firstPerson.test(first));
+          assert.ok(!narrator, `${cite} opens with the narrator: ${text.slice(0, 80)}`);
+          if (!firstPerson.test(first)) assert.doesNotMatch(first, others, `${cite} opens with someone else: ${text.slice(0, 80)}`);
+          assert.doesNotMatch(text, /(And (he|they|Jesus) (left|went|departed|said|heard)[^.]*\.|These things spake Jesus[^.]*\.)$/, `${cite} ends with the narrator: ${text.slice(-80)}`);
         }
       }
     }
-    assert.equal(spoken.John['11']['35'], undefined, 'Jesus wept is not a saying');
+    for (const gone of ['John 11:35', 'Mark 9:7', 'Mark 16:6', 'Luke 13:14', 'Luke 24:32', 'John 7:20', 'John 12:34', 'John 16:17', 'Luke 19:25', 'Matthew 15:33']) {
+      const [book, cv] = gone.split(' ');
+      const [c, v] = cv.split(':');
+      assert.equal(spoken[book]?.[c]?.[v], undefined, `${gone} is not His saying`);
+    }
     assert.equal(spoken.John['20']['21'], 'Peace be unto you: as my Father hath sent me, even so send I you.');
     assert.equal(spoken.Mark['4']['39'], 'Peace, be still.');
+    assert.equal(spoken.John['12']['28'], 'Father, glorify thy name.');
+    assert.equal(spoken.Matthew['21']['25'], 'The baptism of John, whence was it? from heaven, or of men?');
+    assert.match(spoken.Matthew['6']['31'], /^Therefore take no thought, saying,/);
+    assert.match(spoken.Luke['17']['4'], /^And if he trespass against thee seven times/);
+    assert.equal(spoken.Luke['19']['42'].indexOf('thines'), -1);
   });
 
   it('serves the spoken text under the right number', () => {
