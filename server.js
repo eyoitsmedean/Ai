@@ -13,6 +13,7 @@ const {
   offlineDaily,
   offlineEncouragement,
   detectCrisis,
+  classifyIntent,
 } = require('./data/scripture');
 
 const app = express();
@@ -244,10 +245,17 @@ STRICT RULES:
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Never claim to be Jesus, a pastor, a therapist, or a crisis counselor.
 
+SCOPE:
+• You help with life situations: fear, grief, anger, loneliness, shame, decisions, relationships, work, money worry, faith and doubt, rest.
+• If asked for something else — code, homework, trivia, weather, sports, finance tips, medical dosing, legal filings, creative writing on demand — do not force a verse onto it. In two or three warm sentences say plainly that it is outside what you are for, name what you are for, and invite them to bring whatever is underneath the question. No scripture block in that case.
+• If the user is hostile, mocking, or says they do not believe: do not argue, do not defend, do not moralize. Acknowledge that doubt is welcome, then offer one or two red-letter passages with no pressure.
+
 SAFETY:
 • You are not a pastor, therapist, or crisis counselor.
 • If the user expresses suicidal ideation, self-harm intent, or immediate danger, do NOT give spiritual advice as the main response. Briefly acknowledge their pain, urge them to contact emergency services or the 988 Suicide & Crisis Lifeline (call/text 988 in the US) or https://www.iasp.info/suicidalthoughts/ internationally, and keep any scripture secondary and non-prescriptive.
-• Never tell someone to endure abuse, stay in danger, or avoid professional help.`;
+• If the user describes being hit, threatened, or abused by someone, say clearly that it is not their fault and not something to endure, give the National Domestic Violence Hotline (US: call 1-800-799-7233, text START to 88788, thehotline.org) and 911 for immediate danger, and keep scripture brief and secondary.
+• Never tell someone to endure abuse, stay in danger, or avoid professional help.
+• Never diagnose, prescribe, or advise stopping medication or treatment.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -302,6 +310,26 @@ If you are in immediate danger or thinking about hurting yourself, please reach 
 You are not alone. People are ready to help you through this moment.
 
 If you want, after you are safe, we can sit with words Jesus spoke about weariness and rest — but your safety comes first.`;
+
+const ABUSE_REPLY = `Thank you for trusting me with this. What you are describing is not something you have to endure, and it is not your fault. I am a reflective guide using the words of Jesus — not a counselor — so the most caring thing I can do is point you to people trained for exactly this:
+
+• If you are in immediate danger, call **911** (US) or your local emergency number
+• **National Domestic Violence Hotline** (US): call **1-800-799-7233**, text **START** to **88788**, or chat at https://www.thehotline.org — free, confidential, 24/7
+• Outside the US: https://www.hotpeachpages.net lists local helplines by country
+
+If someone may be watching your phone, clear this conversation afterward (Saved → delete).
+
+Jesus never asked anyone to stay in harm's way. When you are safe, I am here — and so are His words about being seen, valued, and not alone.`;
+
+const OFFSCOPE_REPLY = `That is a fair question, but it is outside what I am here for. I am a reflective guide for life's real struggles — fear, grief, decisions, relationships, faith, shame, rest — and I answer only with words Jesus actually spoke in Matthew, Mark, Luke, and John.
+
+For that request, a general assistant or search will serve you better.
+
+If there is something heavier underneath it — stress, a hard season, a question you have been carrying — bring that here. I will meet you with His words, not mine.`;
+
+const HOSTILE_INTRO = `You do not have to believe anything to be here, and I am not going to argue with you. I am a program that quotes one person — Jesus, from the four Gospels — with every citation checkable against the public-domain World English Bible. Doubt is welcome; some of the people He spoke most gently to were the ones who doubted Him.
+
+If you are willing, here are His own words, not mine:`;
 
 async function getDaily() {
   const key = todayKey();
@@ -622,6 +650,24 @@ app.post('/api/chat', async (req, res) => {
   }
 
   const id = getClientId(req);
+  const lastUser = messages.filter((m) => m.role === 'user').pop()?.content || '';
+  const intent = classifyIntent(lastUser);
+
+  // Safety handoffs run before the paywall and never consume a free credit:
+  // someone in danger must never meet a 402.
+  if (intent === 'crisis' || intent === 'abuse') {
+    const reply = intent === 'crisis' ? CRISIS_REPLY : ABUSE_REPLY;
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.write(`data: ${JSON.stringify({ text: reply, crisis: true, intent })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ done: true, crisis: true, intent, citations: [], quota: getQuota(id) })}\n\n`
+    );
+    res.write('data: [DONE]\n\n');
+    return res.end();
+  }
+
   const quota = getQuota(id);
   if (quota.remaining <= 0) {
     return res.status(402).json({
@@ -632,16 +678,14 @@ app.post('/api/chat', async (req, res) => {
     });
   }
 
-  const lastUser = messages.filter((m) => m.role === 'user').pop()?.content || '';
-  if (detectCrisis(lastUser)) {
-    bumpQuota(id);
+  // Off-scope requests get a plain, warm redirect with no verse forced onto them.
+  // Deterministic in both modes so the product behaves the same with or without a key.
+  if (intent === 'offscope') {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
-    res.write(`data: ${JSON.stringify({ text: CRISIS_REPLY, crisis: true })}\n\n`);
-    res.write(
-      `data: ${JSON.stringify({ done: true, crisis: true, citations: [], quota: getQuota(id) })}\n\n`
-    );
+    res.write(`data: ${JSON.stringify({ text: OFFSCOPE_REPLY, intent })}\n\n`);
+    res.write(`data: ${JSON.stringify({ done: true, intent, citations: [], grounded: 0, unverified: 0, quota: getQuota(id) })}\n\n`);
     res.write('data: [DONE]\n\n');
     return res.end();
   }
@@ -649,12 +693,15 @@ app.post('/api/chat', async (req, res) => {
   // Verified-corpus reply: used when no AI is configured, and as the graceful
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
-    const pack = offlineEncouragement(guessTheme(lastUser));
+    const theme = intent === 'hostile' ? 'Faith & Doubt' : guessTheme(lastUser);
+    const pack = offlineEncouragement(theme, lastUser);
+    // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
+    const picks = intent === 'hostile' ? pack.passages.slice(1, 3) : pack.passages.slice(0, 3);
     const text = [
-      intro,
+      intro || pack.opener,
       '',
-      ...pack.passages.slice(0, 3).flatMap((p) => [`**${p.verse}**`, `"${p.quote}"`, p.context, '']),
-      pack.closing,
+      ...picks.flatMap((p) => [`**${p.verse}**`, `"${p.quote}"`, p.context, '']),
+      intent === 'hostile' ? 'No pressure. They are here if you ever want them.' : pack.closing,
     ].join('\n');
     if (!res.headersSent) {
       res.setHeader('Content-Type', 'text/event-stream');
@@ -676,6 +723,7 @@ app.post('/api/chat', async (req, res) => {
         unverified: annotated.unverified,
         quota: getQuota(id),
         offline: true,
+        intent,
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');
@@ -684,9 +732,7 @@ app.post('/api/chat', async (req, res) => {
 
   if (!ai) {
     bumpQuota(id);
-    return streamCorpusReply(
-      'I hear you. Here are words Jesus actually spoke that speak into what you shared — drawn from our verified red-letter library (offline mode).'
-    );
+    return streamCorpusReply(intent === 'hostile' ? HOSTILE_INTRO : null);
   }
 
   res.setHeader('Content-Type', 'text/event-stream');
@@ -720,7 +766,9 @@ app.post('/api/chat', async (req, res) => {
         citations: annotated.citations,
         grounded: annotated.grounded,
         unverified: annotated.unverified,
+        outOfScope: annotated.outOfScope,
         quota: getQuota(id),
+        intent,
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');
@@ -730,7 +778,9 @@ app.post('/api/chat', async (req, res) => {
     if (!full.trim()) {
       // Nothing reached the user yet: answer from the verified corpus instead of failing.
       return streamCorpusReply(
-        'The Advisor is briefly unavailable, so here are words Jesus actually spoke that speak into what you shared — from our verified red-letter library.'
+        intent === 'hostile'
+          ? HOSTILE_INTRO
+          : 'The Advisor is briefly unavailable, so here are words Jesus actually spoke that speak into what you shared — from our verified red-letter library.'
       );
     }
     res.write(`data: ${JSON.stringify({ error: 'interrupted', partial: true })}\n\n`);

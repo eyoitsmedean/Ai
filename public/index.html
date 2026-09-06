@@ -218,6 +218,8 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .msg.assistant .bubble{background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px}
 .msg.assistant.crisis .bubble{background:#2A1218;border-color:#7F1D1D;color:#FCE7F3}
 .msg.assistant.crisis .bubble a{color:#FDA4AF;font-weight:600}
+.msg.assistant .bubble a{color:var(--crimson);text-decoration:underline;text-underline-offset:2px;word-break:break-all}
+.msg.assistant .bubble a.tel{display:inline-block;padding:2px 8px;margin:1px 0;border-radius:999px;background:rgba(255,255,255,.12);text-decoration:none;word-break:normal}
 .cite-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .cite-badge{font-size:calc(10px * var(--scale));padding:3px 8px;border-radius:6px;font-weight:600}
 .cite-badge.ok{background:rgba(34,120,60,.12);color:#166534;border:1px solid rgba(34,120,60,.25)}
@@ -3769,8 +3771,8 @@ async function sendChat() {
             let badges = '';
             if (ev.citations?.length) {
               badges = '<div class="cite-badges">' + ev.citations.map(c =>
-                '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + esc(c.source || '') + '">' +
-                esc(c.citation || c.verse) + (c.verified ? ' ✓ WEB' : ' check') + '</span>'
+                '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + esc(c.outOfScope ? 'Outside the four Gospels — not Jesus’s words' : (c.source || '')) + '">' +
+                esc(c.citation || c.verse) + (c.verified ? ' ✓ WEB' : c.outOfScope ? ' · not Jesus’s words' : ' · unverified') + '</span>'
               ).join('') + '</div>';
               if (ev.grounded != null) {
                 badges += '<p class="ground-note">' + ev.grounded + ' citation' + (ev.grounded === 1 ? '' : 's') +
@@ -4014,6 +4016,8 @@ function formatAI(text) {
     }
     if (!trimmed) { parts.push('<div style="height:6px"></div>'); i++; continue; }
     const html = esc(trimmed)
+      .replace(/(https?:\/\/[^\s<)]+?)([.,;:!?)]*)(?=\s|$)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>$2')
+      .replace(/\*\*(988|911|1-800-799-7233)\*\*/g, (_, n) => '<a class="tel" href="tel:' + n.replace(/-/g, '') + '"><strong>' + n + '</strong></a>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
       .replace(/"([^"]+)"/g, '<em>$1</em>')
       .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>');
