@@ -1,8 +1,8 @@
 # Advisor evaluation — results
 
-Run: 2026-09-06 06:23 UTC · Mode: **curated Advisor (no model key)** · Host: in-process
+Run: 2026-09-06 06:33 UTC · Mode: **curated Advisor (no model key)** · Host: in-process
 
-**80 of 80 questions pass every required check.** 61 distinct letters for 80 questions.
+**82 of 82 questions pass every required check.** 63 distinct letters for 82 questions.
 
 These are the actual answers the product gave, unedited. Read them as the person who typed the question would. The checks are mechanical; the judgement about warmth is yours.
 
@@ -31,7 +31,7 @@ These are the actual answers the product gave, unedited. Read them as the person
 | loss | 2 | 2 |
 | abuse | 2 | 2 |
 | idiom | 2 | 2 |
-| reference | 2 | 2 |
+| reference | 4 | 4 |
 | negation | 2 | 2 |
 | proper-noun | 2 | 2 |
 | language | 1 | 1 |
@@ -1376,13 +1376,13 @@ These are the actual answers the product gave, unedited. Read them as the person
 
 > **Asked:** hi
 
-✓ answered — 60 words  
+✓ answered — 63 words  
 ✓ cites His words — Matthew 11:28  
 ✓ every quote sealed to the KJV corpus — 1 sealed  
 ✓ only the four Gospels — ok  
-✓ length fit for a phone — 60 words
+✓ length fit for a phone — 63 words
 
-> I am here. Say what you are carrying in a sentence; there is no wrong way to begin, and nothing you write leaves this device.
+> I am here. Say what you are carrying in a sentence; there is no wrong way to begin, and this page keeps your letters only on this device.
 > 
 > **Matthew 11:28**
 > “Come unto me, all ye that labour and are heavy laden, and I will give you rest.”
@@ -1394,13 +1394,13 @@ These are the actual answers the product gave, unedited. Read them as the person
 
 > **Asked:** help
 
-✓ answered — 60 words  
+✓ answered — 63 words  
 ✓ cites His words — Matthew 11:28  
 ✓ every quote sealed to the KJV corpus — 1 sealed  
 ✓ only the four Gospels — ok  
-✓ length fit for a phone — 60 words
+✓ length fit for a phone — 63 words
 
-> I am here. Say what you are carrying in a sentence; there is no wrong way to begin, and nothing you write leaves this device.
+> I am here. Say what you are carrying in a sentence; there is no wrong way to begin, and this page keeps your letters only on this device.
 > 
 > **Matthew 11:28**
 > “Come unto me, all ye that labour and are heavy laden, and I will give you rest.”
@@ -2021,4 +2021,47 @@ These are the actual answers the product gave, unedited. Read them as the person
 > Write one sentence you wish you could say. Then write one blessing you can actually offer — even if it is only “I will not rehearse this harm today.”
 > 
 > You can take the next honest step. You do not have to finish the whole road before evening.
+
+### ref-3 · reference
+
+> **Asked:** Luke 2:14 keeps coming to mind and I do not know why
+
+✓ answered — 102 words  
+✓ cites His words — Matthew 11:28  
+✓ every quote sealed to the KJV corpus — 1 sealed  
+✓ only the four Gospels — ok  
+✓ length fit for a phone — 102 words  
+✓ does not echo what was typed — ok  
+✓ opens the passage named — ok  
+✓ a verse that is not His is named, not printed as His — ok
+
+> You brought Luke 2:14 with you. Those words are printed in the Gospel around Him, but they are not words He spoke, and this room keeps only to His own, so I will not put them in His mouth. Read them where they stand; here is what He said nearest to them.
+> 
+> **Matthew 11:28**
+> “Come unto me, all ye that labour and are heavy laden, and I will give you rest.”
+> Whatever brought you to a page like this one, this is the door He leaves open.
+> 
+> If you tell me why that verse came to mind, I will stay with that.
+
+### ref-4 · reference
+
+> **Asked:** my grandmother always quoted John 1:1 to me and I miss her so much
+
+✓ answered — 97 words  
+✓ cites His words — Matthew 5:4  
+✓ every quote sealed to the KJV corpus — 1 sealed  
+✓ only the four Gospels — ok  
+✓ length fit for a phone — 97 words  
+✓ answers the need named — theme passage present (verse-exact)  
+✓ not answered by a script meant for another kind of question — ok  
+✓ does not echo what was typed — ok  
+✓ a verse that is not His is named, not printed as His — ok
+
+> You brought John 1:1 with you. Those words are printed in the Gospel around Him, but they are not words He spoke, and this room keeps only to His own, so I will not put them in His mouth. Read them where they stand; here is what He said nearest to them.
+> 
+> **Matthew 5:4**
+> “Blessed are they that mourn: for they shall be comforted.”
+> Comfort is promised to those who actually mourn — not to those who pretend the loss was small.
+> 
+> If you tell me why that verse came to mind, I will stay with that.
 

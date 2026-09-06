@@ -14,6 +14,11 @@ A quiet page for the words Jesus spoke: four rooms each morning, an Advisor that
 | Translation is the King James Version (1769), public domain in the U.S.; U.K. Crown prerogative acknowledged (Cambridge University Press) in settings | locked | `data/gospels-kjv.json`, settings colophon |
 | Every quoted line is sealed against the corpus; a verbatim clipping counts only if it carries ≥60% of the verse or ≥12 words; seal score ≥ 0.92 | locked | `lib/scripture.js` `similarity`, tests |
 | The model never types a verse: it emits `{{Book C:V}}` placeholders and the server inserts corpus text | locked | `server.js`, `lib/scripture.js` `verifyAndSubstitute` |
+| The seal admits only red letters: a Gospel verse that is not His speech (an angel's line, the evangelist's narration, a genealogy) is dropped from any letter on either path, never printed under "He said this" | locked 2026-09-06 | `lib/scripture.js` `fillPlaceholders`, `verifyAdvisorText`; `lib/advise.js` `refOther` |
+| The daily letter limit is a limit on counsel, never on the crisis handoff: a crisis message bypasses the gate, the composer stays typeable, the gate copy names 988 | locked 2026-09-06 | `public/index.html` `sendMsg`, `#chat-gate` |
+| One crisis detector, byte-identical in server, page, and on-device fallback; a test fails on drift | locked 2026-09-06 | `test/advise.test.js` |
+| Abuse and assault get their own handoff (National DV Hotline 1-800-799-7233 / text START to 88788 / thehotline.org; RAINN 800-656-4673 / hotline.rainn.org / text HOPE to 64673), never Mark 10:11–12 or John 4:16–18 | locked 2026-09-06 | `lib/advise.js` `abuseLetter` |
+| Danger is read three ways — the writer, someone they love, a death they are grieving — and each gets its own letter; 988 also serves concerned others and loss survivors | locked 2026-09-06 | `lib/advise.js` `crisisOther`, `crisisLoss`, `crisisAsk` |
 | Without a model key the Advisor still answers the question from the curated theme packs (not a fixed letter) | locked 2026-09-06 | `lib/advise.js`, `eval/` |
 | Crisis: 988 by call, text, or chat (988lifeline.org) and findahelpline.com stay in the product; the page says it is not a person | locked | title page, Advisor head, settings, crisis modal, `lib/advise.js` |
 | Palette: parchment and crimson; the only loud colour is the red letter; folio not feed | locked | `DESIGN.md`, `public/index.html` |
@@ -29,12 +34,13 @@ Mark each line when you run it. "Verified" means run in this repository and obse
 
 | Item | Status | How to verify |
 | --- | --- | --- |
-| Node suite (56 tests: corpus verse counts, seal, Forty order, Advisor, routes) | verified 2026-09-06 | `npm test` |
+| Node suite (61 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, routes) | verified 2026-09-06 | `npm test` |
 | Corpus whole: all 89 Gospel chapters at canonical verse counts, cross-checked against two independent KJV sources | verified 2026-09-06 | `npm test` (corpus integrity) |
 | Every quotation in every client data file (155) seals at ≥ 0.92 | verified 2026-09-06 | `npm test` |
-| Advisor evaluation set, curated path: 59/59 pass, 41 distinct letters | verified 2026-09-06 | `npm run eval` → `eval/RESULTS.md` |
+| Advisor evaluation set, curated path: 82/82 pass, 63 distinct letters (the 19 shared letters are the fixed crisis, refusal, and hello scripts); harness mutation-tested — sabotaging the composer fails 9 items | verified 2026-09-06 | `npm run eval` → `eval/RESULTS.md` |
+| Breaker register (30 defects, `/tmp` report from a subagent that built nothing) replayed: every S1/S2 repaired, 42 adversarial inputs land where they should | verified 2026-09-06 | `test/advise.test.js`; the inputs are now eval items (crisis-6…9, concern, loss, abuse, idiom, ref, neg, name, typo, anger) |
 | Advisor evaluation set, **live model path** | **unverified** — no `ANTHROPIC_API_KEY` in the build environment | `ANTHROPIC_API_KEY=… npm run eval`, then read `eval/RESULTS.md` |
-| Browser QA (13 walks: Press, Forty labels, share proofs, reduced motion, tablist) | verified 2026-09-06 | `npm start` then `npm run qa` |
+| Browser QA (14 walks: Press, Forty labels, share proofs, reduced motion, tablist, the daily gate never closing the crisis path) | verified 2026-09-06 | `npm start` then `npm run qa` |
 | Android debug build (`assembleDebug`, SDK 36, Java 21) | verified 2026-09-06 — BUILD SUCCESSFUL, `app-debug.apk` 4.3 MB | `npm run mobile:apk` |
 | iOS build | **unverified** — needs a Mac with Xcode | `npx cap add ios && npx cap sync ios && npx cap open ios` |
 | On-device: share sheet hands a PNG on iPhone; install prompt; notifications | **unverified** — Dean's step | `MOBILE.md` five-minute checklist |
@@ -61,9 +67,13 @@ Environment: `ANTHROPIC_API_KEY` (live Advisor), `ANTHROPIC_MODEL`, `PORT`, `API
 3. Grid 3:4 share format: keep once a Meta primary page confirms 1080×1440, or drop.
 4. Brand line: keep "Red Letter" (current) or return to "The Red Letter Advisor" as the brief says.
 5. The API host for phone builds: where will the Node server live (Railway, Fly, a VPS)? `public/config.js` needs that URL before `cap sync`.
+6. Matthew 27:46 and Mark 15:34: the red-letter map keeps only the Aramaic ("Eli, Eli, lama sabachthani?") and treats the KJV's own "that is to say, My God, my God, why hast thou forsaken me?" as the evangelist's gloss, so a reader who brings that verse sees no English. Many printed red-letter editions colour the translation too. Decide: widen those two entries in `data/spoken-gospels.json`, or leave as is.
+7. 49 of the 663 library sayings still open with the evangelist's frame ("He answered and said unto them, …"). The Advisor's search now skips them; the Today rooms and the library still show them. Strip the frames in `scripts/build-spoken.js` (a corpus rebuild), or accept.
+8. The on-device fallback (`public/data/advisor.js`, used when the API is unreachable) shares the crisis detector and handoff with the server but is a far simpler composer than `lib/advise.js`. Ship the phone with the API host configured (question 5), or port the composer to the client.
 
 ## Session log
 
 - **2026-09-05 — Press atelier.** Six leaves (Reveal, Breathe, Parable, Examen, Bless, Forty), `/review` route, browser QA, seal tightened, Holy Week / Triduum labels, synchronous Web Share, 988 by call/text/chat, Cambridge acknowledgement. PR #18.
 - **2026-09-06 — Corpus audit.** Six dropped verses found by comparing all 3,779 Gospel verses against bible-api.com KJV and aruljohn/Bible-kjv (Matthew 2:16, 22:1, 26:38; Mark 4:40, 7:11, 8:8); 45 sayings had carried a neighbour's words; repaired by `scripts/repair-corpus.js`, spoken map and library rebuilt, marginal-note leak filtered, four hand-typed quotations corrected. Forty reordered to the church year.
+- **2026-09-06 — INTERROGATE and ELEVATE.** A Breaker subagent that built nothing ran 70 adversarial inputs and filed 30 defects (13 S1). Repaired in `lib/advise.js`: danger read in every tense, person, and plural ("took pills", "wish I was dead", "end things", "plan and notes", "wants to die", "killed himself"); third-party, loss-survivor, and doctrinal crisis letters; abuse/assault handoff; negation-aware cues; proper-noun collisions (Sue, Paul, diagnosis) no longer outrank a grief cue; gratitude is whole-message; Spanish is met in Spanish; brought references are opened (and `Matthew` is no longer re-expanded to `Matthewhew`); short follow-ups carry the prior need; narrator-framed sayings excluded from search; sub-cue notes and caregiver/exhaustion practices so a miscarriage and a widower do not get one letter. Page: the daily gate no longer closes the crisis path. Harness: verse-exact theme checks, handoff-first-and-once, mis-routing and echo negatives, identical-letter assertion; mutation-tested. ELEVATE: the seal now admits only red letters on both paths, and a brought verse that is not His (Luke 2:14, John 1:1) is named as such. Suite 61, eval 82/82, browser 14/14.
 - **2026-09-06 — Curated Advisor + evaluation.** `lib/advise.js` replaces the fixed no-key letter; 59-question evaluation set with recorded results; crisis detector widened in server and client; `CHAT_RATE_LIMIT`; `public/config.js` API base for phone builds; Capacitor deps and `android/` scaffold added; this file created as the system of record.

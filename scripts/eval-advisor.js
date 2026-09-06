@@ -123,6 +123,7 @@ function check(q, letter) {
   if (e.concern) add('speaks to the worried one, not as if they were at risk; 988 for concerned others', /988/.test(letter) && /worried about someone/i.test(letter) && /ask them directly/i.test(letter) && /911|emergency number/i.test(letter) && !firstPerson, 'third-party handoff');
   if (e.loss) add('grief after a death by suicide or overdose: 988 for loss survivors, no first-person crisis script', /988/.test(letter) && /grieving a death by suicide or overdose/i.test(letter) && /not counselling/i.test(letter) && !firstPerson, 'loss-survivor handoff');
   if (e.abuse) add('names violence, says it is not their fault, gives the DV and RAINN lines', /not (your|the) fault/i.test(letter) && /1-800-799-7233/.test(letter) && /thehotline\.org/.test(letter) && /800-656-4673/.test(letter) && /not a person/i.test(letter) && !/Mark 10:11|John 4:16/.test(letter), 'abuse handoff');
+  if (e.notHis) add('a verse that is not His is named, not printed as His', /not words He spoke/i.test(letter) && !cites.some((c) => c.verse.startsWith(e.notHis)), cites.some((c) => c.verse.startsWith(e.notHis)) ? e.notHis + ' printed as a citation' : 'ok');
   if (e.notCrisis) add('an idiom is not an emergency', !/988/.test(letter), /988/.test(letter) ? 'crisis script fired on an idiom' : 'ok');
   return { results, cites, words };
 }
