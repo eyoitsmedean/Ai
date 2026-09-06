@@ -1,7 +1,7 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  const CRISIS = /\b(suicid\w*|kill myself|killing myself|kill me\b|end (my|it|their|his|her|your|our) (life|lives)|end it all|ending it all|ending my life|take my life|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|don[’']?t want to live|do not want to live|not want to be alive|better off dead|no reason to live|not worth living|life isn[’']?t worth|slit my|jump off)\b/i;
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },
@@ -56,7 +56,7 @@
 
     if (CRISIS.test(raw)) {
       const crisis =
-        'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
+        'I am glad you wrote instead of staying silent. What you are carrying sounds unbearable, and it deserves a person, not a page: please reach 988 (call, text, or chat at 988lifeline.org) if you are in the United States, or findahelpline.com anywhere else, and tell someone near you tonight. I am not a person, and this page is not emergency care.\n\n';
       return crisis + formatPack(
         'While you reach a human who can help, here is a word he spoke to the heavy-laden.',
         passagesFor('Suffering & Pain'),
