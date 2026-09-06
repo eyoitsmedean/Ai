@@ -88,16 +88,32 @@ async function main() {
     assert(!text.includes('<<<<<<<'), 'conflict markers on welcome');
   });
 
-  await check('folio shell', async () => {
+  await check('app shell', async () => {
     const { res, text } = await req('/');
     assert(res.ok, 'app not 200');
-    assert(text.includes('sit-step-4'), 'missing lectio respond leaf');
+    assert(text.includes('id="lectio"') && text.includes('id="lectio-listen"'), 'missing Lectio');
     assert(text.includes('id="amen"'), 'missing Amen');
-    assert(text.includes('id="epigraph"'), 'missing flyleaf');
-    assert(text.includes('churchYear'), 'missing church year');
+    assert(text.includes('id="onboarding"'), 'missing onboarding');
+    for (const tab of ['today', 'seek', 'advisor', 'journal']) {
+      assert(text.includes(`id="nav-${tab}"`), `missing ${tab} tab`);
+    }
+    assert(text.includes('rel="manifest"'), 'missing manifest link');
+    assert(text.includes('name="rla-api-base"'), 'missing API base meta');
     assert(text.includes('988'), 'missing crisis line');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
+  });
+
+  await check('pwa assets', async () => {
+    const manifest = await req('/manifest.json');
+    assert(manifest.res.ok && manifest.json, 'manifest not served');
+    assert(manifest.json.scope === './' && manifest.json.start_url.startsWith('./'), 'manifest paths must be relative');
+    assert((manifest.json.icons || []).some((i) => i.purpose === 'maskable'), 'missing maskable icon');
+    const sw = await req('/sw.js');
+    assert(sw.res.ok, 'service worker not served');
+    assert(/no-cache/.test(sw.res.headers.get('cache-control') || ''), 'sw.js must not be cached');
+    const font = await req('/fonts/fonts.css');
+    assert(font.res.ok, 'self-hosted fonts missing');
   });
 
   if (fails.length) {

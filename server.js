@@ -531,8 +531,19 @@ app.post('/api/chat', async (req, res) => {
   res.setHeader('X-Accel-Buffering', 'no');
   if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
+  // Disconnects are observed on the response: since Node 16 the request stream
+  // auto-destroys as soon as its body is read, so `req.on('close')` would end
+  // the reply before the first model token.
+  let clientGone = false;
+  let activeStream = null;
+  res.on('close', () => {
+    clientGone = true;
+    if (activeStream && typeof activeStream.abort === 'function') {
+      try { activeStream.abort(); } catch (_) { /* already finished */ }
+    }
+  });
   const send = (payload) => {
-    if (!res.writableEnded) res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    if (!clientGone && !res.writableEnded) res.write(`data: ${JSON.stringify(payload)}\n\n`);
   };
   const streamText = (text) => {
     const chunk = 24;
@@ -544,7 +555,7 @@ app.post('/api/chat', async (req, res) => {
     // verse the model typed itself is shown as the recorded text.
     send({ replace: finalText });
     send({ verify: verifyReport(finalText) });
-    if (!res.writableEnded) {
+    if (!clientGone && !res.writableEnded) {
       res.write('data: [DONE]\n\n');
       res.end();
     }
@@ -554,12 +565,6 @@ app.post('/api/chat', async (req, res) => {
     streamText(body);
     finish(body);
   };
-
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) { /* already closed */ }
-    }
-  });
 
   if (!client) return finishWithLetter(fallbackLetter(last.content));
 
@@ -585,6 +590,7 @@ app.post('/api/chat', async (req, res) => {
       system: ADVISOR_SYSTEM,
       messages: modelMessages,
     });
+    activeStream = stream;
 
     // Tokens go out as they arrive, except that an unclosed {{ is held back
     // until its }} lands so the reader only ever sees the recorded verse.
@@ -605,12 +611,15 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const final = await stream.finalMessage();
+    activeStream = null;
     logStop('chat', final);
     flushPending(true);
 
     if (!rawText.trim()) return finishWithLetter(fallbackLetter(last.content));
     finish(`${crisis ? CRISIS_NOTICE : ''}${verifyAndSubstitute(rawText)}`);
   } catch (err) {
+    activeStream = null;
+    if (clientGone) return;
     console.error('Chat error:', err.message);
     if (streamed.trim()) {
       // Something already reached the page; hand it the verified fallback as
