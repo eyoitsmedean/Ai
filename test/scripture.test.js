@@ -13,6 +13,7 @@ const {
   verifyQuote,
   isRedLetter,
   spokenAt,
+  isExactSpan,
   fillPlaceholders,
   loadCorpus,
   NARRATOR_PREFIXES,
@@ -249,6 +250,52 @@ describe('spoken corpus', () => {
     assert.equal(verifyAndSubstitute('**Jn 14.27**\n“x”\n\nGo well.'), 'Go well.');
     assert.equal(verifyAndSubstitute('**Jesus said**\n“Everything happens for a reason.”\n\nGo well.'), 'Go well.');
     assert.equal(verifyAndSubstitute('**John 14:27**\n“Peace”\n\nGo well.'), '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”\nGo well.');
+  });
+
+  it('does not re-attribute an epistle, pass a fabrication with a full stop in it, or read only two quote glyphs', () => {
+    const j1427 = '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”';
+    // 1 John is not the Gospel; "John 4:18" is the woman at the well, not perfect love.
+    assert.equal(verifyAndSubstitute('**1 John 4:18**\n“There is no fear in love; but perfect love casteth out fear.”\nctx'), 'ctx');
+    assert.equal(verifyAndSubstitute('Remember 1 John 4:18 — perfect love casts out fear. Rest tonight.'), 'Rest tonight.');
+    // A fabricated saying with a sentence break inside the quotation marks.
+    assert.equal(verifyAndSubstitute('He said “I will never, ever leave you. Not tonight, not ever.” Rest.'), 'Rest.');
+    // Guillemets, low-9 quotes, backticks, blockquotes and a dash attribution.
+    for (const q of ['«you were never meant to carry this alone, child.»', '„you were never meant to carry this alone, child.“', '‚you were never meant to carry this alone, child.‘', '`you were never meant to carry this alone, child.`']) {
+      assert.equal(verifyAndSubstitute(`He said, ${q} Rest.`), 'Rest.', q);
+    }
+    assert.equal(verifyAndSubstitute('> I will never leave you comfortless, not for one night of this.\n> — Jesus'), '');
+    assert.equal(verifyAndSubstitute('> Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you.'), '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you.”');
+    // Another voice as authority, quoted or not.
+    assert.equal(verifyAndSubstitute('As Paul wrote, all things work together for good. Rest.'), 'Rest.');
+    assert.equal(verifyAndSubstitute('Moroni 10:4 promises the same. Rest.'), 'Rest.');
+    assert.equal(verifyAndSubstitute('And the Quran says much the same. Rest.'), 'Rest.');
+    // Headings dressed differently, a dash-and-reference remnant, and a duplicate quote line.
+    for (const h of ['*John 14:27*', '__John 14:27__', '### John 14:27', '(**John 14:27**)']) {
+      assert.equal(verifyAndSubstitute(`${h}\nctx`), `${j1427}\nctx`, h);
+    }
+    assert.equal(verifyAndSubstitute('“you were never meant to carry this alone, child.” — John 14:27'), '');
+    assert.equal(verifyAndSubstitute('**John 14:27**\nHe is saying that peace is already in the house.\n“Let not your heart be troubled, neither let it be afraid.”'), `${j1427}\nHe is saying that peace is already in the house.`);
+    assert.equal(verifyAndSubstitute('**John 14:27**\n“Let not your heart be troubled.”\nctx\n“Let not your heart be troubled, neither let it be afraid.”\nmore'), `${j1427}\nctx\nmore`);
+  });
+
+  it('keeps only His part of a verse where someone else also speaks', () => {
+    assert.equal(spokenAt('John', 12, 28), 'Father, glorify thy name.');
+    assert.equal(spokenAt('Mark', 9, 7), null, 'the voice out of the cloud');
+    assert.equal(spokenAt('Mark', 16, 6), null, 'the angel at the tomb');
+    assert.equal(spokenAt('Matthew', 15, 33), null, 'the disciples');
+    assert.equal(spokenAt('Luke', 19, 25), null, 'the hearers');
+    assert.equal(spokenAt('John', 16, 17), null, 'some of his disciples among themselves');
+    assert.equal(spokenAt('Mark', 4, 2), null, 'narration only');
+    assert.equal(isExactSpan('Mark 9:7', 'This is my beloved Son: hear him.'), false);
+    assert.equal(spokenAt('Mark', 8, 19), 'When I brake the five loaves among five thousand, how many baskets full of fragments took ye up?');
+    assert.equal(spokenAt('John', 19, 27), 'Behold thy mother!');
+    assert.match(spokenAt('Matthew', 27, 46), /why hast thou forsaken me\?$/);
+    assert.match(spokenAt('Luke', 2, 49), /^How is it that ye sought me/);
+    for (const [cite, want] of [['Matthew 26:31', /^All ye shall be offended/], ['Mark 10:24', /^Children, how hard/], ['John 19:28', /^I thirst\.$/], ['John 11:41', /^Father, I thank thee/], ['Luke 19:12', /^A certain nobleman/], ['John 20:22', /^Receive ye the Holy Ghost/]]) {
+      const [b, cv] = cite.split(' ');
+      const [c, v] = cv.split(':');
+      assert.match(spokenAt(b, +c, +v), want, cite);
+    }
   });
 
   it('strips the evangelist intro but keeps speech inside parables', () => {
