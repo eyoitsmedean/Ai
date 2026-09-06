@@ -2,34 +2,43 @@
 
 Every line is marked **verified** (run in this environment, with what was run) or **unverified** (what it would take). Nothing below is described as passed that was not run. Last run: 2026-09-06 at the commit in `eval/results.md`.
 
+An independent review on 2026-09-06 (a Breaker agent that built nothing) found the corpus shifted in six chapters, the verifier printing non-dominical verses under bold citations, and the crisis pattern missing two-thirds of realistic phrasings. All three are repaired below and tested; the register is in the PR description.
+
 ## Words
 
 | Item | Status | Evidence |
 | --- | --- | --- |
-| Every Advisor quote is exact KJV speech for its citation | verified | `npm run eval` gate `exact`, 50/50; `test/scripture.test.js` |
+| The KJV corpus carries the canonical verse counts (1071/678/1151/879) and correct numbering | verified | rebuilt by `scripts/build-kjv.js` from two independent public-domain sources that agree verse-for-verse; `test/scripture.test.js` asserts counts and Matthew 26:39 / Mark 4:40 / Matthew 22:14 |
+| Every Advisor quote is exact KJV speech for its citation, on the server composer and the static-hosting composer | verified | `npm run eval` gate `exact`, 75/75 both; `test/scripture.test.js` |
+| No verse the red-letter map does not mark as spoken can be quoted, even under a bold citation (the devil, Mary, Judas's death, the narrator, the synagogue ruler, the crowd) | verified | `test/scripture.test.js` — 'never puts other voices in His mouth' |
+| Every quotation the page itself can show (rooms, daily words, Seven, Forty) is His exact words | verified | `test/eval.test.js` — 'every quotation the page can show' |
 | Nothing outside Matthew–John can be quoted, even when asked for Psalms, Romans, 1 Corinthians, or placeholders injected in the question | verified | eval `scope` gate on offscope-05/06, forgery-01..04 |
 | Fabricated "Jesus said" quotes are not expanded or repeated | verified | eval forgery-02, forgery-03 |
 | Blessing links only open for Gospel references; `Romans 8:28` opens nothing | verified | `npm run qa` — "a forged blessing is dropped" |
 | Static hosting shows the exact verse, not its five-verse block | verified | `npm run qa` — "static hosting still shows the exact verse" |
 | Translation licence recorded | verified | KJV public domain outside the UK — CLAUDE.md, source cited |
-| Red-letter verse map provenance | **unverified** | `data/red-letter-source.json` names no source. Dean to name it or authorize a rebuild. |
+| Red-letter verse map is aligned to the corrected numbering | verified | 2,007 markers checked against the rebuilt text: 1 mismatch (a leading 'Saying,'); 6 non-dominical entries excluded by name in `lib/scripture.js` |
+| Red-letter verse map provenance | **unverified** | `data/red-letter-source.json` names no source. Dean to name it or authorize a rebuild from a named public-domain red-letter edition. |
 
 ## Safety
 
 | Item | Status | Evidence |
 | --- | --- | --- |
-| Crisis-shaped questions get 988 + findahelpline before any scripture, server-side | verified | eval `crisis` gate, 8/8 crisis inputs incl. third-person ("wants to end his life"), "too many pills", "not wake up", "cutting myself" |
+| Crisis-shaped questions get 988 + findahelpline before any scripture, and only crisis-safe passages | verified | eval `crisis` gate, 15/15 crisis inputs on both composers, incl. 'unalive', 'kms', 'pills ready', farewells, 'better off without me', third person, Spanish |
+| The pattern hears the phrasings people use and not idiom | verified | `test/eval.test.js` — 43 danger phrasings caught, 17 idioms not; known false triggers: 'hurt myself lifting boxes', 'cut myself shaving', 'overdose of caffeine' (a notice, not a harm) |
+| Violence or abuse gets the National Domestic Violence Hotline (1-800-799-7233 / text START to 88788) + findahelpline before scripture, and an opening that speaks to the one hurt — or to someone frightened of their own anger | verified | eval `danger` category 4/4 + hostile-04 on both composers; hotline VERIFIED 2026-09-06 at thehotline.org |
 | Client shows the crisis interrupt before send with the same pattern | verified | `test/eval.test.js` asserts client regex == `CRISIS_RE`; `npm run qa` — "crisis language interrupts before send" |
 | Idiom does not trigger the notice ("kill for a coffee", "deadline is killing me") | verified | eval edge-05; `test/eval.test.js` |
 | The product says it is not a person / therapy / emergency care on the title page and in every crisis letter | verified | title page copy; `CRISIS_NOTICE` |
 | 988 and findahelpline are live services | verified 2026-09-06 | fetched 988lifeline.org (call/text/chat, 24/7) and findahelpline.com (175+ countries) |
-| Model-written letters (with an Anthropic key) pass the same gates | **unverified** | run `node scripts/eval.js --url http://<host>` against a server with `ANTHROPIC_API_KEY`; ~6 minutes at the 10/min rate limit; read `eval/results.md` |
+| Model-written letters (with an Anthropic key) pass the same gates | **unverified** | run `node scripts/eval.js --url http://<host>` against a server with `ANTHROPIC_API_KEY`; ~8 minutes at the 10/min rate limit; read `eval/results.md`. The verifier the model path passes through is the one tested above. |
+| Live server over HTTP/SSE, no key | see PR | `node scripts/eval.js --url http://127.0.0.1:3000` — result recorded in the PR description |
 
 ## Room
 
 | Item | Status | Evidence |
 | --- | --- | --- |
-| Unit tests | verified | `npm test` — 48 pass |
+| Unit tests | verified | `npm test` — 56 pass (includes both eval runs) |
 | Live HTTP smoke | verified | `npm run smoke` — 10 checks |
 | First-session browser walk (title page, lectio, journal, Seek, Advisor, crisis, library, blessing, desktop rail) | verified | `npm run qa` — 17 checks, headless Chrome 390×844 and 1100×800 |
 | Offline: precache complete, Today renders, blessing link opens from cache | verified | service-worker check in headless Chrome (10/10 precached assets) |
