@@ -1,6 +1,6 @@
 # Launch — what the next 90 days actually are
 
-Research (August 2026): Hallow made ~$40M in 2025 on **one named season** (Pray40 / Lent) plus an **annual** subscription. Ash Wednesday 2026: 263K downloads in a day. Bible Chat wins **downloads** with TikTok “talk to Scripture,” then burns trust with $4.99/week. YouVersion owns reading, is free, and will not leave a red-letter hole for you if you stay a Bible reader.
+Research (August 2026; figures re-checked 5 September 2026): Hallow made roughly $40M net in 2025 — an [Appfigures estimate](https://appfigures.com/resources/insights/hallow-lent-surge-prayer-app-revenue), not a filing — on **one named season** (Pray40 / Lent) plus an **annual** subscription. Ash Wednesday 2026: 263K downloads in a day, the same as 2024; the surrounding Lent surge shrank 2.0M → 1.5M → ~1.2M across 2024–2026, so the calendar is reliable and the category’s growth is flattening. Bible Chat wins **downloads** with TikTok “talk to Scripture,” then draws rising paywall complaints on a weekly SKU ($4.99–$12.99 by variant) while its store ratings still sit at 4.8–4.9. YouVersion owns reading, is free, and will not leave a red-letter hole for you if you stay a Bible reader.
 
 **Nobody owns “live daily life guided only by the red letters” as a premium brand.** That is the farm.
 
@@ -20,7 +20,7 @@ If an ad cannot say that in eight seconds, the ad is wrong.
 
 His words. Lectio. Seek. Seven Days. The curated Advisor. The commonplace.
 
-Bible Chat’s reviews are rotting because they met pain with a paywall. You will not.
+Bible Chat’s complaint volume is rising because they met pain with a weekly paywall — its star rating has not fallen yet, which is exactly why the trap is tempting. You will not.
 
 **When money exists:** live LLM Advisor + extra seasonal paths + atelier extras. Price like Hallow, not like a casino.
 

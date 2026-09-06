@@ -3,7 +3,7 @@
 Research synthesis for owning the “Words of Jesus” niche in faith apps.  
 Sources: YouVersion, App Store listings, Barna, Pew, PRRI, Infinity Concepts, Appfigures, Sensor Tower–style analytics summaries, ScreensDesign Bible/prayer category data, Parable Digital, Sparrow Apps faith-UA reporting (2024–2026).
 
-**August 2026 addendum:** Hallow ~$40M (2025), Ash Wednesday clockwork (~263K downloads/day). Revenue follows a **7-day trial → annual**. Bible Chat beats Hallow on *downloads* via TikTok “talk to Scripture,” then loses trust on weekly SKUs; ~5% subscribe. YouVersion crossed 1B installs, still free. **Implication:** named path + living Advisor + blessing share. Never weekly paywall. Never lock the words. See `LAUNCH.md`.
+**August 2026 addendum (re-checked 5 Sep 2026):** Hallow ~$40M net (2025, Appfigures estimate), Ash Wednesday clockwork (~263K downloads/day in 2024 and 2026; 226K in 2025) with the wider Lent surge shrinking 2.0M → 1.5M → ~1.2M. Revenue follows a **7-day trial → annual**. Bible Chat beats Hallow on *downloads* via TikTok “talk to Scripture,” then accumulates paywall complaints on weekly SKUs ($4.99–$12.99 by variant) while store ratings hold at 4.8–4.9; the “~5% subscribe” figure is unsourced and should be treated as a guess. YouVersion crossed 1B installs, still free. **Implication:** named path + living Advisor + blessing share. Never weekly paywall. Never lock the words. See `LAUNCH.md`.
 
 ---
 
