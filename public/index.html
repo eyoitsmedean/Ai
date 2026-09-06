@@ -866,17 +866,28 @@ textarea { font-family: var(--body); }
 }
 .ink-wait::after { content: ''; animation: ellipsis 1.4s infinite; }
 
-/* The helpline sits above the composer at all times: the one safety control
-   that does not depend on the room recognising what was typed. */
-.composer-help { flex: 1 1 100%; margin: 0 0 2px; font-size: 12px; line-height: 1.5; color: var(--ink-3); }
+/* The helpline is page chrome, not part of the composer: it stays in the DOM
+   and on screen after the page closes, so the person is never more than one
+   visible tap from 988 regardless of what they typed or whether the room
+   recognised it. */
+.composer-help {
+  margin: 0;
+  padding: 10px 18px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  background: var(--folio);
+}
 .composer-help a { color: var(--crimson); text-decoration: underline; text-underline-offset: 2px; }
+#advisor-page.letter-closed .composer-help {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+}
 .composer {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   align-items: flex-end;
-  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px) + var(--kb, 0px));
-  border-top: 1px solid var(--rule);
+  padding: 8px 18px calc(12px + env(safe-area-inset-bottom, 0px) + var(--kb, 0px));
   background: var(--folio);
 }
 .chat-input {
@@ -1865,8 +1876,8 @@ html.sitting .sit-sheet {
             </div>
           </aside>
         </div>
+        <p class="composer-help" id="composer-help">In danger right now? <a href="tel:988">Call or text 988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a> anywhere. This page is not emergency care.</p>
         <div class="composer">
-          <p class="composer-help" id="composer-help">In danger right now? <a href="tel:988">Call or text 988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a> anywhere. This page is not emergency care.</p>
           <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
           <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
             <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -3363,9 +3374,16 @@ function keepWritingState() {
   return '';
 }
 
+// The composer can leave; the helpline above it never does.
+function setComposerClosed(closed) {
+  const page = document.getElementById('advisor-page');
+  const composer = document.querySelector('#advisor-page .composer');
+  if (composer) composer.style.display = closed ? 'none' : '';
+  if (page) page.classList.toggle('letter-closed', !!closed);
+}
+
 function maybeCloseLetter() {
   const leaf = document.getElementById('last-leaf');
-  const composer = document.querySelector('#advisor-page .composer');
   if (!leaf) return;
   const extra = keepWritingState();
   const turns = assistantTurns();
@@ -3375,7 +3393,7 @@ function maybeCloseLetter() {
   else close = turns >= 2;
   if (close && extra === 'open') lsSet('rla-keep-writing-' + todayStr(), 'used');
   leaf.hidden = !close;
-  if (composer) composer.style.display = close ? 'none' : '';
+  setComposerClosed(close);
   if (close) setComposerEnabled(false);
   const keepBtn = document.getElementById('keep-writing');
   if (keepBtn) keepBtn.hidden = extra === 'used' || extra === 'open';
@@ -3411,8 +3429,7 @@ function beginNewLetter() {
   if (leaf) leaf.hidden = true;
   const keepBtn = document.getElementById('keep-writing');
   if (keepBtn) keepBtn.hidden = false;
-  const composer = document.querySelector('#advisor-page .composer');
-  if (composer) composer.style.display = '';
+  setComposerClosed(false);
   setComposerEnabled(true);
   chatInput.focus();
 }
@@ -3425,8 +3442,7 @@ function keepWriting() {
   lsSet('rla-keep-writing-' + todayStr(), 'open');
   const leaf = document.getElementById('last-leaf');
   if (leaf) leaf.hidden = true;
-  const composer = document.querySelector('#advisor-page .composer');
-  if (composer) composer.style.display = '';
+  setComposerClosed(false);
   setComposerEnabled(true);
   showToast('One more turn. Then the page can close.');
   chatInput.focus();

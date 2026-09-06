@@ -1,4 +1,4 @@
-const CACHE = 'rla-prod-v5';
+const CACHE = 'rla-prod-v6';
 const PRECACHE = [
   '/',
   '/index.html',

@@ -170,6 +170,21 @@ async function main() {
     await page.waitForFunction(() => !document.getElementById('last-leaf')?.hidden, { timeout: 20000 });
     const leaf = await page.$eval('#last-leaf', (el) => el.innerText);
     assert(/These are the words/i.test(leaf), 'last leaf missing close');
+    // The page is closed and the composer is gone. The helpline must still be one visible tap away.
+    const closedHelp = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      const composer = document.querySelector('#advisor-page .composer');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        composerHidden: !composer || getComputedStyle(composer).display === 'none',
+        tel: !!el.querySelector('a[href="tel:988"]'),
+        onScreen: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight && getComputedStyle(el).visibility !== 'hidden',
+      };
+    });
+    assert(closedHelp, '#composer-help missing after the page closed');
+    assert(closedHelp.composerHidden, 'composer should be hidden once the page closes');
+    assert(closedHelp.tel && closedHelp.onScreen, 'helpline not visible with the page closed: ' + JSON.stringify(closedHelp));
     await page.click('#nav-seek');
     await page.click('#mode-carry');
     await page.waitForFunction(() => document.getElementById('carry-pane') && !document.getElementById('carry-pane').hidden, { timeout: 4000 });
