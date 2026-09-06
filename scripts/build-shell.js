@@ -17,7 +17,7 @@ const SRC = path.join(ROOT, 'public');
 const OUT = path.join(ROOT, 'dist-shell');
 const apiBase = String(process.argv[2] || '').replace(/\/$/, '');
 
-if (!/^https:\/\/[^/\s]+$/.test(apiBase) && apiBase !== 'http://localhost:3000' && !/^http:\/\/(127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+):\d+$/.test(apiBase)) {
+if (!/^https:\/\/[^/\s]+$/.test(apiBase) && apiBase !== 'http://localhost:3000' && !/^http:\/\/(127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+):\d+$/.test(apiBase)) {
   console.error('Usage: node scripts/build-shell.js https://api.host   (https, or a LAN address for a device on your network)');
   process.exit(2);
 }

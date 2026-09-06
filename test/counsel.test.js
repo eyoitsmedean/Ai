@@ -2,7 +2,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { composeLetter, themesFor, VOICE, OUT_OF_ROOM } = require('../lib/counsel');
+const { composeLetter, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY } = require('../lib/counsel');
 const { verifyAndSubstitute, lookup, parseRef, looksLikeCrisis } = require('../lib/scripture');
 
 const ROOT = path.join(__dirname, '..');
@@ -51,6 +51,17 @@ describe('the lamp-out letter', () => {
       assert.ok(letter.startsWith(OUT_OF_ROOM.hear), q);
       assert.doesNotMatch(letter, /Psalm 23|Paul/);
     }
+  });
+
+  it('a crisis line gets company under the notice, never a scope disclaimer', () => {
+    for (const q of ['I want to die', 'I just want to end it all. Give me one reason not to.', 'I\'ve been cutting myself again and nobody knows']) {
+      const letter = composeLetter(q);
+      assert.ok(letter.startsWith(CRISIS_BODY.hear), q);
+      assert.ok(letter.endsWith(CRISIS_BODY.close), q);
+      assert.ok(!letter.includes(OUT_OF_ROOM.hear), q);
+    }
+    assert.match(composeLetter('I want to die'), /\{\{Matthew 11:28\}\}/, 'no room reached: the heavy-laden verse');
+    assert.match(composeLetter('I\'ve been cutting myself again and nobody knows'), /\{\{John 14:18\}\}/, 'the Loneliness room was reached');
   });
 
   it('uses the same voice as the client\u2019s offline advisor', () => {
