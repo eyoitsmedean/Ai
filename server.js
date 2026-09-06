@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
@@ -204,11 +205,18 @@ async function fetchDailyContent() {
   }
 }
 
+const DETECTOR_HASH = crypto
+  .createHash('sha1')
+  .update(fs.readFileSync(path.join(__dirname, 'data', 'crisis.js')))
+  .digest('hex')
+  .slice(0, 12);
+
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     anthropic: Boolean(client),
     themes: themeNames().length,
+    detector: DETECTOR_HASH,
   });
 });
 
@@ -347,7 +355,10 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
+  // Gate on the last two user turns: the message after a disclosure
+  // ("what should I do") still belongs to the same moment.
+  const recentUser = messages.filter((m) => m.role === 'user').slice(-2);
+  const crisis = recentUser.some((m) => looksLikeCrisis(m.content));
   const finish = (body) => {
     const verified = verifyAndSubstitute(body);
     streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);

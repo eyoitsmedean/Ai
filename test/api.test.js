@@ -77,6 +77,36 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
+  it('keeps the human-help notice on the turn after a disclosure', async () => {
+    const letterOf = (raw) => raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; } })
+      .join('');
+    const first = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I have been thinking about ending my life' }],
+    });
+    assert.match(letterOf(first.raw), /^If you are in danger/);
+    assert.match(letterOf(first.raw), /988/);
+    const second = await request('POST', '/api/chat', {
+      messages: [
+        { role: 'user', content: 'I have been thinking about ending my life' },
+        { role: 'assistant', content: 'I am here with you.' },
+        { role: 'user', content: 'what should I do' },
+      ],
+    });
+    assert.match(letterOf(second.raw), /^If you are in danger/);
+    const plain = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'How do I forgive my brother?' }],
+    });
+    assert.doesNotMatch(letterOf(plain.raw), /988/);
+  });
+
+  it('reports the detector hash so an evaluation can refuse a stale server', async () => {
+    const res = await request('GET', '/api/health');
+    assert.match(JSON.parse(res.raw).detector, /^[0-9a-f]{12}$/);
+  });
+
   it('streams a verified letter for chat', async () => {
     const res = await request('POST', '/api/chat', {
       messages: [{ role: 'user', content: 'I am afraid of the future' }],
