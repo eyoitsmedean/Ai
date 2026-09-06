@@ -3,11 +3,12 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyJsonQuotes, verifyQuote } = require('./lib/scripture');
+const { finishLetter } = require('./lib/letter');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary, sayingCount } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
-const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { roomFor } = require('./lib/advise');
 const { adviseLetter } = require('./lib/advise');
 const pkg = require('./package.json');
 
@@ -17,6 +18,8 @@ const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+// Letters per minute per client. Raise it only on a box you are evaluating (npm run eval -- --url).
+const CHAT_PER_MINUTE = Math.max(1, Number(process.env.CHAT_PER_MINUTE) || 10);
 const THEME_SET = new Set(themeNames());
 
 if (process.env.TRUST_PROXY === '1' || process.env.TRUST_PROXY === 'true') {
@@ -132,7 +135,9 @@ STRICT RULES:
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
-• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
+• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.
+• Never explain a loss, an illness, or a wound as God's punishment, God's plan, a test, a lack of faith, or "for a reason." Never say a passage promises the reader will "never" feel or face something again. Never tell someone who has hurt another person that it is not their fault, and never tell someone who was hurt that it was. Never say a dead person is "in a better place," "needed in heaven," or "at peace now" — you do not know that, and He did not say it here.
+• When the writer's own sentence carries a fact or a name, use it once; do not repeat their pain back to them in your words.`;
 
 function dailySystemFor(dateKey) {
   const label = dateKey
@@ -383,7 +388,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_PER_MINUTE, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -404,10 +409,8 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
   const finish = (body) => {
-    const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    streamText(finishLetter(body, last.content));
     res.write('data: [DONE]\n\n');
     res.end();
   };
@@ -423,13 +426,22 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const retrieved = retrieveSayings(last.content);
-    const allow = formatAllowList(retrieved.sayings);
+    // The room decides what the model may cite — never the question's own keywords —
+    // and finishLetter removes anything cited outside it.
+    const room = roomFor(last.content);
+    const allow = room.allowed.map((c) => `{{${c}}}`).join('\n');
+    const guidance = room.crisis
+      ? 'The reader may be at risk. The system places the human-help notice above your letter; do not add hotline numbers or instructions yourself. Be brief, present-tense, and warm. Say nothing about heaven, departure, or going home.'
+      : room.byYou
+        ? 'The reader is the one who hurt someone, or fears they will. Never tell them it is not their fault. The system places the help notice above your letter.'
+        : room.danger
+          ? 'The reader may be in danger from someone. The system places the help notice above your letter; do not add hotline numbers yourself. Never ask them to forgive, reconcile with, or turn the other cheek to the person hurting them.'
+          : '';
     const modelMessages = messages.map((m, i) => {
       if (i !== messages.length - 1) return { role: m.role, content: m.content };
       return {
         role: 'user',
-        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}`,
+        content: `${m.content}\n\nROOM: ${room.primary}${guidance ? `\n${guidance}` : ''}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}; anything else is removed before the reader sees it):\n${allow}`,
       };
     });
 

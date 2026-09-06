@@ -211,6 +211,20 @@ async function main() {
     await page.waitForSelector('#crisis-modal.on', { timeout: 4000 });
     const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
     assert(/988/.test(copy), 'crisis modal missing 988');
+    assert(!/Poison Control/.test(copy), 'Poison Control shown when nothing was taken');
+    await page.click('#crisis-close');
+    await page.waitForFunction(() => !document.getElementById('crisis-modal').classList.contains('on'));
+  });
+
+  await check('something taken puts 911 and Poison Control in the interrupt', async () => {
+    await page.evaluate(() => {
+      document.getElementById('chat-input').value = 'I took too many pills an hour ago';
+    });
+    await page.evaluate(() => { if (typeof sendMsg === 'function') sendMsg(); });
+    await page.waitForSelector('#crisis-modal.on', { timeout: 4000 });
+    const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
+    assert(/1-800-222-1222/.test(copy) && /911/.test(copy), 'emergency line missing');
+    assert(copy.indexOf('1-800-222-1222') < copy.indexOf('988'), 'emergency line must come before 988');
     await page.click('#crisis-close');
     await page.waitForFunction(() => !document.getElementById('crisis-modal').classList.contains('on'));
   });
@@ -272,6 +286,26 @@ async function main() {
     assert(found.span && /^Come unto me[\s\S]*lowly in heart/.test(found.span.quote) && !/my burden is light/.test(found.span.quote), 'static span should be verses 28–29 only');
     assert(found.span.verse === 'Matthew 11:28–29', 'static span cite wrong: ' + found.span.verse);
     assert(found.paul === null, 'Paul is not in the spoken library');
+  });
+
+  await check('the served composer hears violence, poisoning and grief the way the server does', async () => {
+    // The page's own copy of the composer (what GitHub Pages serves), with no server behind it.
+    const out = await page.evaluate(() => ({
+      loaded: Boolean(window.RLA_SIGNALS && window.RLA_advise),
+      hits: window.RLA_advise('my husband hits me and I am scared'),
+      byYou: window.RLA_advise('I hit my wife'),
+      taken: window.RLA_advise('I took an overdose an hour ago'),
+      widow: window.RLA_advise('I am 82 and my wife of 60 years died last month'),
+      bereaved: window.RLA_advise("my best friend died of an overdose and I feel guilty I didn't stop him"),
+      idiom: window.RLA_advise('my husband hit a home run at the game'),
+    }));
+    assert(out.loaded, 'signals.js and advisor.js should both be on the page');
+    assert(/799-7233/.test(out.hits) && !/enemies|despitefully/.test(out.hits), 'the abused should get the hotline and never "love your enemies"');
+    assert(/You asked about hurting someone/.test(out.byYou) && !/not your fault/.test(out.byYou), 'the one who hit should be spoken to as such');
+    assert(/Poison Control/.test(out.taken) && out.taken.indexOf('Poison Control') < out.taken.indexOf('988'), 'something taken puts Poison Control before 988');
+    assert(!/mansions|prepare a place/.test(out.widow) && /\*\*Matthew 5:4\*\*/.test(out.widow), 'the widow gets the grief room, never "many mansions"');
+    assert(!/Poison Control|988/.test(out.bereaved) && /\*\*Matthew 5:4\*\*/.test(out.bereaved), 'the bereaved-by-overdose are not told to call Poison Control');
+    assert(!/799-7233|988/.test(out.idiom), 'a home run is not violence');
   });
 
   await check('a blessing carries a link', async () => {

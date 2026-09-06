@@ -5,7 +5,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { cleanKjv, extractSpoken } = require('../lib/scripture');
+const { cleanKjv, extractSpoken, SPOKEN_ADDITIONS } = require('../lib/scripture');
 
 const ROOT = path.join(__dirname, '..');
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
@@ -26,12 +26,21 @@ for (const [cite, marker] of Object.entries(red)) {
   const [ch, vs] = rest.split(':');
   const full = cleanKjv(kjv.books[book]?.[ch]?.[vs] || '');
   if (!full) continue;
-  const text = marker && marker !== 'full' ? cleanKjv(marker) : extractSpoken(full, cite);
+  const text = extractSpoken(full, cite, marker);
   if (!text) continue;
   if (!spoken.books[book]) spoken.books[book] = {};
   if (!spoken.books[book][ch]) spoken.books[book][ch] = {};
   spoken.books[book][ch][vs] = text;
   count += 1;
+}
+for (const [cite, text] of Object.entries(SPOKEN_ADDITIONS)) {
+  const [book, rest] = cite.split(' ');
+  const [ch, vs] = rest.split(':');
+  if (!kjv.books[book]?.[ch]?.[vs]) continue;
+  if (!spoken.books[book]) spoken.books[book] = {};
+  if (!spoken.books[book][ch]) spoken.books[book][ch] = {};
+  if (!spoken.books[book][ch][vs]) count += 1;
+  spoken.books[book][ch][vs] = text;
 }
 
 function groupSayings() {

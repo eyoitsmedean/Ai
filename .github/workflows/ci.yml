@@ -14,6 +14,10 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
+      - name: Evaluate the Advisor (server composer)
+        run: node scripts/eval.js
+      - name: Evaluate the Advisor (client composer, static hosting)
+        run: node scripts/eval.js --client
       - name: Smoke the live server
         run: |
           node server.js &

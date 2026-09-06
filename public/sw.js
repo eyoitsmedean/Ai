@@ -1,4 +1,4 @@
-const CACHE = 'rla-v15';
+const CACHE = 'rla-v16';
 const ROOT = new URL('./', self.location).pathname;
 const PRECACHE = [
   './',
@@ -7,6 +7,7 @@ const PRECACHE = [
   './manifest.json',
   './curated.json',
   './library.json',
+  './data/signals.js',
   './data/advisor.js',
   './data/curated.js',
   './data/paths.js',

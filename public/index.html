@@ -1482,6 +1482,8 @@ html.sitting .sit-sheet {
   margin: 8px 0 12px;
 }
 .crisis-card p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; margin-bottom: 12px; }
+.crisis-card .crisis-emergency { color: var(--crimson); border-left: 3px solid var(--crimson); padding-left: 10px; }
+.crisis-card .crisis-emergency a { color: var(--crimson); font-weight: 600; }
 .crisis-actions { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
 .crisis-actions a { color: var(--crimson); }
 
@@ -2040,6 +2042,7 @@ html.sitting .sit-sheet {
     <p class="eyebrow">You are not alone</p>
     <h2 id="crisis-title">Please reach a person who can help right now</h2>
     <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
+    <p class="crisis-emergency" id="crisis-poison" hidden><strong>If you have taken pills or anything else to harm yourself, that is a medical emergency:</strong> in the United States call <a href="tel:911">911</a> or Poison Control at <a href="tel:18002221222">1-800-222-1222</a> right now — even if you feel fine.</p>
     <div class="crisis-actions">
       <a href="tel:988">Call or text 988 (US)</a>
       <a href="https://findahelpline.com" target="_blank" rel="noreferrer">Find a helpline anywhere</a>
@@ -2061,6 +2064,7 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
+<script src="./data/signals.js"></script>
 <script src="./data/curated.js"></script>
 <script src="./data/advisor.js"></script>
 <script src="./data/paths.js"></script>
@@ -3251,7 +3255,7 @@ async function sendMsg(preset) {
   const text = (preset || chatInput.value).trim();
   if (!text || isChatBusy) return;
   if (looksLikeCrisisClient(text)) {
-    const action = await showCrisisModal();
+    const action = await showCrisisModal(looksLikePoisoningClient(text));
     if (action !== 'continue') return;
   }
   if (chatsToday().n >= FREE_CHATS) {
@@ -4266,12 +4270,17 @@ function closeCommandPalette() {
   root.setAttribute('aria-hidden', 'true');
 }
 
+// One copy of every signal, shared with the server: ./data/signals.js
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return window.RLA_SIGNALS.looksLikeCrisis(text);
 }
-function showCrisisModal() {
+function looksLikePoisoningClient(text) {
+  return window.RLA_SIGNALS.looksLikePoisoning(text);
+}
+function showCrisisModal(poisoning) {
   return new Promise((resolve) => {
     const el = document.getElementById('crisis-modal');
+    document.getElementById('crisis-poison').hidden = !poisoning;
     el.classList.add('on');
     const finish = (action) => {
       el.classList.remove('on');

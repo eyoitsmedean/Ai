@@ -13,8 +13,15 @@ const {
   verifyQuote,
   isRedLetter,
   spokenAt,
+  isExactSpan,
   fillPlaceholders,
+  loadCorpus,
+  NARRATOR_PREFIXES,
+  POISON_LINE,
+  CRISIS_NOTICE,
+  DANGER_NOTICE,
 } = require('../lib/scripture');
+const { retrievalLetter } = require('../lib/letter');
 const { retrieveSayings, guessThemes } = require('../lib/retrieve');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
 const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
@@ -196,9 +203,135 @@ describe('similarity', () => {
 describe('spoken corpus', () => {
   it('treats genealogy as narrator, not red-letter', () => {
     assert.equal(isRedLetter('Matthew 1:1'), false);
-    const v = verifyQuote('Matthew 1:1', lookup('Matthew 1:1').text);
+    assert.equal(lookup('Matthew 1:1'), null);
+    const v = verifyQuote('Matthew 1:1', 'The book of the generation of Jesus Christ');
     assert.equal(v.ok, false);
     assert.equal(v.reason, 'not-red-letter');
+  });
+
+  it('never puts other voices in His mouth', () => {
+    // the devil, Mary, Judas's death, the narrator, the synagogue ruler, the crowd
+    for (const ref of ['Matthew 4:9', 'Luke 4:6', 'Luke 1:46', 'Matthew 27:5', 'John 11:35', 'Mark 5:5', 'Luke 13:14', 'John 7:20', 'John 12:34', 'Luke 24:32', 'John 8:48']) {
+      assert.equal(lookup(ref), null, ref);
+      assert.equal(fillPlaceholders(`{{${ref}}}`), '', ref);
+    }
+  });
+
+  it('carries the canonical KJV verse counts', () => {
+    const books = loadCorpus().books;
+    const counts = { Matthew: 1071, Mark: 678, Luke: 1151, John: 879 };
+    for (const [book, expected] of Object.entries(counts)) {
+      const n = Object.values(books[book]).reduce((sum, ch) => sum + Object.keys(ch).length, 0);
+      assert.equal(n, expected, book);
+    }
+    assert.match(books.Matthew['26']['39'], /^And he went a little farther, and fell on his face, and prayed/);
+    assert.match(books.Mark['4']['40'], /^And he said unto them, Why are ye so fearful/);
+    assert.match(books.Matthew['22']['14'], /^For many are called, but few are chosen/);
+  });
+
+  it('drops what the model may not say, wherever it puts it', () => {
+    assert.equal(verifyAndSubstitute('**John 14:27** “God helps those who help themselves.”'), '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”');
+    assert.equal(verifyAndSubstitute('**Psalm 23:1**\n“The LORD is my shepherd; I shall not want.”\nHe leads.'), 'He leads.');
+    assert.equal(verifyAndSubstitute('**Matthew 4:9**\n“All these things will I give thee.”\nctx'), 'ctx');
+    assert.equal(verifyAndSubstitute('Your mother is gone. Jesus said, “God helps those who help themselves and their families always.” Rest now.'), 'Your mother is gone. Rest now.');
+    assert.equal(verifyAndSubstitute('Proverbs 13:24 says spare the rod. But peace is near.'), 'But peace is near.');
+    assert.equal(verifyAndSubstitute('Hold on.\n“Your mother will come back to you if you only believe hard enough tonight.”\nAmen.'), 'Hold on.\nAmen.');
+    assert.equal(verifyAndSubstitute('He said “Peace I leave with you, my peace I give unto you” to frightened men.'), 'He said “Peace I leave with you, my peace I give unto you” to frightened men.');
+  });
+
+  it('leaves no orphan when a quotation is split, short, or under a look-alike heading', () => {
+    // A quotation the model broke across two lines: the tail must not survive as prose.
+    const split = verifyAndSubstitute('Hear this.\n\n**John 14:27**\n“Peace I leave with you,\nmy peace I give unto you.”\nHe leaves peace.');
+    assert.equal(split, 'Hear this.\n\n**John 14:27**\n“' + spokenAt('John', 14, 27) + '”\nHe leaves peace.');
+    // Three-word fabrications in prose go; a real short phrase of His stays.
+    assert.equal(verifyAndSubstitute('Jesus said “just let go.” Stay with that. He also said “trust the process” and it works.'), 'Stay with that.');
+    assert.equal(verifyAndSubstitute('He said “Peace, be still.” Stay with that.'), 'He said “Peace, be still.” Stay with that.');
+    // A heading that only looks like a citation, and whatever it vouched for.
+    assert.equal(verifyAndSubstitute('**Jn 14.27**\n“x”\n\nGo well.'), 'Go well.');
+    assert.equal(verifyAndSubstitute('**Jesus said**\n“Everything happens for a reason.”\n\nGo well.'), 'Go well.');
+    assert.equal(verifyAndSubstitute('**John 14:27**\n“Peace”\n\nGo well.'), '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”\nGo well.');
+  });
+
+  it('does not re-attribute an epistle, pass a fabrication with a full stop in it, or read only two quote glyphs', () => {
+    const j1427 = '**John 14:27**\n“' + spokenAt('John', 14, 27) + '”';
+    // 1 John is not the Gospel; "John 4:18" is the woman at the well, not perfect love.
+    assert.equal(verifyAndSubstitute('**1 John 4:18**\n“There is no fear in love; but perfect love casteth out fear.”\nctx'), 'ctx');
+    assert.equal(verifyAndSubstitute('Remember 1 John 4:18 — perfect love casts out fear. Rest tonight.'), 'Rest tonight.');
+    // A fabricated saying with a sentence break inside the quotation marks.
+    assert.equal(verifyAndSubstitute('He said “I will never, ever leave you. Not tonight, not ever.” Rest.'), 'Rest.');
+    // Guillemets, low-9 quotes, backticks, blockquotes and a dash attribution.
+    for (const q of ['«you were never meant to carry this alone, child.»', '„you were never meant to carry this alone, child.“', '‚you were never meant to carry this alone, child.‘', '`you were never meant to carry this alone, child.`']) {
+      assert.equal(verifyAndSubstitute(`He said, ${q} Rest.`), 'Rest.', q);
+    }
+    assert.equal(verifyAndSubstitute('> I will never leave you comfortless, not for one night of this.\n> — Jesus'), '');
+    assert.equal(verifyAndSubstitute('> Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you.'), '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you.”');
+    // Another voice as authority, quoted or not.
+    assert.equal(verifyAndSubstitute('As Paul wrote, all things work together for good. Rest.'), 'Rest.');
+    assert.equal(verifyAndSubstitute('Moroni 10:4 promises the same. Rest.'), 'Rest.');
+    assert.equal(verifyAndSubstitute('And the Quran says much the same. Rest.'), 'Rest.');
+    // Headings dressed differently, a dash-and-reference remnant, and a duplicate quote line.
+    for (const h of ['*John 14:27*', '__John 14:27__', '### John 14:27', '(**John 14:27**)']) {
+      assert.equal(verifyAndSubstitute(`${h}\nctx`), `${j1427}\nctx`, h);
+    }
+    assert.equal(verifyAndSubstitute('“you were never meant to carry this alone, child.” — John 14:27'), '');
+    assert.equal(verifyAndSubstitute('**John 14:27**\nHe is saying that peace is already in the house.\n“Let not your heart be troubled, neither let it be afraid.”'), `${j1427}\nHe is saying that peace is already in the house.`);
+    assert.equal(verifyAndSubstitute('**John 14:27**\n“Let not your heart be troubled.”\nctx\n“Let not your heart be troubled, neither let it be afraid.”\nmore'), `${j1427}\nctx\nmore`);
+  });
+
+  it('keeps only His part of a verse where someone else also speaks', () => {
+    assert.equal(spokenAt('John', 12, 28), 'Father, glorify thy name.');
+    assert.equal(spokenAt('Mark', 9, 7), null, 'the voice out of the cloud');
+    assert.equal(spokenAt('Mark', 16, 6), null, 'the angel at the tomb');
+    assert.equal(spokenAt('Matthew', 15, 33), null, 'the disciples');
+    assert.equal(spokenAt('Luke', 19, 25), null, 'the hearers');
+    assert.equal(spokenAt('John', 16, 17), null, 'some of his disciples among themselves');
+    assert.equal(spokenAt('Mark', 4, 2), null, 'narration only');
+    assert.equal(isExactSpan('Mark 9:7', 'This is my beloved Son: hear him.'), false);
+    assert.equal(spokenAt('Mark', 8, 19), 'When I brake the five loaves among five thousand, how many baskets full of fragments took ye up?');
+    assert.equal(spokenAt('John', 19, 27), 'Behold thy mother!');
+    assert.match(spokenAt('Matthew', 27, 46), /why hast thou forsaken me\?$/);
+    assert.match(spokenAt('Luke', 2, 49), /^How is it that ye sought me/);
+    for (const [cite, want] of [['Matthew 26:31', /^All ye shall be offended/], ['Mark 10:24', /^Children, how hard/], ['John 19:28', /^I thirst\.$/], ['John 11:41', /^Father, I thank thee/], ['Luke 19:12', /^A certain nobleman/], ['John 20:22', /^Receive ye the Holy Ghost/]]) {
+      const [b, cv] = cite.split(' ');
+      const [c, v] = cv.split(':');
+      assert.match(spokenAt(b, +c, +v), want, cite);
+    }
+  });
+
+  it('strips the evangelist intro but keeps speech inside parables', () => {
+    assert.equal(spokenAt('Mark', 11, 22), 'Have faith in God.');
+    assert.match(spokenAt('Luke', 13, 8), /^And he answering said unto him, Lord, let it alone/);
+    assert.match(spokenAt('Matthew', 10, 38), /^And he that taketh not his cross/);
+    // The explicit list: each prefix matches the verse it names, and the trimmed verse begins with His words.
+    const corpus = loadCorpus().books;
+    for (const [cite, prefix] of Object.entries(NARRATOR_PREFIXES)) {
+      const p = parseRef(cite);
+      const full = cleanKjv(corpus[p.book][p.chapter][p.start]);
+      assert.ok(full.startsWith(prefix), `${cite} does not begin with its listed prefix`);
+      assert.equal(spokenAt(p.book, p.chapter, p.start), full.slice(prefix.length).trim(), cite);
+    }
+    assert.match(spokenAt('Luke', 22, 31), /^Simon, Simon, behold/);
+    assert.match(spokenAt('Mark', 9, 19), /^O faithless generation/);
+    assert.match(spokenAt('John', 16, 19), /^Do ye enquire among yourselves/);
+    // Characters inside His parables keep their "and he said": that is His narration.
+    assert.match(spokenAt('Luke', 16, 2), /^And he called him, and said unto him/);
+    assert.match(spokenAt('Matthew', 25, 24), /^Then he which had received the one talent/);
+    assert.match(spokenAt('Luke', 15, 29), /^And he answering said to his father/);
+  });
+
+  it('puts 911 and Poison Control ahead of 988 when something was taken', () => {
+    const taken = retrievalLetter("I took too many pills an hour ago and now I'm scared.");
+    assert.ok(taken.startsWith(POISON_LINE), 'emergency line must come first');
+    assert.ok(taken.indexOf(POISON_LINE) < taken.indexOf(CRISIS_NOTICE.split('\n')[0]));
+    assert.match(taken, /1-800-222-1222/);
+    const wish = retrievalLetter('I want to die.');
+    assert.ok(wish.startsWith(CRISIS_NOTICE.split('\n')[0]));
+    assert.doesNotMatch(wish, /Poison Control/);
+    assert.doesNotMatch(retrievalLetter('I drank the whole bottle of wine and I feel ashamed.'), /988|Poison Control/);
+    const byYou = retrievalLetter('I want to hit my kid.');
+    assert.ok(byYou.startsWith(DANGER_NOTICE.split('\n')[0]));
+    assert.match(byYou, /You asked about hurting someone/);
+    assert.doesNotMatch(byYou, /not your fault/);
   });
 
   it('uses the spoken span for Mark 4:39 and John 8:12', () => {
