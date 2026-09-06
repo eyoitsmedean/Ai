@@ -259,6 +259,21 @@ async function main() {
     assert(!/Romans/.test(state.body), 'Paul slipped onto the page');
   });
 
+  await check('static hosting still shows the exact verse', async () => {
+    const found = await page.evaluate(async () => {
+      const real = window.fetch;
+      window.fetch = (url, opts) => /api\//.test(String(url)) ? Promise.reject(new Error('no server')) : real(url, opts);
+      try {
+        return { one: await findSpoken('Matthew 11:28'), span: await findSpoken('Matthew 11:28-29'), paul: await findSpoken('Romans 8:28') };
+      } finally { window.fetch = real; }
+    });
+    assert(found.one && /^Come unto me/.test(found.one.quote) && !/rest\. Take/.test(found.one.quote), 'static lookup should slice one verse, got: ' + (found.one && found.one.quote.slice(0, 40)));
+    assert(found.one.verse === 'Matthew 11:28', 'static cite should be the verse asked for, got ' + found.one.verse);
+    assert(found.span && /^Come unto me[\s\S]*lowly in heart/.test(found.span.quote) && !/my burden is light/.test(found.span.quote), 'static span should be verses 28–29 only');
+    assert(found.span.verse === 'Matthew 11:28–29', 'static span cite wrong: ' + found.span.verse);
+    assert(found.paul === null, 'Paul is not in the spoken library');
+  });
+
   await check('a blessing carries a link', async () => {
     await page.evaluate(() => {
       blessingPick = { verse: 'Matthew 11:28', quote: 'Come unto me' };

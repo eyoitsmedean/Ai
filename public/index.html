@@ -2251,8 +2251,20 @@ async function findSpoken(ref) {
   try { lib = await loadStaticLibrary(); } catch (_) { return null; }
   const rows = (lib.sayings || []).filter((s) => s.book === want.book && Number(s.chapter) === want.chapter);
   const exact = rows.find((s) => Number(s.start) === want.start && Number(s.end) === want.end);
-  const cover = exact || rows.find((s) => Number(s.start) <= want.start && Number(s.end) >= want.end);
+  if (exact) return { verse: exact.citation, quote: exact.text };
+  const cover = rows.find((s) => Number(s.start) <= want.start && Number(s.end) >= want.end);
   if (!cover) return null;
+  if (Array.isArray(cover.cuts) && cover.cuts.length === Number(cover.end) - Number(cover.start) + 1) {
+    const from = cover.cuts[want.start - Number(cover.start)];
+    const to = cover.cuts[want.end - Number(cover.start) + 1];
+    const slice = cover.text.slice(from, to == null ? undefined : to).trim();
+    if (slice) {
+      const verse = want.start === want.end
+        ? want.book + ' ' + want.chapter + ':' + want.start
+        : want.book + ' ' + want.chapter + ':' + want.start + '–' + want.end;
+      return { verse, quote: slice };
+    }
+  }
   return { verse: cover.citation, quote: cover.text };
 }
 

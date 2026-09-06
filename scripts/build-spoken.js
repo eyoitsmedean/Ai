@@ -51,6 +51,14 @@ function groupSayings() {
           parts.push(chapters[ch][String(end)]);
         }
         const citation = start === end ? `${book} ${ch}:${start}` : `${book} ${ch}:${start}–${end}`;
+        // Character offset where each verse begins, so a static client can
+        // show one verse out of a grouped saying without the server.
+        const cuts = [];
+        let offset = 0;
+        for (const part of parts) {
+          cuts.push(offset);
+          offset += part.length + 1;
+        }
         sayings.push({
           id: `${book}-${ch}-${start}`,
           book,
@@ -59,6 +67,7 @@ function groupSayings() {
           end,
           citation,
           text: parts.join(' '),
+          cuts,
         });
         i += 1;
       }
