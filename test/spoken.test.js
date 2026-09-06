@@ -41,6 +41,23 @@ describe('spoken corpus: the frame is cut, the words are kept', () => {
     assert.deepEqual(stale, [], 'reviewed entries that the audit no longer finds');
   });
 
+  it('never carries the evangelist naming Him mid-verse either', () => {
+    // He names Himself once, praying (John 17:3). Every other "Jesus" in red text is the narrator.
+    const found = [];
+    for (const [book, chapters] of Object.entries(require('../lib/scripture').loadSpoken().books)) {
+      for (const [ch, verses] of Object.entries(chapters)) {
+        for (const [v, text] of Object.entries(verses)) {
+          if (/\bJesus\b/.test(text) && `${book} ${ch}:${v}` !== 'John 17:3') found.push(`${book} ${ch}:${v}: ${text.slice(0, 70)}`);
+        }
+      }
+    }
+    assert.deepEqual(found, []);
+    assert.equal(lookup('Matthew 11:7').text, 'What went ye out into the wilderness to see? A reed shaken with the wind?');
+    assert.equal(lookup('John 11:41').text, 'Father, I thank thee that thou hast heard me.');
+    assert.equal(lookup('Mark 16:6').redLetter, false, 'the angel at the tomb is not His voice');
+    assert.equal(lookup('John 11:35').redLetter, false, '"Jesus wept" is the narrator');
+  });
+
   it('cuts frames the old literal list missed', () => {
     assert.match(lookup('John 20:21').text, /^Peace be unto you: as my Father hath sent me/);
     assert.match(lookup('Luke 5:31').text, /^They that are whole need not a physician/);

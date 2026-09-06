@@ -90,16 +90,25 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
     assert.equal(res.headers['x-accel-buffering'], 'no');
-    const letter = res.raw
+    const joinStream = (raw) => raw
       .split('\n')
       .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
       .map((line) => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    const letter = joinStream(res.raw);
+    // Without a model the letter is still written for *this* question: the Fear room, not a fixed page.
+    assert.match(letter, /^Fear is shrinking the future/);
+    assert.match(letter, /\*\*Luke 12:32\*\*\n“Fear not, little flock/);
     assert.match(res.raw, /\[DONE\]/);
+
+    const grief = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'my mother died last month' }],
+    });
+    const griefLetter = joinStream(grief.raw);
+    assert.match(griefLetter, /Blessed are they that mourn/);
+    assert.doesNotMatch(griefLetter, /Fear not, little flock/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

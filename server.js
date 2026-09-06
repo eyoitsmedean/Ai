@@ -4,6 +4,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { composeLetter } = require('./lib/counsel');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -294,19 +295,8 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
+/* Written for this question from the curated rooms when the model is absent or fails; never a fixed letter. */
+const fallbackLetter = composeLetter;
 
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
@@ -362,7 +352,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(fallbackLetter(last.content));
   }
 
   try {
@@ -398,7 +388,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(fallbackLetter(last.content));
   }
 });
 
