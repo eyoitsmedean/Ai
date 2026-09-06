@@ -14,6 +14,7 @@ const {
   isRedLetter,
   spokenAt,
   fillPlaceholders,
+  loadCorpus,
 } = require('../lib/scripture');
 const { retrieveSayings, guessThemes } = require('../lib/retrieve');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
@@ -196,9 +197,36 @@ describe('similarity', () => {
 describe('spoken corpus', () => {
   it('treats genealogy as narrator, not red-letter', () => {
     assert.equal(isRedLetter('Matthew 1:1'), false);
-    const v = verifyQuote('Matthew 1:1', lookup('Matthew 1:1').text);
+    assert.equal(lookup('Matthew 1:1'), null);
+    const v = verifyQuote('Matthew 1:1', 'The book of the generation of Jesus Christ');
     assert.equal(v.ok, false);
     assert.equal(v.reason, 'not-red-letter');
+  });
+
+  it('never puts other voices in His mouth', () => {
+    // the devil, Mary, Judas's death, the narrator, the synagogue ruler, the crowd
+    for (const ref of ['Matthew 4:9', 'Luke 4:6', 'Luke 1:46', 'Matthew 27:5', 'John 11:35', 'Mark 5:5', 'Luke 13:14', 'John 7:20', 'John 12:34', 'Luke 24:32', 'John 8:48']) {
+      assert.equal(lookup(ref), null, ref);
+      assert.equal(fillPlaceholders(`{{${ref}}}`), '', ref);
+    }
+  });
+
+  it('carries the canonical KJV verse counts', () => {
+    const books = loadCorpus().books;
+    const counts = { Matthew: 1071, Mark: 678, Luke: 1151, John: 879 };
+    for (const [book, expected] of Object.entries(counts)) {
+      const n = Object.values(books[book]).reduce((sum, ch) => sum + Object.keys(ch).length, 0);
+      assert.equal(n, expected, book);
+    }
+    assert.match(books.Matthew['26']['39'], /^And he went a little farther, and fell on his face, and prayed/);
+    assert.match(books.Mark['4']['40'], /^And he said unto them, Why are ye so fearful/);
+    assert.match(books.Matthew['22']['14'], /^For many are called, but few are chosen/);
+  });
+
+  it('strips the evangelist intro but keeps speech inside parables', () => {
+    assert.equal(spokenAt('Mark', 11, 22), 'Have faith in God.');
+    assert.match(spokenAt('Luke', 13, 8), /^And he answering said unto him, Lord, let it alone/);
+    assert.match(spokenAt('Matthew', 10, 38), /^And he that taketh not his cross/);
   });
 
   it('uses the spoken span for Mark 4:39 and John 8:12', () => {
