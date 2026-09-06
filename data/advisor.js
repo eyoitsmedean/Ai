@@ -1,7 +1,7 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  const CRISIS = /\b(suicid(?:e|al|ally)?|kill(?:ing)? myself|end(?:ing)? my (?:own )?life|tak(?:e|ing) my (?:own )?life|end it all|want(?:ed|s)? to die|wanna die|wish(?:ed)? i (?:was|were) dead|(?:don'?t|do not|didn'?t|did not|no longer) want to (?:live|be alive|exist|wake up|be here anymore)|not want to (?:live|be alive)|(?:can'?t|cannot) go on (?:like this|anymore|any longer|living)|(?:can'?t|cannot) do this anymore|no (?:point|reason) (?:in|to) liv(?:e|ing)|not worth living|tired of (?:living|being alive)|better off (?:dead|without me)|nobody would miss me|self[-\s]?harm|harm(?:ing)? myself|hurt(?:ing)? myself|cut(?:ting)? myself|hang(?:ing)? myself|i (?:want to |will |might |could |am going to )?overdose|jump(?:ing)? off (?:a|the) (?:bridge|building|roof)|thinking about (?:dying|killing myself|ending it)|plan(?:ning)? to (?:die|kill myself))\b/i;
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },
