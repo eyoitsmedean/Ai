@@ -1,33 +1,13 @@
 /* Crisis detection & escalation — interrupt chat flow with real help.
-   Two kinds: 'crisis' (suicidality / self-harm) and 'danger' (abuse, violence,
-   immediate physical danger). Stems carry a leading boundary only so
-   inflections match ("suicidal", "overdosing"); apostrophes are optional. */
+   Detection is shared with the server (safety-patterns.js) so the modal and
+   the server's notice always agree. Kinds: 'crisis' (suicidality / self-harm),
+   'assault' (sexual assault) and 'danger' (abuse, violence, threats); the
+   modal shows suicide lines for 'crisis' and advocate lines for the other two. */
 (function (global) {
-  const CRISIS_PATTERNS = [
-    /\b(kill(ing)?\s+(my|him|her|them)self|killing\s+myself)/i,
-    /\b(suicid|end(ing)?\s+my\s+life|tak(e|ing)\s+my\s+(own\s+)?life)/i,
-    /\b(want\s+to\s+die|wanna\s+die|going\s+to\s+die\s+by|not\s+worth\s+living|end\s+it\s+all)/i,
-    /\b(self[-\s]?harm|cut(ting)?\s+myself|hurt(ing)?\s+myself)/i,
-    /\b(hang(ing)?\s+myself|overdos|jump\s+off)/i,
-    /\b(no\s+reason\s+to\s+live|better\s+off\s+dead|nobody\s+would\s+miss\s+me)/i,
-    /\b(don[’']?t\s+want\s+to\s+(live|be\s+here|be\s+alive|wake\s+up)|do\s+not\s+want\s+to\s+live)/i,
-  ];
-
-  const DANGER_PATTERNS = [
-    /\b(he|she|they|my\s+\w+)\s+(hit|hits|beat|beats|choke[sd]?|strangle[sd]?|punche[sd]|slap(s|ped)?|threaten(s|ed)?\s+to\s+(kill|hurt))\s+(me|us|him|her|them|the\s+kids|my\s+(little\s+|younger\s+|older\s+|baby\s+)?(kids|children|son|daughter|brother|sister|sibling|mom|mother|wife|husband|partner|girlfriend|boyfriend))/i,
-    /\babus(ive|ing|es|ed)\s+(me|us|husband|wife|partner|boyfriend|girlfriend|relationship|father|mother|dad|mom|home)/i,
-    /\bdomestic\s+violence\b/i,
-    /\b(not|never)\s+safe\s+(at\s+home|with\s+(him|her|them))/i,
-    /\bafraid\s+(of|for\s+my\s+life\s+around)\s+my\s+(husband|wife|partner|boyfriend|girlfriend|dad|father|mom|mother|stepdad|stepfather)/i,
-    /\b(rape[ds]?|molest(ed|ing)?|sexual(ly)?\s+assault(ed)?)\b/i,
-    /\b(going\s+to\s+(kill|hurt)\s+me|threatening\s+(me|my\s+life)|hurts?\s+me\s+when\s+(he|she)|scared\s+(he|she)\s+will\s+(hurt|kill)\s+me)\b/i,
-  ];
-
   function detectKind(text) {
-    const t = String(text || '');
-    if (CRISIS_PATTERNS.some((re) => re.test(t))) return 'crisis';
-    if (DANGER_PATTERNS.some((re) => re.test(t))) return 'danger';
-    return null;
+    const shared = global.RedLetterSafety;
+    if (!shared || typeof shared.detectKind !== 'function') return null;
+    return shared.detectKind(text);
   }
 
   function detectCrisis(text) {
@@ -98,16 +78,38 @@
 
   function showCrisisModal(kind) {
     return new Promise((resolve) => {
-      const el = ensureModal(kind === 'danger' ? 'danger' : 'crisis');
-      el.classList.add('on');
+      const el = ensureModal(kind === 'danger' || kind === 'assault' ? 'danger' : 'crisis');
+      const opener = document.activeElement;
+      let settled = false;
+      const onKey = (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); finish('close'); }
+      };
       const finish = (action) => {
+        if (settled) return;
+        settled = true;
+        document.removeEventListener('keydown', onKey, true);
         el.classList.remove('on');
+        if (opener && typeof opener.focus === 'function') {
+          try { opener.focus({ preventScroll: true }); } catch (_) { /* detached */ }
+        }
         resolve(action);
       };
       document.getElementById('crisis-continue').onclick = () => finish('continue');
       document.getElementById('crisis-close').onclick = () => finish('close');
-      const primary = el.querySelector('.crisis-primary');
-      if (primary && typeof primary.focus === 'function') primary.focus();
+      el.onclick = (e) => { if (e.target === el) finish('close'); };
+      document.addEventListener('keydown', onKey, true);
+      el.classList.add('on');
+      // The element was re-rendered while its visibility transition was still
+      // starting; focus only lands once it is actually shown, so it is placed
+      // on the next frame and again after the transition has begun.
+      const focusPrimary = () => {
+        const primary = el.querySelector('.crisis-primary');
+        if (primary && typeof primary.focus === 'function' && !settled) primary.focus();
+      };
+      requestAnimationFrame(focusPrimary);
+      setTimeout(focusPrimary, 60);
+      const card = el.querySelector('.crisis-card');
+      if (card) card.scrollTop = 0;
     });
   }
 

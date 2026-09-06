@@ -14,7 +14,9 @@ const {
   lookup,
   parseRef,
   safetyKind,
-  safetyNotice,
+  conversationSafety,
+  noticeForKind,
+  auditAdvisorText,
 } = require('./lib/scripture');
 const { THEMES, dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary, sayingCount } = require('./lib/library');
@@ -26,14 +28,18 @@ const {
   assessScope,
   looksHostile,
   looksLikeGreeting,
+  looksLikeIdentityQuestion,
 } = require('./lib/retrieve');
-const { holdPlaceholders } = require('./lib/stream');
+const { holdUnsafe, scrubMarkers } = require('./lib/stream');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
 const MAX_CHAT_MESSAGES = 24;
+// A quotation is only "verified" when the recorded text is what the page
+// shows; a reference that merely resolves is reported as such.
+const QUOTE_MATCH_FLOOR = 0.55;
 
 // Railway, Render and Fly terminate TLS one hop away; without this every
 // visitor shares the proxy's address in the rate limiter.
@@ -361,16 +367,20 @@ app.post('/api/verify', (req, res) => {
     const quote = typeof item?.quote === 'string' ? item.quote.slice(0, 2000) : '';
     if (!verse) return { ok: false, verified: false, reason: 'missing-verse', verse: '', quote: '' };
     const verified = verifyQuote(verse, quote);
+    // `verified` means the quote the caller sent is the recorded text (or no
+    // quote was sent); a resolvable reference with the wrong words is reported
+    // as a mismatch and the recorded text is returned alongside.
+    const matches = verified.ok && (!quote || (typeof verified.score === 'number' && verified.score >= QUOTE_MATCH_FLOOR));
     return {
       ok: Boolean(verified.ok),
-      verified: Boolean(verified.ok),
+      verified: Boolean(matches),
       verse: verified.citation || verse,
       quote: verified.quote || quote,
       score: verified.score || 0,
-      reason: verified.reason || (verified.ok ? 'quote-match' : 'unknown-ref'),
+      reason: verified.reason || (!verified.ok ? 'unknown-ref' : matches ? 'quote-match' : 'quote-mismatch'),
     };
   });
-  const verifiedCount = results.filter((row) => row.ok).length;
+  const verifiedCount = results.filter((row) => row.verified).length;
   res.json({
     translation: 'KJV',
     total: results.length,
@@ -430,7 +440,7 @@ const CITE_LINE_RE = /^\*\*((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[a-z])?(?:\s*
 // Walks the final letter and checks every bold citation + quote line against
 // the corpus, so the page can seal passages with the server's verdict instead
 // of re-deriving it from a different translation.
-function verifyReport(text) {
+function verifyReport(text, dropped = []) {
   const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
   const results = [];
   for (let i = 0; i < lines.length; i += 1) {
@@ -441,10 +451,11 @@ function verifyReport(text) {
     const quoteLine = next < lines.length ? lines[next].trim() : '';
     const quote = /^["“]/.test(quoteLine) ? quoteLine.replace(/^["“]+/, '').replace(/["”]+\s*$/, '') : '';
     const v = verifyQuote(cite[1], quote);
+    const matches = v.ok && (!quote || (typeof v.score === 'number' && v.score >= QUOTE_MATCH_FLOOR));
     results.push({
       verse: v.citation || cite[1],
-      verified: Boolean(v.ok),
-      reason: v.reason || (v.ok ? 'quote-match' : 'unknown-ref'),
+      verified: Boolean(matches),
+      reason: v.reason || (!v.ok ? 'unknown-ref' : matches ? 'quote-match' : 'quote-mismatch'),
       score: typeof v.score === 'number' ? v.score : v.ok ? 1 : 0,
     });
   }
@@ -455,6 +466,10 @@ function verifyReport(text) {
     total: results.length,
     verified,
     unverified: results.length - verified,
+    // Quotations the model typed that never reached the page: another author,
+    // narration, or a verse recited from memory.
+    dropped: dropped.length,
+    droppedItems: dropped.slice(0, 12),
     results,
     allVerified: results.length > 0 && verified === results.length,
   };
@@ -522,6 +537,30 @@ const GREETING_LETTER = [
   DOOR,
 ].join('\n');
 
+// "Are you a real person?" deserves the plain answer, not a boundary.
+const IDENTITY_LETTER = [
+  'No. I am not a person, and I will not pretend to be one.',
+  '',
+  'This is a page that holds the words Jesus spoke in Matthew, Mark, Luke, and John, checked against the Gospel text before they reach you. There is no pastor behind it and no one reading along. If you need a human, please find one — a friend, a minister, a counselor — and let this page be the smaller thing it is.',
+  '',
+  'If you still want to ask something, I will answer with his words and nothing I made up.',
+  '',
+  DOOR,
+].join('\n');
+
+// A short answer with no cue at all ("help", "why me", a sentence in another
+// language): warmth and an open door, never "I cannot help with that".
+const UNSURE_LETTER = [
+  'I am here, and I am listening.',
+  '',
+  'I am not sure yet what is underneath what you wrote, and I would rather ask than guess. Say a little more when you can — who or what this is about, and what it is doing to you — and I will bring what Jesus said about it.',
+  '',
+  '{{John 14:27}}',
+  'Until then, this is his, spoken to people who were frightened and did not yet have words for it.',
+  '',
+  DOOR,
+].join('\n');
+
 // Letters for the two safety cases. The notice (numbers, emergency line) is
 // prepended separately; these carry the words that follow it. Scripture here
 // is deliberately secondary and never prescriptive.
@@ -561,13 +600,54 @@ const ASSAULT_LETTER = [
   'The people at the number above listen to survivors every hour of the day, at whatever pace you need. Come back whenever you want.',
 ].join('\n');
 
+// Later turns in a conversation that began with abuse or assault. The question
+// underneath is almost always "must I forgive him and stay?", and the answer
+// his words give is no: forgiveness is never a reason to remain in reach.
+const DANGER_FOLLOWUP_LETTER = [
+  'I am still holding what you told me earlier, and it changes how every one of these questions is answered. Nothing Jesus said asks you to stay within reach of someone who hurts you, to submit to it, or to keep it quiet. Forgiveness in his words is something you may reach in time, from safety — it is never a reason to go back into danger.',
+  '',
+  '{{Matthew 10:16}}',
+  'He sends his own people out told to be wise, not only harmless. Protecting yourself is wisdom, not a failure of love.',
+  '',
+  '{{John 10:10}}',
+  'He describes what he came for as life, and life in abundance. That is his intention for you, not endurance.',
+  '',
+  '{{Luke 10:34}}',
+  'In his own story, the wounded man is bound up and carried somewhere safe. Nobody tells him to stay in the road.',
+  '',
+  'The advocates at the number above will help you think through what is possible at your own pace. You can bring every one of these questions to them too.',
+].join('\n');
+
+const CRISIS_FOLLOWUP_LETTER = [
+  'I am still here, and I have not forgotten what you told me a moment ago. Before anything else: if the weight is still there, please reach the number above, or the emergency number where you are. A real person will stay with you in a way this page cannot.',
+  '',
+  '{{Matthew 11:28}}',
+  'He does not ask you to be well first. Heavy laden is the qualification.',
+  '',
+  '{{Luke 12:7}}',
+  'Counted down to the hairs of your head — that is how closely he says you are known.',
+  '',
+  'Stay with someone tonight if you can. Come back afterwards; this page will still be here.',
+].join('\n');
+
 // Situations the twelve curated themes do not cover well. Each entry is a
 // short set of Jesus's own words with a one-line context, checked against the
 // KJV corpus at boot (see the self-check below). Ordered: most specific first.
 const SITUATIONS = [
   {
+    // Someone condemning themselves: mercy first, never the condition in
+    // Matthew 6:15 handed to a person already certain they are unforgivable.
+    name: 'self-condemnation',
+    re: /\b((cannot|can'?t|cant|will never|never) forgive myself|forgive myself|hate myself|hate my life|hate who i am|(disgust|loathe|despise)\w* (myself|who i am)|will god (ever |still )?forgive me|can god (ever |still )?forgive me|does god (still |even )?love me|god (hates|is disgusted with|gave up on|has given up on|is done with|cannot love|can'?t love) me|says? god hates me|i am (a |an )?(monster|worthless|disgusting|unforgivable|failure as a|terrible person|bad person|beyond (saving|forgiveness|hope|help))|i'?m (a |an )?(monster|worthless|disgusting|unforgivable|terrible person|bad person|beyond (saving|forgiveness|hope|help))|abortion|too far gone|what i (did|have done) (is|was) (unforgivable|too much)|unforgivable|i (ruined|destroyed) (everything|my life|their lives)|no one could (love|forgive) me)\b/i,
+    passages: [
+      ['John 6:37', 'Spoken about anyone at all who comes to him: in no wise cast out. There is no footnote excluding your case.'],
+      ['John 8:11', 'Said to a woman standing in front of a crowd that had already decided about her. He speaks before she has explained anything.'],
+      ['Luke 15:22', 'The father does not audit the confession. He interrupts it with a robe. That is the kind of welcome his story describes.'],
+    ],
+  },
+  {
     name: 'honesty',
-    re: /\b(lying|lied|a liar|dishonest|cheat(ed|ing) on|secret from|hiding (it|this) from)/i,
+    re: /\b(i (keep |have been |am |was |always |sometimes )?(lying|lie|lied)|my lies?|i am a liar|i'?m a liar|dishonest|(i|i'?ve|i have) (been )?cheat(ed|ing) on|secret from|hiding (it|this|the truth) from|not (been )?honest with)\b/i,
     passages: [
       ['Matthew 5:37', 'Plain speech is the whole instruction. The lie is exhausting because it is more than yea and nay.'],
       ['John 8:32', 'Truth is described as the thing that frees — not the thing that ends you.'],
@@ -575,8 +655,18 @@ const SITUATIONS = [
     ],
   },
   {
+    // Betrayed, not the betrayer: comfort first, forgiveness is a later question.
+    name: 'betrayed',
+    re: /\b(cheated on me|cheating on me|had an affair|having an affair|an affair|betrayed me|found (messages|texts|photos|pictures) on (his|her|their) phone|sleeping with (someone|another|his|her|my)|unfaithful|slept with (someone|another|my)|left me for|walked out on (me|us)|abandoned (me|us) for)\b/i,
+    passages: [
+      ['Matthew 5:4', 'What you are carrying is a kind of mourning, and he calls the ones who mourn blessed before anything is fixed.'],
+      ['John 16:33', 'He does not promise the tribulation away. He promises to be larger than it.'],
+      ['Matthew 11:28', 'Rest is offered to the heavy laden — not to the ones who have already sorted out what to do next.'],
+    ],
+  },
+  {
     name: 'marriage',
-    re: /\b(marriage|my (wife|husband|spouse|partner)|we fight|divorc|separat(ed|ing)|falling apart)/i,
+    re: /\b(marriage|we fight|fight(ing)? (all the time|every day|every single day|constantly|nonstop)|divorc|separat(ed|ing|ion)|falling apart|my (wife|husband|spouse|partner) and i (fight|argue|can'?t talk|don'?t talk|are (fighting|struggling|drifting|distant))|(wife|husband|spouse|partner) (and i )?(never|don'?t|won'?t|can'?t) (talk|speak|listen))\b/i,
     passages: [
       ['Matthew 5:9', 'Peacemaking is named blessed — a work you can begin from your side of the table tonight.'],
       ['Matthew 18:15', 'He gives the first step for a wound between two people: go, and say it plainly, alone, before anyone else hears it.'],
@@ -602,8 +692,30 @@ const SITUATIONS = [
     ],
   },
   {
+    // Someone I love is in harm's way and out of reach.
+    name: 'loved one at risk',
+    re: /\b(deployed|deployment|overseas with the|in the (army|military|navy|marines|air force)|at war|in combat|on the front|in a war zone|missing for|hasn'?t (called|come home|checked in)|in surgery right now|in the (icu|intensive care|hospital tonight))\b/i,
+    passages: [
+      ['Matthew 10:29–31', 'Sparrows and the hairs of your head — his argument is that nothing about the ones you love is outside his attention.'],
+      ['Mark 5:36', 'Said to a father on the way to a child he could not reach. It is the sentence for the hours of not knowing.'],
+      ['John 14:27', 'Not the world\'s peace, which needs good news first. His, which is given before the news arrives.'],
+    ],
+  },
+  {
+    // A person who feels like a failure: worth, not repentance.
+    name: 'failure',
+    re: /\b(i(?:'m| am) (such )?a (failure|disappointment|loser|screw-?up|mess|burden)|feel like a (failure|disappointment|loser|burden|fraud)|i (failed|keep failing|am failing) (at|as|them|everyone|my family)|let (everyone|them|my (family|kids|children|parents|wife|husband)) down|not good enough|never good enough|screw(ed)? (it |everything )?up again|i can'?t do anything right|everything i touch)\b/i,
+    passages: [
+      ['Luke 12:7', 'Counted down to the hairs of your head. His measure of your worth was never your results.'],
+      ['Matthew 11:28', 'The invitation is addressed to the tired and the loaded down — not to the ones who have it together.'],
+      ['Luke 12:32', 'Fear not, little flock. Small, tired, and still handed the kingdom.'],
+    ],
+  },
+  {
+    // The love of money, not the lack of it: shortage is a worry question and
+    // belongs to the Anxiety passages.
     name: 'money',
-    re: /\b(money|rich|wealth|greed|possessions|mammon|afford|salary|savings|invest|tithe|generous|giving)/i,
+    re: /\b((love|obsessed with|think about|chasing|chase|worship|idolize|hoard|hoarding) (of )?(money|wealth|riches|possessions|stuff|things)|money (too much|is all i|has become|controls|owns) |i (love|want|need) (more )?money|get(ting)? rich|be(come|coming)? rich|wealth(y|ier)?|greed(y)?|possessions|mammon|materialis|tithe|tithing|how much (should|do) i give|generous|generosity|giving (money|to the poor|to church))\b/i,
     passages: [
       ['Matthew 6:24', 'He does not call money evil; he calls it a rival master. The question is only which one you answer to.'],
       ['Matthew 6:19–21', 'Where you keep your treasure is where your heart will follow — his diagnosis runs the other way from ours.'],
@@ -645,20 +757,39 @@ function overlaps(a, b) {
   return Boolean(p && q && p.book === q.book && p.chapter === q.chapter && p.start <= q.end && p.end >= q.start);
 }
 
+// The fixed letter for a safety verdict. `carried` means the disclosure was
+// made in an earlier turn and the current message is a follow-up.
+function safetyLetter(kind, carried) {
+  if (kind === 'crisis') return carried ? CRISIS_FOLLOWUP_LETTER : CRISIS_LETTER;
+  if (kind === 'assault') return carried ? DANGER_FOLLOWUP_LETTER : ASSAULT_LETTER;
+  if (kind === 'danger') return carried ? DANGER_FOLLOWUP_LETTER : DANGER_LETTER;
+  return null;
+}
+
+// The safety verdict for a conversation: the current message first, then any
+// disclosure in the recent user turns. A bare greeting or thanks after a
+// disclosure is answered as a greeting, not with the handoff again.
+function chatSafety(messages, current) {
+  const text = String(current || '');
+  const own = safetyKind(text);
+  if (own) return { kind: own, carried: false };
+  if (looksLikeGreeting(text)) return { kind: null, carried: false };
+  return conversationSafety(messages);
+}
+
 // Cues are read from the last message first; earlier user turns only widen
 // the search when the last message alone names nothing.
 function fallbackLetter(query, history = []) {
   const text = String(query || '');
-  const kind = safetyKind(text);
-  if (kind === 'crisis') return CRISIS_LETTER;
-  if (kind === 'assault') return ASSAULT_LETTER;
-  if (kind === 'danger') return DANGER_LETTER;
+  const safe = chatSafety(history, text);
+  if (safe.kind) return safetyLetter(safe.kind, safe.carried);
 
   let retrieved;
   let themes;
   const situations = [];
   try {
     if (looksLikeGreeting(text)) return GREETING_LETTER;
+    if (looksLikeIdentityQuestion(text)) return IDENTITY_LETTER;
     if (looksHostile(text)) return HOSTILE_LETTER;
     const earlier = (history || [])
       .filter((m) => m && m.role === 'user' && typeof m.content === 'string')
@@ -672,7 +803,13 @@ function fallbackLetter(query, history = []) {
       if (assessScope(combined).themes.length || SITUATIONS.some((s) => s.re.test(earlier))) cueText = combined;
     }
     const scope = assessScope(cueText);
-    if (!scope.inScope && !SITUATIONS.some((s) => s.re.test(cueText))) return BOUNDARY_LETTER;
+    const situationHit = SITUATIONS.some((s) => s.re.test(cueText));
+    // A boundary is only drawn on a positive off-scope signal (trivia, code,
+    // finance, another author). A message with no cue at all is met with a
+    // question, never with "I cannot help with that".
+    if (scope.hardOffScope) return BOUNDARY_LETTER;
+    if (scope.offScope && !scope.inScope && !situationHit) return BOUNDARY_LETTER;
+    if (!scope.inScope && !situationHit) return UNSURE_LETTER;
     for (const s of SITUATIONS) if (s.re.test(cueText)) situations.push(s);
     retrieved = retrieveSayings(cueText, { limit: 6 });
     themes = retrieved.themes || [];
@@ -724,7 +861,10 @@ function fallbackLetter(query, history = []) {
 // Every hand-picked citation above must resolve to Jesus's own speech; a typo
 // here would otherwise surface as a silently dropped block.
 (function selfCheckCuratedCitations() {
-  const all = [CRISIS_LETTER, DANGER_LETTER, ASSAULT_LETTER, BOUNDARY_LETTER, HOSTILE_LETTER, GREETING_LETTER, FALLBACK_LETTER]
+  const all = [
+    CRISIS_LETTER, DANGER_LETTER, ASSAULT_LETTER, CRISIS_FOLLOWUP_LETTER, DANGER_FOLLOWUP_LETTER,
+    BOUNDARY_LETTER, HOSTILE_LETTER, GREETING_LETTER, IDENTITY_LETTER, UNSURE_LETTER, FALLBACK_LETTER,
+  ]
     .flatMap((letter) => [...letter.matchAll(/\{\{([^}]+)\}\}/g)].map((m) => m[1]))
     .concat(SITUATIONS.flatMap((s) => s.passages.map(([verse]) => verse)));
   for (const cite of all) {
@@ -778,23 +918,33 @@ app.post('/api/chat', async (req, res) => {
     const chunk = 24;
     for (let i = 0; i < text.length; i += chunk) send({ text: text.slice(i, i + chunk) });
   };
-  const notice = safetyNotice(last.content);
+  const safe = chatSafety(messages, last.content);
+  const notice = noticeForKind(safe.kind);
+  let dropped = [];
   const finish = (finalText) => {
     // `replace` is the authoritative letter: the page swaps it in so any
     // verse the model typed itself is shown as the recorded text.
-    send({ replace: finalText });
-    send({ verify: verifyReport(finalText) });
+    const clean = scrubMarkers(finalText);
+    send({ replace: clean });
+    send({ verify: verifyReport(clean, dropped) });
     if (!clientGone && !res.writableEnded) {
       res.write('data: [DONE]\n\n');
       res.end();
     }
   };
   const finishWithLetter = (letter) => {
-    const body = `${notice}${verifyAndSubstitute(letter)}`;
-    streamText(body);
-    finish(body);
+    // The notice arrives whole, as the first frame, so the numbers are never
+    // split across tokens on the page.
+    const text = verifyAndSubstitute(letter);
+    if (notice) send({ text: notice });
+    streamText(text);
+    finish(`${notice}${text}`);
   };
 
+  // Suicidality, assault and abuse are answered with the fixed letters and
+  // never by the model: the one thing this page must not do in that moment is
+  // improvise. (Decision D12 in CLAUDE.md.)
+  if (safe.kind) return finishWithLetter(safetyLetter(safe.kind, safe.carried));
   if (!client) return finishWithLetter(fallbackLetter(last.content, messages));
 
   let streamed = '';
@@ -821,17 +971,22 @@ app.post('/api/chat', async (req, res) => {
     });
     activeStream = stream;
 
-    // Tokens go out as they arrive, except that an unclosed {{ is held back
-    // until its }} lands so the reader only ever sees the recorded verse.
+    // Tokens go out as they arrive, except that anything the page must not
+    // see half-finished is held back: an unclosed {{, a bold citation line
+    // with its quote, an open quotation mark, a sentence naming a reference.
+    // Each released chunk ends on a boundary the verifier can judge alone.
     let rawText = '';
     let pending = '';
     const flushPending = (force) => {
-      const { flush, rest } = holdPlaceholders(pending, force);
+      const { flush, rest } = holdUnsafe(pending, force);
       pending = rest;
       if (!flush) return;
-      const filled = fillPlaceholders(flush);
-      streamed += filled;
-      send({ text: filled });
+      const audited = auditAdvisorText(fillPlaceholders(flush));
+      dropped = dropped.concat(audited.dropped);
+      const clean = scrubMarkers(audited.text);
+      if (!clean) return;
+      streamed += clean;
+      send({ text: clean });
     };
     stream.on('text', (delta) => {
       rawText += delta;
@@ -845,12 +1000,15 @@ app.post('/api/chat', async (req, res) => {
     flushPending(true);
 
     if (!rawText.trim()) return finishWithLetter(fallbackLetter(last.content, messages));
-    const substituted = verifyAndSubstitute(rawText);
+    const audited = auditAdvisorText(fillPlaceholders(rawText));
+    dropped = audited.dropped;
+    const substituted = audited.text;
     // A letter with no verified red-letter quotation left in it (every marker
     // the model chose was narration, another author, or unknown) is replaced
     // by the retrieval letter rather than shipped as bare prose.
     if (verifyReport(substituted).verified === 0) {
       console.warn('Chat: model letter carried no verifiable saying; using retrieval letter.');
+      dropped = [];
       return finish(`${notice}${verifyAndSubstitute(fallbackLetter(last.content, messages))}`);
     }
     finish(`${notice}${substituted}`);

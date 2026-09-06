@@ -3016,6 +3016,21 @@ body::before {
   gap: 8px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
+  /* Stays visible while the helpline list scrolls on a short screen, so
+     the way out is never below the fold. */
+  position: sticky;
+  bottom: -22px;
+  margin: 0 -22px -22px;
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-bottom: 18px;
+  background: var(--surface);
+}
+
+@media (max-height: 700px) {
+  .crisis-card { padding: 18px 16px 16px; max-height: 92dvh; }
+  .crisis-footer { bottom: -16px; margin: 0 -16px -16px; padding-left: 16px; padding-right: 16px; padding-bottom: 14px; }
+  .crisis-secondary { padding-top: 9px; padding-bottom: 9px; }
 }
 
 .crisis-dismiss,

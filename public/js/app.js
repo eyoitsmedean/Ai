@@ -856,7 +856,9 @@
         if (action !== 'continue') return;
       }
 
-      if (chatCount() >= CHAT_DAILY_LIMIT) {
+      // A safety message is never answered with a paywall: the server's
+      // notice and letter carry the helpline into the conversation itself.
+      if (!crisisKind && chatCount() >= CHAT_DAILY_LIMIT) {
         openPlus();
         return;
       }

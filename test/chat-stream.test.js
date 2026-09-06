@@ -36,6 +36,7 @@ Module._load = function (request, ...rest) {
 };
 
 process.env.ANTHROPIC_API_KEY = 'sk-test-fake';
+process.env.RATE_LIMIT_OFF = '1';
 const app = require('../server');
 
 let server;
@@ -157,6 +158,96 @@ describe('live advisor stream', () => {
     assert.doesNotMatch(replace, /Romans|my own words/);
     assert.match(replace, /\*\*Matthew 5:4\*\*/);
     assert.ok(verify.verified >= 2);
+  });
+
+  it('never leaks a half-typed marker into any frame', async () => {
+    tokens = ['Peace.\n\n{{John 14:27}\nsome context\n\n{{Matthew 11:28}}\nRest.\n\n{{John {{14:27}} }}\n\nEnd {{Luke 12:7}'];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'I am anxious tonight' }] });
+    const all = frames(res.raw);
+    const texts = all.filter((f) => typeof f.text === 'string').map((f) => f.text);
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    assert.ok(texts.every((t) => !/\{\{|\}\}/.test(t)), `a text frame carried a marker: ${JSON.stringify(texts)}`);
+    assert.doesNotMatch(replace, /[{}]/);
+    assert.match(replace, /\*\*John 14:27\*\*/);
+    assert.match(replace, /\*\*Matthew 11:28\*\*/);
+    assert.match(replace, /\*\*Luke 12:7\*\*/);
+  });
+
+  it('drops other-author citations, narration in prose, and recited verses; the report counts them', async () => {
+    tokens = [
+      '**Romans 8:28**\n"And we know that all things work together for good"\nPaul wrote this.\n\n',
+      'As Matthew 1:1 says, "The book of the generation of Jesus Christ, the son of David." Hold on to that.\n\n',
+      'Jesus said "Come unto me all ye that labour and are heavy laden and I will give you rest" and he meant it.\n\n',
+      '{{John 14:27}}\nPeace.\n',
+    ];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'I am anxious tonight' }] });
+    const all = frames(res.raw);
+    const streamed = all.filter((f) => typeof f.text === 'string').map((f) => f.text).join('');
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    const verify = all.find((f) => f.verify).verify;
+    for (const text of [streamed, replace]) {
+      assert.doesNotMatch(text, /Romans|work together for good|Paul wrote/);
+      assert.doesNotMatch(text, /Matthew 1:1|generation of Jesus Christ/);
+      assert.doesNotMatch(text, /Come unto me all ye that labour and are heavy laden and I will/);
+    }
+    assert.match(replace, /Hold on to that/);
+    assert.match(replace, /\*\*John 14:27\*\*/);
+    assert.equal(verify.total, 1);
+    assert.equal(verify.allVerified, true);
+    assert.equal(verify.dropped, 3);
+    assert.deepEqual(verify.droppedItems.map((d) => d.kind).sort(), ['narration', 'other-author', 'typed-quote']);
+  });
+
+  it('holds a typed narrator citation out of the live stream, not just the final letter', async () => {
+    tokens = ['**Matthew 1:1**\n"The book of the generation of Jesus Christ"\nA lineage of hope.\n\n{{John 14:27}}\nPeace.\n'];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'I am anxious tonight' }] });
+    const streamed = frames(res.raw).filter((f) => typeof f.text === 'string').map((f) => f.text).join('');
+    assert.doesNotMatch(streamed, /generation of Jesus Christ|lineage of hope|Matthew 1:1/);
+    assert.match(streamed, /\*\*John 14:27\*\*/);
+  });
+
+  it('answers abuse and suicidality with the fixed letter and never calls the model', async () => {
+    tokens = ['Forgive him and stay; submit to him as the Bible says.\n\n{{Matthew 6:14}}\nForgive.\n'];
+    const callsBefore = sent.length;
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'my husband hits me when he drinks' }] });
+    const all = frames(res.raw);
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    assert.equal(sent.length, callsBefore, 'the model was not called');
+    assert.doesNotMatch(replace, /submit to him|forgive not men|Matthew 6:14/);
+    assert.match(replace, /1-800-799-7233/);
+    assert.match(replace, /never a reason to stay in danger/);
+    assert.match(replace, /\*\*Luke 4:18\*\*/);
+
+    tokens = ['As your pastor, I am a real person who cares.\n\n{{John 14:27}}\nPeace.\n'];
+    const res2 = await post('/api/chat', { messages: [{ role: 'user', content: 'I have the pills lined up' }] });
+    const replace2 = frames(res2.raw).find((f) => typeof f.replace === 'string').replace;
+    assert.equal(sent.length, callsBefore);
+    assert.match(replace2, /988/);
+    assert.doesNotMatch(replace2, /your pastor|real person who cares/);
+  });
+
+  it('keeps a disclosure of abuse in force for the follow-up turns', async () => {
+    tokens = ['{{Matthew 6:14}}\nForgive, and go back.\n'];
+    const callsBefore = sent.length;
+    const messages = [
+      { role: 'user', content: 'my husband hits me when he drinks' },
+      { role: 'assistant', content: 'letter' },
+      { role: 'user', content: 'should I forgive him and stay?' },
+    ];
+    const res = await post('/api/chat', { messages });
+    const all = frames(res.raw);
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    assert.equal(sent.length, callsBefore, 'the model was not called for the follow-up');
+    assert.doesNotMatch(replace, /Matthew 6:14|forgive not men|Forgive, and go back/);
+    assert.match(replace, /1-800-799-7233/);
+    assert.match(replace, /never a reason to go back into danger/);
+    assert.match(replace, /\*\*Matthew 10:16\*\*/);
+
+    // A plain thank-you after the disclosure is a greeting, not the handoff again.
+    tokens = ['{{John 14:27}}\nPeace.\n'];
+    const res2 = await post('/api/chat', { messages: messages.concat([{ role: 'assistant', content: 'letter' }, { role: 'user', content: 'ok thank you' }]) });
+    const replace2 = frames(res2.raw).find((f) => typeof f.replace === 'string').replace;
+    assert.doesNotMatch(replace2, /1-800-799-7233/);
   });
 
   it('aborts the model stream when the client disconnects', async () => {

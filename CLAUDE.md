@@ -25,7 +25,7 @@ words only — not the whole Bible.
 | D8 | Only red-letter verses may be rendered as quotations. Narrator lines, other authors and unknown references are dropped from a letter together with their context sentence; a model letter left with zero verifiable sayings is replaced by the retrieval letter. | This session |
 | D9 | Off-scope, hostile and greeting inputs receive fixed honest letters with one open door (`Matthew 11:28`), never a verse chosen by coincidence. | This session |
 | D10 | The evaluation set is `eval/questions.json`, run by `npm run eval`; `eval/RESULTS.md` is generated, never hand-edited, and states which path (retrieval or live model) it ran against. | This session |
-| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v16**. | DEPLOY.md |
+| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v17**. | DEPLOY.md |
 
 ## Third-party material and licences (checked 2026-09-06)
 
