@@ -1269,11 +1269,11 @@ async function api(path, opts = {}) {
 /* ═══ OFFLINE CORPUS ═══ */
 const CORPUS = [
   { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient.", themes: ['Anxiety & Worry', 'Peace'] },
-  { verse: 'Matthew 6:9-13', text: "Pray like this: 'Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.'", themes: ['Peace', 'Purpose & Direction', 'Forgiveness'] },
+  { verse: 'Matthew 6:9-13', text: "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done, as in heaven, so on earth. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’", themes: ['Peace', 'Purpose & Direction', 'Forgiveness'] },
   { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful.", themes: ['Anxiety & Worry', 'Peace', 'Fear'] },
-  { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.', themes: ['Anxiety & Worry', 'Suffering & Pain', 'Peace'] },
-  { verse: 'Matthew 5:44', text: 'But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you.', themes: ['Conflict & Relationships', 'Forgiveness'] },
-  { verse: 'John 16:33', text: 'I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.', themes: ['Fear', 'Hope', 'Suffering & Pain'] },
+  { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.', themes: ['Anxiety & Worry', 'Suffering & Pain', 'Peace'] },
+  { verse: 'Matthew 5:44', text: 'But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you', themes: ['Conflict & Relationships', 'Forgiveness'] },
+  { verse: 'John 16:33', text: 'I have told you these things, that in me you may have peace. In the world you have oppression; but cheer up! I have overcome the world.', themes: ['Fear', 'Hope', 'Suffering & Pain'] },
   { verse: 'Matthew 28:20', text: 'Behold, I am with you always, even to the end of the age.', themes: ['Loneliness', 'Hope', 'Faith & Doubt'] },
   { verse: 'Matthew 5:4', text: 'Blessed are those who mourn, for they shall be comforted.', themes: ['Grief & Loss', 'Hope'] },
   { verse: 'Luke 12:32', text: "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom.", themes: ['Fear', 'Hope'] },
@@ -1282,7 +1282,7 @@ const CORPUS = [
   { verse: 'John 11:25-26', text: 'I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?', themes: ['Grief & Loss', 'Faith & Doubt'] },
   { verse: 'Matthew 6:14-15', text: "For if you forgive men their trespasses, your heavenly Father will also forgive you. But if you don't forgive men their trespasses, neither will your Father forgive your trespasses.", themes: ['Forgiveness', 'Shame & Guilt'] },
   { verse: 'Luke 15:7', text: 'I tell you that even so there will be more joy in heaven over one sinner who repents, than over ninety-nine righteous people who need no repentance.', themes: ['Shame & Guilt', 'Hope'] },
-  { verse: 'Matthew 6:33', text: "But seek first God's Kingdom and his righteousness; and all these things will be given to you as well.", themes: ['Purpose & Direction', 'Anxiety & Worry'] },
+  { verse: 'Matthew 6:33', text: "But seek first God’s Kingdom, and his righteousness; and all these things will be given to you as well.", themes: ['Purpose & Direction', 'Anxiety & Worry'] },
 ];
 
 function corpusByTheme(theme) {
@@ -2380,7 +2380,7 @@ function finishSit() {
 /* ═══ MIDDAY PAUSE (Lectio 365 — Lord’s Prayer) ═══ */
 const LORDS_PRAYER = CORPUS.find((c) => c.verse === 'Matthew 6:9-13') || {
   verse: 'Matthew 6:9-13',
-  text: "Pray like this: 'Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.'",
+  text: "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done, as in heaven, so on earth. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’",
 };
 
 function renderMidday() {
@@ -2812,19 +2812,19 @@ let parableCurrent = null;
 const FALLBACK_PARABLES = [
   {
     verse: 'Luke 15:20-24',
-    text: "But while he was still far off, his father saw him and was moved with compassion, and ran, fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven and in your sight. I am no longer worthy to be called your son.’ But the father said to his servants, ‘Bring out the best robe and put it on him. Put a ring on his hand and sandals on his feet. Bring the fattened calf, kill it, and let’s eat and celebrate; for this my son was dead and is alive again. He was lost and is found.’",
+    text: "But while he was still far off, his father saw him, and was moved with compassion, and ran, and fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven, and in your sight. I am no longer worthy to be called your son.’ “But the father said to his servants, ‘Bring out the best robe, and put it on him. Put a ring on his hand, and shoes on his feet. Bring the fattened calf, kill it, and let us eat, and celebrate; for this, my son, was dead, and is alive again. He was lost, and is found.’",
     note: 'Parable of the Lost Son — Jesus teaching in narrative form',
     title: 'The Lost Son',
   },
   {
     verse: 'Luke 10:33-37',
-    text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion… Then Jesus said to him, “Go and do likewise.”",
+    text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion… Go and do likewise.",
     note: 'Parable of the Good Samaritan',
     title: 'The Good Samaritan',
   },
   {
     verse: 'Matthew 13:31-32',
-    text: "The Kingdom of Heaven is like a grain of mustard seed which a man took, and sowed in his field, which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs and becomes a tree, so that the birds of the air come and lodge in its branches.",
+    text: "The Kingdom of Heaven is like a grain of mustard seed, which a man took, and sowed in his field; which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs, and becomes a tree, so that the birds of the air come and lodge in its branches.",
     note: 'Parable of the Mustard Seed',
     title: 'The Mustard Seed',
   },
@@ -3242,8 +3242,8 @@ function sitPlanDay() {
 /* ═══ EVENING EXAMEN (Lectio 365–shaped, red-letter only) ═══ */
 const EXAMEN_WORDS = [
   { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful." },
-  { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
-  { verse: 'John 16:33', text: "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world." },
+  { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
+  { verse: 'John 16:33', text: "I have told you these things, that in me you may have peace. In the world you have oppression; but cheer up! I have overcome the world." },
   { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient." },
 ];
 function examenWordForToday() {
@@ -3304,7 +3304,7 @@ let closeness = 0;
 const CLOSENESS_WORDS = {
   1: { verse: 'Matthew 6:34', text: "Therefore don't be anxious for tomorrow, for tomorrow will be anxious for itself. Each day's own evil is sufficient." },
   2: { verse: 'John 14:27', text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don't let your heart be troubled, neither let it be fearful." },
-  3: { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
+  3: { verse: 'Matthew 11:28-30', text: 'Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.' },
   4: { verse: 'Luke 12:32', text: "Don't be afraid, little flock, for it is your Father's good pleasure to give you the Kingdom." },
   5: { verse: 'Matthew 28:20', text: 'Behold, I am with you always, even to the end of the age.' },
 };
@@ -3768,7 +3768,11 @@ async function sendChat() {
             bubble.innerHTML = formatAI(full) + badges;
             if (ev.quota) updateQuotaUI(ev.quota);
           }
-          if (ev.error) bubble.innerHTML = '<p>Something went wrong. Please try again.</p>';
+          if (ev.error && ev.partial && full) {
+            bubble.innerHTML = formatAI(full) + '<p class="ground-note">The connection dropped before the Advisor finished. What arrived is above.</p>';
+          } else if (ev.error) {
+            bubble.innerHTML = '<p>Something went wrong. Please try again.</p>';
+          }
         } catch {}
       }
     }

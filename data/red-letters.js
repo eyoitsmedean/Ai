@@ -11,7 +11,7 @@ module.exports = {
       id: 'mt6-25-27',
       book: 'Matthew', chapter: 6, verseStart: 25, verseEnd: 27,
       theme: ['Anxiety & Worry', 'Peace'],
-      text: "Therefore I tell you, don’t be anxious for your life: what you will eat, or what you will drink; nor yet for your body, what you will wear. Isn’t life more than food, and the body more than clothing? See the birds of the sky, that they don’t sow, neither do they reap, nor gather into barns. Your heavenly Father feeds them. Aren’t you of much more value than they? Which of you by being anxious can add one moment to his lifespan?",
+      text: "Therefore I tell you, don’t be anxious for your life: what you will eat, or what you will drink; nor yet for your body, what you will wear. Isn’t life more than food, and the body more than clothing? See the birds of the sky, that they don’t sow, neither do they reap, nor gather into barns. Your heavenly Father feeds them. Aren’t you of much more value than they? Which of you, by being anxious, can add one moment to his lifespan?",
     },
     {
       id: 'mt6-34',
@@ -23,7 +23,7 @@ module.exports = {
       id: 'mt6-9-13',
       book: 'Matthew', chapter: 6, verseStart: 9, verseEnd: 13,
       theme: ['Peace', 'Purpose & Direction', 'Forgiveness'],
-      text: "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’",
+      text: "Pray like this: ‘Our Father in heaven, may your name be kept holy. Let your Kingdom come. Let your will be done, as in heaven, so on earth. Give us today our daily bread. Forgive us our debts, as we also forgive our debtors. Bring us not into temptation, but deliver us from the evil one. For yours is the Kingdom, the power, and the glory forever. Amen.’",
     },
     {
       id: 'jn14-27',
@@ -35,14 +35,14 @@ module.exports = {
       id: 'mt11-28-30',
       book: 'Matthew', chapter: 11, verseStart: 28, verseEnd: 30,
       theme: ['Anxiety & Worry', 'Suffering & Pain', 'Peace'],
-      text: "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
+      text: "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light.",
     },
     // Fear
     {
       id: 'mt10-29-31',
       book: 'Matthew', chapter: 10, verseStart: 29, verseEnd: 31,
       theme: ['Fear', 'Anxiety & Worry'],
-      text: "Aren’t two sparrows sold for an assarion coin? Not one of them falls to the ground apart from your Father’s will. But the very hairs of your head are all numbered. Therefore don’t be afraid. You are of more value than many sparrows.",
+      text: "Aren’t two sparrows sold for an assarion coin? Not one of them falls on the ground apart from your Father’s will, but the very hairs of your head are all numbered. Therefore don’t be afraid. You are of more value than many sparrows.",
     },
     {
       id: 'lk12-32',
@@ -54,7 +54,7 @@ module.exports = {
       id: 'jn16-33',
       book: 'John', chapter: 16, verseStart: 33, verseEnd: 33,
       theme: ['Fear', 'Hope', 'Suffering & Pain'],
-      text: "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.",
+      text: "I have told you these things, that in me you may have peace. In the world you have oppression; but cheer up! I have overcome the world.",
     },
     // Grief & Loss
     {
@@ -67,7 +67,7 @@ module.exports = {
       id: 'jn14-1-3',
       book: 'John', chapter: 14, verseStart: 1, verseEnd: 3,
       theme: ['Grief & Loss', 'Hope', 'Fear'],
-      text: "Don’t let your heart be troubled. Believe in God. Believe also in me. In my Father’s house are many homes. If it weren’t so, I would have told you. I am going to prepare a place for you. If I go and prepare a place for you, I will come again and will receive you to myself; that where I am, you may be there also.",
+      text: "Don’t let your heart be troubled. Believe in God. Believe also in me. In my Father’s house are many homes. If it weren’t so, I would have told you. I am going to prepare a place for you. If I go and prepare a place for you, I will come again, and will receive you to myself; that where I am, you may be there also.",
     },
     {
       id: 'jn11-25-26',
@@ -98,7 +98,7 @@ module.exports = {
       id: 'jn8-10-11',
       book: 'John', chapter: 8, verseStart: 10, verseEnd: 11,
       theme: ['Forgiveness', 'Shame & Guilt'],
-      text: "Woman, where are your accusers? Did no one condemn you? … Neither do I condemn you. Go your way. From now on, sin no more.",
+      text: "Woman, where are your accusers? Did no one condemn you?… Neither do I condemn you. Go your way. From now on, sin no more.",
     },
     // Loneliness
     {
@@ -124,7 +124,7 @@ module.exports = {
       id: 'mt5-44',
       book: 'Matthew', chapter: 5, verseStart: 44, verseEnd: 44,
       theme: ['Conflict & Relationships', 'Forgiveness'],
-      text: "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you,",
+      text: "But I tell you, love your enemies, bless those who curse you, do good to those who hate you, and pray for those who mistreat you and persecute you",
     },
     {
       id: 'mt7-1-3',
@@ -136,7 +136,7 @@ module.exports = {
       id: 'mt7-12',
       book: 'Matthew', chapter: 7, verseStart: 12, verseEnd: 12,
       theme: ['Conflict & Relationships'],
-      text: "Therefore, whatever you desire for men to do to you, you shall also do to them; for this is the law and the prophets.",
+      text: "Therefore whatever you desire for men to do to you, you shall also do to them; for this is the law and the prophets.",
     },
     {
       id: 'jn13-34-35',
@@ -149,13 +149,13 @@ module.exports = {
       id: 'mt5-14-16',
       book: 'Matthew', chapter: 5, verseStart: 14, verseEnd: 16,
       theme: ['Purpose & Direction', 'Hope'],
-      text: "You are the light of the world. A city located on a hill can’t be hidden. Neither do you light a lamp and put it under a measuring basket, but on a stand; and it shines to all who are in the house. Even so, let your light shine before men, that they may see your good works and glorify your Father who is in heaven.",
+      text: "You are the light of the world. A city located on a hill can’t be hidden. Neither do you light a lamp, and put it under a measuring basket, but on a stand; and it shines to all who are in the house. Even so, let your light shine before men; that they may see your good works, and glorify your Father who is in heaven.",
     },
     {
       id: 'mt6-33',
       book: 'Matthew', chapter: 6, verseStart: 33, verseEnd: 33,
       theme: ['Purpose & Direction', 'Anxiety & Worry'],
-      text: "But seek first God’s Kingdom and his righteousness; and all these things will be given to you as well.",
+      text: "But seek first God’s Kingdom, and his righteousness; and all these things will be given to you as well.",
     },
     {
       id: 'mt22-37-39',
@@ -167,7 +167,7 @@ module.exports = {
       id: 'jn15-16',
       book: 'John', chapter: 15, verseStart: 16, verseEnd: 16,
       theme: ['Purpose & Direction'],
-      text: "You didn’t choose me, but I chose you and appointed you, that you should go and bear fruit, and that your fruit should remain; that whatever you will ask of the Father in my name, he may give it to you.",
+      text: "You didn’t choose me, but I chose you, and appointed you, that you should go and bear fruit, and that your fruit should remain; that whatever you will ask of the Father in my name, he may give it to you.",
     },
     // Faith & Doubt
     {
@@ -186,7 +186,7 @@ module.exports = {
       id: 'jn20-29',
       book: 'John', chapter: 20, verseStart: 29, verseEnd: 29,
       theme: ['Faith & Doubt'],
-      text: "Because you have seen me, you have believed. Blessed are those who have not seen and have believed.",
+      text: "Because you have seen me, you have believed. Blessed are those who have not seen, and have believed.",
     },
     // Suffering & Pain
     {
@@ -206,7 +206,7 @@ module.exports = {
       id: 'lk15-20-24',
       book: 'Luke', chapter: 15, verseStart: 20, verseEnd: 24,
       theme: ['Shame & Guilt', 'Forgiveness', 'Hope'],
-      text: "But while he was still far off, his father saw him and was moved with compassion, and ran, fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven and in your sight. I am no longer worthy to be called your son.’ But the father said to his servants, ‘Bring out the best robe and put it on him. Put a ring on his hand and sandals on his feet. Bring the fattened calf, kill it, and let’s eat and celebrate; for this, my son, was dead and is alive again. He was lost and is found.’",
+      text: "But while he was still far off, his father saw him, and was moved with compassion, and ran, and fell on his neck, and kissed him. The son said to him, ‘Father, I have sinned against heaven, and in your sight. I am no longer worthy to be called your son.’ “But the father said to his servants, ‘Bring out the best robe, and put it on him. Put a ring on his hand, and shoes on his feet. Bring the fattened calf, kill it, and let us eat, and celebrate; for this, my son, was dead, and is alive again. He was lost, and is found.’",
       note: 'Parable of the Lost Son — Jesus teaching in narrative form',
     },
     {
@@ -246,7 +246,7 @@ module.exports = {
       id: 'mt28-18-19',
       book: 'Matthew', chapter: 28, verseStart: 18, verseEnd: 19,
       theme: ['Hope', 'Purpose & Direction'],
-      text: "All authority has been given to me in heaven and on earth. Go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit,",
+      text: "All authority has been given to me in heaven and on earth. Go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit",
     },
     // Generosity / wealth (extra themes for advisor depth)
     {
@@ -265,15 +265,15 @@ module.exports = {
       id: 'mt5-3-6',
       book: 'Matthew', chapter: 5, verseStart: 3, verseEnd: 6,
       theme: ['Hope', 'Purpose & Direction', 'Suffering & Pain'],
-      text: "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven. Blessed are those who mourn, for they shall be comforted. Blessed are the gentle, for they shall inherit the earth. Blessed are those who hunger and thirst for righteousness, for they shall be filled.",
+      text: "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven. Blessed are those who mourn, for they shall be comforted. Blessed are the gentle, for they shall inherit the earth. Blessed are those who hunger and thirst after righteousness, for they shall be filled.",
     },
     // Mark — storm, faith, children
     {
       id: 'mk4-39',
       book: 'Mark', chapter: 4, verseStart: 39, verseEnd: 39,
       theme: ['Fear', 'Peace', 'Anxiety & Worry'],
-      text: "He awoke and rebuked the wind, and said to the sea, “Peace! Be still!” The wind ceased and there was a great calm.",
-      note: 'Jesus speaks to the storm — narrative with His command',
+      text: "Peace! Be still!",
+      note: 'Jesus’ command to the storm; the surrounding narration is not His speech',
     },
     {
       id: 'mk5-36',
@@ -305,7 +305,7 @@ module.exports = {
       id: 'jn3-16-17',
       book: 'John', chapter: 3, verseStart: 16, verseEnd: 17,
       theme: ['Hope', 'Faith & Doubt', 'Shame & Guilt'],
-      text: "For God so loved the world, that he gave his only born Son, that whoever believes in him should not perish, but have eternal life. For God didn’t send his Son into the world to judge the world, but that the world should be saved through him.",
+      text: "For God so loved the world, that he gave his one and only Son, that whoever believes in him should not perish, but have eternal life. For God didn’t send his Son into the world to judge the world, but that the world should be saved through him.",
     },
     {
       id: 'jn6-35',
@@ -323,7 +323,7 @@ module.exports = {
       id: 'jn15-4-5',
       book: 'John', chapter: 15, verseStart: 4, verseEnd: 5,
       theme: ['Purpose & Direction', 'Faith & Doubt', 'Loneliness'],
-      text: "Remain in me, and I in you. As the branch can’t bear fruit by itself unless it remains in the vine, so neither can you, unless you remain in me. I am the vine. You are the branches. He who remains in me and I in him bears much fruit, for apart from me you can do nothing.",
+      text: "Remain in me, and I in you. As the branch can’t bear fruit by itself, unless it remains in the vine, so neither can you, unless you remain in me. I am the vine. You are the branches. He who remains in me, and I in him, the same bears much fruit, for apart from me you can do nothing.",
     },
     {
       id: 'mt9-12-13',
@@ -335,7 +335,7 @@ module.exports = {
       id: 'mt13-31-32',
       book: 'Matthew', chapter: 13, verseStart: 31, verseEnd: 32,
       theme: ['Hope', 'Faith & Doubt', 'Purpose & Direction'],
-      text: "The Kingdom of Heaven is like a grain of mustard seed which a man took, and sowed in his field, which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs and becomes a tree, so that the birds of the air come and lodge in its branches.",
+      text: "The Kingdom of Heaven is like a grain of mustard seed, which a man took, and sowed in his field; which indeed is smaller than all seeds. But when it is grown, it is greater than the herbs, and becomes a tree, so that the birds of the air come and lodge in its branches.",
       note: 'Parable of the Mustard Seed',
     },
     {
@@ -349,14 +349,14 @@ module.exports = {
       id: 'lk10-33-37',
       book: 'Luke', chapter: 10, verseStart: 33, verseEnd: 37,
       theme: ['Conflict & Relationships', 'Purpose & Direction', 'Suffering & Pain'],
-      text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him. On the next day, when he departed, he took out two denarii, gave them to the host, and said to him, ‘Take care of him. Whatever you spend beyond that, I will repay you when I return.’ Now which of these three do you think seemed to be a neighbor to him who fell among the robbers?” He said, “He who showed mercy on him.” Then Jesus said to him, “Go and do likewise.”",
-      note: 'Parable of the Good Samaritan',
+      text: "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, and brought him to an inn, and took care of him. On the next day, when he departed, he took out two denarii, and gave them to the host, and said to him, ‘Take care of him. Whatever you spend beyond that, I will repay you when I return.’ Now which of these three do you think seemed to be a neighbor to him who fell among the robbers?… Go and do likewise.",
+      note: 'Parable of the Good Samaritan — the lawyer’s reply is omitted so only Jesus’ words remain',
     },
     {
       id: 'jn10-11-14',
       book: 'John', chapter: 10, verseStart: 11, verseEnd: 14,
       theme: ['Loneliness', 'Hope', 'Fear'],
-      text: "I am the good shepherd. The good shepherd lays down his life for the sheep. He who is a hired hand and not a shepherd, who doesn’t own the sheep, sees the wolf coming, leaves the sheep, and flees. The wolf snatches the sheep and scatters them. The hired hand flees because he is a hired hand and doesn’t care for the sheep. I am the good shepherd. I know my own, and I’m known by my own.",
+      text: "I am the good shepherd. The good shepherd lays down his life for the sheep. He who is a hired hand, and not a shepherd, who doesn’t own the sheep, sees the wolf coming, leaves the sheep, and flees. The wolf snatches the sheep, and scatters them. The hired hand flees because he is a hired hand, and doesn’t care for the sheep. I am the good shepherd. I know my own, and I’m known by my own",
       note: 'Parable / figure of the Good Shepherd',
     },
   ],

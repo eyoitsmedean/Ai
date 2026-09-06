@@ -225,6 +225,27 @@ async function main() {
     assert(html.includes("'threads-sheet'"), 'threads sheet not wired to Android back');
   });
 
+  await check('corpus red-letter purity (offline lint)', async () => {
+    const corpus = require('../data/red-letters');
+    const narration = /\b(Jesus|he|she|they|Peter|Simon|the disciples?)\s+(said|answered|asked|replied|told)\b/i;
+    const bad = [];
+    for (const p of corpus.passages) {
+      if (!p.text || p.text.length < 8) bad.push(p.id + ': empty');
+      if (narration.test(p.text)) bad.push(p.id + ': narration');
+      if (/^["“]|["”]$/.test(p.text.trim())) bad.push(p.id + ': stray outer quote');
+      if (/["']/.test(p.text)) bad.push(p.id + ': straight quote (WEB uses typographic)');
+      if (/[,;:]$/.test(p.text.trim())) bad.push(p.id + ': ends mid-clause');
+    }
+    // Known one-word edge: the Lost Son parable narrates within Jesus' own telling — allowed.
+    const allowed = new Set(['lk15-20-24: narration']);
+    const real = bad.filter((b) => !allowed.has(b));
+    assert(real.length === 0, real.join('; '));
+    assert(corpus.passages.length >= 55, 'corpus shrank');
+    // The one known drift: John 16:33 must read "oppression" (WEB), not "trouble".
+    const jn = corpus.passages.find((p) => p.id === 'jn16-33');
+    assert(/oppression/.test(jn.text), 'John 16:33 drifted from WEB');
+  });
+
   await check('library search payload', async () => {
     const { json } = await req('/api/library');
     assert(json.passages.some((p) => /parable/i.test(p.note || '')), 'parable notes missing for filter');

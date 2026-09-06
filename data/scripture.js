@@ -30,7 +30,9 @@ function similarity(a, b) {
   return inter / Math.max(1, ta.size + tb.size - inter);
 }
 
-async function fetchFromApi(ref) {
+async function fetchFromApi(rawRef) {
+  // bible-api rejects typographic dashes in ranges ("6:25–27"); normalize to ASCII.
+  const ref = String(rawRef || '').replace(/[–—]/g, '-').replace(/\s*-\s*/g, '-').replace(/\s+/g, ' ').trim();
   const key = ref.toLowerCase().replace(/\s+/g, '');
   if (apiCache.has(key)) return apiCache.get(key);
   try {

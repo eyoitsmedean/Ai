@@ -646,19 +646,21 @@ app.post('/api/chat', async (req, res) => {
     return res.end();
   }
 
-  if (!ai) {
-    bumpQuota(id);
+  // Verified-corpus reply: used when no AI is configured, and as the graceful
+  // fallback when the model fails before producing any text.
+  async function streamCorpusReply(intro) {
     const pack = offlineEncouragement(guessTheme(lastUser));
     const text = [
-      'I hear you. Here are words Jesus actually spoke that speak into what you shared — drawn from our verified red-letter library (offline mode).',
+      intro,
       '',
       ...pack.passages.slice(0, 3).flatMap((p) => [`**${p.verse}**`, `"${p.quote}"`, p.context, '']),
       pack.closing,
     ].join('\n');
-
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+    }
     for (const chunk of text.match(/.{1,48}/gs) || [text]) {
       res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
     }
@@ -677,13 +679,21 @@ app.post('/api/chat', async (req, res) => {
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');
-    return res.end();
+    res.end();
+  }
+
+  if (!ai) {
+    bumpQuota(id);
+    return streamCorpusReply(
+      'I hear you. Here are words Jesus actually spoke that speak into what you shared — drawn from our verified red-letter library (offline mode).'
+    );
   }
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
+  let full = '';
   try {
     bumpQuota(id);
     const stream = ai.messages.stream({
@@ -694,7 +704,6 @@ app.post('/api/chat', async (req, res) => {
       messages,
     });
 
-    let full = '';
     stream.on('text', (text) => {
       full += text;
       res.write(`data: ${JSON.stringify({ text })}\n\n`);
@@ -717,9 +726,18 @@ app.post('/api/chat', async (req, res) => {
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (err) {
-    console.error('Chat error:', err.message);
-    if (!res.headersSent) return res.status(500).json({ error: 'Failed to respond.' });
-    res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
+    console.error('Chat error:', err.status || '', err.message);
+    if (!full.trim()) {
+      // Nothing reached the user yet: answer from the verified corpus instead of failing.
+      return streamCorpusReply(
+        'The Advisor is briefly unavailable, so here are words Jesus actually spoke that speak into what you shared — from our verified red-letter library.'
+      );
+    }
+    res.write(`data: ${JSON.stringify({ error: 'interrupted', partial: true })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ done: true, citations: [], grounded: 0, unverified: 0, quota: getQuota(id), interrupted: true })}\n\n`
+    );
+    res.write('data: [DONE]\n\n');
     res.end();
   }
 });
