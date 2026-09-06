@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-06T07:24:55.090Z",
-  "commit": "abb1e5f",
+  "generated": "2026-09-06T07:28:41.314Z",
+  "commit": "ba5d962",
   "mode": {
     "runner": "in-process",
     "path": "client composer (public/data/advisor.js, static hosting)",
@@ -571,30 +571,27 @@
       "id": "life-12",
       "category": "life",
       "input": "I've lost hope that anything in my life will ever change.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "Hope is not naive optimism. In his words it is anchored in who he is, not in how you feel this hour.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe names tribulation honestly — then plants cheer in his victory.\n\n**Matthew 5:14**\n\"Ye are the light of the world. A city that is set on an hill cannot be hid.\"\nHope becomes visible when light is lived, not only felt.\n\n**John 11:25**\n\"I am the resurrection, and the life.\"\nThe center of Christian hope is a person, not a vague wish.\n\nGood cheer is possible because he has overcome — not because you have to.",
       "cites": [
         "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "Matthew 5:14",
+        "John 11:25"
       ],
       "citeThemes": {
         "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
+        "Matthew 5:14": [
+          "Purpose & Direction"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
-          "Suffering & Pain",
-          "Peace"
+        "John 11:25": [
+          "Grief & Loss"
         ]
       },
       "themeMatches": [
         "John 16:33",
-        "Matthew 11:28"
+        "Matthew 5:14"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -2883,27 +2880,31 @@
       "id": "life-29",
       "category": "life",
       "input": "I'm 13 and I get bullied every single day at school. Nobody does anything.",
-      "letter": "Loneliness can convince you that you are unseen. You are not an interruption.\n\n**Matthew 28:20**\n\"Lo, I am with you alway, even unto the end of the world.\"\nHis final Gospel promise is presence that does not expire.\n\n**John 14:18**\n\"I will not leave you comfortless: I will come to you.\"\nOrphaned feelings meet a promise of coming near.\n\n**John 15:15**\n\"Henceforth I call you not servants; for the servant knoweth not what his lord doeth: but I have called you friends.\"\nJesus names his followers friends — belonging at the center of discipleship.\n\nYou are someone Jesus calls friend. Presence does not expire at the end of a text thread.",
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "Matthew 28:20",
-        "John 14:18",
-        "John 15:15"
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
       ],
       "citeThemes": {
-        "Matthew 28:20": [
-          "Loneliness"
+        "John 16:33": [
+          "Suffering & Pain",
+          "Peace"
         ],
-        "John 14:18": [
-          "Loneliness"
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
         ],
-        "John 15:15": [
-          "Conflict & Relationships",
-          "Hope"
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
         ]
       },
       "themeMatches": [
-        "Matthew 28:20",
-        "John 14:18"
+        "John 16:33",
+        "Matthew 5:4",
+        "Matthew 11:28"
       ],
       "firstInRoom": true,
       "inexact": [],
