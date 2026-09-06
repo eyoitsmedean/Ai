@@ -91,9 +91,43 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /\*\*(Luke 12:32|Luke 12:7|Mark 5:36)\*\*/, 'fear is answered from the Fear pack, not a fixed letter');
+    assert.match(letter, /Fear not|Be not afraid|hairs of your head/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('answers a crisis with the handoff first and no duplicated notice', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to kill myself' }],
+    });
+    const letter = res.raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; } })
+      .join('');
+    assert.equal((letter.match(/988(?!lifeline)/g) || []).length, 1, '988 appears once, in the letter itself');
+    assert.match(letter, /findahelpline\.com/);
+    assert.match(letter, /not a person/);
+    assert.match(letter, /\*\*Matthew 11:28\*\*/);
+  });
+
+  it('gives different questions different letters', async () => {
+    const ask = async (content) => {
+      const res = await request('POST', '/api/chat', { messages: [{ role: 'user', content }] });
+      return res.raw
+        .split('\n')
+        .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+        .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; } })
+        .join('');
+    };
+    const a = await ask('My wife passed away and I cannot stop crying');
+    const b = await ask('what is the weather tomorrow');
+    const c = await ask('I lied to my wife about money and I feel disgusted with myself');
+    assert.notEqual(a, b);
+    assert.notEqual(a, c);
+    assert.match(a, /Matthew 5:4|John 11:25|John 16:22/);
+    assert.match(b, /cannot help with that/);
+    assert.match(c, /Luke 15:4|Luke 15:7|John 6:35/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

@@ -8,11 +8,13 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { compose: composeLetter } = require('./lib/advise');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+const CHAT_RATE_LIMIT = Math.max(1, Number(process.env.CHAT_RATE_LIMIT) || 10);
 const THEME_SET = new Set(themeNames());
 
 app.use(express.json({ limit: '32kb' }));
@@ -326,7 +328,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -348,11 +350,21 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
-  const finish = (body) => {
+  const finish = (body, { notice = true } = {}) => {
     const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    streamText(crisis && notice ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
+  };
+
+  // The curated Advisor reads the question itself and carries its own crisis paragraph.
+  const curated = () => {
+    try {
+      return finish(composeLetter(last.content), { notice: false });
+    } catch (err) {
+      console.error('Curated advisor error:', err.message);
+      return finish(FALLBACK_LETTER);
+    }
   };
 
   req.on('close', () => {
@@ -362,7 +374,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return curated();
   }
 
   try {
@@ -398,7 +410,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    curated();
   }
 });
 
