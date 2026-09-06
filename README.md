@@ -35,8 +35,11 @@ API_ACCESS_KEY=        # optional gate for /api/*
 
 ```bash
 npm test
+npm run eval     # 55-question evaluation set against the live Advisor → eval/RESULTS.md
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
+
+`RELEASE.md` lists every release claim as VERIFIED (with its command) or UNVERIFIED (with what it takes), plus the five-minute on-device checklist. `CLAUDE.md` is the system of record for decisions.
 
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
 

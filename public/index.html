@@ -4614,8 +4614,23 @@ function closeCommandPalette() {
   root.setAttribute('aria-hidden', 'true');
 }
 
+// Mirrors CRISIS_PATTERN in lib/scripture.js: explicit ideation plus the
+// passive phrasings from the C-SSRS screener and the 988 warning-sign list.
+const CRISIS_PATTERN_CLIENT = new RegExp([
+  'suicid', 'kill(?:ing)? myself', 'end (?:my|it) (?:life|all)', 'take my (?:own )?life', 'end my life',
+  'wan(?:t|na) to die', 'wish(?:ed|ing)? (?:i (?:were|was) dead|i (?:could|would) die|to die|i (?:was|were) never born)',
+  '(?:go|going) to sleep and (?:not|never) wake up', 'not (?:be )?alive anymore', 'self[-\\s]?harm',
+  'hurt(?:ing)? myself', 'cut(?:ting)? myself', 'hang myself', 'overdos',
+  '(?:don\'?t|do not|dont) want to (?:live|be here|be alive|wake up)', 'better off (?:dead|without me)',
+  'no (?:reason|point) (?:to live|in living|to (?:go|be) on|to be here|to keep going)',
+  '(?:life|it) (?:is|isn\'?t|is not) (?:not )?worth living',
+  'can\'?t (?:go on|do this anymore|keep going|take it anymore)', 'cannot (?:go on|do this anymore|keep going|take it anymore)',
+  '(?:a )?burden to (?:everyone|everybody|my family|them|others)',
+  'nobody would (?:miss|notice|care if)', 'no one would (?:miss|notice|care if)',
+  'want (?:it|everything|the pain) to (?:end|stop|be over)', 'planning (?:my|to end my) (?:death|life)',
+].join('|'), 'i');
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return CRISIS_PATTERN_CLIENT.test(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {

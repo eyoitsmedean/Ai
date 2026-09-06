@@ -3,19 +3,22 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE, looksLikeMedical, MEDICAL_NOTICE, looksLikeOffScope, OFFSCOPE_NOTICE, looksLikeIdentity, IDENTITY_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 const { encodeBlessing, decodeBlessing, blessingPage } = require('./lib/blessing');
 const { securityHeaders } = require('./lib/headers');
-const { matchNeed, sealedNeeds, bestNeed, formatNeedLetter } = require('./lib/concordance');
+const { matchNeed, sealedNeeds, bestNeed, formatNeedLetter, NEED_FLOOR } = require('./lib/concordance');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+// 40 letters a minute per address is generous for a person and hostile to a
+// script; the evaluation harness raises it for in-process runs only.
+const CHAT_RATE_PER_MIN = Math.max(1, Number(process.env.CHAT_RATE_PER_MIN) || 40);
 const THEME_SET = new Set(themeNames());
 const PKG = require('./package.json');
 
@@ -363,7 +366,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 40, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_RATE_PER_MIN, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -385,9 +388,13 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
+  const medical = !crisis && looksLikeMedical(last.content);
+  const identity = !crisis && !medical && looksLikeIdentity(last.content);
+  const offScope = !crisis && !medical && !identity && looksLikeOffScope(last.content);
   const finish = (body) => {
     const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    const prefix = crisis ? CRISIS_NOTICE : medical ? MEDICAL_NOTICE : identity ? IDENTITY_NOTICE : offScope ? OFFSCOPE_NOTICE : '';
+    streamText(prefix + verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
@@ -399,7 +406,9 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    const hit = bestNeed(last.content);
+    // Crisis and off-scope asks get the standing letter (peace, rest), never a
+    // page chosen by a stray word — "planning my death" must not fetch a tomb verse.
+    const hit = (crisis || offScope) ? null : bestNeed(last.content, { minScore: NEED_FLOOR });
     return finish(hit ? formatNeedLetter(hit) : FALLBACK_LETTER);
   }
 
