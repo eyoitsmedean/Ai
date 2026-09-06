@@ -2373,11 +2373,15 @@ html[data-review="1"] .review-ribbon { display: block; }
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
+<script src="/config.js"></script>
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
 <script src="/data/paths.js"></script>
 <script src="/data/press.js"></script>
 <script>
+/* Same origin by default; a phone build points this at the Node host via /config.js. */
+function apiUrl(path) { return String(window.RLA_API_BASE || '').replace(/\/$/, '') + path; }
+
 const FREE_CHATS = 5;
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
@@ -2892,7 +2896,7 @@ async function loadCurated() {
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch(apiUrl('/api/daily'));
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
   } catch (e) {
@@ -2941,7 +2945,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch(apiUrl('/api/encouragement'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -3092,7 +3096,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch(apiUrl('/api/library?' + params.toString()));
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -3468,7 +3472,7 @@ async function sendMsg(preset) {
   let opened = false;
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch(apiUrl('/api/chat'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
@@ -4289,7 +4293,7 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch(apiUrl('/api/library?limit=24'));
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
@@ -5016,7 +5020,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch(apiUrl('/api/verify'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
