@@ -11,10 +11,12 @@
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
-  <title>Red Letter — The Advisor</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <title>Red Letter</title>
+  <meta property="og:url" content="/" />
+  <meta name="application-name" content="Red Letter" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -336,6 +338,9 @@ textarea { font-family: var(--body); }
   text-transform: uppercase;
 }
 .tp-note a { color: var(--crimson); }
+.bl-note { font-style: italic; color: var(--ink-2); }
+.bl-quote { text-align: left; margin: 10px auto 6px; font-size: clamp(22px, 4.6vw, 30px); }
+#blessing-leaf .cite { margin-bottom: 26px; }
 
 /* ── Shell ── */
 .silk {
@@ -601,6 +606,59 @@ textarea { font-family: var(--body); }
 }
 
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.quiet-verbs { display: flex; flex-wrap: wrap; gap: 16px; margin: 8px 0 0; }
+.quiet-verbs button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--crimson);
+}
+#aff-card .aff-text {
+  font-size: clamp(20px, 3.2vw, 26px);
+  max-width: 28ch;
+  color: var(--ink-2);
+}
+.resume {
+  margin: 0 0 36px;
+  padding: 0 0 0 16px;
+  border-left: 1px solid var(--crimson);
+  max-width: 42ch;
+}
+.resume[hidden] { display: none; }
+.resume-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--crimson);
+  margin: 8px 0 16px;
+}
+.hear-rule {
+  display: none;
+  height: 2px;
+  background: var(--rule);
+  margin: 14px 0 6px;
+  max-width: 28ch;
+  overflow: hidden;
+}
+html.hearing .hear-rule { display: block; }
+.hear-rule i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--crimson);
+  animation: hearFill 18s linear forwards;
+}
+@keyframes hearFill { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .hear-rule i { animation: none; width: 100%; }
+}
+.compose { margin: 22px 0 28px; max-width: 48ch; }
+.letter-tools { margin: 12px 0 0; }
+.verso { opacity: .92; }
 .cta {
   border: none;
   padding: 13px 16px;
@@ -1038,24 +1096,33 @@ textarea { font-family: var(--body); }
 }
 .offline-banner.on { display: block; }
 
+.path-block { margin: 0 0 28px; }
+.path-block[hidden] { display: none; }
 .week-ribbon, .seven {
   display: flex;
-  gap: 8px;
-  margin: 0 0 28px;
+  gap: 6px;
+  margin: 0;
 }
 .week-cell, .seven-day {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 7px;
   color: var(--ink-3);
-  font-size: 11px;
-  letter-spacing: .1em;
+  font-size: 10px;
+  letter-spacing: .06em;
   text-transform: uppercase;
   background: none;
   border: none;
   padding: 0;
+}
+.seven-day span:last-child,
+.week-cell span:last-child {
+  white-space: nowrap;
+  overflow: visible;
+  max-width: 100%;
 }
 .week-dot, .seven-dot {
   width: 8px;
@@ -1229,6 +1296,18 @@ textarea { font-family: var(--body); }
     letter-spacing: .14em;
     text-transform: uppercase;
     color: #8A8074;
+  }
+  body.printing-journal #today-page,
+  body.printing-journal #seek-page,
+  body.printing-journal #advisor-page,
+  body.printing-journal .compose .actions,
+  body.printing-journal .journal-delete { display: none !important; }
+  body.printing-journal #journal-page {
+    position: static !important;
+    opacity: 1 !important;
+    pointer-events: all !important;
+    overflow: visible !important;
+    padding: 0 !important;
   }
 }
 
@@ -1471,6 +1550,20 @@ html.sitting .sit-sheet {
 <div class="silk" aria-hidden="true"></div>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
 
+<section id="blessing-leaf" class="titlepage hidden" role="dialog" aria-labelledby="bl-kicker">
+  <div class="tp-inner">
+    <div class="tp-mark" aria-hidden="true">R</div>
+    <div class="tp-ornament">A blessing</div>
+    <p class="tp-kicker" id="bl-kicker">Someone sent you a word</p>
+    <p class="tp-deck bl-note" id="bl-note" hidden></p>
+    <p class="red-letter bl-quote" id="bl-quote"></p>
+    <p class="cite" id="bl-cite"></p>
+    <button class="tp-open" type="button" onclick="openBlessedRoom()">Turn the page</button>
+    <button class="tp-skip" type="button" onclick="keepBlessing()">Keep this word</button>
+    <p class="tp-note">The words He actually spoke, set from the Gospels. Software, not a person.</p>
+  </div>
+</section>
+
 <section id="onboarding" class="titlepage hidden" role="dialog" aria-labelledby="tp-title">
   <div class="tp-inner">
     <div class="tp-mark" aria-hidden="true">R</div>
@@ -1532,7 +1625,7 @@ html.sitting .sit-sheet {
         <div class="mast-sub"><span id="header-sub">Today</span><span class="mast-catch" id="mast-catch" hidden></span></div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
-        <span class="today-streak" id="streak-num">1</span>
+        <span class="today-streak" id="streak-num" hidden></span>
         <button class="icon-btn" onclick="openCommandPalette()" aria-label="Find a word">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
         </button>
@@ -1550,11 +1643,19 @@ html.sitting .sit-sheet {
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
-        <p class="hear-now" id="hear-status" hidden>Listening</p>
-        <div class="actions" style="margin-bottom:22px">
-          <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
+        <div class="path-block" id="path-block">
+          <p class="eyebrow" id="path-kicker">Seven Days</p>
+          <div class="week-ribbon" id="week-ribbon" aria-label="Seven Days with His words"></div>
         </div>
-        <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+
+        <aside class="resume" id="resume-slip" hidden>
+          <p class="eyebrow">The sentence waits</p>
+          <p class="resume-quote" id="resume-quote"></p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="resumeSit()">Continue sitting</button>
+            <button class="ghost" type="button" onclick="dismissResume()">Leave it</button>
+          </div>
+        </aside>
 
         <aside class="epigraph" id="epigraph" hidden>
           <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
@@ -1564,8 +1665,31 @@ html.sitting .sit-sheet {
           <button class="flyleaf-turn" type="button" onclick="turnFlyleaf()">Turn the leaf</button>
         </aside>
 
-        <section class="movement" id="aff-card">
-          <p class="eyebrow">Affirmation</p>
+        <section class="movement" id="word-card">
+          <p class="eyebrow">Word of the day</p>
+          <div id="word-skel">
+            <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
+          </div>
+          <div id="word-content" style="display:none">
+            <div class="badge" id="word-theme"></div>
+            <h2 class="word-title" id="word-title"></h2>
+            <p class="red-letter" id="word-passage"></p>
+            <p class="cite" id="word-verse"></p>
+            <div class="hear-rule" id="hear-rule" hidden aria-hidden="true"><i></i></div>
+            <p class="hear-now" id="hear-status" hidden>Listening</p>
+            <div class="rule"></div>
+            <p class="reflection" id="word-reflection"></p>
+            <div class="actions">
+              <button class="cta cta-primary" type="button" onclick="sitWith('word')">Sit with this</button>
+              <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this</button>
+              <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
+              <button class="ghost" onclick="openShareSheet('word')">Share card</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="movement verso" id="aff-card">
+          <p class="eyebrow">A quieter line</p>
           <div id="aff-skel">
             <div class="skel h l"></div><div class="skel m"></div><div class="skel s"></div>
           </div>
@@ -1578,26 +1702,6 @@ html.sitting .sit-sheet {
               <button class="ghost" id="aff-save-btn" onclick="toggleSave('aff')"><span id="aff-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('aff')">Share card</button>
               <button class="ghost" onclick="sitWith('aff')">Sit with this</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="movement" id="word-card">
-          <p class="eyebrow">Word of the day</p>
-          <div id="word-skel">
-            <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
-          </div>
-          <div id="word-content" style="display:none">
-            <div class="badge" id="word-theme"></div>
-            <h2 class="word-title" id="word-title"></h2>
-            <p class="red-letter" id="word-passage"></p>
-            <p class="cite" id="word-verse"></p>
-            <div class="rule"></div>
-            <p class="reflection" id="word-reflection"></p>
-            <div class="actions">
-              <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
-              <button class="ghost" onclick="openShareSheet('word')">Share card</button>
-              <button class="ghost" onclick="sitWith('word')">Sit with this</button>
             </div>
           </div>
         </section>
@@ -1616,10 +1720,10 @@ html.sitting .sit-sheet {
           </div>
         </section>
 
-        <div class="cta-row">
-          <button class="cta cta-primary" onclick="switchTab('advisor')">Ask the Advisor</button>
-          <button class="cta cta-ghost" onclick="switchTab('seek')">Find a word for this</button>
-          <button class="cta cta-ghost" type="button" onclick="blessingFromToday()">Send a blessing</button>
+        <div class="quiet-verbs">
+          <button type="button" onclick="switchTab('advisor')">Ask</button>
+          <button type="button" onclick="switchTab('seek')">Find a word</button>
+          <button type="button" onclick="blessingFromToday()">Send a blessing</button>
         </div>
         <div class="colophon">
           <span id="folio-colophon">Set in the Gospels. Not a person.</span>
@@ -1714,9 +1818,12 @@ html.sitting .sit-sheet {
             <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
             <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
           </div>
+          <div class="letter-tools">
+            <button class="ghost" type="button" onclick="newLetter()">A new letter</button>
+          </div>
           <div class="gate" id="chat-gate">
-            <h3>Five letters for today</h3>
-            <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
+            <h3>Today’s correspondence is full</h3>
+            <p>Five letters is enough for one day. The rooms are still open — sit with Today, or return in the morning.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
@@ -1732,6 +1839,15 @@ html.sitting .sit-sheet {
       <div class="page" id="journal-page">
         <p class="eyebrow">A commonplace book</p>
         <h1 class="display">Your <em>journal</em></h1>
+        <div class="compose">
+          <label class="sr-only" for="compose-line">A line for the commonplace</label>
+          <textarea class="sit-reply" id="compose-line" rows="2" placeholder="A line of your own…"></textarea>
+          <div class="actions" style="margin-top:14px">
+            <button class="ghost" type="button" onclick="keepCompose()">Keep this line</button>
+            <button class="ghost" type="button" onclick="exportJournal()">Export Markdown</button>
+            <button class="ghost" type="button" onclick="printJournal()">Print the book</button>
+          </div>
+        </div>
         <div class="quire" id="quire" hidden></div>
         <div id="journal-list"></div>
       </div>
@@ -1884,10 +2000,12 @@ html.sitting .sit-sheet {
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
   <div class="actions" style="margin-top:18px">
-    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
-    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
-    <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
+    <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send it</button>
+    <button class="ghost" type="button" onclick="copyBlessingLink()">Copy the link</button>
+    <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn card</button>
+    <button class="ghost" type="button" onclick="sendBlessing('void')">Night card</button>
   </div>
+  <p class="tp-note" style="margin-top:14px">The link opens this room on a leaf with your note and the verse. No account, no app to install.</p>
 </aside>
 
 <aside class="settings-sheet" id="share-sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
@@ -1943,9 +2061,9 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
-<script src="/data/curated.js"></script>
-<script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
+<script src="./data/curated.js"></script>
+<script src="./data/advisor.js"></script>
+<script src="./data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -1963,7 +2081,12 @@ const THEMES = [
   ['Hope', 'Joy no one can take'],
 ];
 
+const BASE = (function () {
+  const m = location.pathname.match(/^(\/[^/]+\/)/);
+  return /github\.io$/i.test(location.hostname) && m ? m[1] : '/';
+})();
 let dailyData = null;
+let blessedWord = null;
 let currentEncData = null;
 let currentEncTheme = null;
 let currentSaying = null;
@@ -2098,27 +2221,140 @@ function clearReaderStorage() {
 function startNewReader() {
   if (!confirm('Start a new reader on this device? Words kept here will be cleared.')) return;
   clearReaderStorage();
-  location.href = '/';
+  location.href = BASE;
+}
+
+function parseSpokenRef(ref) {
+  const m = String(ref || '').trim().match(/^(Matthew|Mark|Luke|John)\s+(\d{1,3}):(\d{1,3})(?:\s*[–—-]\s*(\d{1,3}))?$/i);
+  if (!m) return null;
+  const book = m[1][0].toUpperCase() + m[1].slice(1).toLowerCase();
+  const start = Number(m[3]);
+  return { book, chapter: Number(m[2]), start, end: Number(m[4] || start) };
+}
+
+async function findSpoken(ref) {
+  const want = parseSpokenRef(ref);
+  if (!want) return null;
+  try {
+    const res = await fetch(BASE + 'api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ verse: ref, quote: '' }] }),
+    });
+    if (res.ok) {
+      const row = ((await res.json()).results || [])[0];
+      if (row && row.ok && row.quote) return { verse: row.verse, quote: row.quote };
+      if (row && !row.ok) return null;
+    }
+  } catch (_) {}
+  let lib = null;
+  try { lib = await loadStaticLibrary(); } catch (_) { return null; }
+  const rows = (lib.sayings || []).filter((s) => s.book === want.book && Number(s.chapter) === want.chapter);
+  const exact = rows.find((s) => Number(s.start) === want.start && Number(s.end) === want.end);
+  if (exact) return { verse: exact.citation, quote: exact.text };
+  const cover = rows.find((s) => Number(s.start) <= want.start && Number(s.end) >= want.end);
+  if (!cover) return null;
+  if (Array.isArray(cover.cuts) && cover.cuts.length === Number(cover.end) - Number(cover.start) + 1) {
+    const from = cover.cuts[want.start - Number(cover.start)];
+    const to = cover.cuts[want.end - Number(cover.start) + 1];
+    const slice = cover.text.slice(from, to == null ? undefined : to).trim();
+    if (slice) {
+      const verse = want.start === want.end
+        ? want.book + ' ' + want.chapter + ':' + want.start
+        : want.book + ' ' + want.chapter + ':' + want.start + '–' + want.end;
+      return { verse, quote: slice };
+    }
+  }
+  return { verse: cover.citation, quote: cover.text };
+}
+
+function blessingLink(pick, note) {
+  const u = new URL(BASE, location.origin);
+  u.searchParams.set('b', pick.verse);
+  const n = String(note || '').trim().slice(0, 140);
+  if (n) u.searchParams.set('n', n);
+  return u.toString();
+}
+
+async function showBlessingLeaf(ref, note) {
+  const found = await findSpoken(ref);
+  if (!found) return false;
+  blessedWord = { ...found, note: String(note || '').trim().slice(0, 140) };
+  const noteEl = document.getElementById('bl-note');
+  noteEl.textContent = blessedWord.note;
+  noteEl.hidden = !blessedWord.note;
+  document.getElementById('bl-quote').textContent = '“' + found.quote + '”';
+  document.getElementById('bl-cite').textContent = found.verse + '  ·  KJV';
+  document.getElementById('blessing-leaf').classList.remove('hidden');
+  document.getElementById('app').setAttribute('aria-hidden', 'true');
+  return true;
+}
+
+function leaveBlessingLeaf() {
+  const leaf = document.getElementById('blessing-leaf');
+  const finish = () => {
+    leaf.classList.add('hidden');
+    leaf.classList.remove('leaving');
+    if (!ls('rla-onboarded')) {
+      document.getElementById('onboarding').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('app').removeAttribute('aria-hidden');
+    startApp();
+  };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+  leaf.classList.add('leaving');
+  setTimeout(finish, 640);
+}
+
+function openBlessedRoom() {
+  leaveBlessingLeaf();
+}
+
+function keepBlessing() {
+  if (blessedWord) {
+    const key = 'bless-' + Date.now();
+    saveJournalItem({
+      id: key,
+      key,
+      type: 'bless',
+      title: blessedWord.note || 'A blessing sent to you',
+      body: blessedWord.quote,
+      verse: blessedWord.verse,
+    });
+    showToast('Kept in the journal');
+  }
+  leaveBlessingLeaf();
 }
 
 (function init() {
+  let blessRef = '';
+  let blessNote = '';
   try {
     const q = new URLSearchParams(location.search);
-    if (q.get('fresh') === '1' || q.get('demo') === '1') {
-      clearReaderStorage();
-      history.replaceState({}, '', '/');
-    }
+    if (q.get('fresh') === '1' || q.get('demo') === '1') clearReaderStorage();
+    blessRef = q.get('b') || '';
+    blessNote = q.get('n') || '';
+    if ([...q.keys()].length) history.replaceState({}, '', location.pathname);
   } catch (_) {}
   setWatch();
   applySeason();
   paintThemeIndex();
   bindRituals();
-  if (!ls('rla-onboarded')) {
-    document.getElementById('onboarding').classList.remove('hidden');
+  const openDoor = () => {
+    if (!ls('rla-onboarded')) {
+      document.getElementById('onboarding').classList.remove('hidden');
+      document.getElementById('app').setAttribute('aria-hidden', 'true');
+      return;
+    }
+    startApp();
+  };
+  if (blessRef) {
     document.getElementById('app').setAttribute('aria-hidden', 'true');
+    showBlessingLeaf(blessRef, blessNote).then((shown) => { if (!shown) openDoor(); });
     return;
   }
-  startApp();
+  openDoor();
 })();
 
 function setWatch() {
@@ -2167,6 +2403,7 @@ function startApp() {
   updateDateUI();
   paintCatchword();
   paintEpigraph();
+  paintResume();
   loadDailyContent();
   restoreLetters();
   bindRituals();
@@ -2266,9 +2503,13 @@ function updateStreak() {
   paintStreak(state);
 }
 function paintStreak(state) {
-  const count = Math.max(1, Number(state.count) || 1);
-  document.getElementById('streak-num').textContent = count;
+  const count = Number(state.count) || 0;
   const grace = state.graceUsed && state.graceWeek === weekStartStr();
+  const num = document.getElementById('streak-num');
+  if (num) {
+    num.hidden = count < 1;
+    num.textContent = count > 0 ? String(count) : '';
+  }
   document.getElementById('today-streak-label').textContent = count > 1
     ? (grace ? count + ' mornings · grace this week' : count + ' mornings')
     : '';
@@ -2276,7 +2517,7 @@ function paintStreak(state) {
   if (rail) {
     rail.textContent = count > 1
       ? (grace ? count + ' mornings · grace held one' : count + ' mornings in this room')
-      : 'A first morning';
+      : (count === 1 ? 'One morning kept' : 'A first morning');
   }
 }
 function renderWeekRibbon() {
@@ -2295,6 +2536,8 @@ function paintSeven() {
   if (!host) return;
   const days = sevenDays();
   if (!days.length) {
+    const kicker = document.getElementById('path-kicker');
+    if (kicker) kicker.textContent = 'This week';
     host.className = 'week-ribbon';
     host.innerHTML = '';
     const today = todayStr();
@@ -2318,6 +2561,8 @@ function paintSeven() {
   const state = pathState();
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
+  const kicker = document.getElementById('path-kicker');
+  if (kicker) kicker.textContent = 'Seven Days';
   host.className = 'seven';
   host.setAttribute('aria-label', 'Seven Days with His words');
   host.innerHTML = days.map((day, i) => {
@@ -2411,16 +2656,17 @@ function paintThemeIndex() {
 
 async function loadCurated() {
   if (curatedPacks) return curatedPacks;
-  const res = await fetch('/curated.json');
+  const res = await fetch(BASE + 'curated.json');
   curatedPacks = await res.json();
   return curatedPacks;
 }
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch(BASE + 'api/daily?date=' + encodeURIComponent(todayStr()));
+    if (!res.ok) throw new Error('api ' + res.status);
     dailyData = await res.json();
-    if (dailyData.error) throw new Error(dailyData.error);
+    if (!dailyData || dailyData.error || !dailyData.affirmation || !dailyData.word) throw new Error('bad daily');
   } catch (e) {
     try {
       const cur = await loadCurated();
@@ -2467,7 +2713,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch(BASE + 'api/encouragement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -2604,7 +2850,7 @@ function filterStaticLibrary({ book, q, theme, limit, offset }) {
 
 async function loadStaticLibrary() {
   if (staticLibrary) return staticLibrary;
-  const res = await fetch('/library.json');
+  const res = await fetch(BASE + 'library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
   return staticLibrary;
@@ -2618,7 +2864,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch(BASE + 'api/library?' + params.toString());
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -2859,7 +3105,8 @@ function keepSitReply() {
   const verse = sitPayload.verse;
   rememberSitting({ quote, verse, note, office: sitPayload.kicker || 'Sit' });
   if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
-  closeSit();
+  dismissResume();
+  closeSit({ kept: true });
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
   if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
@@ -2868,13 +3115,48 @@ function keepSitReply() {
   }
 }
 
-function closeSit() {
+function closeSit(opts = {}) {
   clearInterval(sitTimer);
   sitTimer = null;
   stopSitListen();
   document.documentElement.classList.remove('sitting');
   document.getElementById('sit-sheet').classList.remove('on');
+  if (!opts.kept && sitPayload && sitStep >= 1 && sitStep < 4) {
+    lsSet('rla-resume', JSON.stringify({ payload: sitPayload, step: sitStep, date: todayStr() }));
+  }
   hideOverlayIfIdle();
+  paintResume();
+}
+function getResume() {
+  const raw = parseJSON(ls('rla-resume'), null);
+  if (!raw || !raw.payload || raw.date !== todayStr()) return null;
+  return raw;
+}
+function paintResume() {
+  const slip = document.getElementById('resume-slip');
+  if (!slip) return;
+  const raw = getResume();
+  if (!raw) {
+    slip.hidden = true;
+    return;
+  }
+  const q = document.getElementById('resume-quote');
+  if (q) q.textContent = '“' + String(raw.payload.quote || '').replace(/^["“]|["”]$/g, '') + '”';
+  slip.hidden = false;
+}
+function resumeSit() {
+  const raw = getResume();
+  if (!raw) return;
+  sitPayload = raw.payload;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  paintSitPayload(sitPayload);
+  showSitStep(Math.min(4, Math.max(1, Number(raw.step) || 1)));
+}
+function dismissResume() {
+  try { localStorage.removeItem('rla-resume'); } catch (_) {}
+  const slip = document.getElementById('resume-slip');
+  if (slip) slip.hidden = true;
 }
 
 let sheetTrigger = null;
@@ -2993,7 +3275,7 @@ async function sendMsg(preset) {
   let opened = false;
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch(BASE + 'api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
@@ -3141,10 +3423,10 @@ function renderJournal() {
   const items = getJournal();
   paintQuire(items);
   if (!items.length) {
-    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Keep an affirmation, a sitting, a room, a saying, or a letter. They will wait here, on this paper, on this device.</div></div>`;
+    list.innerHTML = `<div class="journal-empty"><div class="journal-empty-title">A blank book</div><div class="journal-empty-text">Write a line above, or keep a sitting. They will wait here, on this paper, on this device.</div></div>`;
     return;
   }
-  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with' };
+  const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with', note: 'A line', bless: 'Sent to you' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -3160,6 +3442,48 @@ function renderJournal() {
   }).join('');
 }
 
+function keepCompose() {
+  const el = document.getElementById('compose-line');
+  const line = el && el.value.trim();
+  if (!line) return;
+  const key = 'note-' + Date.now();
+  saveJournalItem({ id: key, key, type: 'note', title: 'A line', body: line });
+  el.value = '';
+  renderJournal();
+  showToast('Kept in the journal');
+}
+function exportJournal() {
+  const items = getJournal();
+  if (!items.length) { showToast('The book is still blank'); return; }
+  const md = '# Commonplace — Red Letter\n\n' + items.map((item) => {
+    const head = item.title || 'A line';
+    const verse = item.verse ? '\n\n—' + item.verse : '';
+    return '## ' + head + '\n\n' + String(item.body || '') + verse;
+  }).join('\n\n---\n\n') + '\n';
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'red-letter-commonplace.md';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function printJournal() {
+  switchTab('journal');
+  document.body.classList.add('printing-journal');
+  window.print();
+  setTimeout(() => document.body.classList.remove('printing-journal'), 400);
+}
+function newLetter() {
+  chatHistory = [];
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  persistLetters();
+  const suggestions = document.getElementById('suggestions');
+  if (suggestions) suggestions.style.display = '';
+  document.getElementById('chat-gate').classList.remove('on');
+  if (chatsToday().n < FREE_CHATS) setComposerEnabled(true);
+  showToast('A blank letter');
+}
 function deleteJournalItem(key) {
   removeJournalItem(key);
   renderJournal();
@@ -3606,7 +3930,8 @@ function closeAmen() {
 }
 function amenFromSit() {
   if (!sitPayload) return;
-  closeSit();
+  dismissResume();
+  closeSit({ kept: true });
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
 }
 
@@ -3649,10 +3974,12 @@ function stopHearOffice() {
   const btn = document.getElementById('hear-office');
   const status = document.getElementById('hear-status');
   if (btn) {
-    btn.textContent = 'Hear this office';
+    btn.textContent = 'Hear this';
     btn.setAttribute('aria-pressed', 'false');
   }
   if (status) status.hidden = true;
+  const rule = document.getElementById('hear-rule');
+  if (rule) rule.hidden = true;
 }
 function officeScript() {
   const parts = [];
@@ -3696,6 +4023,8 @@ function toggleHearOffice() {
     status.hidden = false;
     status.textContent = 'Listening — the page can rest';
   }
+  const rule = document.getElementById('hear-rule');
+  if (rule) rule.hidden = false;
   const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
   utter.rate = 0.88;
   utter.onend = () => { if (officeSpeaking) stopHearOffice(); };
@@ -3732,14 +4061,14 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch(BASE + 'api/library?limit=24');
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
     }
   } catch (_) {}
   try {
-    const res = await fetch('/library.json');
+    const res = await fetch(BASE + 'library.json');
     const data = await res.json();
     return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
   } catch (_) {
@@ -3794,11 +4123,64 @@ function updateBlessingPreview() {
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
     '<div class="cite">' + esc(blessingPick.verse) + '</div>';
 }
+function blessingNote() {
+  const el = document.getElementById('blessing-note');
+  return (el && el.value.trim()) || '';
+}
+function countBlessing() {
+  const n = Number(ls('rla-blessed') || 0) + 1;
+  lsSet('rla-blessed', String(n));
+}
+async function copyBlessingLink() {
+  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const link = blessingLink(blessingPick, blessingNote());
+  try {
+    await navigator.clipboard.writeText(link);
+    countBlessing();
+    showToast('Link copied — paste it to someone');
+  } catch (_) {
+    prompt('Copy this link', link);
+  }
+}
 async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
+  const note = blessingNote();
+  const link = blessingLink(blessingPick, note);
+  const text = (note ? note + '\n\n' : '') + '“' + blessingPick.quote + '”\n— ' + blessingPick.verse + '\n' + link;
+  const payload = { kicker: 'A blessing', title: note || 'For you', quote: blessingPick.quote, verse: blessingPick.verse };
   closeBlessing();
-  await shareItem('blessing', style || 'parchment');
-  showToast('Blessing ready to send');
+  if (navigator.share) {
+    try {
+      const blob = await renderShareCard(payload, style || 'parchment');
+      const file = new File([blob], 'red-letter-blessing.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'A blessing', text });
+      } else {
+        await navigator.share({ title: 'A blessing', text, url: link });
+      }
+      countBlessing();
+      showToast('Sent');
+      return;
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    countBlessing();
+    showToast('Link copied — paste it to someone');
+  } catch (_) {
+    prompt('Copy this link', link);
+  }
+  if (style && style !== 'parchment') {
+    try {
+      const blob = await renderShareCard(payload, style);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'red-letter-blessing.png';
+      a.click();
+    } catch (_) {}
+  }
 }
 
 function printSitting() {
@@ -3821,7 +4203,10 @@ const COMMANDS = [
   { label: 'Open Journal', hint: 'Kept', run: () => switchTab('journal') },
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
+  { label: 'Continue sitting', hint: 'Resume', run: () => resumeSit() },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
+  { label: 'Export the commonplace', hint: 'Keep', run: () => { switchTab('journal'); exportJournal(); } },
+  { label: 'A new letter', hint: 'Counsel', run: () => { switchTab('advisor'); newLetter(); } },
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
@@ -3906,7 +4291,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch(BASE + 'api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
@@ -3952,7 +4337,7 @@ function checkMorningReminder() {
   const key = 'rla-reminded-' + todayStr();
   if (ls(key) === '1') return;
   try {
-    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: '/icon-192.png', tag: 'rla-morning' });
+    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: BASE + 'icon-192.png', tag: 'rla-morning' });
     lsSet(key, '1');
   } catch (_) {}
 }
@@ -3966,6 +4351,24 @@ function bindRituals() {
   ritualsBound = true;
   const note = document.getElementById('blessing-note');
   if (note) note.addEventListener('input', updateBlessingPreview);
+  const compose = document.getElementById('compose-line');
+  if (compose) {
+    compose.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        keepCompose();
+      }
+    });
+  }
+  const sitReply = document.getElementById('sit-reply');
+  if (sitReply) {
+    sitReply.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        keepSitReply();
+      }
+    });
+  }
   const amen = document.getElementById('amen');
   if (amen) amen.addEventListener('click', closeAmen);
   const cmdk = document.getElementById('cmdk');
@@ -4015,7 +4418,7 @@ function bindRituals() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register(BASE + 'sw.js').catch(() => {});
 }
 </script>
 </body>

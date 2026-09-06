@@ -176,6 +176,13 @@ describe('curated packs', () => {
     assert.ok(d.affirmation.quote.length > 10);
     assert.ok(lookup(d.word.verse));
   });
+
+  it('accepts a YYYY-MM-DD local date string', () => {
+    const fromString = dailyForDate('2026-08-29');
+    const fromLocal = dailyForDate(new Date(2026, 7, 29));
+    assert.equal(fromString.word.verse, fromLocal.word.verse);
+    assert.equal(fromString.affirmation.verse, fromLocal.affirmation.verse);
+  });
 });
 
 describe('similarity', () => {

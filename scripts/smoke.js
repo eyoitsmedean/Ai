@@ -35,11 +35,25 @@ async function main() {
     const { res, json } = await req('/api/health');
     assert(res.ok && json.ok, 'health not ok');
     assert(json.themes >= 12, 'theme rooms missing');
+    assert(json.sayings > 100, 'spoken corpus missing from health');
+    assert(res.headers.get('x-content-type-options') === 'nosniff', 'missing nosniff');
   });
 
   await check('daily page', async () => {
     const { json } = await req('/api/daily');
     assert(json.affirmation?.quote && json.word?.passage, 'daily payload incomplete');
+  });
+
+  await check('daily local date', async () => {
+    const a = await req('/api/daily?date=2026-08-29');
+    const b = await req('/api/daily?date=2026-08-30');
+    assert(a.json?.word?.verse && b.json?.word?.verse, 'dated daily missing');
+    assert(a.json.word.verse + a.json.word.title !== b.json.word.verse + b.json.word.title, 'dates did not rotate');
+  });
+
+  await check('missing asset is 404', async () => {
+    const { res } = await req('/does-not-exist.js');
+    assert(res.status === 404, 'expected 404 for missing js, got ' + res.status);
   });
 
   await check('encouragement', async () => {
@@ -78,7 +92,15 @@ async function main() {
     assert(res.ok, 'chat status ' + res.status);
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
-    assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
+    const letter = body
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert(/Luke 15|John 6:35|Matthew|Mark/i.test(letter), 'fallback should cite a Gospel');
+    assert(/lost|rejoice|bread|shepherd|hunger/i.test(letter), 'shame should retrieve a fitting saying');
   });
 
   await check('welcome landing', async () => {
@@ -92,6 +114,8 @@ async function main() {
     const { res, text } = await req('/');
     assert(res.ok, 'app not 200');
     assert(text.includes('sit-step-4'), 'missing lectio respond leaf');
+    assert(text.includes('id="resume-slip"'), 'missing resume slip');
+    assert(text.includes('compose-line'), 'missing commonplace compose');
     assert(text.includes('id="amen"'), 'missing Amen');
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');

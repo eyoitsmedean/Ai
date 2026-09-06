@@ -14,3 +14,15 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
+      - name: Smoke the live server
+        run: |
+          node server.js &
+          pid=$!
+          for i in $(seq 1 20); do
+            if curl -sf http://127.0.0.1:3000/api/health >/dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+          node scripts/smoke.js http://127.0.0.1:3000
+          kill "$pid"
