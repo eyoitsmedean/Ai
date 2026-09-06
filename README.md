@@ -9,9 +9,11 @@ One red letter a day. Grace over streaks. Installable on iPhone and Android as a
 | Promise | Mechanism | How to check it |
 | --- | --- | --- |
 | Every quote is Jesus' words, verbatim WEB | `data/red-letters.js` is the curated corpus; every passage and every inline client quote is machine-checked against the WEB source text | `npm run verify:corpus` (130/130 verbatim as of this commit: 102 corpus passages + 28 inline client quotes) |
-| The Advisor never invents scripture | Model output is passed through `groundAdvisorText()`: each `**Book c:v**` citation is looked up in the corpus, then bible-api (WEB); the quoted line is replaced with the verified text and flagged ✓ WEB or "check" | Ask the Advisor anything and inspect the citation badges |
+| The Advisor never invents scripture | Model output is passed through `groundAdvisorText()`: each `**Book c:v**` citation is looked up in the corpus, then bible-api (WEB); the quoted line is replaced with the verified text and flagged ✓ WEB or "unverified" | Ask the Advisor anything and inspect the citation badges |
+| Only Jesus's words | A citation outside Matthew/Mark/Luke/John is never marked verified — it is labelled "not Jesus's words" even if the text exists | Eval question e04 (prompt injection asking for Romans) |
 | Works without AI | With no `ANTHROPIC_API_KEY`, or when the model errors before answering, the Advisor replies from the verified corpus by theme | Start without a key, or with an invalid one |
-| Crisis-safe | `detectCrisis()` short-circuits to 988 / IASP resources before any model call | Type a crisis phrase in the Advisor |
+| Crisis-safe | `classifyIntent()` runs before the model **and before the paywall**: suicide/self-harm → 988 + IASP; abuse → National DV Hotline + 911; neither consumes a free credit | Eval categories `crisis` and `abuse` |
+| Honest about scope | Code, trivia, finance, dosing, homework, weather → a warm redirect with no verse forced on it; hostile input → non-defensive reply, 1–2 passages, no pressure | Eval categories `offscope` and `hostile` |
 
 ## Run locally
 
@@ -71,7 +73,8 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 | Command | What it checks |
 | --- | --- |
 | `npm test` (`scripts/smoke.js`) | 17 live checks against a running server: health, corpus APIs, grounded chat SSE, security headers, manifest installability, icons/splash, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
-| `npm run verify:corpus` | Every shipped quote vs. WEB source text (network). `--fix` rewrites drifted quotes to the exact WEB wording. |
+| `npm run eval` (`scripts/eval.js`) | 53-question evaluation set — real life questions, crisis, abuse, off-scope, hostile, edge — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 53/53 in corpus mode. |
+| `npm run verify:corpus` | Every shipped quote vs. WEB source text (network, ~5 min at bible-api's 15 req/30 s limit). `--fix` rewrites drifted quotes to the exact WEB wording. |
 | `npm run icons` | Regenerates all icon and splash assets from `public/icon-1024.png` (needs Python 3 + Pillow). |
 
 Last measured with Lighthouse (mobile, throttled): app `/` — Performance 94, Accessibility 100, Best Practices 100, SEO 100; landing `/welcome` — 98 / 100 / 100 / 100.
@@ -87,7 +90,10 @@ public/sw.js            Service worker: offline shell, update banner, push + not
 public/manifest.json    PWA manifest (id, scope, maskable icons, shortcuts, screenshots)
 public/offline.html     Offline fallback page
 index.html              Marketing landing page served at /welcome
-scripts/                smoke.js, verify-corpus.js, generate-icons.py
+scripts/                smoke.js, eval.js, verify-corpus.js, generate-icons.py
+eval/                   questions.json (the evaluation set), RESULTS.md + results.json (last run)
+CLAUDE.md               System of record: decisions, evidence ledger, assumptions, open questions
+RELEASE.md              Release checklist (verified / unverified) + five-minute on-device checklist
 ```
 
 Client state (journal, saved Advisor conversations, settings, garden) lives in `localStorage` on the device. Server state (quotas, rate limits) is in memory and resets on restart; push subscriptions persist to `PUSH_STORE`.
@@ -98,6 +104,8 @@ Client state (journal, saved Advisor conversations, settings, garden) lives in `
 - The AI Advisor has not been exercised end-to-end in this repository's CI (no API key); its failure path to corpus mode is tested.
 - bible-api.com is used only as a fallback verifier for citations outside the curated corpus; if it is unreachable, such citations are shown as "check" rather than ✓ WEB.
 
-## Scripture
+## Scripture and licences
 
-Scripture quotations are from the World English Bible, which is in the public domain.
+Scripture quotations are from the **World English Bible (WEB)**, which is in the public domain: "you may freely copy it in any form, including electronic and print formats" ([worldenglish.bible](https://worldenglish.bible/), checked 2026-09-06). "World English Bible" is a trademark that may be used to identify faithful copies of that translation, which is how it is used here.
+
+Fonts (Fraunces, Source Serif 4, Figtree) are SIL Open Font License 1.1. Runtime dependencies: Express (MIT), web-push (MPL-2.0), cors (MIT), dotenv, @anthropic-ai/sdk. bible-api.com is a free hobby service with no SLA, used only as a fallback verifier; the product does not depend on it.
