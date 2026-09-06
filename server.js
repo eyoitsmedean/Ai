@@ -32,6 +32,7 @@ const client = createProvider();
 const buckets = new Map();
 
 function rateLimit(key, limit, windowMs) {
+  if (process.env.RATE_LIMIT_OFF === '1') return true;
   const now = Date.now();
   if (buckets.size > 4000) {
     for (const [k, slot] of buckets) {

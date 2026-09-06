@@ -42,8 +42,17 @@ Notes for **GPT-6 Astra** (`gpt-6-astra`, released 3 September 2026): it runs ov
 
 ```bash
 npm test
+npm run eval     # run eval/questions.json through /api/chat, write eval/RESULTS.md
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
+
+## Evaluation
+
+`eval/questions.json` holds 54 real questions in five groups: everyday struggles, crisis (must get the 988 / findahelpline notice before the letter, and only the fixed comfort verses in `lib/retrieve.js`), near-miss (grief and hyperbole that must **not** get the crisis notice), off-scope, and hostile. `npm run eval` sends each through the real `/api/chat` route and writes `eval/RESULTS.md`.
+
+Without an API key the deterministic layers are checked: crisis detection and handoff order, retrieval of an expected saying, and verification of every printed verse against the KJV corpus. With a key the live letters are also graded (cited only allowed sayings, two to four passages, no leaked markers) and saved under `eval/letters/` for a human to read. The results file says which mode ran; nothing is reported as passed that did not run. `RATE_LIMIT_OFF=1` is set by the script so 54 requests are not throttled; never set it in production.
+
+Crisis detection lives once, in `lib/crisis.js`; `test/crisis.test.js` fails if the copies in `public/index.html` or `data/advisor.js` drift.
 
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
 
