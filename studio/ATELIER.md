@@ -1,6 +1,6 @@
 # ATELIER PROTOCOL — MASTER PROMPT
 
-Dean's working protocol for every agent session in this repo. Text is Dean's, transcribed from his message of 6 September 2026 (Parts 1–4); his master copy is authoritative if any character differs. Part 5 (compact version) and the appendix (design rationale with sources) are held in Dean's master copy and are not needed to run a session. Project briefs live in `studio/briefs/`; decisions are recorded in `CLAUDE.md`.
+Dean's working protocol for every agent session in this repo. Text is Dean's, transcribed in full from his message of 6 September 2026 (Parts 1–5 and the appendix); his master copy is authoritative if any character differs. Project briefs live in `studio/briefs/`; decisions are recorded in `CLAUDE.md`.
 
 ---
 

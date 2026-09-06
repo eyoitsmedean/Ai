@@ -66,6 +66,7 @@ const MUST_TRIGGER = [
   'he said he would kill me',
   'my dad beats my mom',
   'he keeps hitting me',
+  'he hits me hard when he drinks',
   'my stepdad touches me and I can\'t tell anyone',
   'I\'m going to shoot up my school tomorrow',
   'I want to strangle my baby when she cries',
@@ -127,6 +128,8 @@ const MUST_NOT_TRIGGER = [
   'I took all my meds this morning like the doctor said and still feel anxious',
   'Jesus said take up your cross, what does that mean',
   'I want to end the fight with my sister',
+  'Life hits me hard some weeks',
+  'that verse really hits me',
 ];
 
 describe('looksLikeCrisis', () => {

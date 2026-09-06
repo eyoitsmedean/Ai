@@ -43,7 +43,7 @@
 
     new RegExp('\\b' + INTENT + '(?:kill|hurt|harm|strangle|smother|shoot|stab|choke|drown|poison)\\s+' + OTHERS + '\\b', 'i'),
     /\bshoot\s+up\s+(?:my|the|a)\s+(?:school|church|office|work|store|mall)\b/i,
-    new RegExp('\\b(?:hits|hitting|beats|beating|chokes|choked|choking|strangles|strangled|strangling|punches|punched|punching|kicks|kicked|kicking|slaps|slapped|slapping|rapes|raped|abuses|abused|abusing|molests|molested)\\s+(?:me|my\\s+(?:mom|mother|dad|father|sister|brother|kids?|children|wife|husband|baby))\\b(?!\\s+(?:at|in)\\s+(?:chess|cards|checkers|basketball|a\\s+game))', 'i'),
+    new RegExp('(?<!\\b(?:life|it|this|that|sermon|news|reality|truth|god|word|verse|song|music)\\s(?:really\\s|just\\s|always\\s)?)\\b(?:hits|hitting|beats|beating|chokes|choked|choking|strangles|strangled|strangling|punches|punched|punching|kicks|kicked|kicking|slaps|slapped|slapping|rapes|raped|abuses|abused|abusing|molests|molested)\\s+(?:me|my\\s+(?:mom|mother|dad|father|sister|brother|kids?|children|wife|husband|baby))\\b(?!\\s+(?:at|in)\\s+(?:chess|cards|checkers|basketball|a\\s+game))', 'i'),
     /\bthrew\s+me\s+(?:against|down|into|across)\b/i,
     /\bhands?\s+(?:around|on)\s+my\s+(?:throat|neck)\b/i,
     /\b(?:touches|touched)\s+me\s+(?:and\s+i\s+can'?t\s+tell|where|inappropriately|there|at\s+night|under)\b/i,

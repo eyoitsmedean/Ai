@@ -27,6 +27,9 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 | 5 Sep 2026 | Advent path *Watch with me*: 28 rooms counted from Advent Sunday, opened by calendar not streak; week one is Seven Days. | `data/paths.js`, `test/paths.test.js` |
 | 6 Sep 2026 | Asset paths and service worker are scope-relative so the app runs at the origin root and under a project path (`/Ai/`). | `public/sw.js`, `public/index.html` |
 | 6 Sep 2026 | Matthew 28:20 reads *alway* (KJV), not *always*. Quotes come only from the corpus. | `data/advisor.js`, `data/curated.js` |
+| 6 Sep 2026 | The human-help gate is one shared pattern list (`data/crisis.js`) used by server and page; it is tuned against a pinned sentence set, looks at the last two user turns, and is hashed into `/api/health` so an evaluation can refuse a stale server. | `data/crisis.js`, `test/crisis.test.js`, `server.js` |
+| 6 Sep 2026 | The verifier prints only his speech: epistle, Psalm, deuterocanon, and narrative-Gospel citations are dropped from a reply, never passed through. `1 John` is not `John`. | `lib/scripture.js`, `test/scripture.test.js` |
+| 6 Sep 2026 | The Advisor evaluation set lives in `eval/` and runs with `npm run eval`; quotation of a non-Gospel book is a hard failure, naming one to decline it is not. Fallback-mode results prove the gate and verifier, not tone; the live run is Dean's, from a machine with a key. | `eval/README.md`, `eval/REVIEW.md` |
 
 ## Open questions (only Dean can close these)
 
@@ -34,6 +37,7 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 2. Where does the Advisor API run for Lent 2027 (Pages is static; the Advisor needs the node host)? Recommended: decide in January, not now.
 3. Quality references for the Advisor brief — two named apps and what to match. Not yet supplied.
 4. Where the Red Words repo lives (not visible under `eyoitsmedean` on GitHub). Needed only if a future brief touches it.
+5. Run the live evaluation once from a machine with a key (`ANTHROPIC_API_KEY=… node server.js` then `npm run eval`), read the replies on E05, H01, O07, A01, C06, and add a dated section to `eval/REVIEW.md`. Recommended: before the Advisor is offered to anyone but you. About 55 model calls.
 
 ## FOR THE RECORD — 6 September 2026
 
@@ -43,3 +47,14 @@ Session: 90-day brief → bound operating book → Advent path build → Pages f
 - Verified this session: 47/47 unit tests; `scripts/qa-browser.js` 6/6 against `node server.js`; headless Chrome under a `/Ai/` sub-path and with the clock set to 1 Dec 2026, 2 Jan 2027, 6 Sep 2026; all 28 Advent passages against `data/gospels-kjv.json` and the red-letter map; Hallow figures against Appfigures, MWM, Sensor Tower.
 - Not verified: the live Pages deploy (Pages not enabled; founder-only). Advisor behaviour with a live API key (no key in this environment).
 - Assumed: the protocol paste with no commission line meant "install it and hand over the current work under it". Corrected in ten seconds if wrong.
+
+## FOR THE RECORD — 6 September 2026 (second session)
+
+Commission read as: run the protocol on the Advisor brief's open MASTERWORK item (the evaluation set), and finish the protocol transcription.
+
+- Built: `eval/questions.json` (59 turns: everyday 18, hostile 5, off-scope 8, crisis 13 incl. Spanish and two-turn, adversarial 5, soft 6, edge 4); `scripts/eval.js` + `npm run eval`; `eval/README.md`, `eval/REVIEW.md`, `eval/RESULTS.md`; `data/crisis.js` shared gate; `test/crisis.test.js` (72 must-trigger / 48 must-not-trigger); verifier and parser repairs in `lib/scripture.js`; two-turn gate and detector hash in `server.js`; Parts 5 and appendix appended to `studio/ATELIER.md`.
+- Team: one builder; one separate Breaker agent ran INTERROGATE on the gate and the runner (29 findings, register in `eval/REVIEW.md`). Repairs and the final retest were the builder's.
+- Verified this session (rung 1): 54/54 unit and API tests; 59/59 evaluation items against `node server.js` in fallback mode, detector `2f573b131c0e`-lineage rebuilt after the idiom fix and re-run; `parseRef('1 John 4:18') === null`; the verifier dropping `1 John`, `Psalm 23:1`, `Matthew 1:1` from a reply.
+- Not verified: any live-model behaviour (no key); the browser crisis modal (same detector, not clicked); the live Pages deploy (founder-only).
+- Assumed: a second paste of the protocol with no commission line meant "run it on the brief". Corrected in ten seconds if wrong.
+
