@@ -8,7 +8,7 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 
 | # | Statement | Status | Evidence / what it takes |
 | --- | --- | --- | --- |
-| 1 | Every answer cites a Gospel passage containing Jesus's direct words, quoted from a public-domain translation opened during the build — never from memory | **VERIFIED** (rung 1+2) | WEB public-domain statement opened 2026-09-06 (worldenglish.bible). 130/130 shipped quotes verbatim vs WEB via `scripts/verify-corpus.js` (2026-09-05; re-run 2026-09-06 — see D below). Non-Gospel citations can no longer be marked verified (`isGospelRef` guard; eval e04). |
+| 1 | Every answer cites a Gospel passage containing Jesus's direct words, quoted from a public-domain translation opened during the build — never from memory | **VERIFIED** (rung 1+2) | WEB public-domain statement opened 2026-09-06 (worldenglish.bible). 130/130 shipped quotes verbatim vs WEB via `scripts/verify-corpus.js` (re-run 2026-09-06, exit 0). Non-Gospel citations can no longer be marked verified (`isGospelRef` guard; eval e04). |
 | 2 | Tone reads as a warm advisor; scholarship behind the answer | **VERIFIED for corpus mode** (rung 1, self-review) · **UNVERIFIED for model mode** | All 53 replies are printed verbatim in `eval/RESULTS.md` and were read in one sitting. Model mode needs `ANTHROPIC_API_KEY` — run `npm run eval` against a keyed server and read the same file. |
 | 3 | Passes an evaluation set of ≥40 real questions incl. hostile, off-scope, crisis-adjacent, with reviewed results; crisis inputs get a caring in-product handoff | **VERIFIED in corpus mode** (rung 1) · **UNVERIFIED in model mode** | 53 questions, 53/53 pass, p95 4 ms (`eval/RESULTS.md`, `eval/results.json`). Crisis and abuse handoffs are server-side and mode-independent. |
 | 4 | Builds without error for iOS and Android targets; on-device testing is Dean's step with a five-minute checklist | **VERIFIED for the PWA build** (rung 1+2) · **UNVERIFIED on a physical device** (rung 5 here) | Server starts, 17/17 smoke checks, manifest installable, icons/splash present, Lighthouse mobile 94/100/100/100 (2026-09-05). No native binaries exist (D6: PWA). Five-minute checklist is section C. |
@@ -21,7 +21,7 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 | Smoke suite (health, corpus APIs, grounded SSE, headers, manifest, icons, offline, push lifecycle, SW handlers, red-letter lint, library search) | `node scripts/smoke.js http://localhost:3000` | 17/17 pass | 1 |
 | Evaluation set — corpus mode | `node scripts/eval.js --strict` | 53/53 pass; p95 4 ms | 1 |
 | Evaluation set — model mode | same, with `ANTHROPIC_API_KEY` set | **UNVERIFIED** — no key in this environment | 5 |
-| Every shipped quote verbatim vs WEB | `npm run verify:corpus` | see section D | 1 |
+| Every shipped quote verbatim vs WEB | `npm run verify:corpus` | 130/130 verbatim (2026-09-06) | 1 |
 | Module syntax | `node -e "require('./server.js')"` (port in use → listen error only) | loads | 1 |
 | Lighthouse mobile (app `/`) | local Lighthouse 2026-09-05 | Perf 94 · A11y 100 · BP 100 · SEO 100 | 2 |
 | Lighthouse mobile (landing `/welcome`) | local Lighthouse 2026-09-05 | 98 · 100 · 100 · 100 | 2 |
@@ -54,7 +54,7 @@ Total ≈ 5:20. Record results as VERIFIED/UNVERIFIED per line in this file unde
 | Date | Result | Notes |
 | --- | --- | --- |
 | 2026-09-05 | 130/130 verbatim (102 corpus + 28 inline client) | after `--fix` pass and manual narration trims |
-| 2026-09-06 | see `CLAUDE.md` log / PR description for the result of the re-run started this session | paced at 2100 ms/request for bible-api's 15/30 s limit |
+| 2026-09-06 | **130/130 verbatim** (`node scripts/verify-corpus.js`, exit 0) | paced at 2100 ms/request for bible-api's 15/30 s limit; ~5 min |
 
 ## E. Not done, by decision or constraint
 

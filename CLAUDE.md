@@ -55,7 +55,7 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 | Fonts Fraunces, Source Serif 4, Figtree are OFL-1.1 | VERIFIED | GitHub API `license.spdx_id` for undercasetype/Fraunces, adobe-fonts/source-serif, erikdkennedy/figtree | 2026-09-06 | Font swap needed for commercial use |
 | `web-push` is MPL-2.0; `express` is MIT | VERIFIED | `npm view <pkg> license` | 2026-09-06 | Dependency swap |
 | Anthropic SDK license permits app use | KNOWLEDGE (MIT) — not re-checked this session | — | — | Confirm at github.com/anthropics/anthropic-sdk-typescript before store submission |
-| Every shipped quote (102 corpus + 28 inline client) is verbatim WEB | VERIFIED (130/130) by `scripts/verify-corpus.js` against bible-api WEB | 2026-09-05 (previous session); not re-run 2026-09-06 (rate limit) | — | Corpus text would need `--fix` |
+| Every shipped quote (102 corpus + 28 inline client) is verbatim WEB | VERIFIED (130/130) by `scripts/verify-corpus.js` against bible-api WEB | 2026-09-06 (re-run, exit 0) | — | Corpus text would need `--fix` |
 
 ## Third-party material
 
