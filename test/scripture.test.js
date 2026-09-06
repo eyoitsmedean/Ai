@@ -187,6 +187,28 @@ describe('similarity', () => {
 });
 
 describe('spoken corpus', () => {
+  it('keeps the six once-shifted chapters aligned with the KJV verse counts', () => {
+    // Each of these chapters was one verse short, which shifted every later
+    // verse under the wrong number. Counts per the 1769 Cambridge text.
+    const { books } = require('../data/gospels-kjv.json');
+    const expected = { 'Matthew 2': 23, 'Matthew 22': 46, 'Matthew 26': 75, 'Mark 4': 41, 'Mark 7': 37, 'Mark 8': 38 };
+    for (const [key, count] of Object.entries(expected)) {
+      const [book, chapter] = key.split(' ');
+      assert.equal(Object.keys(books[book][chapter]).length, count, key);
+    }
+    assert.match(lookup('Matthew 22:21').full, /Render therefore unto Caesar/);
+    assert.match(lookup('Matthew 22:22').full, /they marvelled/);
+    assert.match(lookup('Mark 8:34').full, /take up his cross/);
+    assert.match(lookup('Mark 8:35').full, /whosoever will save his life/);
+  });
+
+  it('never marks narration as red-letter, even inside a Jesus scene', () => {
+    for (const ref of ['John 11:35', 'Mark 4:2', 'Mark 5:43', 'Mark 9:9', 'Matthew 15:33', 'John 7:20', 'John 12:34']) {
+      assert.equal(isRedLetter(ref), false, ref);
+    }
+    assert.equal(verifyQuote('John 11:35', 'Jesus wept.').ok, false);
+  });
+
   it('treats genealogy as narrator, not red-letter', () => {
     assert.equal(isRedLetter('Matthew 1:1'), false);
     const v = verifyQuote('Matthew 1:1', lookup('Matthew 1:1').text);
