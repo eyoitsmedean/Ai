@@ -24,8 +24,17 @@ jobs:
             sleep 1
           done
       - run: node scripts/smoke.js http://localhost:3000
+      - name: Evaluation set (53 questions incl. crisis, abuse, off-scope, hostile)
+        run: BASE_URL=http://localhost:3000 node scripts/eval.js --strict
       - if: failure()
         run: cat server.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            eval/RESULTS.md
+            eval/results.json
 
   corpus:
     name: Every quote verbatim against WEB (bible-api)

@@ -87,7 +87,7 @@ async function fetchWebCached(ref) {
   const k = ref.replace(/[–—]/g, '-').toLowerCase();
   if (!webCache.has(k)) {
     webCache.set(k, await fetchWeb(ref));
-    await sleep(Number(process.env.VERIFY_DELAY_MS || 600));
+    await sleep(Number(process.env.VERIFY_DELAY_MS || 2100));
   }
   return webCache.get(k);
 }

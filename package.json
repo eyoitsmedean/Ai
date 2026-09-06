@@ -1,7 +1,7 @@
 {
   "name": "red-letter-advisor",
   "version": "1.1.0",
-  "description": "Red Letter Advisor — daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
+  "description": "Red Letter Advisor \u2014 daily guidance, encouragement, and chat grounded only in the direct words of Jesus (WEB-verified).",
   "main": "server.js",
   "engines": {
     "node": ">=18"
@@ -12,7 +12,9 @@
     "test": "node scripts/smoke.js",
     "smoke": "node scripts/smoke.js",
     "verify:corpus": "node scripts/verify-corpus.js",
-    "icons": "python3 scripts/generate-icons.py"
+    "icons": "python3 scripts/generate-icons.py",
+    "eval": "node scripts/eval.js",
+    "eval:strict": "node scripts/eval.js --strict"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
