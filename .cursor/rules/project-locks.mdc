@@ -1,17 +1,17 @@
 ---
-description: Choose the correct Dean studio lock for this request
+description: Choose the correct brief and lock for this request
 alwaysApply: true
 ---
 
-Pick one lock and obey it. Do not mix product constitutions.
+Pick one project and obey its brief (`studio/briefs/`) and lock (`studio/locks/`). Do not mix product constitutions.
 
-| If the work is… | Lock |
+| If the work is… | Brief · lock |
 | --- | --- |
-| Red Letter, Quiet Page, Advisor, lectio, Sit/Seek/Today/Journal, KJV folio | `studio/locks/red-letter.md` |
-| Red Words, Flutter, iPhone, Android, widgets, WEB sayings, One Honest Step | `studio/locks/red-words-native.md` |
-| 90-day cash, business plans, folio/Notion OS, The Lamp / The Room | `studio/locks/ninety-day-folio.md` |
-| Muse, Muse Code, Meta Model API, `run muse` | `studio/locks/muse.md` |
+| Red Letter, Quiet Page, Advisor, lectio, Today / Seek / Sit / Journal, KJV folio | `studio/briefs/red-letter.md` · `studio/locks/red-letter.md` |
+| Red Words, Flutter, iPhone, Android, widgets, WEB sayings, One Honest Step | `studio/briefs/red-words-native.md` · `studio/locks/red-words-native.md` |
+| 90-day cash, business plans, folio / Notion OS, The Lamp / The Room | `studio/briefs/ninety-day-folio.md` · `studio/locks/ninety-day-folio.md` |
+| Muse, Muse Code, Meta Model API, `run muse` | `studio/briefs/muse.md` · `studio/locks/muse.md` |
 
 Default if unclear: Red Letter.
 
-Red Letter is a web folio (Today / Sit / Seek / Advisor / Journal, KJV). Red Words is Flutter (Today / Ask / Saved / Settings, WEB). They are siblings, not the same app. Do not merge their information architectures.
+Red Letter is a web folio / PWA (Today / Seek / Sit / Advisor / Journal, KJV). Red Words is Flutter (Today / Ask / Saved / Settings, WEB). They are siblings, not the same app. Do not merge their information architectures.

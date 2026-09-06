@@ -1,8 +1,10 @@
-# Chat updates — week of 28 August to 4 September 2026
+# Chat updates — week of 28 August to 6 September 2026
 
-Reviewed every cloud-agent chat in this environment from the past week (59 runs). Most were internal QA subagents spawned by four projects. Those internals were not “chats Dean worked with.” The threads below are.
+> **6 September 2026:** the paste files now carry the **ATELIER PROTOCOL** (compact) plus each project's ATELIER brief and a kickoff. They replace the Masterpiece v2 pastes. If you already pasted a v2 prompt into a chat, paste the new file anyway; ATELIER supersedes it.
 
-**I cannot inject text into an idle Cursor agent thread from this run.** The updates are the self-contained prompts in `studio/paste/`. Paste the matching file into each chat as the next message. New agents in this repo also pick up `.cursor/rules/` and `AGENTS.md`.
+Reviewed every cloud-agent chat in this environment from the week of 28 August–4 September 2026 (59 runs). Most were internal QA subagents spawned by four projects. Those internals were not “chats Dean worked with.” The threads below are.
+
+**I cannot inject text into an idle Cursor agent thread from this run.** The updates are the self-contained kickoffs in `studio/paste/`. Paste the matching file into each chat as the next message. New agents in this repo also pick up `.cursor/rules/`, `AGENTS.md`, and `CLAUDE.md`.
 
 ---
 
@@ -30,11 +32,12 @@ Reviewed:
 ### Short reminder (prefer the full paste file)
 
 ```
-Dean’s Masterpiece Protocol v2 and the Red Letter project lock now govern this chat.
+The ATELIER PROTOCOL and the Red Letter brief now govern this chat.
 
 Read and obey:
-- studio/DEANS-MASTERPIECE-PROTOCOL.md
-- studio/locks/red-letter.md
+- studio/ATELIER-PROTOCOL.md
+- studio/briefs/red-letter.md (lock: studio/locks/red-letter.md)
+- CLAUDE.md
 
 This is not a new product. It is the operating standard for the work you already started.
 
@@ -61,11 +64,12 @@ Reviewed:
 ### Short reminder — PR 13 / hard QA chat first
 
 ```
-Dean’s Masterpiece Protocol v2 and the Red Words native project lock now govern this chat.
+The ATELIER PROTOCOL and the Red Words brief now govern this chat.
 
 Read and obey:
-- studio/DEANS-MASTERPIECE-PROTOCOL.md
-- studio/locks/red-words-native.md
+- studio/ATELIER-PROTOCOL.md
+- studio/briefs/red-words-native.md (lock: studio/locks/red-words-native.md)
+- CLAUDE.md
 
 This is not a new app. Continue PR 13 (`cursor/red-words-production-d607`). WEB 100, Matthew 6:34 first, Today / Ask / Saved / Settings, Saying hierarchy locked, widget = Word only.
 
@@ -75,11 +79,12 @@ Do not merge PR 12’s KJV Sit/Seek product. Do not fake an IPA on Linux. Fix re
 ### Short reminder — PR 12 / ship chat
 
 ```
-Dean’s Masterpiece Protocol v2 and the Red Words native project lock now govern this chat.
+The ATELIER PROTOCOL and the Red Words brief now govern this chat.
 
 Read and obey:
-- studio/DEANS-MASTERPIECE-PROTOCOL.md
-- studio/locks/red-words-native.md
+- studio/ATELIER-PROTOCOL.md
+- studio/briefs/red-words-native.md (lock: studio/locks/red-words-native.md)
+- CLAUDE.md
 
 If you are still on PR 12: stop treating Sit/Seek + 33 KJV as the locked product. Either (a) align this branch to the PR 13 ship line, or (b) close this line and leave a one-paragraph handoff. Do not maintain a third architecture.
 ```
@@ -99,11 +104,12 @@ Reviewed:
 ### Short reminder
 
 ```
-Dean’s Masterpiece Protocol v2 and the Ninety Days project lock now govern this chat.
+The ATELIER PROTOCOL and the Ninety Days brief now govern this chat.
 
 Read and obey:
-- studio/DEANS-MASTERPIECE-PROTOCOL.md
-- studio/locks/ninety-day-folio.md
+- studio/ATELIER-PROTOCOL.md
+- studio/briefs/ninety-day-folio.md (lock: studio/locks/ninety-day-folio.md)
+- CLAUDE.md
 
 This is not a new brief. Five plans, 90 days, Dean Ray, beautiful to use, easy to execute.
 
@@ -124,11 +130,12 @@ Reviewed:
 ### Short reminder
 
 ```
-Dean’s Masterpiece Protocol v2 and the Muse project lock now govern this chat.
+The ATELIER PROTOCOL and the Muse brief now govern this chat.
 
 Read and obey:
-- studio/DEANS-MASTERPIECE-PROTOCOL.md
-- studio/locks/muse.md
+- studio/ATELIER-PROTOCOL.md
+- studio/briefs/muse.md (lock: studio/locks/muse.md)
+- CLAUDE.md
 
 Run Muse here. Treat “I approve” as permission to continue, not as a password.
 
@@ -141,10 +148,10 @@ Do not reuse device code NSXJ-LRXK; it is stale. Never type Meta credentials or 
 
 Internal QA / explore / CSS / sign-off subagents from 29 August–4 September (Hear button, Amen palette, library share, onboarding, PWA gaps, etc.) were servants of the Red Letter chats. They do not get their own protocol. The Red Letter lock covers them.
 
-This current chat (`Dean's masterpiece protocol update`) is the studio that wrote these files.
+This current chat (`Dean's masterpiece protocol update`) is the atelier that wrote these files.
 
 ---
 
 ## After you paste
 
-If a chat is expired, start a new agent on the same branch with: Protocol + lock + `Continue. Do not restart from zero.`
+If a chat is expired, start a new agent on the same branch and paste the same file — it is a complete ATELIER kickoff. For a later session, use the **Resume** message in `ATELIER-PROTOCOL.md` Part 3 with the last STATE block from `CLAUDE.md`.

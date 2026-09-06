@@ -1,3 +1,5 @@
+> **Superseded on 6 September 2026 by [`ATELIER-PROTOCOL.md`](ATELIER-PROTOCOL.md).** Kept for history; do not paste this into new chats. The project locks in `locks/` remain valid and are now paired with the briefs in `briefs/`.
+
 # Dean’s Masterpiece Protocol
 
 **Version 2 — 4 September 2026.** Refined after reviewing a week of live chats. The first version asked for a studio. This version *is* the studio, without the costume.
