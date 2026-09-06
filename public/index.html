@@ -219,9 +219,12 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .msg.assistant.crisis .bubble{background:#2A1218;border-color:#7F1D1D;color:#FCE7F3}
 .msg.assistant.crisis .bubble a{color:#FDA4AF;font-weight:600}
 .msg.assistant .bubble a{color:var(--crimson);text-decoration:underline;text-underline-offset:2px;word-break:break-all}
-.msg.assistant .bubble a.tel{display:inline-block;padding:2px 8px;margin:1px 0;border-radius:999px;background:rgba(255,255,255,.12);text-decoration:none;word-break:normal}
+.msg.assistant .bubble a.tel{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin:2px 2px 2px 0;border-radius:999px;background:rgba(255,255,255,.14);text-decoration:none;word-break:normal;font-size:calc(16px * var(--scale))}
+.msg.assistant .bubble a{min-height:44px;display:inline-flex;align-items:center}
 .cite-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.cite-badge{font-size:calc(10px * var(--scale));padding:3px 8px;border-radius:6px;font-weight:600}
+.cite-badge{display:inline-flex;align-items:center;min-height:36px;font-size:calc(11px * var(--scale));padding:4px 10px;border-radius:8px;font-weight:600;text-decoration:none}
+a.cite-badge:hover{filter:brightness(.95)}
+.msg.assistant .bubble a.cite-badge{text-decoration:none;min-height:36px}
 .cite-badge.ok{background:rgba(34,120,60,.12);color:#166534;border:1px solid rgba(34,120,60,.25)}
 .cite-badge.warn{background:rgba(146,100,10,.12);color:var(--gold);border:1px solid rgba(146,100,10,.25)}
 .ground-note{font-size:calc(11px * var(--scale));color:var(--ink-muted);margin-top:8px;line-height:1.4;width:100%}
@@ -558,7 +561,7 @@ html.journal-private #journal-list:hover .verse-cite{filter:none}
 .more-practices .midday-card,.more-practices .plan-card,.more-practices .examen-box{margin:12px 12px 0;animation:none}
 .more-practices .examen-box{margin-bottom:12px}
 
-.crisis-pill{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;min-height:36px;border-radius:999px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.08);color:rgba(237,232,224,.75);font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.02em}
+.crisis-pill{display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;min-height:44px;border-radius:999px;border:1px solid rgba(237,232,224,.2);background:rgba(237,232,224,.08);color:rgba(237,232,224,.75);font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.02em}
 .crisis-pill:hover{color:#fff;border-color:rgba(237,232,224,.35)}
 
 .bless-row{padding:0 14px 10px;display:flex;gap:8px}
@@ -3770,10 +3773,14 @@ async function sendChat() {
             if (ev.crisis) assistantWrap.classList.add('crisis');
             let badges = '';
             if (ev.citations?.length) {
-              badges = '<div class="cite-badges">' + ev.citations.map(c =>
-                '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + esc(c.outOfScope ? 'Outside the four Gospels — not Jesus’s words' : (c.source || '')) + '">' +
-                esc(c.citation || c.verse) + (c.verified ? ' ✓ WEB' : c.outOfScope ? ' · not Jesus’s words' : ' · unverified') + '</span>'
-              ).join('') + '</div>';
+              badges = '<div class="cite-badges">' + ev.citations.map(c => {
+                const label = esc(c.citation || c.verse) + (c.verified ? ' ✓ WEB' : c.outOfScope ? ' · not Jesus’s words' : c.speakerUnverified ? ' · WEB text, speaker unverified' : ' · unverified');
+                const title = esc(c.outOfScope ? 'Outside the four Gospels — not Jesus’s words' : c.speakerUnverified ? 'Exact WEB text, but not in the red-letter library — check that Jesus is the speaker' : c.verified ? 'Open this passage in the World English Bible' : (c.source || ''));
+                const href = webLink(c.verse || c.citation);
+                return href && !c.outOfScope
+                  ? '<a class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" href="' + href + '" target="_blank" rel="noopener" title="' + title + '">' + label + ' ↗</a>'
+                  : '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + title + '">' + label + '</span>';
+              }).join('') + '</div>';
               if (ev.grounded != null) {
                 badges += '<p class="ground-note">' + ev.grounded + ' citation' + (ev.grounded === 1 ? '' : 's') +
                   ' grounded to verified text' + (ev.unverified ? ' · ' + ev.unverified + ' unverified' : '') + '</p>';
@@ -3982,6 +3989,15 @@ document.getElementById('chat-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 
+// Public WEB chapter page with a verse anchor, e.g. https://ebible.org/eng-web/MAT06.htm#V25
+// (URL pattern and #V anchors confirmed against ebible.org on 2026-09-06).
+function webLink(ref) {
+  const m = String(ref || '').match(/^(Matthew|Mark|Luke|John)\s+(\d+):(\d+)/);
+  if (!m) return '';
+  const code = { Matthew: 'MAT', Mark: 'MRK', Luke: 'LUK', John: 'JHN' }[m[1]];
+  return 'https://ebible.org/eng-web/' + code + String(m[2]).padStart(2, '0') + '.htm#V' + m[3];
+}
+
 function formatAI(text) {
   const lines = text.split('\n');
   const parts = [];
@@ -4015,11 +4031,13 @@ function formatAI(text) {
       i++; continue;
     }
     if (!trimmed) { parts.push('<div style="height:6px"></div>'); i++; continue; }
+    // Order matters: quoted-speech → <em> must run before any HTML with
+    // attribute quotes is inserted, or the anchors get eaten.
     const html = esc(trimmed)
-      .replace(/(https?:\/\/[^\s<)]+?)([.,;:!?)]*)(?=\s|$)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>$2')
-      .replace(/\*\*(988|911|1-800-799-7233)\*\*/g, (_, n) => '<a class="tel" href="tel:' + n.replace(/-/g, '') + '"><strong>' + n + '</strong></a>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
       .replace(/"([^"]+)"/g, '<em>$1</em>')
+      .replace(/(https?:\/\/[^\s<)]+?)([.,;:!?)]*)(?=\s|$)/g, (_, u, tail) => '<a href="' + u + '" target="_blank" rel="noopener">' + u.replace(/^https?:\/\//, '') + '</a>' + tail)
+      .replace(/\*\*(988|911|1-800-799-7233|88788)\*\*/g, (_, n) => '<a class="tel" href="' + (n === '88788' ? 'sms:88788&body=START' : 'tel:' + n.replace(/-/g, '')) + '"><strong>' + n + '</strong></a>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong class="vcite">$1</strong>')
       .replace(/((?:Matthew|Mark|Luke|John)\s+\d+:\d+(?:[–\-]\d+)?)/g, '<strong class="vcite">$1</strong>');
     parts.push('<p class="ai-p">' + html + '</p>');
     i++;

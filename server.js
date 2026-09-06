@@ -13,6 +13,8 @@ const {
   offlineDaily,
   offlineEncouragement,
   detectCrisis,
+  detectPassiveIdeation,
+  looksSpanish,
   classifyIntent,
 } = require('./data/scripture');
 
@@ -104,7 +106,14 @@ app.use('/api/', (req, res, next) => {
   const recent = (apiHits.get(id) || []).filter((t) => now - t < 60000);
   const cap = req.path === '/chat' ? 20 : 90;
   if (recent.length >= cap) {
-    return res.status(429).json({ error: 'slow_down', message: 'Please wait a moment, then try again.' });
+    // A person in danger must never be told to wait.
+    const last = req.path === '/chat' && Array.isArray(req.body?.messages)
+      ? [...req.body.messages].reverse().find((m) => m && m.role !== 'assistant' && typeof m.content === 'string')?.content
+      : '';
+    const intent = last ? classifyIntent(last) : 'guidance';
+    if (intent !== 'crisis' && intent !== 'abuse') {
+      return res.status(429).json({ error: 'slow_down', message: 'Please wait a moment, then try again.' });
+    }
   }
   recent.push(now);
   apiHits.set(id, recent);
@@ -170,20 +179,25 @@ function parseJsonLoose(text) {
 }
 
 function guessTheme(text) {
-  const t = String(text).toLowerCase();
+  const t = String(text).normalize('NFKC').toLowerCase();
+  // Order matters: the most specific, highest-stakes themes first.
   const map = [
-    [/anxi|worr|stress|overwhelm/, 'Anxiety & Worry'],
-    [/grief|mourn|loss|died|death|funeral/, 'Grief & Loss'],
-    [/forgiv/, 'Forgiveness'],
-    [/lonely|alone|abandon/, 'Loneliness'],
-    [/conflict|enemy|anger|argue|relationship/, 'Conflict & Relationships'],
-    [/fear|afraid|scared|terrified/, 'Fear'],
-    [/purpose|direction|calling|lost/, 'Purpose & Direction'],
-    [/doubt|faith|believe/, 'Faith & Doubt'],
-    [/suffer|pain|sick|hurt/, 'Suffering & Pain'],
-    [/shame|guilt|ashamed|regret/, 'Shame & Guilt'],
-    [/peace|rest|calm/, 'Peace'],
-    [/hope|despair|hopeless/, 'Hope'],
+    [/\blost (?:my|our) (?:baby|child|son|daughter|wife|husband|mom|mother|dad|father|brother|sister|friend|partner)\b|passed away|miscarr|stillbir|\bdied\b|\bdeath\b|funeral|grief|griev|mourn|widow|\bburied\b/, 'Grief & Loss'],
+    [/cancer|biopsy|diagnos|terminal|hospice|chemo|dementia|alzheim|hospital|surgery|afraid of dying|scared of dying/, 'Fear'],
+    [/angry at god|mad at god|angry with god|where (?:is|was) god|why (?:did|would) god/, 'Faith & Doubt'],
+    [/i cheated|i had an affair|my affair|i lied|guilt|ashamed|shame|regret|hate myself|i'?m a failure|failed as a|can'?t forgive myself|what i did/, 'Shame & Guilt'],
+    [/texting another|another (?:woman|man)|(?:he|she) cheated|(?:his|her) affair|trust (?:him|her|them) again|betray|stole|lied to me|forgive (?:him|her|them|my)/, 'Forgiveness'],
+    [/sober|drink(?:ing)?|addict|craving|urge to|relapse|temptation|tempted/, 'Suffering & Pain'],
+    [/exhaust|burn(?:ed|t)? out|numb|feel nothing|nothing left|so tired|worn out|can'?t keep up|drained|chronic pain|in pain|hurts? so much|suffer|sick|illness|patients? die|watched .{0,20}die/, 'Suffering & Pain'],
+    [/anxi|worr|stress|overwhelm|panic|can'?t sleep|debt|bills|rent|money|laid off|lose my job|losing my job|fired/, 'Anxiety & Worry'],
+    [/lonely|alone|abandon|nobody|no one|isolat|left me|left out|single|estranged|won'?t talk to me/, 'Loneliness'],
+    [/forgiv|let go of/, 'Forgiveness'],
+    [/came out|is gay|is trans|how (?:do i|to|should i) (?:respond|react|talk to)|don'?t know how to (?:respond|react)|conflict|enemy|anger|angry|argue|fight|relationship|coworker|boss|in-?laws?|voted|can'?t stand|resent/, 'Conflict & Relationships'],
+    [/fear|afraid|scared|terrified|frighten|nightmare/, 'Fear'],
+    [/purpose|direction|calling|supposed to do|do with my life|everyone else (?:seems|has)|point of me|useless|retire|no plan|behind in life|compar/, 'Purpose & Direction'],
+    [/doubt|faith|believe|pray|talking to a ceiling|god (?:is|isn'?t|doesn'?t)|angry at god|where is god/, 'Faith & Doubt'],
+    [/peace|rest|calm|quiet|still/, 'Peace'],
+    [/hope|despair|hopeless|give up|giving up/, 'Hope'],
   ];
   for (const [re, theme] of map) {
     if (re.test(t)) return theme;
@@ -311,6 +325,14 @@ You are not alone. People are ready to help you through this moment.
 
 If you want, after you are safe, we can sit with words Jesus spoke about weariness and rest — but your safety comes first.`;
 
+const CRISIS_REPLY_ES = `Siento mucho que estés cargando esto, y me alegra que lo hayas dicho. Soy una guía que comparte las palabras de Jesús — no soy un consejero de crisis, y no reemplazo la ayuda humana real.
+
+Si estás en peligro o pensando en hacerte daño, por favor busca ayuda ahora:
+• En EE. UU. y Canadá, llama o envía un mensaje de texto al **988** (hay atención en español)
+• O visita https://www.iasp.info/suicidalthoughts/ para recursos en tu país
+
+No estás solo. Hay personas listas para acompañarte en este momento.`;
+
 const ABUSE_REPLY = `Thank you for trusting me with this. What you are describing is not something you have to endure, and it is not your fault. I am a reflective guide using the words of Jesus — not a counselor — so the most caring thing I can do is point you to people trained for exactly this:
 
 • If you are in immediate danger, call **911** (US) or your local emergency number
@@ -330,6 +352,8 @@ If there is something heavier underneath it — stress, a hard season, a questio
 const HOSTILE_INTRO = `You do not have to believe anything to be here, and I am not going to argue with you. I am a program that quotes one person — Jesus, from the four Gospels — with every citation checkable against the public-domain World English Bible. Doubt is welcome; some of the people He spoke most gently to were the ones who doubted Him.
 
 If you are willing, here are His own words, not mine:`;
+
+const PASSIVE_FOOTER = `One more thing, gently: if any part of you is thinking about not being here, please also talk to a person tonight — call or text **988** (US & Canada), or find local help at https://www.iasp.info/suicidalthoughts/. You matter more than this moment.`;
 
 async function getDaily() {
   const key = todayKey();
@@ -354,23 +378,30 @@ async function getDaily() {
     const aff = await verifyPassage({ verse: data.affirmation?.verse, quote: data.affirmation?.quote });
     const word = await verifyPassage({ verse: data.word?.verse, quote: data.word?.passage });
     const fallback = offlineDaily(key);
+    // The daily red letter is the product's front door: if the model's pick is
+    // not a corpus-verified saying of Jesus, keep the model's framing but show
+    // a verified passage instead of an unverifiable one.
+    const affOk = aff.verified && aff.quote;
+    const wordOk = word.verified && word.quote;
     const out = {
       affirmation: {
         text: data.affirmation?.text || fallback.affirmation.text,
-        verse: aff.verse,
-        quote: aff.quote,
-        verified: aff.verified,
+        verse: affOk ? aff.verse : fallback.affirmation.verse,
+        quote: affOk ? aff.quote : fallback.affirmation.quote,
+        verified: true,
+        substituted: !affOk,
       },
       word: {
         theme: data.word?.theme || fallback.word.theme || 'Presence',
         title: data.word?.title || fallback.word.title,
-        passage: word.quote,
-        verse: word.verse,
-        reflection: data.word?.reflection || fallback.word.reflection,
-        verified: word.verified,
+        passage: wordOk ? word.quote : fallback.word.passage,
+        verse: wordOk ? word.verse : fallback.word.verse,
+        reflection: wordOk ? (data.word?.reflection || fallback.word.reflection) : fallback.word.reflection,
+        verified: true,
+        substituted: !wordOk,
       },
-      verified: !!(aff.verified && word.verified),
-      source: 'model',
+      verified: true,
+      source: affOk && wordOk ? 'model' : 'model+corpus',
     };
     dailyCache.set(key, out);
     return out;
@@ -641,22 +672,29 @@ app.post('/api/encouragement', async (req, res) => {
 });
 
 app.post('/api/chat', async (req, res) => {
-  const { messages } = req.body || {};
-  if (!Array.isArray(messages) || messages.length === 0) {
+  const raw = req.body?.messages;
+  if (!Array.isArray(raw) || raw.length === 0) {
     return res.status(400).json({ error: 'messages required.' });
   }
-  if (!messages[messages.length - 1]?.content?.trim()) {
+  // Keep only what the model API accepts: role + string content. The client
+  // also stores html/crisis on its saved turns; those must never reach the API.
+  const messages = raw
+    .filter((m) => m && typeof m === 'object' && typeof m.content === 'string' && m.content.trim())
+    .map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content.slice(0, 8000) }))
+    .slice(-20);
+  if (!messages.length || messages[messages.length - 1].role !== 'user') {
     return res.status(400).json({ error: 'Empty message.' });
   }
 
   const id = getClientId(req);
-  const lastUser = messages.filter((m) => m.role === 'user').pop()?.content || '';
+  const lastUser = messages[messages.length - 1].content;
   const intent = classifyIntent(lastUser);
+  const passive = intent === 'guidance' && detectPassiveIdeation(lastUser);
 
   // Safety handoffs run before the paywall and never consume a free credit:
   // someone in danger must never meet a 402.
   if (intent === 'crisis' || intent === 'abuse') {
-    const reply = intent === 'crisis' ? CRISIS_REPLY : ABUSE_REPLY;
+    const reply = intent === 'crisis' ? (looksSpanish(lastUser) ? CRISIS_REPLY_ES + '\n\n---\n\n' + CRISIS_REPLY : CRISIS_REPLY) : ABUSE_REPLY;
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
@@ -702,6 +740,7 @@ app.post('/api/chat', async (req, res) => {
       '',
       ...picks.flatMap((p) => [`**${p.verse}**`, `"${p.quote}"`, p.context, '']),
       intent === 'hostile' ? 'No pressure. They are here if you ever want them.' : pack.closing,
+      ...(passive ? ['', PASSIVE_FOOTER] : []),
     ].join('\n');
     if (!res.headersSent) {
       res.setHeader('Content-Type', 'text/event-stream');
@@ -757,6 +796,9 @@ app.post('/api/chat', async (req, res) => {
 
     await stream.finalMessage();
     const annotated = await annotateAdvisorText(full);
+    if (passive && !/\b988\b/.test(annotated.text || full)) {
+      annotated.text = (annotated.text || full) + '\n\n' + PASSIVE_FOOTER;
+    }
     if (annotated.text && annotated.text !== full) {
       res.write(`data: ${JSON.stringify({ replace: annotated.text })}\n\n`);
     }
@@ -792,6 +834,19 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
+  const status = err.status || err.statusCode || 500;
+  if (status >= 500) console.error('Unhandled error:', err.message);
+  if (res.headersSent) return res.end();
+  res.status(status).json({
+    error: status === 400 ? 'bad_request' : status === 413 ? 'too_large' : 'server_error',
+    message: status === 400 ? 'Malformed request.' : status === 413 ? 'Request too large.' : 'Something went wrong. Please try again.',
+  });
+});
+process.on('unhandledRejection', (err) => console.error('unhandledRejection:', err && err.message ? err.message : err));
+process.on('uncaughtException', (err) => console.error('uncaughtException:', err && err.message ? err.message : err));
+
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'not_found' });
@@ -804,6 +859,11 @@ const server = app.listen(PORT, HOST, () => {
   console.log(`   Auth: ${hasAuth ? 'configured' : 'offline corpus mode'}`);
   console.log(`   Corpus: ${corpus.passages.length} verified red-letter passages`);
   console.log(`   Landing: http://${HOST}:${PORT}/welcome`);
+});
+
+server.on('error', (err) => {
+  console.error('listen failed:', err.message);
+  process.exit(1);
 });
 
 function shutdown(signal) {

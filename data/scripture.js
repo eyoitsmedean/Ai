@@ -54,7 +54,7 @@ async function fetchFromApi(rawRef) {
  * Verify a single citation+quote pair.
  * Returns { verse, quote, verified, source, similarity }
  */
-const GOSPEL_RE = /^(?:matthew|matt|mt|mark|mk|mr|luke|lk|lu|john|jn|joh)\.?\s+\d+:\d+/i;
+const GOSPEL_RE = /^(?:matthew|matt|mat|mt|mark|mk|mr|luke|lk|lu|john|jn|joh)\.?\s+\d+:\d+/i;
 
 /** True only for citations inside Matthew, Mark, Luke, or John. */
 function isGospelRef(ref) {
@@ -93,12 +93,15 @@ async function verifyPassage({ verse, quote, context }) {
   const api = await fetchFromApi(verse);
   if (api) {
     const sim = quote ? similarity(quote, api.text) : 1;
-    // If model quote diverges badly, prefer API text but mark low-sim
+    // The text is exact WEB and inside the Gospels, but bible-api cannot tell
+    // us who is speaking (Matthew 1:1 is narration). Only the curated corpus
+    // can vouch for red letters, so this is honest-but-not-verified.
     return {
       verse: api.reference,
       quote: api.text,
       context: context || undefined,
-      verified: true,
+      verified: false,
+      speakerUnverified: true,
       source: 'bible-api',
       similarity: sim,
       translation: 'WEB',
@@ -149,6 +152,7 @@ async function groundAdvisorText(text) {
     }
 
     const citation = vm[1].trim();
+    const headerIndex = out.length;
     out.push(line);
 
     // Skip blank lines after citation
@@ -178,10 +182,13 @@ async function groundAdvisorText(text) {
       similarity: verified.similarity,
       source: verified.source,
       outOfScope: !!verified.outOfScope,
+      speakerUnverified: !!verified.speakerUnverified,
       modelDiverged: !!verified.modelDiverged || (verified.verified && modelQuote && verified.similarity < 0.55),
     });
 
-    if (verified.verified && verified.quote) {
+    if ((verified.verified || verified.speakerUnverified) && verified.quote) {
+      // The text shown must be labelled with the range it actually covers.
+      if (verified.verse && verified.verse !== citation) out[headerIndex] = `**${verified.verse}**`;
       out.push(`"${verified.quote}"`);
       i = j; // consume original quote line
       continue;
@@ -204,6 +211,7 @@ async function groundAdvisorText(text) {
       similarity: v.similarity,
       source: v.source,
       outOfScope: !!v.outOfScope,
+      speakerUnverified: !!v.speakerUnverified,
     });
   }
 
@@ -347,15 +355,15 @@ const THEME_LEADS = {
   ],
   'Conflict & Relationships': [
     ['mt7-12', 'Start with what you would want done to you — He says this is the whole of it.'],
+    ['jn13-34-35', 'Love one another, as I have loved you — the measure is His love, not their behaviour.'],
+    ['mt7-1-3', 'He asks you to look at your own eye first. Not to excuse them; to free you.'],
     ['mt5-23-24', 'He puts repair before ritual: go and make it right first.'],
-    ['lk17-3-4', 'Rebuke and forgive both belong here — honesty and mercy in one breath.'],
-    ['mt5-44', 'He does not pretend the other person is easy. He shows a way through anyway.'],
   ],
   Fear: [
-    ['mt14-27', 'Spoken across the water to terrified friends. Presence before explanation.'],
     ['mt10-29-31', 'He knows the count of sparrows and the hairs on your head. You are not unnoticed.'],
+    ['jn14-27', 'His peace is given, not earned — and He tells you not to let fear take it back.'],
     ['lk12-32', '“Little flock” — He names how small and exposed we feel, and answers it with the Father’s pleasure.'],
-    ['jn16-33', 'He does not say the trouble is not real. He says who has already overcome it.'],
+    ['jn14-1', 'Don’t let your heart be troubled — He speaks it as something you can receive, not perform.'],
   ],
   'Purpose & Direction': [
     ['jn15-16', 'You were chosen before you chose. Purpose starts as a gift.'],
@@ -372,8 +380,8 @@ const THEME_LEADS = {
   'Suffering & Pain': [
     ['mt11-28-30', 'Come to me — the invitation is to the weary, not the strong.'],
     ['lk6-21', 'He blesses those who weep now. Now is where He meets you.'],
-    ['jn16-33', 'Oppression is real; so is His peace. Both are in one sentence.'],
     ['mt26-39', 'He asked for the cup to pass, too. You are allowed to ask.'],
+    ['jn14-1', 'Troubled hearts were the ones He was speaking to.'],
   ],
   'Shame & Guilt': [
     ['jn8-10-11', 'Said to a woman the crowd had already condemned. Neither do I condemn you.'],
@@ -388,10 +396,10 @@ const THEME_LEADS = {
     ['jn20-19', 'His first words to friends who had failed Him: Peace be to you.'],
   ],
   Hope: [
-    ['jn16-33', 'I have overcome — past tense. Hope rests on what is already done.'],
-    ['jn10-10', 'Abundant life is His stated purpose for coming.'],
-    ['mt24-35', 'Everything else passes. His words do not.'],
+    ['mt11-28-30', 'Come to me — the first word to the weary is an invitation, not a demand.'],
     ['lk12-32', 'The Kingdom is given with pleasure, not grudgingly.'],
+    ['jn14-27', 'Peace as a gift, left with you on purpose.'],
+    ['mt7-7-8', 'Ask, seek, knock — the door is described as one that opens.'],
   ],
 };
 
@@ -401,7 +409,7 @@ const THEME_OPENER = {
   'Grief & Loss': 'I am so sorry. Grief does not keep the schedule everyone else does, and you do not have to be “back to normal.” Jesus spoke into exactly this:',
   Forgiveness: 'Forgiveness is one of the hardest things anyone is asked to do, and the hurt underneath it is real. Here is what Jesus actually said about it:',
   Loneliness: 'Loneliness has a way of convincing you that no one sees you. Jesus spoke directly to that feeling:',
-  'Conflict & Relationships': 'Conflict with someone close is its own kind of pain. Jesus did not avoid this subject; here are His words:',
+  'Conflict & Relationships': 'The people closest to us are where this gets hardest, and it is good that you want to get it right. Jesus spoke plainly about how to treat one another — here are His words:',
   Fear: 'Fear is a heavy thing to carry alone. Jesus said “don’t be afraid” more than almost anything else — here is how He said it:',
   'Purpose & Direction': 'Not knowing what comes next is disorienting, and you are not behind. Here is what Jesus said about where to begin:',
   'Faith & Doubt': 'Doubt is not the opposite of faith; it is usually faith asking honest questions. Jesus met doubters gently, and these are His words:',
@@ -460,80 +468,149 @@ function hash(s) {
   return h;
 }
 
-const CRISIS_PATTERNS = [
-  /\bkill\s+myself\b/i,
-  /\bsuicid/i,
-  /\bend\s+my\s+life\b/i,
-  /\bwant\s+to\s+die\b/i,
-  /\bself[-\s]?harm\b/i,
-  /\bhurt\s+myself\b/i,
-  /\bcut(?:ting)?\s+myself\b/i,
-  /\btake\s+my\s+(?:own\s+)?life\b/i,
-  /\bend(?:ing)?\s+it\s+all\b/i,
-  /\bbetter\s+off\s+(?:if\s+i\s+(?:was|were|am|died)\s+)?(?:dead|gone|without\s+me)\b/i,
-  /\bwish\s+i\s+(?:was|were)\s+dead\b/i,
-  /\bno\s+reason\s+to\s+(?:live|go\s+on|keep\s+going|be\s+alive)\b/i,
-  /\bdon'?t\s+want\s+to\s+(?:be\s+here|be\s+alive|live|wake\s+up)\s*(?:anymore|any\s+more)?\b/i,
-  /\boverdos(?:e|ing)\b/i,
-  /\bplan(?:ning)?\s+to\s+(?:die|kill)\b/i,
-];
-
-function detectCrisis(text) {
-  return CRISIS_PATTERNS.some(re => re.test(String(text || '')));
+// Normalise before classifying: NFKC, strip zero-width chars, collapse
+// whitespace, lowercase. Keeps "k\u200bill myself" and curly apostrophes from
+// slipping past the patterns.
+function normForIntent(text) {
+  return String(text || '')
+    .normalize('NFKC')
+    .replace(/[\u200b-\u200f\u2060\ufeff]/g, '')
+    .replace(/[’‘`´]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
 }
 
-// Danger to the person from someone else (domestic violence, abuse). Handled
-// deterministically so the handoff never depends on the model.
+// Active suicidal / self-harm intent. Written for how people actually type at
+// 2 a.m.: contractions, slang, typos, methods, farewells.
+const CRISIS_PATTERNS = [
+  /\bkill (?:my ?self)\b|\b(?:wanna|want to|gonna|going to|should i|could i) kill me\b/,
+  /\bsu+i+c+i+d|\bsucide|\bsuicde|\bsuiside/,
+  /\bkms\b|\bunalive\b/,
+  /\bend (?:my|it|things|everything|my own)\b(?: ?(?:life|all|tonight|today))?/,
+  /\bending (?:my (?:own )?life|it all|things|everything)\b/,
+  /\btake (?:my (?:own )?life|all (?:my|the) pills)\b/,
+  /\b(?:wanna|want to|going to|gonna|ready to|plan(?:ning)? to|about to|thinking (?:of|about)) (?:die|be dead|end (?:it|things|my life|everything)|kill (?:my ?self|me)|jump|hang (?:my ?self|me)|overdose|od\b|not (?:be here|exist|wake up)|disappear for good|stop existing)\b/,
+  /\b(?:i )?(?:wanna|want to) (?:die|be dead|not exist|stop existing)\b/,
+  /\bdon'?t (?:want|wanna) to (?:be here|be alive|live|wake up|exist|go on|keep going)\b/,
+  /\b(?:dont|don'?t) wanna live\b|\bno (?:reason|point) (?:to|in) (?:live|living|go(?:ing)? on|keep going|be(?:ing)? alive|being here)\b/,
+  /\blife (?:isn'?t|is not|aint|ain'?t) worth (?:living|it)\b/,
+  /\b(?:better off|be better|be happier) (?:if i (?:was |were |am |just |had )?(?:dead|gone|died)|if i (?:wasn'?t|weren'?t|had never been|was never) (?:here|around|alive|born)|without me|dead|gone)\b/,
+  /\b(?:no|don'?t see (?:a|the|any)|can'?t see (?:a|the|any)|there'?s no) point (?:in|of|to) (?:being alive|living|staying alive|life anymore|going on)\b/,
+  /\b(?:wanna|want to) dye\b(?! (?:my|the|his|her) )/,
+  /\bwish i (?:was|were|could be) dead\b|\bwish i (?:had never been born|wasn'?t born|would die|could die|didn'?t wake up|would disappear)\b/,
+  /\bself[- ]?harm(?:ing|ed)?\b|\bhurt(?:ing)? myself\b|\bcut(?:ting)? (?:myself|again|my (?:wrists?|arms?))\b/,
+  /\bhang(?:ing)? myself\b|\bjump (?:off|from|in front of)\b|\bgoing to jump\b/,
+  /\boverdos(?:e|ing|ed)\b|\bpills (?:lined up|in front of me|ready|in my hand)\b|\btake all (?:my|the|these) pills\b|\bswallow (?:all )?(?:the|my|these) pills\b/,
+  /\b(?:i have|i've got|got) (?:a )?(?:gun|rope|pills|blade|knife) (?:and|ready|in my hand|next to me|and i know)\b/,
+  /\b(?:written|wrote|writing) (?:my|the|a) (?:suicide )?note\b|\bgoodbye(?: letter| note)?\b.{0,40}\b(?:tell|sorry)\b/,
+  /\b(?:end|ending) (?:things|it|everything) tonight\b|\btonight (?:is|will be) the (?:night|last)\b|\bnot going to be here tomorrow\b|\bwon'?t be here tomorrow\b/,
+  /\b(?:how (?:much|many) (?:tylenol|acetaminophen|ibuprofen|pills|sleeping pills|xanax|benadryl))\b.{0,40}\b(?:die|not wake up|kill|overdose|end)\b/,
+  /\bplan(?:ning)? to (?:die|kill|end)\b/,
+  /\bsleep and never wake up\b|\bnever wake up\b/,
+  /\b(?:want|need) (?:it|this|everything|the pain) to (?:stop|end|be over)\b.{0,30}\b(?:for good|forever|permanently)\b/,
+  /\b(?:i'?m|i am) (?:done|finished) (?:with life|living|with everything)\b/,
+  // Spanish (common in US audience)
+  /\bquiero morir(?:me)?\b|\bmatarme\b|\bsuicidarme\b|\bquitarme la vida\b|\bno quiero vivir\b/,
+];
+function detectCrisis(text) {
+  const t = normForIntent(text);
+  return CRISIS_PATTERNS.some((re) => re.test(t));
+}
+
+// Passive ideation / farewell language that is not an explicit statement of
+// intent. Not blocked — the reply keeps its scripture but appends a 988 line.
+const PASSIVE_IDEATION_PATTERNS = [
+  /\bnobody (?:would|will) (?:notice|miss|care)\b.{0,30}\b(?:gone|disappeared|dead|died|wasn'?t (?:here|around))\b/,
+  /\b(?:everyone|everybody|they|my family|my kids) (?:would|will) be (?:fine|better|happier|better off) (?:without me|if i (?:wasn'?t|weren'?t) (?:here|around))\b/,
+  /\bwhat(?:'s| is) the point (?:of (?:anything|living|going on|it all|me|any of (?:this|it)))?\b/,
+  /\b(?:i )?(?:can'?t|cannot) (?:do|take|go on like) this (?:anymore|any more|any longer)\b/,
+  /\bnobody would (?:notice|miss|care) if i (?:disappeared|was gone|were gone|died|left)\b/,
+  /\bi (?:just )?want (?:it|this|everything|the pain) to (?:stop|end|be over)\b/,
+  /\b(?:tired of|sick of) (?:living|being alive|existing|life)\b/,
+  /\bi (?:feel like|wish i could) (?:disappear|vanish)\b|\bdisappear(?:ing)? (?:forever|for good)\b/,
+  /\bhow much (?:tylenol|acetaminophen|ibuprofen|pills|sleeping pills|xanax|benadryl)\b/,
+  /\b(?:goodbye|good bye|farewell)\b.{0,60}\b(?:sorry|tell (?:my|them|everyone))\b/,
+];
+function detectPassiveIdeation(text) {
+  const t = normForIntent(text);
+  return PASSIVE_IDEATION_PATTERNS.some((re) => re.test(t));
+}
+
+// Danger to the person from someone else (domestic violence, sexual abuse,
+// child abuse). Handled deterministically so the handoff never depends on
+// the model. Patterns are deliberately loose: a false positive costs a
+// hotline line; a false negative can cost far more.
+const PERSON = "(?:he|she|they|my (?:hus?band|husbamd|wife|partner|boyfriend|girlfriend|bf|gf|fianc[eé]e?|dad|mom|mum|father|mother|stepdad|stepmom|step-?father|step-?mother|parents?|son|daughter|brother|sister|uncle|aunt|ex|roommate|boss|coach|pastor|teacher))";
+const VIOLENCE = "(?:hits?|hitting|beats?|beating|chok(?:es?|ed|ing)|strangl(?:es?|ed|ing)|punch(?:es|ed|ing)?|slap(?:s|ped|ping)?|kick(?:s|ed|ing)?|shov(?:es?|ed|ing)|push(?:es|ed) me (?:down|into|against)|threw|throws|grab(?:s|bed) me|drag(?:s|ged) me|pull(?:s|ed) my hair|spits? (?:on|at) me|burn(?:s|ed) me|put his hands on me|puts his hands on me|laid hands on me|lock(?:s|ed) me (?:in|out|up)|took my phone|takes my phone|won'?t let me leave|threatens? (?:to )?(?:kill|hurt|beat)|threatened (?:to )?(?:kill|hurt|beat)|rap(?:es?|ed|ing)|forc(?:es?|ed|ing) me to have sex|forced (?:himself|herself) on me|touch(?:es|ed|ing) me|molest(?:s|ed|ing)?)";
 const ABUSE_PATTERNS = [
-  /\b(?:he|she|they|my (?:husband|wife|partner|boyfriend|girlfriend|dad|mom|father|mother|parent|son|daughter|brother|sister|ex))\b[^.!?]{0,60}\b(?:hits?|hit|beats?|beat|chokes?|choked|punche[sd]|slap(?:s|ped)|threatens? to (?:kill|hurt)|threatened to (?:kill|hurt))\b[^.!?]{0,40}\b(?:me|us|the kids|my kids|my children)\b/i,
-  /\b(?:being|getting|been|am|i'm|i am)\s+(?:physically |sexually )?(?:abused|assaulted|raped|molested)\b/i,
-  /\b(?:abusive|violent)\s+(?:husband|wife|partner|boyfriend|girlfriend|relationship|marriage|home|parent|father|mother)\b/i,
-  /\b(?:domestic violence|domestic abuse)\b/i,
-  /\b(?:i'?m|i am|we are|we're) (?:not safe|in danger|scared for my life|afraid for my life)\b/i,
-  /\bafraid (?:he|she|they)(?:'ll| will|'s going to| is going to) (?:hurt|kill) (?:me|us|the kids)\b/i,
+  new RegExp(`\\b${PERSON}\\b[^.!?]{0,60}\\b${VIOLENCE}\\b`),
+  new RegExp(`\\b${VIOLENCE}\\b[^.!?]{0,20}\\b(?:me|us|my (?:kids?|children|little (?:sister|brother)|daughter|son|mom|mother))\\b`),
+  /\b(?:being|getting|been|am|i'm|i am|was|got|i was) (?:physically |sexually |emotionally )?(?:abused|assaulted|raped|molested|beaten|beat up|hit|choked|strangled|groped)\b/,
+  /\b(?:someone|he|she|they|a man|my \w+) (?:raped|assaulted|molested|groped|forced) me\b|\bforced (?:me )?to have sex\b|\bhad sex with me (?:when|while) i (?:was|said)\b|\bi (?:said no|didn'?t consent|told (?:him|her|them) (?:no|to stop))\b.{0,40}\b(?:anyway|didn'?t stop|kept going)\b/,
+  /\b(?:abusive|violent) (?:husband|wife|partner|boyfriend|girlfriend|relationship|marriage|home|parent|father|mother|dad|mom|ex)\b/,
+  /\b(?:domestic violence|domestic abuse|sexual abuse|sexually abused|child abuse|molested)\b/,
+  /\b(?:i'?m|i am|we are|we're) (?:not safe|in danger|scared for my life|afraid for my life|being hurt)\b/,
+  /\b(?:i'?m|i am|im) (?:scared|afraid|terrified) of my (?:husband|wife|partner|boyfriend|girlfriend|dad|mom|father|mother|stepdad|stepmom|ex)\b/,
+  /\bafraid (?:he|she|they)(?:'ll| will|'s going to| is going to|s gonna| gonna) (?:hurt|kill|hit|beat) (?:me|us|the kids|my kids)\b/,
+  /\btouch(?:es|ed|ing) me (?:when|where|and|in)\b|\btouches me (?:inappropriately|down there|at night|when mom)\b/,
+  /\b(?:hits?|beats?|kicks?|chokes?|hurts?) my (?:little |younger |baby )?(?:sister|brother|kids?|children|daughter|son)\b/,
+  /\bcontrols? (?:all )?(?:my|our) money\b.{0,60}\b(?:worthless|stupid|can'?t leave|scared|afraid|threat)\b/,
+  /\bthrew (?:a |the )?\w+ at (?:me|my head|my face)\b/,
 ];
 function detectAbuse(text) {
-  return ABUSE_PATTERNS.some(re => re.test(String(text || '')));
+  const t = normForIntent(text);
+  return ABUSE_PATTERNS.some((re) => re.test(t));
 }
 
 // Requests the Advisor is not for: code, homework, trivia, weather, sports,
-// medical dosing, legal filings, betting. Life questions that merely mention
-// these words still pass through (see the negative guards below).
+// medical dosing, finance tips, betting. A life question that merely mentions
+// one of these words passes through: EMOTIONAL_GUARD wins unless the sentence
+// is plainly a request for the thing itself.
+const EMOTIONAL_GUARD =
+  /\b(?:god|jesus|pray|faith|forgiv|griev|grief|mourn|anxious|anxiety|afraid|scared|terrified|lonely|alone|hurt|hurting|marriage|divorce|hopeless|worthless|broke|broken|gambl|exhausted|numb|depress|cry|crying|tears|died|death|dying|funeral|hospital|relapse|sober|addict|hate myself|can'?t sleep|panic|ashamed|shame|guilt|betray|cheated|abandon|miscarr|cancer|diagnos|sick|fired|laid off|lost my|my (?:son|daughter|wife|husband|mom|dad|friend|partner|neighbor|neighbour|family|kids?|baby)|feel(?:ing)? (?:like|so|lost|empty))\w*\b/;
 const OFFSCOPE_PATTERNS = [
-  /\b(?:write|fix|debug|generate|refactor)\b[^.!?]{0,40}\b(?:code|function|script|program|regex|sql|query|python|javascript|java|c\+\+|html|css)\b/i,
-  /\b(?:python|javascript|typescript|c\+\+|sql|regex)\b[^.!?]{0,30}\b(?:error|bug|snippet|code|function)\b/i,
-  /\bcapital of\b|\bhow many (?:ounces|grams|miles|kilometers|calories|planets|states)\b|\bwhat year (?:did|was)\b|\bwho (?:won|invented|discovered)\b/i,
-  /\b(?:weather|forecast|temperature) (?:today|tomorrow|this week|in [A-Z][a-z]+)\b/i,
-  /\b(?:stock|share) price\b|\bbitcoin\b|\bcrypto\b|\bwhich stocks?\b|\bshould i (?:buy|sell|short) (?:stock|shares|crypto|bitcoin)\b|\bbetting odds\b|\bparlay\b/i,
-  /\b(?:solve|calculate|compute|what is|what's)\s+[\d(][\d\s+\-*/^().x=]*[\d)]\s*[?]?$/i,
-  /\b(?:essay|homework|book report|cover letter|resume|résumé|business plan|marketing plan)\b[^.!?]{0,40}\b(?:write|draft|for me|do my)\b|\b(?:write|draft|do) my (?:essay|homework|cover letter|resume|résumé)\b/i,
-  /\b(?:recipe for|how (?:do i|to) (?:cook|bake|install|configure|reset|unlock|jailbreak))\b/i,
-  /\b(?:dosage|how many (?:mg|milligrams|pills)|what dose)\b/i,
-  /\b(?:translate|translation of) (?:this|the following|into)\b/i,
-  /\bwho (?:will|is going to) win (?:the|this)\b|\bpredict (?:the|this) (?:game|match|election|season)\b/i,
-  /\b(?:tell me|write) (?:a|me a) (?:joke|poem|story|song|rap|limerick)\b/i,
+  /\b(?:write|fix|debug|generate|refactor|explain)\b[^.!?]{0,40}\b(?:code|function|script|program|regex|sql|query|python|javascript|java|c\+\+|html|css)\b/,
+  /\b(?:python|javascript|typescript|c\+\+|sql|regex)\b[^.!?]{0,30}\b(?:error|bug|snippet|code|function)\b/,
+  /\bcapital of\b|\bhow many (?:ounces|grams|miles|kilometers|calories|planets|states|countries)\b|\bwhat year (?:did|was)\b|\bwho (?:won|invented|discovered)\b|\bhow (?:tall|old|far|big) is\b/,
+  /\b(?:weather|forecast|temperature) (?:today|tomorrow|this week|in [a-z]+)\b/,
+  /\b(?:stock|share|bitcoin|btc|eth|crypto) price\b|\bwhich (?:stocks?|coins?) (?:should|to) (?:i )?buy\b|\bshould i (?:buy|sell|short|invest in) (?:stocks?|shares|crypto|bitcoin|btc|eth|gold|tesla|nvidia)\b|\bbetting odds\b|\bparlay\b|\bprice prediction\b/,
+  /\b(?:solve|calculate|compute|what is|what's)\s+[\d(][\d\s+\-*/^().x=]*[\d)]\s*[?]?$/,
+  /\b(?:essay|homework|book report|cover letter|resume|résumé|business plan|marketing plan)\b[^.!?]{0,40}\b(?:write|draft|for me|do my)\b|\b(?:write|draft|do) my (?:essay|homework|cover letter|resume|résumé)\b/,
+  /\b(?:recipe for|how (?:do i|to) (?:cook|bake|install|configure|reset|unlock|jailbreak|root))\b/,
+  /\b(?:how many (?:mg|milligrams|pills|tablets) (?:of \w+ )?(?:can|should) i take|what(?:'s| is) the (?:max|maximum|right|correct|safe) dos(?:e|age)|safe dos(?:e|age)|max dos(?:e|age)|can i take \d+ ?(?:mg|pills|tablets))\b/,
+  /\b(?:translate|translation of) (?:this|the following|into)\b/,
+  /\bwho (?:will|is going to|'s gonna) win (?:the|this|tonight)\b|\bpredict (?:the|this) (?:game|match|election|season)\b/,
+  /\b(?:tell me|write) (?:a|me a) (?:joke|poem|story|song|rap|limerick|haiku)\b/,
 ];
 function detectOffScope(text) {
-  const t = String(text || '');
-  if (/\b(?:god|jesus|pray|faith|forgive|grief|anxious|anxiety|afraid|lonely|hurt|marriage|divorce|my (?:son|daughter|wife|husband|mom|dad|friend))\b/i.test(t) &&
-      !/\b(?:code|python|javascript|sql|regex|homework|essay|stock|bitcoin|weather|capital of)\b/i.test(t)) {
+  const t = normForIntent(text);
+  if (EMOTIONAL_GUARD.test(t) && !/\b(?:write|fix|debug) (?:me )?(?:a |some )?(?:code|function|script|python)|\bcapital of\b|\bhomework for me\b|\bmy essay for me\b/.test(t)) {
     return false;
   }
-  return OFFSCOPE_PATTERNS.some(re => re.test(t));
+  return OFFSCOPE_PATTERNS.some((re) => re.test(t));
 }
 
 // Contempt or attack aimed at the Advisor, the faith, or Jesus. Not blocked —
 // routed to a warm, non-defensive reply.
 const HOSTILE_PATTERNS = [
-  /\b(?:this|your app|you|this app|this bot|religion|christianity|the bible|jesus|god) (?:is|are) (?:a )?(?:scam|fake|bullshit|bs|garbage|stupid|a joke|nonsense|a lie|made up|useless|a fairy ?tale|a cult)\b/i,
-  /\bjesus (?:never existed|isn'?t real|is a myth|was a fraud|was just a man)\b/i,
-  /\b(?:prove|show me proof|where'?s (?:your|the) (?:proof|evidence))\b[^.!?]{0,40}\b(?:god|jesus|exists|real)\b/i,
-  /\b(?:fuck|screw|shut up|damn) (?:you|this|off|jesus|god)\b|\bf\*+k (?:you|this|off)\b/i,
-  /\byou'?re (?:just )?(?:a|an) (?:ai|bot|chatbot|program|computer|algorithm)\b[^.!?]{0,40}\b(?:what do you know|you can'?t|don'?t pretend|stop pretending)\b/i,
-  /\bwhy (?:would|should) i (?:listen to|trust|believe) (?:you|a bot|an ai|a computer|this)\b/i,
+  /\b(?:this|your app|you|this app|this bot|religion|christianity|the bible|jesus|god) (?:is|are) (?:a |just a |all )?(?:scam|fake|bullshit|bs|garbage|stupid|a joke|nonsense|a lie|made up|useless|a fairy ?tale|fairy ?tales?|a cult|for (?:weak|stupid|dumb) people)\b/,
+  /\bjesus (?:never existed|isn'?t real|is a myth|was a fraud|was just a man|is fake)\b/,
+  /\b(?:prove|show me proof|where'?s (?:your|the) (?:proof|evidence))\b[^.!?]{0,40}\b(?:god|jesus|exists|real)\b/,
+  /\b(?:fuck|screw|shut up|damn) (?:you|this|off|jesus|god)\b|\bf\*+k (?:you|this|off)\b/,
+  /\byou'?re (?:just )?(?:a|an) (?:ai|bot|chatbot|program|computer|algorithm)\b[^.!?]{0,40}\b(?:what do you know|you can'?t|don'?t pretend|stop pretending)\b/,
+  /\bwhy (?:would|should) i (?:listen to|trust|believe) (?:you|a bot|an ai|a computer|this|a \d+ year old book)\b/,
 ];
 function detectHostile(text) {
-  return HOSTILE_PATTERNS.some(re => re.test(String(text || '')));
+  const t = normForIntent(text);
+  return HOSTILE_PATTERNS.some((re) => re.test(t));
+}
+
+/** Rough Spanish detector for the safety replies (two or more common function words). */
+function looksSpanish(text) {
+  const t = normForIntent(text);
+  const hits = (t.match(/\b(?:quiero|vivir|morir|morirme|estoy|muy|triste|ayuda|ayúdame|me siento|no sé|qué|hacer|mi vida|nadie|solo|sola|dios|jesús|por favor|ya no|puedo|tengo)\b/g) || []).length;
+  return hits >= 2;
 }
 
 /**
@@ -558,6 +635,8 @@ module.exports = {
   offlineDaily,
   offlineEncouragement,
   detectCrisis,
+  detectPassiveIdeation,
+  looksSpanish,
   detectAbuse,
   detectOffScope,
   detectHostile,

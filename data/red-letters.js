@@ -697,7 +697,7 @@ module.exports.findByRef = function findByRef(ref) {
   if (!m) return null;
   const bookRaw = m[1].replace(/\s+/g, ' ').trim().toLowerCase();
   const bookMap = {
-    matthew: 'Matthew', matt: 'Matthew', mt: 'Matthew',
+    matthew: 'Matthew', matt: 'Matthew', mat: 'Matthew', mt: 'Matthew',
     mark: 'Mark', mk: 'Mark', mr: 'Mark',
     luke: 'Luke', lk: 'Luke', lu: 'Luke',
     john: 'John', jn: 'John', joh: 'John',
@@ -707,10 +707,13 @@ module.exports.findByRef = function findByRef(ref) {
   const chapter = +m[2];
   const start = +m[3];
   const end = m[4] ? +m[4] : start;
-  return module.exports.passages.find(p =>
-    p.book === book &&
-    p.chapter === chapter &&
-    p.verseStart <= end &&
-    p.verseEnd >= start
-  ) || null;
+  const inBook = module.exports.passages.filter(p => p.book === book && p.chapter === chapter);
+  // Exact range first, then the tightest overlapping passage, so "John 14:1"
+  // resolves to the one-verse entry rather than the 14:1–3 entry.
+  const exact = inBook.find(p => p.verseStart === start && p.verseEnd === end);
+  if (exact) return exact;
+  const overlapping = inBook.filter(p => p.verseStart <= end && p.verseEnd >= start);
+  if (!overlapping.length) return null;
+  overlapping.sort((a, b) => (a.verseEnd - a.verseStart) - (b.verseEnd - b.verseStart));
+  return overlapping[0];
 };
