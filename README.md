@@ -47,6 +47,6 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **GitHub Pages:** the workflow publishes `public/`. Enable it once under Settings → Pages → Source: GitHub Actions; the site lands at `https://<owner>.github.io/<repo>/`. Asset paths and the service worker are scope-relative, so the app works at the origin root or under a project path. Today, Seek, and the paths work from bundled data. Advisor needs the API host.
 
 KJV text is public domain. Attribution is printed beside citations.

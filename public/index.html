@@ -12,9 +12,9 @@
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
   <title>Red Letter — The Advisor</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -1972,9 +1972,9 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
-<script src="/data/curated.js"></script>
-<script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
+<script src="./data/curated.js"></script>
+<script src="./data/advisor.js"></script>
+<script src="./data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -2507,14 +2507,14 @@ function paintThemeIndex() {
 
 async function loadCurated() {
   if (curatedPacks) return curatedPacks;
-  const res = await fetch('/curated.json');
+  const res = await fetch('./curated.json');
   curatedPacks = await res.json();
   return curatedPacks;
 }
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch('./api/daily');
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
   } catch (e) {
@@ -2563,7 +2563,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch('./api/encouragement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -2700,7 +2700,7 @@ function filterStaticLibrary({ book, q, theme, limit, offset }) {
 
 async function loadStaticLibrary() {
   if (staticLibrary) return staticLibrary;
-  const res = await fetch('/library.json');
+  const res = await fetch('./library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
   return staticLibrary;
@@ -2714,7 +2714,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch('./api/library?' + params.toString());
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -3089,7 +3089,7 @@ async function sendMsg(preset) {
   let opened = false;
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('./api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
@@ -3828,14 +3828,14 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch('./api/library?limit=24');
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
     }
   } catch (_) {}
   try {
-    const res = await fetch('/library.json');
+    const res = await fetch('./library.json');
     const data = await res.json();
     return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
   } catch (_) {
@@ -4002,7 +4002,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch('./api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
@@ -4111,7 +4111,7 @@ function bindRituals() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 </script>
 </body>
