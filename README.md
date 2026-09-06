@@ -45,7 +45,11 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 **The ledger.** LAUNCH's four signals are counted on the reader's device (`rla-ledger`: open, lectio, blessing, advisor, sevenStart, sevenDone; sixty days) and read in Room settings. Nothing leaves the device unless *Share anonymous counts* is on; then completed days are sent once each as plain totals — no name, no device id — to `POST /api/signal`, which appends to `data/signals.jsonl` (gitignored; `RLA_SIGNAL_PATH` overrides). `GET /api/signal/summary?days=30` returns the four LAUNCH ratios with their denominators; because no id travels, "active" is device-days, not unique devices, and the response says so. The toggle only appears when `/api/health` answers, so it is absent on GitHub Pages.
 
-`npm run qa` drives a first session in headless Chrome (title page, lectio, Seven, Forty, Lent, the ledger). It needs a running server and system Chrome.
+**When the lamp is out.** With no model key (or when the model fails) the server still writes the letter for *this* question: `lib/counsel.js` reads the need from the writer's words (twelve rooms, weighted cues, the same voice lines as the client's offline advisor), takes the passages from the curated rooms, and fills every verse from the corpus. A question that does not reach His words gets an honest out-of-room letter rather than a verse about the weather.
+
+**The evaluation set.** `eval/questions.json` holds 46 real questions — everyday, low-moment, hostile, off-scope, crisis. `npm run eval` posts them to a live server and writes `eval/RESULTS.md`: every citation must resolve to His words and quote the corpus exactly; no other author; crisis lines must open with the human handoff (988 · findahelpline) before any verse; off-scope must be answered honestly; answers must vary with the need. The report records which path answered (offline rooms or model); a green offline run says nothing about the model path, and the report says so. Tone is a column for a human reader.
+
+`npm run qa` drives a first session in headless Chrome (title page, lectio, Seven, Forty, Lent, the ledger, the Advisor and its crisis door). It needs a running server and system Chrome. `RELEASE.md` lists what is verified and what is not, with the rung.
 
 ## Design
 
@@ -55,5 +59,7 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 - **App (Node):** serve this repo with `npm start`.
 - **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **One build, any host:** `<meta name="rla-api-base">` in `public/index.html` (empty = same origin) is where `/api` lives; `npm run shell https://api.host` writes `dist-shell/` with it set. The server answers other origins only when they are named in `RLA_ALLOWED_ORIGINS` (comma-separated; for a Capacitor shell add `capacitor://localhost` and `https://localhost`).
+- **Native shell:** Capacitor around this build — `capacitor.config.json` points at `dist-shell/`; the exact steps and the on-device checklist are in `RELEASE.md`. Decisions are recorded in `CLAUDE.md`.
 
-KJV text is public domain. Attribution is printed beside citations.
+KJV text is public domain in the United States and most of the world; in the United Kingdom it remains Crown prerogative administered by Cambridge University Press (see `CLAUDE.md`). Attribution is printed beside citations.

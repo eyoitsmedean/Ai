@@ -62,14 +62,20 @@ Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playb
 | LAUNCH named four signals and thresholds; nothing measured them, and a tracker would break "they do not feel managed, scored, or sold" | The ledger: counted on the device, read in Room settings, shared only by choice as day totals with no identifier; `/api/signal/summary` returns the four ratios and says which denominators are exact |
 | Lent 2027 was asserted in prose; the client's church-year copy had no test | Server and client checked against a retrieved table for 2025–2030, 2035, 2038 |
 | The frame audit checked how a red verse *opens*, not whether the map was right: eight verses of His were missing (John 21:15 entirely; Luke 15:17 inside the prodigal), four printed another voice mid-verse (Mark 8:19 "They say unto him, Twelve"), two partial markers misquoted the KJV, and two editorial notes rode inside the corpus text | Map repaired with a ` … ` span convention for interrupted verses; `test/map.test.js` checks every partial marker against its verse, discourse coverage, the sayings a reader looks for first, mid-verse replies, and the corpus for notes; `/welcome` now says the journal and ledger stay on the device |
+| Without a model key the server sent the *same* letter (John 14:27 / Matthew 11:28) to every question — worse than the client's offline advisor; the retriever's stems ended in `\b` so "worried" and "lonely" never reached a room | `lib/counsel.js` writes the letter for the question from twelve rooms with weighted cues and an honest out-of-room letter; retriever stems fixed; `test/counsel.test.js` |
+| Nothing measured what the Advisor actually says | `eval/questions.json` (46) + `npm run eval` → `eval/RESULTS.md`: 46/46 on the offline path, 17 distinct answer sets, crisis handoff 8/8; the model path is recorded as unverified until run with a key |
+| Searching red text for "Jesus" found five more narrator frames mid-verse, the angel at the tomb (Mark 16:6) and "Jesus wept" in red | Cut by override / removed from the map; test forbids "Jesus" in red text except John 17:3 |
+| Crisis detector missed "I don't want to be here anymore", "end it all", "nobody would notice if I disappeared"; client and server copies could drift | Both widened; a test asserts they are byte-identical |
+| The HTML build could only call `/api` on its own origin, so neither Pages nor a native shell could reach the Advisor | `apiUrl()` + `<meta name="rla-api-base">`; `RLA_ALLOWED_ORIGINS` allow-list on the server; `npm run shell` build; proven with a static host on one port and the API on another |
+| The brief names `CLAUDE.md` as system of record; it did not exist; nothing said what was verified | `CLAUDE.md` (decisions, open questions, mobile stack) and `RELEASE.md` (verified / unverified with rung, native-shell steps, five-minute device checklist) |
 | The room never said how the red letters are decided | Room settings: KJV red-letter tradition, John 3:16–21 set red as most KJV editions do, the citation always printed |
 
 ## Follow-ups (next iterations)
 
 - Lectio divina (Read / Reflect / Rest / Respond) is the daily ritual — shipped.
 - Forty (the Lent path) — shipped; film it in January, name the week before Ash Wednesday.
-- Wire live Anthropic key in production and tune prompts against real traffic.
+- Wire live Anthropic key in production; run `npm run eval` on the model path and review the tone column.
 - Add push / local reminder for daily red letter / lectio.
 - Soft freemium paywall + annual plan.
 - Scripture license path for modern translations beyond KJV curated set.
-- Native iOS/Android shell (Expo) for store distribution.
+- Native iOS/Android shell — Capacitor around the existing build (decided; steps in `RELEASE.md`); needs a Mac with Xcode 26+ and an API host.
