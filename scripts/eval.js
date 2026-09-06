@@ -60,7 +60,8 @@ function loadQuestions() {
   return data.questions.map((q) => {
     if (q.input === 'LONG') {
       const worry = 'I keep thinking about everything that could go wrong tomorrow and I cannot make it stop. ';
-      return { ...q, input: worry.repeat(Math.ceil(3000 / worry.length)).slice(0, 3000), note: '3000 characters of repeated worry' };
+      // 2000 characters is the most the server accepts (server.js); the harness tests the longest letter a reader can actually send.
+      return { ...q, input: worry.repeat(Math.ceil(2000 / worry.length)).slice(0, 2000), note: '2000 characters of repeated worry — the longest message the server accepts' };
     }
     return q;
   });
