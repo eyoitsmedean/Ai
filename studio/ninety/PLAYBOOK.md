@@ -279,7 +279,11 @@ The product is built. The paper already cools in Advent. Nobody owns “daily li
 
 ## September · one sitting (90 minutes, then stop)
 
-1. Put Red Letter on a real HTTPS URL (Pages or a $10 domain). PWA installable.
+1. Put Red Letter on a real HTTPS URL. The cheapest door is already cut: the repo has a Pages workflow, and the app now runs correctly under a project path (verified locally at `/Ai/`; it used to assume the origin root and would have loaded a broken shell). Only the founder can open it:
+   - GitHub → **Settings → Pages → Build and deployment → Source: GitHub Actions**. (Pages is not enabled as of 6 September.)
+   - Merge this PR into `claude/jesus-teachings-chatbot-bSBhF` (or `main`). The workflow runs tests, then publishes `public/`.
+   - URL: `https://eyoitsmedean.github.io/Ai/`. PWA installable.
+   - On Pages the Advisor is silent (no `/api`). Today, the path, Seek, Journal, and blessing all work from bundled data. The Advisor needs the node server somewhere; that is not required for Advent week one. If you film clip 3 (Ask), run it from `npm start` on your own machine.
 2. Text the URL to yourself. Open it on a phone as a stranger.
 3. Sit Today → one lectio. Send one blessing to one real person (a human you love, not a market).
 4. Write four numbers on paper: did they find the sentence in one glance? Did lectio need a tutorial? Did the blessing leave the phone? Did you feel the urge to redesign?
@@ -343,7 +347,7 @@ That is Seven Days in seasonal clothes. The shell was not rebuilt.
 | 25 | Here | John 12:46 | *I am come a light into the world.* Arrival. The paper warms. |
 | 26 | Comfort | John 14:18 | *I will not leave you comfortless: I will come to you.* The whole path. |
 
-Christmas Day did not need a new architecture. The paper warms. The sentence stays his.
+Christmas Day did not need a new architecture. The paper warms. The sentence stays his. (The rooms count from Advent Sunday, so *Here* falls on 25 December in 2026; in other years it drifts by a day or two. Fine.)
 
 **What is still yours to do.** Nothing in code. Put the URL on HTTPS in September (one sitting). Sit week one as a user. Send ten. Count day-2. If you catch yourself redesigning the ribbon in November, close the editor — it already works.
 

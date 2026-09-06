@@ -149,7 +149,7 @@ If you want a prompt after this, use the one in `PROMPT.md` only when the calend
 | Claim | Label |
 | --- | --- |
 | Advent 2026 begins 29 November; Lent 2027 begins 10 February | Fact (USCCB liturgical calendar) |
-| Hallow Advent week Dec 2025 ~220k downloads; Lent week Feb 2026 ~750k | Category evidence (public market writeups). Not your demand. |
+| Hallow Advent week Dec 2025 ~220k downloads; Lent week Feb 2026 ~750k; Ash Wednesday 2026 263k in one day | Category evidence, third-party estimates: [Appfigures](https://appfigures.com/resources/insights/hallow-lent-surge-prayer-app-revenue), [MWM](https://mwm.ai/de/articles/hallow-app-s-1-76-2026-02-23), [Sensor Tower Q4 2025](https://sensortower.com/blog/2025-q4-unified-top-5-reference-apps-revenue-us-60772727241bc16eb8784bc8). Appfigures also shows the Lent surge shrinking (2M → 1.5M → 1.2M, 2024–26). The season is real; the category is not growing. Not your demand. |
 | Enablement is shifting from content factory to AI systems / judgment | Category evidence. Not a promise of a title or raise. |
 | 20–35 optional hours in this window | Estimate from your own Newborn Mode rules and October freeze |
 | Ten prior 90-day plans, zero paid side customers | Fact about the last 24 hours and the studio shelf |
