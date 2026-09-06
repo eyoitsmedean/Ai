@@ -866,8 +866,13 @@ textarea { font-family: var(--body); }
 }
 .ink-wait::after { content: ''; animation: ellipsis 1.4s infinite; }
 
+/* The helpline sits above the composer at all times: the one safety control
+   that does not depend on the room recognising what was typed. */
+.composer-help { flex: 1 1 100%; margin: 0 0 2px; font-size: 12px; line-height: 1.5; color: var(--ink-3); }
+.composer-help a { color: var(--crimson); text-decoration: underline; text-underline-offset: 2px; }
 .composer {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: flex-end;
   padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px) + var(--kb, 0px));
@@ -1861,6 +1866,7 @@ html.sitting .sit-sheet {
           </aside>
         </div>
         <div class="composer">
+          <p class="composer-help" id="composer-help">In danger right now? <a href="tel:988">Call or text 988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a> anywhere. This page is not emergency care.</p>
           <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
           <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
             <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>

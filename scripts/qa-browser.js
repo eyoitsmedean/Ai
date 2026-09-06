@@ -142,6 +142,21 @@ async function main() {
     assert(!gate, 'paywall gate must not exist');
   });
 
+  await check('the helpline is visible before anyone types', async () => {
+    await page.evaluate(() => { closeSheets(); switchTab('advisor'); });
+    await page.waitForFunction(() => document.getElementById('advisor-page').classList.contains('active') && getComputedStyle(document.querySelector('.composer')).display !== 'none', { timeout: 4000 });
+    const help = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return { text: el.innerText, tel: !!el.querySelector('a[href="tel:988"]'), onScreen: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight, display: style.display };
+    });
+    assert(help, '#composer-help missing');
+    assert(help.tel && /findahelpline/.test(help.text), 'helpline line lacks 988 or findahelpline');
+    assert(help.onScreen, 'helpline line is not on screen above the composer: ' + JSON.stringify(help));
+  });
+
   await check('Advisor letter ends in Sit, blessing is a page', async () => {
     await page.click('#nav-advisor');
     await page.type('#chat-input', 'I feel shame');

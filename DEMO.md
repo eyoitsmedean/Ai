@@ -33,4 +33,4 @@ Have them add it to the home screen before they leave. On iPhone that is the onl
 
 ## After the room
 
-`npm test` · `npm run smoke` · `npm run qa` · `npm run qa:mobile` · `npm run demo` · `npm run eval` (86 questions, results in `eval/RESULTS.md`)
+`npm test` · `npm run smoke` · `npm run qa` · `npm run qa:mobile` · `npm run demo` · `npm run eval` (149 questions, results in `eval/RESULTS.md`)
