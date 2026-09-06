@@ -74,6 +74,19 @@ The old headline — "Engine + Background + Seasonal ≈ $2,700" — assumed hou
 
 The conversion assumptions are the weakest numbers on this page. Nobody has data on how a sixty-second phone video converts with Treasure Valley plumbers. Your first twenty sends are that data; the kill rules exist so you stop before the assumption costs more than an evening.
 
+### Risks, priced
+
+The currency at risk is hours, not dollars — every plan spends almost no money before it is paid. "Hours at risk" is the planning-estimate time you would have spent by the kill date with nothing to show.
+
+| # | Plan | Kill rule fires | Hours at risk | Cash at risk | What caps it |
+| --- | --- | --- | --- | --- | --- |
+| I | One-Fix Friday | 2 Oct | ≈ 12 h | $0 | Four weeks of Tuesday sends and Saturday follow-ups. Stripe costs nothing until it pays. The refund promise means a fix that fails costs one Thursday, not a dispute. |
+| II | Red Letter — Advent edition | 15 Nov | ≈ 10 h | $0–12 | The September hours produce a finished PDF either way; if nobody buys, it becomes the free Lent path. The only money is an optional domain. The year gate is never built on hope — ten sales first. |
+| III | The Voice Capsule | 20 Nov | ≈ 10 h | $0–10 | The sample is the whole downside — seven hours and a call recorder — and it is a keepsake for someone you know even if it never sells. Deposits are refundable by design. |
+| IV | The Civilian Interview | 5 Oct | ≈ 7 h | $0 | Two free sessions (three hours) and four posts. Nothing is built. The clean-room exclusion (no insurance, benefits, HR, finance employers) is the real risk control. |
+| V | Workflow Rescue | 15 Nov | ≈ 2 h | $0 | Only the one-page scope is written in advance. The live risk is scope creep after the deposit: eleven hours becoming twenty. The cap is the version-dated scope and "not HR, legal, or safety" said before the deposit. |
+| — | All of them | Any week | One week | $0 | The family gate. A week that steals sleep or shifts load onto your partner ends that plan for the week. The household is the judge, not the ledger. |
+
 ---
 
 ## I · One-Fix Friday — the engine
@@ -82,7 +95,7 @@ The conversion assumptions are the weakest numbers on this page. Nobody has data
 
 - **Who pays:** owner-run local service businesses within thirty minutes: plumbers, HVAC, electricians, barbers, groomers, detailers, gyms, coffee, landscapers, med-spa, dentists, chiropractors. Never insurance, benefits, HR, staffing, finance, or anyone connected to your employer.
 - **What they get:** one fix, shipped — mobile booking that works, click-to-call above the fold, an FAQ answering the five questions their reviews keep asking, a review-reply library in their voice, a corrected Google Business Profile, or a one-page landing for their best service — plus a 90-second before/after screen recording.
-- **Why you:** you direct coding agents like a crew chief (this repo is the proof); a shop quotes $2,000 and three weeks for a two-hour block; and you write copy that sounds like a person. Your Friction Audit is the pitch; this charges for the fix instead of the report.
+- **Why you:** you direct coding agents like a crew chief (this repo is the proof); an agency quotes weeks and four figures for what you ship in a two-hour block (say it as your experience, not a statistic); and you write copy that sounds like a person. Your Friction Audit is the pitch; this charges for the fix instead of the report.
 
 **Build.** W1 Stripe link, three scripts, list of twenty, first five phone videos sent · W2 five more, first sale → build Thu, deliver Fri, ask for a sentence · W3 five, deliver, post one before/after · W4 five, deliver, write down any "we also have this problem with…" (that is Plan V) · W5 last sends, deliver everything, auto-reply on **Baby.** W6–9 nothing. **Build.** W10 re-open, five, Small Business Saturday hook · W11–13 five a week, deliver Fridays, no new work after 27 Nov unless it ships by 3 Dec.
 
@@ -114,7 +127,7 @@ The conversion assumptions are the weakest numbers on this page. Nobody has data
 
 - **Who pays:** the adult child or spouse of a veteran, any era, who has said "I wish I had Dad's voice telling that story." Reunion groups. A veteran choosing his own legacy artifact. Usually 35–60, buying a Christmas gift that isn't a thing.
 - **What they get:** a consent-first 60–75 minute conversation (in person or by phone), a truth-marked transcript, an 8–12 minute edited audio vignette, a four-page keepsake, and a 30–60 second original motif made in Ableton. Private by default. The narrator controls topics, cuts, and access, and can stop at any time. "No artifact" is a valid ending.
-- **Why you:** veterans talk to veterans differently; you have spent a career listening for the real sentence; you have the truth discipline never to invent a detail, the typesetting taste for the keepsake, and a Push 2 on the desk. Storyworth sells prompts, Remento sells an app; nobody sells a veteran-to-veteran audio heirloom with music.
+- **Why you:** veterans talk to veterans differently; you have spent a career listening for the real sentence; you have the truth discipline never to invent a detail, the typesetting taste for the keepsake, and a Push 2 on the desk. Storyworth (from $59) sends weekly prompts and prints a book; Remento ($99) records self-told answers and plays them back from a QR code in a book — both checked 6 Sep 2026. Neither sends a fellow veteran to ask the second question, edits the hour to ten minutes, or writes music for it. That is what you sell, and why it costs five times as much.
 
 **Build.** W1 one-page offer + consent sheet · W2–3 record ONE sample with a consenting fellow veteran; edit; write the motif; time it honestly · W4 keepsake template; choose a three-minute excerpt; written permission · W5 draft the Veterans Day post and two organization messages; save **Baby.** W6–9 nothing. **Build.** W10 post, message the Legion/VFW and one veteran-family group, email ten people, take up to three $250 deposits for Christmas delivery · W11–12 schedule and record · W13 edit the first; deliveries by 20 Dec.
 
@@ -132,7 +145,7 @@ The conversion assumptions are the weakest numbers on this page. Nobody has data
 
 - **Who pays:** service members within six months of separating; veterans up to two years out; the spouse who books it. Exclude anyone interviewing at an insurance, benefits, HR, or financial-services firm.
 - **What they get:** a recorded 60-minute rehearsal of their actual interview; a one-page "Five Sentences" card; one text the morning of.
-- **Why you:** you made this exact transition and have spent years teaching people to talk like humans instead of like a résumé. Interview coaches charge $100–300 an hour; almost none have worn the uniform. Coaching an individual job-seeker is not selling enablement.
+- **Why you:** you made this exact transition and have spent years teaching people to talk like humans instead of like a résumé. Interview coaches list $150–400 an hour (several 2026 price surveys, one coach's own rate card; checked 6 Sep 2026); almost none have worn the uniform, and $149 is under the floor of that market. Coaching an individual job-seeker is not selling enablement.
 
 **Build.** W1 read your clause; offer in one screen; $149 link; offer two free sessions for quotes · W2 run them; build the card; one LinkedIn post (one true moment, no lesson) · W3 post; message the Boise State veterans center and one transition group · W4 first paid session · W5 as booked, nothing inside Baby. **Baby.** W6–9 nothing. **Build.** W10–13 one post a week, sessions Tue/Thu evenings, stop at five.
 
@@ -168,10 +181,59 @@ The conversion assumptions are the weakest numbers on this page. Nobody has data
 
 ---
 
-## Status
+## What's checked
 
-- **Deliverables:** `plans/index.html` (interactive; state in `localStorage` key `ninety.v1`), this file, `npm run plans` (serves `plans/` on port 3010 for a phone on the same Wi-Fi).
-- **Verified:** headless-browser checks of the budget panel (default I + II fits; I + II + III over; state survives reload; birth date moves hours, calendar, movements, ledger target; reset restores defaults); no console errors; external facts above checked against the linked sources on 6 Sep 2026.
-- **Not verified, by nature:** every conversion assumption. They are labelled as such and each plan has a kill rule and a date.
-- **Open decisions (yours):** the real birth date; Advent or the Capsule for the second Build; whether the outside-work clause needs the one written question before the first paid fix.
-- **Next executable step:** Week 1 of Plan I — the Stripe link, three scripts on the phone, the list of twenty, five videos sent.
+Every claim this playbook leans on, with how much to trust it. **Verified** — a primary or independent source was opened this session. **Sourced** — secondary sources, not cross-checked against a primary. **Knowledge** — general knowledge, uncited; could be stale. **Estimated** — a planning number with its basis and no data behind it yet. **Your notes** — taken from your own Notion and Drive during the build.
+
+| Claim | Label | Source | Checked | If it's wrong |
+| --- | --- | --- | --- | --- |
+| Stripe standard rate for domestic cards: 2.9% + 30¢ per successful transaction | Verified | [Stripe pricing](https://stripe.com/us/pricing) | 6 Sep 2026 | A $350 fix nets a few dollars more or less. |
+| Idaho Certificate of Assumed Business Name: $25 online (SOSBiz), $45 by mail or in person | Verified | [Idaho SOS business forms](https://sos.idaho.gov/business-forms/) | 6 Sep 2026 | The cost of trading as "One-Fix Friday" instead of under your own name. |
+| Net self-employment earnings of $400+ require Schedule SE and self-employment tax | Verified | [IRS](https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center) | 6 Sep 2026 | Nothing changes; the 30% tax jar stands either way. |
+| Advent Sunday 2026 is 29 Nov; Ash Wednesday 2027 is 10 Feb | Verified | Computed two ways: this repository's `lib/year.js`, and by hand from Christmas (Fri) and Easter (28 Mar 2027) | 6 Sep 2026 | Plan II's delivery date and the Lent target shift by the same amount. |
+| Small Business Saturday 2026 is Sat 28 Nov (the Saturday after Thanksgiving, 26 Nov) | Verified | [Wikipedia](https://en.wikipedia.org/wiki/Small_Business_Saturday) | 6 Sep 2026 | Plan I's November hook moves a day. |
+| Every weekday named in the calendar (Fri 4 Sep, Mon 7 Sep, Wed 11 Nov, Thu 26 Nov, Thu 3 Dec, Sat 26 Dec…) | Verified | Computed by execution (system date arithmetic) during the build | 6 Sep 2026 | A week boundary is off by a day. |
+| General interview coaches list about $150–400 an hour; one coach's own rate card shows $150 | Sourced | [The Interview Professional](https://theinterviewprofessional.com/interview-coaching-cost/); [Black on the Job, 2026](https://www.blackonthejob.co/blog/mock-interview-coach-cost) | 6 Sep 2026 | If the floor is lower, $149 founding is still fair; the "under the market" line softens. |
+| Storyworth: weekly prompts, write or record, hardcover book, from $59. Remento: self-recorded answers, QR voice playback in a book, $99 | Verified | [Storyworth](https://welcome.storyworth.com/); [Remento](https://www.remento.co/) | 6 Sep 2026 | The Capsule's edge is the interviewer, the edit, and the music — not "voice", which Remento already sells. The pitch is written that way. |
+| Lemon Squeezy hosts files, delivers them after purchase, and acts as merchant of record | Verified | [Lemon Squeezy docs](https://docs.lemonsqueezy.com/help/products/adding-products) | 6 Sep 2026 | Use Stripe Payment Links with a delivery email instead; one evening. |
+| Boise State University has a Veteran Services Center (a benefits and transition office, 208-426-3744) | Verified | [Boise State Veteran Services](https://www.boisestate.edu/veterans/) | 6 Sep 2026 | It is a benefits office, so the ask is a referral or a flyer, not a partnership. The transition group is the second door. |
+| "An agency quotes weeks and four figures" for a small-business web fix | Knowledge | No source; your experience of the market | — | Say it as your experience in the pitch. Never quote it as a statistic. |
+| Conversion assumptions: ~1 in 13 videos → a paid fix; 25 PDFs; 2 capsules; 5 sessions; 1 Rescue | Estimated | No data yet. The first twenty sends are the data. | — | Everything on this page. The kill rules cap what finding out costs. |
+| Hours per plan (3 h/week for One-Fix, 7 h per capsule, 1.5 h per session…) | Estimated | Planning estimates from each plan's week-by-week tasks | — | "Does it fit?" is wrong by the same amount. Log real hours for two weeks and correct the numbers. |
+| The King James text is public domain in the United States | Knowledge | Long-settled; the app already relies on it. In the UK, printing the KJV is restricted by letters patent. | — | Sell the Advent PDF in the US without concern; check before printing it for sale in the UK. |
+| Fraunces, Source Serif 4, Instrument Sans are served by Google Fonts under the SIL Open Font License | Knowledge | Google Fonts; OFL permits use and embedding, including commercial | — | Nothing for this page; embedding them in the PDF you sell is allowed. |
+| What you have done and can do (Marine, sales floor, senior director, enablement, Ableton and Push 2, this repository) | Your notes | Your Notion and Drive, read during the build; the repository itself | 6 Sep 2026 | The "Why you" paragraphs are wrong in the same place. Correct the note and the plan. |
+| `lib/year.js` computes the church year; share-card and print/broadside code exist in the app | Verified | Opened and ran in this repository | 6 Sep 2026 | Plan II's "already built" claim weakens by the missing piece. |
+
+---
+
+## Project record
+
+The system of record for this playbook. Decisions here are settled unless you change them; assumptions are choices made because you had not said, and take ten seconds to correct.
+
+**Mission.** Earn from what you already have — the Red Letter corpus and design, the agent-directing skill, the Marine-to-director story — in the ninety days from 4 Sep to 3 Dec 2026, inside 4.5 real hours a week and a newborn's arrival, without touching your employer's domain.
+
+**The finished thing.** `plans/index.html` — an interactive playbook (checklists, ledger, calendar, budget panel; state in `localStorage` key `ninety.v1`), served to a phone with `npm run plans` (port 3010, same Wi-Fi); this file as its plain-text twin. Not published by the Pages workflow.
+
+**Decisions made.**
+- Three movements: Build (until the birth) · Baby (birth + 30 days, zero optional hours) · Build (re-open into Veterans Day and Advent).
+- Five plans, one engine: One-Fix Friday runs; Advent rides along; the Voice Capsule is a swap for Advent, not an addition; the Civilian Interview is optional; Workflow Rescue is never pitched.
+- Prices: $350 flat with refund · $12 PDF, $59.99 year only after ten PDFs · $495 founding capsule · $149 founding session · $1,500 fixed, half up front.
+- Money: 30% tax jar the same day; nothing reinvested until a plan has paid twice; a domain and a call recorder are the only allowed purchases.
+- Clean room: no insurance, benefits, HR, staffing, or finance buyers until the outside-work question is answered in writing.
+- Provenance travels with the plan: every market claim carries a label; the arithmetic behind every base case is on its card; risks are priced in hours.
+
+**Assumptions (yours to correct).**
+- Birth date 10 Oct 2026 — the default in the calendar; change it in the date field.
+- Week rhythm Tue 60 · Thu 90 · Sat 60 · Sun 15, from your own notes on real available time.
+- Every conversion rate and every hours-per-task estimate (labelled Estimated above).
+- That the two Build movements are the same length before and after — the calendar computes it from the date you enter.
+
+**Open questions (only you can answer).**
+1. The real birth date.
+2. Advent or the Capsule for the second Build. Recommended default: Advent, because its hours are already sunk in September and the launch runs without you.
+3. Whether the outside-work clause needs the one written question before the first paid fix. Recommended default: ask it in Week 1, before any invoice.
+
+**Verification performed (6 Sep 2026).** Headless Chrome (rung 1 for logic, not a physical phone): budget panel fits/over cases; state survives reload; birth date moves hours, calendar, movements, ledger target; "Your week" shows the ticked plans' tasks, follows the toggles and the birth date, opens and closes as one, is remembered, opens for print; no console errors; no horizontal overflow at 390px. External facts opened at the linked sources. Weekdays checked by execution. Not verifiable by nature: the Estimated rows.
+
+**Next executable step.** Week 1 of Plan I — the Stripe link, three scripts on the phone, the list of twenty, five videos sent by Thursday 10 Sep.
