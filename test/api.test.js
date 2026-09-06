@@ -143,7 +143,59 @@ describe('smoke routes', () => {
     assert.ok(/Crown’s patentee, Cambridge University Press/.test(res.raw), 'the U.K. acknowledgement must be printed');
     assert.ok(/not a person/i.test(res.raw), 'the page must say it is not a person');
     const sw = await request('GET', '/sw.js');
-    assert.ok(/rla-phase0-v14/.test(sw.raw) && /\/data\/press\.js/.test(sw.raw), 'service worker must carry the Press offline under a fresh cache name');
+    assert.ok(/rla-phase0-v15/.test(sw.raw) && /\/data\/press\.js/.test(sw.raw), 'service worker must carry the Press offline under a fresh cache name');
+  });
+
+  function loadClientData(files) {
+    const vm = require('node:vm');
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const ctx = { window: {} };
+    for (const f of files) vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'public', 'data', f), 'utf8'), ctx);
+    return ctx.window;
+  }
+
+  async function sealAll(items) {
+    const failed = [];
+    for (let i = 0; i < items.length; i += 12) {
+      const res = await request('POST', '/api/verify', { items: items.slice(i, i + 12).map((x) => ({ verse: x.verse, quote: x.quote })) });
+      assert.equal(res.status, 200);
+      JSON.parse(res.raw).results.forEach((r, j) => {
+        if (!r.ok || r.score < 0.92) failed.push(items[i + j].where + ' ' + r.verse + ' (' + (r.ok ? 'score ' + r.score.toFixed(2) : r.reason) + ')');
+      });
+    }
+    return failed;
+  }
+
+  it('keeps forty distinct sealed rooms in the order of the church year', async () => {
+    const w = loadClientData(['curated.js', 'paths.js']);
+    const rooms = w.RLA_FORTY;
+    assert.equal(rooms.length, 40, 'forty rooms');
+    assert.equal(new Set(rooms.map((r) => r.verse)).size, 40, 'no saying is used twice');
+    const at = (n) => rooms[n - 1].verse;
+    assert.equal(at(1), 'Matthew 6:6', 'Ash Wednesday opens on the day’s Gospel, Matthew 6');
+    assert.equal(at(5), 'Matthew 4:4', 'the Monday after the Sunday of the Temptation is the wilderness');
+    assert.equal(at(33), 'Matthew 26:39', 'the last Lenten Friday is Gethsemane');
+    assert.deepEqual([35, 36, 37, 38, 39, 40].map(at), ['Mark 10:43–45', 'John 10:11', 'Matthew 5:44', 'John 13:34–35', 'Luke 23:43', 'John 11:25–26'], 'Holy Week, Monday to Holy Saturday');
+    const failed = await sealAll(rooms.map((r, i) => ({ where: 'Room ' + (i + 1), verse: r.verse, quote: r.passage })));
+    assert.deepEqual(failed, [], 'unsealed rooms: ' + failed.join(', '));
+  });
+
+  it('seals every quotation in the client data files', async () => {
+    const w = loadClientData(['curated.js', 'paths.js', 'press.js', 'advisor.js']);
+    const items = [];
+    const walk = (o, where) => {
+      if (!o || typeof o !== 'object') return;
+      if (Array.isArray(o)) return o.forEach((x) => walk(x, where));
+      const quote = o.quote || o.passage;
+      const verse = o.verse || o.citation;
+      if (typeof quote === 'string' && typeof verse === 'string' && /^(Matthew|Mark|Luke|John) \d/.test(verse)) items.push({ where, verse, quote });
+      Object.keys(o).forEach((k) => walk(o[k], where));
+    };
+    Object.keys(w).forEach((k) => { if (typeof w[k] !== 'function') walk(w[k], k); });
+    assert.ok(items.length >= 120, 'expected the data files to carry many quotations, found ' + items.length);
+    const failed = await sealAll(items);
+    assert.deepEqual(failed, [], 'unsealed: ' + failed.join(', '));
   });
 
   it('seals every crimson sentence in the Press against the Gospel corpus', async () => {
