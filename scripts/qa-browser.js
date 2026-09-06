@@ -211,6 +211,20 @@ async function main() {
     await page.waitForSelector('#crisis-modal.on', { timeout: 4000 });
     const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
     assert(/988/.test(copy), 'crisis modal missing 988');
+    assert(!/Poison Control/.test(copy), 'Poison Control shown when nothing was taken');
+    await page.click('#crisis-close');
+    await page.waitForFunction(() => !document.getElementById('crisis-modal').classList.contains('on'));
+  });
+
+  await check('something taken puts 911 and Poison Control in the interrupt', async () => {
+    await page.evaluate(() => {
+      document.getElementById('chat-input').value = 'I took too many pills an hour ago';
+    });
+    await page.evaluate(() => { if (typeof sendMsg === 'function') sendMsg(); });
+    await page.waitForSelector('#crisis-modal.on', { timeout: 4000 });
+    const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
+    assert(/1-800-222-1222/.test(copy) && /911/.test(copy), 'emergency line missing');
+    assert(copy.indexOf('1-800-222-1222') < copy.indexOf('988'), 'emergency line must come before 988');
     await page.click('#crisis-close');
     await page.waitForFunction(() => !document.getElementById('crisis-modal').classList.contains('on'));
   });
