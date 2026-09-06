@@ -44,6 +44,10 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Working here
+
+Agents start at `CLAUDE.md` (decisions, open questions, record) and run `studio/ATELIER.md` on the brief in `studio/briefs/`.
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
