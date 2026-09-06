@@ -188,7 +188,7 @@ async function main() {
       await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length === 0, { timeout: 4000 })
         .catch(() => { throw new Error('Carrying did not hear: ' + passive); });
     }
-    const shared = await page.evaluate(() => !!(window.RLA_SAFETY && window.RLA_SAFETY.crisis && window.RLA_SAFETY.crisis.length > 40));
+    const shared = await page.evaluate(() => !!(window.RLA_SAFETY_CORE && typeof window.RLA_SAFETY_CORE.looksLikeCrisis === 'function' && window.RLA_SAFETY_CORE.looksLikeCrisis('I took a bunch of pills an hour ago')));
     assert(shared, 'shared safety bundle (/data/safety.js) not loaded');
     await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'my dog died of an overdose of joy'; q.dispatchEvent(new Event('input')); });
     await page.waitForFunction(() => document.getElementById('carry-crisis').hidden, { timeout: 4000 }).catch(() => { throw new Error('false crisis on "overdose of joy"'); });

@@ -406,8 +406,11 @@ app.post('/api/chat', async (req, res) => {
 
   if (!client) {
     // Crisis and off-scope asks get the standing letter (peace, rest), never a
-    // page chosen by a stray word — "planning my death" must not fetch a tomb verse.
-    const hit = (crisis || offScope) ? null : bestNeed(last.content, { minScore: NEED_FLOOR });
+    // page chosen by a stray word. Independently of whether the crisis scorer
+    // fired, a first-person mention of one's own death never fetches a
+    // resurrection, mourning, or "kill and destroy" verse.
+    let hit = (crisis || offScope) ? null : bestNeed(last.content, { minScore: NEED_FLOOR });
+    if (hit && !safety.verseSafeFor(last.content, hit.verse)) hit = null;
     return finish(hit ? formatNeedLetter(hit) : FALLBACK_LETTER);
   }
 

@@ -4628,13 +4628,13 @@ function closeCommandPalette() {
   root.setAttribute('aria-hidden', 'true');
 }
 
-// The phrasings live in lib/safety.js and are shipped as /data/safety.js so the
-// room hears the same sentences as the server, online and offline.
+// The crisis scorer is lib/safety-core.js, shipped verbatim as /data/safety.js,
+// so the room hears exactly what the server hears, online and offline.
 const CRISIS_FALLBACK_CLIENT = /\b(suicid|kill(?:ing|ed)? myself|end my life|wan(?:t|na) to die|self[-\s]?harm|hurt myself|cut myself|overdos|better off dead|no reason to live|kms|unalive)\b/i;
 function looksLikeCrisisClient(text) {
-  const S = window.RLA_SAFETY;
-  const re = (S && Array.isArray(S.crisis) && S.crisis.length) ? new RegExp(S.crisis.join('|'), 'i') : CRISIS_FALLBACK_CLIENT;
-  return re.test(String(text || ''));
+  const S = window.RLA_SAFETY_CORE;
+  if (S && typeof S.looksLikeCrisis === 'function') return S.looksLikeCrisis(String(text || ''));
+  return CRISIS_FALLBACK_CLIENT.test(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {
