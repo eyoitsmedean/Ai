@@ -91,9 +91,72 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /John 14:1/);
+    assert.match(letter, /Let not your heart be troubled/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('the model path cannot set a resurrection verse under "I want to die"', async () => {
+    // A stand-in model that does what the prompt forbids: answers a first-person
+    // wish to die with the resurrection verse, as a range.
+    const fakeModel = (text) => ({
+      messages: {
+        stream() {
+          const handlers = {};
+          return {
+            on(evt, cb) { handlers[evt] = cb; },
+            // A real model answers after the request body has been consumed;
+            // the stream must survive that gap (Node ≥16 fires req 'close' early).
+            async finalMessage() {
+              await new Promise((r) => setTimeout(r, 30));
+              if (handlers.text) handlers.text(text);
+              return {};
+            },
+          };
+        },
+      },
+    });
+    const letterOf = (raw) => raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; } })
+      .join('');
+    try {
+      app.locals.chatClient = fakeModel('I hear you.\n\n**John 11:25-26**\n“I am the resurrection, and the life”\nHe speaks of life after death.');
+      const bad = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'I want to die' }] });
+      const badLetter = letterOf(bad.raw);
+      assert.equal(bad.status, 200);
+      assert.match(badLetter, /988/, 'crisis notice still leads');
+      assert.doesNotMatch(badLetter, /John 11:2[56]|resurrection/i, 'death verse must be replaced');
+      assert.match(badLetter, /John 14:27/, 'standing letter goes out instead');
+
+      // The same stand-in answering grief for another keeps its verse: the block is about the speaker.
+      app.locals.chatClient = fakeModel('I am sorry.\n\n**John 11:25**\n“I am the resurrection, and the life”\nSit with it.');
+      const grief = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'My mother died last night' }] });
+      assert.match(letterOf(grief.raw), /John 11:25/);
+    } finally {
+      delete app.locals.chatClient;
+    }
+  });
+
+  it('serves the concordance of need', async () => {
+    const all = await request('GET', '/api/concordance');
+    assert.equal(all.status, 200);
+    const data = JSON.parse(all.raw);
+    assert.ok(data.count >= 80);
+    assert.ok(data.needs.some((n) => n.verse === 'John 8:11'));
+    const hit = await request('GET', '/api/concordance?q=' + encodeURIComponent('I feel shame'));
+    const found = JSON.parse(hit.raw);
+    assert.ok(found.matches.some((m) => /John 8:11/.test(m.verse)));
+  });
+
+  it('serves the studio Codex', async () => {
+    const res = await request('GET', '/codex');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /The Red Letter Codex/);
+    assert.match(res.raw, /noindex/);
+    assert.doesNotMatch(res.raw, /Ask <em>Him<\/em>/);
+    assert.match(res.raw, /The model is not a person/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {
@@ -115,6 +178,49 @@ describe('smoke routes', () => {
     const missing = await request('POST', '/api/verify', { verse: '' });
     assert.equal(missing.status, 200);
     assert.equal(JSON.parse(missing.raw).allVerified, false);
+  });
+
+  it('mints and serves a blessing page', async () => {
+    const minted = await request('POST', '/api/blessing', {
+      verse: 'John 14:27',
+      quote: 'Peace I leave with you, my peace I give unto you.',
+      note: 'For you',
+    });
+    assert.equal(minted.status, 200);
+    const data = JSON.parse(minted.raw);
+    assert.ok(data.token);
+    const page = await request('GET', '/b/' + data.token);
+    assert.equal(page.status, 200);
+    assert.match(page.raw, /Peace I leave with you/);
+    assert.match(page.raw, /Sit with this/);
+    assert.match(page.raw, /<meta property="og:title" content="John 14:27 — a blessing"/);
+    assert.match(page.raw, /<meta property="og:description" content="“Peace I leave with you/);
+    assert.match(page.raw, /twitter:card/);
+  });
+
+  it('serves the privacy page in the same paper', async () => {
+    const res = await request('GET', '/privacy');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What stays/);
+    assert.match(res.raw, /no accounts/i);
+    assert.match(res.raw, /988/);
+    assert.match(res.raw, /seven days/);
+    assert.doesNotMatch(res.raw, /Plus/);
+  });
+
+  it('keeps the crisis leaf and the copy controls in the room', async () => {
+    const res = await request('GET', '/');
+    assert.match(res.raw, /id="carry-crisis"/);
+    assert.match(res.raw, /exportJournalFile/);
+    assert.match(res.raw, /importJournalFile/);
+    assert.match(res.raw, /id="privacy-link"/);
+    assert.match(res.raw, /navigator\.storage\.persist/);
+  });
+
+  it('sends production headers', async () => {
+    const res = await request('GET', '/');
+    assert.equal(res.headers['x-content-type-options'], 'nosniff');
+    assert.match(res.headers['content-security-policy'] || '', /default-src 'self'/);
   });
 
   it('searches the spoken library', async () => {

@@ -3,18 +3,29 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote } = require('./lib/scripture');
+const safety = require('./lib/safety');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { encodeBlessing, decodeBlessing, blessingPage } = require('./lib/blessing');
+const { securityHeaders } = require('./lib/headers');
+const { matchNeed, sealedNeeds, bestNeed, formatNeedLetter, NEED_FLOOR } = require('./lib/concordance');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+// 40 letters a minute per address is generous for a person and hostile to a
+// script; the evaluation harness raises it for in-process runs only.
+const CHAT_RATE_PER_MIN = Math.max(1, Number(process.env.CHAT_RATE_PER_MIN) || 40);
 const THEME_SET = new Set(themeNames());
+const PKG = require('./package.json');
 
+app.set('trust proxy', 1);
+app.disable('x-powered-by');
+app.use(securityHeaders);
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders(res, filePath) {
@@ -209,7 +220,29 @@ app.get('/api/health', (req, res) => {
     ok: true,
     anthropic: Boolean(client),
     themes: themeNames().length,
+    version: PKG.version,
+    pwa: true,
+    unlimited: true,
   });
+});
+
+app.get('/api/blessing/:token', (req, res) => {
+  const parsed = decodeBlessing(req.params.token);
+  if (!parsed) return res.status(404).json({ error: 'This blessing could not be opened.' });
+  res.json({ ok: true, ...parsed, url: `/b/${req.params.token}` });
+});
+
+app.post('/api/blessing', (req, res) => {
+  if (!rateLimit(`bless:${clientKey(req)}`, 30, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const token = encodeBlessing({
+    verse: req.body?.verse,
+    quote: req.body?.quote,
+    note: req.body?.note,
+  });
+  if (!token) return res.status(400).json({ error: 'A verse and His words are needed.' });
+  res.json({ ok: true, token, url: `/b/${token}` });
 });
 
 app.get('/api/daily', async (req, res) => {
@@ -226,6 +259,14 @@ app.get('/api/daily', async (req, res) => {
 
 app.get('/api/themes', (req, res) => {
   res.json({ themes: themeNames() });
+});
+
+app.get('/api/concordance', (req, res) => {
+  const q = typeof req.query.q === 'string' ? req.query.q.slice(0, 160) : '';
+  if (!q) {
+    return res.json({ count: sealedNeeds().length, needs: sealedNeeds() });
+  }
+  res.json({ count: sealedNeeds().length, matches: matchNeed(q, { limit: 8 }) });
 });
 
 app.post('/api/verify', (req, res) => {
@@ -319,6 +360,9 @@ app.post('/api/chat', async (req, res) => {
     return res.status(400).json({ error: 'Empty message.' });
   }
   if (last.content.length > 2000) return res.status(400).json({ error: 'Message is too long.' });
+  // Tests may stand in a fake model here (app.locals.chatClient) to exercise
+  // the model path without a key. Production never sets it.
+  const model = app.locals.chatClient !== undefined ? app.locals.chatClient : client;
   for (const m of messages) {
     if (!m || (m.role !== 'user' && m.role !== 'assistant') || typeof m.content !== 'string') {
       return res.status(400).json({ error: 'Invalid message list.' });
@@ -326,7 +370,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_RATE_PER_MIN, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -347,22 +391,35 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
+  // Listen on the response, not the request: since Node 16 the request's
+  // 'close' fires as soon as its body has been read, which on the model path
+  // is before the model has answered — ending the stream with nothing in it.
+  let gone = false;
+  res.on('close', () => { gone = true; });
+
+  const routed = safety.route(last.content);
+  const crisis = routed.kind === 'crisis';
+  const offScope = routed.kind === 'offscope';
   const finish = (body) => {
-    const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    if (gone || res.writableEnded) return;
+    let verified = verifyAndSubstitute(body);
+    // Holds on both paths: if the model set a resurrection, mourning, or
+    // "kill and destroy" verse under a first-person mention of death, the
+    // standing letter goes out instead. Not a matter of model judgment.
+    if (!safety.letterSafeFor(last.content, verified)) verified = verifyAndSubstitute(FALLBACK_LETTER);
+    streamText(routed.notice + verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
 
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) {}
-    }
-  });
-
-  if (!client) {
-    return finish(FALLBACK_LETTER);
+  if (!model) {
+    // Crisis and off-scope asks get the standing letter (peace, rest), never a
+    // page chosen by a stray word. Independently of whether the crisis scorer
+    // fired, a first-person mention of one's own death never fetches a
+    // resurrection, mourning, or "kill and destroy" verse.
+    let hit = (crisis || offScope) ? null : bestNeed(last.content, { minScore: NEED_FLOOR });
+    if (hit && !safety.verseSafeFor(last.content, hit.verse)) hit = null;
+    return finish(hit ? formatNeedLetter(hit) : FALLBACK_LETTER);
   }
 
   try {
@@ -376,7 +433,7 @@ app.post('/api/chat', async (req, res) => {
       };
     });
 
-    const stream = client.messages.stream({
+    const stream = model.messages.stream({
       model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },
@@ -421,9 +478,31 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get('/codex', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'codex.html'));
+});
+
+app.get('/privacy', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const welcome = path.join(__dirname, 'public', 'welcome.html');
+  res.sendFile(fs.existsSync(welcome) ? welcome : path.join(__dirname, 'index.html'));
+});
+
+app.get('/b/:token', (req, res) => {
+  const parsed = decodeBlessing(req.params.token);
+  if (!parsed) {
+    res.setHeader('Cache-Control', 'no-cache');
+    return res.redirect('/');
+  }
+  const origin = `${req.protocol}://${req.get('host') || 'localhost'}`;
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.type('html').send(blessingPage(parsed, origin));
 });
 
 app.get('*', (req, res, next) => {
@@ -433,8 +512,9 @@ app.get('*', (req, res, next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+    console.log(`  iPhone / Android PWA: add to home screen from that address`);
   });
 }
 

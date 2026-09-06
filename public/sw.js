@@ -1,15 +1,24 @@
-const CACHE = 'rla-phase0-v11';
+const CACHE = 'rla-prod-v6';
 const PRECACHE = [
+  '/',
   '/index.html',
+  '/welcome.html',
+  '/privacy.html',
   '/manifest.json',
   '/curated.json',
   '/library.json',
+  '/concordance.json',
   '/data/advisor.js',
   '/data/curated.js',
   '/data/paths.js',
+  '/data/concordance.js',
+  '/data/safety.js',
   '/icon-192.png',
   '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
   '/apple-touch-icon.png',
+  '/splash-1080x2400.png',
 ];
 
 self.addEventListener('install', (e) => {
@@ -47,6 +56,7 @@ self.addEventListener('fetch', (e) => {
   const isDocument =
     e.request.mode === 'navigate' ||
     url.pathname === '/' ||
+    url.pathname.startsWith('/b/') ||
     url.pathname.endsWith('.html') ||
     (e.request.headers.get('accept') || '').includes('text/html');
 
@@ -60,7 +70,17 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((cached) => cached || caches.match('/index.html')))
+        .catch(async () => {
+          const cached = await caches.match(e.request);
+          if (cached) return cached;
+          // Clean routes map to their precached pages; everything else opens the room.
+          const page = { '/privacy': '/privacy.html', '/welcome': '/welcome.html' }[url.pathname];
+          if (page) {
+            const known = await caches.match(page);
+            if (known) return known;
+          }
+          return (await caches.match('/index.html')) || caches.match('/');
+        })
     );
     return;
   }

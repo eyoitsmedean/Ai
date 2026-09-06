@@ -148,6 +148,21 @@ describe('looksLikeCrisis', () => {
     assert.equal(looksLikeCrisis('I have no reason to live'), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
   });
+  it('hears passive ideation the way the C-SSRS screener asks it', () => {
+    assert.equal(looksLikeCrisis('Some nights I wish I were dead'), true);
+    assert.equal(looksLikeCrisis('I just want to go to sleep and not wake up'), true);
+    assert.equal(looksLikeCrisis('Everyone would be better off without me'), true);
+    assert.equal(looksLikeCrisis('I am a burden to my family'), true);
+    assert.equal(looksLikeCrisis("I can't go on anymore"), true);
+    assert.equal(looksLikeCrisis('Nobody would notice if I was gone'), true);
+    assert.equal(looksLikeCrisis('I want it all to end'), true);
+  });
+  it('does not flag ordinary heaviness as crisis', () => {
+    assert.equal(looksLikeCrisis('I am so tired of this job'), false);
+    assert.equal(looksLikeCrisis('My dad died and I do not know how to pray'), false);
+    assert.equal(looksLikeCrisis('I feel hopeless about the election'), false);
+    assert.equal(looksLikeCrisis('I cannot sleep. I am so anxious.'), false);
+  });
 });
 
 describe('parseModelJson', () => {

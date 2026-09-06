@@ -1,7 +1,13 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  // Prefer the shared bundle (public/data/safety.js, generated from lib/safety.js);
+  // the short list is only a last resort if that file failed to load.
+  function isCrisis(text) {
+    const S = window.RLA_SAFETY_CORE;
+    if (S && typeof S.looksLikeCrisis === 'function') return S.looksLikeCrisis(text);
+    return /\b(suicid|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live|kms|unalive)\b/i.test(text);
+  }
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },
@@ -54,14 +60,33 @@
     const raw = String(text || '').trim();
     if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
 
-    if (CRISIS.test(raw)) {
-      const crisis =
-        'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
-      return crisis + formatPack(
+    // Crisis is heard before any page is chosen, offline exactly as online.
+    if (isCrisis(raw)) {
+      const S = window.RLA_SAFETY_CORE;
+      const notice = (S && S.NOTICES && S.NOTICES.crisis) ||
+        'If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com.\nI am not a person, and this page is not emergency care.\n\n';
+      return notice + formatPack(
         'While you reach a human who can help, here is a word he spoke to the heavy-laden.',
         passagesFor('Suffering & Pain'),
         'You are not alone in this hour. Please go toward help now.'
       );
+    }
+
+    // The room's own matcher (same stop list, gravity, and floor as the server).
+    // Below the floor, fall through to the theme packs rather than a stray page.
+    if (typeof window.matchConcordanceClient === 'function') {
+      const scoring = (window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.scoring) || {};
+      const floor = typeof scoring.floor === 'number' ? scoring.floor : 14;
+      const top = window.matchConcordanceClient(raw, 1)[0];
+      const S = window.RLA_SAFETY_CORE;
+      const safe = !top || !S || typeof S.verseSafeFor !== 'function' || S.verseSafeFor(raw, top.verse);
+      if (top && top.score >= floor && safe) {
+        return formatPack(
+          'I hear what you are carrying. Before advice, a sentence He actually spoke.',
+          [{ verse: top.verse, quote: top.quote, context: top.carry }],
+          'Sit with this. The page can close.'
+        );
+      }
     }
 
     let best = null;

@@ -44,6 +44,7 @@ async function main() {
     assert(/988/.test(copy), 'missing 988');
     const href = await page.$eval('a.btn', (a) => a.getAttribute('href'));
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
+    assert(!/Plus/i.test(copy), 'welcome must not sell Plus');
   });
 
   await check('fresh start wipes the last reader', async () => {
@@ -83,7 +84,20 @@ async function main() {
     assert(/988/.test(onboarding.text), 'title page missing crisis');
     assert(/Ask Him/i.test(onboarding.text) === false, 'must not say Ask Him');
 
+    // A first-time guest taps the page-turn before reading the trust line.
+    await page.click('#ob-ack-block');
+    const nudge = await page.evaluate(() => ({
+      hint: document.getElementById('ob-hint').hidden,
+      text: document.getElementById('ob-hint').innerText,
+      focused: document.activeElement && document.activeElement.id,
+      stillTitle: !document.getElementById('onboarding').classList.contains('hidden'),
+    }));
+    assert(!nudge.hint && /line above/i.test(nudge.text), 'disabled page-turn gives no cue');
+    assert(nudge.stillTitle, 'page turned without the trust line');
+    await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'ob-ack', { timeout: 2000 });
+
     await page.click('#ob-ack');
+    await page.waitForFunction(() => !document.getElementById('ob-open').disabled && document.getElementById('ob-hint').hidden, { timeout: 2000 });
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
     await page.click('.tp-skip');
@@ -124,6 +138,207 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    const gate = await page.evaluate(() => !!document.getElementById('chat-gate'));
+    assert(!gate, 'paywall gate must not exist');
+  });
+
+  await check('the helpline is visible before anyone types', async () => {
+    await page.evaluate(() => { closeSheets(); switchTab('advisor'); });
+    await page.waitForFunction(() => document.getElementById('advisor-page').classList.contains('active') && getComputedStyle(document.querySelector('.composer')).display !== 'none', { timeout: 4000 });
+    const help = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return { text: el.innerText, tel: !!el.querySelector('a[href="tel:988"]'), onScreen: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight, display: style.display };
+    });
+    assert(help, '#composer-help missing');
+    assert(help.tel && /findahelpline/.test(help.text), 'helpline line lacks 988 or findahelpline');
+    assert(help.onScreen, 'helpline line is not on screen above the composer: ' + JSON.stringify(help));
+  });
+
+  await check('Advisor letter ends in Sit, blessing is a page', async () => {
+    await page.click('#nav-advisor');
+    await page.type('#chat-input', 'I feel shame');
+    await page.click('#send-btn');
+    await page.waitForFunction(() => /John|Matthew/i.test(document.getElementById('chat-messages')?.innerText || ''), { timeout: 20000 });
+    const sit = await page.$('#sit-from-letter');
+    assert(sit, 'Sit with this missing');
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+    await page.type('#chat-input', 'I still cannot lift my face');
+    await page.click('#send-btn');
+    await page.waitForFunction(() => !document.getElementById('last-leaf')?.hidden, { timeout: 20000 });
+    const leaf = await page.$eval('#last-leaf', (el) => el.innerText);
+    assert(/These are the words/i.test(leaf), 'last leaf missing close');
+    // The page is closed and the composer is gone. The helpline must still be one visible tap away.
+    const closedHelp = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      const composer = document.querySelector('#advisor-page .composer');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        composerHidden: !composer || getComputedStyle(composer).display === 'none',
+        tel: !!el.querySelector('a[href="tel:988"]'),
+        onScreen: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight && getComputedStyle(el).visibility !== 'hidden',
+      };
+    });
+    assert(closedHelp, '#composer-help missing after the page closed');
+    assert(closedHelp.composerHidden, 'composer should be hidden once the page closes');
+    assert(closedHelp.tel && closedHelp.onScreen, 'helpline not visible with the page closed: ' + JSON.stringify(closedHelp));
+    await page.click('#nav-seek');
+    await page.click('#mode-carry');
+    await page.waitForFunction(() => document.getElementById('carry-pane') && !document.getElementById('carry-pane').hidden, { timeout: 4000 });
+    const carry = await page.evaluate(() => document.getElementById('carry-list')?.innerText || '');
+    assert(/John|Matthew|Luke|Mark/i.test(carry), 'carrying concordance empty');
+    await page.click('#nav-today');
+    await page.evaluate(() => { if (typeof blessingFromToday === 'function') blessingFromToday(); });
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 8000 });
+    const url = await page.evaluate(() => blessingUrl());
+    assert(/\/b\//.test(url), 'blessing is not a page');
+    await page.evaluate(() => closeBlessing());
+  });
+
+  await check('Carrying puts a person before a verse', async () => {
+    await page.evaluate(() => { closeSheets(); switchTab('seek'); setSeekMode('carry'); });
+    await page.waitForFunction(() => !document.getElementById('carry-pane').hidden && document.getElementById('seek-page').classList.contains('active'), { timeout: 4000 });
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = ''; q.dispatchEvent(new Event('input')); });
+    await page.type('#carry-q', 'I want to die');
+    await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden, { timeout: 4000 });
+    const state = await page.evaluate(() => ({
+      crisis: document.getElementById('carry-crisis').innerText,
+      rows: document.querySelectorAll('#carry-list .carry-row').length,
+      tel: !!document.querySelector('#carry-crisis a[href="tel:988"]'),
+    }));
+    assert(/988/.test(state.crisis), 'crisis leaf missing 988');
+    assert(state.tel, 'crisis leaf missing tel:988');
+    assert(state.rows === 0, 'verse table shown on top of crisis');
+    // Passive phrasings and means must be heard in the room exactly as on the server.
+    for (const passive of ['nobody would notice if I was gone', 'I have the pills ready', 'i wanna kms']) {
+      await page.evaluate((s) => { const q = document.getElementById('carry-q'); q.value = s; q.dispatchEvent(new Event('input')); }, passive);
+      await page.waitForFunction(() => !document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length === 0, { timeout: 4000 })
+        .catch(() => { throw new Error('Carrying did not hear: ' + passive); });
+    }
+    const shared = await page.evaluate(() => !!(window.RLA_SAFETY_CORE && typeof window.RLA_SAFETY_CORE.looksLikeCrisis === 'function' && window.RLA_SAFETY_CORE.looksLikeCrisis('I took a bunch of pills an hour ago')));
+    assert(shared, 'shared safety bundle (/data/safety.js) not loaded');
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'my dog died of an overdose of joy'; q.dispatchEvent(new Event('input')); });
+    await page.waitForFunction(() => document.getElementById('carry-crisis').hidden, { timeout: 4000 }).catch(() => { throw new Error('false crisis on "overdose of joy"'); });
+    await page.evaluate(() => { const q = document.getElementById('carry-q'); q.value = 'I cannot forgive them'; q.dispatchEvent(new Event('input')); });
+    await page.waitForFunction(() => document.getElementById('carry-crisis').hidden && document.querySelectorAll('#carry-list .carry-row').length > 0, { timeout: 4000 });
+    const first = await page.$eval('#carry-list .carry-row .cite', (el) => el.textContent);
+    assert(/Matthew 6:14/.test(first), 'Carrying did not land on Matthew 6:14 for forgiveness: ' + first);
+  });
+
+  await check('Keep a copy round-trips the journal', async () => {
+    const exported = await page.evaluate(() => {
+      const journalBefore = JSON.parse(localStorage.getItem('rla-journal') || '[]');
+      const captured = [];
+      const realCreate = URL.createObjectURL;
+      URL.createObjectURL = (blob) => { captured.push(blob); return 'blob:qa'; };
+      const realClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () {};
+      exportJournalFile();
+      URL.createObjectURL = realCreate;
+      HTMLAnchorElement.prototype.click = realClick;
+      return captured[0] ? captured[0].text().then((t) => ({ text: t, before: journalBefore.length })) : null;
+    });
+    assert(exported && exported.before > 0, 'nothing exported');
+    const data = JSON.parse(exported.text);
+    assert(data.app === 'red-letter' && data.keys['rla-journal'], 'export shape wrong');
+    const restored = await page.evaluate(async (text) => {
+      localStorage.removeItem('rla-journal');
+      localStorage.removeItem('rla-last-sit');
+      const file = new File([text], 'copy.json', { type: 'application/json' });
+      importJournalFile(file);
+      await new Promise((r) => setTimeout(r, 300));
+      return {
+        journal: JSON.parse(localStorage.getItem('rla-journal') || '[]').length,
+        lastSit: !!localStorage.getItem('rla-last-sit'),
+      };
+    }, exported.text);
+    assert(restored.journal === exported.before, 'journal did not come back: ' + restored.journal + ' vs ' + exported.before);
+    assert(restored.lastSit, 'last sit did not come back');
+    const bad = await page.evaluate(async () => {
+      const before = localStorage.getItem('rla-journal');
+      importJournalFile(new File(['{"app":"other"}'], 'x.json', { type: 'application/json' }));
+      await new Promise((r) => setTimeout(r, 300));
+      return localStorage.getItem('rla-journal') === before;
+    });
+    assert(bad, 'a foreign file changed the journal');
+  });
+
+  await check('reopening with today’s letters does not break the room', async () => {
+    const saved = await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith('rla-letters-')));
+    assert(saved, 'expected today’s letters to be persisted');
+    const errorsBefore = consoleErrors.length;
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+    const state = await page.evaluate(() => ({
+      letters: document.querySelectorAll('#chat-messages .letter').length,
+      leaf: !document.getElementById('last-leaf').hidden,
+      carryBound: typeof exportJournalFile === 'function' && typeof matchConcordanceClient === 'function',
+    }));
+    assert(consoleErrors.length === errorsBefore, 'reload threw: ' + consoleErrors.slice(errorsBefore).join(' | '));
+    assert(state.letters >= 2, 'letters did not come back');
+    assert(state.leaf, 'last leaf should still be closed after reload');
+    assert(state.carryBound, 'script did not finish on reload');
+  });
+
+  await check('Tuesday: the ribbon names yesterday', async () => {
+    await page.evaluate(() => {
+      const d = new Date(); d.setDate(d.getDate() - 1);
+      const y = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const sit = JSON.parse(localStorage.getItem('rla-last-sit') || '{}');
+      sit.date = y; sit.verse = sit.verse || 'Matthew 11:28';
+      localStorage.setItem('rla-last-sit', JSON.stringify(sit));
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => !document.getElementById('onboarding') || document.getElementById('onboarding').classList.contains('hidden'), { timeout: 6000 });
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); if (typeof closeSit === 'function') closeSit(); });
+    const ribbon = await page.evaluate(() => {
+      const el = document.getElementById('return-ribbon');
+      return { hidden: el.hidden, text: el.innerText };
+    });
+    assert(!ribbon.hidden, 'return ribbon hidden on day two');
+    assert(/Yesterday you sat with (Matthew|Mark|Luke|John)/.test(ribbon.text), 'ribbon does not name the verse: ' + ribbon.text);
+  });
+
+  await check('offline: the words stay on the phone', async () => {
+    await page.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, { timeout: 15000 }).catch(() => {});
+    await page.evaluate(async () => {
+      const keys = await caches.keys();
+      const c = await caches.open(keys.find((k) => /rla-/.test(k)) || 'rla-prod-v3');
+      await Promise.all(['/', '/index.html', '/privacy.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/safety.js', '/data/paths.js', '/curated.json']
+        .map((u) => c.add(u).catch(() => null)));
+    });
+    await page.setOfflineMode(true);
+    let offlineOk = false;
+    let privacyOffline = false;
+    try {
+      await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
+      offlineOk = await page.evaluate(() => !!document.getElementById('today-page') && /Red Letter/i.test(document.body.innerText) && !!(window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs && window.RLA_CONCORDANCE.needs.length));
+      // The offline Advisor must hear a passive crisis line and put 988 before any verse.
+      const offlineLetter = await page.evaluate(() => (typeof window.RLA_advise === 'function' ? window.RLA_advise('I have the pills ready') : ''));
+      assert(offlineLetter.indexOf('988') >= 0 && offlineLetter.indexOf('988') < offlineLetter.indexOf('**'), 'offline Advisor did not put 988 before the verse: ' + offlineLetter.slice(0, 120));
+      const offlineNeed = await page.evaluate(() => (typeof window.RLA_advise === 'function' ? window.RLA_advise('I feel so much shame') : ''));
+      assert(/John 8:11/.test(offlineNeed), 'offline Advisor did not find John 8:11 for shame');
+      await page.goto(BASE + '/privacy', { waitUntil: 'domcontentloaded', timeout: 15000 });
+      privacyOffline = await page.evaluate(() => /What stays/.test(document.body.innerText));
+    } finally {
+      await page.setOfflineMode(false);
+    }
+    assert(offlineOk, 'room did not open offline with the concordance');
+    assert(privacyOffline, '/privacy fell back to the room offline');
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+  });
+
+  await check('privacy is one tap from Settings', async () => {
+    const link = await page.$eval('#privacy-link', (a) => a.getAttribute('href'));
+    assert(link === '/privacy', 'privacy link missing in Settings');
+    const res = await page.goto(BASE + '/privacy', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'privacy HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/on the phone/i.test(copy) && /988/.test(copy) && /no accounts/i.test(copy), 'privacy page missing its promises');
+    assert(!/Plus/.test(copy), 'privacy must not sell Plus');
   });
 
   await check('no page errors', async () => {
