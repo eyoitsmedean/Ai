@@ -14,7 +14,8 @@ Last updated 2026-09-06, on branch `cursor/forty-path-fbba`, in a Linux containe
 | Client and server crisis detectors are identical | `test/counsel.test.js` compares the two regex sources | 1 |
 | Off-scope questions (weather, Python, Paul, Psalm 23, Bitcoin) get an honest out-of-room letter with no other author cited | eval 6/6 | 1 |
 | Hostile questions get a gentle in-scope letter, no argument | eval 6/6 (offline path); tone on the model path is for human review | 1 / 5 |
-| Without a model key the server still answers the question's need | `test/api.test.js` (fear → Fear room, grief → Grief room) | 1 |
+| Without a model key the server still answers the question's need | `test/api.test.js` (fear → Fear room, grief → Grief room, crisis → notice, blank line, company) | 1 |
+| A model letter that cites another author, or carries no verified saying, never reaches the reader — the room's letter replaces it | `test/counsel.test.js` `letterPassesFloor` (Romans, Psalm, no verse, unfillable marker, typed quote all fail; every offline letter passes) | 1 |
 | Corpus integrity: all 89 Gospel chapters at KJV verse counts; no editorial notes in verse text | `test/corpus.test.js`, `test/map.test.js` | 1 |
 | Red-letter map: every partial marker quotes its verse; discourses covered; no other speaker's reply in red; no "Jesus" in red text except John 17:3 | `test/map.test.js`, `test/spoken.test.js`, `npm run audit` (0 named frames) | 1 |
 | The web room end to end (title page, lectio, Seven, Forty, Lent, ledger, Advisor, crisis modal, library on both hosts) | `npm run qa` — 14/14 in headless Chrome at a phone viewport | 1 |

@@ -25,12 +25,11 @@
 const fs = require('fs');
 const path = require('path');
 const { lookup, parseRef, CRISIS_NOTICE } = require('../lib/scripture');
-const { VOICE, OUT_OF_ROOM } = require('../lib/counsel');
+const { VOICE, OUT_OF_ROOM, OTHER_AUTHOR } = require('../lib/counsel');
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const ROOT = path.join(__dirname, '..');
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
-const OTHER_AUTHOR = /\b(Psalms?|Proverbs|Isaiah|Jeremiah|Genesis|Exodus|Deuteronomy|Acts|Romans|Corinthians|Galatians|Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Hebrews|James|Peter|Jude|Revelation)\s+\d/;
 const PERSONA = /\b(as an ai|language model|i am (?:a|your) (?:pastor|priest|counsel|therapist|doctor|person|human)|i'm (?:a|your) (?:pastor|priest|counsel|therapist|doctor|person|human))\b/i;
 
 async function ask(text) {

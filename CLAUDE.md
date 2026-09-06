@@ -19,6 +19,7 @@ A chat-first advisor that answers a real life question from the direct words of 
 | Privacy: journal and ledger stay on the device; anonymous day totals shared only by an explicit toggle; no tracker, no account | settled | `LAUNCH.md`, `README.md` |
 | Crisis: detector on client *and* server (kept identical by test); the modal offers 988 and findahelpline before a crisis line is sent; the server prepends the notice before any verse | settled | `public/index.html`, `lib/scripture.js`, `test/counsel.test.js` |
 | When no model is available the server writes the letter from the curated rooms for *this* question; never one fixed page | settled 2026-09-06 | `lib/counsel.js` |
+| **The floor**: every letter, model or not, must print at least one of His sayings from the corpus and cite no other author; a model letter that fails is replaced by the room's own letter | settled 2026-09-06 | `lib/counsel.js` `letterPassesFloor`, `server.js` |
 | **Mobile stack: Capacitor around the existing HTML build** (default per brief). Alternative considered: a React Native / Expo rewrite — rejected for now because it duplicates 4,300 lines of working UI and the church-year, path, and ledger logic, and puts two clients on one corpus. Risk accepted: Apple guideline 4.2 / 4.2.2 rejects "repackaged websites"; the shell must ship with what a website cannot do — the whole room offline, the paths kept on the device, the system share sheet for a blessing — and say so in the review notes; see `RELEASE.md`. | settled 2026-09-06 | `capacitor.config.json`, `scripts/build-shell.js`, `RELEASE.md` |
 | One HTML build serves every host: `<meta name="rla-api-base">` (empty = same origin) routes `/api`; the server answers other origins only when named in `RLA_ALLOWED_ORIGINS` | settled 2026-09-06 | `public/index.html` `apiUrl()`, `server.js` |
 | Free tier: 5 Advisor letters a day; Plus is annual, not weekly | settled | `LAUNCH.md`, `public/index.html` `FREE_CHATS` |
@@ -38,7 +39,7 @@ A chat-first advisor that answers a real life question from the direct words of 
 
 ## How to check the work
 
-`npm test` (82) · `npm run qa` (14 browser checks; needs a running server and Chrome) · `npm run eval` (46 questions against a live server; writes `eval/RESULTS.md`) · `npm run audit` (frame audit).
+`npm test` (83) · `npm run qa` (14 browser checks; needs a running server and Chrome) · `npm run eval` (46 questions against a live server; writes `eval/RESULTS.md`) · `npm run audit` (frame audit).
 
 ## Session log
 

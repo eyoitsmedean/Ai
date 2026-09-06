@@ -111,6 +111,13 @@ describe('smoke routes', () => {
     const griefLetter = joinStream(grief.raw);
     assert.match(griefLetter, /Blessed are they that mourn/);
     assert.doesNotMatch(griefLetter, /Fear not, little flock/);
+
+    // A crisis line: the human door first, a blank line, then company — never a scope disclaimer.
+    const crisis = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'I want to die' }] });
+    const crisisLetter = joinStream(crisis.raw);
+    assert.match(crisisLetter, /^If you are in danger[^]*call or text 988[^]*findahelpline\.com[^]*not emergency care\.\n\nWhile you reach a person who can help/);
+    assert.ok(crisisLetter.indexOf('988') < crisisLetter.indexOf('**'), 'help before any verse');
+    assert.doesNotMatch(crisisLetter, /cannot answer that as it is asked/);
   });
 
   it('answers cross-origin only for origins named in RLA_ALLOWED_ORIGINS', async () => {

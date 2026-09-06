@@ -2,7 +2,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { composeLetter, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY } = require('../lib/counsel');
+const { composeLetter, letterPassesFloor, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY } = require('../lib/counsel');
 const { verifyAndSubstitute, lookup, parseRef, looksLikeCrisis } = require('../lib/scripture');
 
 const ROOT = path.join(__dirname, '..');
@@ -62,6 +62,17 @@ describe('the lamp-out letter', () => {
     }
     assert.match(composeLetter('I want to die'), /\{\{Matthew 11:28\}\}/, 'no room reached: the heavy-laden verse');
     assert.match(composeLetter('I\'ve been cutting myself again and nobody knows'), /\{\{John 14:18\}\}/, 'the Loneliness room was reached');
+  });
+
+  it('the floor: a letter must print one of His sayings and cite no other author', () => {
+    const good = verifyAndSubstitute('I hear you.\n\n{{John 14:27}}\nPeace is left.\n\nRest.');
+    assert.ok(letterPassesFloor(good));
+    assert.ok(!letterPassesFloor('I hear you. As Paul wrote in Romans 8:28, all things work together.'));
+    assert.ok(!letterPassesFloor(verifyAndSubstitute('I hear you.\n\n**Psalm 23:1**\n“The LORD is my shepherd.”\n\nRest.')));
+    assert.ok(!letterPassesFloor('Only warmth, no verse at all.'));
+    assert.ok(!letterPassesFloor(verifyAndSubstitute('{{Matthew 99:1}}\nctx')), 'an unfillable marker leaves nothing of His');
+    assert.ok(!letterPassesFloor('**John 3:16**\n“For God so loved the world that he gave his only begotten Son.”'), 'a typed, unverified quote does not count');
+    for (const q of ['I want to die', 'What is the capital of France?', 'my mom died']) assert.ok(letterPassesFloor(verifyAndSubstitute(composeLetter(q))), q);
   });
 
   it('uses the same voice as the client\u2019s offline advisor', () => {
