@@ -21,6 +21,7 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 | 9 | Crisis detection has one source, `lib/crisis.js`. The three client copies must match byte-for-byte; `test/crisis.test.js` enforces it. | `lib/crisis.js` | 2026-09-06; the previous pattern missed "suicidal" and "suicide" |
 | 10 | A reader in crisis is offered only the fixed comfort verses in `lib/retrieve.js` (`CRISIS_CITATIONS`), never token-matched sayings. | `lib/retrieve.js` | 2026-09-06; token matching once offered Mark 13's wars and famines |
 | 11 | `npm run eval` is the release gate. `eval/RESULTS.md` must be regenerated on the release commit and must say which mode ran. Nothing is reported as passed that did not run. | `scripts/eval.js` | 2026-09-06 |
+| 12 | The noun "suicide" alone triggers the notice, so "the suicide of my brother still haunts me" receives the 988 line and the comfort verses. Accepted: a bereaved-by-suicide reader is at elevated risk and the notice is gentle; the letter still comes. | `lib/crisis.js`, `test/crisis.test.js` | 2026-09-06, ASSUMED by the builder; Dean may reverse |
 
 ## Not yet decided (Dean)
 
