@@ -4,16 +4,16 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const { runEval, loadQuestions } = require('../scripts/eval');
-const { CRISIS_RE, DANGER_RE, BY_YOU_RE, POISON_RE, POISON_LINE, isExactSpan } = require('../lib/scripture');
+const { isExactSpan, looksLikeCrisis, looksLikeDanger, looksLikePoisoning, looksLikeByYou, looksLikeBereaved, fold } = require('../lib/scripture');
+const SIGNALS = require('../public/data/signals.js');
 const { encouragementFor } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
 function clientWindow() {
   const w = {};
-  const ctx = vm.createContext({ window: w });
-  w.looksLikeCrisisClient = (t) => CRISIS_RE.test(String(t || ''));
-  for (const f of ['curated.js', 'advisor.js', 'paths.js']) vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', f), 'utf8'), ctx);
+  const ctx = vm.createContext({ window: w, self: w });
+  for (const f of ['signals.js', 'curated.js', 'advisor.js', 'paths.js']) vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', f), 'utf8'), ctx);
   return w;
 }
 
@@ -38,35 +38,30 @@ describe('evaluation set', () => {
     assert.deepEqual(failed, []);
   });
 
-  it('keeps the client crisis check in step with the server', () => {
+  it('the page, the composer and the server listen with the same ears', () => {
+    // One file. The server requires it; the page and the static composer load it.
     const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
-    const m = html.match(/function looksLikeCrisisClient\(text\) \{\s*return (\/.*\/i)\.test/);
-    assert.ok(m, 'client crisis function not found');
-    assert.equal(m[1].slice(1, -2), CRISIS_RE.source);
-  });
-
-  it('keeps the client danger check in step with the server', () => {
-    const js = fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8');
-    const m = js.match(/const DANGER = (\/.*\/i);/);
-    assert.ok(m, 'client danger pattern not found');
-    assert.equal(m[1].slice(1, -2), DANGER_RE.source);
-    const by = js.match(/const BY_YOU = (\/.*\/i);/);
-    assert.ok(by, 'client by-you pattern not found');
-    assert.equal(by[1].slice(1, -2), BY_YOU_RE.source);
-  });
-
-  it('keeps the poisoning check in step on the composer and the page', () => {
-    const js = fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8');
-    const m = js.match(/const POISON = (\/.*\/i);/);
-    assert.ok(m, 'client poison pattern not found');
-    assert.equal(m[1].slice(1, -2), POISON_RE.source);
-    assert.ok(js.includes(POISON_LINE.trim()), 'client composer lacks the Poison Control line');
-    const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
-    const h = html.match(/function looksLikePoisoningClient\(text\) \{\s*return (\/.*\/i)\.test/);
-    assert.ok(h, 'page poison function not found');
-    assert.equal(h[1].slice(1, -2), POISON_RE.source);
+    assert.ok(html.includes('<script src="./data/signals.js"></script>'), 'page does not load signals.js');
+    assert.ok(html.indexOf('data/signals.js') < html.indexOf('data/advisor.js'), 'signals.js must load before the composer');
+    assert.match(html, /function looksLikeCrisisClient\(text\) \{\s*return window\.RLA_SIGNALS\.looksLikeCrisis\(text\)/);
+    assert.match(html, /function looksLikePoisoningClient\(text\) \{\s*return window\.RLA_SIGNALS\.looksLikePoisoning\(text\)/);
     assert.match(html, /id="crisis-poison"[^>]*hidden/);
     assert.ok(html.includes('1-800-222-1222'));
+    const js = fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8');
+    assert.ok(js.includes('window.RLA_SIGNALS'), 'composer does not use signals.js');
+    assert.doesNotMatch(js, /const (?:DANGER|BY_YOU|POISON|CRISIS) = \//, 'composer still carries its own copy of a pattern');
+    const sw = fs.readFileSync(path.join(ROOT, 'public', 'sw.js'), 'utf8');
+    assert.ok(sw.includes("'./data/signals.js'"), 'service worker does not precache signals.js');
+    // The server's functions are the module's functions, not copies.
+    assert.equal(looksLikeCrisis, SIGNALS.looksLikeCrisis);
+    assert.equal(looksLikeDanger, SIGNALS.looksLikeDanger);
+    // And the browser copy, loaded the way the page loads it, agrees on every probe.
+    const w = clientWindow();
+    for (const probe of ['I want to kill myself', 'I took 30 pills', 'my husband hits me', 'I hit my wife', 'my son died last year', 'what did Jesus say about rest']) {
+      for (const fn of ['looksLikeCrisis', 'looksLikePoisoning', 'looksLikeDanger', 'looksLikeByYou', 'looksLikeBereaved']) {
+        assert.equal(w.RLA_SIGNALS[fn](probe), SIGNALS[fn](probe), `${fn}(${probe})`);
+      }
+    }
   });
 
   it('the two composers open the same rooms with the same first passage', () => {
@@ -125,26 +120,65 @@ describe('evaluation set', () => {
       "I'm ready to die of embarrassment", 'I wanted to die laughing', 'I drank the whole bottle of wine by myself',
       'thinking about not being here for the reunion', 'I laughed so hard I was dying',
     ];
-    assert.deepEqual(danger.filter((s) => !CRISIS_RE.test(s)), []);
-    assert.deepEqual(benign.filter((s) => CRISIS_RE.test(s)), []);
+    const disguised = [
+      's u i c i d e', 'sui.cide', 'k/y/s', 'su1c1de', 'I want to k!ll myself', 'I want to d1e', 'i want to di3', 'k\u200bill my\u200bself',
+      "my brother told me he doesn't want to be here anymore", 'my son keeps saying he wishes he was dead', 'I want to disappear',
+      "I keep thinking my family would be happier if I wasn't around", 'I have a plan and a date', "I've been giving away my things and saying goodbye to people",
+      "I've taken 30 paracetamol", 'I took 40 tylenol', 'I took every pill in the house',
+    ];
+    const bereavedNotCrisis = ["my best friend died of an overdose and I feel guilty I didn't stop him", 'my brother overdosed two years ago and I still miss him'];
+    assert.deepEqual(danger.filter((s) => !looksLikeCrisis(s)), []);
+    assert.deepEqual(disguised.filter((s) => !looksLikeCrisis(s)), []);
+    assert.deepEqual(benign.filter((s) => looksLikeCrisis(s)), []);
+    assert.deepEqual(bereavedNotCrisis.filter((s) => looksLikeCrisis(s)), []);
+    assert.deepEqual(['I want to disappear for a week on vacation', 'I have 3 kids', 'the dose is 30mg', 'I am ok', 'my dad hit a home run at the reunion'].filter((s) => looksLikeCrisis(s)), []);
+    assert.equal(fold('s u i c i d e'), 'suicide');
+    assert.equal(fold('su1c1de'), 'suicide');
   });
 
-  it('knows when something has been taken', () => {
-    for (const s of ['I took too many pills an hour ago', 'I swallowed the whole bottle of my sleeping pills', 'I overdosed', 'I drank bleach', 'just took 40 tablets']) {
-      assert.equal(POISON_RE.test(s), true, s);
+  it('knows when something has been taken — and when it was someone else, or long ago', () => {
+    const taken = [
+      'I took too many pills an hour ago', 'I swallowed the whole bottle of my sleeping pills', 'I overdosed', 'I drank bleach', 'just took 40 tablets',
+      "I've taken 30 paracetamol", 'I took 40 tylenol', 'I took 30 pills', 'i swallowed a bottle of pills', 'I drank a bottle of antifreeze',
+      'I took every pill in the house', "I ate all my mom's blood pressure meds", "I ate a handful of my grandma's heart pills",
+      'I took way more than I should have of my xanax', 'I just swallowed all my insulin', 'I took an overdose an hour ago',
+      'my son overdosed last year and tonight I took all my pills',
+    ];
+    const notTaken = [
+      'I want to die', 'kms', 'I took the whole day off', 'I drank the whole bottle of wine', 'took my pills like the doctor said',
+      "my best friend died of an overdose and I feel guilty I didn't stop him", 'I took 2 advil for my headache', 'I take all my meds at night',
+      'my brother overdosed two years ago and I still miss him', 'I overdosed two years ago and I am still ashamed', "my son OD'd last spring",
+    ];
+    assert.deepEqual(taken.filter((s) => !looksLikePoisoning(s)), []);
+    assert.deepEqual(notTaken.filter((s) => looksLikePoisoning(s)), []);
+  });
+
+  it('knows the bereaved from the one at risk', () => {
+    for (const s of ['My daughter died by suicide last year', "my best friend died of an overdose and I feel guilty I didn't stop him", 'my husband passed away in March', 'we lost our son to suicide']) {
+      assert.equal(looksLikeBereaved(s), true, s);
     }
-    for (const s of ['I want to die', 'kms', 'I took the whole day off', 'I drank the whole bottle of wine', 'took my pills like the doctor said']) {
-      assert.equal(POISON_RE.test(s), false, s);
+    for (const s of ['my brother died by suicide and I want to die too', 'I want to kill myself', 'I am 82 and my wife of 60 years died last month and I want to join her']) {
+      assert.equal(looksLikeBereaved(s), false, s);
     }
   });
 
-  it('hears violence and abuse', () => {
-    for (const s of ['he hit my mom again last night', 'my husband choked me on Saturday', 'I was raped in college', 'my youth pastor abused me when I was 15', "I'm afraid to go home", 'domestic violence']) {
-      assert.equal(DANGER_RE.test(s), true, s);
-    }
-    for (const s of ['the storm hit my town', 'this song hits different', 'he beat me at chess', 'I hit my head on the cupboard']) {
-      assert.equal(DANGER_RE.test(s), false, s);
-    }
+  it('hears violence and abuse, received or witnessed, and not the idioms', () => {
+    const heard = [
+      'he hit my mom again last night', 'my husband choked me on Saturday', 'I was raped in college', 'my youth pastor abused me when I was 15', "I'm afraid to go home", 'domestic violence',
+      'my husband hits me and I am scared', 'he controls all the money and checks my phone', 'he threw a plate at me', "he won't let me leave the house",
+      'my husband threw me against the wall', 'my husband pushed me', 'my boyfriend put his hands around my neck', 'my husband threatens to take the kids if I leave',
+      'my dad touches me at night', 'my uncle touched me when I was little', 'my husband forces me to have sex', 'my partner is abusive',
+      "my daughter's boyfriend hits her", "my friend's husband beats her", 'my neighbor beats his kids and I hear it through the wall', "my mom's boyfriend beats her",
+      'husband hit me last night',
+    ];
+    const idiom = [
+      'the storm hit my town', 'this song hits different', 'he beat me at chess', 'I hit my head on the cupboard',
+      'my husband hit a home run at the game', 'she beat cancer', 'my husband hit the jackpot', 'my son hit me up for money', 'my boyfriend hit me up last night',
+      "she hit me with the news that she's moving", 'my brother hit his head', 'it hit me hard when she left', 'the news hit me like a truck',
+      'my husband pushed me to apply for the job', 'he pushed me away emotionally', 'my dad threw the ball at me and I missed',
+    ];
+    assert.deepEqual(heard.filter((s) => !looksLikeDanger(s)), []);
+    assert.deepEqual(idiom.filter((s) => looksLikeDanger(s)), []);
   });
 
   it('hears the one who hit, or is afraid they will', () => {
@@ -152,13 +186,18 @@ describe('evaluation set', () => {
       'I want to hit my kid', 'I hit my wife last night and I hate myself', "I'm scared I'm going to hurt my baby", 'I slapped my son',
       'Sometimes I want to hurt my daughter', 'I want to kill my husband', 'I am afraid of what I might do to my kids', 'I shook my baby',
       'Give me the verse where Jesus says I am allowed to beat my kids', "I'm afraid I'll hurt her",
+      'I lose my temper with the kids and it gets physical', 'I pushed her', 'I pushed my wife down the stairs', 'I grabbed her by the throat',
+      'I locked my son in his room for two days', 'I threw my phone at my wife', 'I put my hands on my wife', 'I burned my kid with a cigarette',
+      'I keep leaving bruises on my son', 'I screamed at my toddler and grabbed her arm so hard it bruised',
     ];
     const benign = [
       'I hit my head on the cabinet', 'I beat my brother at chess', 'I want to hit the gym', 'I hit my stride this year', 'I beat my addiction',
       'I hit my limit with this job', 'she beat them in the finals', 'I want to kill it at the interview',
+      'I want to kill my sourdough starter', 'I pushed my son to study harder', 'I hurt my back at work', 'I want to hurt my chances', 'I hit my snooze button',
     ];
-    assert.deepEqual(byYou.filter((s) => !BY_YOU_RE.test(s)), []);
-    assert.deepEqual(byYou.filter((s) => !DANGER_RE.test(s)), []);
-    assert.deepEqual(benign.filter((s) => DANGER_RE.test(s)), []);
+    assert.deepEqual(byYou.filter((s) => !looksLikeByYou(s)), []);
+    assert.deepEqual(byYou.filter((s) => !looksLikeDanger(s)), []);
+    assert.deepEqual(benign.filter((s) => looksLikeDanger(s)), []);
+    assert.deepEqual(benign.filter((s) => looksLikeByYou(s)), []);
   });
 });

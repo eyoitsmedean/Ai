@@ -1,17 +1,12 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  // Self-harm is judged by the page's shared check (looksLikeCrisisClient, mirrored from the server).
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
-  function inCrisis(text) {
-    return typeof window.looksLikeCrisisClient === 'function' ? window.looksLikeCrisisClient(text) : CRISIS.test(text);
-  }
-  // Mirrored from DANGER_RE, BY_YOU_RE and POISON_RE in lib/scripture.js; test/eval.test.js keeps them in step.
-  const DANGER = /\b(?:(?:he|she|they|my (?:dad|father|mom|mother|husband|wife|partner|boyfriend|girlfriend|stepdad|stepfather|stepmom|brother|son|uncle))\s+(?:hit|hits|beat|beats|punched|punches|choked|chokes|strangled|kicked|kicks|slapped|slaps|threatened to kill|threatens to kill|threatened me|threatens me)\b(?!\s+(?:me\s+|us\s+|him\s+|her\s+|them\s+)?(?:at|in|to|by)\b)|(?:hit|hits|beat|beats|punched|choked|strangled|slapped)\s+(?:me|my mom|my mother|my kids|my child|my daughter|my son)\b(?!\s+(?:at|in|to|by)\b)|abus(?:e|es|ed|ing|ive)\s+(?:me|us|my|her|him)\b|(?:sexually|physically)\s+abus\w*|molest\w*|raped?\b|rape[sd]?\s+me|domestic violence|not safe at home|afraid (?:of|to go) home|afraid he(?:'ll| will) (?:hurt|kill)|he(?:'ll| will) kill me|scared (?:he|she)(?:'ll| will) hurt)\b|\b(?:allowed\s+to\s+(?:beat|hit|hurt|spank)|i\s+(?:hit|beat|slapped|punched|choked|strangled|shook|kicked|smacked)\s+(?:my\s+(?!(?:head|knee|elbow|hand|foot|toe|leg|arm|shin|thumb|finger|snooze|stride|limit|goal|target|quota|peak|mark|record|best|addiction|depression|cancer|anxiety|demons|fear|illness|diagnosis|own)\b)\w+|him|her|them)\b(?!\s+(?:at|in|to|by)\b)|(?:want|wanna|wanted|going|gonna|about|tempted|urge|urges)\s+to\s+(?:hit|beat|hurt|kill|strangle|choke|shake|smack)\s+(?:my|him|her|them|the\s+baby|our\s+baby)\b(?!\s+(?:at|in)\b)|(?:scared|afraid|worried|terrified|frightened)\s+(?:that\s+)?(?:i(?:'?m|\s+am)\s+(?:going\s+to|gonna)|i(?:'ll|\s+will|\s+might|\s+could))\s+(?:hurt|hit|kill|shake|snap\s+and\s+hurt|lose\s+it\s+and\s+hurt)\s+(?:my|him|her|them|the\s+baby|someone)|afraid\s+(?:of\s+)?what\s+i(?:'ll|\s+will|\s+might|\s+could|\s+would)\s+do(?:\s+to\s+(?:my|him|her|them|someone|the\s+baby))?)\b/i;
-  const BY_YOU = /\b(?:allowed\s+to\s+(?:beat|hit|hurt|spank)|i\s+(?:hit|beat|slapped|punched|choked|strangled|shook|kicked|smacked)\s+(?:my\s+(?!(?:head|knee|elbow|hand|foot|toe|leg|arm|shin|thumb|finger|snooze|stride|limit|goal|target|quota|peak|mark|record|best|addiction|depression|cancer|anxiety|demons|fear|illness|diagnosis|own)\b)\w+|him|her|them)\b(?!\s+(?:at|in|to|by)\b)|(?:want|wanna|wanted|going|gonna|about|tempted|urge|urges)\s+to\s+(?:hit|beat|hurt|kill|strangle|choke|shake|smack)\s+(?:my|him|her|them|the\s+baby|our\s+baby)\b(?!\s+(?:at|in)\b)|(?:scared|afraid|worried|terrified|frightened)\s+(?:that\s+)?(?:i(?:'?m|\s+am)\s+(?:going\s+to|gonna)|i(?:'ll|\s+will|\s+might|\s+could))\s+(?:hurt|hit|kill|shake|snap\s+and\s+hurt|lose\s+it\s+and\s+hurt)\s+(?:my|him|her|them|the\s+baby|someone)|afraid\s+(?:of\s+)?what\s+i(?:'ll|\s+will|\s+might|\s+could|\s+would)\s+do(?:\s+to\s+(?:my|him|her|them|someone|the\s+baby))?)\b/i;
-  const POISON = /\b(?:overdos\w*|too\s+many\s+pills|swallowed\s+(?:all\s+)?(?:the|my)\s+pills|took\s+all\s+(?:my|the)\s+pills|(?:took|take|taking|taken|swallow\w*)\s+(?:the|a|an|my)\s+(?:whole|entire)\s+bottle|(?:whole|entire)\s+bottle\s+of\s+(?:pills|tablets|tylenol|acetaminophen|paracetamol|ibuprofen|advil|aspirin|xanax|ambien|oxy\w*|vicodin|percocet|benadryl|sleeping\s+pills|my\s+(?:meds|medication|medicine|pills|prescription))|(?:took|swallowed|drank|ate)\s+(?:some\s+|the\s+|a\s+lot\s+of\s+|a\s+bunch\s+of\s+|a\s+handful\s+of\s+)?(?:bleach|antifreeze|rat\s+poison|drain\s+cleaner)|(?:just|already)\s+(?:took|swallowed)\s+(?:\d+|a\s+handful\s+of|a\s+bunch\s+of)\s+(?:pills|tablets)|poison(?:ed|ing)?\s+myself)\b/i;
-  const DANGER_NOTICE = 'If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\n\n';
-  const POISON_LINE = 'If you have taken pills or anything else to harm yourself, that is a medical emergency before it is anything else: in the United States call 911, or Poison Control at 1-800-222-1222, right now — even if you feel fine.\n';
+  // Every signal — self-harm, poisoning, violence, bereavement — comes from signals.js,
+  // the same file the server reads. There is no second copy to drift.
+  const S = window.RLA_SIGNALS;
+  const inCrisis = (t) => S.looksLikeCrisis(t);
+  const DANGER_NOTICE = S.DANGER_NOTICE;
+  const POISON_LINE = S.POISON_LINE + '\n';
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep', 'tomorrow', 'interview', 'shaking', 'laid off', 'fired', 'rent', 'bills', 'debt', 'money', 'income', 'bankrupt', 'can\'t stop', 'cant stop'] },
@@ -65,17 +60,22 @@
     if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
 
     if (inCrisis(raw)) {
-      const crisis =
-        (POISON.test(raw) ? POISON_LINE : '') +
-        'If you are in danger or thinking of ending your life, please stop here and get human help now.\nIn the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.\nI am not a person, and this page is not emergency care.\n\n';
+      const crisis = (S.looksLikePoisoning(raw) ? POISON_LINE : '') + S.CRISIS_NOTICE;
+      if (S.looksLikeBereaved(raw)) {
+        return crisis + formatPack(
+          'Someone you love is gone, and the way they went has left you carrying more than grief. The number above is for you too: the people there sit with those left behind, tonight, and will not hurry you. These words are for you.',
+          passagesFor('Grief & Loss'),
+          'You do not have to be finished grieving to be held. Please let a person sit with you in this.'
+        );
+      }
       return crisis + formatPack(
         'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
         passagesFor('Peace'),
         'You are not alone in this hour. Please go toward help now.'
       );
     }
-    if (DANGER.test(raw)) {
-      const byYou = BY_YOU.test(raw);
+    if (S.looksLikeDanger(raw)) {
+      const byYou = S.looksLikeByYou(raw);
       return DANGER_NOTICE + formatPack(
         byYou
           ? 'You asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.'
