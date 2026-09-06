@@ -84,7 +84,20 @@ async function main() {
     assert(/988/.test(onboarding.text), 'title page missing crisis');
     assert(/Ask Him/i.test(onboarding.text) === false, 'must not say Ask Him');
 
+    // A first-time guest taps the page-turn before reading the trust line.
+    await page.click('#ob-ack-block');
+    const nudge = await page.evaluate(() => ({
+      hint: document.getElementById('ob-hint').hidden,
+      text: document.getElementById('ob-hint').innerText,
+      focused: document.activeElement && document.activeElement.id,
+      stillTitle: !document.getElementById('onboarding').classList.contains('hidden'),
+    }));
+    assert(!nudge.hint && /line above/i.test(nudge.text), 'disabled page-turn gives no cue');
+    assert(nudge.stillTitle, 'page turned without the trust line');
+    await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'ob-ack', { timeout: 2000 });
+
     await page.click('#ob-ack');
+    await page.waitForFunction(() => !document.getElementById('ob-open').disabled && document.getElementById('ob-hint').hidden, { timeout: 2000 });
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
     await page.click('.tp-skip');
@@ -252,19 +265,23 @@ async function main() {
     await page.evaluate(async () => {
       const keys = await caches.keys();
       const c = await caches.open(keys.find((k) => /rla-/.test(k)) || 'rla-prod-v3');
-      await Promise.all(['/', '/index.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/paths.js', '/curated.json']
+      await Promise.all(['/', '/index.html', '/privacy.html', '/data/concordance.js', '/concordance.json', '/data/curated.js', '/data/advisor.js', '/data/paths.js', '/curated.json']
         .map((u) => c.add(u).catch(() => null)));
     });
     await page.setOfflineMode(true);
     let offlineOk = false;
+    let privacyOffline = false;
     try {
       await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
       offlineOk = await page.evaluate(() => !!document.getElementById('today-page') && /Red Letter/i.test(document.body.innerText) && !!(window.RLA_CONCORDANCE && window.RLA_CONCORDANCE.needs && window.RLA_CONCORDANCE.needs.length));
+      await page.goto(BASE + '/privacy', { waitUntil: 'domcontentloaded', timeout: 15000 });
+      privacyOffline = await page.evaluate(() => /What stays/.test(document.body.innerText));
     } finally {
       await page.setOfflineMode(false);
     }
     assert(offlineOk, 'room did not open offline with the concordance');
-    await page.reload({ waitUntil: 'networkidle0' });
+    assert(privacyOffline, '/privacy fell back to the room offline');
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
   });
 
   await check('privacy is one tap from Settings', async () => {

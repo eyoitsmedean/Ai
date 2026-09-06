@@ -1,4 +1,4 @@
-const CACHE = 'rla-prod-v3';
+const CACHE = 'rla-prod-v4';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -69,9 +69,17 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() =>
-          caches.match(e.request).then((cached) => cached || caches.match('/index.html') || caches.match('/'))
-        )
+        .catch(async () => {
+          const cached = await caches.match(e.request);
+          if (cached) return cached;
+          // Clean routes map to their precached pages; everything else opens the room.
+          const page = { '/privacy': '/privacy.html', '/welcome': '/welcome.html' }[url.pathname];
+          if (page) {
+            const known = await caches.match(page);
+            if (known) return known;
+          }
+          return (await caches.match('/index.html')) || caches.match('/');
+        })
     );
     return;
   }

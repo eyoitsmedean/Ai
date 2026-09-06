@@ -325,9 +325,21 @@ textarea { font-family: var(--body); }
   letter-spacing: .04em;
   transition: transform .2s var(--ease), opacity .2s;
 }
-.tp-open:disabled { opacity: .38; cursor: not-allowed; }
+.tp-open:disabled { opacity: .38; cursor: not-allowed; pointer-events: none; }
 .tp-open:not(:disabled):hover { transform: translateY(-1px); }
 .tp-note { margin-top: 16px; font-size: 12px; color: var(--ink-4); line-height: 1.5; }
+.tp-hint {
+  margin: 10px 0 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--crimson);
+  line-height: 1.5;
+  animation: rise .3s var(--ease);
+}
+.tp-hint[hidden] { display: none; }
+.tp-trust.nudge { border-left: 2px solid var(--crimson); padding-left: 10px; margin-left: -12px; }
+.tp-trust.nudge input { outline: 2px solid var(--crimson); outline-offset: 2px; }
 .tp-need { display: none; margin-top: 8px; }
 .tp-need.on { display: block; animation: rise .4s var(--ease); }
 .tp-needs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 8px 0 18px; }
@@ -1583,12 +1595,13 @@ html.sitting .sit-sheet {
       <div class="tp-point"><span class="tp-num">02</span><span>Encouragement for the life you are in.</span></div>
       <div class="tp-point"><span class="tp-num">03</span><span>A quiet advisor — Matthew to John only.</span></div>
     </div>
-    <label class="tp-trust">
-      <input type="checkbox" id="ob-ack" onchange="document.getElementById('ob-open').disabled = !this.checked" />
+    <label class="tp-trust" id="ob-trust">
+      <input type="checkbox" id="ob-ack" aria-describedby="ob-hint" onchange="ackTrust(this.checked)" />
       <span>This is not a person, and it is not therapy, medical care, or pastoral counseling. If you are in crisis, call or text <a href="tel:988">988</a> in the U.S., or find a local helpline at <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</span>
     </label>
-    <div id="ob-ack-block">
-      <button class="tp-open" id="ob-open" disabled onclick="showNeedStep()">Turn the page</button>
+    <div id="ob-ack-block" onclick="nudgeTrust(event)">
+      <button class="tp-open" id="ob-open" disabled aria-describedby="ob-hint" onclick="showNeedStep()">Turn the page</button>
+      <p class="tp-hint" id="ob-hint" hidden role="status">First, the line above. Tick it and the page will turn.</p>
       <p class="tp-note">Red letters mark the direct speech of Jesus in many printed Bibles.</p>
     </div>
     <div class="tp-need" id="ob-need">
@@ -2284,6 +2297,29 @@ function setWatch() {
   document.documentElement.dataset.watch = watch;
 }
 
+/* The title page waits on the trust line. A disabled button with no cue reads
+   as "stuck" to a first-time guest, so a tap on it names the missing step. */
+function ackTrust(checked) {
+  const open = document.getElementById('ob-open');
+  const hint = document.getElementById('ob-hint');
+  const trust = document.getElementById('ob-trust');
+  if (open) open.disabled = !checked;
+  if (checked) {
+    if (hint) hint.hidden = true;
+    if (trust) trust.classList.remove('nudge');
+  }
+}
+function nudgeTrust(event) {
+  const open = document.getElementById('ob-open');
+  if (!open || !open.disabled) return;
+  if (event && event.target && event.target.closest && event.target.closest('.tp-note')) return;
+  const hint = document.getElementById('ob-hint');
+  const trust = document.getElementById('ob-trust');
+  const box = document.getElementById('ob-ack');
+  if (hint) hint.hidden = false;
+  if (trust) trust.classList.add('nudge');
+  if (box) setTimeout(() => box.focus({ preventScroll: false }), 50);
+}
 function showNeedStep() {
   if (!document.getElementById('ob-ack').checked) return;
   document.getElementById('ob-ack-block').style.display = 'none';

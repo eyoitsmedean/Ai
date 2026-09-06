@@ -108,6 +108,24 @@ async function main() {
       await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
     });
 
+    await check(device.name + ' — Settings tells the truth about keeping', async () => {
+      await page.evaluate(() => { if (typeof openSettings === 'function') openSettings(); });
+      await page.waitForSelector('#settings-sheet.on', { timeout: 4000 });
+      const s = await page.evaluate(() => ({
+        ios: typeof isIOS === 'function' && isIOS(),
+        note: !document.getElementById('storage-note').hidden,
+        noteText: document.getElementById('storage-note').innerText,
+        copy: !!document.getElementById('export-btn'),
+        privacy: document.getElementById('privacy-link').getAttribute('href'),
+        persisted: localStorage.getItem('rla-persist'),
+      }));
+      assert(s.copy && s.privacy === '/privacy', 'Keep a copy or Privacy missing');
+      if (s.ios) assert(s.note && /seven days/.test(s.noteText), 'iPhone in a Safari tab must see the seven-day note');
+      else assert(!s.note, 'Android should not see the Safari note');
+      assert(s.persisted === '1' || s.persisted === '0', 'persist() was not asked after the first kept sit');
+      await page.evaluate(() => { if (typeof closeSettings === 'function') closeSettings(); });
+    });
+
     await check(device.name + ' — no page errors', async () => {
       assert(errors.length === 0, errors.join(' | '));
     });
