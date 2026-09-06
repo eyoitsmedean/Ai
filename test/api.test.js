@@ -1,12 +1,19 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
+
+const SIGNAL_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'rla-signals-')), 'signals.jsonl');
+process.env.RLA_SIGNAL_PATH = SIGNAL_FILE;
+process.env.RLA_ALLOWED_ORIGINS = 'https://shell.example, capacitor://localhost';
 const app = require('../server');
 
 let server;
 let base;
 
-function request(method, path, body) {
+function request(method, path, body, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
     const req = http.request(`${base}${path}`, {
@@ -14,6 +21,7 @@ function request(method, path, body) {
       headers: {
         'Content-Type': 'application/json',
         ...(payload ? { 'Content-Length': Buffer.byteLength(payload) } : {}),
+        ...extraHeaders,
       },
     }, (res) => {
       const chunks = [];
@@ -84,16 +92,44 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
     assert.equal(res.headers['x-accel-buffering'], 'no');
-    const letter = res.raw
+    const joinStream = (raw) => raw
       .split('\n')
       .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
       .map((line) => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    const letter = joinStream(res.raw);
+    // Without a model the letter is still written for *this* question: the Fear room, not a fixed page.
+    assert.match(letter, /^Fear is shrinking the future/);
+    assert.match(letter, /\*\*Luke 12:32\*\*\n“Fear not, little flock/);
     assert.match(res.raw, /\[DONE\]/);
+
+    const grief = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'my mother died last month' }],
+    });
+    const griefLetter = joinStream(grief.raw);
+    assert.match(griefLetter, /Blessed are they that mourn/);
+    assert.doesNotMatch(griefLetter, /Fear not, little flock/);
+
+    // A crisis line: the human door first, a blank line, then company — never a scope disclaimer.
+    const crisis = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'I want to die' }] });
+    const crisisLetter = joinStream(crisis.raw);
+    assert.match(crisisLetter, /^If you are in danger[^]*call or text 988[^]*findahelpline\.com[^]*not emergency care\.\n\nWhile you reach a person who can help/);
+    assert.ok(crisisLetter.indexOf('988') < crisisLetter.indexOf('**'), 'help before any verse');
+    assert.doesNotMatch(crisisLetter, /cannot answer that as it is asked/);
+  });
+
+  it('answers cross-origin only for origins named in RLA_ALLOWED_ORIGINS', async () => {
+    const shell = await request('OPTIONS', '/api/chat', null, { Origin: 'capacitor://localhost', 'Access-Control-Request-Method': 'POST' });
+    assert.equal(shell.status, 204);
+    assert.equal(shell.headers['access-control-allow-origin'], 'capacitor://localhost');
+    const pages = await request('GET', '/api/health', null, { Origin: 'https://shell.example' });
+    assert.equal(pages.headers['access-control-allow-origin'], 'https://shell.example');
+    const stranger = await request('GET', '/api/health', null, { Origin: 'https://evil.example' });
+    assert.equal(stranger.headers['access-control-allow-origin'], undefined);
+    const sameOrigin = await request('GET', '/api/health');
+    assert.equal(sameOrigin.headers['access-control-allow-origin'], undefined);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {
@@ -122,5 +158,76 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
+  });
+});
+
+function dayAgo(n) {
+  return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+}
+
+describe('the ledger (/api/signal)', () => {
+  it('keeps plain day totals and answers the four launch questions', async () => {
+    const first = await request('POST', '/api/signal', {
+      v: 1,
+      rows: [
+        { day: dayAgo(3), open: 1, lectio: 1, sevenStart: 1, newOpen: 1, day1Lectio: 1 },
+        { day: dayAgo(2), open: 1, blessing: 1 },
+        { day: dayAgo(1), open: 1, advisor: 2 },
+      ],
+    });
+    assert.equal(first.status, 200, first.raw);
+    assert.equal(JSON.parse(first.raw).kept, 3);
+
+    const second = await request('POST', '/api/signal', {
+      v: 1,
+      rows: [{ day: dayAgo(2), open: 1, newOpen: 1 }],
+    });
+    assert.equal(second.status, 200);
+
+    const summary = JSON.parse((await request('GET', '/api/signal/summary?days=30')).raw);
+    assert.equal(summary.deviceDays, 4);
+    assert.equal(summary.totals.newOpen, 2);
+    assert.equal(summary.launch.day1LectioPct.value, 50);
+    assert.equal(summary.launch.day1LectioPct.target, 40);
+    assert.equal(summary.launch.sevenDonePct.value, 0);
+    assert.equal(summary.launch.blessingPct.value, 25);
+    assert.equal(summary.launch.advisorPct.value, 50);
+    assert.match(summary.launch.blessingPct.of, /no id is sent/);
+
+    const stored = fs.readFileSync(SIGNAL_FILE, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    assert.equal(stored.length, 4);
+    for (const row of stored) {
+      assert.deepEqual(
+        Object.keys(row).filter((k) => !['day', 'receivedAt', 'open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone', 'newOpen', 'day1Lectio'].includes(k)),
+        [],
+        'a stored row carries nothing but day totals',
+      );
+    }
+  });
+
+  it('refuses anything that is not a completed day of small integer totals', async () => {
+    const cases = [
+      { v: 1, rows: [{ day: dayAgo(0), open: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1, email: 'x@y.z' }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1.5 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 999 }] },
+      { v: 1, rows: [{ day: dayAgo(1), day1Lectio: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(1), open: 1 }, { day: dayAgo(1), open: 1 }] },
+      { v: 1, rows: [{ day: dayAgo(90), open: 1 }] },
+      { v: 1, rows: [] },
+      { v: 2, rows: [{ day: dayAgo(1), open: 1 }] },
+      { rows: 'nope' },
+    ];
+    for (const body of cases) {
+      const res = await request('POST', '/api/signal', body);
+      assert.equal(res.status, 400, JSON.stringify(body));
+    }
+  });
+
+  it('caps the summary window and never caches it', async () => {
+    const res = await request('GET', '/api/signal/summary?days=9999');
+    assert.equal(res.status, 200);
+    assert.equal(JSON.parse(res.raw).days, 365);
+    assert.equal(res.headers['cache-control'], 'no-store');
   });
 });

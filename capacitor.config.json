@@ -1,0 +1,14 @@
+{
+  "appId": "org.redletter.room",
+  "appName": "Red Letter",
+  "webDir": "dist-shell",
+  "backgroundColor": "#F4EFE4",
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#F4EFE4"
+  },
+  "android": {
+    "backgroundColor": "#F4EFE4",
+    "allowMixedContent": false
+  }
+}

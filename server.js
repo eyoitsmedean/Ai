@@ -4,6 +4,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { composeLetter, letterPassesFloor } = require('./lib/counsel');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -14,6 +15,22 @@ const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
+
+/* Other origins (GitHub Pages, a native shell's capacitor://localhost) may call /api only when named here.
+   Unset means same-origin only, which is how the room runs from server.js. */
+const ALLOWED_ORIGINS = String(process.env.RLA_ALLOWED_ORIGINS || '')
+  .split(',').map((s) => s.trim()).filter(Boolean);
+app.use('/api', (req, res, next) => {
+  const origin = req.get('origin');
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    if (req.method === 'OPTIONS') return res.status(204).end();
+  }
+  next();
+});
 
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -208,6 +225,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     anthropic: Boolean(client),
+    model: client ? MODEL : null,
     themes: themeNames().length,
   });
 });
@@ -294,19 +312,8 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
+/* Written for this question from the curated rooms when the model is absent or fails; never a fixed letter. */
+const fallbackLetter = composeLetter;
 
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
@@ -349,8 +356,12 @@ app.post('/api/chat', async (req, res) => {
 
   const crisis = looksLikeCrisis(last.content);
   const finish = (body) => {
-    const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    let verified = verifyAndSubstitute(body);
+    if (!letterPassesFloor(verified)) {
+      // The model cited another author, or nothing of His survived verification: the room writes the letter.
+      verified = verifyAndSubstitute(fallbackLetter(last.content));
+    }
+    streamText(crisis ? `${CRISIS_NOTICE}\n${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
@@ -362,7 +373,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(fallbackLetter(last.content));
   }
 
   try {
@@ -398,7 +409,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(fallbackLetter(last.content));
   }
 });
 
@@ -419,6 +430,107 @@ app.post('/api/waitlist', (req, res) => {
     fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
   }
   res.json({ ok: true });
+});
+
+/* The ledger, shared by choice. A device posts completed days as plain totals, each day once, with no
+   identifier; the server appends them and can answer LAUNCH.md's four questions in aggregate.
+   Because there is no id, "active" is counted in device-days, not unique devices, and the summary says so. */
+const SIGNAL_PATH = process.env.RLA_SIGNAL_PATH || path.join(__dirname, 'data', 'signals.jsonl');
+const SIGNAL_FIELDS = ['open', 'lectio', 'blessing', 'advisor', 'sevenStart', 'sevenDone', 'newOpen', 'day1Lectio'];
+const SIGNAL_MAX_ROWS = 60;
+const SIGNAL_MAX_COUNT = 200;
+
+function isoDay(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function validSignalRows(body) {
+  if (!body || body.v !== 1 || !Array.isArray(body.rows)) return null;
+  if (body.rows.length === 0 || body.rows.length > SIGNAL_MAX_ROWS) return null;
+  const today = isoDay(new Date());
+  const floor = isoDay(new Date(Date.now() - (SIGNAL_MAX_ROWS + 1) * 86400000));
+  const seen = new Set();
+  const rows = [];
+  for (const raw of body.rows) {
+    if (!raw || typeof raw !== 'object') return null;
+    if (typeof raw.day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(raw.day)) return null;
+    if (raw.day >= today || raw.day < floor || seen.has(raw.day)) return null;
+    seen.add(raw.day);
+    const row = { day: raw.day };
+    for (const [k, v] of Object.entries(raw)) {
+      if (k === 'day') continue;
+      if (!SIGNAL_FIELDS.includes(k)) return null;
+      if (!Number.isInteger(v) || v < 1 || v > SIGNAL_MAX_COUNT) return null;
+      row[k] = v;
+    }
+    if ((row.newOpen || 0) > 1 || (row.day1Lectio || 0) > 1) return null;
+    if (row.day1Lectio && !row.newOpen) return null;
+    rows.push(row);
+  }
+  return rows;
+}
+
+function readSignalRows() {
+  let text = '';
+  try { text = fs.readFileSync(SIGNAL_PATH, 'utf8'); } catch (_) { return []; }
+  const rows = [];
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    try { rows.push(JSON.parse(line)); } catch (_) {}
+  }
+  return rows;
+}
+
+function summarizeSignals(rows, days) {
+  const since = isoDay(new Date(Date.now() - days * 86400000));
+  const totals = {};
+  SIGNAL_FIELDS.forEach((k) => { totals[k] = 0; });
+  let deviceDays = 0;
+  for (const r of rows) {
+    if (r.day < since) continue;
+    SIGNAL_FIELDS.forEach((k) => { totals[k] += r[k] || 0; });
+    if (r.open) deviceDays += 1;
+  }
+  const rate = (num, den) => (den ? Math.round((num / den) * 1000) / 10 : null);
+  return {
+    since,
+    days,
+    deviceDays,
+    totals,
+    launch: {
+      day1LectioPct: { value: rate(totals.day1Lectio, totals.newOpen), of: 'new opens', target: 40 },
+      sevenDonePct: { value: rate(totals.sevenDone, totals.sevenStart), of: 'Seven starters', target: 18 },
+      blessingPct: { value: rate(totals.blessing, deviceDays), of: 'active device-days (no id is sent, so not unique devices)', target: 8 },
+      advisorPct: { value: rate(totals.advisor, deviceDays), of: 'active device-days (no id is sent, so not unique devices)', target: 25 },
+    },
+  };
+}
+
+app.post('/api/signal', (req, res) => {
+  const rows = validSignalRows(req.body);
+  if (!rows) return res.status(400).json({ error: 'Day totals only.' });
+  // Shared addresses (a household, a parish) send from one IP; a device itself sends once a day.
+  if (!rateLimit(`signal:${clientKey(req)}`, 30, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const receivedAt = new Date().toISOString();
+  const lines = rows.map((r) => JSON.stringify({ ...r, receivedAt })).join('\n') + '\n';
+  try {
+    fs.appendFileSync(SIGNAL_PATH, lines);
+  } catch (err) {
+    console.error('signal write failed:', err.message);
+    return res.status(500).json({ error: 'Could not keep the count.' });
+  }
+  res.json({ ok: true, kept: rows.length });
+});
+
+app.get('/api/signal/summary', (req, res) => {
+  if (!rateLimit(`signal-summary:${clientKey(req)}`, 60, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const days = Math.min(365, Math.max(1, Number(req.query.days) || 30));
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(summarizeSignals(readSignalRows(), days));
 });
 
 app.get('/welcome', (req, res) => {
