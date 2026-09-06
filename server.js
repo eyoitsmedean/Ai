@@ -715,7 +715,7 @@ const SITUATIONS = [
     // The love of money, not the lack of it: shortage is a worry question and
     // belongs to the Anxiety passages.
     name: 'money',
-    re: /\b((love|obsessed with|think about|chasing|chase|worship|idolize|hoard|hoarding) (of )?(money|wealth|riches|possessions|stuff|things)|money (too much|is all i|has become|controls|owns) |i (love|want|need) (more )?money|get(ting)? rich|be(come|coming)? rich|wealth(y|ier)?|greed(y)?|possessions|mammon|materialis|tithe|tithing|how much (should|do) i give|generous|generosity|giving (money|to the poor|to church))\b/i,
+    re: /\b((love|obsessed with|think about|chasing|chase|worship|idolize|hoard|hoarding) (of )?(money|wealth|riches|possessions|stuff|things)|money (too much|is all i|has become|controls|owns) |i (love|want|need) (more )?money|(jesus|he|christ) (say|said|teach|taught|think|thought)s? about (money|wealth|riches|possessions|the rich|giving|tithing)|about money|money[^.?!]{0,40}\btoo much|get(ting)? rich|be(come|coming)? rich|wealth(y|ier)?|greed(y)?|possessions|mammon|materialis|tithe|tithing|how much (should|do) i give|generous|generosity|giving (money|to the poor|to church))\b/i,
     passages: [
       ['Matthew 6:24', 'He does not call money evil; he calls it a rival master. The question is only which one you answer to.'],
       ['Matthew 6:19–21', 'Where you keep your treasure is where your heart will follow — his diagnosis runs the other way from ours.'],
