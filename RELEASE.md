@@ -31,7 +31,7 @@ An independent review on 2026-09-06 (a Breaker agent that built nothing) found t
 | Idiom does not trigger the notice ("kill for a coffee", "deadline is killing me") | verified | eval edge-05; `test/eval.test.js` |
 | The product says it is not a person / therapy / emergency care on the title page and in every crisis letter | verified | title page copy; `CRISIS_NOTICE` |
 | 988 and findahelpline are live services | verified 2026-09-06 | fetched 988lifeline.org (call/text/chat, 24/7) and findahelpline.com (175+ countries) |
-| Model-written letters (with an Anthropic key) pass the same gates | **unverified** | run `node scripts/eval.js --url http://<host>` against a server with `ANTHROPIC_API_KEY`; ~8 minutes at the 10/min rate limit; read `eval/results.md`. The verifier the model path passes through is the one tested above. |
+| Model-written letters (with an Anthropic key) pass the same gates | **unverified** | start the server with `ANTHROPIC_API_KEY` and `CHAT_PER_MINUTE=120`, then `EVAL_PACE_MS=600 node scripts/eval.js --url http://127.0.0.1:3000` — about a minute; read `eval/results.md`. The verifier the model path passes through is the one tested above. |
 | Live server over HTTP/SSE, no key | see PR | `node scripts/eval.js --url http://127.0.0.1:3000` — result recorded in the PR description |
 
 ## Room

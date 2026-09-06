@@ -4,6 +4,7 @@
  *
  *   node scripts/eval.js                 # in-process, retrieval advisor (no model key needed)
  *   node scripts/eval.js --url http://127.0.0.1:3000   # against a live server (model path if it has a key)
+ *     — start that server with CHAT_PER_MINUTE=120 and run with EVAL_PACE_MS=600 to finish in about a minute
  *   node scripts/eval.js --client        # the browser composer used on static hosting (data/advisor.js)
  *   node scripts/eval.js --no-fail       # write results but exit 0 even on gate failures
  *
@@ -29,6 +30,8 @@ const { themesForSaying, sayingTouchesCitation } = require('../lib/themes');
 
 const ROOT = path.join(__dirname, '..');
 const GOSPELS = new Set(['Matthew', 'Mark', 'Luke', 'John']);
+// Pause between live requests; the server allows CHAT_PER_MINUTE letters a minute (default 10). Set EVAL_PACE_MS=600 when the server runs with CHAT_PER_MINUTE=120.
+const PACE_MS = Math.max(0, Number(process.env.EVAL_PACE_MS) || 6500);
 const CITE_RE = /^\*\*([^*\n]+)\*\*\s*\n[“"]([^”"]+)[”"]/gm;
 const BOLD_RE = /^\*\*[^*\n]+\*\*/gm;
 const QUOTE_RE = /[“"]([^”"\n]{25,})[”"]/g;
@@ -207,7 +210,7 @@ async function runEval({ url = '', client = false } = {}) {
   for (const q of questions) {
     const letter = url ? await letterFromServer(url, q.input) : (client ? clientComposer()(q.input) : retrievalLetter(q.input));
     results.push(judge(q, letter));
-    if (url) await new Promise((r) => setTimeout(r, 6500)); // stay under the 10/min chat rate limit
+    if (url) await new Promise((r) => setTimeout(r, PACE_MS));
   }
   return { mode, results };
 }

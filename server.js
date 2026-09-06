@@ -18,6 +18,8 @@ const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+// Letters per minute per client. Raise it only on a box you are evaluating (npm run eval -- --url).
+const CHAT_PER_MINUTE = Math.max(1, Number(process.env.CHAT_PER_MINUTE) || 10);
 const THEME_SET = new Set(themeNames());
 
 if (process.env.TRUST_PROXY === '1' || process.env.TRUST_PROXY === 'true') {
@@ -384,7 +386,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_PER_MINUTE, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
