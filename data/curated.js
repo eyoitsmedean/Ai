@@ -434,9 +434,9 @@ window.RLA_CURATED = {
         "context": "Jesus meets grief with resurrection hope without erasing the pain of the present."
       },
       {
-        "verse": "John 14:1–3",
-        "quote": "Let not your heart be troubled: ye believe in God, believe also in me. In my Father's house are many mansions: if it were not so, I would have told you. I go to prepare a place for you.",
-        "context": "He speaks preparation and place when hearts are troubled by loss."
+        "verse": "John 16:22",
+        "quote": "And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.",
+        "context": "Sorrow is real, and so is the joy no one can confiscate when he is near again."
       }
     ],
     "practice": "Sit in quiet for three minutes. Speak the name of what you have lost. Then read Matthew 5:4 aloud as a blessing over your mourning.",
@@ -447,9 +447,9 @@ window.RLA_CURATED = {
     "opening": "Forgiveness is one of the hardest teachings Jesus gave — and one of the freest. He knows the cost, and still invites you into it.",
     "passages": [
       {
-        "verse": "Matthew 6:14–15",
-        "quote": "For if ye forgive men their trespasses, your heavenly Father will also forgive you: But if ye forgive not men their trespasses, neither will your Father forgive your trespasses.",
-        "context": "Forgiveness received and forgiveness given are linked in Jesus' teaching."
+        "verse": "Luke 6:36",
+        "quote": "Be ye therefore merciful, as your Father also is merciful.",
+        "context": "Mercy is not a personality trait. It is family resemblance."
       },
       {
         "verse": "Matthew 18:21–22",
@@ -567,14 +567,14 @@ window.RLA_CURATED = {
         "context": "Reconciliation is placed ahead of religious performance."
       },
       {
-        "verse": "Matthew 5:44",
-        "quote": "Love your enemies, bless them that curse you, do good to them that hate you, and pray for them which despitefully use you, and persecute you.",
-        "context": "The hardest person in the room is still inside the command to love."
-      },
-      {
         "verse": "Matthew 7:12",
         "quote": "Therefore all things whatsoever ye would that men should do to you, do ye even so to them: for this is the law and the prophets.",
         "context": "The next sentence you speak can be the one you wish to hear."
+      },
+      {
+        "verse": "John 15:13",
+        "quote": "Greater love hath no man than this, that a man lay down his life for his friends.",
+        "context": "The measure of love is not convenience. It is what you are willing to lay down."
       }
     ],
     "practice": "Name one relationship that is strained. Ask: what would ‘go, be reconciled’ look like as one small step today — a message, a pause, a prayer?",
