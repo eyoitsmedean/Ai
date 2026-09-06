@@ -10,9 +10,9 @@ One red letter a day. Grace over streaks. Installable on iPhone and Android as a
 | --- | --- | --- |
 | Every quote is Jesus' words, verbatim WEB | `data/red-letters.js` is the curated corpus; every passage and every inline client quote is machine-checked against the WEB source text | `npm run verify:corpus` (130/130 verbatim as of this commit: 102 corpus passages + 28 inline client quotes) |
 | The Advisor never invents scripture | Model output is passed through `groundAdvisorText()`: each `**Book c:v**` citation is looked up in the corpus, then bible-api (WEB); the quoted line is replaced with the verified text and flagged ✓ WEB or "unverified" | Ask the Advisor anything and inspect the citation badges |
-| Only Jesus's words | A citation outside Matthew/Mark/Luke/John is never marked verified — it is labelled "not Jesus's words" even if the text exists | Eval question e04 (prompt injection asking for Romans) |
+| Only Jesus's words | A citation outside Matthew/Mark/Luke/John is never marked verified — it is labelled "not Jesus's words". A Gospel verse outside the curated corpus shows exact WEB text but is labelled "speaker unverified". Every ✓ WEB badge opens the verse on ebible.org. | Eval question e04 (prompt injection asking for Romans); tap any badge |
 | Works without AI | With no `ANTHROPIC_API_KEY`, or when the model errors before answering, the Advisor replies from the verified corpus by theme | Start without a key, or with an invalid one |
-| Crisis-safe | `classifyIntent()` runs before the model **and before the paywall**: suicide/self-harm → 988 + IASP; abuse → National DV Hotline + 911; neither consumes a free credit | Eval categories `crisis` and `abuse` |
+| Crisis-safe | `classifyIntent()` runs before the model **and before the paywall** (and outside the rate limiter): suicide/self-harm → 988 + IASP (Spanish first for Spanish input); abuse → National DV Hotline + 911; neither consumes a free credit. Passive ideation keeps scripture and appends a 988 line. Hotline numbers render as tappable `tel:` pills. | Eval categories `crisis`, `abuse`, `passive`; `npm run ui-check` |
 | Honest about scope | Code, trivia, finance, dosing, homework, weather → a warm redirect with no verse forced on it; hostile input → non-defensive reply, 1–2 passages, no pressure | Eval categories `offscope` and `hostile` |
 
 ## Run locally
@@ -73,7 +73,8 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 | Command | What it checks |
 | --- | --- |
 | `npm test` (`scripts/smoke.js`) | 17 live checks against a running server: health, corpus APIs, grounded chat SSE, security headers, manifest installability, icons/splash, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
-| `npm run eval` (`scripts/eval.js`) | 53-question evaluation set — real life questions, crisis, abuse, off-scope, hostile, edge — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 53/53 in corpus mode. |
+| `npm run eval` (`scripts/eval.js`) | 91-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse, passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 91/91 in corpus mode. |
+| `npm run ui-check` (`scripts/ui-check.js`) | Headless Chrome at a phone viewport: the crisis card renders with tappable 988/911/hotline links ≥44 px, ✓ WEB badges link to the WEB verse on ebible.org, off-scope replies carry no verse, no page errors. Needs `puppeteer` (CI installs it). |
 | `npm run verify:corpus` | Every shipped quote vs. WEB source text (network, ~5 min at bible-api's 15 req/30 s limit). `--fix` rewrites drifted quotes to the exact WEB wording. |
 | `npm run icons` | Regenerates all icon and splash assets from `public/icon-1024.png` (needs Python 3 + Pillow). |
 

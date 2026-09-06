@@ -23,7 +23,10 @@ Audience: someone carrying a real question about their life, often at a low mome
 | D8 | Safety handoffs (suicide/self-harm, abuse) are **deterministic** — pattern-gated on the server before any model call and before the paywall. They never consume a free credit and can never be blocked by a 402. | settled | 2026-09-06 |
 | D9 | Off-scope requests (code, trivia, finance, medical dosing, homework, weather, jokes) get a warm redirect with **no verse forced onto them**. Hostile input gets a non-defensive reply with 1–2 passages and "no pressure". | settled | 2026-09-06 |
 | D10 | Corpus mode (no AI key, or model failure) is a first-class path, not an error: theme opener → 3 hand-curated lead passages with a true one-line "why" each → gentle close. | settled | 2026-09-06 |
-| D11 | The evaluation set (`eval/questions.json`, 53 questions) runs in CI in strict mode; a regression in any category blocks the merge. | settled | 2026-09-06 |
+| D11 | The evaluation set (`eval/questions.json`, 91 questions) and the rendered UI check (`scripts/ui-check.js`) run in CI; a regression in any category blocks the merge. | settled | 2026-09-06 |
+| D13 | Passive ideation ("nobody would miss me") is not the crisis card: scripture stays, a 988 line is appended. Explicit intent, methods, farewells and Spanish equivalents are the crisis card. | settled | 2026-09-06 |
+| D14 | A Gospel verse that is not in the curated corpus is shown as exact WEB text but labelled "speaker unverified" — only the corpus vouches for red letters. The daily word never shows an unverified passage (corpus substitution). | settled | 2026-09-06 |
+| D15 | Every ✓ WEB badge links to the public WEB chapter page with a verse anchor (`https://ebible.org/eng-web/<MAT|MRK|LUK|JHN><cc>.htm#V<v>`), so "citations you can check" is one tap. | settled | 2026-09-06 |
 | D12 | Grace over streaks: no streak counters, no guilt mechanics. Presence is shown, never scored. | settled (earlier session) | 2026-09-01 |
 
 ## Mobile stack — two options considered (D6)
@@ -51,6 +54,8 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 | IASP suicide resources page is live | VERIFIED (HTTP 200) | https://www.iasp.info/suicidalthoughts/ | 2026-09-06 | Replace international link |
 | HotPeachPages lists abuse agencies by country | VERIFIED | https://www.hotpeachpages.net | 2026-09-06 | Replace international DV link |
 | Web Push works for Home Screen web apps on iOS/iPadOS 16.4+; no Developer Program membership required | VERIFIED | https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/ | 2026-09-06 | Reminder feature copy on iOS would be wrong |
+| ebible.org serves WEB chapters at `/eng-web/MAT06.htm` with `id="V25"` verse anchors (MAT, JHN, LUK fetched 200; MRK timed out twice — USFM code, KNOWLEDGE) | VERIFIED | https://ebible.org/eng-web/MAT06.htm, JHN14, LUK12 | 2026-09-06 | Badge links would 404 |
+| 988 Lifeline offers text and chat in Spanish | VERIFIED | https://988lifeline.org/ (banner) | 2026-09-06 | Spanish crisis copy would need another resource |
 | Capacitor drops into an existing web app given package.json, a web assets dir, and index.html; `npx cap add ios/android`, `npx cap sync` | VERIFIED | https://capacitorjs.com/docs/getting-started (v8) | 2026-09-06 | Option B effort estimate changes |
 | Fonts Fraunces, Source Serif 4, Figtree are OFL-1.1 | VERIFIED | GitHub API `license.spdx_id` for undercasetype/Fraunces, adobe-fonts/source-serif, erikdkennedy/figtree | 2026-09-06 | Font swap needed for commercial use |
 | `web-push` is MPL-2.0; `express` is MIT | VERIFIED | `npm view <pkg> license` | 2026-09-06 | Dependency swap |
@@ -84,8 +89,17 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 - Parallel file edits raced during 2026-09-06 and silently dropped a block; the build was caught by `node -e "require(...)"` and re-applied. Run the syntax check after every edit batch.
 - bible-api.com rate limit (15/30 s) makes `verify:corpus` slow (~5 min) and CI-advisory only.
 
+## STATE (for the next session)
+
+- Mission lock: unchanged (above).
+- Decisions made this session: D6–D15.
+- Work done: scope guard; intent gate (crisis/abuse/passive/off-scope/hostile) before paywall; corpus-mode tone (openers, curated leads); eval 91/91; UI check 18/18; smoke 17/17; verify:corpus 130/130; Breaker S1/S2 repaired; README/RELEASE/CLAUDE.
+- Next step: Dean runs RELEASE.md §C on a phone against the deployed URL, then `npm run eval` against a keyed server for a model-mode results file.
+- Open risks: model-mode behaviour unverified here (no key); `x-client-id` quota bypass; bible-api rate limit makes verify:corpus slow.
+- RESUME_FROM: read RELEASE.md §C results from Dean; if model-mode eval shows misses, fix prompts in `server.js` (ADVISOR_SYSTEM) and re-run `npm run eval`.
+
 ## Log
 
 - 2026-09-01 — Encounter (cinematic daily open) and Living Garden shipped. Grace over streaks (D12).
 - 2026-09-02..05 — Production hardening: PWA manifest/icons/splash, SW offline, Web Push, threads, voice input, Lighthouse fixes, corpus expanded 55 → 102 and machine-verified (D5), README, CI.
-- 2026-09-06 — ATELIER pass: Gospel-only scope guard (D7), deterministic safety/off-scope/hostile gate before paywall (D8, D9), corpus-mode tone (D10), evaluation set 53/53 in corpus mode (D11), this file, RELEASE.md.
+- 2026-09-06 — ATELIER pass: Gospel-only scope guard (D7), deterministic safety/off-scope/hostile gate before paywall (D8, D9), corpus-mode tone (D10), evaluation set (D11), this file, RELEASE.md. Independent Breaker found 5 S1 / 5 S2 / 5 S3 (RELEASE.md §F); all S1/S2 repaired and retested; eval grew to 91/91; UI check added; D13–D15 recorded. ELEVATE: ✓ WEB badges now open the exact WEB verse (D15).

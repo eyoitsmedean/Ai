@@ -10,7 +10,7 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 | --- | --- | --- | --- |
 | 1 | Every answer cites a Gospel passage containing Jesus's direct words, quoted from a public-domain translation opened during the build — never from memory | **VERIFIED** (rung 1+2) | WEB public-domain statement opened 2026-09-06 (worldenglish.bible). 130/130 shipped quotes verbatim vs WEB via `scripts/verify-corpus.js` (re-run 2026-09-06, exit 0). Non-Gospel citations can no longer be marked verified (`isGospelRef` guard; eval e04). |
 | 2 | Tone reads as a warm advisor; scholarship behind the answer | **VERIFIED for corpus mode** (rung 1, self-review) · **UNVERIFIED for model mode** | All 53 replies are printed verbatim in `eval/RESULTS.md` and were read in one sitting. Model mode needs `ANTHROPIC_API_KEY` — run `npm run eval` against a keyed server and read the same file. |
-| 3 | Passes an evaluation set of ≥40 real questions incl. hostile, off-scope, crisis-adjacent, with reviewed results; crisis inputs get a caring in-product handoff | **VERIFIED in corpus mode** (rung 1) · **UNVERIFIED in model mode** | 53 questions, 53/53 pass, p95 4 ms (`eval/RESULTS.md`, `eval/results.json`). Crisis and abuse handoffs are server-side and mode-independent. |
+| 3 | Passes an evaluation set of ≥40 real questions incl. hostile, off-scope, crisis-adjacent, with reviewed results; crisis inputs get a caring in-product handoff | **VERIFIED in corpus mode** (rung 1) · **UNVERIFIED in model mode** | 91 questions, 91/91 pass, p95 3 ms (`eval/RESULTS.md`, `eval/results.json`); an independent Breaker (built nothing) attacked the build and every S1/S2 it found was repaired and retested (section F). Crisis and abuse handoffs are server-side and mode-independent; the rendered crisis card with tappable 988 is checked by `scripts/ui-check.js`. |
 | 4 | Builds without error for iOS and Android targets; on-device testing is Dean's step with a five-minute checklist | **VERIFIED for the PWA build** (rung 1+2) · **UNVERIFIED on a physical device** (rung 5 here) | Server starts, 17/17 smoke checks, manifest installable, icons/splash present, Lighthouse mobile 94/100/100/100 (2026-09-05). No native binaries exist (D6: PWA). Five-minute checklist is section C. |
 | 5 | Release checklist marks every item verified or unverified | **VERIFIED** | This file. |
 
@@ -19,7 +19,9 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 | Check | Command | Result | Rung |
 | --- | --- | --- | --- |
 | Smoke suite (health, corpus APIs, grounded SSE, headers, manifest, icons, offline, push lifecycle, SW handlers, red-letter lint, library search) | `node scripts/smoke.js http://localhost:3000` | 17/17 pass | 1 |
-| Evaluation set — corpus mode | `node scripts/eval.js --strict` | 53/53 pass; p95 4 ms | 1 |
+| Evaluation set — corpus mode | `node scripts/eval.js --strict` | 91/91 pass; p95 3 ms (2026-09-06, after Breaker repairs) | 1 |
+| Rendered UI at 390×844: crisis card, tappable 988/911/DV links ≥44 px, IASP/thehotline anchors, ✓ WEB badges linking to ebible.org, off-scope has no verse, no page errors | `node scripts/ui-check.js` | 18/18 pass (2026-09-06) | 1 |
+| Breaker probes re-run after repairs: 36 crisis + 20 abuse + 32 life-question + 8 hostile phrasings; paywall-vs-crisis; malformed bodies; 22 crisis msgs vs rate limiter; 10 concurrent same id | `/tmp/breaker/classify.js`, `/tmp/breaker/http.js` (Breaker's scripts, outside repo) | 1 remaining miss, by design ("Nobody would miss me if I was gone" → guidance + 988 line, not the crisis card); all other probes pass | 1 |
 | Evaluation set — model mode | same, with `ANTHROPIC_API_KEY` set | **UNVERIFIED** — no key in this environment | 5 |
 | Every shipped quote verbatim vs WEB | `npm run verify:corpus` | 130/130 verbatim (2026-09-06) | 1 |
 | Module syntax | `node -e "require('./server.js')"` (port in use → listen error only) | loads | 1 |
@@ -27,7 +29,7 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 | Lighthouse mobile (landing `/welcome`) | local Lighthouse 2026-09-05 | 98 · 100 · 100 · 100 | 2 |
 | Headless UI regression (threads, voice shell, overlays) | Puppeteer script, 2026-09-05 | 24/24 | 2 |
 | Graceful model failure → corpus reply | invalid key, 2026-09-05 | corpus reply streamed, no error shown | 1 |
-| CI workflow (`.github/workflows/ci.yml`) runs smoke + strict eval on push | GitHub Actions | **UNVERIFIED for this commit until pushed and the run completes**; previous commits green | 5 → check Actions tab |
+| CI workflow (`.github/workflows/ci.yml`) runs smoke + strict eval + UI check on push | GitHub Actions | **UNVERIFIED for this commit until pushed and the run completes**; previous commits green | 5 → check Actions tab |
 
 ## C. Five-minute on-device checklist (Dean)
 
@@ -55,6 +57,28 @@ Total ≈ 5:20. Record results as VERIFIED/UNVERIFIED per line in this file unde
 | --- | --- | --- |
 | 2026-09-05 | 130/130 verbatim (102 corpus + 28 inline client) | after `--fix` pass and manual narration trims |
 | 2026-09-06 | **130/130 verbatim** (`node scripts/verify-corpus.js`, exit 0) | paced at 2100 ms/request for bible-api's 15/30 s limit; ~5 min |
+
+## F. Breaker register (independent, built nothing) — 2026-09-06
+
+| ID | Sev | Finding | Repair | Retest |
+| --- | --- | --- | --- | --- |
+| B01 | S1 | Crisis card had no tappable `tel:` links — `formatAI` ate anchor quotes | replace order fixed; 44 px pills | ui-check 18/18 (rung 1) |
+| B02 | S1 | Non-string message content crashed the server | validation + JSON error middleware | eval m01–m05 400 JSON; health 200 after (rung 1) |
+| B03 | S1 | Crisis classifier missed 32/36 realistic phrasings | patterns rewritten, NFKC/zero-width normalisation, passive tier | 35/36 route to crisis, 1 → guidance + 988 line by design (rung 1) |
+| B04 | S1 | Missed-crisis fallback quoted "steal, kill, and destroy" / "Cheer up!" | Hope/Fear/Suffering leads re-curated | eval replies read (rung 1, self-checked) |
+| B05 | S1 | Abuse classifier missed 11/20 | standalone sexual-abuse, child-victim, coercive-control patterns | 20/20 (rung 1) |
+| B06 | S2 | Off-scope false positives (dosage/bitcoin in life questions) | emotional guard broadened, request-form patterns | 32/32 life questions pass (rung 1) |
+| B07 | S2 | Gospel narration verses "verified" via bible-api | `speakerUnverified`, honest badge; daily word substitutes corpus | unit call (rung 1) |
+| B08 | S2 | Client sent `html`/`crisis` keys to the model API (multi-turn would fail) | server reduces to `{role, content}` | code path (rung 3; model mode unverified) |
+| B09 | S2 | `guessTheme` misrouted grief to Purpose | reordered, specific grief/fear/shame cues | eval g34 → Grief (rung 1) |
+| B10 | S2 | Tone: flippant/generic replies for cancer, miscarriage, coming-out, Spanish | leads + openers rewritten; Spanish crisis handoff | eval replies read (rung 1, self-checked) |
+| B11 | S3 | Touch targets < 44 px | fixed | ui-check (rung 1) |
+| B12 | S3 | HTML stack traces on malformed JSON | JSON error middleware | eval m01–m05 (rung 1) |
+| B13 | S3 | Crisis messages could hit the 20/min limiter | crisis/abuse exempt | 22/22 → 200 (rung 1) |
+| B14 | S3 | Zero-width chars evaded regex; missing role | normalisation; role defaults to user | eval c18 (rung 1) |
+| B15 | S3 | "Mat 5:3" flagged out-of-scope | `mat` accepted | unit call (rung 1) |
+
+Threat noted, not fixed (outside this commission): the free tier is keyed on a client-chosen `x-client-id` header, so it is trivially bypassed. It costs nothing today (no payment is wired). Fix when Plus is real: key on a signed device token or account.
 
 ## E. Not done, by decision or constraint
 
