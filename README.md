@@ -8,7 +8,7 @@ One red letter a day. Grace over streaks. Installable on iPhone and Android as a
 
 | Promise | Mechanism | How to check it |
 | --- | --- | --- |
-| Every quote is Jesus' words, verbatim WEB | `data/red-letters.js` is the curated corpus; every passage and every inline client quote is machine-checked against the WEB source text | `npm run verify:corpus` (83/83 verbatim as of this commit) |
+| Every quote is Jesus' words, verbatim WEB | `data/red-letters.js` is the curated corpus; every passage and every inline client quote is machine-checked against the WEB source text | `npm run verify:corpus` (130/130 verbatim as of this commit: 102 corpus passages + 28 inline client quotes) |
 | The Advisor never invents scripture | Model output is passed through `groundAdvisorText()`: each `**Book c:v**` citation is looked up in the corpus, then bible-api (WEB); the quoted line is replaced with the verified text and flagged ✓ WEB or "check" | Ask the Advisor anything and inspect the citation badges |
 | Works without AI | With no `ANTHROPIC_API_KEY`, or when the model errors before answering, the Advisor replies from the verified corpus by theme | Start without a key, or with an invalid one |
 | Crisis-safe | `detectCrisis()` short-circuits to 988 / IASP resources before any model call | Type a crisis phrase in the Advisor |
@@ -80,7 +80,7 @@ Last measured with Lighthouse (mobile, throttled): app `/` — Performance 94, A
 
 ```
 server.js               Express: security headers, gzip, rate limits, API, Web Push scheduler
-data/red-letters.js     Curated WEB red-letter corpus (55 passages, 12 themes)
+data/red-letters.js     Curated WEB red-letter corpus (102 passages, 12 themes)
 data/scripture.js       Verification + grounding: corpus → bible-api (WEB) → unverified flag
 public/index.html       The app (single file: styles, markup, and client logic)
 public/sw.js            Service worker: offline shell, update banner, push + notification click
