@@ -84,7 +84,7 @@ async function evaluate(base, live, q) {
     const hit = q.expectAny.find((cite) => allowed.some((s) => sayingTouchesCitation(s, cite)));
     add('retrieval', Boolean(hit), hit ? `has ${hit}` : `expected one of ${q.expectAny.join(', ')}; got ${top}`, 1);
   } else {
-    add('retrieval', true, `allow-list ${allowed.length} sayings`, 1);
+    add('retrieval', true, `no expectation set; allow-list has ${allowed.length} sayings`, 1);
   }
 
   const res = await post(base, '/api/chat', { messages: [{ role: 'user', content: q.text }] });

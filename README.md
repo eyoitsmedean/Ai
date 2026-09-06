@@ -48,7 +48,7 @@ npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 
 ## Evaluation
 
-`eval/questions.json` holds 54 real questions in five groups: everyday struggles, crisis (must get the 988 / findahelpline notice before the letter, and only the fixed comfort verses in `lib/retrieve.js`), near-miss (grief and hyperbole that must **not** get the crisis notice), off-scope, and hostile. `npm run eval` sends each through the real `/api/chat` route and writes `eval/RESULTS.md`.
+`eval/questions.json` holds 61 real questions in five groups: everyday struggles, crisis (must get the 988 / findahelpline notice before the letter, and only the fixed comfort verses in `lib/retrieve.js`), near-miss (grief and hyperbole that must **not** get the crisis notice), off-scope, and hostile. `npm run eval` sends each through the real `/api/chat` route and writes `eval/RESULTS.md`.
 
 Without an API key the deterministic layers are checked: crisis detection and handoff order, retrieval of an expected saying, and verification of every printed verse against the KJV corpus. With a key the live letters are also graded (cited only allowed sayings, two to four passages, no leaked markers) and saved under `eval/letters/` for a human to read. The results file says which mode ran; nothing is reported as passed that did not run. `RATE_LIMIT_OFF=1` is set by the script so 54 requests are not throttled; never set it in production.
 

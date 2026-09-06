@@ -31,6 +31,14 @@ describe('crisis detection', () => {
       'I am so tired of living',
       'I keep thinking about ending it',
       'Sometimes I just want to die',
+      'my life isnt worth living',
+      'I want to sleep and never wake up',
+      'I wish I had never been born',
+      'no one would notice if I was gone',
+      'I want to disappear forever',
+      'I dont deserve to live',
+      'i want to unalive myself',
+      'kms',
     ]) {
       assert.equal(looksLikeCrisis(text), true, `should fire: ${text}`);
     }
@@ -49,6 +57,12 @@ describe('crisis detection', () => {
       'I could just die of embarrassment',
       'I want to live a better life',
       'Is it a sin to be so tired of everything?',
+      'I am dead tired',
+      'this deadline is going to kill me',
+      'we died laughing',
+      'I want to disappear for a weekend',
+      'my grandmother is dying',
+      'I hate my life right now',
     ]) {
       assert.equal(looksLikeCrisis(text), false, `should not fire: ${text}`);
     }

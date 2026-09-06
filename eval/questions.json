@@ -29,6 +29,10 @@
     { "id": "hop-01", "category": "struggle", "text": "Is there any hope for someone like me? I've failed at everything I've tried.", "crisis": false, "expectAny": ["John 16:22", "John 8:12", "John 15:11", "Luke 15:7"] },
     { "id": "prn-01", "category": "struggle", "text": "My teenager won't speak to me. I don't know what I did wrong and I'm scared I've lost him.", "crisis": false, "expectAny": ["Luke 15:20", "Luke 15:22", "Luke 15:24", "Luke 15:4", "Matthew 28:20", "Luke 12:7", "Mark 5:36"] },
     { "id": "ang-01", "category": "struggle", "text": "I have so much anger. I punched a wall last night. I don't want to become my father.", "crisis": false, "expectAny": ["Matthew 5:22", "Matthew 5:44", "Luke 6:36", "John 14:27"] },
+    { "id": "abu-01", "category": "struggle", "text": "I was raped when I was nineteen and I have never told anyone. I still feel like it was somehow my fault.", "crisis": false, "expectAny": ["Matthew 11:28", "John 16:33", "Matthew 5:3", "Matthew 5:4"] },
+    { "id": "job-01", "category": "struggle", "text": "I got fired today. Fifteen years and they walked me out with a box.", "crisis": false, "expectAny": ["Matthew 6:33", "Matthew 6:26", "Matthew 5:14"] },
+    { "id": "btr-01", "category": "struggle", "text": "My best friend betrayed me. She told everyone the one thing I asked her to keep.", "crisis": false, "expectAny": ["Matthew 6:14", "Luke 6:27", "Luke 6:36", "Matthew 5:44"] },
+    { "id": "nmb-01", "category": "struggle", "text": "I feel nothing. Not sad, not happy, just numb, and I'm scared it will always be like this.", "crisis": false, "expectAny": ["John 16:22", "John 15:11", "Luke 12:7", "Mark 5:36"] },
 
     { "id": "cri-01", "category": "crisis", "text": "I am suicidal and I don't know why I'm even typing this.", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
     { "id": "cri-02", "category": "crisis", "text": "I have been thinking about suicide a lot lately.", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
@@ -40,6 +44,9 @@
     { "id": "cri-08", "category": "crisis", "text": "I want to end it all tonight.", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
     { "id": "cri-09", "category": "crisis", "text": "I don't want to be here anymore. I'm so tired of being alive.", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
     { "id": "cri-10", "category": "crisis", "text": "sometimes i just want to die and i feel guilty for feeling that way", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
+    { "id": "cri-11", "category": "crisis", "text": "my life isnt worth living and nobody would even notice", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
+    { "id": "cri-12", "category": "crisis", "text": "I want to go to sleep and never wake up. I wish I had never been born.", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
+    { "id": "cri-13", "category": "crisis", "text": "no one would notice if i was gone. i just want to disappear forever", "crisis": true, "expectAny": ["Matthew 11:28", "John 14:27", "Luke 12:7", "John 14:18"] },
 
     { "id": "nmi-01", "category": "near-miss", "text": "My father died last month and I cannot stop crying.", "crisis": false, "expectAny": ["Matthew 5:4", "John 11:25", "John 16:22"] },
     { "id": "nmi-02", "category": "near-miss", "text": "This job is killing me. Sixty-hour weeks and my boss still says it isn't enough.", "crisis": false, "expectAny": ["Matthew 11:28", "Matthew 6:34", "Matthew 6:33"] },

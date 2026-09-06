@@ -38,4 +38,4 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 
 | Date | Mode | Model | Result |
 |---|---|---|---|
-| 2026-09-06 | offline (no key) | claude-opus-5 configured | 54/54; live-only checks not run |
+| 2026-09-06 | offline (no key) | claude-opus-5 configured | 61/61; live-only checks not run. Live path exercised against a mock Responses API (rung 2): 61/61 |
