@@ -326,6 +326,41 @@ async function main() {
     assert(/scripture-sit/.test(advisor), 'Advisor scripture blocks should offer Sit with this');
   });
 
+  await check('the daily limit never closes the crisis path', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 5 }));
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => switchTab('advisor'));
+    await page.evaluate(() => sendMsg('I am afraid of the future'));
+    const gate = await page.evaluate(() => ({
+      on: document.getElementById('chat-gate').classList.contains('on'),
+      text: document.getElementById('chat-gate').innerText,
+      typeable: !document.getElementById('chat-input').disabled && !document.getElementById('send-btn').disabled,
+      letters: document.querySelectorAll('.msg-ai').length,
+    }));
+    assert(gate.letters === 0, 'an ordinary message should be withheld at the limit, got ' + gate.letters + ' letters');
+    assert(gate.on, 'gate should be shown once a message is withheld');
+    assert(/988/.test(gate.text) && /findahelpline\.com/.test(gate.text), 'gate copy must carry the handoff');
+    assert(gate.typeable, 'composer must stay typeable when gated');
+
+    const sending = page.evaluate(() => sendMsg('I want to kill myself'));
+    await page.waitForSelector('#crisis-modal.on', { timeout: 5000 });
+    const modal = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
+    assert(/988/.test(modal), 'crisis modal must show 988');
+    await page.click('#crisis-continue');
+    await sending;
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && /988/.test(last.innerText) && /not a person/i.test(last.innerText);
+    }, { timeout: 15000 });
+    const letter = await page.evaluate(() => [...document.querySelectorAll('.msg-ai .letter')].pop().innerText);
+    assert(/findahelpline\.com/.test(letter), 'crisis letter must carry the global directory');
+    assert((letter.match(/988(?!lifeline)/g) || []).length === 1, 'crisis letter should name 988 once, got ' + (letter.match(/988(?!lifeline)/g) || []).length);
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

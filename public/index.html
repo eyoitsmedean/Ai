@@ -883,6 +883,8 @@ textarea { font-family: var(--body); }
 .gate.on { display: block; }
 .gate h3 { font-family: var(--display); font-size: 22px; font-weight: 500; margin-bottom: 8px; }
 .gate p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; }
+.gate .gate-danger { margin-top: 10px; color: var(--ink); }
+.gate .gate-danger a { color: var(--crimson); text-decoration: underline; }
 
 /* Journal */
 .journal-empty { padding: 48px 8px; max-width: 36ch; }
@@ -2005,6 +2007,7 @@ html[data-review="1"] .review-ribbon { display: block; }
           <div class="gate" id="chat-gate">
             <h3>Five letters for today</h3>
             <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
+            <p class="gate-danger">If you are in danger tonight, this room does not close. Write it here and it will still be answered — and 988 (call, text, or chat) answers day and night in the United States; <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists lines everywhere else.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
@@ -3434,7 +3437,7 @@ function restoreLetters() {
   document.getElementById('suggestions').style.display = 'none';
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
-    setComposerEnabled(false);
+    setComposerEnabled(true);
   }
 }
 
@@ -3447,14 +3450,15 @@ function useSuggestion(btn) {
 async function sendMsg(preset) {
   const text = (preset || chatInput.value).trim();
   if (!text || isChatBusy) return;
-  if (looksLikeCrisisClient(text)) {
+  const crisis = looksLikeCrisisClient(text);
+  if (crisis) {
     const action = await showCrisisModal();
     if (action !== 'continue') return;
   }
-  if (chatsToday().n >= FREE_CHATS) {
+  // The daily limit is a limit on counsel, never on the crisis handoff.
+  if (!crisis && chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
     document.getElementById('suggestions').style.display = 'none';
-    setComposerEnabled(false);
     return;
   }
   chatInput.value = '';
@@ -3542,13 +3546,8 @@ async function sendMsg(preset) {
   } finally {
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
-    const gated = chatsToday().n >= FREE_CHATS;
-    if (gated) {
-      document.getElementById('chat-gate').classList.add('on');
-      setComposerEnabled(false);
-    } else {
-      document.getElementById('send-btn').disabled = false;
-    }
+    if (chatsToday().n >= FREE_CHATS) document.getElementById('chat-gate').classList.add('on');
+    document.getElementById('send-btn').disabled = false;
     scrollChat();
   }
 }
