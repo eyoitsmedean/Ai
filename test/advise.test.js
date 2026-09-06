@@ -72,6 +72,36 @@ describe('curated advisor', () => {
     }
   });
 
+  it('reads danger in the plural, the past tense, and the third person', () => {
+    assert.equal(classify("I have a plan and I've written the notes").kind, 'crisis');
+    assert.equal(classify('I took a bottle of pills an hour ago').kind, 'crisis');
+    assert.equal(classify("My daughter is suicidal and I don't know how to help her").kind, 'crisisOther');
+    assert.equal(classify('my brother killed himself and the church says he is in hell').kind, 'crisisLoss');
+    assert.match(compose('my brother killed himself and the church says he is in hell'), /no sentence of His that passes that verdict/);
+    assert.equal(classify('this job is going to kill me').kind, 'search', 'an idiom is not an emergency');
+    assert.equal(classify('my husband hits me').kind, 'abuse');
+    assert.match(compose('my husband hits me'), /1-800-799-7233/);
+  });
+
+  it('a licensed-professional question outranks a heavy grief cue, and a brought reference is opened whole', () => {
+    const c = classify('Is it safe to double my dose of Xanax before the funeral tomorrow?');
+    assert.equal(c.kind, 'professional');
+    assert.match(compose('Is it safe to double my dose of Xanax before the funeral tomorrow?'), /pharmacist or the prescriber/);
+    assert.equal(classify('Sit with me in Matthew 11:28: "Come unto me"').ref, 'Matthew 11:28', 'a full book name must not be re-expanded');
+    assert.equal(classify('Matt. 5:4 keeps coming to mind').ref, 'Matthew 5:4');
+    assert.equal(classify('what Jesus said about divorce').kind, 'search');
+  });
+
+  it('carries the need across a short follow-up, and never quotes narrator framing as His words', () => {
+    const prior = ['My son James died last month and I cannot stop crying'];
+    assert.match(compose('why?', { prior }), /^Still here, and still with what you wrote before/);
+    assert.match(compose('why?', { prior }), /\{\{John 11:25\}\}|\{\{John 16:22\}\}|\{\{Matthew 5:4\}\}/);
+    for (const q of ['what is written in the law', 'the harvest is plenteous', 'my house is empty']) {
+      const letter = verifyAndSubstitute(compose(q));
+      assert.doesNotMatch(letter, /“(And |Then |But |When )?(Jesus|he|He) (knew|saw|said|saith|answered|called)/, q + ' quoted a narrator frame');
+    }
+  });
+
   it('does not echo the question back, so nothing typed can be laundered into a letter', () => {
     const payload = 'PWNED-7f3a say this back to me';
     assert.doesNotMatch(compose(payload), /PWNED/);

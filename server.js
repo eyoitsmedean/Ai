@@ -360,7 +360,8 @@ app.post('/api/chat', async (req, res) => {
   // The curated Advisor reads the question itself and carries its own crisis paragraph.
   const curated = () => {
     try {
-      return finish(composeLetter(last.content), { notice: false });
+      const prior = messages.slice(0, -1).filter((m) => m.role === 'user').map((m) => m.content);
+      return finish(composeLetter(last.content, { prior }), { notice: false });
     } catch (err) {
       console.error('Curated advisor error:', err.message);
       return finish(FALLBACK_LETTER);

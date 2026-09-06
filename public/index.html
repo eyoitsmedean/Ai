@@ -4996,7 +4996,7 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
-  return /\b(suicid\w*|kill myself|killing myself|kill me\b|end (my|it|their|his|her|your|our) (life|lives)|end it all|ending it all|ending my life|take my life|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|don[’']?t want to live|do not want to live|not want to be alive|better off dead|no reason to live|not worth living|life isn[’']?t worth|slit my|jump off)\b/i.test(String(text || ''));
+  return /\b(suicid\w*|kill myself|killing myself|end (my|it|their|his|her|your|our) (life|lives)|end it all|ending it all|ending my life|end things|end everything|ending things|going to end (it|things|everything)|take my life|took .{0,30}pills|swallowed .{0,30}pills|want(s|ed)? to die|wanna die|wish(ed)? (i|that i|he|she|they) (was|were|could be) dead|wish i (were|was)n[’']?t (here|alive|born)|wish i could (die|disappear|not exist)|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|don[’']?t want to live|do not want to live|don[’']?t want to be (alive|here|around)|not want to be alive|better off dead|no reason to live|not worth living|life isn[’']?t worth|slit my|jump off|a plan and .{0,40}(notes?|letters?|goodbyes?)|suicide notes?|goodbye letters?|kill(ed|ing)? (him|her|them)sel(f|ves))\b/i.test(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {
