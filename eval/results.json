@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-06T07:21:32.559Z",
-  "commit": "4758d48",
+  "generated": "2026-09-06T07:23:55.305Z",
+  "commit": "abb1e5f",
   "mode": {
     "runner": "in-process",
     "path": "retrieval",
@@ -2250,13 +2250,18 @@
       "id": "edge-01",
       "category": "edge",
       "input": "",
-      "letter": "Peace I leave with you.\n\n**Matthew 5:16**\n“Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.”\nShine by doing the next good work quietly. The Father is the one who receives the glory — you only have to stop hiding.",
+      "letter": "Peace I leave with you.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nHe leaves peace the way someone leaves a key. It is already in the house.\n\n**Mark 4:39**\n“Peace, be still.”\nThe storm is addressed by name. Calm is not negotiated; it is spoken.",
       "cites": [
-        "Matthew 5:16"
+        "John 14:27",
+        "Mark 4:39"
       ],
       "citeThemes": {
-        "Matthew 5:16": [
-          "Purpose & Direction"
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
+        ],
+        "Mark 4:39": [
+          "Peace"
         ]
       },
       "themeMatches": [],

@@ -8,7 +8,7 @@ const { finishLetter } = require('./lib/letter');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary, sayingCount } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
-const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { roomFor } = require('./lib/advise');
 const { adviseLetter } = require('./lib/advise');
 const pkg = require('./package.json');
 
@@ -426,13 +426,22 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const retrieved = retrieveSayings(last.content);
-    const allow = formatAllowList(retrieved.sayings);
+    // The room decides what the model may cite — never the question's own keywords —
+    // and finishLetter removes anything cited outside it.
+    const room = roomFor(last.content);
+    const allow = room.allowed.map((c) => `{{${c}}}`).join('\n');
+    const guidance = room.crisis
+      ? 'The reader may be at risk. The system places the human-help notice above your letter; do not add hotline numbers or instructions yourself. Be brief, present-tense, and warm. Say nothing about heaven, departure, or going home.'
+      : room.byYou
+        ? 'The reader is the one who hurt someone, or fears they will. Never tell them it is not their fault. The system places the help notice above your letter.'
+        : room.danger
+          ? 'The reader may be in danger from someone. The system places the help notice above your letter; do not add hotline numbers yourself. Never ask them to forgive, reconcile with, or turn the other cheek to the person hurting them.'
+          : '';
     const modelMessages = messages.map((m, i) => {
       if (i !== messages.length - 1) return { role: m.role, content: m.content };
       return {
         role: 'user',
-        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}`,
+        content: `${m.content}\n\nROOM: ${room.primary}${guidance ? `\n${guidance}` : ''}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}; anything else is removed before the reader sees it):\n${allow}`,
       };
     });
 
