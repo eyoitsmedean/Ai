@@ -194,6 +194,49 @@ describe('similarity', () => {
   });
 });
 
+describe('corpus integrity', () => {
+  // Verse counts per chapter of the KJV Gospels, agreed by two independent public-domain
+  // sources (bible-api.com KJV and github.com/aruljohn/Bible-kjv). A dropped verse shifts
+  // every citation after it and puts the narrator's words in His mouth.
+  const KJV_COUNTS = {
+    Matthew: [25, 23, 17, 25, 48, 34, 29, 34, 38, 42, 30, 50, 58, 36, 39, 28, 27, 35, 30, 34, 46, 46, 39, 51, 46, 75, 66, 20],
+    Mark: [45, 28, 35, 41, 43, 56, 37, 38, 50, 52, 33, 44, 37, 72, 47, 20],
+    Luke: [80, 52, 38, 44, 39, 49, 50, 56, 62, 42, 54, 59, 35, 35, 32, 31, 37, 43, 48, 47, 38, 71, 56, 53],
+    John: [51, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31, 27, 33, 26, 40, 42, 31, 25],
+  };
+
+  it('has every chapter of the four Gospels at its canonical verse count', () => {
+    const corpus = require('../data/gospels-kjv.json').books;
+    for (const [book, counts] of Object.entries(KJV_COUNTS)) {
+      assert.equal(Object.keys(corpus[book]).length, counts.length, book + ' chapters');
+      counts.forEach((n, i) => {
+        const chapter = corpus[book][String(i + 1)];
+        assert.equal(Object.keys(chapter).length, n, `${book} ${i + 1} should have ${n} verses`);
+        for (let v = 1; v <= n; v += 1) assert.ok(chapter[String(v)], `${book} ${i + 1}:${v} missing`);
+      });
+    }
+  });
+
+  it('keeps the six once-missing verses in their places', () => {
+    assert.match(lookup('Matthew 2:16').full, /^Then Herod, when he saw that he was mocked/);
+    assert.match(lookup('Matthew 22:1').full, /^And Jesus answered and spake unto them again by parables/);
+    assert.match(lookup('Matthew 26:38').text, /^My soul is exceeding sorrowful/);
+    assert.match(lookup('Matthew 26:39').text, /^O my Father, if it be possible, let this cup pass from me/);
+    assert.match(lookup('Mark 4:40').text, /^Why are ye so fearful/);
+    assert.match(lookup('Mark 7:11').text, /It is Corban/);
+    assert.match(lookup('Mark 8:8').full, /^So they did eat, and were filled/);
+    assert.match(lookup('Mark 8:38').text, /^Whosoever therefore shall be ashamed of me/);
+    assert.match(lookup('Matthew 26:75').full, /^And Peter remembered the word of Jesus/);
+  });
+
+  it('never lets a marginal note into His mouth', () => {
+    assert.equal(cleanKjv('Two {men} shall be in the field. {this verse is not found in most of the Greek copies}'), 'Two men shall be in the field.');
+    assert.equal(cleanKjv('and {he} to whom the Son will reveal {him}. {many ancient copies add these words at the beginning of verse, and turning to his disciples, he said}'), 'and he to whom the Son will reveal him.');
+    assert.doesNotMatch(lookup('Luke 10:22').text, /ancient copies/);
+    assert.doesNotMatch(lookup('Luke 17:36').full, /Greek copies/);
+  });
+});
+
 describe('spoken corpus', () => {
   it('treats genealogy as narrator, not red-letter', () => {
     assert.equal(isRedLetter('Matthew 1:1'), false);
