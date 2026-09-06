@@ -7,7 +7,6 @@ const PRECACHE = [
   '/data/letterpress.js',
   '/data/advisor.js',
   '/data/curated.js',
-  '/data/paths.js',
   '/icon-192.png',
   '/icon-512.png',
   '/apple-touch-icon.png',

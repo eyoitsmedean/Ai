@@ -1953,7 +1953,6 @@ html.sitting .sit-sheet {
 <script src="/data/curated.js"></script>
 <script src="/data/letterpress.js"></script>
 <script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -2077,12 +2076,6 @@ const VESPERS_PROMPTS = [
   'Where was mercy given to you?',
   'What will you leave in His hands?',
 ];
-const VESPERS_FALLBACK = [
-  { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
-  { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.' },
-  { verse: 'Matthew 6:34', quote: 'Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.' },
-  { verse: 'Luke 23:46', quote: 'Father, into thy hands I commend my spirit.' },
-];
 function vespersPrompt() {
   return VESPERS_PROMPTS[new Date().getDay()];
 }
@@ -2090,7 +2083,11 @@ function vespersSaying() {
   if (dailyData && dailyData.word) {
     return { verse: dailyData.word.verse, quote: dailyData.word.passage };
   }
-  return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
+  // The commons are generated from the corpus, so evening never types a verse of its own.
+  const commons = ((window.RLA_CURATED || {}).commons || []);
+  if (!commons.length) return { verse: '', quote: '' };
+  const p = commons[new Date().getDay() % commons.length];
+  return { verse: p.verse, quote: p.quote };
 }
 
 function clearReaderStorage() {

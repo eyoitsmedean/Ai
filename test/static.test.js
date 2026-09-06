@@ -20,7 +20,7 @@ function loadBrowserGlobals() {
   const window = {};
   const sandbox = { window, self: window, module: undefined };
   sandbox.globalThis = sandbox;
-  for (const name of ['curated.js', 'letterpress.js', 'advisor.js', 'paths.js']) {
+  for (const name of ['curated.js', 'letterpress.js', 'advisor.js']) {
     const src = fs.readFileSync(path.join(ROOT, 'public', 'data', name), 'utf8');
     vm.runInNewContext(src, sandbox);
   }
@@ -70,12 +70,11 @@ describe('static artifacts', () => {
         checked += 1;
       }
     }
-    const { RLA_SEVEN, RLA_FORTY, RLA_CURATED } = loadBrowserGlobals();
+    const { RLA_SEVEN, RLA_CURATED } = loadBrowserGlobals();
     assert.deepEqual(plain(RLA_CURATED), json);
     assert.deepEqual(plain(RLA_SEVEN), json.paths.seven);
-    assert.deepEqual(plain(RLA_FORTY), json.paths.forty);
     assert.equal(RLA_SEVEN.length, 7);
-    assert.ok(checked >= 100, `only ${checked} quotes checked`);
+    assert.ok(checked >= 95, `only ${checked} quotes checked`);
   });
 });
 

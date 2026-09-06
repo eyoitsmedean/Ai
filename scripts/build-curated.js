@@ -5,14 +5,14 @@
  *
  *   public/curated.json      — Today rotation, Seek rooms (with `more`), commons, named paths
  *   public/data/curated.js   — the same object as window.RLA_CURATED
- *   public/data/*.js         — browser copies of data/{letterpress,advisor,paths}.js
+ *   public/data/*.js         — browser copies of data/{letterpress,advisor}.js
  *
  * Usage: node scripts/build-curated.js [--check]
  * --check exits 1 if any artifact on disk differs from what would be written.
  */
 const fs = require('fs');
 const path = require('path');
-const { THEMES, COMMONS, SEVEN, FORTY, dailyRotation, themeNames } = require('../lib/curated');
+const { THEMES, COMMONS, SEVEN, MORE_DAYS, dailyRotation, themeNames } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -25,7 +25,7 @@ function curatedObject() {
     daily: dailyRotation(),
     packs,
     commons: COMMONS,
-    paths: { seven: SEVEN, forty: FORTY },
+    paths: { seven: SEVEN, more: MORE_DAYS },
     translation: 'KJV',
   };
 }
@@ -43,7 +43,7 @@ function artifacts() {
     'public/curated.json': json,
     'public/data/curated.js': js,
   };
-  for (const name of ['letterpress.js', 'advisor.js', 'paths.js']) {
+  for (const name of ['letterpress.js', 'advisor.js']) {
     out[`public/data/${name}`] = fs.readFileSync(path.join(ROOT, 'data', name), 'utf8');
   }
   return out;
