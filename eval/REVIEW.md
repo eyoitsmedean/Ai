@@ -15,7 +15,7 @@
 ### What it did not prove
 
 - Tone, warmth, relevance, and the model's own handling of oblique crisis language, off-scope requests, and injection. All of that waits on a live run with a key.
-- The browser crisis modal, which shares the same detector but was not clicked this session.
+- ~~The browser crisis modal~~ — closed in the ELEVATE pass: `scripts/qa-browser.js` now types "I don't want to be here anymore" into Ask in headless Chrome, sees the modal open with 988 and findahelpline.com, closes it, and confirms Bible history does not trip it (rung 1, 7/7 browser checks pass).
 
 ### Defect register (Breaker findings, with disposition)
 

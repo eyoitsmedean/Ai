@@ -55,6 +55,7 @@ Commission read as: run the protocol on the Advisor brief's open MASTERWORK item
 - Built: `eval/questions.json` (59 turns: everyday 18, hostile 5, off-scope 8, crisis 13 incl. Spanish and two-turn, adversarial 5, soft 6, edge 4); `scripts/eval.js` + `npm run eval`; `eval/README.md`, `eval/REVIEW.md`, `eval/RESULTS.md`; `data/crisis.js` shared gate; `test/crisis.test.js` (72 must-trigger / 48 must-not-trigger); verifier and parser repairs in `lib/scripture.js`; two-turn gate and detector hash in `server.js`; Parts 5 and appendix appended to `studio/ATELIER.md`.
 - Team: one builder; one separate Breaker agent ran INTERROGATE on the gate and the runner (29 findings, register in `eval/REVIEW.md`). Repairs and the final retest were the builder's.
 - Verified this session (rung 1): 54/54 unit and API tests; 59/59 evaluation items against `node server.js` in fallback mode, detector `2f573b131c0e`-lineage rebuilt after the idiom fix and re-run; `parseRef('1 John 4:18') === null`; the verifier dropping `1 John`, `Psalm 23:1`, `Matthew 1:1` from a reply.
-- Not verified: any live-model behaviour (no key); the browser crisis modal (same detector, not clicked); the live Pages deploy (founder-only).
+- Verified in ELEVATE (rung 1): the browser crisis modal opens on a Breaker sentence and closes, `scripts/qa-browser.js` 7/7 in headless Chrome.
+- Not verified: any live-model behaviour (no key); the live Pages deploy (founder-only).
 - Assumed: a second paste of the protocol with no commission line meant "run it on the brief". Corrected in ten seconds if wrong.
 

@@ -126,6 +126,26 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('crisis modal opens before a 2 a.m. sentence is sent', async () => {
+    const outcome = await page.evaluate(async () => {
+      const input = document.getElementById('chat-input');
+      const modal = document.getElementById('crisis-modal');
+      input.value = "I don't want to be here anymore";
+      const sending = sendMsg();
+      await new Promise((r) => setTimeout(r, 50));
+      const shown = modal.classList.contains('on');
+      const copy = modal.innerHTML;
+      document.getElementById('crisis-close').click();
+      await sending;
+      return { shown, has988: /988/.test(copy), hasHelpline: /findahelpline/.test(copy), stillOpen: modal.classList.contains('on') };
+    });
+    assert(outcome.shown, 'crisis modal did not open');
+    assert(outcome.has988 && outcome.hasHelpline, 'modal must name 988 and findahelpline.com');
+    assert(!outcome.stillOpen, 'Close should dismiss the modal');
+    const benign = await page.evaluate(() => window.RLA_looksLikeCrisis('Herod wanted to kill him as a baby, why'));
+    assert(benign === false, 'Bible history must not trip the modal');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
