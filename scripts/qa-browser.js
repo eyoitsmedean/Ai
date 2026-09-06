@@ -42,6 +42,7 @@ async function main() {
     const copy = await page.evaluate(() => document.body.innerText);
     assert(/Red Letter/i.test(copy), 'missing brand');
     assert(/988/.test(copy), 'missing 988');
+    assert(/stay on your device/.test(copy) && /only if you turn that on/.test(copy), 'welcome must say where the journal and ledger live');
     const href = await page.$eval('a.btn', (a) => a.getAttribute('href'));
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
   });
@@ -298,6 +299,17 @@ async function main() {
     const copy = await page.evaluate(() => document.getElementById('settings-sheet').innerText);
     assert(/red-letter tradition/.test(copy) && /John 3:16–21/.test(copy), 'disclosure missing');
     assert(/not a person/.test(copy) && /988/.test(copy), 'safety copy missing');
+  });
+
+  await check('the library serves the repaired verses on both hosts', async () => {
+    const api = await page.evaluate(async () => (await fetch('/api/library?q=lambs')).json());
+    const apiText = JSON.stringify(api);
+    assert(/John 21:15/.test(apiText) && /lovest thou me more than these\? … Feed my lambs/.test(apiText), 'John 21:15 missing from /api/library');
+    const pages = await page.evaluate(async () => (await fetch('/library.json')).json());
+    const flat = JSON.stringify(pages);
+    assert(/Feed my lambs/.test(flat), 'John 21:15 missing from library.json (GitHub Pages)');
+    assert(!/They say unto him, Twelve/.test(flat), 'Mark 8:19 still prints the disciples in red');
+    assert(!/not found in most of the Greek copies/.test(flat), 'editorial note leaked into the library');
   });
 
   await check('no page errors', async () => {
