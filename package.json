@@ -13,7 +13,9 @@
     "qa": "node scripts/qa-browser.js",
     "curated": "node scripts/build-curated.js",
     "curated:check": "node scripts/build-curated.js --check",
-    "qa:static": "node scripts/qa-static.js"
+    "qa:static": "node scripts/qa-static.js",
+    "eval": "node scripts/eval-advisor.js",
+    "eval:check": "node scripts/eval-advisor.js --check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

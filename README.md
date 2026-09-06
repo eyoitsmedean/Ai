@@ -40,6 +40,7 @@ npm run curated   # regenerate public/curated.json and public/data/ from lib/cur
 npm run smoke     # against a running server
 npm run qa        # first session in a real browser, against a running server
 npm run qa:static # the page alone, as GitHub Pages serves it — no API host
+npm run eval      # the Advisor evaluation set (eval/advisor-eval.json) → eval/RESULTS.md; phone steps in eval/PHONE-CHECKLIST.md
 ```
 
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.

@@ -20,7 +20,7 @@
   var NEED_CUES = [
     [new RegExp('\\b(grie[fv]|mourn|died|death\\b|dying(?! to)|funeral|widow|passed away|miss (him|her|them|you|my)|crying|miscarriage|stillborn|lost (my|our) ' + LOVED_ONE + ')', 'i'), 'Grief & Loss'],
     [/\b(afraid|fear(?!less)|scared|terror|terrif|frighten|dread(?!lock)|panic attack)/i, 'Fear'],
-    [/\b(shame(?!less)|guilt(?!y pleasure)|ashamed|unworthy|worthless|disgust|messed up|sin(ned|ner|ning|s)?\b|failure|failing|not good enough|hate myself|i hurt (him|her|them|someone|my))/i, 'Shame & Guilt'],
+    [/\b(shame(?!less)|guilt(?!y pleasure)|ashamed|unworthy|worthless|disgust|messed up|sin(ned|ner|ning|s)?\b|failure|failing|not good enough|(not|don'?t|never|no longer) (feel )?worthy|hate myself|i hurt (him|her|them|someone|my))/i, 'Shame & Guilt'],
     [/\b(forgiv|resent|bitter(?!sweet)|grudg|hate (him|her|them)|let it go|let go of|betray|cheated on me|lied to me)/i, 'Forgiveness'],
     [/\b(lonel|alone|abandon|orphan\b|left me|no one|nobody|isolat|unseen\b|no friends)/i, 'Loneliness'],
     [/\b(pain(?!t)|suffer|sick(?!le)|illness|tribulation|hurt(s|ing)?\b|chronic\b|diagnos|cancer|hospital|surgery)/i, 'Suffering & Pain'],
@@ -32,7 +32,7 @@
     [/\b(peace(?! out)|calm|be still|stillness|can'?t (be|sit) still|quiet my)/i, 'Peace'],
   ];
 
-  var CRISIS_RE = /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i;
+  var CRISIS_RE = /\b(suicid|kill(ing)? myself|(end|ending|take|taking) my (own )?life|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang(ing)? myself|overdos|don'?t want to (live|be here anymore|be alive)|do not want to (live|be here anymore|be alive)|better off dead|no reason to live|not worth living|no point (in )?living|wish i (was|were) dead|wish i (was|were)n'?t (here|alive))\b/i;
 
   var CRISIS_NOTICE = [
     'If you are in danger or thinking of ending your life, please stop here and get human help now.',
