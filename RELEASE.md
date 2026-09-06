@@ -15,6 +15,7 @@ Two independent reviews on 2026-09-06 (a Breaker agent that built nothing, twice
 | No verse the red-letter map does not mark as spoken can be quoted, even under a bold citation (the devil, Mary, Judas's death, the narrator, the synagogue ruler, the crowd) | verified | `test/scripture.test.js` — 'never puts other voices in His mouth' |
 | Every quotation the page itself can show (rooms, daily words, Seven, Forty) is His exact words | verified | `test/eval.test.js` — 'every quotation the page can show' |
 | Nothing outside Matthew–John can be quoted, even when asked for Psalms, Romans, 1 Corinthians, or placeholders injected in the question | verified | eval `scope` gate on offscope-05/06, forgery-01..04 |
+| No letter's prose contains the platitudes that wound — 'God is punishing', 'lack of faith', 'happens for a reason', 'better place', 'you will never feel', 'pray harder' (36 phrases) | verified | eval `scope` gate `GLOBAL_FORBID`, 85/85 both composers; the model prompt now forbids them in words as well |
 | Fabricated "Jesus said" quotes are not expanded or repeated | verified | eval forgery-02, forgery-03 |
 | Blessing links only open for Gospel references; `Romans 8:28` opens nothing | verified | `npm run qa` — "a forged blessing is dropped" |
 | Static hosting shows the exact verse, not its five-verse block | verified | `npm run qa` — "static hosting still shows the exact verse" |

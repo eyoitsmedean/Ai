@@ -37,6 +37,7 @@ The product is advisor-first, not scholarship-first. Scholarship sits behind the
 | Nothing behind the words is paywalled: His words, lectio, Seek, Seven Days, curated Advisor, journal | settled | LAUNCH.md § What must never be locked |
 | Pricing when money exists: annual first, no weekly SKU | settled | LAUNCH.md |
 | Evaluation: `npm run eval` and `npm run eval -- --client` must pass (85 questions, five gates, both composers) before any release; results are committed in `eval/` | settled 2026-09-06 | scripts/eval.js, eval/ |
+| Prose is gated too: `GLOBAL_FORBID` in `scripts/eval.js` lists the platitudes no letter may contain whatever the question ('God is punishing', 'lack of faith', 'for a reason', 'better place', 'never feel', 'pray harder'…); the model prompt forbids them in words. This is the cheap half of the open meaning gap (question 5) | settled 2026-09-06 | scripts/eval.js, server.js `ADVISOR_SYSTEM` |
 | The three client patterns (crisis, danger/by-you, poisoning) are literal copies of the server's; tests fail when they drift. Never edit the copies by hand — change `lib/scripture.js`, then paste `.source` | settled 2026-09-06 | test/eval.test.js 'keeps the … in step' |
 
 ## Assumptions (labelled, correct if wrong)
