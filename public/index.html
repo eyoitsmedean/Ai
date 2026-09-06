@@ -29,12 +29,14 @@
   <link rel="apple-touch-startup-image" href="/splash/ipad-pro-12.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap" /></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 :root{
-  --ink:#1A1612;--ink-soft:#4A443C;--ink-muted:#7A7268;
+  --ink:#1A1612;--ink-soft:#4A443C;--ink-muted:#6B6359;
   --stone:#EDE8E0;--surface:#F7F4EF;--surface-2:#FDFBF8;
   --border:#D8D0C4;--border-2:#C4BAB0;
   --crimson:#9F1239;--crimson-deep:#7F0F2E;--crimson-glow:rgba(159,18,57,.12);
@@ -92,7 +94,7 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .trust-strip .ts-dot{width:5px;height:5px;border-radius:50%;background:var(--crimson);box-shadow:0 0 0 3px rgba(159,18,57,.18);animation:trustPulse 2.4s ease-in-out infinite}
 @keyframes trustPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.7}}
 .advisor-hero{margin:0 12px 12px;padding:16px;border-radius:var(--r);border:1px solid rgba(159,18,57,.28);background:linear-gradient(145deg,rgba(159,18,57,.12),var(--surface));text-align:center}
-.advisor-hero h3{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin:0 0 6px;color:var(--ink)}
+.advisor-hero h2{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin:0 0 6px;color:var(--ink)}
 .advisor-hero p{font-size:calc(13px * var(--scale));color:var(--ink-soft);line-height:1.45;margin:0 0 12px}
 .share-caption{margin:8px 14px 0;padding:10px 12px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--border);font-size:12px;color:var(--ink-soft);line-height:1.4}
 .share-caption strong{color:var(--crimson);display:block;margin-bottom:2px;font-size:11px;letter-spacing:.3px;text-transform:uppercase}
@@ -122,7 +124,7 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .onboarding.hidden{display:none}
 .ob-screen{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center}
 .ob-screen.active{display:flex}
-.ob-wordmark{font-family:var(--font-disp);font-size:clamp(48px,14vw,64px);font-weight:800;color:var(--crimson-words);line-height:.95;letter-spacing:-1px;margin-bottom:16px;animation:fadeUp .7s var(--ease) both}
+.ob-wordmark{font-family:var(--font-disp);font-size:clamp(48px,14vw,64px);font-weight:800;color:#DC2626;line-height:.95;letter-spacing:-1px;margin-bottom:16px;animation:fadeUp .7s var(--ease) both}
 .ob-tagline{font-size:calc(16px * var(--scale));color:rgba(237,232,224,.72);line-height:1.55;max-width:280px;animation:fadeUp .7s .1s var(--ease) both}
 .ob-quote{font-family:var(--font-body);font-size:calc(22px * var(--scale));color:var(--crimson-words);line-height:1.55;font-weight:500;max-width:320px;margin-bottom:12px;animation:fadeUp .7s .08s var(--ease) both}
 .ob-cite{font-family:var(--font-ui);font-size:calc(13px * var(--scale));color:var(--gold-soft);font-weight:600;letter-spacing:.3px;margin-bottom:24px;animation:fadeUp .7s .14s var(--ease) both}
@@ -203,7 +205,7 @@ textarea,input,select{font-family:var(--font-ui);font-size:16px}
 .quota-bar strong{color:var(--crimson);font-weight:700}
 .quota-bar button{background:none;border:none;color:var(--crimson);font-weight:700;font-size:calc(12px * var(--scale));text-decoration:underline;padding:0}
 .chat-welcome{padding:20px 16px;text-align:center}
-.chat-welcome h3{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin-bottom:6px}
+.chat-welcome h2{font-family:var(--font-disp);font-size:calc(18px * var(--scale));margin-bottom:6px}
 .chat-welcome p{font-size:calc(13px * var(--scale));color:var(--ink-muted);line-height:1.5}
 .suggestions{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 12px;justify-content:center}
 .sug-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;min-height:var(--touch);font-size:calc(13px * var(--scale));color:var(--ink-soft);transition:border-color .15s}
@@ -604,7 +606,7 @@ html.simple-mode .rhythm-sub{display:none}
 .return-ribbon .action-btn{margin-right:6px}
 
 .harvest-card{margin:0 14px 16px;padding:16px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface);overflow:hidden}
-.harvest-card h3{font-family:var(--font-disp);font-size:calc(16px * var(--scale));margin:0 0 4px}
+.harvest-card h2{font-family:var(--font-disp);font-size:calc(16px * var(--scale));margin:0 0 4px}
 .harvest-sub{font-size:calc(12px * var(--scale));color:var(--ink-muted);margin-bottom:12px;line-height:1.4}
 .harvest-garden{display:none}
 .garden-stage{position:relative;height:220px;border-radius:var(--r-sm);overflow:hidden;border:1px solid rgba(185,28,28,.14);background:linear-gradient(180deg,#F8F0E4 0%,#EDE4D4 42%,#E2D6C4 100%);cursor:pointer;touch-action:manipulation}
@@ -818,7 +820,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
         </div>
       </div>
       <div class="harvest-card" id="harvest-card">
-        <h3>This week’s harvest</h3>
+        <h2>This week’s harvest</h2>
         <p class="harvest-sub">Words you received bloom here — a quiet garden, not a streak. Tap a flower to carry it again.</p>
         <div class="garden-stage" id="garden-stage" role="img" aria-label="Living garden of received words">
           <canvas id="garden-canvas"></canvas>
@@ -868,7 +870,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
       <div class="presence-card" id="presence-card">
         <button type="button" class="presence-btn" id="presence-btn" onclick="markPresence()">I received today's word</button>
         <p class="presence-note" id="presence-note">A quiet check-in — no streaks, no shame. Just showing up for His words.</p>
-        <div class="presence-week" id="presence-week" aria-label="This week's presence"></div>
+        <div class="presence-week" id="presence-week" role="group" aria-label="This week's presence"></div>
       </div>
       <details class="more-practices" id="more-practices">
         <summary>More with Him</summary>
@@ -968,12 +970,12 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
           <p id="advisor-context-text"></p>
         </div>
         <div class="advisor-hero" id="advisor-hero">
-          <h3>Your Red Letter Advisor</h3>
+          <h2>Your Red Letter Advisor</h2>
           <p>Guidance only from the words Jesus spoke — verified WEB citations, never invented quotes. Bring what’s heavy; leave with His speech.</p>
           <button type="button" class="cta-btn cta-primary" style="margin:0 auto;display:inline-flex;width:auto;padding:12px 18px" onclick="askAboutTodaysWord()">Start with today’s word</button>
         </div>
         <div class="chat-welcome" id="chat-welcome">
-          <h3>Speak what’s on your heart</h3>
+          <h2>Speak what’s on your heart</h2>
           <p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John — grounded and checkable.</p>
         </div>
         <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
@@ -1029,11 +1031,11 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
 <div class="sheet" id="settings-sheet"><div class="sheet-hd"><h2 class="sheet-title">Settings</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
 <div class="sheet-body">
   <div class="setting-row"><div><div class="setting-label">Dark mode</div><div class="setting-desc">Easier on the eyes at night</div></div>
-    <button type="button" class="ob-toggle" id="dark-toggle" onclick="toggleDark()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
+    <button type="button" class="ob-toggle" id="dark-toggle" onclick="toggleDark()" aria-pressed="false" aria-label="Dark mode" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Simple mode</div><div class="setting-desc">Fewer surfaces — rhythm first</div></div>
-    <button type="button" class="ob-toggle" id="simple-toggle" onclick="toggleSimpleMode()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
+    <button type="button" class="ob-toggle" id="simple-toggle" onclick="toggleSimpleMode()" aria-pressed="false" aria-label="Simple mode" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Private journal</div><div class="setting-desc">Blur saved words until you hover or focus</div></div>
-    <button type="button" class="ob-toggle" id="privacy-toggle" onclick="toggleJournalPrivacy()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
+    <button type="button" class="ob-toggle" id="privacy-toggle" onclick="toggleJournalPrivacy()" aria-pressed="false" aria-label="Private journal" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button></div>
   <div class="setting-row"><div><div class="setting-label">Text size</div>
     <div class="size-btns"><button type="button" class="size-btn" data-fs="sm" onclick="setFontSize('sm')">A</button><button type="button" class="size-btn active" data-fs="md" onclick="setFontSize('md')">A</button><button type="button" class="size-btn" data-fs="lg" onclick="setFontSize('lg')">A</button></div></div></div>
   <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:10px">
@@ -1042,7 +1044,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
         <div class="setting-label">Morning reminder</div>
         <div class="setting-desc" id="reminder-desc">Today’s red letter, delivered to your lock screen each morning.</div>
       </div>
-      <button type="button" class="ob-toggle" id="reminder-toggle" onclick="toggleReminder()" aria-pressed="false" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button>
+      <button type="button" class="ob-toggle" id="reminder-toggle" onclick="toggleReminder()" aria-pressed="false" aria-label="Morning reminder" style="margin:0;padding:8px 12px;background:var(--stone);border:1px solid var(--border)"><span class="ob-toggle-track"><span class="ob-toggle-thumb"></span></span></button>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <input type="time" class="time-input" id="reminder-time" value="07:30" onchange="saveReminderTime()" aria-label="Reminder time" style="flex:1" />
