@@ -118,6 +118,47 @@ describe('live advisor stream', () => {
     assert.match(texts.join(''), /988/);
   });
 
+  it('prefixes the domestic-violence handoff when someone describes being hit', async () => {
+    tokens = ['{{Luke 4:18}}\nYou are not asked to stay.\n'];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'my husband hits me when he drinks' }] });
+    const texts = frames(res.raw).filter((f) => typeof f.text === 'string').map((f) => f.text);
+    assert.match(texts[0], /1-800-799-7233/);
+    assert.match(texts[0], /911/);
+    assert.doesNotMatch(texts.join(''), /988/);
+  });
+
+  it('drops a narrator verse the model cites and never shows it as a quotation', async () => {
+    tokens = [
+      'Hear this.\n\n',
+      '{{Matthew 1:1}}\nA genealogy is not comfort.\n\n',
+      '{{John 14:27}}\nThis peace is left with you.\n\n',
+      '**Luke 2:1**\n"there went out a decree from Caesar Augustus"\nNarration typed as a quote.\n\n',
+      'Sit with that.',
+    ];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'I am anxious tonight' }] });
+    const all = frames(res.raw);
+    const streamed = all.filter((f) => typeof f.text === 'string').map((f) => f.text).join('');
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    const verify = all.find((f) => f.verify).verify;
+    assert.doesNotMatch(streamed, /generation of Jesus Christ/);
+    assert.doesNotMatch(streamed, /genealogy is not comfort/);
+    assert.doesNotMatch(replace, /Matthew 1:1|Luke 2:1|Caesar Augustus/);
+    assert.match(replace, /\*\*John 14:27\*\*/);
+    assert.equal(verify.total, 1);
+    assert.equal(verify.allVerified, true);
+  });
+
+  it('replaces a letter with no verifiable saying by the retrieval letter', async () => {
+    tokens = ['I have only my own words for you tonight.\n\n{{Romans 8:28}}\nAll things work together.\n'];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'my mother died last week' }] });
+    const all = frames(res.raw);
+    const replace = all.find((f) => typeof f.replace === 'string').replace;
+    const verify = all.find((f) => f.verify).verify;
+    assert.doesNotMatch(replace, /Romans|my own words/);
+    assert.match(replace, /\*\*Matthew 5:4\*\*/);
+    assert.ok(verify.verified >= 2);
+  });
+
   it('aborts the model stream when the client disconnects', async () => {
     tokens = Array.from({ length: 40 }, (_, i) => `word${i} `);
     const before = aborted;

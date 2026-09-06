@@ -2762,6 +2762,13 @@ body::before {
   color: var(--ink-2);
 }
 
+.sheet-about .translation-rights {
+  margin-top: 8px;
+  font-size: calc(11px * var(--scale));
+  line-height: 1.6;
+  color: var(--ink-4, var(--ink-3));
+}
+
 .sheet-about a {
   color: var(--ink-2);
   text-decoration: underline;

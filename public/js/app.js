@@ -846,9 +846,12 @@
     setChatBusy(true);
     try {
       const crisis = global.RedLetterCrisis;
-      if (crisis && typeof crisis.detectCrisis === 'function' && crisis.detectCrisis(text)) {
+      const crisisKind = crisis && typeof crisis.detectKind === 'function'
+        ? crisis.detectKind(text)
+        : (crisis && typeof crisis.detectCrisis === 'function' && crisis.detectCrisis(text) ? 'crisis' : null);
+      if (crisisKind) {
         const action = typeof crisis.showCrisisModal === 'function'
-          ? await crisis.showCrisisModal()
+          ? await crisis.showCrisisModal(crisisKind)
           : 'close';
         if (action !== 'continue') return;
       }
