@@ -1,22 +1,22 @@
 {
   "summary": {
     "host": "http://127.0.0.1:3000",
-    "date": "2026-09-06T05:47:16.495Z",
+    "date": "2026-09-06T05:54:14.097Z",
     "path": "offline rooms (no model key on the server)",
     "corpusSpokenVerses": 1927,
     "questions": 46,
-    "passed": 34,
-    "failed": 12,
-    "distinctCitationSets": 13,
+    "passed": 46,
+    "failed": 0,
+    "distinctCitationSets": 17,
     "varietyOk": true,
     "byCategory": {
       "everyday": {
         "n": 16,
-        "passed": 7
+        "passed": 16
       },
       "low-moment": {
         "n": 10,
-        "passed": 7
+        "passed": 10
       },
       "hostile": {
         "n": 6,
@@ -67,18 +67,20 @@
       "id": 3,
       "category": "everyday",
       "text": "Big job interview tomorrow and I'm terrified I'll blow it",
-      "room": "Fear",
-      "status": 200,
-      "letter": "I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.\n\n**Matthew 6:34**\n“Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.”\nHe limits the assignment to today, so your mind does not have to carry a week it has not been given.\n\n**Matthew 6:26**\n“Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?”\nYou are not less tended than the birds. Provision is already in motion before you finish the sentence.\n\nOne day is enough to hold. His words meet you in the room with no windows.",
-      "failures": [
-        "room:Fear"
+      "room": [
+        "Fear",
+        "Anxiety & Worry"
       ],
+      "status": 200,
+      "letter": "I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.\n\n**Matthew 6:34**\n“Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.”\nHe limits the assignment to today, so your mind does not have to carry a week it has not been given.\n\n**Matthew 6:26**\n“Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?”\nYou are not less tended than the birds. Provision is already in motion before you finish the sentence.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nHis peace is not a mood the world can revoke. It is something left with you.\n\nOne day is enough to hold. His words meet you in the room with no windows.",
+      "failures": [],
       "notes": [],
       "cites": [
         "Matthew 6:34",
-        "Matthew 6:26"
+        "Matthew 6:26",
+        "John 14:27"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 4,
@@ -86,16 +88,14 @@
       "text": "My teenage son won't talk to me anymore and I don't know what I did",
       "room": "Conflict & Relationships",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Conflict & Relationships"
-      ],
+      "letter": "Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.\n\n**Matthew 5:44**\n“But I say unto you, Love your enemies, bless them that curse you, do good to them that hate you, and pray for them which despitefully use you, and persecute you;”\nBlessing is an action, not a feeling you wait to arrive.\n\n**Luke 6:28**\n“Bless them that curse you, and pray for them which despitefully use you.”\nPrayer for the one who used you is how the heart unclenches without lying.\n\nYou do not have to finish the story today. You can take the next faithful step toward them.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "Matthew 5:44",
+        "Luke 6:28"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 5,
@@ -119,16 +119,14 @@
       "text": "I take care of my mother with dementia and I have nothing left for anyone",
       "room": "Suffering & Pain",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Suffering & Pain"
-      ],
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n“These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.”\nPeace is in Him, not in the world’s weather. Cheer is commanded because He has already overcome.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted. Rest is a gift, not a prize for the strong.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "John 16:33",
+        "Matthew 11:28"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 7,
@@ -151,16 +149,14 @@
       "text": "I'm jealous of a coworker who got the promotion I deserved",
       "room": "Forgiveness",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Forgiveness"
-      ],
+      "letter": "Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.\n\n**Matthew 6:14–15**\n“For if ye forgive men their trespasses, your heavenly Father will also forgive you: But if ye forgive not men their trespasses, neither will your Father forgive your trespasses.”\nThe same mercy you release is the mercy that keeps finding you.\n\n**Luke 6:36**\n“Be ye therefore merciful, as your Father also is merciful.”\nMercy is not a personality trait. It is family resemblance.\n\nMercy is often a road, not a moment. Take the next honest step.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "Matthew 6:14–15",
+        "Luke 6:36"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 9,
@@ -168,16 +164,14 @@
       "text": "My dad was cruel to us growing up and now he wants a relationship. I still hate him.",
       "room": "Forgiveness",
       "status": 200,
-      "letter": "The world offers a pause between problems. He offers a peace that can sit in a troubled room and still be itself.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nHe leaves peace the way someone leaves a key. It is already in the house.\n\n**Mark 4:39**\n“Peace, be still.”\nThe storm is addressed by name. Calm is not negotiated; it is spoken.\n\nHis peace is not the absence of storms. It is his presence within them.",
-      "failures": [
-        "room:Forgiveness"
-      ],
+      "letter": "Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.\n\n**Matthew 6:14–15**\n“For if ye forgive men their trespasses, your heavenly Father will also forgive you: But if ye forgive not men their trespasses, neither will your Father forgive your trespasses.”\nThe same mercy you release is the mercy that keeps finding you.\n\n**Luke 6:36**\n“Be ye therefore merciful, as your Father also is merciful.”\nMercy is not a personality trait. It is family resemblance.\n\nMercy is often a road, not a moment. Take the next honest step.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "John 14:27",
-        "Mark 4:39"
+        "Matthew 6:14–15",
+        "Luke 6:36"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 10,
@@ -185,16 +179,14 @@
       "text": "I go to church every week and feel completely invisible there",
       "room": "Loneliness",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Loneliness"
-      ],
+      "letter": "Loneliness can convince you that you are unseen. You are not an interruption.\n\n**John 14:18**\n“I will not leave you comfortless: I will come to you.”\nHe refuses the orphan story. Company is the promise, not a technique.\n\n**John 15:9**\n“As the Father hath loved me, so have I loved you: continue ye in my love.”\nYou are already inside a love that began before you asked for it.\n\nYou are someone Jesus calls friend. Presence does not expire at the end of a text thread.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "John 14:18",
+        "John 15:9"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 11,
@@ -215,18 +207,20 @@
       "id": 12,
       "category": "everyday",
       "text": "I want to be generous but I'm scared there won't be enough for us",
-      "room": "Anxiety & Worry",
-      "status": 200,
-      "letter": "Fear is shrinking the future. You do not have to pretend the waves are small.\n\n**Luke 12:32**\n“Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.”\nHe names you small on purpose — and then names the gift as a kingdom.\n\n**Luke 12:7**\n“But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.”\nYou are counted. Fear has to argue with that arithmetic.\n\nCourage is not the absence of fear. It is hearing “it is I” in the middle of it.",
-      "failures": [
-        "room:Anxiety & Worry"
+      "room": [
+        "Anxiety & Worry",
+        "Fear"
       ],
+      "status": 200,
+      "letter": "Fear is shrinking the future. You do not have to pretend the waves are small.\n\n**Luke 12:32**\n“Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.”\nHe names you small on purpose — and then names the gift as a kingdom.\n\n**Luke 12:7**\n“But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.”\nYou are counted. Fear has to argue with that arithmetic.\n\n**Mark 5:36**\n“Be not afraid, only believe.”\nBelief here is not bravado. It is refusing to let the report in the hallway be the last word.\n\nCourage is not the absence of fear. It is hearing “it is I” in the middle of it.",
+      "failures": [],
       "notes": [],
       "cites": [
         "Luke 12:32",
-        "Luke 12:7"
+        "Luke 12:7",
+        "Mark 5:36"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 13,
@@ -234,16 +228,14 @@
       "text": "I compare my life to everyone on Instagram and always come up short",
       "room": "Shame & Guilt",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Shame & Guilt"
-      ],
+      "letter": "Shame wants you out of the room. He still knows how to lift a face.\n\n**Luke 15:4**\n“What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?”\nHe does not wait for you to find the road back. He comes after what is lost.\n\n**Luke 15:7**\n“I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.”\nRepentance is not a courtroom. It is a reason for joy.\n\nYou are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "Luke 15:4",
+        "Luke 15:7"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 14,
@@ -266,16 +258,14 @@
       "text": "I have no idea what to do with my life. Every path looks wrong.",
       "room": "Purpose & Direction",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Purpose & Direction"
-      ],
+      "letter": "Direction-anxiety wants a five-year map. He offers a first thing and a following.\n\n**Matthew 5:14**\n“Ye are the light of the world. A city that is set on an hill cannot be hid.”\nYou do not have to become visible. You already are. The work is not to hide.\n\n**Matthew 6:33**\n“But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.”\nFirst things first. The rest is promised as addition, not as the hunt.\n\nYou do not need the whole map. You need the next yes.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "Matthew 5:14",
+        "Matthew 6:33"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 16,
@@ -313,16 +303,15 @@
       "text": "We lost the baby at 14 weeks. Everyone says it wasn't really a baby yet.",
       "room": "Grief & Loss",
       "status": 200,
-      "letter": "Direction-anxiety wants a five-year map. He offers a first thing and a following.\n\n**Matthew 5:14**\n“Ye are the light of the world. A city that is set on an hill cannot be hid.”\nYou do not have to become visible. You already are. The work is not to hide.\n\n**Matthew 6:33**\n“But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.”\nFirst things first. The rest is promised as addition, not as the hunt.\n\nYou do not need the whole map. You need the next yes.",
-      "failures": [
-        "room:Grief & Loss"
-      ],
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n“Blessed are they that mourn: for they shall be comforted.”\nComfort is promised to those who actually mourn — not to those who pretend the loss was small.\n\n**John 11:25**\n“I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:”\nHe meets death with His own name. The last word over what you have lost is not absence.\n\n**John 16:22**\n“And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.”\nSorrow is real, and so is the joy no one can confiscate when He is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 5:14",
-        "Matthew 6:33"
+        "Matthew 5:4",
+        "John 11:25",
+        "John 16:22"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 19,
@@ -330,16 +319,14 @@
       "text": "The doctor said stage 3. I'm 41 and I have two kids.",
       "room": "Suffering & Pain",
       "status": 200,
-      "letter": "This room holds only what Jesus said, so I cannot answer that as it is asked. If there is something under the question — a worry, a person, a night that will not end — write it plainly and I will look for his words on it. Until then, two sentences anyone may keep.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\n\nCome back with the thing itself. The room is open.",
-      "failures": [
-        "room:Suffering & Pain"
-      ],
+      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n“These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.”\nPeace is in Him, not in the world’s weather. Cheer is commanded because He has already overcome.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted. Rest is a gift, not a prize for the strong.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "John 16:33",
+        "Matthew 11:28"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 20,
@@ -362,17 +349,15 @@
       "text": "I got fired and I haven't told my wife. I feel like such a failure.",
       "room": "Shame & Guilt",
       "status": 200,
-      "letter": "Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.\n\n**Matthew 5:44**\n“But I say unto you, Love your enemies, bless them that curse you, do good to them that hate you, and pray for them which despitefully use you, and persecute you;”\nBlessing is an action, not a feeling you wait to arrive.\n\n**Luke 6:28**\n“Bless them that curse you, and pray for them which despitefully use you.”\nPrayer for the one who used you is how the heart unclenches without lying.\n\n**John 15:13**\n“Greater love hath no man than this, that a man lay down his life for his friends.”\nThe measure of love is not convenience. It is what you are willing to lay down.\n\nYou do not have to finish the story today. You can take the next faithful step toward them.",
-      "failures": [
-        "room:Shame & Guilt"
-      ],
+      "letter": "Shame wants you out of the room. He still knows how to lift a face.\n\n**Luke 15:4**\n“What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?”\nHe does not wait for you to find the road back. He comes after what is lost.\n\n**Luke 15:7**\n“I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.”\nRepentance is not a courtroom. It is a reason for joy.\n\n**John 6:35**\n“I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.”\nHunger does not make you unworthy of bread. It makes you the one the bread was for.\n\nYou are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.",
+      "failures": [],
       "notes": [],
       "cites": [
-        "Matthew 5:44",
-        "Luke 6:28",
-        "John 15:13"
+        "Luke 15:4",
+        "Luke 15:7",
+        "John 6:35"
       ],
-      "roomMet": false
+      "roomMet": true
     },
     {
       "id": 22,
@@ -410,12 +395,13 @@
       "text": "I failed the bar exam for the second time and my parents are so disappointed",
       "room": "Shame & Guilt",
       "status": 200,
-      "letter": "Shame wants you out of the room. He still knows how to lift a face.\n\n**Luke 15:4**\n“What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?”\nHe does not wait for you to find the road back. He comes after what is lost.\n\n**Luke 15:7**\n“I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.”\nRepentance is not a courtroom. It is a reason for joy.\n\nYou are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.",
+      "letter": "Shame wants you out of the room. He still knows how to lift a face.\n\n**Luke 15:4**\n“What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?”\nHe does not wait for you to find the road back. He comes after what is lost.\n\n**Luke 15:7**\n“I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.”\nRepentance is not a courtroom. It is a reason for joy.\n\n**John 6:35**\n“I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.”\nHunger does not make you unworthy of bread. It makes you the one the bread was for.\n\nYou are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.",
       "failures": [],
       "notes": [],
       "cites": [
         "Luke 15:4",
-        "Luke 15:7"
+        "Luke 15:7",
+        "John 6:35"
       ],
       "roomMet": true
     },

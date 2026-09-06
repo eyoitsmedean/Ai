@@ -7,12 +7,13 @@ const path = require('path');
 
 const SIGNAL_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'rla-signals-')), 'signals.jsonl');
 process.env.RLA_SIGNAL_PATH = SIGNAL_FILE;
+process.env.RLA_ALLOWED_ORIGINS = 'https://shell.example, capacitor://localhost';
 const app = require('../server');
 
 let server;
 let base;
 
-function request(method, path, body) {
+function request(method, path, body, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
     const req = http.request(`${base}${path}`, {
@@ -20,6 +21,7 @@ function request(method, path, body) {
       headers: {
         'Content-Type': 'application/json',
         ...(payload ? { 'Content-Length': Buffer.byteLength(payload) } : {}),
+        ...extraHeaders,
       },
     }, (res) => {
       const chunks = [];
@@ -109,6 +111,18 @@ describe('smoke routes', () => {
     const griefLetter = joinStream(grief.raw);
     assert.match(griefLetter, /Blessed are they that mourn/);
     assert.doesNotMatch(griefLetter, /Fear not, little flock/);
+  });
+
+  it('answers cross-origin only for origins named in RLA_ALLOWED_ORIGINS', async () => {
+    const shell = await request('OPTIONS', '/api/chat', null, { Origin: 'capacitor://localhost', 'Access-Control-Request-Method': 'POST' });
+    assert.equal(shell.status, 204);
+    assert.equal(shell.headers['access-control-allow-origin'], 'capacitor://localhost');
+    const pages = await request('GET', '/api/health', null, { Origin: 'https://shell.example' });
+    assert.equal(pages.headers['access-control-allow-origin'], 'https://shell.example');
+    const stranger = await request('GET', '/api/health', null, { Origin: 'https://evil.example' });
+    assert.equal(stranger.headers['access-control-allow-origin'], undefined);
+    const sameOrigin = await request('GET', '/api/health');
+    assert.equal(sameOrigin.headers['access-control-allow-origin'], undefined);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

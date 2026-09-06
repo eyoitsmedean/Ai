@@ -295,6 +295,28 @@ async function main() {
     page.off('request', onRequest);
   });
 
+  await check('the Advisor answers the need with His words, and a crisis opens the handoff first', async () => {
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { localStorage.setItem('rla-onboarded', '1'); });
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => sendMsg('My mom died three weeks ago and I feel nothing at all'));
+    await page.waitForFunction(() => /Blessed are they that mourn/.test(document.getElementById('chat-messages').innerText), { timeout: 8000 });
+    const letter = await page.evaluate(() => document.getElementById('chat-messages').innerText);
+    const verses = await page.evaluate(() => [...document.querySelectorAll('#chat-messages .scripture-verse')].map((el) => el.textContent.trim()));
+    assert(/Grief is not a failure of faith/.test(letter), 'grief room should open the letter');
+    assert(verses.includes('Matthew 5:4'), 'citation should be printed with the verse, saw ' + verses.join(', '));
+    assert(!/\{\{/.test(letter), 'no unfilled marker may reach the page');
+
+    // A crisis line never goes to the Advisor before the reader has seen a human door.
+    const modalOpened = page.evaluate(() => {
+      const p = sendMsg('I want to die');
+      return new Promise((resolve) => setTimeout(() => resolve(document.getElementById('crisis-modal').classList.contains('on')), 300)).then((on) => { document.getElementById('crisis-close').click(); return p.then(() => on); });
+    });
+    assert(await modalOpened, 'crisis modal must open before sending');
+    const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
+    assert(/988/.test(copy) && /helpline/i.test(copy), 'modal must name 988 and a global directory');
+  });
+
   await check('Room settings says how the red letters are decided', async () => {
     const copy = await page.evaluate(() => document.getElementById('settings-sheet').innerText);
     assert(/red-letter tradition/.test(copy) && /John 3:16–21/.test(copy), 'disclosure missing');

@@ -4,3 +4,6 @@ node_modules/
 .DS_Store
 data/waitlist.json
 data/signals.jsonl
+dist-shell/
+ios/
+android/
