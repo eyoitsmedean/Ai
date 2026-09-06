@@ -61,6 +61,40 @@ describe('KJV corpus', () => {
     }
   });
 
+  it('narrator frames are the corpus’s own words, verse by verse', () => {
+    const frames = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'narrator-frames.json'), 'utf8'));
+    assert.ok(Object.keys(frames).length >= 70);
+    for (const [cite, frame] of Object.entries(frames)) {
+      const [book, cv] = cite.split(' ');
+      const [c, v] = cv.split(':');
+      const full = cleanKjv(corpus.books[book][c][v]);
+      assert.ok(full.startsWith(frame.intro), `${cite}: intro is not how the verse begins`);
+      if (frame.tail) assert.ok(full.endsWith(frame.tail), `${cite}: tail is not how the verse ends`);
+    }
+  });
+
+  it('the spoken corpus opens with His words, not the narrator’s', () => {
+    const spoken = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'spoken-gospels.json'), 'utf8')).books;
+    // Inside a parable He narrates his own characters; those stay.
+    const inParable = new Set(['Matthew 12:44', 'Luke 13:8', 'Luke 15:26', 'Luke 15:29', 'Luke 16:2', 'Luke 16:24', 'Luke 19:13']);
+    const narrator = [
+      /^[^,.;:!?]{0,90}\bJesus\b/,
+      /^((And|But|Then|Now|When) )?(he|Jesus)( also)? (answered|answering|said|saith|spake|cried|called)\b[^,]{0,60}, /i,
+    ];
+    for (const [book, chapters] of Object.entries(spoken)) {
+      for (const [c, verses] of Object.entries(chapters)) {
+        for (const [v, text] of Object.entries(verses)) {
+          const cite = `${book} ${c}:${v}`;
+          if (inParable.has(cite)) continue;
+          for (const re of narrator) assert.doesNotMatch(text, re, `${cite} keeps the narrator: ${text.slice(0, 80)}`);
+        }
+      }
+    }
+    assert.equal(spoken.John['11']['35'], undefined, 'Jesus wept is not a saying');
+    assert.equal(spoken.John['20']['21'], 'Peace be unto you: as my Father hath sent me, even so send I you.');
+    assert.equal(spoken.Mark['4']['39'], 'Peace, be still.');
+  });
+
   it('serves the spoken text under the right number', () => {
     assert.match(lookup('Matthew 22:39').text, /love thy neighbour as thyself/);
     assert.match(lookup('Matthew 26:41').text, /^Watch and pray/);
