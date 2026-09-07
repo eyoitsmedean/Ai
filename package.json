@@ -11,6 +11,7 @@
     "dev": "node server.js",
     "test": "node scripts/smoke.js",
     "smoke": "node scripts/smoke.js",
+    "test:unit": "node --test test/*.test.js",
     "verify:corpus": "node scripts/verify-corpus.js",
     "icons": "python3 scripts/generate-icons.py",
     "eval": "node scripts/eval.js",
