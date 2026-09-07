@@ -27,6 +27,7 @@ Audience: someone carrying a real question about their life, often at a low mome
 | D13 | Passive ideation ("nobody would miss me") is not the crisis card: scripture stays, a 988 line is appended. Explicit intent, methods, farewells and Spanish equivalents are the crisis card. | settled | 2026-09-06 |
 | D14 | A Gospel verse that is not in the curated corpus is shown as exact WEB text but labelled "speaker unverified" — only the corpus vouches for red letters. The daily word never shows an unverified passage (corpus substitution). | settled | 2026-09-06 |
 | D15 | Every ✓ WEB badge links to the public WEB chapter page with a verse anchor (`https://ebible.org/eng-web/<MAT|MRK|LUK|JHN><cc>.htm#V<v>`), so "citations you can check" is one tap. | settled | 2026-09-06 |
+| D16 | The truth-and-safety layer lives in `lib/advisor/` as one file per promise (verify, intent, corpus-reply, normalize) behind the unchanged `data/scripture` façade, and is pinned by offline unit tests (`npm run test:unit`). Rule: a new crisis/abuse phrasing goes into `test/fixtures/phrasings.json` first, then the pattern. | settled | 2026-09-07 |
 | D12 | Grace over streaks: no streak counters, no guilt mechanics. Presence is shown, never scored. | settled (earlier session) | 2026-09-01 |
 
 ## Mobile stack — two options considered (D6)
@@ -102,4 +103,5 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 
 - 2026-09-01 — Encounter (cinematic daily open) and Living Garden shipped. Grace over streaks (D12).
 - 2026-09-02..05 — Production hardening: PWA manifest/icons/splash, SW offline, Web Push, threads, voice input, Lighthouse fixes, corpus expanded 55 → 102 and machine-verified (D5), README, CI.
+- 2026-09-07 — Rebuild pipeline on `data/scripture.js`: split into `lib/advisor/` (verify / intent / corpus-reply / normalize) behind a façade; differential test old-vs-new over 182 intent inputs and all verification/reply paths showed zero behaviour change; 30 unit tests added (29 offline + 1 network); smoke 17/17, eval 91/91, ui-check 18/18 re-run on the rebuilt module. D16. Notes: `docs/bot-notes.md`.
 - 2026-09-06 — ATELIER pass: Gospel-only scope guard (D7), deterministic safety/off-scope/hostile gate before paywall (D8, D9), corpus-mode tone (D10), evaluation set (D11), this file, RELEASE.md. Independent Breaker found 5 S1 / 5 S2 / 5 S3 (RELEASE.md §F); all S1/S2 repaired and retested; eval grew to 91/91; UI check added; D13–D15 recorded. ELEVATE: ✓ WEB badges now open the exact WEB verse (D15).

@@ -72,6 +72,7 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 
 | Command | What it checks |
 | --- | --- |
+| `npm run test:unit` (`test/*.test.js`) | 30 offline unit tests on the truth-and-safety layer (`lib/advisor/`): every crisis, abuse, passive-ideation, off-scope and hostile phrasing from the eval set and the Breaker pass; Gospel scope; corpus-first verification and header correction; curated leads exist and contain no wounding defaults. Node's built-in runner, no dependencies. `VERIFY_NETWORK=1` adds one bible-api case. |
 | `npm test` (`scripts/smoke.js`) | 17 live checks against a running server: health, corpus APIs, grounded chat SSE, security headers, manifest installability, icons/splash, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
 | `npm run eval` (`scripts/eval.js`) | 91-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse, passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 91/91 in corpus mode. |
 | `npm run ui-check` (`scripts/ui-check.js`) | Headless Chrome at a phone viewport: the crisis card renders with tappable 988/911/hotline links ≥44 px, ✓ WEB badges link to the WEB verse on ebible.org, off-scope replies carry no verse, no page errors. Needs `puppeteer` (CI installs it). |
@@ -85,13 +86,19 @@ Last measured with Lighthouse (mobile, throttled): app `/` — Performance 94, A
 ```
 server.js               Express: security headers, gzip, rate limits, API, Web Push scheduler
 data/red-letters.js     Curated WEB red-letter corpus (102 passages, 12 themes)
-data/scripture.js       Verification + grounding: corpus → bible-api (WEB) → unverified flag
+data/scripture.js       Compatibility façade → lib/advisor
+lib/advisor/            Truth-and-safety layer, one file per promise:
+  verify.js               only Jesus's words — Gospel scope, corpus → bible-api (WEB) → unverified; grounding of model text
+  intent.js               crisis → abuse → off-scope → hostile gate, passive-ideation flag, Spanish (runs before model and paywall)
+  corpus-reply.js         model-free daily word and encouragement from curated leads
+  normalize.js            shared text normalisation + hash
+test/                   Unit tests for lib/advisor (fixtures/phrasings.json = Breaker phrasings)
 public/index.html       The app (single file: styles, markup, and client logic)
 public/sw.js            Service worker: offline shell, update banner, push + notification click
 public/manifest.json    PWA manifest (id, scope, maskable icons, shortcuts, screenshots)
 public/offline.html     Offline fallback page
 index.html              Marketing landing page served at /welcome
-scripts/                smoke.js, eval.js, verify-corpus.js, generate-icons.py
+scripts/                smoke.js, eval.js, ui-check.js, verify-corpus.js, generate-icons.py
 eval/                   questions.json (the evaluation set), RESULTS.md + results.json (last run)
 CLAUDE.md               System of record: decisions, evidence ledger, assumptions, open questions
 RELEASE.md              Release checklist (verified / unverified) + five-minute on-device checklist
