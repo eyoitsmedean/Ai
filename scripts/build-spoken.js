@@ -9,13 +9,31 @@ const { cleanKjv, extractSpoken, SPOKEN_ADDITIONS } = require('../lib/scripture'
 
 const ROOT = path.join(__dirname, '..');
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
-const SOURCE = process.argv[2] || path.join(ROOT, 'data', 'red-letter-source.json');
+const PROD_SOURCE = path.join(ROOT, 'data', 'red-letter-source.json');
+const PROD_SPOKEN = path.join(ROOT, 'data', 'spoken-gospels.json');
+const PROD_LIBRARY = path.join(ROOT, 'public', 'library.json');
+
+function flag(name, fallback) {
+  const i = process.argv.indexOf(name);
+  return i !== -1 ? process.argv[i + 1] : fallback;
+}
+const positional = process.argv.slice(2).filter((a) => !a.startsWith('--') && process.argv[process.argv.indexOf(a) - 1] !== '--source' && process.argv[process.argv.indexOf(a) - 1] !== '--out' && process.argv[process.argv.indexOf(a) - 1] !== '--library');
+const SOURCE = flag('--source', positional[0] || PROD_SOURCE);
+const destSpoken = flag('--out', PROD_SPOKEN);
+const destLibrary = flag('--library', PROD_LIBRARY);
+const fromNamed = path.resolve(SOURCE) !== path.resolve(PROD_SOURCE);
+if (fromNamed && destSpoken === PROD_SPOKEN && !process.argv.includes('--out')) {
+  console.error('Refusing to overwrite data/spoken-gospels.json from a non-production map. Pass --out <file>.');
+  process.exit(1);
+}
 
 const red = JSON.parse(fs.readFileSync(SOURCE, 'utf8')).verses;
 const kjv = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'gospels-kjv.json'), 'utf8'));
 
 const spoken = {
-  attribution: 'KJV 1769 public domain; red-letter spans from open red-letter maps, then spoken-text extraction',
+  attribution: fromNamed
+    ? 'KJV 1769 public domain; red-letter spans from the eBible.org KJV OSIS (see data/red-letter-ebible-kjv.json), then spoken-text extraction'
+    : 'KJV 1769 public domain; red-letter spans from open red-letter maps, then spoken-text extraction',
   books: {},
 };
 
@@ -85,10 +103,9 @@ function groupSayings() {
   return sayings;
 }
 
-const destSpoken = path.join(ROOT, 'data', 'spoken-gospels.json');
 fs.writeFileSync(destSpoken, JSON.stringify(spoken));
 const sayings = groupSayings();
-fs.writeFileSync(path.join(ROOT, 'public', 'library.json'), JSON.stringify({
+fs.writeFileSync(destLibrary, JSON.stringify({
   translation: 'KJV',
   count: sayings.length,
   verses: count,
