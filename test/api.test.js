@@ -47,6 +47,9 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(data.themes, 12);
+    assert.equal(data.model, 'claude-opus-5');
+    assert.equal(data.effort, 'low');
+    assert.equal(data.anthropic, false);
   });
 
   it('serves a verified daily page', async () => {
@@ -75,6 +78,23 @@ describe('smoke routes', () => {
   it('rejects an empty chat', async () => {
     const res = await request('POST', '/api/chat', { messages: [] });
     assert.equal(res.status, 400);
+  });
+
+  it('prefixes a crisis letter with 988', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to kill myself tonight' }],
+    });
+    assert.equal(res.status, 200);
+    const letter = res.raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert.match(letter, /988/);
+    assert.match(letter, /findahelpline\.com/);
+    assert.match(letter, /Peace I leave with you/);
   });
 
   it('streams a verified letter for chat', async () => {

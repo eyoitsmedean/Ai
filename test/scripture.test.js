@@ -14,8 +14,10 @@ const {
   isRedLetter,
   spokenAt,
   fillPlaceholders,
+  spokenLookup,
 } = require('../lib/scripture');
-const { retrieveSayings, guessThemes } = require('../lib/retrieve');
+const { FALLBACK_LETTER } = require('../lib/prompts');
+const { retrieveSayings, guessThemes, formatAllowList } = require('../lib/retrieve');
 const { dailyForDate, encouragementFor, themeNames } = require('../lib/curated');
 const { searchLibrary, verseCount, sayingCount } = require('../lib/library');
 const { themesForSaying, isKnownTheme } = require('../lib/themes');
@@ -109,6 +111,26 @@ describe('verifyAdvisorText', () => {
     const via = verifyAndSubstitute('{{QUOTE:Mark 4:39}}');
     assert.match(via, /Peace, be still/);
   });
+
+  it('refuses narrator verses at every insertion point', () => {
+    assert.equal(spokenLookup('Matthew 1:1'), null);
+    assert.equal(spokenLookup('John 1:1'), null);
+    assert.equal(spokenLookup('Mark 1:1'), null);
+    assert.doesNotMatch(fillPlaceholders('{{Matthew 1:1}}'), /generation of Jesus Christ/);
+    assert.doesNotMatch(fillPlaceholders('{{John 1:1}}'), /In the beginning was the Word/);
+    const dropped = verifyAdvisorText('**Matthew 1:1**\n"The book of the generation"\nA gloss that must also leave.');
+    assert.doesNotMatch(dropped, /generation/);
+    assert.doesNotMatch(dropped, /gloss/);
+    assert.ok(spokenLookup('John 14:27'));
+    assert.ok(spokenLookup('John 3:16'));
+  });
+
+  it('writes the fallback letter through the same gate as the model', () => {
+    const out = verifyAndSubstitute(FALLBACK_LETTER);
+    assert.match(out, /Peace I leave with you/);
+    assert.match(out, /Come unto me/);
+    assert.doesNotMatch(out, /\{\{/);
+  });
 });
 
 describe('verifyJsonQuotes', () => {
@@ -146,6 +168,8 @@ describe('looksLikeCrisis', () => {
   it('detects clear self-harm language and ignores ordinary grief', () => {
     assert.equal(looksLikeCrisis('I want to kill myself tonight'), true);
     assert.equal(looksLikeCrisis('I have no reason to live'), true);
+    assert.equal(looksLikeCrisis('I want to unalive myself'), true);
+    assert.equal(looksLikeCrisis("I don't want to be alive anymore"), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
   });
 });
@@ -225,5 +249,17 @@ describe('spoken corpus', () => {
     const hit = retrieveSayings('I am afraid of the future', { limit: 8 });
     assert.ok(hit.sayings.length >= 3);
     assert.ok(hit.sayings.some((s) => /fear not|be not afraid|troubled/i.test(s.text)));
+  });
+
+  it('does not treat a vague sentence as a keyword search of the whole corpus', () => {
+    const hit = retrieveSayings('I do not know what to say');
+    assert.ok(hit.sayings.length >= 2);
+    assert.ok(hit.sayings.every((s) => /14:27|11:28|4:39/.test(s.citation)));
+  });
+
+  it('prints an allow-list of placeholders, not full verses for the model to copy', () => {
+    const list = formatAllowList(retrieveSayings('I feel so much shame', { limit: 3 }).sayings);
+    assert.match(list, /\{\{(Matthew|Mark|Luke|John) /);
+    assert.doesNotMatch(list, /\n[^{].{200,}/);
   });
 });

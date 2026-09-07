@@ -12,7 +12,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 - **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
 - **Journal** — a commonplace book kept on this device, with a quire of words you have sat with
 
-Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts the spoken corpus text, so the model never types the verse. Daily and encouragement JSON are requested as structured output, then verified the same way.
+Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts spoken-corpus text only; narrator verses (genealogies, prologues) are refused even if the KJV has them. Daily and encouragement JSON are requested as structured output, then verified the same way. Unverified model pages fall back to the curated set.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 
@@ -29,8 +29,10 @@ Without an API key the room still opens: Today and Seek use curated, corpus-veri
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
 ANTHROPIC_MODEL=claude-opus-5
+ANTHROPIC_EFFORT=low   # thinking effort; thinking counts against max_tokens
 PORT=3000
 API_ACCESS_KEY=        # optional gate for /api/*
+TRUST_PROXY=1          # set when a reverse proxy sets X-Forwarded-For
 ```
 
 ```bash
