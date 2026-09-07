@@ -1,0 +1,16 @@
+{
+  "locked": "2026-09-07",
+  "about": "Ten questions written and locked before the BM25+lexicon rebuild. Do not edit expectations to match a worse ranker. A hit is any retrieved saying that overlaps the expected citation.",
+  "questions": [
+    { "text": "I feel so alone since my divorce", "expect": ["John 14:18", "Matthew 28:20", "John 14:27"] },
+    { "text": "My daughter is not speaking to me", "expect": ["Luke 15:20", "Luke 15:4", "Matthew 18:12", "Luke 15:22", "Luke 15:24"] },
+    { "text": "I lied to my wife and I feel sick about it", "expect": ["Matthew 5:23", "Matthew 5:24", "Luke 15:7", "John 8:11", "Luke 15:21"] },
+    { "text": "I am jealous of my friend's success", "expect": ["Matthew 20:15", "Luke 12:15", "Matthew 6:33", "Matthew 6:19", "Matthew 6:20", "Matthew 6:21"] },
+    { "text": "I cannot stop drinking", "expect": ["John 8:36", "Matthew 26:41", "Matthew 11:28", "Luke 21:34"] },
+    { "text": "What does Jesus say about money and greed", "expect": ["Matthew 6:24", "Matthew 6:19", "Luke 12:15", "Mark 8:36", "Matthew 6:21"] },
+    { "text": "I am scared of dying", "expect": ["John 11:25", "John 14:1", "John 14:2", "John 5:24", "John 14:27", "Luke 12:4", "Matthew 10:28"] },
+    { "text": "My boss humiliated me in front of everyone", "expect": ["Matthew 5:11", "Luke 6:22", "Luke 6:28", "Matthew 5:44", "Matthew 5:39"] },
+    { "text": "I have been praying for years and nothing changes", "expect": ["Luke 11:9", "Matthew 7:7", "Luke 18:7", "Mark 11:24"] },
+    { "text": "How do I love people who are cruel to me", "expect": ["Matthew 5:44", "Luke 6:27", "Luke 6:35", "Luke 6:28"] }
+  ]
+}
