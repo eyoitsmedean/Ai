@@ -30,6 +30,7 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 | 6 Sep 2026 | The human-help gate is one shared pattern list (`data/crisis.js`) used by server and page; it is tuned against a pinned sentence set, looks at the last two user turns, and is hashed into `/api/health` so an evaluation can refuse a stale server. | `data/crisis.js`, `test/crisis.test.js`, `server.js` |
 | 6 Sep 2026 | The verifier prints only his speech: epistle, Psalm, deuterocanon, and narrative-Gospel citations are dropped from a reply, never passed through. `1 John` is not `John`. | `lib/scripture.js`, `test/scripture.test.js` |
 | 6 Sep 2026 | The Advisor evaluation set lives in `eval/` and runs with `npm run eval`; quotation of a non-Gospel book is a hard failure, naming one to decline it is not. Fallback-mode results prove the gate and verifier, not tone; the live run is Dean's, from a machine with a key. | `eval/README.md`, `eval/REVIEW.md` |
+| 7 Sep 2026 | `MARKET_STRATEGY.md` is the current strategy page (v2). v1 is archived as `MARKET_STRATEGY.v1.md`. The red-letter niche is occupied (three products) but not owned; money and paid ads stay parked through 4 Dec 2026. | `MARKET_STRATEGY.md`, `docs/bot-notes.md` |
 
 ## Open questions (only Dean can close these)
 
@@ -58,4 +59,13 @@ Commission read as: run the protocol on the Advisor brief's open MASTERWORK item
 - Verified in ELEVATE (rung 1): the browser crisis modal opens on a Breaker sentence and closes, `scripts/qa-browser.js` 7/7 in headless Chrome.
 - Not verified: any live-model behaviour (no key); the live Pages deploy (founder-only).
 - Assumed: a second paste of the protocol with no commission line meant "run it on the brief". Corrected in ten seconds if wrong.
+
+## FOR THE RECORD — 7 September 2026
+
+Commission: UNIVERSAL REBUILD PIPELINE on a blank brief. Target assumed: `MARKET_STRATEGY.md`.
+
+- Built: `MARKET_STRATEGY.md` v2; `MARKET_STRATEGY.v1.md` (archive); `docs/bot-notes.md`.
+- Verified this session: 17 URLs opened; `lib/year.js` dates for Advent 2026 / Ash Wednesday 2027 / Easter 2027; HTTP check on every cited URL (Baptist Press 403, replaced).
+- Not verified: live App Store search ads; Hallow's full 2026 Lent close; any paywall in this product (none is on).
+- Assumed: blank brief fields as listed in `docs/bot-notes.md`. Corrected in ten seconds if the target was something else.
 
