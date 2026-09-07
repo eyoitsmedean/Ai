@@ -24,7 +24,7 @@ Three independent reviews on 2026-09-06 (a Breaker agent that built nothing, thr
 | Static hosting shows the exact verse, not its five-verse block | verified | `npm run qa` — "static hosting still shows the exact verse" |
 | Translation licence recorded | verified | KJV public domain outside the UK — CLAUDE.md, source cited |
 | Red-letter verse map is aligned to the corrected numbering | verified | 2,007 markers checked against the rebuilt text: 1 mismatch (a leading 'Saying,'); 12 non-dominical entries excluded by name in `lib/scripture.js` |
-| Red-letter verse map provenance | **unverified** | `data/red-letter-source.json` names no source. Dean to name it or authorize a rebuild from a named public-domain red-letter edition. |
+| Red-letter verse map provenance | verified 2026-09-07 as a **named witness, not a swap** | Production file still unnamed. Named source committed beside it: eBible.org KJV OSIS 1769, SHA-256 `eeeae647…e253`, `<q who="Jesus">`, 1,968 Gospel verses; WEB USFX witness agrees on 1,950. Rebuild: `npm run red-letter-map`. The named edition already omits the voice from the cloud, the angel, and the disciples; a wholesale swap would add 57 verses and drop 3 genuine ones — not done. `docs/red-letter-map.md`; `test/red-letter-map.test.js` |
 
 ## Safety
 
