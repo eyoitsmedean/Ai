@@ -2,7 +2,7 @@
 
 Every line is **verified** (with how, and the rung) or **unverified** (with what it takes). Nothing here is called passed that was not run. Rungs: (1) ran it and observed · (2) automated proxy · (3) hand-traced · (4) checked against a spec · (5) could not verify.
 
-Last updated 2026-09-06, on branch `cursor/forty-path-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
+Last updated 2026-09-11, on branch `cursor/advisor-sprint-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
 
 ## What is verified
 

@@ -39,7 +39,7 @@ A chat-first advisor that answers a real life question from the direct words of 
 
 ## How to check the work
 
-`npm test` · `npm run qa` (browser checks; needs a running server and Chrome) · `npm run eval` (46 questions against a live server; writes `eval/RESULTS.md`) · `npm run audit` (frame audit).
+`npm test` (87) · `npm run qa` (16 browser checks; needs a running server and Chrome) · `npm run eval` (46 questions against a live server; writes `eval/RESULTS.md`) · `npm run audit` (frame audit).
 
 ## Session log
 
