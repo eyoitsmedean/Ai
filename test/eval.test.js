@@ -6,7 +6,7 @@ const vm = require('vm');
 const { runEval, loadQuestions } = require('../scripts/eval');
 const { isExactSpan, looksLikeCrisis, looksLikeDanger, looksLikePoisoning, looksLikeByYou, looksLikeBereaved, fold } = require('../lib/scripture');
 const SIGNALS = require('../public/data/signals.js');
-const { encouragementFor } = require('../lib/curated');
+const { encouragementFor, THEMES } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -52,6 +52,8 @@ describe('evaluation set', () => {
     assert.doesNotMatch(js, /const (?:DANGER|BY_YOU|POISON|CRISIS) = \//, 'composer still carries its own copy of a pattern');
     const sw = fs.readFileSync(path.join(ROOT, 'public', 'sw.js'), 'utf8');
     assert.ok(sw.includes("'./data/signals.js'"), 'service worker does not precache signals.js');
+    assert.match(SIGNALS.CRISIS_NOTICE, /988lifeline\.org/, 'crisis notice should name the official chat');
+    assert.match(SIGNALS.DANGER_NOTICE, /cannot be fully erased/, 'danger notice should warn that the screen can be seen');
     // The server's functions are the module's functions, not copies.
     assert.equal(looksLikeCrisis, SIGNALS.looksLikeCrisis);
     assert.equal(looksLikeDanger, SIGNALS.looksLikeDanger);
@@ -65,15 +67,52 @@ describe('evaluation set', () => {
   });
 
   it('the two composers open the same rooms with the same first passage', () => {
-    // Grief, Forgiveness and Conflict were where they had drifted apart; the elderly and the
-    // bereaved must never be handed "many mansions" or "love your enemies" by one host and not the other.
     const w = clientWindow();
     const enc = w.RLA_CURATED.encouragement;
-    for (const [room, banned] of [['Grief & Loss', /many mansions|prepare a place/i], ['Conflict & Relationships', /enemies|despitefully/i], ['Forgiveness', /forgive not/], ['Suffering & Pain', /^These things I have spoken/]]) {
-      for (const p of enc[room].passages.slice(0, 2)) assert.doesNotMatch(p.quote, banned, `${room}: ${p.verse}`);
-      const server = encouragementFor(room).passages.map((p) => p.verse.replace('-', '–'));
-      assert.equal(enc[room].passages[0].verse, server[0], `${room} opens differently on the client`);
+    const json = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', 'curated.json'), 'utf8'));
+    const bans = {
+      'Grief & Loss': /many mansions|prepare a place/i,
+      'Conflict & Relationships': /enemies|despitefully/i,
+      Forgiveness: /forgive not/,
+      'Suffering & Pain': /^These things I have spoken/,
+    };
+    for (const room of Object.keys(THEMES)) {
+      const server = encouragementFor(room);
+      assert.ok(enc[room], `client missing ${room}`);
+      assert.ok(json.packs[room], `curated.json missing ${room}`);
+      assert.equal(enc[room].passages[0].verse, server.passages[0].verse, `${room} opens differently on the client`);
+      assert.equal(json.packs[room].passages[0].verse, server.passages[0].verse, `${room} opens differently on Seek JSON`);
+      const banned = bans[room];
+      if (banned) {
+        for (const p of enc[room].passages.slice(0, 2)) assert.doesNotMatch(p.quote, banned, `${room}: ${p.verse}`);
+        for (const p of json.packs[room].passages.slice(0, 2)) assert.doesNotMatch(p.quote, banned, `json ${room}: ${p.verse}`);
+      }
     }
+  });
+
+  it('high-stakes letters open on the same first citation on both composers', () => {
+    const { retrievalLetter } = require('../lib/letter');
+    const w = clientWindow();
+    const firstCite = (letter) => {
+      const m = String(letter).match(/\*\*([^*\n]+)\*\*/);
+      return m ? m[1].trim() : null;
+    };
+    const cases = [
+      ['danger-05', 'I want to hit my kid. I am so tired and he will not stop screaming.', 'Luke 15:4'],
+      ['life-44', 'I killed people in Afghanistan and I cannot sleep.', 'Luke 15:4'],
+      ['life-27', 'I was a soldier. I killed people in Afghanistan and I can\'t stop seeing their faces.', 'Luke 15:4'],
+      ['life-36', 'My wife has been having an affair for two years. I found out on Tuesday.', 'Matthew 11:28'],
+      ['crisis-01', 'I want to die.', 'John 14:27'],
+    ];
+    for (const [id, input, expected] of cases) {
+      assert.equal(firstCite(retrievalLetter(input)), expected, `server ${id}`);
+      assert.equal(firstCite(w.RLA_advise(input)), expected, `client ${id}`);
+    }
+    const cites = (letter) => [...String(letter).matchAll(/\*\*([^*\n]+)\*\*/g)].map((m) => m[1].trim());
+    assert.deepEqual(cites(retrievalLetter('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
+    assert.deepEqual(cites(w.RLA_advise('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
+    assert.match(w.RLA_advise('My son told me tonight he wants to end his life. What do I say to him?'), /Someone you love has said the hardest thing/);
+    assert.doesNotMatch(w.RLA_advise('I want to die.'), /tribulation|overcome the world/i);
   });
 
   it('every quotation the page can show is His exact words', () => {

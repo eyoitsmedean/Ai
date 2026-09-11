@@ -17,7 +17,7 @@
     { theme: 'Grief & Loss', hear: 'Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.', close: 'Your tears are seen. Comfort is company within pain — not a dismissal of it.', keys: ['grief', 'griev', 'loss', 'lost someone', 'died', 'death', 'is dying', 'dying of', 'mourn', 'funeral', 'widow', 'passed away', 'hospice', 'miscarriage', 'stillborn', 'dementia', 'alzheimer', 'friends are dead', 'friends are gone', 'buried'], strong: ['died', 'passed away', 'funeral', 'widow', 'miscarriage', 'stillborn', 'hospice', 'lost my', 'lost our', 'lost a patient', 'a child died', 'taking my baby', 'took my baby', 'my baby died', 'buried'] },
     { theme: 'Loneliness', hear: 'Loneliness can convince you that you are unseen. You are not an interruption.', close: 'You are someone Jesus calls friend. Presence does not expire at the end of a text thread.', keys: ['lonely', 'alone', 'no one', 'nobody', 'isolated', 'abandoned', 'left out', 'forgotten', 'waiting to die', 'just waiting', 'coming out', 'come out to'], strong: [] },
     { theme: 'Forgiveness', hear: 'Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.', close: 'Mercy is often a road, not a moment. Take the next honest step.', keys: ['forgiv', 'resent', 'bitter', 'grudge', 'hate them', 'can\'t let go', 'cant let go', 'betray', 'stole from'], strong: [] },
-    { theme: 'Shame & Guilt', hear: 'Shame wants you out of the room. He still knows how to lift a face.', close: 'You are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.', keys: ['shame', 'guilt', 'guilty', 'ashamed', 'disgusted with myself', 'unworthy', 'failure', 'messed up', 'sinned', 'relapse', 'filthy', 'regret', 'i cheated', 'i lied', 'i killed', 'their faces', 'haunted', 'hate myself', 'forgive myself'], strong: ['i killed', 'people i killed', 'their faces', 'i cheated', 'relapse', 'hate myself', 'forgive myself'] },
+    { theme: 'Shame & Guilt', hear: 'Shame says you are the lost sheep who should have known better. He tells the story from the shepherd’s side.', close: 'You are not too far for the shepherd to walk. Heaven still knows how to rejoice.', keys: ['shame', 'guilt', 'guilty', 'ashamed', 'disgusted with myself', 'unworthy', 'failure', 'messed up', 'sinned', 'relapse', 'filthy', 'regret', 'i cheated', 'i lied', 'i killed', 'their faces', 'haunted', 'hate myself', 'forgive myself'], strong: ['i killed', 'people i killed', 'their faces', 'i cheated', 'relapse', 'hate myself', 'forgive myself'] },
     { theme: 'Suffering & Pain', hear: 'The first word to the one in pain is come, not cheer up. Rest is offered to the laden.', close: 'Your pain is not a failure of faith. Rest is offered to the laden, not the finished.', keys: ['pain', 'hurt', 'hurting', 'suffer', 'sick', 'ill', 'illness', 'chronic', 'broken body', 'ache', 'exhausted', 'so tired', 'burnt out', 'bullied', 'bully me', 'bullies me', 'feel numb', 'am numb', 'i\'m numb', 'gone numb', 'furious', 'enraged', 'rage', 'so angry', 'livid', 'covered it up', 'protected the wrong', 'cheated on me', 'cheating on me', 'been cheating', 'his affair', 'her affair', 'an affair', 'unfaithful', 'lost my house', 'lost our house', 'lost my home', 'lost everything', 'in the fire', 'flooded'], strong: ['cheated on me', 'an affair', 'unfaithful', 'been cheating', 'bullied', 'bully me', 'bullies me', 'terminal', 'weeks to live', 'months to live', 'not getting better', 'multiple sclerosis', 'chronic', 'lost my house', 'lost our house', 'lost everything'] },
     { theme: 'Conflict & Relationships', hear: 'Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.', close: 'You do not have to finish the story today. You can take the next faithful step toward them.', keys: ['conflict', 'fight', 'argu', 'my marriage', 'marriage is', 'save my marriage', 'save our marriage', 'spouse', 'divorce', 'relationship', 'angry at my', 'angry with my', 'angry at him', 'angry at her', 'not speaking', 'barely speaks', 'won\'t talk', 'losing her', 'losing him'], strong: [] },
     { theme: 'Purpose & Direction', hear: 'Direction-anxiety wants a five-year map. He offers a first thing and a following.', close: 'You do not need the whole map. You need the next yes.', keys: ['purpose', 'direction', 'feel lost', 'feeling lost', 'i\'m lost', 'im lost', 'so lost', 'lost my way', 'career', 'calling', 'what should i do', 'confused', 'plan', 'future job', 'meaning', 'tempted', 'temptation', 'fudge', 'integrity', 'dishonest', 'everyone does it'], strong: [] },
@@ -39,6 +39,31 @@
     const enc = window.RLA_CURATED && window.RLA_CURATED.encouragement && window.RLA_CURATED.encouragement[theme];
     return (enc && enc.passages && enc.passages.length) ? enc.passages.slice(0, 3) : FALLBACK.passages;
   }
+
+  // Same special rooms the server uses (lib/advise.js). Do not pull these from the
+  // question's keywords or from a neighbouring theme — that is how people were wounded.
+  const BETRAYED_PASSAGES = [
+    { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
+    { verse: 'Matthew 5:4', quote: 'Blessed are they that mourn: for they shall be comforted.', context: 'What was broken is a loss. Comfort is promised to those who actually mourn it.' },
+    { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'He leaves peace the way someone leaves a key. It is already in the house.' },
+  ];
+  const DANGER_PASSAGES = [
+    { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
+    { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'He leaves peace the way someone leaves a key. It is already in the house.' },
+    { verse: 'Matthew 5:4', quote: 'Blessed are they that mourn: for they shall be comforted.', context: 'Comfort is promised to those who actually mourn — not to those who pretend the loss was small.' },
+  ];
+  const BY_YOU_PASSAGES = [
+    { verse: 'Luke 15:4', quote: 'What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?', context: 'He does not wait for you to find the road back. He comes after what is lost.' },
+    { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
+    { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Counted, down to the hairs of your head. You are not a burden to Him — and you are still responsible for what you do next.' },
+  ];
+  const CRISIS_PASSAGES = [
+    { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'He leaves peace the way someone leaves a key. It is already in the house.' },
+    { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
+    { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Counted, down to the hairs of your head. You are not a burden to Him.' },
+  ];
+  const THIRD_PERSON_RE = /\b(?:himself|herself|themselves|his life|her life|their life|he wants|she wants|he doesn'?t|she doesn'?t|he wishes|she wishes|he keeps|she keeps|my (?:son|daughter|friend|brother|sister|wife|husband|mom|mum|dad|mother|father|kid|child|student|partner|boyfriend|girlfriend) (?:said|told|wants|is|has|keeps))\b/i;
+  const BETRAYED_RE = /\b(?:cheat(?:ed|ing)\s+on\s+me|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:has\s+been|is|was|'s\s+been|had\s+been)\s+(?:cheating|unfaithful|sleeping\s+with)|(?:his|her)\s+affair|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:had|is\s+having|has\s+been\s+having|was\s+having|'s\s+having|'s\s+been\s+having)\s+an\s+affair|been\s+unfaithful|left\s+me\s+for\s+(?:another|someone|a\s+younger|his|her)|an\s+affair|been\s+cheating|unfaithful)\b/i;
 
   const PREFIX_KEYS = { anxi: 1, worr: 1, argu: 1, griev: 1, forgiv: 1, diagnos: 1, fright: 1 };
   function hasKey(t, key) {
@@ -82,8 +107,10 @@
         );
       }
       return crisis + formatPack(
-        'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
-        passagesFor('Peace'),
+        THIRD_PERSON_RE.test(raw)
+          ? 'Someone you love has said the hardest thing there is to hear. The numbers above are for them and for you — a counselor can tell you what to say tonight, and how to stay close. These words are for you while you make that call.'
+          : 'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
+        CRISIS_PASSAGES,
         'You are not alone in this hour. Please go toward help now.'
       );
     }
@@ -93,15 +120,15 @@
         byYou
           ? 'You asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.'
           : 'What happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.',
-        byYou ? passagesFor('Shame & Guilt') : passagesFor('Suffering & Pain'),
+        byYou ? BY_YOU_PASSAGES : DANGER_PASSAGES,
         'You deserve to be safe. Please let a person help you get there.'
       );
     }
 
-    if (/\b(?:cheat(?:ed|ing)\s+on\s+me|an affair|been cheating|unfaithful|his affair|her affair)\b/i.test(raw)) {
+    if (BETRAYED_RE.test(raw)) {
       return formatPack(
         'The day you find out is not the day He asks you to forgive. He sits with the wound first.',
-        passagesFor('Suffering & Pain').slice(0, 2),
+        BETRAYED_PASSAGES,
         'Your pain is seen. Forgiveness, if it comes, can wait.'
       );
     }

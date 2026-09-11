@@ -19,7 +19,7 @@ The answer: **keep the production map.** Adopt verses from the named edition one
 - drops 12 verses that are other speakers (`NOT_SPEECH`)
 - keeps only His part of 15 shared verses (`SPOKEN_OVERRIDES`)
 - trims 64 evangelist introductions (`NARRATOR_PREFIXES`)
-- adds Luke 2:49 (`SPOKEN_ADDITIONS`)
+- adds Luke 2:49 and the later safe omitted class (`SPOKEN_ADDITIONS`)
 
 That layer is the KEEP LIST. It is how the Advisor currently tells the truth. `[verified] (in-scope)`
 
