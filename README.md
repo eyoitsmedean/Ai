@@ -4,6 +4,8 @@ A quiet reading room for the **words Jesus actually spoke**.
 
 Not another Bible app. A daily companion constrained to the red letters of Matthew, Mark, Luke, and John — typeset like a small press, simple like a blank page.
 
+Local one-screen (WATCH — not a public launch): `http://localhost:3000/ask`. It works with **no API key**. Do not publish, deploy, turn on GitHub Pages, or submit stores while WATCH holds.
+
 ## The room
 
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
@@ -44,7 +46,9 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
-## Deploy
+## Deploy (blocked while WATCH holds)
+
+Dean has not authorized a public URL, GitHub Pages publish, or App Store / Play submit. Home-screen install of a **local** or explicitly authorized host is not a store submit. The lines below are capability notes, not tonight’s job.
 
 - **App (Node):** `npm start` on any host with Node 18+. Bind is `0.0.0.0`. HTTPS belongs on the reverse proxy.
 - **iPhone:** Safari → Share → Add to Home Screen. The room opens standalone. His words stay on the phone.

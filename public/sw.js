@@ -1,8 +1,10 @@
-const CACHE = 'rla-prod-v2';
+const CACHE = 'rla-prod-v3';
 const PRECACHE = [
   '/',
   '/index.html',
   '/welcome.html',
+  '/ask.html',
+  '/ask',
   '/manifest.json',
   '/curated.json',
   '/library.json',
