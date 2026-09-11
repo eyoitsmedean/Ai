@@ -157,6 +157,9 @@ app.use('/api/', (req, res, next) => {
 
 app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/offline', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'offline.html')));
+app.get('/legal', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'legal.html')));
+app.get('/privacy', (_req, res) => res.redirect(301, '/legal#privacy'));
+app.get('/terms', (_req, res) => res.redirect(301, '/legal#terms'));
 app.use(
   express.static(path.join(__dirname, 'public'), {
     setHeaders(res, filePath) {
@@ -323,23 +326,29 @@ Return ONLY valid JSON (no markdown fences) with this structure:
 
 Include 3–4 passages. Use only real, verifiable red-letter verses (WEB preferred). Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
 
-const CRISIS_REPLY = `I hear how heavy this is, and I'm glad you said something. I am a reflective guide using the words of Jesus — not a crisis counselor, and not a substitute for real human help.
+const CRISIS_REPLY = `I hear how heavy this is, and I'm glad you said something. I am a faith reflection tool using the words of Jesus — software, not a person, not a crisis counselor, and not a substitute for real human help.
 
-If you are in immediate danger or thinking about hurting yourself, please reach out now:
-• In the US & Canada, call or text **988** (Suicide & Crisis Lifeline)
-• Or go to https://www.iasp.info/suicidalthoughts/ for local resources worldwide
+If you are in immediate danger, call **911** (US) or your local emergency number.
 
-You are not alone. People are ready to help you through this moment.
+If you are thinking about suicide or self-harm, or you need crisis support:
+• United States: call or text **988**, or chat https://chat.988lifeline.org (988 Suicide & Crisis Lifeline)
+• Español: llama al **988** y oprime 2; envía AYUDA al **988**; chat https://chat.988lifeline.org/?lang=es
+• Other countries: https://www.iasp.info/suicidalthoughts/ (IASP lists local options; it is not a hotline)
+
+You are not alone. 988 is staffed by people whose job is this moment. We do not contact 911, 988, or anyone for you.
 
 If you want, after you are safe, we can sit with words Jesus spoke about weariness and rest — but your safety comes first.`;
 
-const CRISIS_REPLY_ES = `Siento mucho que estés cargando esto, y me alegra que lo hayas dicho. Soy una guía que comparte las palabras de Jesús — no soy un consejero de crisis, y no reemplazo la ayuda humana real.
+const CRISIS_REPLY_ES = `Siento mucho que estés cargando esto, y me alegra que lo hayas dicho. Soy una herramienta de fe que comparte las palabras de Jesús — software, no una persona, no un consejero de crisis, y no reemplazo la ayuda humana real.
 
-Si estás en peligro o pensando en hacerte daño, por favor busca ayuda ahora:
-• En EE. UU. y Canadá, llama o envía un mensaje de texto al **988** (hay atención en español)
-• O visita https://www.iasp.info/suicidalthoughts/ para recursos en tu país
+Si estás en peligro inmediato, llama al **911** (EE. UU.) o a tu número de emergencia local.
 
-No estás solo. Hay personas listas para acompañarte en este momento.`;
+Si estás pensando en el suicidio o en hacerte daño, o necesitas apoyo de crisis:
+• Estados Unidos: llama o envía un mensaje al **988**, o entra a https://chat.988lifeline.org
+• Español: llama al **988** y oprime 2; envía AYUDA al **988**; chat https://chat.988lifeline.org/?lang=es
+• Otros países: https://www.iasp.info/suicidalthoughts/ (IASP lista opciones locales; no es una línea de emergencia)
+
+No estás solo. En 988 hay personas cuyo trabajo es este momento. Nosotros no llamamos al 911 ni al 988 por ti.`;
 
 const ABUSE_REPLY = `Thank you for trusting me with this. What you are describing is not something you have to endure, and it is not your fault. I am a reflective guide using the words of Jesus — not a counselor — so the most caring thing I can do is point you to people trained for exactly this:
 
@@ -371,7 +380,7 @@ const HOSTILE_INTRO = `You do not have to believe anything to be here, and I am 
 
 If you are willing, here are His own words, not mine:`;
 
-const PASSIVE_FOOTER = `One more thing, gently: if any part of you is thinking about not being here, please also talk to a person tonight — call or text **988** (US & Canada), or find local help at https://www.iasp.info/suicidalthoughts/. You matter more than this moment.`;
+const PASSIVE_FOOTER = `One more thing, gently: if any part of you is thinking about not being here, please also talk to a person tonight — in the United States, call or text **988** or chat https://chat.988lifeline.org; elsewhere, https://www.iasp.info/suicidalthoughts/. You matter more than this moment.`;
 
 async function getDaily() {
   const key = todayKey();
@@ -569,10 +578,33 @@ app.post('/api/push/test', async (req, res) => {
   }
 });
 
+const WAITLIST_STORE = process.env.WAITLIST_STORE || path.join(__dirname, 'data', 'waitlist.json');
+
+function appendWaitlist(email) {
+  let rows = [];
+  try {
+    rows = JSON.parse(fs.readFileSync(WAITLIST_STORE, 'utf8'));
+    if (!Array.isArray(rows)) rows = [];
+  } catch {
+    rows = [];
+  }
+  const now = new Date().toISOString();
+  if (!rows.some((r) => r && r.email === email)) {
+    rows.push({ email, at: now });
+    fs.mkdirSync(path.dirname(WAITLIST_STORE), { recursive: true });
+    fs.writeFileSync(WAITLIST_STORE, JSON.stringify(rows, null, 2));
+  }
+}
+
 app.post('/api/waitlist', (req, res) => {
-  const email = String(req.body?.email || '').trim();
+  const email = String(req.body?.email || '').trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'invalid_email' });
+  }
+  try {
+    appendWaitlist(email);
+  } catch (err) {
+    return res.status(500).json({ error: 'waitlist_write_failed' });
   }
   res.json({ ok: true });
 });

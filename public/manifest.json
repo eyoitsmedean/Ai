@@ -3,7 +3,7 @@
   "name": "Red Letter Advisor",
   "short_name": "Red Letter",
   "description": "Daily guidance from the direct words of Jesus Christ in the four Gospels. Verified WEB red letters only.",
-  "start_url": "/?source=pwa",
+  "start_url": "/?tab=advisor&source=pwa",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
@@ -39,17 +39,17 @@
   ],
   "shortcuts": [
     {
-      "name": "Today’s word",
-      "short_name": "Today",
-      "description": "Open today’s red letter",
-      "url": "/?tab=today",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
-    },
-    {
       "name": "Ask the Advisor",
       "short_name": "Advisor",
       "description": "Guidance from His words",
       "url": "/?tab=advisor",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Today’s word",
+      "short_name": "Today",
+      "description": "Open today’s red letter",
+      "url": "/?tab=today",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ],

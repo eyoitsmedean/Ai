@@ -23,11 +23,13 @@ Audience: someone carrying a real question about their life, often at a low mome
 | D8 | Safety handoffs (suicide/self-harm, abuse) are **deterministic** — pattern-gated on the server before any model call and before the paywall. They never consume a free credit and can never be blocked by a 402. | settled | 2026-09-06 |
 | D9 | Off-scope requests (code, trivia, finance, medical dosing, homework, weather, jokes) get a warm redirect with **no verse forced onto them**. Hostile input gets a non-defensive reply with 1–2 passages and "no pressure". | settled | 2026-09-06 |
 | D10 | Corpus mode (no AI key, or model failure) is a first-class path, not an error: theme opener → 3 hand-curated lead passages with a true one-line "why" each → gentle close. | settled | 2026-09-06 |
-| D11 | The evaluation set (`eval/questions.json`, 91 questions) and the rendered UI check (`scripts/ui-check.js`) run in CI; a regression in any category blocks the merge. | settled | 2026-09-06 |
+| D11 | The evaluation set (`eval/questions.json`, 92 questions) and the rendered UI check (`scripts/ui-check.js`) run in CI; a regression in any category blocks the merge. | settled | 2026-09-11 (count) |
 | D13 | Passive ideation ("nobody would miss me") is not the crisis card: scripture stays, a 988 line is appended. Explicit intent, methods, farewells and Spanish equivalents are the crisis card. | settled | 2026-09-06 |
 | D14 | A Gospel verse that is not in the curated corpus is shown as exact WEB text but labelled "speaker unverified" — only the corpus vouches for red letters. The daily word never shows an unverified passage (corpus substitution). | settled | 2026-09-06 |
 | D15 | Every ✓ WEB badge links to the public WEB chapter page with a verse anchor (`https://ebible.org/eng-web/<MAT|MRK|LUK|JHN><cc>.htm#V<v>`), so "citations you can check" is one tap. | settled | 2026-09-06 |
 | D12 | Grace over streaks: no streak counters, no guilt mechanics. Presence is shown, never scored. | settled (earlier session) | 2026-09-01 |
+| D16 | Default land is the **Advisor** tab (HTML, `initApp`, manifest `start_url`, PWA shortcut order). Encounter and hour-routing run only on Today. Founding “amaze / beautiful” surfaces stay available; they do not intercept chat. | settled | 2026-09-11 |
+| D17 | Crisis geography: US 988 (call/text/chat) + 911 for immediate danger + IASP worldwide. Do not describe official US 988 as “US & Canada.” | settled | 2026-09-11 |
 
 ## Mobile stack — two options considered (D6)
 
@@ -49,7 +51,7 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 | --- | --- | --- | --- | --- |
 | WEB is public domain: "you may freely copy it in any form, including electronic and print formats"; the name is a trademark usable to identify faithful copies | VERIFIED | https://worldenglish.bible/ ("About the World English Bible") | 2026-09-06 | Translation choice and store distribution would need re-licensing |
 | bible-api.com: default translation WEB; free "as long as you don't abuse my server"; rate limit **15 requests / 30 s per IP**; no availability guarantee; suggests self-hosting the open data | VERIFIED | https://bible-api.com/ (Terms of Use) | 2026-09-06 | Fallback verifier could be throttled; product must not depend on it (it doesn't — corpus is local) |
-| 988 Suicide & Crisis Lifeline: call/text 988, 24/7, free, confidential (US) | VERIFIED | https://988lifeline.org/ | 2026-09-06 | Crisis copy would need a new number |
+| 988 Suicide & Crisis Lifeline: call/text 988, chat https://chat.988lifeline.org, 24/7 (US + territories). Spanish: press 2 / text AYUDA / ES chat. Not the same system as Canada 9-8-8. | VERIFIED | https://988lifeline.org/get-help/; SAMHSA 988 FAQs | 2026-09-11 | Crisis copy would need a new number |
 | National Domestic Violence Hotline: 1-800-799-7233, text START to 88788, chat at thehotline.org, 24/7 | VERIFIED | https://www.thehotline.org/ | 2026-09-06 | Abuse copy would need a new number |
 | IASP suicide resources page is live | VERIFIED (HTTP 200) | https://www.iasp.info/suicidalthoughts/ | 2026-09-06 | Replace international link |
 | HotPeachPages lists abuse agencies by country | VERIFIED | https://www.hotpeachpages.net | 2026-09-06 | Replace international DV link |
@@ -81,7 +83,7 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 1. Store listing (Option B) — yes/no. Default: not now.
 2. Two quality-reference apps to match on time-to-first-answer and warmth.
 3. Production hostname and ANTHROPIC_API_KEY for a model-mode eval run (`npm run eval` against the deployed URL).
-4. Whether the app should open on the Advisor tab rather than Today. The brief says "chat-first"; the current build opens on Today (daily red letter) with the Advisor one tap away. Flagged, not changed (protocol §1.6).
+4. ~~Advisor vs Today as default~~ — closed as D16 (Advisor). Today remains one tap away.
 
 ## Known risks / what went wrong before
 
@@ -91,15 +93,16 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 
 ## STATE (for the next session)
 
-- Mission lock: unchanged (above).
-- Decisions made this session: D6–D15.
-- Work done: scope guard; intent gate (crisis/abuse/passive/off-scope/hostile) before paywall; corpus-mode tone (openers, curated leads); eval 91/91; UI check 18/18; smoke 17/17; verify:corpus 130/130; Breaker S1/S2 repaired; README/RELEASE/CLAUDE.
-- Next step: Dean runs RELEASE.md §C on a phone against the deployed URL, then `npm run eval` against a keyed server for a model-mode results file.
-- Open risks: model-mode behaviour unverified here (no key); `x-client-id` quota bypass; bible-api rate limit makes verify:corpus slow.
+- Mission lock: unchanged (above). Canonical brief: `docs/CANONICAL-BRIEF.md`.
+- Decisions made this session: D16 (chat-first default), D17 (988 geography).
+- Work done: recovered first 10 prompts from the founding transcript; research archive `docs/KNOWLEDGE.md`; operator kit `docs/OPERATOR-KIT.md`; Advisor default; Encounter skipped on chat path; iOS install sheet; `/legal`; waitlist persistence; crisis copy corrected.
+- Next step: Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
+- Open risks: no production URL (unauthorized to deploy); model-mode unverified; quotas in-memory; companion-statute scope untested.
 - RESUME_FROM: read RELEASE.md §C results from Dean; if model-mode eval shows misses, fix prompts in `server.js` (ADVISOR_SYSTEM) and re-run `npm run eval`.
 
 ## Log
 
+- 2026-09-11 — Recovery commission: first ten prompts recovered from transcript (not the later ATELIER block); chat-first default (D16); crisis geography (D17); `/legal`; iOS install coach; share links to Advisor; waitlist file; docs/CANONICAL-BRIEF.md + KNOWLEDGE.md + OPERATOR-KIT.md. Branch `cursor/recovery-commission-6ab5`.
 - 2026-09-01 — Encounter (cinematic daily open) and Living Garden shipped. Grace over streaks (D12).
 - 2026-09-02..05 — Production hardening: PWA manifest/icons/splash, SW offline, Web Push, threads, voice input, Lighthouse fixes, corpus expanded 55 → 102 and machine-verified (D5), README, CI.
 - 2026-09-11 — Sprint 2: Spanish abuse detection + bilingual handoff; `guessTheme` moved into `data/scripture.js` with unit tests; hour-aware Advisor chips + focus; library “Ask the Advisor” + deep-link highlight; public `/api/health` no longer leaks `env`. Branch `cursor/sprint-six-6ab5`.
