@@ -2101,7 +2101,7 @@ function apiUrl(p) {
   const base = (window.RLA_API_BASE || (meta && meta.content) || '').replace(/\/$/, '');
   return base + p;
 }
-const FREE_CHATS = 5;
+const FREE_CHATS = 5; /* live lamp letters; the curated room is never locked */
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
   ['Grief & Loss', 'When love has nowhere to stand'],
