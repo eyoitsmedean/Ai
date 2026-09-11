@@ -78,6 +78,29 @@ async function main() {
     assert(out.grounded >= 1, 'grounded count');
   });
 
+  await check('quota cookie wins over a rotated x-client-id', async () => {
+    const stamp = Date.now();
+    const chat = async (headerId, cookie) => {
+      const headers = { 'Content-Type': 'application/json', 'X-Client-Id': headerId };
+      if (cookie) headers.cookie = cookie;
+      const res = await fetch(BASE + '/api/chat', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ messages: [{ role: 'user', content: 'I feel anxious about tomorrow' }] }),
+      });
+      return { status: res.status, set: res.headers.get('set-cookie') || '' };
+    };
+    const first = await chat('hdr-a-' + stamp);
+    const cookie = (first.set.match(/rla_qid=([^;]+)/) || [])[1];
+    assert(cookie, 'missing rla_qid Set-Cookie');
+    for (let i = 0; i < 4; i++) {
+      const r = await chat('hdr-b-' + stamp + '-' + i, 'rla_qid=' + cookie);
+      assert(r.status === 200, 'expected 200 on credit ' + (i + 2) + ', got ' + r.status);
+    }
+    const sixth = await chat('hdr-c-' + stamp, 'rla_qid=' + cookie);
+    assert(sixth.status === 402, 'rotated header must not reset the free tier, got ' + sixth.status);
+  });
+
   await check('chat SSE offline grounded', async () => {
     const res = await fetch(BASE + '/api/chat', {
       method: 'POST',
@@ -150,6 +173,8 @@ async function main() {
     assert(appHtml.includes('silence-overlay') && appHtml.includes('rhythm-closure') && appHtml.includes('privacy-toggle'), 'missing silence/closure/privacy');
     assert(appHtml.includes('trust-strip') && appHtml.includes('advisor-hero') && appHtml.includes('Ask the Advisor'), 'missing trust/advisor hero');
     assert(appHtml.includes('share-caption') && /VERIFIED · WEB|Verified · WEB/.test(appHtml), 'missing viral trust share chrome');
+    assert(appHtml.includes('function shareVerseBtn') && appHtml.includes('openSharedRef'), 'missing Advisor share / deep-link');
+    assert(welcomeHtml.includes('/?tab=advisor'), 'welcome CTA must open the Advisor');
     assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
     assert(appHtml.includes('apple-mobile-web-app-capable'), 'missing iOS A2HS meta');
     assert(appHtml.includes('apple-touch-startup-image'), 'missing iOS splash');

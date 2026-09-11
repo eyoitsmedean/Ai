@@ -84,6 +84,7 @@ function ok(cond, label, detail) {
         telLinks: [...last.querySelectorAll('a[href^="tel:"], a[href^="sms:"]')].map((a) => ({ href: a.getAttribute('href'), h: rect(a), text: a.innerText })),
         extLinks: [...last.querySelectorAll('a[href^="http"]')].map((a) => a.getAttribute('href')),
         badgesOk: last.querySelectorAll('.cite-badge.ok').length,
+        shareBtns: last.querySelectorAll('.share-verse-btn').length,
         webLinks: [...last.querySelectorAll('a.cite-badge[href*="ebible.org/eng-web/"]')].map((a) => a.getAttribute('href')),
         badgesWarn: last.querySelectorAll('.cite-badge.warn').length,
         blocks: last.querySelectorAll('.scripture-block').length,
@@ -118,7 +119,20 @@ function ok(cond, label, detail) {
   ok(g.blocks >= 2, 'at least two scripture blocks rendered', `${g.blocks}`);
   ok(g.badgesWarn === 0, 'no unverified badges in corpus mode');
   ok(g.webLinks.length >= 1 && g.webLinks.every((h) => /^https:\/\/ebible\.org\/eng-web\/(MAT|MRK|LUK|JHN)\d{2}\.htm#V\d+$/.test(h)), 'every ✓ WEB badge links to the WEB chapter + verse anchor', g.webLinks.join(' '));
+  ok(g.shareBtns >= 1, 'guidance reply has a Share card button', `${g.shareBtns}`);
   await page.screenshot({ path: '/tmp/ui-check-guidance.png' });
+
+  // 3b. Share card opens from the button
+  const shareOpened = await page.evaluate(async () => {
+    const btn = document.querySelector('.msg.assistant .share-verse-btn');
+    if (!btn) return false;
+    btn.click();
+    await new Promise((r) => setTimeout(r, 200));
+    const modal = document.getElementById('share-modal');
+    return !!(modal && modal.classList.contains('open'));
+  });
+  ok(shareOpened, 'Share card modal opens from an Advisor verse');
+  await page.evaluate(() => closeShareCard());
 
   // 4. Off-scope rendering
   const o = await send('write me a python function to sort a list');
@@ -130,6 +144,18 @@ function ok(cond, label, detail) {
     return el ? el.getBoundingClientRect().height : 0;
   });
   ok(pillH >= 44 || pillH === 0, 'header 988 pill ≥44px (or not on this screen)', `${Math.round(pillH)}px`);
+
+  // 6. Deep link ?tab=library&ref= opens the share card for that verse
+  await page.goto(BASE + '/?tab=library&ref=' + encodeURIComponent('Matthew 6:34'), { waitUntil: 'networkidle0' });
+  await sleep(1200);
+  const deep = await page.evaluate(() => {
+    const modal = document.getElementById('share-modal');
+    return {
+      tab: document.querySelector('.nav-btn.active')?.dataset?.tab || '',
+      shareOpen: !!(modal && modal.classList.contains('open')),
+    };
+  });
+  ok(deep.tab === 'library' || deep.shareOpen, 'deep link lands on library or opens the shared verse', JSON.stringify(deep));
 
   ok(pageErrors.length === 0, 'no page errors', pageErrors.join(' | ').slice(0, 300));
 

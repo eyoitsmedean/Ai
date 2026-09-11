@@ -80,6 +80,8 @@ def main():
     if OG_SRC.exists():
         og = Image.open(OG_SRC).convert("RGBA")
         save_png(cover(og, (1200, 630)), PUBLIC / "og-image.png", (1200, 630))
+    else:
+        print("  OG source missing — run python3 scripts/generate-og.py")
 
     print("Generating iOS splash screens…")
     splashes = {
