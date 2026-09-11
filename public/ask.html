@@ -159,7 +159,6 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'The page could not be set.');
-        if (data.cannot) cannot.textContent = data.cannot;
         if (data.crisis) {
           crisisText.textContent = data.notice || 'Call or text 988.';
           crisisBlock.classList.remove('hidden');
