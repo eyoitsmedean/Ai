@@ -46,13 +46,14 @@ The evaluation set behind these claims is `eval/questions.json` (82 real questio
 
 ## Verify it yourself
 
-Nothing here is described as passing that was not run. Last run in this repository: **2026-09-07**.
+Nothing here is described as passing that was not run. Last run in this repository: **2026-09-11**.
 
 | Claim | Command | Last result |
 | --- | --- | --- |
-| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, routes | `npm test` | 61 pass, 0 fail |
+| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, routes | `npm test` | 64 pass, 0 fail |
 | Advisor answers 82 questions correctly on the curated path (mis-routing, buried handoffs, echoes, and identical letters all fail the run) | `npm run eval` → `eval/RESULTS.md` | 82/82, 63 distinct letters |
-| The page works in a phone-sized browser, including the crisis modal at the daily limit | `npm start` then `npm run qa` | 14 walks pass |
+| Same 82 questions against the on-device composer (Pages / dropped API / phone without a host) | `npm run eval:device` → `eval/RESULTS-device.md` | 82/82, 63 distinct letters |
+| The page works in a phone-sized browser, including Advisor chips/follow-ups and the crisis modal at the daily limit | `npm start` then `npm run qa` | 15 walks pass |
 | Android debug build | `npm run mobile:apk` | BUILD SUCCESSFUL (2026-09-06) |
 | Live-model path (`ANTHROPIC_API_KEY` set) | `npm run eval` with the key | **unverified** — no key in the build environment |
 | iOS build, on-device behaviour | `MOBILE.md` checklist | **unverified** — needs a Mac and a phone |
@@ -78,7 +79,7 @@ The iPhone and Android apps are this same HTML build wrapped by **Capacitor** (`
 ## Deploy
 
 - **Node host** — serve this repo with `npm start`; that host is also what the phone builds and any static deploy call for `/api`.
-- **GitHub Pages** — `.github/workflows/pages.yml` publishes `public/` on every push to the repo's default branch (`claude/jesus-teachings-chatbot-bSBhF`) when Pages is enabled. Today and Seek work from `public/curated.json` and `public/library.json`; the Advisor on Pages uses the on-device fallback (`public/data/advisor.js`, same crisis detector and handoff, simpler composer) unless `public/config.js` points at a Node host.
+- **GitHub Pages** — `.github/workflows/pages.yml` publishes `public/` on every push to the repo's default branch (`claude/jesus-teachings-chatbot-bSBhF`) when Pages is enabled. Today and Seek work from `public/curated.json` and `public/library.json`; the Advisor on Pages uses the on-device composer (`public/data/advisor.js`, generated from `lib/advise.js` — same letters as the server, including crisis, abuse, and themed counsel) unless `public/config.js` points at a Node host.
 - **CI** — `.github/workflows/ci.yml` runs `npm test` on every push and pull request (Node 20).
 
 ## The text and its rights

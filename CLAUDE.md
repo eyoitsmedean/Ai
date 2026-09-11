@@ -34,13 +34,14 @@ Mark each line when you run it. "Verified" means run in this repository and obse
 
 | Item | Status | How to verify |
 | --- | --- | --- |
-| Node suite (61 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, routes) | verified 2026-09-06 | `npm test` |
+| Node suite (64 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, on-device composer parity, routes) | verified 2026-09-11 | `npm test` |
 | Corpus whole: all 89 Gospel chapters at canonical verse counts, cross-checked against two independent KJV sources | verified 2026-09-06 | `npm test` (corpus integrity) |
 | Every quotation in every client data file (155) seals at ≥ 0.92 | verified 2026-09-06 | `npm test` |
-| Advisor evaluation set, curated path: 82/82 pass, 63 distinct letters (the 19 shared letters are the fixed crisis, refusal, and hello scripts); harness mutation-tested — sabotaging the composer fails 9 items | verified 2026-09-06 | `npm run eval` → `eval/RESULTS.md` |
+| Advisor evaluation set, curated path: 82/82 pass, 63 distinct letters (the 19 shared letters are the fixed crisis, refusal, and hello scripts); harness mutation-tested — sabotaging the composer fails 9 items | verified 2026-09-11 | `npm run eval` → `eval/RESULTS.md` |
+| Advisor evaluation set, **on-device composer** (`public/data/advisor.js`, generated from `lib/advise.js`): 82/82, 63 distinct letters | verified 2026-09-11 | `npm run eval:device` → `eval/RESULTS-device.md` |
 | Breaker register (30 defects, `/tmp` report from a subagent that built nothing) replayed: every S1/S2 repaired, 42 adversarial inputs land where they should | verified 2026-09-06 | `test/advise.test.js`; the inputs are now eval items (crisis-6…9, concern, loss, abuse, idiom, ref, neg, name, typo, anger) |
 | Advisor evaluation set, **live model path** | **unverified** — no `ANTHROPIC_API_KEY` in the build environment | `ANTHROPIC_API_KEY=… npm run eval`, then read `eval/RESULTS.md` |
-| Browser QA (14 walks: Press, Forty labels, share proofs, reduced motion, tablist, the daily gate never closing the crisis path) | verified 2026-09-06 | `npm start` then `npm run qa` |
+| Browser QA (15 walks: Press, Forty labels, share proofs, reduced motion, tablist, Advisor chips + follow-ups, the daily gate never closing the crisis path) | verified 2026-09-11 | `npm start` then `npm run qa` |
 | Android debug build (`assembleDebug`, SDK 36, Java 21) | verified 2026-09-06 — BUILD SUCCESSFUL, `app-debug.apk` 4.3 MB | `npm run mobile:apk` |
 | iOS build | **unverified** — needs a Mac with Xcode | `npx cap add ios && npx cap sync ios && npx cap open ios` |
 | On-device: share sheet hands a PNG on iPhone; install prompt; notifications | **unverified** — Dean's step | `MOBILE.md` five-minute checklist |
@@ -53,8 +54,10 @@ npm install
 npm start          # http://localhost:3000 — without a key, curated pages and the curated Advisor
 npm test           # Node suite
 npm run eval       # Advisor evaluation → eval/RESULTS.md (exit 1 on any failure)
+npm run eval:device # same set against the on-device composer → eval/RESULTS-device.md
 npm run qa         # browser QA against a running server
-npm run spoken     # rebuild data/spoken-gospels.json and public/library.json from the corpus
+npm run spoken     # rebuild spoken map, library, and the on-device Advisor bundle
+npm run advisor    # regenerate public/data/advisor.js from lib/advise.js
 node scripts/repair-corpus.js   # idempotent; restores the six once-missing verses if a stale corpus is restored
 ```
 
@@ -67,13 +70,14 @@ Environment: `ANTHROPIC_API_KEY` (live Advisor), `ANTHROPIC_MODEL`, `PORT`, `API
 3. Grid 3:4 share format: keep once a Meta primary page confirms 1080×1440, or drop.
 4. Brand line: keep "Red Letter" (current) or return to "The Red Letter Advisor" as the brief says.
 5. The API host for phone builds: where will the Node server live (Railway, Fly, a VPS)? `public/config.js` needs that URL before `cap sync`.
-6. Matthew 27:46 and Mark 15:34: the red-letter map keeps only the Aramaic ("Eli, Eli, lama sabachthani?") and treats the KJV's own "that is to say, My God, my God, why hast thou forsaken me?" as the evangelist's gloss, so a reader who brings that verse sees no English. Many printed red-letter editions colour the translation too. Decide: widen those two entries in `data/spoken-gospels.json`, or leave as is.
-7. 49 of the 663 library sayings still open with the evangelist's frame ("He answered and said unto them, …"). The Advisor's search now skips them; the Today rooms and the library still show them. Strip the frames in `scripts/build-spoken.js` (a corpus rebuild), or accept.
-8. The on-device fallback (`public/data/advisor.js`, used when the API is unreachable) shares the crisis detector and handoff with the server but is a far simpler composer than `lib/advise.js`. Ship the phone with the API host configured (question 5), or port the composer to the client.
+6. ~~Matthew 27:46 / Mark 15:34 English.~~ **Decided 2026-09-11, reversible:** both entries now include the KJV's own English ("My God, my God, why hast thou forsaken me?"). Printed red-letter editions colour the translation; a reader who brings the verse now sees it. Revert the two lines in `data/red-letter-source.json` if Dean wants Aramaic-only.
+7. ~~49 narrator-framed library sayings.~~ **Done 2026-09-11:** `stripNarratorFrame` in `lib/scripture.js` / `scripts/build-spoken.js`. Two openings remain on purpose: Matthew 24:39 (His own flood narration) and Luke 20:13 (the vineyard lord inside the parable).
+8. ~~On-device composer vs server.~~ **Done 2026-09-11:** `scripts/bundle-advisor.js` generates `public/data/advisor.js` from `lib/advise.js`. `npm run eval:device` is 82/82. Question 5 (where the Node host lives) is still open for the live-model path; Pages and a dropped API now get the same curated letters.
 
 ## Session log
 
 - **2026-09-05 — Press atelier.** Six leaves (Reveal, Breathe, Parable, Examen, Bless, Forty), `/review` route, browser QA, seal tightened, Holy Week / Triduum labels, synchronous Web Share, 988 by call/text/chat, Cambridge acknowledgement. PR #18.
 - **2026-09-06 — Corpus audit.** Six dropped verses found by comparing all 3,779 Gospel verses against bible-api.com KJV and aruljohn/Bible-kjv (Matthew 2:16, 22:1, 26:38; Mark 4:40, 7:11, 8:8); 45 sayings had carried a neighbour's words; repaired by `scripts/repair-corpus.js`, spoken map and library rebuilt, marginal-note leak filtered, four hand-typed quotations corrected. Forty reordered to the church year.
 - **2026-09-06 — INTERROGATE and ELEVATE.** A Breaker subagent that built nothing ran 70 adversarial inputs and filed 30 defects (13 S1). Repaired in `lib/advise.js`: danger read in every tense, person, and plural ("took pills", "wish I was dead", "end things", "plan and notes", "wants to die", "killed himself"); third-party, loss-survivor, and doctrinal crisis letters; abuse/assault handoff; negation-aware cues; proper-noun collisions (Sue, Paul, diagnosis) no longer outrank a grief cue; gratitude is whole-message; Spanish is met in Spanish; brought references are opened (and `Matthew` is no longer re-expanded to `Matthewhew`); short follow-ups carry the prior need; narrator-framed sayings excluded from search; sub-cue notes and caregiver/exhaustion practices so a miscarriage and a widower do not get one letter. Page: the daily gate no longer closes the crisis path. Harness: verse-exact theme checks, handoff-first-and-once, mis-routing and echo negatives, identical-letter assertion; mutation-tested. ELEVATE: the seal now admits only red letters on both paths, and a brought verse that is not His (Luke 2:14, John 1:1) is named as such. Suite 61, eval 82/82, browser 14/14.
+- **2026-09-11 — Sprint: one composer everywhere.** On-device Advisor is generated from `lib/advise.js` (`npm run advisor`); Pages/offline no longer get the keyword stub. Evangelist frames stripped from the spoken library (47 of 49; two kept as His own narration). Matthew 27:46 and Mark 15:34 carry the KJV English. Advisor chips now exercise shame, grief, a named parable, a brought verse, and negation; follow-up chips continue a letter. Suite 64, eval 82/82, device eval 82/82.
 - **2026-09-06 — Curated Advisor + evaluation.** `lib/advise.js` replaces the fixed no-key letter; 59-question evaluation set with recorded results; crisis detector widened in server and client; `CHAT_RATE_LIMIT`; `public/config.js` API base for phone builds; Capacitor deps and `android/` scaffold added; this file created as the system of record.

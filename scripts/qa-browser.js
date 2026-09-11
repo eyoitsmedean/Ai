@@ -326,11 +326,60 @@ async function main() {
     assert(/scripture-sit/.test(advisor), 'Advisor scripture blocks should offer Sit with this');
   });
 
+  await check('Advisor chips exercise the real range and follow-ups continue', async () => {
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      document.getElementById('onboarding').classList.add('hidden');
+      switchTab('advisor');
+    });
+    const chips = await page.evaluate(() => [...document.querySelectorAll('#suggestions .chip')].map((b) => b.textContent.trim()));
+    assert(chips.includes('I feel so much shame'), 'shame chip missing: ' + chips.join(' | '));
+    assert(chips.includes('My mother died last month'), 'grief chip missing');
+    assert(chips.includes('What does Jesus say about the prodigal son?'), 'parable chip missing');
+    assert(chips.includes('Sit with me in Matthew 11:28'), 'brought-verse chip missing');
+    assert(chips.includes('I am not afraid — I am tired'), 'negation chip missing');
+
+    await page.evaluate(() => sendMsg('I feel so much shame'));
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && last.innerText.length > 80;
+    }, { timeout: 15000 });
+    const shame = await page.evaluate(() => ({
+      letter: [...document.querySelectorAll('.msg-ai .letter')].pop().innerText,
+      follows: [...document.querySelectorAll('.follow-ups .chip')].map((b) => b.textContent.trim()),
+      crisis: !!document.querySelector('#crisis-modal.on'),
+    }));
+    assert(!shame.crisis, 'shame chip must not open the crisis modal');
+    assert(/Matthew|John|Luke|Mark/.test(shame.letter), 'shame letter should cite a Gospel');
+    assert(/shame|condemn|lift a face/i.test(shame.letter), 'shame letter should stay with shame: ' + shame.letter.slice(0, 180));
+    assert(shame.follows.length >= 1, 'follow-up chips should appear after a letter');
+
+    await page.evaluate(() => {
+      const btn = document.querySelector('.follow-ups .chip');
+      if (btn) btn.click();
+    });
+    await page.waitForFunction(() => document.querySelectorAll('.msg-ai .letter').length >= 2, { timeout: 15000 });
+    const second = await page.evaluate(() => [...document.querySelectorAll('.msg-ai .letter')].pop().innerText);
+    assert(second.length > 80, 'follow-up should produce a second letter');
+
+    await page.evaluate(() => sendMsg('Sit with me in Matthew 11:28'));
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && /11:28/.test(last.innerText) && !document.getElementById('typing').classList.contains('on');
+    }, { timeout: 15000 });
+    await page.evaluate(() => {
+      localStorage.removeItem('rla-letters-' + todayStr());
+      localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 0 }));
+    });
+  });
+
   await check('the daily limit never closes the crisis path', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
     await page.evaluate(() => {
       localStorage.setItem('rla-onboarded', '1');
       localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 5 }));
+      localStorage.removeItem('rla-letters-' + todayStr());
     });
     await page.reload({ waitUntil: 'networkidle0' });
     await page.evaluate(() => switchTab('advisor'));

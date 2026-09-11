@@ -4,6 +4,20 @@ Working-notes location for rebuild workers (per the Universal Rebuild Pipeline).
 
 ---
 
+## Sprint — 2026-09-11 — one composer everywhere
+
+Worker: Cursor cloud agent · five priorities in one hour.
+
+1. **On-device composer = server composer.** `scripts/bundle-advisor.js` generates `public/data/advisor.js` from `lib/advise.js`. Crisis/abuse/themes/refusals no longer rot into a keyword stub on Pages or a dropped API. `npm run eval:device` 82/82. `const CRISIS` still byte-matches `lib/scripture.js`.
+2. **Narrator frames stripped.** 47 of 49 evangelist openings removed from the spoken library. Kept: Matthew 24:39 (His flood narration), Luke 20:13 (vineyard lord inside the parable).
+3. **Cross in English.** Matthew 27:46 and Mark 15:34 now include the KJV English. Reversible in `data/red-letter-source.json`.
+4. **Advisor chips** exercise shame, grief, prodigal, Matthew 11:28, negation. Follow-up chips continue a letter; none on crisis/abuse letters.
+5. **Device eval path** so the client cannot silently drift. Suite 64.
+
+Verification run this session: `npm test` 64/64; `npm run eval` 82/82; `npm run eval:device` 82/82; `npm run qa` 14/14.
+
+---
+
 ## Red Letter — README.md — v2 — 2026-09-07
 
 Worker: Cursor cloud agent (solo) · owns `README.md` only · started 2026-09-07 02:15 UTC.

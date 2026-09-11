@@ -6,7 +6,7 @@ The phone app is the same HTML build, wrapped by Capacitor. Nothing is rewritten
 
 | Option | What it is | Why / why not |
 | --- | --- | --- |
-| **Capacitor** (chosen) | Native iOS and Android shells around `public/`. `appId app.redletter.quietpage`. | Reuses the working build and its 61 tests and 14 browser walks. Web Share, Canvas proofs, the service worker and the Press need no port. First build is minutes, not weeks of parity work. |
+| **Capacitor** (chosen) | Native iOS and Android shells around `public/`. `appId app.redletter.quietpage`. | Reuses the working build and its 64 tests and 15 browser walks. Web Share, Canvas proofs, the service worker and the Press need no port. First build is minutes, not weeks of parity work. |
 | React Native / Expo rewrite | Re-implement the rooms as native views. | Discards a build Dean has reviewed. Every leaf, seal, and church-year rule would be rewritten twice (JS + native layout). Rejected. |
 
 ## What has been verified here, and what has not

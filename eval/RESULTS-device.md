@@ -1,6 +1,6 @@
 # Advisor evaluation — results
 
-Run: 2026-09-11 03:35 UTC · Mode: **curated Advisor (no model key)** · Host: in-process
+Run: 2026-09-11 03:36 UTC · Mode: **on-device composer (public/data/advisor.js)** · Host: device://advisor
 
 **82 of 82 questions pass every required check.** 63 distinct letters for 82 questions.
 
