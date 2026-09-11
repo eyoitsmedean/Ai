@@ -76,15 +76,14 @@ class _AskTabState extends State<AskTab> {
               dark: widget.dark,
               chips: result.chips,
               showStepCue: true,
-            )
-          else
+            ),
+          if (!result.retrieved || result.distress)
             Text(
               result.message,
               key: Key('ask-${result.kind.name}'),
               style: const TextStyle(height: 1.45, color: Brand.ink),
             ),
-          if (result.kind == AskKind.crisis)
-            const CrisisButton(key: Key('crisis-988')),
+          if (result.offer988) const CrisisButton(key: Key('crisis-988')),
         ],
       ],
     );
