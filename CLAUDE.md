@@ -38,11 +38,19 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 ### 2026-09-06 — Muse
 - "I approve" is authorization to continue, not a password. Stale device code NSXJ-LRXK must not be reused.
 
+### 2026-09-11 — Red Letter sprint
+- Short room names (`Anxiety`, `grief`) resolve to the locked room names on `/api/encouragement`, the library filter, and Seek's static fallback. Unknown names still 400.
+- Crisis cue carves out accidental cuts (`shaving`, `cooking`, `on a knife/glass/paper`). The page modal uses the same engine as the letter.
+- Generic letter opening states that only His words are kept, not that every question was answered.
+- After Day 7 the Today ribbon shows the next week of `paths.more` (11 further days). First week still labelled Seven Days. Storage key `rla-seven` unchanged.
+- Advisor empty state: eight room chips (Shame, Grief, Loneliness, Suffering, Doubt, Conflict, Hope, Peace) send phrases the letterpress already hears. Existing four suggestion chips kept.
+
 ## STATE (latest)
 
-- Mission lock: install ATELIER as governing protocol; correct the Red Letter brief; build the missing Advisor evaluation set.
-- Work done: see decisions above; `npm test`, `npm run eval`, smoke and browser QA run this session (results in the PR and `eval/RESULTS.md`).
-- Next step: Dean pastes `studio/paste/*.prompt.md` into the live chats (`studio/CHAT-UPDATES.md`); names two quality-reference apps; confirms or overturns "Red Letter, Advisor as a room".
-- Open risks: the model path is unverified without a key; the eval covers routing, canon, and safety, not warmth (a human read); the public Pages URL is not live (404 on 6 September 2026).
+- Mission lock: Red Letter sprint (11 September 2026) — five product increments on the letterpress Advisor and the daily path.
+- Decisions this session: short room names resolve; accidental "cut myself shaving" is not a crisis; generic letters tell the truth when no room is named; the path continues after Day 7 from `paths.more`; Advisor empty state has a second row of rooms.
+- Work done: aliases, crisis carve-out, generic opening, path after Seven, room chips. `npm test` 80/80; `npm run eval` 45/45; smoke / browser QA / static QA run this session.
+- Next step: Dean pastes `studio/paste/*.prompt.md` into live chats; enables GitHub Pages or names `[PAGES_URL]`; names two quality-reference apps; confirms or overturns "Red Letter, Advisor as a room".
+- Open risks: model path unverified without a key; eval does not judge warmth; Pages URL still not live as of 6 September 2026 (not re-checked this session — KNOWLEDGE, stale-by: re-curl); "I cut myself shaving" carve-out is phrase-specific.
 
 RESUME_FROM: Red Letter — next commission under the ATELIER brief; start with ANCHOR against CLAUDE.md and `studio/briefs/red-letter.md`.

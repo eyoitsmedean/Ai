@@ -128,6 +128,8 @@ async function main() {
 
   await check('Advisor hears the need without a model', async () => {
     await page.evaluate(() => switchTab('advisor'));
+    const rooms = await page.evaluate(() => [...document.querySelectorAll('#room-chips .chip.room')].map((b) => b.textContent.trim()));
+    assert(rooms.includes('Shame') && rooms.includes('Grief'), 'room chips missing: ' + rooms.join(', '));
     await page.type('#chat-input', 'I feel so much shame');
     await page.click('#send-btn');
     await page.waitForFunction(
