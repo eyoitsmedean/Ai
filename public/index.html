@@ -474,6 +474,21 @@ textarea { font-family: var(--body); }
 #advisor-page { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 0; }
 .chat-scroll { flex: 1; overflow-y: auto; padding: 28px 22px 12px; }
 
+html { --kb: 0px; }
+html.kb-up .dock {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+html.kb-up .folio {
+  min-height: calc(100dvh - var(--kb));
+  height: calc(100dvh - var(--kb));
+  max-height: calc(100dvh - var(--kb));
+}
+html.kb-up #advisor-page .composer { padding-bottom: 12px; }
+html.kb-up .sit-sheet.on,
+html.kb-up .settings-sheet.on,
+html.kb-up .blessing-sheet.on { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px) + var(--kb)); }
+
 .dock {
   height: calc(var(--dock) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -775,6 +790,9 @@ textarea { font-family: var(--body); }
 
 /* Advisor */
 .letter-head { margin-bottom: 22px; }
+.letter-tools { margin-top: 14px; }
+.letter-tools .ghost { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.send-btn[data-mode="stop"] { background: var(--ink-3); }
 .welcome {
   font-family: var(--body);
   font-size: 16px;
@@ -1806,6 +1824,9 @@ html.sitting .sit-sheet {
             <h1 class="display">The <em>Advisor</em></h1>
             <p class="welcome">Write what is true. The reply is written by software, then His words are set on the page from the Gospels.</p>
             <p class="trust-line">Not a person, not a pastor, not a clinician. If you are in danger: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+            <div class="letter-tools">
+              <button class="ghost" type="button" id="new-letter" onclick="startNewLetter()">New letter</button>
+            </div>
           </div>
           <div class="suggestions" id="suggestions">
             <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
@@ -1814,15 +1835,15 @@ html.sitting .sit-sheet {
             <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
           </div>
           <div class="gate" id="chat-gate">
-            <h3>Five letters for today</h3>
-            <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
+            <h3>Today’s live letters are spent</h3>
+            <p>The lamp that writes with a model is out until morning. The room still writes from His words — send what you carry.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
         </div>
         <div class="composer">
           <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
-          <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
+          <button class="send-btn" id="send-btn" onclick="onSendClick()" aria-label="Send">
             <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
@@ -1932,7 +1953,7 @@ html.sitting .sit-sheet {
   <div class="setting-row">
     <div>
       <div class="setting-label">Morning reminder</div>
-      <div class="setting-sub">A quiet knock around 8:00, if this device allows it</div>
+      <div class="setting-sub" id="reminder-sub">When you open the room between 8 and 10, if this device allows it</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
@@ -2080,7 +2101,7 @@ function apiUrl(p) {
   const base = (window.RLA_API_BASE || (meta && meta.content) || '').replace(/\/$/, '');
   return base + p;
 }
-const FREE_CHATS = 5;
+const FREE_CHATS = 5; /* live lamp letters; the curated room is never locked */
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
   ['Grief & Loss', 'When love has nowhere to stand'],
@@ -2118,6 +2139,10 @@ const SIT_SECONDS = 60;
 const SIT_RING = 2 * Math.PI * 52;
 let chatHistory = [];
 let isChatBusy = false;
+const chatInput = document.getElementById('chat-input');
+const SEND_ICON = '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+const STOP_ICON = '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>';
+let chatAbort = null;
 let curatedPacks = null;
 const encCache = {};
 let pendingShareType = null;
@@ -3307,7 +3332,6 @@ function closeSheets() {
   closeAmen();
 }
 
-const chatInput = document.getElementById('chat-input');
 chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
 });
@@ -3332,7 +3356,10 @@ function persistLetters() {
 function restoreLetters() {
   const saved = parseJSON(ls('rla-letters-' + todayStr()), null);
   const msgs = document.getElementById('chat-messages');
-  if (!saved || !Array.isArray(saved.messages) || !saved.messages.length || !msgs) return;
+  if (!saved || !Array.isArray(saved.messages) || !saved.messages.length || !msgs) {
+    paintChatGate();
+    return;
+  }
   chatHistory = saved.messages.filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
   msgs.innerHTML = '';
   chatHistory.forEach((m) => {
@@ -3345,10 +3372,7 @@ function restoreLetters() {
     }
   });
   document.getElementById('suggestions').style.display = 'none';
-  if (chatsToday().n >= FREE_CHATS) {
-    document.getElementById('chat-gate').classList.add('on');
-    setComposerEnabled(false);
-  }
+  paintChatGate();
 }
 
 function useSuggestion(btn) {
@@ -3357,24 +3381,83 @@ function useSuggestion(btn) {
   sendMsg();
 }
 
+const ROOM_FALLBACK = [
+  'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
+  '',
+  '**John 14:27**',
+  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
+  'A troubled heart is the intended reader of this line.',
+  '',
+  '**Matthew 11:28**',
+  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
+  'Rest is offered to the exhausted, not the already-composed.',
+].join('\n');
+
+function lampOutToday() {
+  return chatsToday().n >= FREE_CHATS;
+}
+
+function paintChatGate() {
+  const gate = document.getElementById('chat-gate');
+  if (gate) gate.classList.toggle('on', lampOutToday());
+  setComposerEnabled(true);
+}
+
+function setChatBusy(on) {
+  isChatBusy = on;
+  const btn = document.getElementById('send-btn');
+  btn.innerHTML = on ? STOP_ICON : SEND_ICON;
+  btn.setAttribute('aria-label', on ? 'Stop' : 'Send');
+  btn.dataset.mode = on ? 'stop' : 'send';
+  btn.disabled = false;
+  chatInput.disabled = false;
+}
+
+function onSendClick() {
+  if (isChatBusy) stopLetter();
+  else sendMsg();
+}
+
+function stopLetter() {
+  if (chatAbort) {
+    chatAbort.abort();
+    chatAbort = null;
+  }
+}
+
+function startNewLetter() {
+  if (isChatBusy) stopLetter();
+  chatHistory = [];
+  persistLetters();
+  const msgs = document.getElementById('chat-messages');
+  if (msgs) msgs.innerHTML = '';
+  document.getElementById('suggestions').style.display = '';
+  document.getElementById('typing').classList.remove('on');
+  setChatBusy(false);
+  paintChatGate();
+  chatInput.focus();
+}
+
+function writeRoomText(text, crisis) {
+  if (typeof window.RLA_advise === 'function') {
+    const living = window.RLA_advise(text, { crisis: !!crisis });
+    if (living && living.trim()) return living;
+  }
+  return ROOM_FALLBACK;
+}
+
 async function sendMsg(preset) {
   const text = (preset || chatInput.value).trim();
   if (!text || isChatBusy) return;
-  if (looksLikeCrisisClient(text)) {
+  const crisis = looksLikeCrisisClient(text);
+  if (crisis) {
     const action = await showCrisisModal();
     if (action !== 'continue') return;
-  }
-  if (chatsToday().n >= FREE_CHATS) {
-    document.getElementById('chat-gate').classList.add('on');
-    document.getElementById('suggestions').style.display = 'none';
-    setComposerEnabled(false);
-    return;
   }
   chatInput.value = '';
   chatInput.style.height = 'auto';
   document.getElementById('suggestions').style.display = 'none';
-  isChatBusy = true;
-  document.getElementById('send-btn').disabled = true;
+  setChatBusy(true);
 
   chatHistory.push({ role: 'user', content: text });
   addBubble('user', text);
@@ -3385,11 +3468,33 @@ async function sendMsg(preset) {
   let fullText = '';
   let opened = false;
 
+  const seal = (letter, countLive) => {
+    if (!letter || !letter.trim()) return false;
+    updateStreamBubble(aiBubble, letter);
+    chatHistory.push({ role: 'assistant', content: letter });
+    persistLetters();
+    addSaveToChatBubble(aiBubble, letter, text);
+    sealLetter(aiBubble.bubble, letter);
+    if (countLive) bumpChat();
+    return true;
+  };
+
+  if (lampOutToday()) {
+    document.getElementById('typing').classList.remove('on');
+    seal(writeRoomText(text, crisis), false);
+    setChatBusy(false);
+    paintChatGate();
+    scrollChat();
+    return;
+  }
+
+  chatAbort = new AbortController();
   try {
     const res = await fetch(apiUrl('/api/chat'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory })
+      body: JSON.stringify({ messages: chatHistory }),
+      signal: chatAbort.signal,
     });
     if (res.status === 429) throw new Error('slow');
     if (!res.ok && !res.body) throw new Error('fail');
@@ -3431,45 +3536,26 @@ async function sendMsg(preset) {
       }
     }
     if (!fullText.trim()) throw new Error('empty');
-    bumpChat();
-    chatHistory.push({ role: 'assistant', content: fullText });
-    persistLetters();
-    addSaveToChatBubble(aiBubble, fullText, text);
-    sealLetter(aiBubble.bubble, fullText);
+    seal(fullText, true);
   } catch (err) {
-    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
-    const fallback = living || [
-      'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
-      '',
-      '**John 14:27**',
-      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-      'A troubled heart is the intended reader of this line.',
-      '',
-      '**Matthew 11:28**',
-      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-      'Rest is offered to the exhausted, not the already-composed.',
-    ].join('\n');
-    updateStreamBubble(aiBubble, fallback);
-    chatHistory.push({ role: 'assistant', content: fallback });
-    persistLetters();
-    addSaveToChatBubble(aiBubble, fallback, text);
-  } finally {
-    isChatBusy = false;
-    document.getElementById('typing').classList.remove('on');
-    const gated = chatsToday().n >= FREE_CHATS;
-    if (gated) {
-      document.getElementById('chat-gate').classList.add('on');
-      setComposerEnabled(false);
+    if (err && err.name === 'AbortError') {
+      if (fullText.trim()) seal(fullText.replace(/\s*$/, '') + '\n\n— the letter was stopped here.', false);
+      else seal(writeRoomText(text, crisis), false);
     } else {
-      document.getElementById('send-btn').disabled = false;
+      seal(writeRoomText(text, crisis), false);
     }
+  } finally {
+    chatAbort = null;
+    setChatBusy(false);
+    document.getElementById('typing').classList.remove('on');
+    paintChatGate();
     scrollChat();
   }
 }
 
 function setComposerEnabled(on) {
   chatInput.disabled = !on;
-  document.getElementById('send-btn').disabled = !on;
+  if (!isChatBusy) document.getElementById('send-btn').disabled = !on;
 }
 
 function addBubble(role, text) {
@@ -3780,6 +3866,7 @@ function applySettings() {
   });
   const reminder = document.getElementById('reminder-toggle');
   if (reminder) reminder.checked = ls('rla-reminder') === '1';
+  paintReminderSub();
 }
 
 let toastTimer;
@@ -4323,6 +4410,7 @@ async function sealLetter(bubble) {
 async function toggleReminder(on) {
   if (!on) {
     lsSet('rla-reminder', '0');
+    paintReminderSub();
     return;
   }
   if (!('Notification' in window)) {
@@ -4335,23 +4423,67 @@ async function toggleReminder(on) {
   if (permission !== 'granted') {
     document.getElementById('reminder-toggle').checked = false;
     lsSet('rla-reminder', '0');
+    paintReminderSub();
     showToast('Reminder permission was declined');
     return;
   }
   lsSet('rla-reminder', '1');
-  showToast('Morning reminder on · around 8:00');
+  await registerMorningSync();
+  paintReminderSub();
+  const fired = checkMorningReminder();
+  showToast(fired ? 'A quiet word is waiting for you today.' : 'Morning reminder on · when you open the room between 8 and 10');
+}
+function paintReminderSub() {
+  const el = document.getElementById('reminder-sub');
+  if (!el) return;
+  el.textContent = ls('rla-reminder') === '1'
+    ? 'On — a knock when you open the room between 8 and 10'
+    : 'When you open the room between 8 and 10, if this device allows it';
 }
 function checkMorningReminder() {
-  if (ls('rla-reminder') !== '1') return;
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  const now = new Date();
-  if (now.getHours() < 8 || now.getHours() > 10) return;
+  if (ls('rla-reminder') !== '1') return false;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return false;
+  const hour = new Date().getHours();
+  if (hour < 8 || hour > 10) return false;
   const key = 'rla-reminded-' + todayStr();
-  if (ls(key) === '1') return;
+  if (ls(key) === '1') return false;
   try {
     new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: '/icon-192.png', tag: 'rla-morning' });
     lsSet(key, '1');
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+async function registerMorningSync() {
+  if (!('serviceWorker' in navigator) || !('periodicSync' in ServiceWorkerRegistration.prototype)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+    if (status.state !== 'granted') return;
+    await reg.periodicSync.register('rla-morning', { minInterval: 12 * 60 * 60 * 1000 });
   } catch (_) {}
+}
+
+function bindKeyboardLift() {
+  const apply = () => {
+    const vv = window.visualViewport;
+    const overlap = vv ? Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) : 0;
+    const up = overlap > 80;
+    document.documentElement.style.setProperty('--kb', (up ? overlap : 0) + 'px');
+    document.documentElement.classList.toggle('kb-up', up);
+    const focused = document.activeElement;
+    if (up && focused && typeof focused.scrollIntoView === 'function') {
+      focused.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  };
+  if (window.visualViewport) {
+    visualViewport.addEventListener('resize', apply);
+    visualViewport.addEventListener('scroll', apply);
+  }
+  window.addEventListener('focusin', apply);
+  window.addEventListener('focusout', () => setTimeout(apply, 80));
+  apply();
 }
 
 function setOfflineBanner() {
@@ -4380,6 +4512,13 @@ function bindRituals() {
   window.addEventListener('offline', setOfflineBanner);
   setOfflineBanner();
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
+  bindKeyboardLift();
+  paintReminderSub();
+  if (ls('rla-reminder') === '1') registerMorningSync();
+  checkMorningReminder();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkMorningReminder(); });
+  window.addEventListener('pageshow', checkMorningReminder);
+  window.addEventListener('focus', checkMorningReminder);
   setInterval(checkMorningReminder, 5 * 60 * 1000);
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();

@@ -81,6 +81,8 @@ describe('the lamp-out letter', () => {
       assert.ok(client.includes(v.hear), `${theme} hear line is in data/advisor.js`);
       assert.ok(client.includes(v.close), `${theme} close line is in data/advisor.js`);
     }
+    assert.ok(client.includes(OUT_OF_ROOM.hear), 'out-of-room hear is on the client');
+    assert.ok(client.includes(CRISIS_BODY.hear), 'crisis body is on the client');
   });
 
   it('client and server agree on what a crisis sounds like', () => {
