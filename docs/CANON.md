@@ -108,4 +108,4 @@ Start `/ask` with `npm start` and open `http://localhost:3000/ask`. Do not treat
 
 ## Notion
 
-Grok-thread F1–F3 remain untouched. A pointer page for *this* conversation is created under [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0) when Notion writes succeed; if they fail, this file and RESEARCH are the import source.
+Grok-thread F1–F3 remain untouched. Pointer for *this* conversation: [Cursor recovery · this conversation · 11 Sep](https://app.notion.com/p/3d8b7d53f969815fae74d87dc035970b), child of [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0).

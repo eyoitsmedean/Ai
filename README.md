@@ -53,10 +53,10 @@ Nothing here is described as passing that was not run. Last run in this reposito
 
 | Claim | Command | Last result |
 | --- | --- | --- |
-| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, routes | `npm test` | 64 pass, 0 fail |
+| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, `/ask` stop | `npm test` | 76 pass, 0 fail |
 | Advisor answers 82 questions correctly on the curated path (mis-routing, buried handoffs, echoes, and identical letters all fail the run) | `npm run eval` → `eval/RESULTS.md` | 82/82, 63 distinct letters |
 | Same 82 questions against the on-device composer (Pages / dropped API / phone without a host) | `npm run eval:device` → `eval/RESULTS-device.md` | 82/82, 63 distinct letters |
-| The page works in a phone-sized browser, including Advisor chips/follow-ups and the crisis modal at the daily limit | `npm start` then `npm run qa` | 15 walks pass |
+| The page works in a phone-sized browser, including Advisor chips/follow-ups, the crisis modal at the daily limit, and `/ask` | `npm start` then `npm run qa` | 16 walks pass |
 | Android debug build | `npm run mobile:apk` | BUILD SUCCESSFUL (2026-09-06) |
 | Live-model path (`ANTHROPIC_API_KEY` set) | `npm run eval` with the key | **unverified** — no key in the build environment |
 | iOS build, on-device behaviour | `MOBILE.md` checklist | **unverified** — needs a Mac and a phone |

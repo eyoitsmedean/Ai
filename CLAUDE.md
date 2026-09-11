@@ -38,14 +38,14 @@ Mark each line when you run it. "Verified" means run in this repository and obse
 
 | Item | Status | How to verify |
 | --- | --- | --- |
-| Node suite (64 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, on-device composer parity, routes) | verified 2026-09-11 | `npm test` |
+| Node suite (76 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, on-device composer parity, `/ask` stop + routes) | verified 2026-09-11 | `npm test` |
 | Corpus whole: all 89 Gospel chapters at canonical verse counts, cross-checked against two independent KJV sources | verified 2026-09-06 | `npm test` (corpus integrity) |
 | Every quotation in every client data file (155) seals at ≥ 0.92 | verified 2026-09-06 | `npm test` |
 | Advisor evaluation set, curated path: 82/82 pass, 63 distinct letters (the 19 shared letters are the fixed crisis, refusal, and hello scripts); harness mutation-tested — sabotaging the composer fails 9 items | verified 2026-09-11 | `npm run eval` → `eval/RESULTS.md` |
 | Advisor evaluation set, **on-device composer** (`public/data/advisor.js`, generated from `lib/advise.js`): 82/82, 63 distinct letters | verified 2026-09-11 | `npm run eval:device` → `eval/RESULTS-device.md` |
 | Breaker register (30 defects, `/tmp` report from a subagent that built nothing) replayed: every S1/S2 repaired, 42 adversarial inputs land where they should | verified 2026-09-06 | `test/advise.test.js`; the inputs are now eval items (crisis-6…9, concern, loss, abuse, idiom, ref, neg, name, typo, anger) |
 | Advisor evaluation set, **live model path** | **unverified** — no `ANTHROPIC_API_KEY` in the build environment | `ANTHROPIC_API_KEY=… npm run eval`, then read `eval/RESULTS.md` |
-| Browser QA (15 walks: Press, Forty labels, share proofs, reduced motion, tablist, Advisor chips + follow-ups, the daily gate never closing the crisis path) | verified 2026-09-11 | `npm start` then `npm run qa` |
+| Browser QA (16 walks: Press, Forty, Advisor chips, daily gate, and `/ask` one-screen + crisis stop) | verified 2026-09-11 | `npm start` then `npm run qa` |
 | Android debug build (`assembleDebug`, SDK 36, Java 21) | verified 2026-09-06 — BUILD SUCCESSFUL, `app-debug.apk` 4.3 MB | `npm run mobile:apk` |
 | iOS build | **unverified** — needs a Mac with Xcode | `npx cap add ios && npx cap sync ios && npx cap open ios` |
 | On-device: share sheet hands a PNG on iPhone; install prompt; notifications | **unverified** — Dean's step | `MOBILE.md` five-minute checklist |

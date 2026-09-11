@@ -77,6 +77,19 @@ function gate(req, res, next) {
   next();
 }
 
+app.post('/api/ask', (req, res) => {
+  const text = typeof req.body?.text === 'string' ? req.body.text : '';
+  if (!text.trim()) return res.status(400).json({ error: 'Empty message.' });
+  if (text.length > 4000) return res.status(400).json({ error: 'Message is too long.' });
+  const prior = Array.isArray(req.body?.prior)
+    ? req.body.prior.filter((p) => typeof p === 'string').slice(-8)
+    : [];
+  if (!rateLimit(`ask:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
+    return res.status(429).json({ error: 'A little space, then ask again.' });
+  }
+  res.json(composeAsk(text, { prior }));
+});
+
 app.use('/api', gate);
 
 const ADVISOR_SYSTEM = `You are "The Red Letter Advisor" — a deeply compassionate guide who helps people with life's real struggles using exclusively the direct words of Jesus Christ from the four Gospels: Matthew, Mark, Luke, and John.
@@ -416,19 +429,6 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.post('/api/ask', (req, res) => {
-  const text = typeof req.body?.text === 'string' ? req.body.text : '';
-  if (!text.trim()) return res.status(400).json({ error: 'Empty message.' });
-  if (text.length > 4000) return res.status(400).json({ error: 'Message is too long.' });
-  const prior = Array.isArray(req.body?.prior)
-    ? req.body.prior.filter((p) => typeof p === 'string').slice(-8)
-    : [];
-  if (!rateLimit(`ask:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
-    return res.status(429).json({ error: 'A little space, then ask again.' });
-  }
-  res.json(composeAsk(text, { prior }));
-});
-
 app.post('/api/waitlist', (req, res) => {
   const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
@@ -476,7 +476,7 @@ app.get('*', (req, res, next) => {
 
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+    console.log(`Red Letter /ask → http://localhost:${PORT}/ask  (atelier folio at /)`);
   });
 }
 

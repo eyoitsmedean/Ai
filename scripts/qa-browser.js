@@ -359,7 +359,11 @@ async function main() {
       const btn = document.querySelector('.follow-ups .chip');
       if (btn) btn.click();
     });
-    await page.waitForFunction(() => document.querySelectorAll('.msg-ai .letter').length >= 2, { timeout: 15000 });
+    await page.waitForFunction(() => {
+      const letters = [...document.querySelectorAll('.msg-ai .letter')];
+      const last = letters[letters.length - 1];
+      return letters.length >= 2 && last && last.innerText.length > 80 && !document.getElementById('typing')?.classList.contains('on');
+    }, { timeout: 20000 });
     const second = await page.evaluate(() => [...document.querySelectorAll('.msg-ai .letter')].pop().innerText);
     assert(second.length > 80, 'follow-up should produce a second letter');
 
@@ -417,6 +421,9 @@ async function main() {
     assert(/Watch/i.test(copy), 'WATCH banner missing');
     assert(/What is weighing on you today/.test(copy), 'ask prompt missing');
     assert(/World English Bible/.test(copy), 'WEB example missing');
+    assert(/what that might mean today/i.test(copy), 'meaning heading missing on first paint');
+    assert(/what this bot cannot do/i.test(copy), 'cannot-do heading missing on first paint');
+    assert(/not a pastor/.test(copy), 'cannot-do copy missing on first paint');
     assert(/988/.test(copy), '/ask must name 988 before any ask');
     assert(/not a launch/i.test(copy), 'must say it is not a launch');
 
@@ -433,6 +440,7 @@ async function main() {
       handoffHidden: document.getElementById('handoff-block').classList.contains('hidden'),
       meaningLines: document.getElementById('meaning').textContent.split('\n').filter((s) => s.trim()).length,
     }));
+    assert(!/did not name a feeling/.test(counsel.meaning), 'first chip must not deny the feeling: ' + counsel.meaning);
     assert(/Matthew|Mark|Luke|John/.test(counsel.cite), 'counsel should cite a Gospel: ' + counsel.cite);
     assert(/KJV/.test(counsel.cite), 'live quote must name KJV: ' + counsel.cite);
     assert(counsel.meaningLines >= 1 && counsel.meaningLines <= 4, 'meaning lines: ' + counsel.meaningLines);

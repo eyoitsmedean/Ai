@@ -54,7 +54,7 @@ Source: [eBible WEB+ copyright](https://ebible.org/engwebp/copyright.htm) and [W
 - The *text* is dedicated to the public domain (copyright notice: “Public Domain”).
 - “World English Bible” is a **trademark**. You may not call a *changed* text WEB.
 - Apocrypha/Deuterocanon in some WEB editions is also public domain on that page.
-- This session opened **one** WEB Gospel page: [Matthew 11](https://ebible.org/web/MAT11.htm). Verse 28 on that page reads: “Come to me, all you who labor and are heavily burdened, and I will give you rest.”  
+- This session opened **one** WEB Gospel page: [Matthew 11](https://ebible.org/engwebp/MAT11.htm) (the `/web/MAT11.htm` path 404s; `engwebp` is the live file). Verse 28 on that page reads: “Come to me, all you who labor and are heavily burdened, and I will give you rest.”  
 - **No other WEB verse was opened.** Do not quote other WEB lines from memory in a public page.
 
 **KJV (US)**  
@@ -99,7 +99,7 @@ Name a human hotline. **Stop generating counsel.** No verses after 988.
 
 ### Adjacent law (not controlling)
 
-Oregon SB 1546 (2026) — AI companions: disclose non-human; detect suicidal ideation; **interrupt** and refer to 988; further intervention if ideation continues. Dean is in **Idaho**. The statute is a signal, not Idaho law. The product rule (stop + 988) is compatible with interrupt-and-refer. “Further intervention” on this page means **repeat the human number**, not more theology.
+Oregon [SB 1546 (enrolled, 2026 session)](https://olis.oregonlegislature.gov/liz/2026R1/Downloads/MeasureDocument/sb1546/Enrolled) — operators of AI companions: disclose non-human output; protocol to detect suicidal / self-harm ideation; refer to 988 (and a youthline under 25). Secondary write-ups (e.g. [WTL Governance](https://wtlgovernance.com/insights/updates/oregon-sb-1546-ai-companion-safety-law/), retrieved 2026-09-11) describe an **interrupt** duty. Dean is in **Idaho**. The statute is a signal, not Idaho law. The product rule (stop + 988) is compatible with interrupt-and-refer. “Further intervention” on this page means **repeat the human number**, not more theology.
 
 ### Decision this cycle
 
@@ -169,7 +169,9 @@ Unchanged from `CLAUDE.md`. Seal admits only red letters. `refOther` for Luke 2:
 | 2026-09-11 | https://www.cambridge.org/about-us/who-we-are/queens-printers-patent (attempt) | Cambridge primary | **Blocked** (Cloudflare) |
 | 2026-09-11 | https://ebible.org/engwebp/copyright.htm | WEB text PD; name is trademark | Read the page; do not alter and still say WEB |
 | 2026-09-11 | https://ebible.org/study/content/texts/engwebu/about.html | Same grant, WEBU edition | Same |
-| 2026-09-11 | https://ebible.org/web/MAT11.htm | WEB Matthew 11:28 wording | **Only WEB verse opened** |
+| 2026-09-11 | https://ebible.org/engwebp/MAT11.htm | WEB Matthew 11:28 wording (live). `/web/MAT11.htm` 404s | **Only WEB verse opened** |
+| 2026-09-11 | https://olis.oregonlegislature.gov/liz/2026R1/Downloads/MeasureDocument/sb1546/Enrolled | Oregon SB 1546 enrolled text — detect ideation, refer to 988 | Adjacent; Idaho is not Oregon |
+| 2026-09-11 | https://wtlgovernance.com/insights/updates/oregon-sb-1546-ai-companion-safety-law/ | Secondary: interrupt + 988 | Not the statute |
 | 2026-09-11 | https://berean.bible/licensing.htm | BSB PD as of 2023-04-30 | Footer copyright line is confusing; not adopted |
 | 2026-09-11 | https://app.notion.so/3d8b7d53f969812f9d88eac827b219e0 | One-screen / not a launch | User-edited; wins |
 | 2026-09-11 | https://app.notion.so/3d8b7d53f96981958a71e8effc74a2d5 | License lock | User-edited; wins |

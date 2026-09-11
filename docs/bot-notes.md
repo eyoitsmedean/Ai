@@ -10,6 +10,8 @@ Worker: Cursor cloud agent · this conversation’s recovery commission.
 2. **`docs/RESEARCH.md`** — core topics + five adjacent (WEB vs KJV; crisis stop; paper folio; one-screen; Idaho vs Pages). Source register: only URLs opened this session.
 3. **`/ask`** — one-screen advisor. Crisis/abuse stop with no Gospel counsel. Live quotes sealed KJV. Empty state shows the one WEB line opened from eBible (Matthew 11:28).
 
+Independent review (same day) found two S1 leaks on `/ask`: a short follow-up after crisis pasted Matthew 11:28, and indirect ideation (`can't go on`) got a Hope verse. Both now stop. Soft `tired` no longer says “you did not name a feeling.” WEB example URL corrected to the live `engwebp` path. `/api/ask` is not behind the optional API key. Folio eval still 82/82.
+
 Do not treat `/` as the product. Do not store-submit. Do not overwrite Grok F1–F3.
 
 ---

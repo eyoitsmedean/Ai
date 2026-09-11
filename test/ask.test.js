@@ -82,6 +82,35 @@ describe('one-screen composeAsk', () => {
     assert.ok(next.quote);
   });
 
+  it('keeps the stop on a short follow-up after crisis or abuse', () => {
+    for (const follow of ['why?', 'help', 'what now', 'what do I do']) {
+      const afterCrisis = composeAsk(follow, { prior: ['I want to kill myself'] });
+      assert.equal(afterCrisis.stop, true, follow + ' after crisis');
+      assert.equal(afterCrisis.quote, '');
+      assert.equal(gospelCounsel(afterCrisis.handoff + afterCrisis.quote), false);
+      const afterAbuse = composeAsk(follow, { prior: ['my husband hits me'] });
+      assert.equal(afterAbuse.stop, true, follow + ' after abuse');
+      assert.equal(afterAbuse.quote, '');
+    }
+  });
+
+  it('stops on indirect ideation instead of pasting a Hope verse', () => {
+    for (const line of ['I can\'t go on anymore', 'thinking about dying', 'tired of living']) {
+      const out = composeAsk(line);
+      assert.equal(out.stop, true, line);
+      assert.equal(out.quote, '');
+      assert.match(out.handoff, /988/);
+      assert.equal(gospelCounsel(out.handoff + out.quote), false);
+    }
+  });
+
+  it('does not tell a tired person they failed to name a feeling', () => {
+    const out = composeAsk('I am so tired');
+    assert.equal(out.stop, false);
+    assert.doesNotMatch(out.meaning, /did not name a feeling/);
+    assert.match(out.meaning, /exhausted|pain|rest|invitation/i);
+  });
+
   it('opens a brought saying and refuses a verse that is not His speech', () => {
     const mine = composeAsk('Sit with me in Matthew 11:28');
     assert.equal(mine.stop, false);
@@ -138,7 +167,7 @@ describe('one-screen routes', () => {
     assert.match(res.raw, /What is weighing on you today/);
     assert.match(res.raw, /What this bot cannot do/);
     assert.match(res.raw, /World English Bible/);
-    assert.match(res.raw, /ebible\.org\/web\/MAT11\.htm/);
+    assert.match(res.raw, /ebible\.org\/engwebp\/MAT11\.htm/);
     assert.doesNotMatch(res.raw, /id="sit-quote"/);
     assert.match(res.raw, /tel:988/);
   });

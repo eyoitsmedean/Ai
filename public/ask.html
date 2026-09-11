@@ -191,7 +191,7 @@
         <span class="fine">Nothing you type is stored on a server.</span>
       </div>
       <div class="chips" id="chips">
-        <button type="button" class="chip">I am tired</button>
+        <button type="button" class="chip">I am so tired</button>
         <button type="button" class="chip">I feel so much shame</button>
         <button type="button" class="chip">My mother died last month</button>
         <button type="button" class="chip">Sit with Matthew 11:28</button>
@@ -200,22 +200,20 @@
       <p class="err hidden" id="ask-err" role="alert"></p>
     </form>
 
-    <section id="empty" class="block example">
-      <h2>An example — not tonight’s answer</h2>
-      <p class="quote">“Come to me, all you who labor and are heavily burdened, and I will give you rest.”</p>
-      <p class="cite">Matthew 11:28 · World English Bible</p>
-      <p class="fine">Opened 2026-09-11 from <a href="https://ebible.org/web/MAT11.htm">eBible, Matthew 11</a>. The WEB <em>text</em> is public domain; the name is a trademark. Live answers below use the sealed KJV 1769 until a text is recorded for any public URL.</p>
-    </section>
-
-    <div id="answer" class="hidden" aria-live="polite">
+    <div id="answer" aria-live="polite">
       <section class="block" id="words-block">
         <h2>The words</h2>
-        <p class="quote" id="quote"></p>
-        <p class="cite" id="cite"></p>
+        <div id="example" class="example">
+          <p class="quote">“Come to me, all you who labor and are heavily burdened, and I will give you rest.”</p>
+          <p class="cite">Matthew 11:28 · World English Bible · an example, not tonight’s answer</p>
+          <p class="fine">Opened 2026-09-11 from <a href="https://ebible.org/engwebp/MAT11.htm">eBible, Matthew 11 (WEB)</a>. The WEB <em>text</em> is public domain; the name is a trademark. A live answer uses the sealed KJV 1769 until a text is recorded for any public URL.</p>
+        </div>
+        <p class="quote hidden" id="quote"></p>
+        <p class="cite hidden" id="cite"></p>
       </section>
       <section class="block" id="meaning-block">
         <h2>What that might mean today</h2>
-        <p class="meaning" id="meaning"></p>
+        <p class="meaning" id="meaning">A live answer will sit here — four lines or fewer. This page will not add a verse after 988.</p>
       </section>
       <section class="block hidden" id="handoff-block">
         <h2>Stop here</h2>
@@ -223,7 +221,8 @@
       </section>
       <section class="block" id="cannot-block">
         <h2>What this bot cannot do</h2>
-        <p class="cannot" id="cannot"></p>
+        <p class="cannot" id="cannot">This page is not a pastor, not a diagnosis, and not a substitute for a person who knows your name.
+If you are in danger, call 988 in the United States, or start at findahelpline.com anywhere else.</p>
       </section>
     </div>
 
@@ -237,41 +236,70 @@
     const input = document.getElementById('ask-input');
     const go = document.getElementById('ask-go');
     const err = document.getElementById('ask-err');
-    const empty = document.getElementById('empty');
-    const answer = document.getElementById('answer');
     const prior = [];
+    const CANNOT = 'This page is not a pastor, not a diagnosis, and not a substitute for a person who knows your name.\nIf you are in danger, call 988 in the United States, or start at findahelpline.com anywhere else.';
 
     /* Byte-identical to lib/scripture.js looksLikeCrisis. A test fails on drift. */
     function looksLikeCrisisClient(text) {
       return /\b(suicid\w*|kill myself|killing myself|end (my|it|their|his|her|your|our) (life|lives)|end it all|ending it all|ending my life|end things|end everything|ending things|going to end (it|things|everything)|take my life|took .{0,30}pills|swallowed .{0,30}pills|want(s|ed)? to die|wanna die|wish(ed)? (i|that i|he|she|they) (was|were|could be) dead|wish i (were|was)n[’']?t (here|alive|born)|wish i could (die|disappear|not exist)|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|don[’']?t want to live|do not want to live|don[’']?t want to be (alive|here|around)|not want to be alive|better off dead|no reason to live|not worth living|life isn[’']?t worth|slit my|jump off|a plan and .{0,40}(notes?|letters?|goodbyes?)|suicide notes?|goodbye letters?|kill(ed|ing)? (him|her|them)sel(f|ves))\b/i.test(String(text || ''));
     }
+    const ABUSE_RE = /\b(hits me|hit me|beats me|beat me|beating me|hurts me|abuses? me|abused|abusive|abusing|raped|rape|molested|molest|assaulted|sexual(ly)? assault|touched me|threatens? to (hurt|kill) me|afraid of (my|him|her) (husband|wife|partner|boyfriend|girlfriend)|domestic violence|he will kill me|she will kill me|chokes? me|strangled)\b/i;
+    const SPANISH_CRISIS_RE = /\b(quiero morir|matarme|suicidarme|quitarme la vida|no quiero vivir|acabar con todo)\b/i;
+    const NEGATED_CRISIS_RE = /\b(not|never|no|isn'?t|am not|i'?m not)\s+(suicidal|going to (kill|hurt) myself|thinking of (suicide|killing myself)|about to (kill|hurt) myself)\b|\bnot suicidal\b/i;
+    const INDIRECT_RE = /\b(disappear forever|can[’']?t (do this|go on|take it|keep going) anymore|cannot (do this|go on) anymore|no way out|no point in (living|going on|anything)|tired of living|tired of being alive|what[’']?s the point of living|everyone would be better off without me|nobody would (miss|notice) me|think(ing)? about dying|thoughts of dying|dying every day|don[’']?t want to wake up|wish i could sleep forever|don[’']?t want to be here anymore)\b/i;
 
-    const LOCAL_STOP = {
-      kind: 'crisis',
-      stop: true,
-      citation: '',
-      quote: '',
-      meaning: '',
-      handoff: 'If you are in danger of harming yourself, stop here.\n\nUnited States: 988 — call, text, or chat. https://988lifeline.org/\nAnywhere else: https://findahelpline.com/\n\nThis page will not add counsel or a verse after that number. I am not a person, and this is not emergency care.',
-      cannot: 'This page is not a pastor, not a diagnosis, and not a substitute for a person who knows your name.\nIf you are in danger, call 988 in the United States, or start at findahelpline.com anywhere else.',
-      edition: ''
+    const STOPS = {
+      crisis: {
+        kind: 'crisis', stop: true, citation: '', quote: '', meaning: '', edition: '',
+        handoff: 'If you are in danger of harming yourself, stop here.\n\nUnited States: 988 — call, text, or chat. https://988lifeline.org/\nAnywhere else: https://findahelpline.com/\n\nThis page will not add counsel or a verse after that number. I am not a person, and this is not emergency care.',
+        cannot: CANNOT
+      },
+      softCrisis: {
+        kind: 'softCrisis', stop: true, citation: '', quote: '', meaning: '', edition: '',
+        handoff: 'What you wrote is heavy enough that this page should not answer with a verse.\n\nUnited States: 988 — call, text, or chat. https://988lifeline.org/\nAnywhere else: https://findahelpline.com/\n\nThis page will not add counsel or a verse. I am not a person, and this is not emergency care.',
+        cannot: CANNOT
+      },
+      abuse: {
+        kind: 'abuse', stop: true, citation: '', quote: '', meaning: '', edition: '',
+        handoff: 'What you are describing is violence, and it is not the fault of the person it is happening to. If anyone is in danger right now, call 911 or your local emergency number.\n\nUnited States: National Domestic Violence Hotline — 1-800-799-7233, text START to 88788, or thehotline.org.\nSexual assault: RAINN — 800-656-4673, text HOPE to 64673, or hotline.rainn.org.\n\nThis page will not add a verse. I am not a person, and this page cannot keep anyone safe; those lines can help you plan how to be.',
+        cannot: CANNOT
+      },
+      spanishCrisis: {
+        kind: 'spanishCrisis', stop: true, citation: '', quote: '', meaning: '', edition: '',
+        handoff: 'Si estás pensando en quitarte la vida, por favor busca a una persona ahora.\n\nEstados Unidos: 988 (llamar, escribir, o chat). https://988lifeline.org/\nOtros países: https://findahelpline.com/\n\nEsta página no añadirá un versículo después de ese número. No soy una persona, y esto no es atención de emergencia.',
+        cannot: CANNOT
+      }
     };
+
+    function localStop(text) {
+      if (ABUSE_RE.test(text)) return STOPS.abuse;
+      if (SPANISH_CRISIS_RE.test(text)) return STOPS.spanishCrisis;
+      if (NEGATED_CRISIS_RE.test(text)) return null;
+      if (looksLikeCrisisClient(text) || INDIRECT_RE.test(text)) {
+        return INDIRECT_RE.test(text) && !looksLikeCrisisClient(text) ? STOPS.softCrisis : STOPS.crisis;
+      }
+      return null;
+    }
 
     function show(data) {
       err.classList.add('hidden');
-      empty.classList.add('hidden');
-      answer.classList.remove('hidden');
       const stop = Boolean(data.stop);
-      document.getElementById('words-block').classList.toggle('hidden', stop || !data.quote);
+      const example = document.getElementById('example');
+      const quote = document.getElementById('quote');
+      const cite = document.getElementById('cite');
+      example.classList.toggle('hidden', stop || Boolean(data.quote));
+      quote.classList.toggle('hidden', stop || !data.quote);
+      cite.classList.toggle('hidden', stop || !data.quote);
+      document.getElementById('words-block').classList.toggle('hidden', stop);
       document.getElementById('meaning-block').classList.toggle('hidden', stop || !data.meaning);
       document.getElementById('handoff-block').classList.toggle('hidden', !stop);
-      document.getElementById('quote').textContent = data.quote ? '“' + data.quote + '”' : '';
-      document.getElementById('cite').textContent = data.citation
+      quote.textContent = data.quote ? '“' + data.quote + '”' : '';
+      cite.textContent = data.citation
         ? data.citation + (data.edition ? ' · ' + data.edition : '')
         : '';
       document.getElementById('meaning').textContent = data.meaning || '';
       document.getElementById('handoff').textContent = data.handoff || '';
-      document.getElementById('cannot').textContent = data.cannot || LOCAL_STOP.cannot;
+      document.getElementById('cannot').textContent = data.cannot || CANNOT;
       if (stop) document.getElementById('handoff-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
       else document.getElementById('words-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -281,7 +309,8 @@
       if (!q) return;
       go.disabled = true;
       err.classList.add('hidden');
-      if (looksLikeCrisisClient(q)) show(LOCAL_STOP);
+      const fallback = localStop(q);
+      if (fallback) show(fallback);
       try {
         const res = await fetch('/api/ask', {
           method: 'POST',
@@ -293,7 +322,7 @@
         show(data);
         prior.push(q);
       } catch (e) {
-        if (!looksLikeCrisisClient(q)) {
+        if (!fallback) {
           err.textContent = e.message || 'The page could not answer.';
           err.classList.remove('hidden');
         }
