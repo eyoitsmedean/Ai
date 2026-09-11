@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:red_words/brand.dart';
 import 'package:red_words/engine/crisis.dart';
+import 'package:red_words/engine/privacy.dart';
+import 'package:red_words/ui/settings_tab.dart';
 import 'package:red_words/ui/shell.dart';
+import 'package:red_words/engine/moment.dart';
+import 'package:red_words/engine/pack.dart';
+import 'dart:io';
 
 void main() {
   test('988 launcher intent is tel:988', () {
@@ -33,6 +39,22 @@ void main() {
     expect(Brand.appGroup, 'group.com.redwords.redWords');
     expect(Brand.urlSchemeToday, 'redwords://today');
     expect(Brand.androidApplicationId, 'com.redwords.redwords');
+  });
+
+  testWidgets('Settings shows the in-app privacy notice', (tester) async {
+    final pack =
+        ScripturePack.parse(File('assets/sayings.json').readAsStringSync());
+    final engine = MomentEngine(pack, const LocalMemory());
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(home: Scaffold(body: SettingsTab(engine: engine))),
+      ),
+    );
+    expect(find.byKey(const Key('privacy-title')), findsOneWidget);
+    expect(find.byKey(const Key('privacy-body')), findsOneWidget);
+    expect(find.textContaining('does not connect to the internet'), findsOneWidget);
+    expect(PrivacyNotice.body, contains('does not connect to the internet'));
+    expect(PrivacyNotice.deletion, contains('Deleting the app'));
   });
 
   test('product forbids streaks chat journeys', () {

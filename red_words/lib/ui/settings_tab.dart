@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../brand.dart';
 import '../engine/crisis.dart';
 import '../engine/moment.dart';
+import '../engine/privacy.dart';
 import 'crisis_button.dart';
 import 'shell.dart';
 
@@ -35,6 +36,22 @@ class SettingsTab extends ConsumerWidget {
           'World English Bible. Public domain. Gospels only — words Jesus spoke. Reflections are not Scripture.',
           style: TextStyle(color: Brand.muted, height: 1.45),
         ),
+        const SizedBox(height: 28),
+        const Text(
+          PrivacyNotice.title,
+          key: Key('privacy-title'),
+          style: TextStyle(fontSize: 13, letterSpacing: 1.4, color: Brand.muted),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          PrivacyNotice.body,
+          key: Key('privacy-body'),
+          style: TextStyle(height: 1.45),
+        ),
+        const SizedBox(height: 8),
+        const Text(PrivacyNotice.thirdParties, style: TextStyle(height: 1.45)),
+        const SizedBox(height: 8),
+        const Text(PrivacyNotice.deletion, style: TextStyle(height: 1.45)),
       ],
     );
   }
