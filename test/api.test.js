@@ -111,9 +111,24 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /Fear not, little flock|Be not afraid|hairs of your head/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('streams a shame letter from the curated pack when the lamp is out', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I feel so much shame' }],
+    });
+    assert.equal(res.status, 200);
+    const letter = res.raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert.match(letter, /Luke 15:4/);
+    assert.match(letter, /lost/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

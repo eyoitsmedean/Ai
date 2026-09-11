@@ -254,7 +254,7 @@ describe('spoken corpus', () => {
   it('does not treat a vague sentence as a keyword search of the whole corpus', () => {
     const hit = retrieveSayings('I do not know what to say');
     assert.ok(hit.sayings.length >= 2);
-    assert.ok(hit.sayings.every((s) => /14:27|11:28|4:39/.test(s.citation)));
+    assert.ok(hit.sayings.every((s) => /14:23|11:26|4:39/.test(s.citation)));
   });
 
   it('prints an allow-list of placeholders, not full verses for the model to copy', () => {

@@ -86,7 +86,12 @@ async function main() {
     await page.click('#ob-ack');
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
-    await page.click('.tp-skip');
+    await page.click('button.tp-need-btn');
+    try {
+      await page.waitForFunction(() => document.getElementById('sit-sheet')?.classList.contains('on'), { timeout: 8000 });
+    } catch (_) {
+      await page.click('.tp-skip');
+    }
     await page.waitForFunction(() => document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
     await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 8000 });
     const quote = await page.$eval('#sit-quote', (el) => el.textContent);

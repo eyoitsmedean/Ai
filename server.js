@@ -11,6 +11,7 @@ const { loadConfig } = require('./lib/config');
 const { createRateLimiter } = require('./lib/rate-limit');
 const { createModel } = require('./lib/model');
 const { ADVISOR_SYSTEM, ENCOURAGE_SYSTEM, FALLBACK_LETTER, dailySystem } = require('./lib/prompts');
+const { letterFor } = require('./lib/letter');
 
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
 const THEME_SET = new Set(themeNames());
@@ -232,7 +233,7 @@ function createApp(options = {}) {
     });
 
     if (!model) {
-      return writeLetter(res, FALLBACK_LETTER, crisis);
+      return writeLetter(res, crisis ? FALLBACK_LETTER : letterFor(last.content), crisis);
     }
 
     try {
@@ -253,7 +254,7 @@ function createApp(options = {}) {
         signal: ac.signal,
       });
       if (res.writableEnded) return;
-      writeLetter(res, result.text || FALLBACK_LETTER, crisis);
+      writeLetter(res, result.text || letterFor(last.content), crisis);
     } catch (err) {
       if (ac.signal.aborted || res.writableEnded) return;
       console.error('Chat error:', err.message);
@@ -262,7 +263,7 @@ function createApp(options = {}) {
         res.setHeader('Cache-Control', 'no-cache, no-transform');
         res.setHeader('X-Accel-Buffering', 'no');
       }
-      writeLetter(res, FALLBACK_LETTER, crisis);
+      writeLetter(res, crisis ? FALLBACK_LETTER : (letterFor(last.content) || FALLBACK_LETTER), crisis);
     }
   });
 

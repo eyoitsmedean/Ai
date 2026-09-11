@@ -1,3 +1,7 @@
+# Red Letter — Trust harness — v2 — 2026-09-11
+
+Sprint (2026-09-11): five shipped items — need opens Sit; no-key Advisor writes a themed sealed letter; Amen offers Send a blessing; crisis matchers aligned (`unalive`); comfort cites no longer collide with Matthew 14:27 / 24:39.
+
 # Red Letter — Trust harness — v1 — 2026-09-07
 
 Worker: Cursor Grok 4.6 · owns server + scripture verification + retrieval · 2026-09-07
