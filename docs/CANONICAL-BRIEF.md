@@ -138,7 +138,7 @@ Quoted from the same transcript after prompt #10.
 ## 8. Observable acceptance criteria
 
 1. First ten prompts recovered from the transcript with quoted wording — this file.  
-2. Default phone path: open `/` → Advisor composer, no Encounter intercept.  
+2. Default phone path after onboarding (or **Ask a question now**): Advisor composer, no Encounter intercept. A brand-new visit still shows the short onboarding overlay first.  
 3. Crisis reply: 911, 988 call/text, `chat.988lifeline.org`, IASP; no “US & Canada”; no scripture lead.  
 4. `/legal` is live and linked from Settings and the landing footer.  
 5. iOS install sheet exists and is opened from Settings / How.  
