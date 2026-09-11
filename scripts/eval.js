@@ -152,7 +152,7 @@ async function main() {
     failed: failed.length,
     distinctCitationSets: varied.size,
     varietyOk,
-    byCategory: Object.fromEntries(['everyday', 'low-moment', 'hostile', 'off-scope', 'crisis'].map((c) => {
+    byCategory: Object.fromEntries(['everyday', 'low-moment', 'hostile', 'off-scope', 'crisis', 'abuse'].map((c) => {
       const inCat = rows.filter((r) => r.category === c);
       return [c, { n: inCat.length, passed: inCat.filter((r) => !r.failures.length).length }];
     })),
