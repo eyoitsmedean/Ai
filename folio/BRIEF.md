@@ -61,7 +61,7 @@ Known risks / what went wrong before:
 - Curl-based link checks hit bot walls (Justia 403, midpage 429); those links open in a browser, but each such row now carries a second source.
 
 Authority (what you may do without asking; what always needs sign-off):
-- Without asking: edit `folio/`, the canvas, the Notion hub and runbook pages this project created, `LAUNCH.md` and `MARKET_STRATEGY.md` for factual corrections; commit and push to the working branch; update PR #15.
+- Without asking: edit `folio/`, the canvas, the Notion hub and runbook pages this project created, `LAUNCH.md` and `MARKET_STRATEGY.md` for factual corrections; commit and push to the working branch; update PR #31 (this sprint) or PR #15 (folio line).
 - Always needs sign-off: any application, outreach message, purchase, publish (including GitHub Pages), deploy, client work, edits to Notion pages outside this project's tree, merging the PR, force-push or history rewrite.
 
 Quality reference (two named examples of the best of this kind, and what specifically to match):
