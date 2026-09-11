@@ -317,6 +317,65 @@ async function main() {
     assert(/988/.test(copy) && /helpline/i.test(copy), 'modal must name 988 and a global directory');
   });
 
+  await check('the curated Advisor is never locked, and a new letter clears the thread', async () => {
+    await page.evaluate(() => {
+      localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 5 }));
+      if (typeof paintChatGate === 'function') paintChatGate();
+      switchTab('advisor');
+    });
+    const gated = await page.evaluate(() => ({
+      gate: document.getElementById('chat-gate').classList.contains('on'),
+      copy: document.getElementById('chat-gate').innerText,
+      inputOff: document.getElementById('chat-input').disabled,
+      sendOff: document.getElementById('send-btn').disabled,
+      newLetter: !!document.getElementById('new-letter'),
+    }));
+    assert(gated.gate, 'gate should say the live lamp is out');
+    assert(/still writes/.test(gated.copy), 'gate must say the room still writes: ' + gated.copy);
+    assert(!gated.inputOff && !gated.sendOff, 'composer must stay open after five live letters');
+    assert(gated.newLetter, 'New letter control missing');
+
+    await page.evaluate(() => sendMsg('What is the capital of France?'));
+    await page.waitForFunction(() => /cannot answer that as it is asked/.test(document.getElementById('chat-messages').innerText), { timeout: 8000 });
+    const room = await page.evaluate(() => document.getElementById('chat-messages').innerText);
+    assert(/Come back with the thing itself/.test(room), 'out-of-room close missing');
+
+    await page.evaluate(() => startNewLetter());
+    const cleared = await page.evaluate(() => ({
+      msgs: document.getElementById('chat-messages').innerText.trim(),
+      chips: document.getElementById('suggestions').style.display !== 'none',
+      n: JSON.parse(localStorage.getItem('rla-chats')).n,
+    }));
+    assert(!cleared.msgs, 'New letter should clear the thread');
+    assert(cleared.chips, 'chips should return');
+    assert(cleared.n === 5, 'New letter must not reset the live-letter count');
+  });
+
+  await check('the reminder tells the truth and the keyboard lift is bound', async () => {
+    const room = await page.evaluate(() => {
+      openSettings();
+      return {
+        sub: document.getElementById('reminder-sub').textContent,
+        kb: typeof bindKeyboardLift === 'function',
+        stop: typeof stopLetter === 'function',
+      };
+    });
+    assert(/between 8 and 10/.test(room.sub), 'reminder copy is ' + room.sub);
+    assert(room.kb, 'bindKeyboardLift missing');
+    assert(room.stop, 'stopLetter missing');
+    await page.evaluate(() => {
+      document.documentElement.style.setProperty('--kb', '280px');
+      document.documentElement.classList.add('kb-up');
+    });
+    const lift = await page.evaluate(() => document.documentElement.classList.contains('kb-up'));
+    assert(lift, 'kb-up class should apply');
+    await page.evaluate(() => {
+      document.documentElement.classList.remove('kb-up');
+      document.documentElement.style.setProperty('--kb', '0px');
+      closeSettings();
+    });
+  });
+
   await check('Room settings says how the red letters are decided', async () => {
     const copy = await page.evaluate(() => document.getElementById('settings-sheet').innerText);
     assert(/red-letter tradition/.test(copy) && /John 3:16–21/.test(copy), 'disclosure missing');

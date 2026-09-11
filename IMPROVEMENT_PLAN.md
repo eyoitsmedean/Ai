@@ -75,7 +75,7 @@ Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playb
 - Lectio divina (Read / Reflect / Rest / Respond) is the daily ritual — shipped.
 - Forty (the Lent path) — shipped; film it in January, name the week before Ash Wednesday.
 - Wire live Anthropic key in production; run `npm run eval` on the model path and review the tone column.
-- Add push / local reminder for daily red letter / lectio.
+- Add push / local reminder for daily red letter / lectio. — shipped 2026-09-11 as an on-open knock between 8 and 10 (honest: no silent background push without a server); periodicSync registered when the browser allows it.
 - Soft freemium paywall + annual plan.
 - Scripture license path for modern translations beyond KJV curated set.
 - Native iOS/Android shell — Capacitor around the existing build (decided; steps in `RELEASE.md`); needs a Mac with Xcode 26+ and an API host.

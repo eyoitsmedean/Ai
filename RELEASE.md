@@ -18,7 +18,7 @@ Last updated 2026-09-06, on branch `cursor/forty-path-fbba`, in a Linux containe
 | A model letter that cites another author, or carries no verified saying, never reaches the reader — the room's letter replaces it | `test/counsel.test.js` `letterPassesFloor` (Romans, Psalm, no verse, unfillable marker, typed quote all fail; every offline letter passes) | 1 |
 | Corpus integrity: all 89 Gospel chapters at KJV verse counts; no editorial notes in verse text | `test/corpus.test.js`, `test/map.test.js` | 1 |
 | Red-letter map: every partial marker quotes its verse; discourses covered; no other speaker's reply in red; no "Jesus" in red text except John 17:3 | `test/map.test.js`, `test/spoken.test.js`, `npm run audit` (0 named frames) | 1 |
-| The web room end to end (title page, lectio, Seven, Forty, Lent, ledger, Advisor, crisis modal, library on both hosts) | `npm run qa` — 14/14 in headless Chrome at a phone viewport | 1 |
+| The web room end to end (title page, lectio, Seven, Forty, Lent, ledger, Advisor, crisis modal, library on both hosts, curated Advisor never locked, new letter, reminder copy) | `npm run qa` in headless Chrome at a phone viewport | 1 |
 | One HTML build can call an API on another origin, and the server refuses origins it was not told about | Static host on :8081 + API on :3000 with `RLA_ALLOWED_ORIGINS`: letter rendered, 5 API calls, no console errors; unknown origin gets no CORS header (`test/api.test.js`) | 1 |
 | `npm run shell https://api.host` writes `dist-shell/` with the API base set and refuses a non-https, non-LAN host | ran both cases | 1 |
 | 988 Lifeline is live (call, text, chat, 24/7, free); findahelpline covers 175+ countries with verified numbers | opened both sites 2026-09-06 | 4 |

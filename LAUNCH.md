@@ -20,6 +20,8 @@ If an ad cannot say that in eight seconds, the ad is wrong.
 
 His words. Lectio. Seek. Seven Days. The curated Advisor. The commonplace.
 
+The five-letter gate is the **live lamp** only. After five model letters the room still writes from His words. A crisis line is never gated.
+
 Bible Chat’s reviews are rotting because they met pain with a paywall. You will not.
 
 **When money exists:** live LLM Advisor + extra seasonal paths + atelier extras. Price like Hallow, not like a casino.

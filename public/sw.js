@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v15';
+const CACHE = 'rla-phase0-v16';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',
@@ -26,6 +26,29 @@ self.addEventListener('activate', (e) => {
     )
   );
   self.clients.claim();
+});
+
+self.addEventListener('periodicsync', (e) => {
+  if (e.tag !== 'rla-morning') return;
+  e.waitUntil(
+    self.registration.showNotification('Red Letter', {
+      body: 'A quiet word is waiting for you today.',
+      icon: '/icon-192.png',
+      tag: 'rla-morning',
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const c of clients) {
+        if ('focus' in c) return c.focus();
+      }
+      if (self.clients.openWindow) return self.clients.openWindow('/');
+    })
+  );
 });
 
 self.addEventListener('fetch', (e) => {
