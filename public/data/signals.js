@@ -120,13 +120,14 @@
   var POISON_LINE = 'If you have taken pills or anything else to harm yourself, that is a medical emergency before it is anything else: in the United States call 911, or Poison Control at 1-800-222-1222, right now — even if you feel fine.';
   var CRISIS_NOTICE = [
     'If you are in danger or thinking of ending your life, please stop here and get human help now.',
-    'In the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.',
+    'In the United States, call or text 988, or chat at https://988lifeline.org. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.',
     'I am not a person, and this page is not emergency care.',
     '',
   ].join('\n');
   var DANGER_NOTICE = [
     'If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.',
     'In the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.',
+    'If someone might see this screen, leave now and call from a safer phone — browsing this page can be seen and cannot be fully erased.',
     'I am not a person, and this page is not emergency care.',
     '',
   ].join('\n');

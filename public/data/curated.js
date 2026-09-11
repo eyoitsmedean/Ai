@@ -1,5 +1,6 @@
 /* Curated red-letter fallbacks — public-domain KJV words of Jesus (four Gospels).
-   Single source of truth for the app and server.js. */
+   Encouragement rooms are generated from lib/curated.js (`npm run curated`).
+   Do not edit the encouragement object by hand. Daily rotation may be edited here. */
 window.RLA_CURATED = {
   daily: [
   {
@@ -396,290 +397,308 @@ window.RLA_CURATED = {
   }
 ],
   encouragement: {
-  "Anxiety & Worry": {
-    "headline": "Do Not Be Anxious",
-    "opening": "Worry can feel like a room with no windows. Jesus speaks directly into that room — not with shame, but with a Father who knows what you need.",
-    "passages": [
-      {
-        "verse": "Matthew 6:25–26",
-        "quote": "Take no thought for your life, what ye shall eat, or what ye shall drink; nor yet for your body, what ye shall put on. Is not the life more than meat, and the body than raiment? Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?",
-        "context": "Jesus redirects anxious eyes from scarcity to the care already written into creation."
-      },
-      {
-        "verse": "Matthew 6:33–34",
-        "quote": "But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you. Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself.",
-        "context": "Priority becomes the antidote: seek first, then let tomorrow stay tomorrow."
-      },
-      {
-        "verse": "John 14:27",
-        "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
-        "context": "His peace is a gift, not a mood you manufacture."
-      }
-    ],
-    "practice": "Name one worry out loud. Then read Matthew 6:26 slowly twice. Ask: what would it look like to trust I am cared for in this one thing today?",
-    "closing": "You are not alone in the spiral. His words meet you there."
-  },
-  "Grief & Loss": {
-    "headline": "Blessed Are They That Mourn",
-    "opening": "Grief is not a failure of faith. Jesus blesses those who mourn — and he weeps with the hurting.",
-    "passages": [
-      {
-        "verse": "Matthew 5:4",
-        "quote": "Blessed are they that mourn: for they shall be comforted.",
-        "context": "Comfort is promised to mourners, not to those who hide their tears."
-      },
-      {
-        "verse": "John 11:25–26",
-        "quote": "I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live: And whosoever liveth and believeth in me shall never die.",
-        "context": "Jesus meets grief with resurrection hope without erasing the pain of the present."
-      },
-      {
-        "verse": "John 16:22",
-        "quote": "And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.",
-        "context": "Sorrow is real, and so is the joy no one can confiscate when he is near again."
-      }
-    ],
-    "practice": "Sit in quiet for three minutes. Speak the name of what you have lost. Then read Matthew 5:4 aloud as a blessing over your mourning.",
-    "closing": "Your tears are seen. Comfort is not a dismissal of pain — it is company within it."
-  },
-  "Forgiveness": {
-    "headline": "As We Forgive",
-    "opening": "Forgiveness is one of the hardest teachings Jesus gave — and one of the freest. He knows the cost, and still invites you into it.",
-    "passages": [
-      {
-        "verse": "Luke 6:36",
-        "quote": "Be ye therefore merciful, as your Father also is merciful.",
-        "context": "Mercy is not a personality trait. It is family resemblance."
-      },
-      {
-        "verse": "Matthew 18:21–22",
-        "quote": "I say not unto thee, Until seven times: but, Until seventy times seven.",
-        "context": "Mercy is meant to be practiced repeatedly, not rationed."
-      },
-      {
-        "verse": "Luke 23:34",
-        "quote": "Father, forgive them; for they know not what they do.",
-        "context": "Even from the cross, Jesus models forgiveness toward those who wound."
-      }
-    ],
-    "practice": "Write the name of one person (or yourself) you are struggling to forgive. Pray Luke 23:34 over that name — not forcing feelings, but opening a door.",
-    "closing": "Forgiveness is often a road, not a moment. Take the next honest step."
-  },
-  "Loneliness": {
-    "headline": "I Am With You",
-    "opening": "Loneliness can convince you that you are unseen. Jesus speaks of presence, friendship, and a Father who does not leave.",
-    "passages": [
-      {
-        "verse": "Matthew 28:20",
-        "quote": "Lo, I am with you alway, even unto the end of the world.",
-        "context": "His final Gospel promise is presence that does not expire."
-      },
-      {
-        "verse": "John 14:18",
-        "quote": "I will not leave you comfortless: I will come to you.",
-        "context": "Orphaned feelings meet a promise of coming near."
-      },
-      {
-        "verse": "John 15:15",
-        "quote": "Henceforth I call you not servants; for the servant knoweth not what his lord doeth: but I have called you friends.",
-        "context": "Jesus names his followers friends — belonging at the center of discipleship."
-      }
-    ],
-    "practice": "Sit with John 14:18. Whisper: You will not leave me comfortless. Notice what rises.",
-    "closing": "You are not an interruption. You are someone Jesus calls friend."
-  },
-  "Fear": {
-    "headline": "Be Not Afraid",
-    "opening": "Fear shrinks the future. Jesus keeps saying “fear not” — not because danger is fake, but because you are held.",
-    "passages": [
-      {
-        "verse": "Matthew 14:27",
-        "quote": "Be of good cheer; it is I; be not afraid.",
-        "context": "In the storm, his presence is the first word against fear."
-      },
-      {
-        "verse": "Luke 12:32",
-        "quote": "Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.",
-        "context": "Tenderness and inheritance replace terror."
-      },
-      {
-        "verse": "John 14:27",
-        "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
-        "context": "Peace is left with you — a possession, not a performance."
-      }
-    ],
-    "practice": "When fear spikes, place a hand on your chest and slowly say Matthew 14:27. Breathe between each phrase.",
-    "closing": "Courage is not the absence of fear. It is hearing “it is I” in the middle of it."
-  },
-  "Peace": {
-    "headline": "My Peace I Give You",
-    "opening": "The world offers fragile calm. Jesus offers a peace that holds even when trouble stays.",
-    "passages": [
-      {
-        "verse": "John 14:27",
-        "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
-        "context": "His peace is left with you — a gift, not a mood you manufacture."
-      },
-      {
-        "verse": "John 16:33",
-        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
-        "context": "Peace in him can coexist with tribulation in the world."
-      },
-      {
-        "verse": "Matthew 11:28–29",
-        "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
-        "context": "Rest for the soul is the shape peace often takes in his invitation."
-      }
-    ],
-    "practice": "Sit quietly for one minute. Breathe in: Peace I leave with you. Breathe out: Let not your heart be troubled.",
-    "closing": "His peace is not the absence of storms — it is his presence within them."
-  },
-  "Hope": {
-    "headline": "Take Heart",
-    "opening": "Hope is not naive optimism. In Jesus' words, hope is anchored in who he is and what he has overcome.",
-    "passages": [
-      {
-        "verse": "John 16:33",
-        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
-        "context": "He names tribulation honestly — then plants cheer in his victory."
-      },
-      {
-        "verse": "Matthew 5:14",
-        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid.",
-        "context": "Hope becomes visible when light is lived, not only felt."
-      },
-      {
-        "verse": "John 11:25",
-        "quote": "I am the resurrection, and the life.",
-        "context": "The center of Christian hope is a person, not a vague wish."
-      }
-    ],
-    "practice": "Write one place tribulation feels real. Under it, write John 16:33. Ask for peace in him, not denial of the hard thing.",
-    "closing": "Good cheer is possible because he has overcome — not because you have to."
-  },
-  "Conflict & Relationships": {
-    "headline": "Go, Be Reconciled",
-    "opening": "Conflict lodges in the body. Jesus treats broken relationship as worship’s unfinished business — not a side issue.",
-    "passages": [
-      {
-        "verse": "Matthew 5:23–24",
-        "quote": "Therefore if thou bring thy gift to the altar, and there rememberest that thy brother hath ought against thee; Leave there thy gift before the altar, and go thy way; first be reconciled to thy brother, and then come and offer thy gift.",
-        "context": "Reconciliation is placed ahead of religious performance."
-      },
-      {
-        "verse": "Matthew 7:12",
-        "quote": "Therefore all things whatsoever ye would that men should do to you, do ye even so to them: for this is the law and the prophets.",
-        "context": "The next sentence you speak can be the one you wish to hear."
-      },
-      {
-        "verse": "John 15:13",
-        "quote": "Greater love hath no man than this, that a man lay down his life for his friends.",
-        "context": "The measure of love is not convenience. It is what you are willing to lay down."
-      }
-    ],
-    "practice": "Name one relationship that is strained. Ask: what would ‘go, be reconciled’ look like as one small step today — a message, a pause, a prayer?",
-    "closing": "You do not have to finish the story today. You can take the next faithful step toward the other person."
-  },
-  "Purpose & Direction": {
-    "headline": "Seek Ye First",
-    "opening": "Direction-anxiety wants a five-year map. Jesus offers a first thing, a following, and a name that is already chosen.",
-    "passages": [
-      {
-        "verse": "Matthew 6:33",
-        "quote": "But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.",
-        "context": "First things first un-knots the rest — not by magic, but by reordering the heart."
-      },
-      {
-        "verse": "Matthew 4:19",
-        "quote": "Follow me, and I will make you fishers of men.",
-        "context": "Purpose begins as following a person, not designing a brand."
-      },
-      {
-        "verse": "John 15:16",
-        "quote": "Ye have not chosen me, but I have chosen you, and ordained you, that ye should go and bring forth fruit.",
-        "context": "You are not auditioning for a calling. You have been chosen to bear fruit."
-      }
-    ],
-    "practice": "Write the next faithful step — not the whole vocation. Seek first that one thing. Leave the five-year map on the table.",
-    "closing": "You do not need the whole map. You need the next yes."
-  },
-  "Faith & Doubt": {
-    "headline": "Reach Hither Thy Finger",
-    "opening": "Doubt is not a firing offense in the Gospels. Jesus lets a doubter touch the wound.",
-    "passages": [
-      {
-        "verse": "John 20:27",
-        "quote": "Reach hither thy finger, and behold my hands; and reach hither thy hand, and thrust it into my side: and be not faithless, but believing.",
-        "context": "Evidence is offered to the one who cannot yet believe — without humiliation."
-      },
-      {
-        "verse": "Matthew 14:31",
-        "quote": "O thou of little faith, wherefore didst thou doubt?",
-        "context": "The question comes after the catching hand — rebuke inside rescue."
-      },
-      {
-        "verse": "Mark 9:23",
-        "quote": "If thou canst believe, all things are possible to him that believeth.",
-        "context": "Jesus meets a desperate parent at the edge of belief, not past it."
-      }
-    ],
-    "practice": "Tell the truth about one doubt. Then read John 20:27 slowly. You are allowed to bring the wound into the room.",
-    "closing": "Faith is not the absence of questions. It is staying close enough to touch."
-  },
-  "Suffering & Pain": {
-    "headline": "Come, then the truth about the day",
-    "opening": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.",
-    "passages": [
-      {
-        "verse": "Matthew 11:28",
-        "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
-        "context": "The invitation is to the exhausted, not the already-healed."
-      },
-      {
-        "verse": "Matthew 5:4",
-        "quote": "Blessed are they that mourn: for they shall be comforted.",
-        "context": "Mourning is blessed, not rushed."
-      },
-      {
-        "verse": "John 16:33",
-        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
-        "context": "He refuses both denial and despair — trouble is real, and so is his overcoming."
-      }
-    ],
-    "practice": "Place a hand where it hurts — body or story. Say Matthew 11:28 once. Rest is offered to the laden, not the finished.",
-    "closing": "Your pain is not a failure of faith. It is a place he still says come."
-  },
-  "Shame & Guilt": {
-    "headline": "Go, And Sin No More",
-    "opening": "Shame wants you out of the room. Jesus writes in the dust, then lifts a face, then frees a future.",
-    "passages": [
-      {
-        "verse": "John 8:11",
-        "quote": "Neither do I condemn thee: go, and sin no more.",
-        "context": "No condemnation, and a new walk — both sentences belong together."
-      },
-      {
-        "verse": "Matthew 9:2",
-        "quote": "Son, be of good cheer; thy sins be forgiven thee.",
-        "context": "Before the body is mended, the deeper wound is named and released."
-      },
-      {
-        "verse": "Luke 7:47",
-        "quote": "Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.",
-        "context": "A public sinner is given a public pardon and a place at his feet."
-      }
-    ],
-    "practice": "If a specific guilt has a name, write it once. Under it write John 8:11. Neither do I condemn thee is the first word, not the last excuse.",
-    "closing": "You are not your worst hour. He still knows how to lift a face."
+    "Anxiety & Worry": {
+      "theme": "Anxiety & Worry",
+      "headline": "Tomorrow is not asking for you yet",
+      "opening": "Worry is a room with no windows. Jesus does not scold you for sitting in it — He names the air, the birds, the length of a day, and invites you back into this one hour.",
+      "passages": [
+        {
+          "verse": "Matthew 6:34",
+          "quote": "Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.",
+          "context": "He limits the assignment to today, so your mind does not have to carry a week it has not been given."
+        },
+        {
+          "verse": "Matthew 6:26",
+          "quote": "Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?",
+          "context": "You are not less tended than the birds. Provision is already in motion before you finish the sentence."
+        },
+        {
+          "verse": "John 14:27",
+          "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+          "context": "His peace is not a mood the world can revoke. It is something left with you."
+        }
+      ],
+      "practice": "Sit still for two minutes. Name one thing that belongs only to this day. Leave the rest on the table.",
+      "closing": "You do not have to finish the future tonight."
+    },
+    "Grief & Loss": {
+      "theme": "Grief & Loss",
+      "headline": "Mourning is not a failure of faith",
+      "opening": "Grief is love with nowhere to stand. Jesus does not hurry the mourner. He blesses the ache, then stands close enough to be the life on the other side of it.",
+      "passages": [
+        {
+          "verse": "Matthew 5:4",
+          "quote": "Blessed are they that mourn: for they shall be comforted.",
+          "context": "Comfort is promised to those who actually mourn — not to those who pretend the loss was small."
+        },
+        {
+          "verse": "John 11:25",
+          "quote": "I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:",
+          "context": "He meets death with His own name. The last word over what you have lost is not absence."
+        },
+        {
+          "verse": "John 16:22",
+          "quote": "And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.",
+          "context": "Sorrow is real, and so is the joy no one can confiscate when He is near again."
+        }
+      ],
+      "practice": "Say the name of what you miss. Then read John 11:25 aloud, slowly, as if it were spoken into this room.",
+      "closing": "You are allowed to mourn. You are not alone in it."
+    },
+    "Forgiveness": {
+      "theme": "Forgiveness",
+      "headline": "Mercy is how the Father looks",
+      "opening": "Forgiveness is not pretending the wound was gentle. It is refusing to let the wound become the only story you will ever tell.",
+      "passages": [
+        {
+          "verse": "Luke 6:36",
+          "quote": "Be ye therefore merciful, as your Father also is merciful.",
+          "context": "Mercy is not a personality trait. It is family resemblance."
+        },
+        {
+          "verse": "Matthew 18:22",
+          "quote": "I say not unto thee, Until seven times: but, Until seventy times seven.",
+          "context": "Seventy times seven is not arithmetic. It is a way of life that stops counting."
+        },
+        {
+          "verse": "Matthew 6:14–15",
+          "quote": "For if ye forgive men their trespasses, your heavenly Father will also forgive you: But if ye forgive not men their trespasses, neither will your Father forgive your trespasses.",
+          "context": "The same mercy you release is the mercy that keeps finding you."
+        }
+      ],
+      "practice": "Write one sentence you wish you could say. Then write one blessing you can actually offer — even if it is only “I will not rehearse this harm today.”",
+      "closing": "You can take the next honest step. You do not have to finish the whole road before evening."
+    },
+    "Loneliness": {
+      "theme": "Loneliness",
+      "headline": "You were never meant to be an orphan in this",
+      "opening": "Loneliness can feel like a verdict. Jesus answers it as a presence: I will not leave you. I come to you. Stay in my love.",
+      "passages": [
+        {
+          "verse": "John 14:18",
+          "quote": "I will not leave you comfortless: I will come to you.",
+          "context": "He refuses the orphan story. Company is the promise, not a technique."
+        },
+        {
+          "verse": "John 15:9",
+          "quote": "As the Father hath loved me, so have I loved you: continue ye in my love.",
+          "context": "You are already inside a love that began before you asked for it."
+        },
+        {
+          "verse": "Matthew 28:20",
+          "quote": "Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen.",
+          "context": "The last word of His earthly charge is accompaniment — always, to the end."
+        }
+      ],
+      "practice": "Place a chair across from you. Read John 14:18 as if it were spoken from that chair. Sit with it for one minute.",
+      "closing": "The room is less empty than it feels."
+    },
+    "Conflict & Relationships": {
+      "theme": "Conflict & Relationships",
+      "headline": "Love that costs something is still love",
+      "opening": "Conflict asks who you will become while you are angry. Jesus does not call the person across from you an enemy. He tells you the first move, and He makes it small enough to take today.",
+      "passages": [
+        {
+          "verse": "Matthew 5:23–24",
+          "quote": "Therefore if thou bring thy gift to the altar, and there rememberest that thy brother hath ought against thee; Leave there thy gift before the altar, and go thy way; first be reconciled to thy brother, and then come and offer thy gift.",
+          "context": "He interrupts worship itself for this. The person you are at odds with comes before the gift."
+        },
+        {
+          "verse": "Matthew 7:12",
+          "quote": "Therefore all things whatsoever ye would that men should do to you, do ye even so to them: for this is the law and the prophets.",
+          "context": "Not a rule for winning. A rule for how to treat someone while you are still angry."
+        },
+        {
+          "verse": "John 15:13",
+          "quote": "Greater love hath no man than this, that a man lay down his life for his friends.",
+          "context": "The measure of love is not convenience. It is what you are willing to lay down."
+        }
+      ],
+      "practice": "Before you reply, pray one honest sentence for the other person. Then speak only what still needs saying.",
+      "closing": "You can be clear and still be kind."
+    },
+    "Fear": {
+      "theme": "Fear",
+      "headline": "Little flock — you are not prey",
+      "opening": "Fear makes the world larger than God. Jesus shrinks it back: numbered hairs, a little flock, a Father who is pleased to give you the kingdom.",
+      "passages": [
+        {
+          "verse": "Luke 12:32",
+          "quote": "Fear not, little flock; for it is your Father’s good pleasure to give you the kingdom.",
+          "context": "He names you small on purpose — and then names the gift as a kingdom."
+        },
+        {
+          "verse": "Luke 12:7",
+          "quote": "But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.",
+          "context": "You are counted. Fear has to argue with that arithmetic."
+        },
+        {
+          "verse": "Matthew 14:27",
+          "quote": "Be of good cheer; it is I; be not afraid.",
+          "context": "Spoken across the water to men who thought they were seeing a ghost. The first word against fear is that He is here."
+        }
+      ],
+      "practice": "When fear spikes, say aloud: “Fear not, little flock.” Then name one next faithful step the size of this hour.",
+      "closing": "You are held more tightly than the thing that scares you."
+    },
+    "Purpose & Direction": {
+      "theme": "Purpose & Direction",
+      "headline": "Light is something you already are",
+      "opening": "Purpose is not a hidden career code. Jesus speaks it as identity and order: you are light; seek the kingdom first; follow, and you will not walk in the dark.",
+      "passages": [
+        {
+          "verse": "Matthew 5:14",
+          "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid.",
+          "context": "You do not have to become visible. You already are. The work is not to hide."
+        },
+        {
+          "verse": "Matthew 6:33",
+          "quote": "But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.",
+          "context": "First things first. The rest is promised as addition, not as the hunt."
+        },
+        {
+          "verse": "John 8:12",
+          "quote": "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+          "context": "Following is how darkness loses its claim on your steps."
+        }
+      ],
+      "practice": "Write one way you can shine without performing — a kindness, a truth, a piece of work done well.",
+      "closing": "You do not need the whole map. You need the next honest step in the light."
+    },
+    "Faith & Doubt": {
+      "theme": "Faith & Doubt",
+      "headline": "Blessed are those who have not seen",
+      "opening": "Doubt is not the opposite of faith. It is faith asking for a place to put its feet. Jesus makes room for Thomas and then blesses the ones who believe without the wound to touch.",
+      "passages": [
+        {
+          "verse": "John 20:29",
+          "quote": "Thomas, because thou hast seen me, thou hast believed: blessed are they that have not seen, and yet have believed.",
+          "context": "Unseen trust is not second-class. He calls it blessed."
+        },
+        {
+          "verse": "John 14:1",
+          "quote": "Let not your heart be troubled: ye believe in God, believe also in me.",
+          "context": "A troubled heart is invited to believe — not to pretend it is calm first."
+        },
+        {
+          "verse": "Matthew 11:28",
+          "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
+          "context": "Doubt does not disqualify the weary. The invitation still stands."
+        }
+      ],
+      "practice": "Tell Jesus the part you cannot see. Then read John 20:29 and let the blessing rest on that exact place.",
+      "closing": "You can bring the question. You do not have to bring the proof."
+    },
+    "Suffering & Pain": {
+      "theme": "Suffering & Pain",
+      "headline": "Come, then the truth about the day",
+      "opening": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden. Only then does He name the tribulation without letting it be the last sentence.",
+      "passages": [
+        {
+          "verse": "Matthew 11:28",
+          "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
+          "context": "The invitation is to the exhausted. Rest is a gift, not a prize for the strong."
+        },
+        {
+          "verse": "Matthew 5:4",
+          "quote": "Blessed are they that mourn: for they shall be comforted.",
+          "context": "Comfort is promised to those who actually mourn — not to those who pretend the loss was small."
+        },
+        {
+          "verse": "John 16:33",
+          "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
+          "context": "Peace is in Him, not in the world’s weather. Cheer is commanded because He has already overcome."
+        }
+      ],
+      "practice": "Lie down or sit. Place a hand on the place that hurts. Pray Matthew 11:28 as if it were spoken to that place alone.",
+      "closing": "Your pain is seen. It is not the end of the story."
+    },
+    "Shame & Guilt": {
+      "theme": "Shame & Guilt",
+      "headline": "Heaven still knows how to rejoice",
+      "opening": "Shame says you are the lost sheep who should have known better. Jesus tells the story from the shepherd’s side — leaving the ninety-nine, carrying the one, throwing a feast in heaven.",
+      "passages": [
+        {
+          "verse": "Luke 15:4",
+          "quote": "What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?",
+          "context": "He does not wait for you to find the road back. He comes after what is lost."
+        },
+        {
+          "verse": "Luke 15:7",
+          "quote": "I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.",
+          "context": "Repentance is not a courtroom. It is a reason for joy."
+        },
+        {
+          "verse": "John 6:35",
+          "quote": "I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.",
+          "context": "Hunger does not make you unworthy of bread. It makes you the one the bread was for."
+        }
+      ],
+      "practice": "Name the shame in one sentence. Then read Luke 15:7 and imagine the joy is about you, specifically.",
+      "closing": "You are not too far for the shepherd to walk."
+    },
+    "Peace": {
+      "theme": "Peace",
+      "headline": "Not as the world giveth",
+      "opening": "The world’s peace is a ceasefire. His peace is a presence that stays after the wind has been told to sit down.",
+      "passages": [
+        {
+          "verse": "John 14:27",
+          "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+          "context": "He leaves peace the way someone leaves a key. It is already in the house."
+        },
+        {
+          "verse": "Mark 4:39",
+          "quote": "Peace, be still.",
+          "context": "The storm is addressed by name. Calm is not negotiated; it is spoken."
+        },
+        {
+          "verse": "John 16:33",
+          "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
+          "context": "Peace and tribulation can occupy the same day. He has overcome the louder one."
+        }
+      ],
+      "practice": "Breathe out slowly four times. On each breath, say: “Peace, be still.” Let the words be for your body first.",
+      "closing": "The sea in you can hear Him too."
+    },
+    "Hope": {
+      "theme": "Hope",
+      "headline": "Your joy no one can take",
+      "opening": "Hope is not optimism. It is Jesus saying the sorrow has a horizon, the light is Himself, and the joy that comes cannot be confiscated.",
+      "passages": [
+        {
+          "verse": "John 16:22",
+          "quote": "And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.",
+          "context": "Sorrow is admitted. The joy that follows is guarded by His return, not by your grip."
+        },
+        {
+          "verse": "John 8:12",
+          "quote": "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+          "context": "Darkness is a place you walk through, not a name you have to keep."
+        },
+        {
+          "verse": "John 15:11",
+          "quote": "These things have I spoken unto you, that my joy might remain in you, and that your joy might be full.",
+          "context": "He speaks so that joy would remain — full, not rationed."
+        }
+      ],
+      "practice": "Write one true hard thing. Under it, write John 16:22. Keep both sentences. That is hope with its feet on the ground.",
+      "closing": "The last word over your life is not the night you are in."
+    }
   }
-}
 };
 
 window.RLA_THEME_ALIASES = {
+  "Anxiety & Worry": "Anxiety & Worry",
+  "Grief & Loss": "Grief & Loss",
+  "Forgiveness": "Forgiveness",
+  "Loneliness": "Loneliness",
   "Conflict & Relationships": "Conflict & Relationships",
+  "Fear": "Fear",
   "Purpose & Direction": "Purpose & Direction",
   "Faith & Doubt": "Faith & Doubt",
   "Suffering & Pain": "Suffering & Pain",
   "Shame & Guilt": "Shame & Guilt",
-  "Peace": "Peace"
+  "Peace": "Peace",
+  "Hope": "Hope"
 };
