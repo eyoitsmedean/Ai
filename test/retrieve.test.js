@@ -93,6 +93,7 @@ describe('retrieveSayings', () => {
     assert.ok(hitsAt('I am so anxious about tomorrow I cannot sleep', ['Matthew 6:34'], 3).length);
     assert.ok(hitsAt('How do I love people who are cruel to me', ['Matthew 5:44'], 3).length);
     assert.ok(hitsAt('I feel so alone since my divorce', ['John 14:18'], 3).length);
+    assert.ok(hitsAt("My teenager won't speak to me", ['Luke 15:20', 'Luke 15:24', 'Luke 15:4'], 8).length);
   });
 
   it('falls back to known comfort verses when nothing maps', () => {

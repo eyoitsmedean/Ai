@@ -23,17 +23,18 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 | 11 | `npm run eval` is the release gate. `eval/RESULTS.md` must be regenerated on the release commit and must say which mode ran. Nothing is reported as passed that did not run. | `scripts/eval.js` | 2026-09-06 |
 | 12 | The noun "suicide" alone triggers the notice, so "the suicide of my brother still haunts me" receives the 988 line and the comfort verses. Accepted: a bereaved-by-suicide reader is at elevated risk and the notice is gentle; the letter still comes. | `lib/crisis.js`, `test/crisis.test.js` | 2026-09-06, ASSUMED by the builder; Dean may reverse |
 | 13 | Retrieval is lexicon + BM25, not raw substring overlap. A 2026 message is translated into the vocabulary the sayings use; BM25 (k1 1.5, b 0.75) ranks; curated room verses are interleaved; unmatched messages get `DEFAULT_CITATIONS`. Crisis still uses only `CRISIS_CITATIONS`. | `lib/retrieve.js` | 2026-09-07; held-out @8 went 4/10 → 10/10 vs the committed substring ranker |
+| 14 | Offline and error letters are built from the same retrieved allow-list as a live model would see (`lib/letter.js`). The generic John 14:27 + Matthew 11:28 pair is only the last resort. | `lib/letter.js`, `server.js` | 2026-09-11 |
+| 15 | Mobile default is Capacitor over `public/`. Config is in-repo; native `ios/` / `android/` trees are generated on Dean’s machine. On-device proof is `DEVICE_CHECKLIST.md`. | `capacitor.config.json` | 2026-09-11; brief default (A) |
 
 ## Not yet decided (Dean)
 
-- **Mobile stack.** Two options exist as branches. (A) Capacitor shell around the existing `public/` PWA — `origin/cursor/production-ready-mobile-bca4` has `capacitor.config.json` (last commit 2026-09-02). Reuses the whole HTML build, one codebase, web performance ceiling. (B) Native — `origin/cursor/red-words-native-c2d6` and `origin/cursor/red-words-production-d607` carry an Android/Kotlin project. Best performance and platform feel, two more codebases to keep in step with the room. Default per the brief: (A). Only the file lists of those branches were inspected on 2026-09-06, not their contents.
+- **Mobile stack.** Default is (A) Capacitor — `capacitor.config.json` is now in this branch. Native Kotlin/Swift apps on other branches remain an alternative, not the default.
 - Whether harm-to-others phrasing ("I want to hurt him") should also trigger the human-help notice. Currently it does not; the notice text speaks of ending one's own life.
 - Whether to add an LLM-judged warmth/fit score to the eval. Currently the eval is deterministic and saves live letters for a human to read.
 
 ## Known gaps (recorded, not yet fixed)
 
-- Some spoken-corpus sayings begin with narrator framing ("And Jesus answering them began to say, …"). `README.md` promises His speech, not the frame. Source: `data/spoken-gospels.json` grouping.
-- The prodigal son (Luke 15:11–32) is still untagged as a theme room; the 2026-09-07 lexicon now surfaces Luke 15 for estrangement via vocabulary (`father`, `son`, `lost`) rather than a theme tag. A dedicated room would still be clearer.
+- `public/library.json` still stores some grouped sayings with narrator frames; `lookup()` now strips known wrappers before print. Rebuild with `npm run spoken` after expanding `SPEECH_INTROS` further if Seek still shows a frame.
 - A live `gpt-6-astra` call has not been made from this repo; the provider is verified against a mock of the Responses API only.
 
 ## Eval status
@@ -42,3 +43,4 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 |---|---|---|---|
 | 2026-09-06 | offline (no key) | claude-opus-5 configured | 61/61; live-only checks not run. Live path exercised against a mock Responses API (rung 2): 61/61 |
 | 2026-09-07 | offline (no key) | claude-opus-5 configured | 61/61 after lexicon+BM25 retrieval rebuild |
+| 2026-09-11 | offline (no key) | claude-opus-5 configured | 61/61 after retrieval-aware fallback letters |

@@ -7,6 +7,7 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { letterFromSayings } = require('./lib/letter');
 const { MODEL_CHOICES, resolveModel, createProvider } = require('./lib/models');
 
 const app = express();
@@ -263,20 +264,6 @@ app.post('/api/encouragement', async (req, res) => {
   }
 });
 
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
-
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -318,6 +305,7 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
+  const retrieved = retrieveSayings(last.content);
   const finish = (body) => {
     if (gone()) return;
     const verified = verifyAndSubstitute(body);
@@ -327,11 +315,10 @@ app.post('/api/chat', async (req, res) => {
   };
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(letterFromSayings(retrieved.sayings));
   }
 
   try {
-    const retrieved = retrieveSayings(last.content);
     const allow = formatAllowList(retrieved.sayings);
     const modelMessages = messages.map((m, i) => {
       if (i !== messages.length - 1) return { role: m.role, content: m.content };
@@ -354,7 +341,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(letterFromSayings(retrieved.sayings));
   }
 });
 

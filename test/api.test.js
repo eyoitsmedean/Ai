@@ -94,8 +94,9 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /\*\*(Matthew|Mark|Luke|John) /);
+    assert.match(letter, /[“"]/);
+    assert.match(letter, /I am here with you/);
     assert.match(res.raw, /\[DONE\]/);
   });
 

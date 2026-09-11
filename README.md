@@ -24,7 +24,7 @@ npm install
 npm start              # http://localhost:3000
 ```
 
-Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
+Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a verified letter built from the sayings retrieved for *this* message (`lib/letter.js`).
 
 ```
 MODEL=claude-opus-5    # or gpt-6-astra
@@ -44,6 +44,8 @@ Notes for **GPT-6 Astra** (`gpt-6-astra`, released 3 September 2026): it runs ov
 npm test
 npm run eval     # run eval/questions.json through /api/chat, write eval/RESULTS.md
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
+# Phone shell: capacitor.config.json (webDir public). Dean’s five minutes: DEVICE_CHECKLIST.md
+# What has actually been run: RELEASE.md
 ```
 
 ## Evaluation
