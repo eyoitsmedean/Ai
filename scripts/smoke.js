@@ -81,6 +81,30 @@ async function main() {
     assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
   });
 
+  await check('one-screen ask', async () => {
+    const page = await req('/ask');
+    assert(page.res.ok, 'ask page not 200');
+    assert(page.text.includes('What is weighing on you today?'), 'missing Ask copy');
+    assert(page.text.includes('The words'), 'missing words heading');
+    assert(page.text.includes('What that might mean today'), 'missing meaning heading');
+    assert(page.text.includes('What this bot cannot do'), 'missing cannot heading');
+    assert(page.text.includes('988'), 'ask missing crisis line');
+    assert(page.text.includes('King James Version'), 'must label KJV');
+    assert(!page.text.includes('id="dock"'), 'ask must not grow a dock');
+    assert(!page.text.includes('<<<<<<<'), 'conflict markers on ask');
+    const asked = await req('/api/ask', {
+      method: 'POST',
+      body: JSON.stringify({ question: 'I am afraid of the future' }),
+    });
+    assert(asked.res.ok && asked.json?.words?.quote, 'ask API missing sealed words');
+    assert(asked.json.words.translation === 'KJV', 'ask must cite KJV tonight');
+    const crisis = await req('/api/ask', {
+      method: 'POST',
+      body: JSON.stringify({ question: 'I want to die' }),
+    });
+    assert(crisis.json?.crisis === true && crisis.json.words == null, 'crisis must stop counsel');
+  });
+
   await check('welcome landing', async () => {
     const { res, text } = await req('/welcome');
     assert(res.ok, 'welcome not 200');
@@ -102,6 +126,7 @@ async function main() {
     assert(text.includes('id="last-leaf"'), 'Advisor must grow a last leaf');
     assert(text.includes('id="composer-help"'), 'helpline must sit above the composer');
     assert(text.includes('id="lib-crisis"'), 'Letters search must put a person first');
+    assert(text.includes('href="/ask"'), 'folio must point at the one screen');
     assert(text.includes('encodeBlessingClient'), 'blessing page missing');
     assert(!text.includes('Five letters for today'), 'must not meter His words');
     assert(!text.includes('FREE_CHATS'), 'must not paywall the Advisor');

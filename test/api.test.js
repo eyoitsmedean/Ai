@@ -144,4 +144,32 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
   });
+
+  it('serves the one-screen ask page', async () => {
+    const res = await request('GET', '/ask');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What is weighing on you today/);
+    assert.match(res.raw, /The words/);
+    assert.match(res.raw, /What that might mean today/);
+    assert.match(res.raw, /What this bot cannot do/);
+    assert.match(res.raw, /988/);
+    assert.match(res.raw, /King James Version/);
+    assert.doesNotMatch(res.raw, /id="dock"/);
+    assert.doesNotMatch(res.raw, /<<<<<<</);
+  });
+
+  it('answers /api/ask with a sealed saying and stops on crisis', async () => {
+    const ok = await request('POST', '/api/ask', { question: 'I feel so much shame' });
+    assert.equal(ok.status, 200);
+    const data = JSON.parse(ok.raw);
+    assert.equal(data.ok, true);
+    assert.equal(data.words.translation, 'KJV');
+    assert.match(data.words.citation, /^(Matthew|Mark|Luke|John) /);
+    const crisis = await request('POST', '/api/ask', { question: 'I want to kill myself' });
+    assert.equal(crisis.status, 200);
+    const stopped = JSON.parse(crisis.raw);
+    assert.equal(stopped.crisis, true);
+    assert.equal(stopped.words, null);
+  });
 });
+

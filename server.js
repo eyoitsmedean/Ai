@@ -10,6 +10,7 @@ const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/sche
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 const { encodeBlessing, decodeBlessing, blessingPage } = require('./lib/blessing');
 const { securityHeaders } = require('./lib/headers');
+const { answerAsk } = require('./lib/ask');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -218,6 +219,7 @@ app.get('/api/health', (req, res) => {
     version: PKG.version,
     pwa: true,
     unlimited: true,
+    ask: true,
   });
 });
 
@@ -449,10 +451,27 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ ok: true });
 });
 
+app.post('/api/ask', (req, res) => {
+  const question = typeof req.body?.question === 'string' ? req.body.question : '';
+  if (!rateLimit(`ask:${clientKey(req)}`, 40, 60 * 1000)) {
+    return res.status(429).json({ error: 'A little space, then ask again.' });
+  }
+  const result = answerAsk(question);
+  if (!result.ok) {
+    return res.status(400).json(result);
+  }
+  res.json(result);
+});
+
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   const welcome = path.join(__dirname, 'public', 'welcome.html');
   res.sendFile(fs.existsSync(welcome) ? welcome : path.join(__dirname, 'index.html'));
+});
+
+app.get('/ask', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'ask.html'));
 });
 
 app.get('/b/:token', (req, res) => {

@@ -147,6 +147,9 @@ describe('looksLikeCrisis', () => {
     assert.equal(looksLikeCrisis('I want to kill myself tonight'), true);
     assert.equal(looksLikeCrisis('I have no reason to live'), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
+    assert.equal(looksLikeCrisis('I want to die'), true);
+    assert.equal(looksLikeCrisis("I don't want to die"), false);
+    assert.equal(looksLikeCrisis('I do not want to die but I want to kill myself'), true);
   });
 });
 
