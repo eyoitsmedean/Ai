@@ -471,7 +471,7 @@ window.RLA_CURATED = {
     "passages": [
       {
         "verse": "Matthew 28:20",
-        "quote": "Lo, I am with you always, even unto the end of the world.",
+        "quote": "Lo, I am with you alway, even unto the end of the world.",
         "context": "His final Gospel promise is presence that does not expire."
       },
       {
@@ -545,12 +545,12 @@ window.RLA_CURATED = {
       },
       {
         "verse": "Matthew 5:14–16",
-        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid. Let your light so shine before men.",
+        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid. Neither do men light a candle, and put it under a bushel, but on a candlestick; and it giveth light unto all that are in the house. Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.",
         "context": "Hope becomes visible when light is lived, not only felt."
       },
       {
         "verse": "John 11:25",
-        "quote": "I am the resurrection, and the life.",
+        "quote": "I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:",
         "context": "The center of Christian hope is a person, not a vague wish."
       }
     ],
@@ -665,7 +665,7 @@ window.RLA_CURATED = {
       },
       {
         "verse": "Luke 7:47–48",
-        "quote": "Her sins, which are many, are forgiven; for she loved much. Thy sins are forgiven.",
+        "quote": "Wherefore I say unto thee, Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little. Thy sins are forgiven.",
         "context": "A public sinner is given a public pardon and a place at his feet."
       }
     ],

@@ -8,11 +8,14 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { compose: composeLetter } = require('./lib/advise');
+const { composeAsk } = require('./lib/ask');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
+const CHAT_RATE_LIMIT = Math.max(1, Number(process.env.CHAT_RATE_LIMIT) || 10);
 const THEME_SET = new Set(themeNames());
 
 app.use(express.json({ limit: '32kb' }));
@@ -73,6 +76,19 @@ function gate(req, res, next) {
   if (sent !== ACCESS_KEY) return res.status(401).json({ error: 'Unauthorized.' });
   next();
 }
+
+app.post('/api/ask', (req, res) => {
+  const text = typeof req.body?.text === 'string' ? req.body.text : '';
+  if (!text.trim()) return res.status(400).json({ error: 'Empty message.' });
+  if (text.length > 4000) return res.status(400).json({ error: 'Message is too long.' });
+  const prior = Array.isArray(req.body?.prior)
+    ? req.body.prior.filter((p) => typeof p === 'string').slice(-8)
+    : [];
+  if (!rateLimit(`ask:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
+    return res.status(429).json({ error: 'A little space, then ask again.' });
+  }
+  res.json(composeAsk(text, { prior }));
+});
 
 app.use('/api', gate);
 
@@ -326,7 +342,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -348,11 +364,22 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
-  const finish = (body) => {
+  const finish = (body, { notice = true } = {}) => {
     const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    streamText(crisis && notice ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
+  };
+
+  // The curated Advisor reads the question itself and carries its own crisis paragraph.
+  const curated = () => {
+    try {
+      const prior = messages.slice(0, -1).filter((m) => m.role === 'user').map((m) => m.content);
+      return finish(composeLetter(last.content, { prior }), { notice: false });
+    } catch (err) {
+      console.error('Curated advisor error:', err.message);
+      return finish(FALLBACK_LETTER);
+    }
   };
 
   req.on('close', () => {
@@ -362,7 +389,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return curated();
   }
 
   try {
@@ -398,7 +425,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    curated();
   }
 });
 
@@ -426,6 +453,21 @@ app.get('/welcome', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/ask', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'ask.html'));
+});
+
+app.get('/review', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  const season = String(req.query.season || '').toLowerCase();
+  const q = new URLSearchParams({ review: '1' });
+  if (/^(advent|christmas|lent|easter|ordinary)$/.test(season)) q.set('season', season);
+  const leaf = String(req.query.leaf || '').toLowerCase();
+  if (/^(reveal|breath|parable|examen|blessing|forty)$/.test(leaf)) q.set('leaf', leaf);
+  res.redirect(302, '/?' + q.toString());
+});
+
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
   res.setHeader('Cache-Control', 'no-cache');
@@ -434,7 +476,7 @@ app.get('*', (req, res, next) => {
 
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+    console.log(`Red Letter /ask → http://localhost:${PORT}/ask  (atelier folio at /)`);
   });
 }
 

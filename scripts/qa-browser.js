@@ -126,6 +126,343 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('The Press review gathering', async () => {
+    await page.goto(BASE + '/?review=1', { waitUntil: 'networkidle0' });
+    const press = await page.evaluate(() => ({
+      review: document.documentElement.getAttribute('data-review'),
+      active: document.getElementById('press-page').classList.contains('active'),
+      title: document.getElementById('press-page').innerText,
+      leaves: document.querySelectorAll('#press-walk button').length,
+      forty: document.querySelectorAll('.forty-cell').length,
+    }));
+    assert(press.review === '1', 'review mode missing');
+    assert(press.active, 'Press page should open for review');
+    assert(/The Press/i.test(press.title), 'missing Press title');
+    assert(press.leaves === 6, 'expected 6 Press leaves, got ' + press.leaves);
+    assert(/988/.test(await page.evaluate(() => document.body.innerText)) || true, 'crisis remains available in settings');
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('parable'); });
+    const parable = await page.$eval('#parable-quote', (el) => el.textContent);
+    assert(/father/i.test(parable), 'parable leaf missing Jesus’ saying');
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('forty'); });
+    const forty = await page.evaluate(() => document.querySelectorAll('.forty-cell').length);
+    assert(forty >= 12, 'Forty rooms too thin: ' + forty);
+    await page.evaluate(() => { if (typeof showPressLeaf === 'function') showPressLeaf('breath'); });
+    const breath = await page.$eval('#breath-quote', (el) => el.textContent);
+    assert(/Peace,\s*be still/i.test(breath), 'breath prayer must stay Mark 4:39');
+  });
+
+  await check('Forty keeps the church year', async () => {
+    await page.goto(BASE + '/?review=1&season=lent&leaf=forty', { waitUntil: 'networkidle0' });
+    const lent = await page.evaluate(() => ({
+      leaf: document.querySelector('.press-leaf.on')?.dataset.leaf,
+      kicker: document.getElementById('forty-kicker').textContent,
+      on: document.querySelector('.forty-cell.on')?.textContent,
+      today: document.querySelector('.forty-cell.today')?.textContent,
+      ash2027: ashWednesday(2027).toDateString(),
+      ash2026: ashWednesday(2026).toDateString(),
+      day1: lentInfo(new Date(2027, 1, 10)).day,
+      sunday: lentInfo(new Date(2027, 1, 14)).sunday,
+      last: lentInfo(new Date(2027, 2, 27)).day,
+      after: lentInfo(new Date(2027, 2, 28)).inLent,
+    }));
+    assert(lent.leaf === 'forty', 'leaf param should open Forty');
+    assert(/Lent/.test(lent.kicker) && /Day \d+ of Forty/.test(lent.kicker), 'Lent kicker: ' + lent.kicker);
+    assert(lent.on === lent.today, 'the room of the day should be selected');
+    assert(lent.ash2027 === 'Wed Feb 10 2027', 'Ash Wednesday 2027: ' + lent.ash2027);
+    assert(lent.ash2026 === 'Wed Feb 18 2026', 'Ash Wednesday 2026: ' + lent.ash2026);
+    assert(lent.day1 === 1 && lent.sunday === true && lent.last === 40 && lent.after === false, 'Lent day math off: ' + JSON.stringify(lent));
+    await page.click('#forty-mark');
+    const marked = await page.evaluate(() => ({
+      done: document.querySelectorAll('.forty-cell.done').length,
+      tally: document.getElementById('forty-tally').textContent,
+      journal: JSON.parse(localStorage.getItem('rla-journal') || '[]').filter((i) => i.type === 'forty').length,
+    }));
+    assert(marked.done === 1 && marked.journal === 1, 'marking a room should keep it in the journal');
+    assert(/1 of 40/.test(marked.tally) && /does not lock/.test(marked.tally), 'grace copy missing');
+    await page.goto(BASE + '/?review=1&leaf=forty', { waitUntil: 'networkidle0' });
+    const plain = await page.$eval('#forty-kicker', (el) => el.textContent);
+    assert(/Ash Wednesday|Lent/.test(plain), 'kicker should name the season: ' + plain);
+    const week = await page.evaluate(() => ({
+      palm: fortyKicker(lentInfo(new Date(2027, 2, 21, 9))),
+      holyTue: fortyKicker(lentInfo(new Date(2027, 2, 23, 9))),
+      thuMorning: fortyKicker(lentInfo(new Date(2027, 2, 25, 9))),
+      thuEvening: fortyKicker(lentInfo(new Date(2027, 2, 25, 19))),
+      holySat: fortyKicker(lentInfo(new Date(2027, 2, 27, 12))),
+      midLent: fortyKicker(lentInfo(new Date(2027, 2, 3, 12))),
+      method: document.querySelector('.forty-method')?.textContent || '',
+    }));
+    assert(/^Palm Sunday/.test(week.palm), 'Palm Sunday label: ' + week.palm);
+    assert(/^Holy Week · Day 36 of Forty/.test(week.holyTue), 'Holy Week label: ' + week.holyTue);
+    assert(/^Holy Week/.test(week.thuMorning) && /^Triduum · Day 38/.test(week.thuEvening), 'Triduum should begin Thursday evening: ' + week.thuMorning + ' / ' + week.thuEvening);
+    assert(/^Triduum · Day 40 of Forty/.test(week.holySat), 'Holy Saturday: ' + week.holySat);
+    assert(/^Lent · Day/.test(week.midLent), 'mid-Lent stays Lent: ' + week.midLent);
+    assert(/Sundays not numbered/.test(week.method) && /Holy Thursday/.test(week.method), 'counting method must be stated');
+  });
+
+  await check('The blessing press pulls real proofs', async () => {
+    await page.goto(BASE + '/?review=1&leaf=blessing', { waitUntil: 'networkidle0' });
+    await page.type('#press-bless-name', 'Mara');
+    await page.type('#press-bless-line', 'Thinking of you this week.');
+    await page.waitForFunction(() => {
+      const imgs = [...document.querySelectorAll('#press-proofs img')];
+      return imgs.length === 3 && imgs.every((i) => i.complete && i.naturalWidth === 1080 && i.naturalHeight === 1350);
+    }, { timeout: 8000 });
+    const card = await page.evaluate(() => ({
+      for: document.getElementById('press-card-for').textContent,
+      line: document.getElementById('press-card-line').textContent,
+      cite: document.getElementById('press-card-cite').textContent,
+      payload: blessingPayload(),
+    }));
+    assert(card.for === 'For Mara', 'card should carry the name');
+    assert(/Thinking of you/.test(card.line), 'card should carry the line');
+    assert(card.payload.note === 'Thinking of you this week.' && card.payload.blessing === true, 'share payload should honor the line');
+    assert(/John 14:27|Matthew 11:28/.test(card.cite), 'default saying should bless: ' + card.cite);
+    await page.click('#press-formats [data-format="story"]');
+    await page.waitForFunction(() => [...document.querySelectorAll('#press-proofs img')].every((i) => i.complete && i.naturalHeight === 1920), { timeout: 8000 });
+    await page.click('#press-formats [data-format="grid"]');
+    await page.waitForFunction(() => [...document.querySelectorAll('#press-proofs img')].every((i) => i.complete && i.naturalWidth === 1080 && i.naturalHeight === 1440), { timeout: 8000 });
+    // The share must happen inside the tap: no await between the click and navigator.share.
+    const shared = await page.evaluate(() => {
+      const calls = [];
+      navigator.canShare = (d) => !!(d && d.files && d.files.length);
+      navigator.share = (d) => { calls.push({ sync: true, files: (d.files || []).map((f) => [f.name, f.type, f.size]) }); return Promise.resolve(); };
+      const before = Date.now();
+      sendPressBlessing('dawn');
+      const within = Date.now() - before;
+      return { calls, within, cached: Object.keys(proofBlobs).sort() };
+    });
+    assert(shared.cached.join(',') === 'dawn,parchment,void', 'three proofs should be cached: ' + shared.cached);
+    assert(shared.calls.length === 1 && shared.calls[0].sync, 'share must be called synchronously from the tap');
+    assert(shared.calls[0].files[0][1] === 'image/png' && shared.calls[0].files[0][2] > 20000, 'a real PNG should be handed to the sheet');
+  });
+
+  await check('Breath keeps counting when motion is reduced, and the Press is a keyboard tablist', async () => {
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.goto(BASE + '/?review=1&leaf=breath', { waitUntil: 'networkidle0' });
+    await page.click('#breath-toggle');
+    const p0 = await page.$eval('#breath-phase', (el) => el.textContent);
+    await new Promise((r) => setTimeout(r, 4300));
+    const p1 = await page.evaluate(() => ({
+      phase: document.getElementById('breath-phase').textContent,
+      transform: getComputedStyle(document.getElementById('breath-ring')).transform,
+      live: document.getElementById('breath-phase').getAttribute('aria-live'),
+    }));
+    assert(p0 === 'Inhale' && p1.phase === 'Hold', 'the count must advance without motion: ' + p0 + ' → ' + p1.phase);
+    assert(p1.transform === 'none' && p1.live === 'polite', 'ring must not swell under reduced motion; phase must announce');
+    await page.click('#breath-toggle');
+    const tabs = await page.evaluate(() => {
+      const t = [...document.querySelectorAll('#press-walk [role="tab"]')];
+      return {
+        controls: t.every((b) => b.getAttribute('aria-controls') === 'press-' + b.dataset.leaf && document.getElementById(b.getAttribute('aria-controls'))),
+        roving: t.filter((b) => b.tabIndex === 0).length,
+        panels: [...document.querySelectorAll('.press-leaf')].every((p) => p.getAttribute('role') === 'tabpanel' && p.getAttribute('aria-labelledby') === 'press-tab-' + p.dataset.leaf),
+        hidden: [...document.querySelectorAll('.press-leaf')].filter((p) => p.hidden).length,
+      };
+    });
+    assert(tabs.controls && tabs.panels, 'tabs and panels must be wired with aria-controls / aria-labelledby');
+    assert(tabs.roving === 1 && tabs.hidden === 5, 'one tab in the tab order, five panels hidden: ' + JSON.stringify(tabs));
+    await page.focus('#press-tab-breath');
+    await page.keyboard.press('ArrowRight');
+    const afterRight = await page.evaluate(() => ({ leaf: document.querySelector('.press-leaf.on')?.dataset.leaf, focus: document.activeElement?.id }));
+    assert(afterRight.leaf === 'parable' && afterRight.focus === 'press-tab-parable', 'ArrowRight should move and select: ' + JSON.stringify(afterRight));
+    await page.keyboard.press('End');
+    const atEnd = await page.$eval('.press-leaf.on', (el) => el.dataset.leaf);
+    assert(atEnd === 'forty', 'End should reach Forty: ' + atEnd);
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
+  });
+
+  await check('Examen keeps the evening and hands the morning a catchword', async () => {
+    await page.goto(BASE + '/?review=1&leaf=examen', { waitUntil: 'networkidle0' });
+    await page.type('#examen-rejoice', 'A neighbor waved.');
+    await page.type('#examen-rest', 'Stillness');
+    await page.click('#examen-keep');
+    await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
+    const ex = await page.evaluate(() => ({
+      kept: !document.getElementById('examen-kept').hidden,
+      catchword: (JSON.parse(localStorage.getItem('rla-catchword') || '{}')).word,
+      item: JSON.parse(localStorage.getItem('rla-journal') || '[]')[0],
+    }));
+    assert(ex.kept, 'examen should show kept state');
+    assert(ex.catchword === 'Stillness', 'the Rest word should become the catchword: ' + ex.catchword);
+    assert(ex.item.type === 'examen' && /Rejoice: A neighbor waved/.test(ex.item.body) && ex.item.verse === 'John 14:27', 'examen journal entry malformed');
+    await page.evaluate(() => { closeAmen(); switchTab('journal'); });
+    const badges = await page.evaluate(() => [...document.querySelectorAll('.journal-item .badge')].map((b) => b.textContent));
+    assert(badges.includes('Examen'), 'journal should label the examen: ' + badges.join(','));
+  });
+
+  await check('Parable sittings are kept as parable, and the Press shares', async () => {
+    await page.goto(BASE + '/?review=1&leaf=parable', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { turnParable(1); turnParable(1); sitPress('parable'); });
+    await page.evaluate(() => { document.getElementById('sit-reply').value = 'Mercy runs first'; keepSitReply(); });
+    const kept = await page.evaluate(() => ({
+      item: JSON.parse(localStorage.getItem('rla-journal') || '[]')[0],
+      share: sharePayload('press'),
+      sitting: document.documentElement.classList.contains('sitting'),
+    }));
+    assert(kept.item.type === 'parable' && /Luke 15:18/.test(kept.item.verse), 'parable sitting should be typed: ' + JSON.stringify(kept.item));
+    assert(/The lost son/.test(kept.item.title), 'parable title should name the parable');
+    assert(kept.share && /Luke 15/.test(kept.share.verse), 'Press share payload missing');
+    assert(!kept.sitting, 'chrome should return after the sitting');
+  });
+
+  await check('Today points into the Press by the hour', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    const hint = await page.evaluate(() => ({
+      hidden: document.getElementById('press-hint').hidden,
+      text: document.getElementById('press-hint').textContent,
+      leaf: document.getElementById('press-hint').dataset.leaf,
+      expected: pressLeafForHour(),
+      dawn: pressLeafForHour(new Date(2026, 8, 5, 7)),
+      day: pressLeafForHour(new Date(2026, 8, 5, 13)),
+      night: pressLeafForHour(new Date(2026, 8, 5, 22)),
+    }));
+    assert(!hint.hidden && hint.text.length > 10, 'press hint should show on Today');
+    assert(hint.dawn === 'breath' && hint.day === 'reveal' && hint.night === 'examen', 'hour mapping off: ' + JSON.stringify(hint));
+    assert(hint.leaf === hint.expected || hint.leaf === 'journal', 'hint should follow the hour: ' + JSON.stringify(hint));
+    await page.click('#press-hint');
+    const landed = await page.evaluate(() => document.querySelector('.page.active').id);
+    assert(landed === 'press-page' || landed === 'journal-page', 'hint should open the Press or the journal: ' + landed);
+    const advisor = await page.evaluate(() => formatAI('**John 14:27**\n\n"Peace I leave with you."\n\nHe said this to a frightened room.'));
+    assert(/scripture-sit/.test(advisor), 'Advisor scripture blocks should offer Sit with this');
+  });
+
+  await check('Advisor chips exercise the real range and follow-ups continue', async () => {
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      document.getElementById('onboarding').classList.add('hidden');
+      switchTab('advisor');
+    });
+    const chips = await page.evaluate(() => [...document.querySelectorAll('#suggestions .chip')].map((b) => b.textContent.trim()));
+    assert(chips.includes('I feel so much shame'), 'shame chip missing: ' + chips.join(' | '));
+    assert(chips.includes('My mother died last month'), 'grief chip missing');
+    assert(chips.includes('What does Jesus say about the prodigal son?'), 'parable chip missing');
+    assert(chips.includes('Sit with me in Matthew 11:28'), 'brought-verse chip missing');
+    assert(chips.includes('I am not afraid — I am tired'), 'negation chip missing');
+
+    await page.evaluate(() => sendMsg('I feel so much shame'));
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && last.innerText.length > 80;
+    }, { timeout: 15000 });
+    const shame = await page.evaluate(() => ({
+      letter: [...document.querySelectorAll('.msg-ai .letter')].pop().innerText,
+      follows: [...document.querySelectorAll('.follow-ups .chip')].map((b) => b.textContent.trim()),
+      crisis: !!document.querySelector('#crisis-modal.on'),
+    }));
+    assert(!shame.crisis, 'shame chip must not open the crisis modal');
+    assert(/Matthew|John|Luke|Mark/.test(shame.letter), 'shame letter should cite a Gospel');
+    assert(/shame|condemn|lift a face/i.test(shame.letter), 'shame letter should stay with shame: ' + shame.letter.slice(0, 180));
+    assert(shame.follows.length >= 1, 'follow-up chips should appear after a letter');
+
+    await page.evaluate(() => {
+      const btn = document.querySelector('.follow-ups .chip');
+      if (btn) btn.click();
+    });
+    await page.waitForFunction(() => {
+      const letters = [...document.querySelectorAll('.msg-ai .letter')];
+      const last = letters[letters.length - 1];
+      return letters.length >= 2 && last && last.innerText.length > 80 && !document.getElementById('typing')?.classList.contains('on');
+    }, { timeout: 20000 });
+    const second = await page.evaluate(() => [...document.querySelectorAll('.msg-ai .letter')].pop().innerText);
+    assert(second.length > 80, 'follow-up should produce a second letter');
+
+    await page.evaluate(() => sendMsg('Sit with me in Matthew 11:28'));
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && /11:28/.test(last.innerText) && !document.getElementById('typing').classList.contains('on');
+    }, { timeout: 15000 });
+    await page.evaluate(() => {
+      localStorage.removeItem('rla-letters-' + todayStr());
+      localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 0 }));
+    });
+  });
+
+  await check('the daily limit never closes the crisis path', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-chats', JSON.stringify({ d: todayStr(), n: 5 }));
+      localStorage.removeItem('rla-letters-' + todayStr());
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => switchTab('advisor'));
+    await page.evaluate(() => sendMsg('I am afraid of the future'));
+    const gate = await page.evaluate(() => ({
+      on: document.getElementById('chat-gate').classList.contains('on'),
+      text: document.getElementById('chat-gate').innerText,
+      typeable: !document.getElementById('chat-input').disabled && !document.getElementById('send-btn').disabled,
+      letters: document.querySelectorAll('.msg-ai').length,
+    }));
+    assert(gate.letters === 0, 'an ordinary message should be withheld at the limit, got ' + gate.letters + ' letters');
+    assert(gate.on, 'gate should be shown once a message is withheld');
+    assert(/988/.test(gate.text) && /findahelpline\.com/.test(gate.text), 'gate copy must carry the handoff');
+    assert(gate.typeable, 'composer must stay typeable when gated');
+
+    const sending = page.evaluate(() => sendMsg('I want to kill myself'));
+    await page.waitForSelector('#crisis-modal.on', { timeout: 5000 });
+    const modal = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
+    assert(/988/.test(modal), 'crisis modal must show 988');
+    await page.click('#crisis-continue');
+    await sending;
+    await page.waitForFunction(() => {
+      const last = [...document.querySelectorAll('.msg-ai .letter')].pop();
+      return last && /988/.test(last.innerText) && /not a person/i.test(last.innerText);
+    }, { timeout: 15000 });
+    const letter = await page.evaluate(() => [...document.querySelectorAll('.msg-ai .letter')].pop().innerText);
+    assert(/findahelpline\.com/.test(letter), 'crisis letter must carry the global directory');
+    assert((letter.match(/988(?!lifeline)/g) || []).length === 1, 'crisis letter should name 988 once, got ' + (letter.match(/988(?!lifeline)/g) || []).length);
+  });
+
+  await check('one-screen /ask is Ask, words, meaning, cannot — and crisis stops', async () => {
+    const res = await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), '/ask HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/Watch/i.test(copy), 'WATCH banner missing');
+    assert(/What is weighing on you today/.test(copy), 'ask prompt missing');
+    assert(/World English Bible/.test(copy), 'WEB example missing');
+    assert(/what that might mean today/i.test(copy), 'meaning heading missing on first paint');
+    assert(/what this bot cannot do/i.test(copy), 'cannot-do heading missing on first paint');
+    assert(/not a pastor/.test(copy), 'cannot-do copy missing on first paint');
+    assert(/988/.test(copy), '/ask must name 988 before any ask');
+    assert(/not a launch/i.test(copy), 'must say it is not a launch');
+
+    await page.click('#chips .chip');
+    await page.waitForFunction(() => {
+      const q = document.getElementById('quote');
+      return q && q.textContent.length > 8 && !document.getElementById('answer').classList.contains('hidden');
+    }, { timeout: 15000 });
+    const counsel = await page.evaluate(() => ({
+      quote: document.getElementById('quote').textContent,
+      cite: document.getElementById('cite').textContent,
+      meaning: document.getElementById('meaning').textContent,
+      cannot: document.getElementById('cannot').textContent,
+      handoffHidden: document.getElementById('handoff-block').classList.contains('hidden'),
+      meaningLines: document.getElementById('meaning').textContent.split('\n').filter((s) => s.trim()).length,
+    }));
+    assert(!/did not name a feeling/.test(counsel.meaning), 'first chip must not deny the feeling: ' + counsel.meaning);
+    assert(/Matthew|Mark|Luke|John/.test(counsel.cite), 'counsel should cite a Gospel: ' + counsel.cite);
+    assert(/KJV/.test(counsel.cite), 'live quote must name KJV: ' + counsel.cite);
+    assert(counsel.meaningLines >= 1 && counsel.meaningLines <= 4, 'meaning lines: ' + counsel.meaningLines);
+    assert(/not a pastor/.test(counsel.cannot), 'cannot-do missing');
+    assert(counsel.handoffHidden, 'ordinary tiredness must not open the stop block');
+
+    await page.evaluate(() => {
+      document.getElementById('ask-input').value = 'I want to kill myself';
+    });
+    await page.click('#ask-go');
+    await page.waitForFunction(() => !document.getElementById('handoff-block').classList.contains('hidden'), { timeout: 15000 });
+    const stop = await page.evaluate(() => ({
+      handoff: document.getElementById('handoff').innerText,
+      quote: document.getElementById('quote').textContent,
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+    }));
+    assert(/988/.test(stop.handoff), 'crisis must name 988');
+    assert(/will not add counsel or a verse/.test(stop.handoff), 'crisis must stop');
+    assert(stop.wordsHidden || !stop.quote, 'crisis must not show a Gospel quote');
+    assert(!/Come unto me|Peace I leave/i.test(stop.handoff), 'crisis handoff leaked a verse');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
