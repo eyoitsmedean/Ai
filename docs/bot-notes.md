@@ -1,5 +1,20 @@
 # Bot working notes — Red Letter
 
+---
+
+## Recovery — 2026-09-11 — three flagships
+
+Worker: Cursor cloud agent · this conversation’s recovery commission.
+
+1. **`docs/CANON.md`** — first ten user prompts from the run transcript; later Notion amendments; drift table; next-agent guide.
+2. **`docs/RESEARCH.md`** — core topics + five adjacent (WEB vs KJV; crisis stop; paper folio; one-screen; Idaho vs Pages). Source register: only URLs opened this session.
+3. **`/ask`** — one-screen advisor. Crisis/abuse stop with no Gospel counsel. Live quotes sealed KJV. Empty state shows the one WEB line opened from eBible (Matthew 11:28).
+
+Do not treat `/` as the product. Do not store-submit. Do not overwrite Grok F1–F3.
+
+---
+
+
 Working-notes location for rebuild workers (per the Universal Rebuild Pipeline). Append; do not rewrite earlier entries. Decisions belong in `CLAUDE.md`, not here.
 
 ---
@@ -14,7 +29,7 @@ Worker: Cursor cloud agent · five priorities in one hour.
 4. **Advisor chips** exercise shame, grief, prodigal, Matthew 11:28, negation. Follow-up chips continue a letter; none on crisis/abuse letters.
 5. **Device eval path** so the client cannot silently drift. Suite 64.
 
-Verification run this session: `npm test` 64/64; `npm run eval` 82/82; `npm run eval:device` 82/82; `npm run qa` 14/14.
+Verification run this session: `npm test` 64/64; `npm run eval` 82/82; `npm run eval:device` 82/82; `npm run qa` 15/15.
 
 ---
 

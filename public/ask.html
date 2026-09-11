@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="A one-screen page for the words Jesus spoke. Not a launch." />
+  <title>Red Letter — Ask</title>
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      min-height: 100svh;
+      background: #F4EFE4;
+      color: #1B1610;
+      font-family: 'Source Serif 4', 'Palatino Linotype', Palatino, serif;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .watch {
+      background: #1B1610;
+      color: #F4EFE4;
+      font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .watch strong { font-weight: 600; letter-spacing: 0.14em; }
+    main {
+      width: min(36rem, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
+    header { margin-bottom: 1.75rem; }
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .r {
+      width: 1.7rem;
+      height: 1.7rem;
+      border: 1px solid rgba(27,22,16,0.22);
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-family: Fraunces, Georgia, serif;
+      font-style: italic;
+      color: #8F1D1D;
+      font-size: 1.05rem;
+    }
+    .wordmark {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 560;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 560;
+      font-size: clamp(1.85rem, 6vw, 2.35rem);
+      line-height: 1.15;
+      margin: 1.1rem 0 0.55rem;
+    }
+    .lede { color: #4A4034; max-width: 32rem; }
+    label {
+      display: block;
+      font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7A6E5E;
+      margin-bottom: 0.45rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 6.5rem;
+      resize: vertical;
+      border: 1px solid rgba(27,22,16,0.16);
+      background: #FBF7EE;
+      color: #1B1610;
+      border-radius: 2px;
+      padding: 0.9rem 1rem;
+      font: inherit;
+      line-height: 1.5;
+    }
+    textarea:focus { outline: 2px solid #8F1D1D; outline-offset: 2px; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.75rem;
+    }
+    button, .chip {
+      font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      border: 1px solid rgba(27,22,16,0.16);
+      background: #FBF7EE;
+      color: #1B1610;
+      border-radius: 999px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+    button.primary {
+      background: #8F1D1D;
+      color: #FBF7EE;
+      border-color: #8F1D1D;
+      padding: 0.55rem 1.15rem;
+      font-weight: 600;
+    }
+    button:disabled { opacity: 0.45; cursor: wait; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+    .chip { background: transparent; }
+    .block {
+      margin-top: 1.6rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid rgba(27,22,16,0.10);
+    }
+    .block h2 {
+      font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7A6E5E;
+      font-weight: 500;
+      margin-bottom: 0.55rem;
+    }
+    .quote {
+      font-family: Fraunces, Georgia, serif;
+      font-style: italic;
+      font-size: 1.28rem;
+      line-height: 1.4;
+      color: #8F1D1D;
+    }
+    .cite {
+      margin-top: 0.55rem;
+      font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      color: #7A6E5E;
+    }
+    .meaning, .handoff, .cannot { color: #4A4034; white-space: pre-wrap; }
+    .handoff { color: #1B1610; }
+    .example .quote { font-size: 1.12rem; }
+    .fine {
+      margin-top: 0.45rem;
+      font-size: 0.85rem;
+      color: #7A6E5E;
+    }
+    .fine a { color: inherit; }
+    footer {
+      margin-top: 2.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(27,22,16,0.10);
+      font-size: 0.92rem;
+      color: #7A6E5E;
+    }
+    footer a { color: #4A4034; }
+    .err { color: #8F1D1D; margin-top: 0.7rem; font-size: 0.95rem; }
+    .hidden { display: none; }
+    @media (max-width: 420px) {
+      body { font-size: 17px; }
+      .quote { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+  <p class="watch"><strong>Watch</strong> — not a launch. Household review only. Do not publish or submit to a store.</p>
+  <main>
+    <header>
+      <a class="mark" href="/ask"><span class="r" aria-hidden="true">R</span><span class="wordmark">Red Letter</span></a>
+      <h1>What is weighing on you today?</h1>
+      <p class="lede">Ask in a sentence. This page answers with one saying Jesus spoke, a short plain-speech reading, then silence.</p>
+    </header>
+
+    <form id="ask-form">
+      <label for="ask-input">Ask</label>
+      <textarea id="ask-input" name="text" maxlength="4000" required placeholder="I am tired, and I do not know what to do with it."></textarea>
+      <div class="row">
+        <button type="submit" class="primary" id="ask-go">Ask</button>
+        <span class="fine">Nothing you type is stored on a server.</span>
+      </div>
+      <div class="chips" id="chips">
+        <button type="button" class="chip">I am tired</button>
+        <button type="button" class="chip">I feel so much shame</button>
+        <button type="button" class="chip">My mother died last month</button>
+        <button type="button" class="chip">Sit with Matthew 11:28</button>
+        <button type="button" class="chip">I am not afraid — I am tired</button>
+      </div>
+      <p class="err hidden" id="ask-err" role="alert"></p>
+    </form>
+
+    <section id="empty" class="block example">
+      <h2>An example — not tonight’s answer</h2>
+      <p class="quote">“Come to me, all you who labor and are heavily burdened, and I will give you rest.”</p>
+      <p class="cite">Matthew 11:28 · World English Bible</p>
+      <p class="fine">Opened 2026-09-11 from <a href="https://ebible.org/web/MAT11.htm">eBible, Matthew 11</a>. The WEB <em>text</em> is public domain; the name is a trademark. Live answers below use the sealed KJV 1769 until a text is recorded for any public URL.</p>
+    </section>
+
+    <div id="answer" class="hidden" aria-live="polite">
+      <section class="block" id="words-block">
+        <h2>The words</h2>
+        <p class="quote" id="quote"></p>
+        <p class="cite" id="cite"></p>
+      </section>
+      <section class="block" id="meaning-block">
+        <h2>What that might mean today</h2>
+        <p class="meaning" id="meaning"></p>
+      </section>
+      <section class="block hidden" id="handoff-block">
+        <h2>Stop here</h2>
+        <p class="handoff" id="handoff"></p>
+      </section>
+      <section class="block" id="cannot-block">
+        <h2>What this bot cannot do</h2>
+        <p class="cannot" id="cannot"></p>
+      </section>
+    </div>
+
+    <footer>
+      <p>Crisis: <a href="tel:988">988</a> in the United States (call, text, or chat at <a href="https://988lifeline.org/">988lifeline.org</a>). Anywhere else: <a href="https://findahelpline.com/">findahelpline.com</a>.</p>
+      <p style="margin-top:0.45rem">The five-room folio is the atelier, not this product. <a href="/">Open the atelier</a>.</p>
+    </footer>
+  </main>
+  <script>
+    const form = document.getElementById('ask-form');
+    const input = document.getElementById('ask-input');
+    const go = document.getElementById('ask-go');
+    const err = document.getElementById('ask-err');
+    const empty = document.getElementById('empty');
+    const answer = document.getElementById('answer');
+    const prior = [];
+
+    /* Byte-identical to lib/scripture.js looksLikeCrisis. A test fails on drift. */
+    function looksLikeCrisisClient(text) {
+      return /\b(suicid\w*|kill myself|killing myself|end (my|it|their|his|her|your|our) (life|lives)|end it all|ending it all|ending my life|end things|end everything|ending things|going to end (it|things|everything)|take my life|took .{0,30}pills|swallowed .{0,30}pills|want(s|ed)? to die|wanna die|wish(ed)? (i|that i|he|she|they) (was|were|could be) dead|wish i (were|was)n[’']?t (here|alive|born)|wish i could (die|disappear|not exist)|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|don[’']?t want to live|do not want to live|don[’']?t want to be (alive|here|around)|not want to be alive|better off dead|no reason to live|not worth living|life isn[’']?t worth|slit my|jump off|a plan and .{0,40}(notes?|letters?|goodbyes?)|suicide notes?|goodbye letters?|kill(ed|ing)? (him|her|them)sel(f|ves))\b/i.test(String(text || ''));
+    }
+
+    const LOCAL_STOP = {
+      kind: 'crisis',
+      stop: true,
+      citation: '',
+      quote: '',
+      meaning: '',
+      handoff: 'If you are in danger of harming yourself, stop here.\n\nUnited States: 988 — call, text, or chat. https://988lifeline.org/\nAnywhere else: https://findahelpline.com/\n\nThis page will not add counsel or a verse after that number. I am not a person, and this is not emergency care.',
+      cannot: 'This page is not a pastor, not a diagnosis, and not a substitute for a person who knows your name.\nIf you are in danger, call 988 in the United States, or start at findahelpline.com anywhere else.',
+      edition: ''
+    };
+
+    function show(data) {
+      err.classList.add('hidden');
+      empty.classList.add('hidden');
+      answer.classList.remove('hidden');
+      const stop = Boolean(data.stop);
+      document.getElementById('words-block').classList.toggle('hidden', stop || !data.quote);
+      document.getElementById('meaning-block').classList.toggle('hidden', stop || !data.meaning);
+      document.getElementById('handoff-block').classList.toggle('hidden', !stop);
+      document.getElementById('quote').textContent = data.quote ? '“' + data.quote + '”' : '';
+      document.getElementById('cite').textContent = data.citation
+        ? data.citation + (data.edition ? ' · ' + data.edition : '')
+        : '';
+      document.getElementById('meaning').textContent = data.meaning || '';
+      document.getElementById('handoff').textContent = data.handoff || '';
+      document.getElementById('cannot').textContent = data.cannot || LOCAL_STOP.cannot;
+      if (stop) document.getElementById('handoff-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      else document.getElementById('words-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function ask(text) {
+      const q = String(text || '').trim();
+      if (!q) return;
+      go.disabled = true;
+      err.classList.add('hidden');
+      if (looksLikeCrisisClient(q)) show(LOCAL_STOP);
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: q, prior: prior.slice(-6) }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'The page could not answer.');
+        show(data);
+        prior.push(q);
+      } catch (e) {
+        if (!looksLikeCrisisClient(q)) {
+          err.textContent = e.message || 'The page could not answer.';
+          err.classList.remove('hidden');
+        }
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      ask(input.value);
+    });
+    document.getElementById('chips').addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      input.value = btn.textContent.trim();
+      ask(input.value);
+    });
+  </script>
+</body>
+</html>

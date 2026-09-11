@@ -1,6 +1,7 @@
-const CACHE = 'rla-phase0-v18';
+const CACHE = 'rla-phase0-v19';
 const PRECACHE = [
   '/index.html',
+  '/ask.html',
   '/manifest.json',
   '/config.js',
   '/curated.json',
@@ -62,7 +63,11 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((cached) => cached || caches.match('/index.html')))
+        .catch(() => caches.match(e.request).then((cached) => {
+          if (cached) return cached;
+          if (url.pathname === '/ask' || url.pathname === '/ask.html') return caches.match('/ask.html');
+          return caches.match('/index.html');
+        }))
     );
     return;
   }

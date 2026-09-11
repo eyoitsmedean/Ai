@@ -1,12 +1,14 @@
 # Red Letter
 
-A quiet reading room for the **words Jesus actually spoke**.
+A quiet page for the **words Jesus actually spoke**.
 
-Not another Bible app. A daily companion constrained to the red letters of Matthew, Mark, Luke, and John — typeset like a small press, simple like a blank page. One rule holds the whole thing together: **nothing on the page is presented as His unless the corpus says He said it.** Every claim below comes with the command that proves it.
+The intended product is **one screen** at [`/ask`](http://localhost:3000/ask): Ask → The words → What that might mean today → What this bot cannot do. The five-room folio at `/` is the atelier, not a launch. **WATCH** — do not publish, do not submit to a store, do not treat GitHub Pages as a launch.
+
+Not another Bible app. Constrained to the red letters of Matthew, Mark, Luke, and John. One rule holds the whole thing together: **nothing on the page is presented as His unless the corpus says He said it.** Every claim below comes with the command that proves it.
 
 > **Purpose** · the front door for anyone opening this repo — Dean, a reviewer, a contributor, or the next worker.
-> **Owner** · Dean · **Status** · working build on a review branch; not yet in a store · **Updated** · 2026-09-07.
-> **What changed in this version** · the Advisor answers the question without a model key (82-question evaluation, results recorded) · phones build through Capacitor (Android verified) · `CLAUDE.md` is the system of record for decisions.
+> **Owner** · Dean · **Status** · WATCH; household review; not a launch · **Updated** · 2026-09-11.
+> **What changed in this version** · recovered brief in `docs/CANON.md` · research in `docs/RESEARCH.md` · walkable `/ask` that **stops** on crisis · folio Advisor still answers without a model key (82-question evaluation).
 
 **If you are in crisis:** this is software, not a person, and not therapy, medical care, or pastoral counseling. In the United States, [988](tel:988) answers by call, text, or chat ([988lifeline.org](https://988lifeline.org)), day and night; anywhere else, [findahelpline.com](https://findahelpline.com) lists verified lines in 175+ countries. The product says the same thing, in the same words, before any letter is sent.
 
@@ -14,7 +16,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 
 ```bash
 npm install
-npm start              # http://localhost:3000
+npm start              # http://localhost:3000/ask  (product) · http://localhost:3000 (atelier)
 ```
 
 Without a key the whole room opens: Today and Seek serve curated, corpus-verified pages, and the **Advisor reads the question and answers it** from His sayings — a felt need, a named parable, a verse you brought, a hostile line, a request outside the room, or danger, each in its own letter. Add a key only if you want the model to write the letter:
@@ -25,6 +27,7 @@ cp .env.example .env   # then set ANTHROPIC_API_KEY
 
 ## The room
 
+- **Ask (`/ask`)** — the intended product. One screen. Crisis stops. Not a launch.
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn.
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves.
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence.
@@ -70,7 +73,7 @@ Nothing here is described as passing that was not run. Last run in this reposito
 | `API_ACCESS_KEY` | optional gate on `/api/*`: clients must send it as an `x-api-key` header | off |
 | `CHAT_RATE_LIMIT` | Advisor letters per client per minute | `10` |
 
-Routes: `/api/health` · `/api/daily` · `/api/themes` · `/api/encouragement` · `/api/library` · `/api/verify` · `/api/chat` · `/api/waitlist` · `/welcome` · `/review`.
+Routes: `/ask` · `/api/ask` · `/api/health` · `/api/daily` · `/api/themes` · `/api/encouragement` · `/api/library` · `/api/verify` · `/api/chat` · `/api/waitlist` · `/welcome` · `/review`.
 
 ## Phones
 
@@ -97,6 +100,8 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 | Path | What it is |
 | --- | --- |
+| `docs/CANON.md` | **This conversation’s brief**: first ten prompts, later amendments, what to preserve. |
+| `docs/RESEARCH.md` | Core and adjacent questions, dated source register. |
 | `CLAUDE.md` | **System of record**: locked decisions, the verified/unverified release checklist, open questions for Dean, session log. Read it before designing anything. |
 | `server.js` · `lib/` | Express app; `advise.js` (curated Advisor), `scripture.js` (corpus, seal, crisis detector), `curated.js` (twelve theme packs), `year.js` (church year) |
 | `public/` | The page (`index.html`), service worker, on-device data, `config.js` |

@@ -410,6 +410,51 @@ async function main() {
     assert((letter.match(/988(?!lifeline)/g) || []).length === 1, 'crisis letter should name 988 once, got ' + (letter.match(/988(?!lifeline)/g) || []).length);
   });
 
+  await check('one-screen /ask is Ask, words, meaning, cannot — and crisis stops', async () => {
+    const res = await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), '/ask HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/Watch/i.test(copy), 'WATCH banner missing');
+    assert(/What is weighing on you today/.test(copy), 'ask prompt missing');
+    assert(/World English Bible/.test(copy), 'WEB example missing');
+    assert(/988/.test(copy), '/ask must name 988 before any ask');
+    assert(/not a launch/i.test(copy), 'must say it is not a launch');
+
+    await page.click('#chips .chip');
+    await page.waitForFunction(() => {
+      const q = document.getElementById('quote');
+      return q && q.textContent.length > 8 && !document.getElementById('answer').classList.contains('hidden');
+    }, { timeout: 15000 });
+    const counsel = await page.evaluate(() => ({
+      quote: document.getElementById('quote').textContent,
+      cite: document.getElementById('cite').textContent,
+      meaning: document.getElementById('meaning').textContent,
+      cannot: document.getElementById('cannot').textContent,
+      handoffHidden: document.getElementById('handoff-block').classList.contains('hidden'),
+      meaningLines: document.getElementById('meaning').textContent.split('\n').filter((s) => s.trim()).length,
+    }));
+    assert(/Matthew|Mark|Luke|John/.test(counsel.cite), 'counsel should cite a Gospel: ' + counsel.cite);
+    assert(/KJV/.test(counsel.cite), 'live quote must name KJV: ' + counsel.cite);
+    assert(counsel.meaningLines >= 1 && counsel.meaningLines <= 4, 'meaning lines: ' + counsel.meaningLines);
+    assert(/not a pastor/.test(counsel.cannot), 'cannot-do missing');
+    assert(counsel.handoffHidden, 'ordinary tiredness must not open the stop block');
+
+    await page.evaluate(() => {
+      document.getElementById('ask-input').value = 'I want to kill myself';
+    });
+    await page.click('#ask-go');
+    await page.waitForFunction(() => !document.getElementById('handoff-block').classList.contains('hidden'), { timeout: 15000 });
+    const stop = await page.evaluate(() => ({
+      handoff: document.getElementById('handoff').innerText,
+      quote: document.getElementById('quote').textContent,
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+    }));
+    assert(/988/.test(stop.handoff), 'crisis must name 988');
+    assert(/will not add counsel or a verse/.test(stop.handoff), 'crisis must stop');
+    assert(stop.wordsHidden || !stop.quote, 'crisis must not show a Gospel quote');
+    assert(!/Come unto me|Peace I leave/i.test(stop.handoff), 'crisis handoff leaked a verse');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

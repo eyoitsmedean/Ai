@@ -9,6 +9,7 @@ const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 const { compose: composeLetter } = require('./lib/advise');
+const { composeAsk } = require('./lib/ask');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -415,6 +416,19 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+app.post('/api/ask', (req, res) => {
+  const text = typeof req.body?.text === 'string' ? req.body.text : '';
+  if (!text.trim()) return res.status(400).json({ error: 'Empty message.' });
+  if (text.length > 4000) return res.status(400).json({ error: 'Message is too long.' });
+  const prior = Array.isArray(req.body?.prior)
+    ? req.body.prior.filter((p) => typeof p === 'string').slice(-8)
+    : [];
+  if (!rateLimit(`ask:${clientKey(req)}`, CHAT_RATE_LIMIT, 60 * 1000)) {
+    return res.status(429).json({ error: 'A little space, then ask again.' });
+  }
+  res.json(composeAsk(text, { prior }));
+});
+
 app.post('/api/waitlist', (req, res) => {
   const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
@@ -437,6 +451,11 @@ app.post('/api/waitlist', (req, res) => {
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/ask', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'ask.html'));
 });
 
 app.get('/review', (req, res) => {

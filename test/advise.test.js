@@ -129,8 +129,10 @@ describe('one crisis detector everywhere', () => {
     const server = read('lib/scripture.js').match(/function looksLikeCrisis[\s\S]*?return (\/.*?\/i)\.test/)[1];
     const page = read('public/index.html').match(/function looksLikeCrisisClient[\s\S]*?return (\/.*?\/i)\.test/)[1];
     const device = read('public/data/advisor.js').match(/const CRISIS = (\/.*?\/i);/)[1];
+    const ask = read('public/ask.html').match(/function looksLikeCrisisClient[\s\S]*?return (\/.*?\/i)\.test/)[1];
     assert.equal(page, server, 'public/index.html looksLikeCrisisClient drifted from lib/scripture.js');
     assert.equal(device, server, 'public/data/advisor.js CRISIS drifted from lib/scripture.js');
+    assert.equal(ask, server, 'public/ask.html looksLikeCrisisClient drifted from lib/scripture.js');
     assert.equal(read('data/advisor.js'), read('public/data/advisor.js'), 'data/advisor.js is a stale copy');
   });
 });
