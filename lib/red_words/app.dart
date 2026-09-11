@@ -92,15 +92,17 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
     AppLeaf next;
     if (widget.catalog.isEmpty || moment == null) {
       next = AppLeaf.empty;
-    } else if (RedWordsLink.isToday(link) || opened) {
-      next = AppLeaf.today;
     } else {
-      next = AppLeaf.title;
-    }
-    if (next == AppLeaf.today) {
-      await session.markOpened();
+      // Seed the seven-slot rotation on the title leaf so the home-screen
+      // card is today's Word before anyone turns the page.
       if (widget.syncWidget && !_hostless) {
         await _pushWidget();
+      }
+      if (RedWordsLink.isToday(link) || opened) {
+        await session.markOpened();
+        next = AppLeaf.today;
+      } else {
+        next = AppLeaf.title;
       }
     }
     if (mounted) {
@@ -164,6 +166,7 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
         return TodayPage(
           moment: current,
           office: engine.officeAt(now),
+          now: now,
           seven: engine.seven,
           onSit: () => setState(() => leaf = AppLeaf.sit),
           onSeek: () => setState(() => leaf = AppLeaf.seek),

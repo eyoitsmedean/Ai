@@ -120,6 +120,7 @@ class TodayPage extends StatelessWidget {
     super.key,
     required this.moment,
     required this.office,
+    required this.now,
     required this.seven,
     required this.onSit,
     required this.onSeek,
@@ -130,6 +131,7 @@ class TodayPage extends StatelessWidget {
 
   final DailyMoment moment;
   final DailyOffice office;
+  final DateTime now;
   final List<PathDay> seven;
   final VoidCallback onSit;
   final VoidCallback onSeek;
@@ -181,6 +183,11 @@ class TodayPage extends StatelessWidget {
                     citationKey: const Key('today-citation'),
                   ),
                   const SizedBox(height: 22),
+                  HomeCard(
+                    word: moment.word.text,
+                    citation: moment.word.citation,
+                  ),
+                  const SizedBox(height: 22),
                   Text(
                     moment.reflection,
                     textAlign: TextAlign.center,
@@ -194,7 +201,7 @@ class TodayPage extends StatelessWidget {
                   if (office.isEvening) ...[
                     const SizedBox(height: 28),
                     Text(
-                      office.vespersPromptOn(DateTime.now()),
+                      office.vespersPromptOn(now),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'serif',

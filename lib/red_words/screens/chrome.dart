@@ -125,6 +125,64 @@ class TextAction extends StatelessWidget {
   }
 }
 
+/// The home-screen card, on paper: Word and citation only.
+/// Caption sits outside the card so the craft law still holds.
+class HomeCard extends StatelessWidget {
+  const HomeCard({super.key, required this.word, required this.citation});
+
+  final String word;
+  final String citation;
+
+  @override
+  Widget build(BuildContext context) {
+    final paper = PaperScope.of(context);
+    return Column(
+      children: [
+        Text(
+          'THE CARD',
+          style: TextStyle(letterSpacing: 1.6, fontSize: 11, color: paper.colors.gold),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          key: const Key('home-card'),
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+          decoration: BoxDecoration(
+            color: paper.colors.folio,
+            border: Border.all(color: paper.colors.rule),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                word,
+                key: const Key('home-card-word'),
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
+                  height: 1.4,
+                  color: paper.colors.crimson,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                citation,
+                key: const Key('home-card-citation'),
+                style: TextStyle(
+                  letterSpacing: 1.1,
+                  fontSize: 11,
+                  color: paper.colors.crimson,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class WordBlock extends StatelessWidget {
   const WordBlock({
     super.key,
