@@ -75,6 +75,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .fact .sc{display:block;margin-bottom:4px}
 .fact .v{font-family:var(--display);font-size:1.25rem;font-weight:500;letter-spacing:-.01em}
 
+/* This week — the decision on the first screen */
+.decide{margin-top:22px;padding:18px 20px 16px;background:var(--folio);border:1px solid var(--rule);border-radius:14px;box-shadow:var(--shadow)}
+.decide .kicker{font-family:var(--ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--crimson);margin-bottom:6px}
+.decide h2{font-family:var(--display);font-weight:500;font-size:1.45rem;letter-spacing:-.015em;margin:0 0 8px;line-height:1.2}
+.decide p{margin:0 0 .7em}
+.decide ol{margin:8px 0 0;padding:0 0 0 1.2em}
+.decide li{margin:5px 0;padding-left:2px}
+.decide .act{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.decide .act .sc{display:block;margin-bottom:6px}
+.decide.late{box-shadow:0 0 0 1px var(--crimson) inset;border-color:var(--crimson)}
+.decide .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.decide .pay .v{font-family:var(--display);font-size:1.15rem;font-weight:500}
+@media (max-width:640px){.decide .pay{grid-template-columns:1fr 1fr}}
+
 /* Nav */
 .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
 .nav .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-top:8px;padding-bottom:8px}
@@ -372,10 +386,13 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <div class="fact"><span class="sc">Your base case</span><span class="v" id="f-base">$1,350</span></div>
     <div class="fact"><span class="sc">Floor</span><span class="v" id="f-floor">$350</span></div>
   </div>
+  <p class="note" style="margin-top:16px">Purpose · this week's yes and no · Owner · Dean · Status · live · Updated · 11 Sep 2026. What changed: the decision is on this screen; Week 2 is now; catch-up if last week's five videos did not leave the phone.</p>
+  <div class="decide" id="now" aria-live="polite"></div>
 </div>
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
+    <a href="#now">This week</a>
     <a href="#first">Read first</a>
     <a href="#choose">Choose</a>
     <a href="#plans">The five</a>
@@ -518,9 +535,11 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <p>Every dollar that arrives is split the same day: <b>30% to a tax jar</b> (a separate savings account is enough), the rest to the household buffer. Nothing speculative. Nothing reinvested until a plan has paid twice. The only purchases allowed in these ninety days are a domain (about $12) and, if you need it, a call-recording app (about $10).</p>
     <h3>Tax, plainly</h3>
     <p>Side income is taxable from the first dollar. Net self-employment earnings of <b>$400 or more</b> in a year mean you file Schedule C and Schedule SE and pay self-employment tax; quarterly estimated payments may apply. Stripe's standard rate for domestic cards is <b>2.9% + 30¢</b> per successful transaction, so a $350 fix nets about $339.55. Keep every receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. This page is not tax advice.</p>
+    <h3>Sales tax and the $5,000 line</h3>
+    <p>Fixes, sessions, and rescues are services — Idaho does not tax them. The Advent PDF is different: Idaho treats a digital book the buyer keeps as taxable goods, at <b>6%</b>. What saves you the paperwork is the <b>small seller exemption</b> (in force since July 2025): an Idaho resident selling as a sole proprietor with <b>$5,000 or less</b> in cumulative gross sales in the current and previous calendar year needs no seller's permit and collects no sales tax. Every plan on this page fits under that line in 2026 unless the stretch cases all land at once. If the ledger passes $5,000, you have thirty days to get a free seller's permit and start collecting 6% from Idaho buyers of the PDF — or move the PDF to a merchant of record that collects it for you. Boise licenses businesses by activity (food, taxis, tree work); none of these five is on the list.</p>
     <h3>Your name on the invoice</h3>
     <p>Invoice under your own legal name and you need no filing to begin. If you trade under a name that isn't yours ("One-Fix Friday" on a Stripe page counts), Idaho requires a Certificate of Assumed Business Name with the Secretary of State: <b>$25 filed online</b> through SOSBiz, $45 on paper, no renewal. An LLC can wait until something has paid three times.</p>
-    <p class="note" style="margin-top:-6px">Checked 6 Sep 2026: <a href="https://stripe.com/us/pricing">Stripe pricing</a> · <a href="https://sos.idaho.gov/business-forms/">Idaho Secretary of State, business forms</a> · <a href="https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center">IRS self-employed tax center</a>. Rates change; the links don't.</p>
+    <p class="note" style="margin-top:-6px">Checked 6–7 Sep 2026: <a href="https://stripe.com/us/pricing">Stripe pricing</a> · <a href="https://sos.idaho.gov/business-forms/">Idaho Secretary of State, business forms</a> · <a href="https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center">IRS self-employed tax center</a> · <a href="https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/">Idaho Tax Commission, small seller exemption</a>. Sources for every row are in <a href="#checked">What's checked</a>. Rates change; the links don't.</p>
     <h3>The employer line</h3>
     <p>Read your own agreements once — outside work, conflicts, confidentiality, invention assignment. Do it yourself; don't paste them anywhere. If a plan sits in a grey area, one written question before the first paid job. Until you have a written answer, treat insurance, benefits, HR, staffing, and financial services as off-limits buyers, and keep every artifact on your own devices and accounts.</p>
     <h3>The family gate</h3>
@@ -573,7 +592,7 @@ const PLANS = [
   what:'One fix, shipped: a mobile booking path that works, click-to-call above the fold, an FAQ that answers the five questions their reviews keep asking, a review-reply library in their voice, fixed hours/photos/services on the Google Business Profile, or a one-page landing for their best service. Plus a ninety-second before/after screen recording they can watch on their phone.',
   why:'You direct coding agents like a crew chief — this repository is the proof. An agency quotes weeks and four figures for what you can ship in a two-hour block — that is the pitch, and you should say it as your experience, not as a statistic. And you write copy that sounds like a person, which is the whole difference on a phone screen. The Friction Audit you already designed in your notes is the pitch; this just charges for the fix instead of the report.',
   weeks:[
-    ['1','4–10 Sep','Set up a Stripe Payment Link for $350 (ten minutes). Save the three scripts to your phone. From Google Maps, list twenty businesses with 3.5–4.6 stars and a website that annoys you on a phone. Record the first five sixty-second phone videos — you, trying to book, narrating — and send them.','a'],
+    ['1','4–10 Sep','Set up a Stripe Payment Link for $350 (ten minutes). Save the three scripts to your phone. From Google Maps, list twenty businesses with 3.5–4.6 stars and a website that annoys you on a phone. Record the first five sixty-second phone videos — you, trying to book, narrating — and send them. If you are reading this after 10 Sep, this is still the first job — do it this weekend before sending Week 2\'s five.','a'],
     ['2','11–17 Sep','Send five more. Reply to everyone within a day. First sale: build Thursday, deliver Friday with the before/after video. Ask for one sentence you can quote.','a'],
     ['3','18–24 Sep','Send five. Deliver. Post the before/after once, with permission — one sentence, no hashtags.','a'],
     ['4','25 Sep–1 Oct','Send five. Deliver. If anyone says "we also have this problem with quotes / scheduling / new hires" — that is Plan V. Write it down.','a'],
@@ -636,7 +655,7 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
   weeks:[
     ['1','4–10 Sep','Choose twenty-eight sayings from data/paths.js and lib/curated.js. Write nothing new yet.','a'],
     ['2','11–17 Sep','Draft the reflections — one line each, the app\'s voice. Lay out the PDF from the app\'s print and broadside styles. One evening.','a'],
-    ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 link with file delivery (Stripe or Lemon Squeezy) and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.','a'],
+    ['3','18–24 Sep','Second pass: type, cover, colophon. Export. Create the $12 Stripe Payment Link, set its confirmation to redirect to an unlisted download page, and test-buy it yourself. Put the app on a real URL — Pages already works; a domain is optional.','a'],
     ['4','25 Sep–1 Oct','Make four Advent share cards (the card code exists) and one face-free vertical video: hands, paper, one red sentence. Save them. Schedule nothing.','a'],
     ['5','2–8 Oct','Message five small-group leaders: a free copy for their group in exchange for telling people where it came from when it opens. Then set 1 Nov to happen without you: the $12 link is already live, the launch post is scheduled, the leaders have their copies. Close the laptop.','a'],
     ['6–9','9 Oct–5 Nov','Baby. Nothing. Pages stays up. On 1 Nov the scheduled post goes out and pre-orders open on their own — a live link is not a working hour.','b'],
@@ -649,7 +668,7 @@ Two things I noticed and didn't touch: [A], [B]. If one of those is keeping you 
     'Twenty-eight sayings picked (existing corpus only; KJV, public domain).',
     'Twenty-eight one-line reflections written.',
     'PDF built — paper, ink, crimson — phone-readable and A5-printable.',
-    '$12 link with file delivery live; test-bought once.',
+    '$12 link live, confirmation redirects to the download page; test-bought once.',
     'App on a real URL and installable.',
     'Four share cards and one vertical video saved.',
     'Five small-group leaders messaged with the free-copy offer.',
@@ -681,7 +700,7 @@ If one of these sentences lands, send it to one person — not a feed.
   kill:'Fewer than three pre-orders by 15 Nov → deliver to whoever bought, don\'t build the year, keep the words free, point everything at Lent.',
   risk:{when:'15 Nov', hours:'≈ 10 h', cash:'$0–12', cap:'The September hours produce a finished PDF either way; if nobody buys, it becomes the free Lent path. The only money is an optional domain. The year gate is never built on hope — ten sales first.'},
   clean:'Entirely yours. Public-domain KJV. No employer overlap. Keep "software, not a person" and 988 in the product.',
-  tools:'Stripe or Lemon Squeezy ($0/month) · GitHub Pages ($0) · a domain ($12/yr, optional) · the app\'s own share-card and print code.',
+  tools:'Stripe Payment Links (same account as Plan I; confirmation redirect delivers the file) · GitHub Pages ($0) · a domain ($12/yr, optional) · the app\'s own share-card and print code. Lemon Squeezy only if the ledger passes $5,000 and you want a merchant of record.',
   tonight:{0:'Nothing is the move. Pages is up. Go to bed.',15:'Pick three sayings for Advent from data/paths.js.',45:'Write seven one-line reflections in the app\'s voice.',90:'Lay out the PDF from the app\'s print styles. Export a first draft.'}
 },
 {
@@ -889,7 +908,11 @@ const LEDGER = [
   {c:'Every weekday named in the calendar (Fri 4 Sep, Mon 7 Sep, Wed 11 Nov, Thu 26 Nov, Thu 3 Dec, Sat 26 Dec…)', l:'Verified', s:['Computed by execution (system date arithmetic) during the build'], d:CHECKED, w:'A week boundary is off by a day.'},
   {c:'General interview coaches list about $150–400 an hour; one coach\'s own rate card shows $150', l:'Sourced', s:[['The Interview Professional — pricing','https://theinterviewprofessional.com/interview-coaching-cost/'],['Black on the Job — mock interview coach cost, 2026','https://www.blackonthejob.co/blog/mock-interview-coach-cost']], d:CHECKED, w:'If the floor is lower, $149 founding is still a fair price; the "under the market" line softens.'},
   {c:'Storyworth: weekly prompts, write or record, hardcover book, from $59. Remento: self-recorded answers, QR voice playback in a book, $99', l:'Verified', s:[['Storyworth','https://welcome.storyworth.com/'],['Remento','https://www.remento.co/']], d:CHECKED, w:'The Capsule\'s differentiation is the interviewer, the edit, and the music — not "voice", which Remento already sells. The pitch is written that way.'},
-  {c:'Lemon Squeezy hosts files, delivers them after purchase, and acts as merchant of record', l:'Verified', s:[['Lemon Squeezy docs — adding products','https://docs.lemonsqueezy.com/help/products/adding-products']], d:CHECKED, w:'Use Stripe Payment Links with a delivery email instead; one evening.'},
+  {c:'A Stripe Payment Link can show a custom confirmation message or redirect to a URL after payment, and send a receipt — enough to deliver a PDF', l:'Verified', s:[['Stripe docs — after a payment link payment','https://docs.stripe.com/payment-links/post-payment']], d:'7 Sep 2026', w:'Plan II needs a second tool for delivery; one evening.'},
+  {c:'Lemon Squeezy still takes new merchants but its roadmap is frozen and it is being merged into Stripe Managed Payments over 12–18 months', l:'Sourced', s:[['Lemon Squeezy — 2026 update','https://www.lemonsqueezy.com/blog/2026-update'],['DesignRevision, 2026','https://designrevision.com/blog/stripe-vs-lemonsqueezy']], d:'7 Sep 2026', w:'It is only the fallback past the $5,000 line; if it closes, Stripe Managed Payments is the same idea under the parent. Recheck before Lent.'},
+  {c:'Idaho sales tax is 6%; it applies to a digital book the buyer keeps permanently, not to services or electronically delivered custom software', l:'Verified', s:[['Idaho Tax Commission — basics guide','https://tax.idaho.gov/taxes/sales-use/online-guide/'],['Idaho Tax Commission — collecting sales tax','https://tax.idaho.gov/taxes/sales-use/guides-for-certain-groups/retailers/collecting/'],['Idaho Code §63-3616','https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3616/']], d:'7 Sep 2026', w:'Only the Advent PDF is affected, and only past the $5,000 line.'},
+  {c:'Idaho small seller exemption (since 1 Jul 2025): a resident sole proprietor with cumulative gross sales of $5,000 or less in the current and previous calendar year needs no seller\'s permit and collects no sales tax; past $5,000, a permit within 30 days. Permits are free.', l:'Verified', s:[['Idaho Tax Commission — small seller exemption','https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/'],['Tax Commission press release, 17 Jul 2025','https://tax.idaho.gov/pressrelease/new-law-means-idaho-small-sellers-wont-have-to-charge-sales-tax/'],['House Bill 144 (2025)','https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2025/legislation/H0144.pdf']], d:'7 Sep 2026', w:'The PDF needs a permit and 6% collected from Idaho buyers from the first sale — or a merchant of record. One evening, not a plan change.'},
+  {c:'Boise licenses businesses by activity (food, taxi, tree work, security…) and has no general business license; web fixes and coaching are not on the list', l:'Sourced', s:[['City of Boise — small business start-up guide (PDF)','https://www.cityofboise.org/media/3862/pds-smallbusinessstartup-onlineguide.pdf']], d:'7 Sep 2026', w:'One call to the City Clerk (208-972-8150) settles it.'},
   {c:'Boise State University has a Veteran Services Center (a benefits and transition office, 208-426-3744)', l:'Verified', s:[['Boise State — Veteran Services','https://www.boisestate.edu/veterans/']], d:CHECKED, w:'It is a benefits office, so the ask is a referral or a flyer, not a partnership. If they decline, the transition group is the second door.'},
   {c:'"An agency quotes weeks and four figures" for a small-business web fix', l:'Knowledge', s:['No source; your experience of the market'], d:'—', w:'Say it as your experience in the pitch. Never quote it as a statistic.'},
   {c:'Conversion assumptions: ~1 in 13 videos → a paid fix; 25 PDFs; 2 capsules; 5 sessions; 1 Rescue', l:'Estimated', s:['No data yet. The first twenty sends are the data.'], d:'—', w:'Everything on this page. The kill rules cap what finding out costs.'},
@@ -961,6 +984,84 @@ const dayIndex = d => Math.floor((d - START)/86400000) + 1;
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),1600); }
 function planById(id){ return PLANS.find(p=>p.id===id) || PLANS[0]; }
 function doneCount(p){ const c=S.checks[p.id]||{}; return p.checks.filter((_,i)=>c[i]).length; }
+function hoursLeftBefore(){
+  const now = new Date(); now.setHours(0,0,0,0);
+  const b = babyDate();
+  if(now >= b) return 0;
+  return Math.max(0, ((b - now)/86400000)/7 * WEEK_HOURS);
+}
+function weekNum(d){
+  const now = d ? new Date(d) : new Date(); now.setHours(0,0,0,0);
+  if(now < START) return 0;
+  if(now > END) return 14;
+  return Math.min(13, Math.ceil(dayIndex(now)/7));
+}
+function week1Shipped(){
+  const c = S.checks.fix || {};
+  return !!(c[1] && c[2] && c[3] && c[4]); /* Stripe, scripts, list, five videos */
+}
+function tonightLine(p, min){
+  const w = weekNum();
+  if(p.id==='fix' && !week1Shipped() && w>=2 && w<=5){
+    return ({
+      0:'Nothing is the move. Go to bed. The five videos wait until you have forty-five minutes.',
+      15:'Open Google Maps. Write one name and the one friction you saw on a phone.',
+      45:'Record and send two sixty-second videos. That is the whole move.',
+      90:'Stripe link if it is not live. Then five videos, sent, before you close the laptop.'
+    })[min];
+  }
+  return p.tonight[min];
+}
+function renderThisWeek(){
+  const el = $('#now'); if(!el) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const w = weekNum(now);
+  const mv = (now < START || now > END) ? 'a' : moveOf(now);
+  const B = budget();
+  if(w===0){
+    el.classList.remove('late');
+    el.innerHTML = `<div class="kicker">The decision</div><h2>Not yet. Begins Friday 4 Sep.</h2><p>Until then: read the six rules. Pick the engine. Do nothing that spends Thursday.</p>`;
+    return;
+  }
+  if(w===14){
+    el.classList.remove('late');
+    el.innerHTML = `<div class="kicker">The decision</div><h2>Ninety days done.</h2><p>Open the ledger. 30% of whatever is there belongs in the tax jar. Point Advent at Lent.</p>`;
+    return;
+  }
+  if(mv==='b'){
+    el.classList.remove('late');
+    el.innerHTML = `<div class="kicker">The decision · Week ${w} · Baby</div><h2>Nothing is the move.</h2><p>Links stay live. Auto-replies talk. Whatever minutes you have belong upstairs. The second Build begins when both of you say yes.</p>`;
+    return;
+  }
+  const late = on('fix','a') && !week1Shipped() && w>=2 && w<=5;
+  const tasks = weekTasks(w, mv);
+  let body;
+  if(late){
+    body = `<p class="late"><b>Catch-up.</b> Week 1's five videos are still the job. Do not send this week's five until those left the phone.</p>
+      <ol>
+        <li>Stripe $350 Payment Link — ten minutes, if it is not live.</li>
+        <li>Three scripts onto the phone.</li>
+        <li>Twenty names from Google Maps.</li>
+        <li>Five sixty-second videos, sent tonight or Saturday.</li>
+      </ol>`;
+  } else {
+    const lines = tasks.length ? tasks.map(t=>`<li><span class="red">${t[0]}</span> ${esc(t[1])}</li>`).join('') : '<li>Nothing ticked in Does it fit? Tick One-Fix and Advent.</li>';
+    body = `<p>Engine is One-Fix. Advent rides along. Two engines is none.</p><ol>${lines}</ol>`;
+  }
+  el.classList.toggle('late', late);
+  el.innerHTML = `<div class="kicker">The decision · Week ${w} of 13 · ${esc(MOVES[mv].name)}</div>
+    <h2>${late ? 'Last week is still this week.' : 'This is the week.'}</h2>
+    ${body}
+    <div class="act">
+      <span class="sc">What stops it</span>
+      Forty videos and zero sales by 2 Oct → stop or change the trade. A week that steals sleep ends the plan for the week.
+    </div>
+    <div class="pay">
+      <div><span class="sc">Your base</span><div class="v">${money(B.base)}</div></div>
+      <div><span class="sc">Floor</span><div class="v">${money(B.floor)}</div></div>
+      <div><span class="sc">Hours left before the birth</span><div class="v">${h1(hoursLeftBefore())} of ${h1(B.avail.a)}</div></div>
+    </div>`;
+}
 
 /* ---------------- Counter ---------------- */
 function renderCounter(){
@@ -1031,7 +1132,7 @@ $('#bud').addEventListener('change', e=>{
   const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
   S.stack[cb.dataset.p] = S.stack[cb.dataset.p] || {};
   S.stack[cb.dataset.p][cb.dataset.m] = cb.checked;
-  save(); renderBudget(); renderLedger(); renderCal();
+  save(); renderBudget(); renderThisWeek(); renderLedger(); renderCal();
   const again = $(`#bud input[data-p="${cb.dataset.p}"][data-m="${cb.dataset.m}"]`); if(again) again.focus();
 });
 
@@ -1045,7 +1146,7 @@ function renderTonight(){
     $('#tonight-move').innerHTML = `<small>Baby · every plan</small>Nothing is the move. The links are live. Whatever minutes you have belong upstairs.`;
     return;
   }
-  $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}</small>${esc(p.tonight[S.tonightMin])}`;
+  $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}${week1Shipped()||p.id!=='fix'?'':' · catch-up'}</small>${esc(tonightLine(p, S.tonightMin))}`;
 }
 $('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
 $('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightMin=Number(b.dataset.m); save(); renderTonight(); });
@@ -1104,7 +1205,7 @@ $('#plan').addEventListener('change', e=>{
   const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
   const p = planById(S.active); S.checks[p.id] = S.checks[p.id]||{};
   if(cb.checked) S.checks[p.id][cb.dataset.i] = true; else delete S.checks[p.id][cb.dataset.i];
-  save(); renderStrip();
+  save(); renderStrip(); renderThisWeek(); renderTonight();
   const done = doneCount(p);
   $('#plan .progress i').style.width = (done/p.checks.length*100)+'%';
   $$('#plan .block h4').forEach(h=>{ if(/^Checklist/.test(h.textContent)) h.textContent = `Checklist · ${done} of ${p.checks.length}`; });
@@ -1180,7 +1281,7 @@ $('#cal').addEventListener('toggle', e=>{
 }, true);
 window.addEventListener('beforeprint', ()=>{ printing=true; $$('#cal details.tasks').forEach(d=>d.open=true); });
 window.addEventListener('afterprint', ()=>{ $$('#cal details.tasks').forEach(d=>d.open=!!S.openWeeks); printing=false; });
-$('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); renderMovements(); renderCounter(); renderTonight(); renderBudget(); renderCompare(); renderLedger(); });
+  $('#baby').addEventListener('change', e=>{ if(!e.target.value) return; S.baby=e.target.value; save(); renderCal(); renderPlan(); renderMovements(); renderCounter(); renderTonight(); renderThisWeek(); renderBudget(); renderCompare(); renderLedger(); });
 
 /* ---------------- Ledger ---------------- */
 function renderLedger(){
@@ -1219,7 +1320,7 @@ const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting)
 $$('main section').forEach(s=>io.observe(s));
 
 /* ---------------- Go ---------------- */
-function renderAll(){ renderCounter(); renderMovements(); renderBudget(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); renderChecked(); }
+function renderAll(){ renderCounter(); renderMovements(); renderBudget(); renderThisWeek(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); renderChecked(); }
 renderAll();
 })();
 </script>

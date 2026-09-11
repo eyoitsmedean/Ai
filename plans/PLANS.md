@@ -1,12 +1,43 @@
 # Ninety Days — Build. Baby. Build.
 
-Plain-text twin of [`plans/index.html`](./index.html). Open the HTML for the interactive version (checklists, ledger, calendar, scripts with copy buttons; everything saved on your device). Read this one on GitHub or print it.
+**Ninety Days — the decision — v2 — 11 Sep 2026**
 
-**Three movements.** Build (4 Sep → the birth, about 5 weeks): sell, deliver, close the queues. Baby (birth + 30 days): zero optional hours; links stay live. Build (→ 3 Dec, about 3–4 weeks): re-open into Veterans Day and Advent. The playbook assumes the birth around 10 Oct; the HTML moves the phases when you set the real date.
+Plain-text twin of [`plans/index.html`](./index.html). Open the HTML for checklists, ledger, calendar, and scripts (saved on the device). Read this one on GitHub or print it.
 
-**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Real hours:** about 39 of a nominal 59 (4.5/week × 13 weeks, minus the 31 Baby days) · **Base case, recommended stack (I + II):** $1,350, stretch $4,000 · **Floor:** $350
+| | |
+| --- | --- |
+| **Purpose** | Decide this week's yes and no, then do the next hour. |
+| **Owner** | Dean |
+| **Status** | Live. Week 2 of 13 began Fri 11 Sep 2026. |
+| **Updated** | 11 Sep 2026 |
+| **What changed** | The decision sits on the first screen. Week 1 is behind you — catch up this weekend if the five videos did not go out. Stripe alone delivers the Advent PDF. Idaho's $5,000 small-seller line is now a rule. |
 
 Everything here is an estimate, not a promise. Compliments are not demand. Only the ledger counts.
+
+---
+
+## The decision
+
+**Goal.** Earn from what you already have — the Red Letter corpus, the agent-directing skill, the Marine-to-director story — between Fri 4 Sep and Thu 3 Dec 2026, inside 4.5 real hours a week and a newborn's arrival, without touching your employer's domain.
+
+**Where you are.** Friday 11 Sep 2026. Day 8 of 90. Week 2 of 13. First Build (until the birth). About 23 optional hours remain before a 10 Oct birth, then 31 Baby days at zero, then about 15.5 hours after. `[calc]` from 4.5 h × Build days.
+
+**The gap.** The window has started. Week 1's job was a Stripe link, three scripts, twenty names, and five videos sent. If those left the phone, you are on plan. If they did not, that is this weekend — not a new plan.
+
+**The call.** Run **I · One-Fix Friday** as the engine. Finish **II · Red Letter — Advent** in September and let 1 Nov launch itself. Do not add the Voice Capsule beside Advent. Do not pitch Workflow Rescue. The Civilian Interview only replaces One-Fix if you would rather talk to veterans than plumbers.
+
+**This week (11–17 Sep).**
+
+1. If last week's five videos went out: send five more. Reply to everyone within a day. First sale builds Thursday, delivers Friday. Ask for one sentence.
+2. If they did not: Stripe $350 link, three scripts on the phone, twenty names from Maps, five sixty-second videos by Sunday. Week 2's five wait until those left the phone.
+3. Advent, in the leftover Thursday: draft the one-line reflections and lay out the PDF from the app's print styles. Write nothing new. One evening.
+4. Sunday fifteen: ledger (even if it is zero). Next week's five names. Close the laptop.
+
+**What it pays.** Recommended stack (I + II): floor **$350** · base **$1,350** · stretch **$4,000**. Hours in the window ≈ 36. That is about **$37/h** at base, **$111/h** at stretch. `[calc]` $1,350 ÷ 36 h; $4,000 ÷ 36 h. Conversion is a guess; the kill rules cap what finding out costs.
+
+**What stops it.** Forty videos and zero sales by **2 Oct** → stop One-Fix or change the trade. Family gate: a week that steals sleep or moves load onto your partner ends that plan for the week. The household is the judge, not the ledger.
+
+**How you will know.** A dollar in the ledger. Five videos that left the phone this week (or last week's five, if those are still the job). 30% of every dollar in the tax jar the day it arrives. Nothing after 10 pm if it costs sleep.
 
 ---
 
@@ -27,6 +58,12 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 | Thursday | 90 | Build or deliver. One thing, finished. |
 | Saturday | 60 | Finish and send. Ask for the sentence. |
 | Sunday | 15 | Ledger. Next week's five names. Close the laptop. |
+
+### Three movements
+
+Build (4 Sep → the birth, about 5 weeks): sell, deliver, close the queues. Baby (birth + 30 days): zero optional hours; links stay live. Build (→ 3 Dec, about 3–4 weeks): re-open into Veterans Day and Advent. The playbook assumes the birth around 10 Oct; the HTML moves the phases when you set the real date.
+
+**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Real hours:** about 39 of a nominal 59 (4.5/week × 13 weeks, minus the 31 Baby days) · **Floor:** $350
 
 ---
 
@@ -99,6 +136,8 @@ The currency at risk is hours, not dollars — every plan spends almost no money
 
 **Build.** W1 Stripe link, three scripts, list of twenty, first five phone videos sent · W2 five more, first sale → build Thu, deliver Fri, ask for a sentence · W3 five, deliver, post one before/after · W4 five, deliver, write down any "we also have this problem with…" (that is Plan V) · W5 last sends, deliver everything, auto-reply on **Baby.** W6–9 nothing. **Build.** W10 re-open, five, Small Business Saturday hook · W11–13 five a week, deliver Fridays, no new work after 27 Nov unless it ships by 3 Dec.
 
+If you are reading this after 10 Sep and Week 1 did not ship: do W1 this weekend. Do not send W2's five until those left the phone.
+
 **Kill rule.** Forty videos sent and zero sales by 2 Oct → stop. Change the buyer (a different trade) or shelve it.
 
 **Tools.** Stripe Payment Links · iPhone screen recording · Cursor. Cost ≈ $0.
@@ -113,11 +152,11 @@ The currency at risk is hours, not dollars — every plan spends almost no money
 - **What they get:** "Advent with His words" — 28 days (Sun 29 Nov → Sat 26 Dec), one saying, one line of reflection, one blank line. PDF for phone and print. The same content becomes an in-app Advent path (the church-year retint exists). If the PDF sells, the Year: $59.99 unlocks the live Advisor.
 - **Why you:** nobody owns "the red letters" as a premium brand — you wrote that. Corpus, design language, forty-day path, share cards, and five ad scripts already exist. Only the thing with a price is missing. Advent rehearses Lent (Ash Wednesday 10 Feb 2027), which your research calls the payday.
 
-**Build.** W1 pick 28 sayings from `data/paths.js` and `lib/curated.js` · W2 reflections, lay out the PDF from the app's print styles · W3 type pass, export, $12 link with file delivery (test-buy it), app on a real URL · W4 four share cards, one face-free vertical video, saved · W5 message five small-group leaders (free copies for sharing); then set 1 Nov to happen without you — link live, launch post scheduled, leaders holding their copies. **Baby.** W6–9 nothing; on 1 Nov the scheduled post goes out and pre-orders open on their own (a live link is not a working hour). **Build.** W10 first evening back: answer replies, post the video and one card · W11 one card, one post · W12 22 Nov deliver; Black Friday post, no discount · W13 Advent begins 29 Nov, in-app path live; ≥10 PDFs → build the year gate in December, else stay free and aim at Lent.
+**Build.** W1 pick 28 sayings from `data/paths.js` and `lib/curated.js` · W2 reflections, lay out the PDF from the app's print styles · W3 type pass, export, $12 Stripe Payment Link whose confirmation redirects to an unlisted download page (test-buy it), app on a real URL · W4 four share cards, one face-free vertical video, saved · W5 message five small-group leaders (free copies for sharing); then set 1 Nov to happen without you — link live, launch post scheduled, leaders holding their copies. **Baby.** W6–9 nothing; on 1 Nov the scheduled post goes out and pre-orders open on their own (a live link is not a working hour). **Build.** W10 first evening back: answer replies, post the video and one card · W11 one card, one post · W12 22 Nov deliver; Black Friday post, no discount · W13 Advent begins 29 Nov, in-app path live; ≥10 PDFs → build the year gate in December, else stay free and aim at Lent.
 
 **Kill rule.** Fewer than three pre-orders by 15 Nov → deliver to whoever bought, don't build the year, keep the words free, point everything at Lent.
 
-**Tools.** Stripe or Lemon Squeezy · GitHub Pages · optional $12 domain · the app's share-card and print code.
+**Tools.** Stripe Payment Links (the same account as Plan I; confirmation redirect delivers the file) · GitHub Pages · optional $12 domain · the app's share-card and print code. Lemon Squeezy is the fallback only if the ledger passes $5,000 and you want a merchant of record for the PDF — its roadmap is frozen and it is merging into Stripe Managed Payments. Recheck before Lent.
 
 ---
 
@@ -171,7 +210,8 @@ The currency at risk is hours, not dollars — every plan spends almost no money
 
 - **Waterfall.** Every dollar splits the same day: 30% to a tax jar, the rest to the household buffer. Nothing speculative. Nothing reinvested until a plan has paid twice. Allowed purchases in ninety days: a domain (~$12) and, if needed, a call recorder (~$10).
 - **Tax.** Side income is taxable from the first dollar. Net self-employment earnings of $400 or more in a year mean Schedule C, Schedule SE, and self-employment tax; estimated payments may apply ([IRS](https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center)). Stripe's standard domestic-card rate is 2.9% + 30¢ per successful transaction ([Stripe pricing](https://stripe.com/us/pricing)), so a $350 fix nets about $339.55. Keep every receipt and a one-line log of hours. Ask a CPA before year-end if the ledger passes $2,000. Not tax advice.
-- **Your name.** Invoice under your legal name and you need no filing to begin. A trade name in Idaho ("One-Fix Friday" on a Stripe page counts) needs a Certificate of Assumed Business Name with the Secretary of State: $25 online through SOSBiz, $45 on paper, no renewal ([Idaho SOS business forms](https://sos.idaho.gov/business-forms/)). An LLC waits until something has paid three times. Facts checked 6 Sep 2026.
+- **Sales tax and the $5,000 line.** Fixes, sessions, and rescues are services — Idaho does not tax them. The Advent PDF is different: Idaho taxes a digital book the buyer keeps, at 6% ([Idaho Tax Commission basics](https://tax.idaho.gov/taxes/sales-use/online-guide/); [Idaho Code §63-3616](https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3616/)). What saves you the paperwork is the **small seller exemption** (in force since 1 July 2025): an Idaho resident selling as a sole proprietor with **$5,000 or less** in cumulative gross sales in the current and previous calendar year needs no seller's permit and collects no sales tax ([Idaho Tax Commission](https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/); [press release, 17 Jul 2025](https://tax.idaho.gov/pressrelease/new-law-means-idaho-small-sellers-wont-have-to-charge-sales-tax/)). Every plan on this page fits under that line in 2026 unless the stretch cases all land at once. If the ledger passes $5,000, you have thirty days to get a free seller's permit and start collecting 6% from Idaho buyers of the PDF — or move the PDF to a merchant of record. Boise licenses businesses by activity (food, taxis, tree work); none of these five is on the list ([City of Boise start-up guide](https://www.cityofboise.org/media/3862/pds-smallbusinessstartup-onlineguide.pdf)).
+- **Your name.** Invoice under your legal name and you need no filing to begin. A trade name in Idaho ("One-Fix Friday" on a Stripe page counts) needs a Certificate of Assumed Business Name with the Secretary of State: $25 online through SOSBiz, $45 on paper, no renewal ([Idaho SOS business forms](https://sos.idaho.gov/business-forms/)). An LLC waits until something has paid three times. Facts checked 6–7 Sep 2026.
 - **Employer line.** Read your agreements yourself; paste them nowhere. Grey area → one written question before the first paid job. Until answered, insurance, benefits, HR, staffing, and finance are off-limits buyers.
 - **Family gate.** If a week's work steals sleep or quietly moves load onto your partner, it stops. "Nothing this week" is a valid entry.
 
@@ -195,7 +235,11 @@ Every claim this playbook leans on, with how much to trust it. **Verified** — 
 | Every weekday named in the calendar (Fri 4 Sep, Mon 7 Sep, Wed 11 Nov, Thu 26 Nov, Thu 3 Dec, Sat 26 Dec…) | Verified | Computed by execution (system date arithmetic) during the build | 6 Sep 2026 | A week boundary is off by a day. |
 | General interview coaches list about $150–400 an hour; one coach's own rate card shows $150 | Sourced | [The Interview Professional](https://theinterviewprofessional.com/interview-coaching-cost/); [Black on the Job, 2026](https://www.blackonthejob.co/blog/mock-interview-coach-cost) | 6 Sep 2026 | If the floor is lower, $149 founding is still fair; the "under the market" line softens. |
 | Storyworth: weekly prompts, write or record, hardcover book, from $59. Remento: self-recorded answers, QR voice playback in a book, $99 | Verified | [Storyworth](https://welcome.storyworth.com/); [Remento](https://www.remento.co/) | 6 Sep 2026 | The Capsule's edge is the interviewer, the edit, and the music — not "voice", which Remento already sells. The pitch is written that way. |
-| Lemon Squeezy hosts files, delivers them after purchase, and acts as merchant of record | Verified | [Lemon Squeezy docs](https://docs.lemonsqueezy.com/help/products/adding-products) | 6 Sep 2026 | Use Stripe Payment Links with a delivery email instead; one evening. |
+| A Stripe Payment Link can show a custom confirmation or redirect to a URL after payment, and send a receipt — enough to deliver a PDF | Verified | [Stripe docs — after a payment](https://docs.stripe.com/payment-links/post-payment) | 7 Sep 2026 | Plan II needs a second tool for delivery; one evening. |
+| Lemon Squeezy still takes new merchants but its roadmap is frozen and it is merging into Stripe Managed Payments over 12–18 months | Sourced | [Lemon Squeezy 2026 update](https://www.lemonsqueezy.com/blog/2026-update); [DesignRevision, 2026](https://designrevision.com/blog/stripe-vs-lemonsqueezy) | 7 Sep 2026 | Fallback only past the $5,000 line. Recheck before Lent. |
+| Idaho sales tax is 6%; it applies to a digital book the buyer keeps permanently, not to services | Verified | [Idaho Tax Commission basics](https://tax.idaho.gov/taxes/sales-use/online-guide/); [Idaho Code §63-3616](https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3616/) | 7 Sep 2026 | Only the Advent PDF is affected, and only past the $5,000 line. |
+| Idaho small seller exemption (since 1 Jul 2025): resident sole proprietor, $5,000 or less in the current and previous calendar year → no permit, no collection; past $5,000, a free permit within 30 days | Verified | [Idaho Tax Commission](https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/); [press release, 17 Jul 2025](https://tax.idaho.gov/pressrelease/new-law-means-idaho-small-sellers-wont-have-to-charge-sales-tax/); [HB 144 (2025)](https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2025/legislation/H0144.pdf) | 7 Sep 2026 | The PDF needs a permit and 6% from Idaho buyers from the first sale — or a merchant of record. One evening, not a plan change. |
+| Boise licenses businesses by activity (food, taxi, tree work…) and has no general business license; web fixes and coaching are not on the list | Sourced | [City of Boise start-up guide (PDF)](https://www.cityofboise.org/media/3862/pds-smallbusinessstartup-onlineguide.pdf) | 7 Sep 2026 | One call to the City Clerk (208-972-8150) settles it. |
 | Boise State University has a Veteran Services Center (a benefits and transition office, 208-426-3744) | Verified | [Boise State Veteran Services](https://www.boisestate.edu/veterans/) | 6 Sep 2026 | It is a benefits office, so the ask is a referral or a flyer, not a partnership. The transition group is the second door. |
 | "An agency quotes weeks and four figures" for a small-business web fix | Knowledge | No source; your experience of the market | — | Say it as your experience in the pitch. Never quote it as a statistic. |
 | Conversion assumptions: ~1 in 13 videos → a paid fix; 25 PDFs; 2 capsules; 5 sessions; 1 Rescue | Estimated | No data yet. The first twenty sends are the data. | — | Everything on this page. The kill rules cap what finding out costs. |
@@ -213,7 +257,7 @@ The system of record for this playbook. Decisions here are settled unless you ch
 
 **Mission.** Earn from what you already have — the Red Letter corpus and design, the agent-directing skill, the Marine-to-director story — in the ninety days from 4 Sep to 3 Dec 2026, inside 4.5 real hours a week and a newborn's arrival, without touching your employer's domain.
 
-**The finished thing.** `plans/index.html` — an interactive playbook (checklists, ledger, calendar, budget panel; state in `localStorage` key `ninety.v1`), served to a phone with `npm run plans` (port 3010, same Wi-Fi); this file as its plain-text twin. Not published by the Pages workflow.
+**The finished thing.** `plans/index.html` — an interactive playbook (checklists, ledger, calendar, budget panel, this-week card; state in `localStorage` key `ninety.v1`), served to a phone with `npm run plans` (port 3010, same Wi-Fi); this file as its plain-text twin. Not published by the Pages workflow.
 
 **Decisions made.**
 - Three movements: Build (until the birth) · Baby (birth + 30 days, zero optional hours) · Build (re-open into Veterans Day and Advent).
@@ -222,18 +266,20 @@ The system of record for this playbook. Decisions here are settled unless you ch
 - Money: 30% tax jar the same day; nothing reinvested until a plan has paid twice; a domain and a call recorder are the only allowed purchases.
 - Clean room: no insurance, benefits, HR, staffing, or finance buyers until the outside-work question is answered in writing.
 - Provenance travels with the plan: every market claim carries a label; the arithmetic behind every base case is on its card; risks are priced in hours.
+- PDF delivery is Stripe confirmation-redirect, not a second merchant, until the $5,000 line.
 
 **Assumptions (yours to correct).**
 - Birth date 10 Oct 2026 — the default in the calendar; change it in the date field.
 - Week rhythm Tue 60 · Thu 90 · Sat 60 · Sun 15, from your own notes on real available time.
 - Every conversion rate and every hours-per-task estimate (labelled Estimated above).
 - That the two Build movements are the same length before and after — the calendar computes it from the date you enter.
+- That Week 1 may not have shipped; the this-week card and the catch-up line treat that as the default until the first five videos are ticked.
 
 **Open questions (only you can answer).**
 1. The real birth date.
 2. Advent or the Capsule for the second Build. Recommended default: Advent, because its hours are already sunk in September and the launch runs without you.
-3. Whether the outside-work clause needs the one written question before the first paid fix. Recommended default: ask it in Week 1, before any invoice.
+3. Whether the outside-work clause needs the one written question before the first paid fix. Recommended default: ask it in Week 1 (or this weekend), before any invoice.
 
-**Verification performed (6 Sep 2026).** Headless Chrome (rung 1 for logic, not a physical phone): budget panel fits/over cases; state survives reload; birth date moves hours, calendar, movements, ledger target; "Your week" shows the ticked plans' tasks, follows the toggles and the birth date, opens and closes as one, is remembered, opens for print; no console errors; no horizontal overflow at 390px. External facts opened at the linked sources. Weekdays checked by execution. Not verifiable by nature: the Estimated rows.
+**Verification performed (6 Sep 2026; research refresh 7 Sep 2026; rebuild 11 Sep 2026).** Headless Chrome (rung 1 for logic, not a physical phone): budget panel fits/over cases; state survives reload; birth date moves hours, calendar, movements, ledger target; "Your week" shows the ticked plans' tasks; this-week card names Week 2 and catch-up when Week 1 checks are empty. External facts opened at the linked sources. Weekdays checked by execution. Not verifiable by nature: the Estimated rows.
 
-**Next executable step.** Week 1 of Plan I — the Stripe link, three scripts on the phone, the list of twenty, five videos sent by Thursday 10 Sep.
+**Next executable step.** Tonight or Saturday of Week 2 — if the five videos are not sent, they are the whole job. If they are, send five more and answer everyone who replied.
