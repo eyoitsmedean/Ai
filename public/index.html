@@ -233,6 +233,9 @@ a.cite-badge:hover{filter:brightness(.95)}
 .scripture-verse{font-size:calc(11px * var(--scale));font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .scripture-quote{font-family:var(--font-body);font-size:calc(15px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.6}
 .scripture-ctx{font-size:calc(13px * var(--scale));color:var(--ink-muted);margin-top:8px}
+.share-verse-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 14px;margin-top:10px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--crimson);font-size:calc(12px * var(--scale));font-weight:700;cursor:pointer}
+.share-verse-btn:hover{border-color:var(--crimson)}
+.cite-badges .share-verse-btn{margin-top:0}
 .ai-p{margin-bottom:6px}
 .vcite{color:var(--gold);font-weight:600}
 .chat-input-bar{display:flex;gap:8px;padding:10px 12px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
@@ -3351,6 +3354,7 @@ function finishOnboarding() {
   try {
     lsSet('rla-onboarded', '1');
     lsSet('rla-onboarded-at', todayISO());
+    lsSet('rla-land', 'advisor');
     if (commitOn) lsSet('rla-commitment', '1');
   } catch (_) {}
   const ob = document.getElementById('onboarding');
@@ -3781,6 +3785,8 @@ async function sendChat() {
                   ? '<a class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" href="' + href + '" target="_blank" rel="noopener" title="' + title + '">' + label + ' ↗</a>'
                   : '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + title + '">' + label + '</span>';
               }).join('') + '</div>';
+              const firstShare = ev.citations.find((c) => c.verified && c.quote);
+              if (firstShare) badges += shareVerseBtn(firstShare.verse || firstShare.citation, firstShare.quote);
               if (ev.grounded != null) {
                 badges += '<p class="ground-note">' + ev.grounded + ' citation' + (ev.grounded === 1 ? '' : 's') +
                   ' grounded to verified text' + (ev.unverified ? ' · ' + ev.unverified + ' unverified' : '') + '</p>';
@@ -3988,9 +3994,27 @@ function toggleVoice() {
 document.getElementById('chat-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest?.('.share-verse-btn');
+  if (!btn) return;
+  e.preventDefault();
+  openShareCard({ verse: btn.dataset.verse, quote: btn.dataset.quote, theme: 'His words' });
+});
 
 // Public WEB chapter page with a verse anchor, e.g. https://ebible.org/eng-web/MAT06.htm#V25
 // (URL pattern and #V anchors confirmed against ebible.org on 2026-09-06).
+function shareVerseBtn(verse, quote) {
+  return '<button type="button" class="share-verse-btn" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '" aria-label="Share ' + esc(verse) + '">Share card</button>';
+}
+
+function shareLinkFor(verse) {
+  try {
+    return location.origin + '/?tab=library&ref=' + encodeURIComponent(verse || '');
+  } catch {
+    return '/?tab=library&ref=' + encodeURIComponent(verse || '');
+  }
+}
+
 function webLink(ref) {
   const m = String(ref || '').match(/^(Matthew|Mark|Luke|John)\s+(\d+):(\d+)/);
   if (!m) return '';
@@ -4023,7 +4047,8 @@ function formatAI(text) {
           }
           parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
             '</div><div class="scripture-quote">"' + esc(q) + '"</div>' +
-            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
+            (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') +
+            shareVerseBtn(verse, q) + '</div>');
           i = j; continue;
         }
       }
@@ -4427,7 +4452,8 @@ function viralShareCaption() {
     shareState.quote +
     '" — ' +
     v +
-    '\n\nVerified red letters · World English Bible\nOpen Red Letter Advisor → sit with what He actually said.'
+    '\n\nVerified red letters · World English Bible\nSit with what He actually said → ' +
+    shareLinkFor(v)
   );
 }
 
@@ -4780,7 +4806,28 @@ function applyAppUpdate() {
 function routeFromQuery() {
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
+  const ref = (params.get('ref') || '').replace(/\+/g, ' ').trim();
   if (tab && TABS.includes(tab)) goTab(tab);
+  else if (ref) goTab('library');
+  if (ref) openSharedRef(ref);
+}
+
+async function openSharedRef(raw) {
+  const ref = String(raw || '').trim();
+  if (!ref) return;
+  try {
+    if (!libAllPassages.length) await loadLibrary();
+  } catch {}
+  const needle = ref.toLowerCase();
+  const hit = (libAllPassages || []).find((p) => {
+    const v = String(p.verse || '').toLowerCase();
+    return v === needle || v.startsWith(needle) || needle.startsWith(v.split(/[–-]/)[0]);
+  });
+  if (hit?.text) {
+    openShareCard({ verse: hit.verse, quote: hit.text, theme: hit.theme || 'His words' });
+    return;
+  }
+  showToast('Looking up ' + ref);
 }
 
 /* ═══ INIT ═══ */
@@ -4800,7 +4847,7 @@ function initApp() {
   renderHarvest();
   renderThemeGrid();
   wireOnlineStatus();
-  goTab('today');
+  goTab(ls('rla-land') === 'advisor' ? 'advisor' : 'today');
   routeFromQuery();
   routeByHour();
   const nav = document.getElementById('bottom-nav');

@@ -16,6 +16,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Unit tests (safety gate + citation verification)
+        run: npm run test:unit
       - name: Start server (corpus mode)
         run: |
           PORT=3000 PUSH_STORE=/tmp/push-store.json node server.js > server.log 2>&1 &

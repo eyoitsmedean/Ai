@@ -72,11 +72,13 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 
 | Command | What it checks |
 | --- | --- |
-| `npm test` (`scripts/smoke.js`) | 17 live checks against a running server: health, corpus APIs, grounded chat SSE, security headers, manifest installability, icons/splash, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
+| `npm run test:unit` (`test/*.test.js`) | Offline safety-gate and citation-verification tests (crisis, abuse, off-scope, hostile, Gospel scope). No server required. |
+| `npm test` (`scripts/smoke.js`) | Live checks against a running server: health, corpus APIs, grounded chat SSE, quota cookie, security headers, manifest installability, icons/splash/OG image, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
 | `npm run eval` (`scripts/eval.js`) | 91-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse, passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 91/91 in corpus mode. |
 | `npm run ui-check` (`scripts/ui-check.js`) | Headless Chrome at a phone viewport: the crisis card renders with tappable 988/911/hotline links ≥44 px, ✓ WEB badges link to the WEB verse on ebible.org, off-scope replies carry no verse, no page errors. Needs `puppeteer` (CI installs it). |
 | `npm run verify:corpus` | Every shipped quote vs. WEB source text (network, ~5 min at bible-api's 15 req/30 s limit). `--fix` rewrites drifted quotes to the exact WEB wording. |
 | `npm run icons` | Regenerates all icon and splash assets from `public/icon-1024.png` (needs Python 3 + Pillow). |
+| `npm run og` | Writes `public/og-image.png` (1200×630) for social shares. |
 
 Last measured with Lighthouse (mobile, throttled): app `/` — Performance 94, Accessibility 100, Best Practices 100, SEO 100; landing `/welcome` — 98 / 100 / 100 / 100.
 
@@ -91,7 +93,8 @@ public/sw.js            Service worker: offline shell, update banner, push + not
 public/manifest.json    PWA manifest (id, scope, maskable icons, shortcuts, screenshots)
 public/offline.html     Offline fallback page
 index.html              Marketing landing page served at /welcome
-scripts/                smoke.js, eval.js, verify-corpus.js, generate-icons.py
+scripts/                smoke.js, eval.js, ui-check.js, verify-corpus.js, generate-icons.py, generate-og.py
+test/                   Offline unit tests for the safety gate and citation verification
 eval/                   questions.json (the evaluation set), RESULTS.md + results.json (last run)
 CLAUDE.md               System of record: decisions, evidence ledger, assumptions, open questions
 RELEASE.md              Release checklist (verified / unverified) + five-minute on-device checklist

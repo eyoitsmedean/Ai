@@ -102,4 +102,5 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 
 - 2026-09-01 — Encounter (cinematic daily open) and Living Garden shipped. Grace over streaks (D12).
 - 2026-09-02..05 — Production hardening: PWA manifest/icons/splash, SW offline, Web Push, threads, voice input, Lighthouse fixes, corpus expanded 55 → 102 and machine-verified (D5), README, CI.
+- 2026-09-11 — Sprint: Advisor share cards + `?ref=` deep links; real `og-image.png`; cookie-bound quota (`rla_qid` wins over rotated `x-client-id`); new users land on Advisor (D3); unit tests + CI step. Branch `cursor/sprint-five-6ab5`.
 - 2026-09-06 — ATELIER pass: Gospel-only scope guard (D7), deterministic safety/off-scope/hostile gate before paywall (D8, D9), corpus-mode tone (D10), evaluation set (D11), this file, RELEASE.md. Independent Breaker found 5 S1 / 5 S2 / 5 S3 (RELEASE.md §F); all S1/S2 repaired and retested; eval grew to 91/91; UI check added; D13–D15 recorded. ELEVATE: ✓ WEB badges now open the exact WEB verse (D15).

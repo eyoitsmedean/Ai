@@ -3,6 +3,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const zlib = require('zlib');
 const webpush = require('web-push');
 const {
@@ -99,9 +100,42 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: '256kb' }));
 
+const QID_RE = /^[A-Za-z0-9_-]{8,80}$/;
+
+function parseCookies(req) {
+  const out = {};
+  for (const part of String(req.headers.cookie || '').split(';')) {
+    const eq = part.indexOf('=');
+    if (eq < 1) continue;
+    try {
+      out[part.slice(0, eq).trim()] = decodeURIComponent(part.slice(eq + 1).trim());
+    } catch {
+      /* ignore malformed cookie encodings */
+    }
+  }
+  return out;
+}
+
+function ensureClientId(req, res) {
+  if (req.rlaId) return req.rlaId;
+  const fromCookie = parseCookies(req).rla_qid;
+  if (QID_RE.test(fromCookie || '')) {
+    req.rlaId = fromCookie;
+    return fromCookie;
+  }
+  const fromHeader = String(req.headers['x-client-id'] || '').slice(0, 80);
+  const id = QID_RE.test(fromHeader) ? fromHeader : crypto.randomUUID();
+  res.append(
+    'Set-Cookie',
+    `rla_qid=${id}; HttpOnly; SameSite=Lax; Path=/; Max-Age=31536000${IS_PROD ? '; Secure' : ''}`
+  );
+  req.rlaId = id;
+  return id;
+}
+
 const apiHits = new Map();
 app.use('/api/', (req, res, next) => {
-  const id = String(req.headers['x-client-id'] || req.ip || 'anon').slice(0, 80);
+  const id = ensureClientId(req, res);
   const now = Date.now();
   const recent = (apiHits.get(id) || []).filter((t) => now - t < 60000);
   const cap = req.path === '/chat' ? 20 : 90;
@@ -154,7 +188,7 @@ function todayKey() {
 }
 
 function getClientId(req) {
-  return String(req.headers['x-client-id'] || req.ip || 'anon').slice(0, 80);
+  return req.rlaId || String(req.headers['x-client-id'] || req.ip || 'anon').slice(0, 80);
 }
 
 function getQuota(id) {
