@@ -94,6 +94,7 @@ Opened this session from Dean’s Notion household. These are **not** this Curso
 | Operator handoff | `studio/HANDOFF.md` |
 | Future-agent guide | `studio/FUTURE-AGENTS.md` |
 | Notion one-screen (parent) | https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0 |
+| Notion Cursor recovery (this commission) | https://app.notion.com/p/3d8b7d53f96981e49951d3d8ffcc2160 |
 | Notion This week | https://app.notion.com/p/3cbb7d53f96981eda707f2d6dbff199a |
 
 ---
