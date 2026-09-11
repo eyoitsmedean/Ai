@@ -328,7 +328,7 @@ Include 3–4 passages. Use only real, verifiable red-letter verses (WEB preferr
 
 const CRISIS_REPLY = `I hear how heavy this is, and I'm glad you said something. I am a faith reflection tool using the words of Jesus — software, not a person, not a crisis counselor, and not a substitute for real human help.
 
-If you are in immediate danger, call **911**.
+If you are in immediate danger, call **911** (US) or your local emergency number.
 
 If you are thinking about suicide or self-harm, or you need crisis support:
 • United States: call or text **988**, or chat https://chat.988lifeline.org (988 Suicide & Crisis Lifeline)
@@ -341,7 +341,7 @@ If you want, after you are safe, we can sit with words Jesus spoke about wearine
 
 const CRISIS_REPLY_ES = `Siento mucho que estés cargando esto, y me alegra que lo hayas dicho. Soy una herramienta de fe que comparte las palabras de Jesús — software, no una persona, no un consejero de crisis, y no reemplazo la ayuda humana real.
 
-Si estás en peligro inmediato, llama al **911**.
+Si estás en peligro inmediato, llama al **911** (EE. UU.) o a tu número de emergencia local.
 
 Si estás pensando en el suicidio o en hacerte daño, o necesitas apoyo de crisis:
 • Estados Unidos: llama o envía un mensaje al **988**, o entra a https://chat.988lifeline.org

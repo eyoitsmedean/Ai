@@ -17,6 +17,8 @@ Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is
 
 ### 1. Put it on HTTPS (blocks everything else)
 
+Before the URL is public, replace `hello@redletter.app` in `public/legal.html`, `VAPID_SUBJECT`, and the README default with an inbox you actually read. `/legal` is research-based draft copy, not a lawyer-filed policy.
+
 Any Node 18 host works. Railway is already described in `README.md` (`railway.toml`, health `/api/health`).
 
 Set:

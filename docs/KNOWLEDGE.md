@@ -77,7 +77,7 @@ This file is the reusable knowledge layer. Decisions it changed are named. Inves
 
 - SAMHSA/988: linking encouraged; no mandated app disclaimer. End-card line last updated **15 Jun 2023**, still posted.  
 - APA advisory **13 Nov 2025**: disclose AI; not a replacement; interrupt; 988.  
-- NY GBL Art. 47 effective **5 Nov 2025**; CA SB 243 operative **1 Jan 2026**: companion-bot duties. **UNRESOLVED** whether RLA is in-scope; conservative interrupt already matches the duty.  
+- NY GBL Art. 47 effective **5 Nov 2025**; CA SB 243 operative **1 Jan 2026**: companion-bot duties (including, if in-scope, conspicuous “this is AI” notices and a published self-harm protocol). **UNRESOLVED** whether RLA is in-scope. The pre-model 988 interrupt is a conservative referral; it does **not** by itself satisfy every statutory duty.  
 - FTC 6(b) **11 Sep 2025**: inquiry, not a rule.  
 - Character.AI settlement **Jan 2026** and pending OpenAI suit: **NEWS**, not holdings. Pattern alleged: no interrupt + anthropomorphic companion.
 

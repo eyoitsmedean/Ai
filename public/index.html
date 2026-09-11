@@ -3868,7 +3868,7 @@ async function sendChat() {
     saveCurrentThread();
     if (full && !crisis) maybeShowInstallBanner(true);
   } catch {
-    bubble.innerHTML = '<p>Unable to reach the Advisor. Check your connection and try again.</p>';
+    bubble.innerHTML = formatAI('Unable to reach the Advisor. Check your connection and try again.\n\nIf you are in immediate danger, call **911** (US) or your local emergency number. In the United States, call or text **988** or chat https://chat.988lifeline.org. Elsewhere: https://www.iasp.info/suicidalthoughts/.');
   }
   chatStreaming = false;
   document.getElementById('chat-send').disabled = false;
