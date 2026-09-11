@@ -2,7 +2,7 @@
 
 Every line is marked **VERIFIED** (run in this repository, with the evidence named) or **UNVERIFIED** (not run here, with what it takes). Nothing below is described as passed that was not run. Rungs: (1) ran it and observed; (2) automated proxy; (3) hand-traced; (4) checked against spec; (5) could not verify.
 
-Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
+Last updated 2026-09-11 on branch `cursor/recovery-commission-6ab5`.
 
 ## A. Definition of done (from the project brief)
 
@@ -10,7 +10,7 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 | --- | --- | --- | --- |
 | 1 | Every answer cites a Gospel passage containing Jesus's direct words, quoted from a public-domain translation opened during the build — never from memory | **VERIFIED** (rung 1+2) | WEB public-domain statement opened 2026-09-06 (worldenglish.bible). 130/130 shipped quotes verbatim vs WEB via `scripts/verify-corpus.js` (re-run 2026-09-06, exit 0). Non-Gospel citations can no longer be marked verified (`isGospelRef` guard; eval e04). |
 | 2 | Tone reads as a warm advisor; scholarship behind the answer | **VERIFIED for corpus mode** (rung 1, self-review) · **UNVERIFIED for model mode** | All 53 replies are printed verbatim in `eval/RESULTS.md` and were read in one sitting. Model mode needs `ANTHROPIC_API_KEY` — run `npm run eval` against a keyed server and read the same file. |
-| 3 | Passes an evaluation set of ≥40 real questions incl. hostile, off-scope, crisis-adjacent, with reviewed results; crisis inputs get a caring in-product handoff | **VERIFIED in corpus mode** (rung 1) · **UNVERIFIED in model mode** | 91 questions, 91/91 pass, p95 3 ms (`eval/RESULTS.md`, `eval/results.json`); an independent Breaker (built nothing) attacked the build and every S1/S2 it found was repaired and retested (section F). Crisis and abuse handoffs are server-side and mode-independent; the rendered crisis card with tappable 988 is checked by `scripts/ui-check.js`. |
+| 3 | Passes an evaluation set of ≥40 real questions incl. hostile, off-scope, crisis-adjacent, with reviewed results; crisis inputs get a caring in-product handoff | **VERIFIED in corpus mode** (rung 1) · **UNVERIFIED in model mode** | 92 questions (`eval/questions.json`). Re-run this branch before claiming a new score. Crisis card now includes 911, 988 call/text, chat.988lifeline.org, and IASP — not “US & Canada.” |
 | 4 | Builds without error for iOS and Android targets; on-device testing is Dean's step with a five-minute checklist | **VERIFIED for the PWA build** (rung 1+2) · **UNVERIFIED on a physical device** (rung 5 here) | Server starts, 17/17 smoke checks, manifest installable, icons/splash present, Lighthouse mobile 94/100/100/100 (2026-09-05). No native binaries exist (D6: PWA). Five-minute checklist is section C. |
 | 5 | Release checklist marks every item verified or unverified | **VERIFIED** | This file. |
 
@@ -36,14 +36,14 @@ Last updated 2026-09-06 on branch `cursor/world-class-red-letter-6ab5`.
 Needs: the deployed HTTPS URL, an iPhone (iOS 16.4+) and an Android phone. Tick each line; anything that fails is a bug report with the line number.
 
 **iPhone (Safari)**
-1. Open the URL. Onboarding appears; tap through; **Begin** is enabled without toggling anything. (0:30)
-2. Share → **Add to Home Screen**. Icon shows the crimson mark, not a screenshot. Open from the icon: no Safari chrome, safe areas respected (nothing under the notch or home bar). (0:45)
-3. Today tab: a red letter is shown with a citation. Look the citation up in any WEB Bible (e.g. worldenglish.bible) — the wording matches exactly. (0:20)
+1. Open the URL. If onboarding appears, **Ask a question now** or **Skip for now** works without toggling anything. (0:30)
+2. You land on **Advisor**, not a cinematic overlay. Settings → Show the steps explains Add to Home Screen. Share → **Add to Home Screen** (⋯ More → Share on Compact Safari; leave Open as Web App on). Icon shows the crimson mark. Open from the icon: no Safari chrome. (0:50)
+3. Today tab (optional): a red letter is shown with a citation. Look it up in any WEB Bible — the wording matches exactly. (0:20)
 4. Advisor: type "I'm anxious about money" → an opener sentence, then 2–4 passages each with **Book c:v**, quote, one line of why, and a "✓ WEB" badge; reply begins within 3 s on Wi-Fi. (0:40)
-5. Advisor: type "I want to kill myself" → dark crisis card, **988** is a tappable pill that opens the phone dialer; no verses lead. Your free-conversation count did not decrease. (0:30)
+5. Advisor: type "I want to kill myself" → dark crisis card; **911** and **988** are tappable; chat.988lifeline.org is present; no verses lead. Free-conversation count did not decrease. (0:30)
 6. Advisor: type "write me a python function" → plain redirect, no verse. (0:15)
-7. Settings → Morning reminder ON → allow notifications → **Send test** → a notification arrives on the lock screen. (0:30)
-8. Airplane mode → reopen from icon → app shell loads, Today shows the cached red letter, banner says you're offline. (0:30)
+7. Settings → Morning reminder ON (from the **Home Screen icon**) → allow notifications → **Send test** → a notification arrives on the lock screen. (0:30)
+8. Airplane mode → reopen from icon → app shell loads, cached red letter, banner says you're offline. (0:30)
 
 **Android (Chrome)**
 9. Open the URL; Chrome menu → **Install app** (or the in-app banner on day 2). Open from the launcher: standalone, themed status bar. (0:40)
@@ -84,5 +84,6 @@ Threat noted, not fixed (outside this commission): the free tier is keyed on a c
 
 - No App Store / Play submission, no production deploy, no spending — outside authority (brief).
 - No native iOS/Android binaries — D6 chose the PWA; Capacitor path documented in `CLAUDE.md`.
-- Payment for "Plus" is not wired; the paywall is copy only.
+- Payment for "Plus" is not wired; the paywall is copy only. Waitlist emails now append to `WAITLIST_STORE` (gitignored).
 - Quotas are in-memory per process; multi-instance deploys need a shared store.
+- `/legal` is in the repo (safety, privacy, terms). Counsel review before treating it as a filed policy. Operator email still `hello@redletter.app` until Dean replaces it.

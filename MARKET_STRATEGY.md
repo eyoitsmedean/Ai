@@ -1,5 +1,7 @@
 # Red Letter Market Strategy
 
+> **Superseded as current guidance (2026-09-11).** Keep this file as research history. Do not follow the Phase 2 streak line, the React Native / Expo move, or the claim that assets live under `public/js` + `public/css` — those contradict `CLAUDE.md` D6/D12 and the actual tree. Current decisions: `CLAUDE.md`. Current research: `docs/KNOWLEDGE.md`.
+
 Research synthesis for owning the “Words of Jesus” niche in faith apps.  
 Sources: YouVersion, App Store listings, Barna, Pew, PRRI, Infinity Concepts, Appfigures, Sensor Tower–style analytics summaries, ScreensDesign Bible/prayer category data, Parable Digital, Sparrow Apps faith-UA reporting (2024–2026).
 

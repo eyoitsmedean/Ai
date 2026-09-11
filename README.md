@@ -63,8 +63,8 @@ node scripts/smoke.js https://your-domain
 
 ### Install on phones
 
-- **iPhone (Safari):** Share → Add to Home Screen. Morning reminders via Web Push work from the installed app on iOS 16.4+.
-- **Android (Chrome):** the in-app install banner appears from the second day; or Chrome menu → Install app.
+- **iPhone (Safari):** Share → Add to Home Screen (⋯ More → Share on Compact Safari). In-app Settings → Show the steps. Morning reminders via Web Push work from the installed app on iOS 16.4+.
+- **Android (Chrome):** Install from the banner after a first answer or on day 2; or Chrome menu → Install app.
 
 This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.json` is a stub for a future Play Trusted Web Activity.
 
@@ -74,7 +74,7 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 | --- | --- |
 | `npm run test:unit` (`test/*.test.js`) | Offline safety-gate and citation-verification tests (crisis, abuse, off-scope, hostile, Gospel scope). No server required. |
 | `npm test` (`scripts/smoke.js`) | Live checks against a running server: health, corpus APIs, grounded chat SSE, quota cookie, security headers, manifest installability, icons/splash/OG image, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
-| `npm run eval` (`scripts/eval.js`) | 92-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse (incl. Spanish), passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Last run: 91/91 in corpus mode; re-run after this sprint. |
+| `npm run eval` (`scripts/eval.js`) | 92-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse (incl. Spanish), passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Re-run after the recovery commission (crisis copy now includes 911 + 988 chat). |
 | `npm run ui-check` (`scripts/ui-check.js`) | Headless Chrome at a phone viewport: the crisis card renders with tappable 988/911/hotline links ≥44 px, ✓ WEB badges link to the WEB verse on ebible.org, off-scope replies carry no verse, no page errors. Needs `puppeteer` (CI installs it). |
 | `npm run verify:corpus` | Every shipped quote vs. WEB source text (network, ~5 min at bible-api's 15 req/30 s limit). `--fix` rewrites drifted quotes to the exact WEB wording. |
 | `npm run icons` | Regenerates all icon and splash assets from `public/icon-1024.png` (needs Python 3 + Pillow). |
@@ -96,8 +96,12 @@ index.html              Marketing landing page served at /welcome
 scripts/                smoke.js, eval.js, ui-check.js, verify-corpus.js, generate-icons.py, generate-og.py
 test/                   Offline unit tests for the safety gate and citation verification
 eval/                   questions.json (the evaluation set), RESULTS.md + results.json (last run)
+public/legal.html       Safety, privacy, and terms (`/legal`)
 CLAUDE.md               System of record: decisions, evidence ledger, assumptions, open questions
 RELEASE.md              Release checklist (verified / unverified) + five-minute on-device checklist
+docs/CANONICAL-BRIEF.md Recovered brief + first-ten prompt table
+docs/KNOWLEDGE.md       Research syntheses and source register
+docs/OPERATOR-KIT.md    Dean's next three actions and phone checklist
 ```
 
 Client state (journal, saved Advisor conversations, settings, garden) lives in `localStorage` on the device. Server state (quotas, rate limits) is in memory and resets on restart; push subscriptions persist to `PUSH_STORE`.

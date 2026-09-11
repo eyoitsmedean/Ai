@@ -1,8 +1,10 @@
-const CACHE = 'rla-v28';
+const CACHE = 'rla-v29';
 const PRECACHE = [
   '/',
   '/offline',
   '/offline.html',
+  '/legal',
+  '/legal.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',

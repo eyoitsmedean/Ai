@@ -506,6 +506,20 @@ a.cite-badge:hover{filter:brightness(.95)}
 }
 .install-banner .ib-yes{background:#EDE8E0;color:var(--chrome)}
 .install-banner .ib-no{background:transparent;color:rgba(237,232,224,.65)}
+.install-sheet{position:fixed;inset:0;z-index:360;display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));opacity:0;pointer-events:none;visibility:hidden;transition:opacity .25s,visibility .25s}
+.install-sheet.open{opacity:1;pointer-events:all;visibility:visible}
+.install-sheet-bg{position:absolute;inset:0;background:rgba(20,18,16,.62)}
+.install-sheet-card{position:relative;width:min(420px,100%);background:var(--surface);border-radius:20px 20px 16px 16px;padding:22px 20px 18px;box-shadow:var(--shadow-lg);max-height:min(88vh,640px);overflow:auto}
+.install-sheet-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--crimson);font-weight:700;margin-bottom:6px}
+.install-sheet-card h2{font-family:var(--font-display);font-size:1.35rem;margin:0 0 8px;color:var(--ink)}
+.install-sheet-card p.lead{margin:0 0 16px;color:var(--ink-muted);font-size:14px;line-height:1.45}
+.install-steps{margin:0 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.install-steps li{display:flex;gap:12px;align-items:flex-start}
+.install-step-n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--crimson);color:#F7F4EF;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.install-steps p{margin:0;font-size:14px;line-height:1.4;color:var(--ink)}
+.install-sheet-note{font-size:12px;color:var(--ink-muted);line-height:1.4;margin:0 0 14px}
+.install-sheet-actions{display:flex;gap:8px}
+.install-sheet-actions button{flex:1;min-height:44px}
 
 .time-input{padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink);font-size:16px;font-family:var(--font-ui);min-height:var(--touch)}
 .pray-form input{font-size:16px;min-height:var(--touch);padding:12px}
@@ -716,6 +730,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     <div class="ob-wordmark">Red Letter</div>
     <p class="ob-tagline">Daily guidance from the words Jesus actually spoke.</p>
     <button type="button" class="ob-btn" onclick="obNext()">Continue</button>
+    <button type="button" class="ob-btn" style="margin-top:10px;background:transparent;color:rgba(237,232,224,.7);box-shadow:none" onclick="finishOnboarding()">Ask a question now</button>
     <div class="ob-dots"><span class="ob-dot active"></span><span class="ob-dot"></span><span class="ob-dot"></span><span class="ob-dot"></span></div>
   </div>
   <div class="ob-screen" data-step="1">
@@ -771,7 +786,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
   </header>
   <div class="trust-strip" id="trust-strip" role="status"><span class="ts-dot" aria-hidden="true"></span><span>Verified · WEB red letters only</span><span>·</span><span>Not invented speech</span></div>
   <div class="pages">
-    <section class="page active reading-room" id="today-page" data-tab="today">
+    <section class="page reading-room" id="today-page" data-tab="today">
       <div class="page-hd"><div class="page-hd-eyebrow" id="today-date"></div><h1 class="page-hd-title" id="today-greeting">Good morning</h1></div>
       <div id="offline-banner" class="offline-banner hidden">You're offline — showing verified passages from our library.</div>
       <div class="return-ribbon hidden" id="return-ribbon" role="status">
@@ -954,7 +969,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
       </div>
       <div class="theme-grid" id="theme-grid"></div><div class="seek-result hidden" id="seek-result"></div>
     </section>
-    <section class="page" id="advisor-page" data-tab="advisor">
+    <section class="page active" id="advisor-page" data-tab="advisor">
       <div class="chat-scroll" id="chat-scroll">
         <div class="advisor-bar hidden" id="advisor-bar">
           <div class="advisor-bar-title" id="advisor-bar-title">Conversation</div>
@@ -987,7 +1002,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
           <h2>Speak what’s on your heart</h2>
           <p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John — grounded and checkable.</p>
         </div>
-        <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
+        <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — software that quotes Jesus’s words, with citations you can check. Immediate danger: 911. US crisis: call or text 988, or <a href="https://chat.988lifeline.org" target="_blank" rel="noopener">chat 988</a>. <a href="/legal">Safety &amp; privacy</a>.</p>
         <div class="suggestions" id="suggestions"></div>
         <div id="chat-messages"></div>
       </div>
@@ -1023,9 +1038,9 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
   </div>
   <nav class="nav" id="bottom-nav" aria-label="Main navigation">
     <div class="nav-indicator" id="nav-indicator"></div>
-    <button type="button" class="nav-btn active" data-tab="today" onclick="goTab('today')" aria-label="Today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><span>Today</span></button>
+    <button type="button" class="nav-btn" data-tab="today" onclick="goTab('today')" aria-label="Today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><span>Today</span></button>
     <button type="button" class="nav-btn" data-tab="seek" onclick="goTab('seek')" aria-label="Seek"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Seek</span></button>
-    <button type="button" class="nav-btn" data-tab="advisor" onclick="goTab('advisor')" aria-label="Advisor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Advisor</span></button>
+    <button type="button" class="nav-btn active" data-tab="advisor" onclick="goTab('advisor')" aria-label="Advisor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Advisor</span></button>
     <button type="button" class="nav-btn" data-tab="library" onclick="goTab('library')" aria-label="Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></button>
     <button type="button" class="nav-btn" data-tab="journal" onclick="goTab('journal')" aria-label="Journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Journal</span></button>
   </nav>
@@ -1055,9 +1070,13 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
     </div>
   </div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">About</div>
-    <p class="about-text">The Red Letter Advisor guides you using only the direct words of Jesus from the four Gospels. Every quote is verified against the World English Bible.</p></div>
+    <p class="about-text">The Red Letter Advisor guides you using only the direct words of Jesus from the four Gospels. Every quote is verified against the World English Bible. This is software, not a person, pastor, or therapist — <a href="/legal">Safety, privacy &amp; terms</a>.</p></div>
+  <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">Add to Home Screen</div>
+    <p class="setting-desc">On iPhone we cannot install it for you. Open the illustrated steps, then Share → Add to Home Screen.</p>
+    <button type="button" class="ghost-btn" onclick="openInstallSheet()" style="min-height:var(--touch);padding:0 14px;font-size:13px">Show the steps</button>
+  </div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">Crisis resources</div>
-    <div class="crisis-links"><a class="crisis-link" href="tel:988">US &amp; Canada: Call or text 988</a><a class="crisis-link" href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">Find help worldwide (IASP)</a></div></div>
+    <div class="crisis-links"><a class="crisis-link" href="tel:911">Immediate danger: 911</a><a class="crisis-link" href="tel:988">US: Call or text 988</a><a class="crisis-link" href="https://chat.988lifeline.org" target="_blank" rel="noopener">US: Chat 988</a><a class="crisis-link" href="https://www.iasp.info/suicidalthoughts/" target="_blank" rel="noopener">Find help worldwide (IASP)</a></div></div>
   <button type="button" class="danger-btn" onclick="resetOnboarding()">Reset onboarding</button>
 </div></div>
 <div class="sheet" id="threads-sheet"><div class="sheet-hd"><h2 class="sheet-title">Saved conversations</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
@@ -1248,10 +1267,28 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
   </div>
 </div>
 <div class="install-banner hidden" id="install-banner">
-  <p><strong>Add Red Letter to your home screen</strong><span id="install-copy">Keep His words one tap away</span></p>
+  <p><strong>Add Red Letter to your Home Screen</strong><span id="install-copy">Keep His words one tap away</span></p>
   <div class="ib-actions">
-    <button type="button" class="ib-yes" id="install-yes" onclick="acceptInstall()">Install</button>
+    <button type="button" class="ib-yes" id="install-yes" onclick="acceptInstall()">How</button>
     <button type="button" class="ib-no" onclick="dismissInstall()">Not now</button>
+  </div>
+</div>
+<div class="install-sheet" id="install-sheet" role="dialog" aria-label="Add to Home Screen" aria-hidden="true">
+  <div class="install-sheet-bg" onclick="closeInstallSheet()"></div>
+  <div class="install-sheet-card">
+    <div class="install-sheet-kicker">Home Screen</div>
+    <h2>Add Red Letter Advisor to your Home Screen</h2>
+    <p class="lead">Keep the daily reading one tap away. After you open it from your Home Screen, you can turn on optional reminders.</p>
+    <ol class="install-steps">
+      <li><span class="install-step-n">1</span><p>In Safari, tap <strong>Share</strong> (square with the arrow). If you don’t see Share, tap <strong>⋯ More</strong>, then Share.</p></li>
+      <li><span class="install-step-n">2</span><p>Tap <strong>Add to Home Screen</strong>. You may need to scroll or tap <strong>View More</strong>. If it is missing, open Edit Actions and add it.</p></li>
+      <li><span class="install-step-n">3</span><p>Leave <strong>Open as Web App</strong> on, tap Add, then open <strong>Red Letter Advisor</strong> from your Home Screen — not from Safari.</p></li>
+    </ol>
+    <p class="install-sheet-note">We cannot add it for you — iPhone only allows this from Share. Notifications are a separate Allow tap after you open the icon. Reminders need iOS 16.4+.</p>
+    <div class="install-sheet-actions">
+      <button type="button" class="cta-btn cta-primary" onclick="closeInstallSheet()">Got it</button>
+      <button type="button" class="action-btn" onclick="dismissInstall(); closeInstallSheet()">Not now</button>
+    </div>
   </div>
 </div>
 <div class="sw-banner" id="sw-banner" role="status"><span>A new version is ready</span><button type="button" onclick="applyAppUpdate()">Update</button></div>
@@ -2658,6 +2695,8 @@ function revealCinematicWords(el, text, onDone) {
 function maybeShowEncounter(force) {
   if (!dailyData?.word) return;
   if (!force && ls(encounterKey()) === '1') return;
+  // Chat-first: do not intercept the Advisor. Encounter lives on Today.
+  if (!force && currentTab() === 'advisor') return;
   scheduleEncounter(() => openEncounter(!!force), force ? 0 : 700);
 }
 
@@ -3391,8 +3430,12 @@ function resetOnboarding() {
 /* ═══ NAVIGATION ═══ */
 const TABS = ['today', 'seek', 'advisor', 'library', 'journal'];
 
+function currentTab() {
+  return document.querySelector('.page.active')?.dataset.tab || 'advisor';
+}
+
 function goTab(tab) {
-  if (!TABS.includes(tab)) tab = 'today';
+  if (!TABS.includes(tab)) tab = 'advisor';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   const idx = TABS.indexOf(tab);
@@ -3823,6 +3866,7 @@ async function sendChat() {
     }
     chatMessages.push({ role: 'assistant', content: full, html: bubble.innerHTML, crisis });
     saveCurrentThread();
+    if (full && !crisis) maybeShowInstallBanner(true);
   } catch {
     bubble.innerHTML = '<p>Unable to reach the Advisor. Check your connection and try again.</p>';
   }
@@ -4027,9 +4071,9 @@ function shareVerseBtn(verse, quote) {
 
 function shareLinkFor(verse) {
   try {
-    return location.origin + '/?tab=library&ref=' + encodeURIComponent(verse || '');
+    return location.origin + '/?tab=advisor&ref=' + encodeURIComponent(verse || '');
   } catch {
-    return '/?tab=library&ref=' + encodeURIComponent(verse || '');
+    return '/?tab=advisor&ref=' + encodeURIComponent(verse || '');
   }
 }
 
@@ -4719,24 +4763,40 @@ function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 
-function maybeShowInstallBanner() {
+function maybeShowInstallBanner(afterValue) {
   if (isStandalone() || ls('rla-install-dismiss') === '1') return;
-  // Earn the ask: never on the first day, and never while the encounter is on screen.
-  if (parseInt(ls('rla-day-num') || '1', 10) < 2) return;
+  // Earn the ask: after a real answer, or on day 2. Never under the Encounter.
+  const day = parseInt(ls('rla-day-num') || '1', 10);
+  if (!afterValue && day < 2) return;
   if (document.getElementById('encounter-overlay')?.classList.contains('open')) return;
   const banner = document.getElementById('install-banner');
   const copy = document.getElementById('install-copy');
   const yes = document.getElementById('install-yes');
   if (!banner) return;
   if (isIOS()) {
-    if (copy) copy.textContent = 'Tap Share, then Add to Home Screen.';
+    if (copy) copy.textContent = 'Tap How for Share → Add to Home Screen.';
     if (yes) yes.textContent = 'How';
-    setTimeout(() => banner.classList.remove('hidden'), 2400);
+    setTimeout(() => banner.classList.remove('hidden'), afterValue ? 800 : 2400);
   } else if (deferredInstall) {
     if (copy) copy.textContent = 'Keep His words one tap away on Android.';
     if (yes) yes.textContent = 'Install';
-    setTimeout(() => banner.classList.remove('hidden'), 1800);
+    setTimeout(() => banner.classList.remove('hidden'), afterValue ? 800 : 1800);
   }
+}
+
+function openInstallSheet() {
+  document.getElementById('install-banner')?.classList.add('hidden');
+  const sheet = document.getElementById('install-sheet');
+  if (!sheet) return;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeInstallSheet() {
+  const sheet = document.getElementById('install-sheet');
+  if (!sheet) return;
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -4759,7 +4819,7 @@ async function acceptInstall() {
     return;
   }
   if (isIOS()) {
-    showToast('On iPhone: tap Share, then Add to Home Screen');
+    openInstallSheet();
     return;
   }
   showToast('Open in Chrome, then tap Install in the menu');
@@ -4804,6 +4864,7 @@ function wireKeyboardInset() {
 }
 
 function closeAllOverlays() {
+  closeInstallSheet();
   closeShareCard();
   closeSit();
   closeMidday();
@@ -4825,7 +4886,7 @@ function wireAndroidBack() {
   const ids = [
     'sit-overlay','midday-overlay','amen-overlay','cmd-overlay','breath-overlay',
     'parable-overlay','focus-overlay','rest-overlay','lectio-overlay','silence-overlay',
-    'encounter-overlay','garden-detail','share-modal','settings-sheet','paywall-sheet','threads-sheet',
+    'encounter-overlay','garden-detail','share-modal','settings-sheet','paywall-sheet','threads-sheet','install-sheet',
   ];
   ids.forEach((id) => {
     const el = document.getElementById(id);
@@ -4851,7 +4912,7 @@ function routeFromQuery() {
   const tab = params.get('tab');
   const ref = (params.get('ref') || '').replace(/\+/g, ' ').trim();
   if (tab && TABS.includes(tab)) goTab(tab);
-  else if (ref) goTab('library');
+  else if (ref) goTab('advisor');
   if (ref) openSharedRef(ref);
 }
 
@@ -4911,9 +4972,9 @@ function initApp() {
   renderHarvest();
   renderThemeGrid();
   wireOnlineStatus();
-  goTab(ls('rla-land') === 'advisor' ? 'advisor' : 'today');
+  goTab('advisor');
   routeFromQuery();
-  routeByHour();
+  if (currentTab() === 'today') routeByHour();
   const nav = document.getElementById('bottom-nav');
   const indicator = document.getElementById('nav-indicator');
   if (nav && indicator) {

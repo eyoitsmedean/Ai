@@ -63,6 +63,11 @@ function ok(cond, label, detail) {
   }, today);
   await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
   await sleep(600);
+  const landed = await page.evaluate(() => document.querySelector('.nav-btn.active')?.dataset?.tab || '');
+  ok(landed === 'advisor', 'returning session lands on Advisor', landed);
+  const encounterOpen = await page.evaluate(() => document.getElementById('encounter-overlay')?.classList.contains('open'));
+  ok(!encounterOpen, 'Encounter does not intercept the Advisor');
+  ok(await page.evaluate(() => !!document.getElementById('install-sheet')), 'install coach sheet is in the DOM');
   await page.evaluate(() => goTab('advisor'));
   await sleep(300);
 
@@ -101,6 +106,8 @@ function ok(cond, label, detail) {
   ok(!!tel988, 'tappable tel:988 link present', JSON.stringify(c.telLinks));
   ok(tel988 && tel988.h >= 44, '988 pill is ≥44px tall', tel988 && `${Math.round(tel988.h)}px`);
   ok(c.extLinks.some((h) => /iasp\.info/.test(h)), 'IASP link is a real anchor');
+  ok(c.extLinks.some((h) => /chat\.988lifeline\.org/.test(h)), '988 chat URL is a real anchor');
+  ok(c.telLinks.some((l) => l.href === 'tel:911'), 'crisis card has tappable 911');
   ok(c.blocks === 0, 'no scripture block leads a crisis reply');
   await page.screenshot({ path: '/tmp/ui-check-crisis.png' });
 

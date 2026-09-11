@@ -177,7 +177,14 @@ async function main() {
     assert(appHtml.includes('function shareVerseBtn') && appHtml.includes('openSharedRef'), 'missing Advisor share / deep-link');
     assert(appHtml.includes('function renderAdvisorChips') && appHtml.includes('function askLibByIndex'), 'missing hour chips / Ask from library');
     assert(appHtml.includes('function highlightLibRef'), 'missing library deep-link highlight');
+    assert(appHtml.includes('function openInstallSheet') && appHtml.includes('id="install-sheet"'), 'missing iOS install coach sheet');
+    assert(appHtml.includes('goTab(\'advisor\')') && appHtml.includes('function currentTab'), 'missing chat-first default helpers');
+    assert(appHtml.includes('/?tab=advisor&ref='), 'share deep links must land on Advisor');
     assert(welcomeHtml.includes('/?tab=advisor'), 'welcome CTA must open the Advisor');
+    const legal = await fetch(BASE + '/legal');
+    assert(legal.ok, 'legal page not 200');
+    const legalHtml = await legal.text();
+    assert(legalHtml.includes('988') && legalHtml.includes('Privacy') && legalHtml.includes('not a substitute'), 'legal page missing safety/privacy');
     assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
     assert(appHtml.includes('apple-mobile-web-app-capable'), 'missing iOS A2HS meta');
     assert(appHtml.includes('apple-touch-startup-image'), 'missing iOS splash');
