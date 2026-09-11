@@ -57,4 +57,4 @@ Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playb
 - Add push / local reminder for daily red letter / lectio.
 - Soft freemium paywall + annual plan.
 - Scripture license path for modern translations beyond KJV curated set.
-- Native iOS/Android shell (Expo) for store distribution.
+- Native iOS/Android shell (Expo) for store distribution. **Retired for this window (decision 4–5 Sep 2026): do not implement. Native lives in Red Words. Do not start a second architecture.**

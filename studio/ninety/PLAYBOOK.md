@@ -3,7 +3,9 @@
 
 This expands `FIVE.md`. It is the object to review: doctrine, calendar, scripts, sitting cards, and kill rules. Nothing here authorizes outreach, spend, application, or publication.
 
-**How to sit with it (12 minutes).** Title leaf. The math. The pick. Then only the book you will actually run this month. The other four can wait.
+**Dated 11 September 2026.** Week 2 of the cohort is past. For what to do *this week*, open `SIT.md` or the folio leaf `#week`. Do not treat the Tuesday 8 September row below as still ahead of you.
+
+**How to sit with it (12 minutes).** Title leaf. This week. The math. The pick. Then only the book you will actually run this month. The other four can wait.
 
 ---
 
@@ -131,7 +133,7 @@ Do these on a Sunday, ten minutes, then close Notion.
 
 1. **Who has the boys if she goes in.** A name. Not a protocol. Not a hospital plan.
 2. **Tuesday work blocks on a calendar you will actually see.** Week 2 is 8 September. Weeks 4 / 6 / 8 / 10 belong on the work calendar, not a second brain.
-3. **His three:** early, or cake at home after. Pick. Mark a wall or a paper. Do not build a party OS.
+3. **His birthday:** early, or cake at home after the arrival. Pick. Mark a wall or a paper. Do not build a party OS.
 4. **Breakfast as a date** stays a date or it moves. It is not a metric.
 5. **One bag that makes a 2 a.m. exit boring.** Clothes for her, clothes for you, charger, snacks for the boys’ person. If the bag already exists, do not reopen the list.
 
@@ -218,7 +220,9 @@ Stay in the apartment. Years ago. Not today. No dog in the house now.
 
 The decision can be earned later. This chapter is the gap.
 
-## Eight sittings · 45 minutes · September and November
+## Two sittings this season · 45 minutes · September and November
+
+The container is two nights. An eight-row craft table follows for if a sitting is already rest. It is not a program. November is this chapter *or* Advent, not both, unless writing is rest.
 
 October is off unless writing steadies you — then one sitting, then stop.
 

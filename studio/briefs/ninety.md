@@ -4,7 +4,7 @@ Filled from this repo and the 4–6 September sessions. Labels per `studio/ATELI
 
 **Mission:** Get five things done in a 90-day window that includes a newborn, not five more businesses researched.
 
-**The finished thing:** the bound operating book at `studio/ninety/index.html` (open in a browser; phone-readable), with `PLAYBOOK.md` (long form), `FIVE.md` (first run), `PROMPT.md` (the prompt that was built). Plus the one code artifact the book required: the Advent path *Watch with me* in Red Letter (`data/paths.js`, live in the ribbon from 29 November).
+**The finished thing:** the bound operating book at `studio/ninety/index.html` (open in a browser; phone-readable), with `SIT.md` (dated this-week card), `PLAYBOOK.md` (long form), `FIVE.md` (first run), `PROMPT.md` (the prompt that was built), and `studio/recovery/` (canonical brief + knowledge). Plus the code the book required: Advent *Watch with me* and Lent *Stay with me* (`data/paths.js`).
 
 **Audience and use moment:** Dean, on a phone, after the kids are down, with twelve minutes and no appetite for a pitch deck.
 
@@ -46,4 +46,4 @@ Filled from this repo and the 4–6 September sessions. Labels per `studio/ATELI
 
 **Quality reference:** a well-set letterpress pamphlet (paper, one accent colour, a running head, a colophon) and Red Letter's own `DESIGN.md`. What to match: one idea per leaf; the sentence is the page; nothing that needs a tutorial.
 
-**Verified this session (6 Sep):** the Advent switch on real dates (headless Chrome, clock set to 1 Dec 2026 / 2 Jan 2027 / 6 Sep 2026); the app under the `/Ai/` Pages sub-path; 47/47 tests; Hallow figures against Appfigures, MWM, Sensor Tower. **Not verified:** the live Pages URL (Pages not enabled).
+**Verified this session (6 Sep):** the Advent switch on real dates (headless Chrome, clock set to 1 Dec 2026 / 2 Jan 2027 / 6 Sep 2026); the app under the `/Ai/` Pages sub-path; 47/47 tests; Hallow figures against Appfigures, MWM, Sensor Tower. **11 Sep recovery:** first ten prompts quoted from this conversation’s transcript; sit-down card dated for day seven. **Not verified:** the live Pages URL (Pages not enabled).

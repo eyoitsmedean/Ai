@@ -32,6 +32,7 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 | 6 Sep 2026 | The Advisor evaluation set lives in `eval/` and runs with `npm run eval`; quotation of a non-Gospel book is a hard failure, naming one to decline it is not. Fallback-mode results prove the gate and verifier, not tone; the live run is Dean's, from a machine with a key. | `eval/README.md`, `eval/REVIEW.md` |
 | 7 Sep 2026 | `MARKET_STRATEGY.md` is the current strategy page (v2). v1 is archived as `MARKET_STRATEGY.v1.md`. The red-letter niche is occupied (three products) but not owned; money and paid ads stay parked through 4 Dec 2026. | `MARKET_STRATEGY.md`, `docs/bot-notes.md` |
 | 11 Sep 2026 | Lent path *Stay with me*: 40 rooms counted from Ash Wednesday, opened by calendar not streak; week one is Seven Days. First sitting offers a blessing, not an install toast. | `data/paths.js`, `lib/year.js`, `public/index.html` |
+| 11 Sep 2026 | Recovery commission on this conversation: the original ask is five 90-day life projects, not a second app. Canonical brief `studio/recovery/CANONICAL_BRIEF.md`. Sit-down card `studio/ninety/SIT.md`. Money/ads stay parked; `LAUNCH.md` no longer tells him to spend $200 this week. Expo in `IMPROVEMENT_PLAN.md` remains drift — do not implement. | `studio/recovery/`, `studio/ninety/SIT.md` |
 
 ## Open questions (only Dean can close these)
 
@@ -77,4 +78,15 @@ Commission: 45–60 minute sprint, five priorities.
 - Built: Lent path *Stay with me* (40 rooms, `lentDayIndex`, `?path=lent`); first sitting opens a blessing instead of an install toast; `LAUNCH.md` aligned with the occupied niche.
 - Verified this session: `npm test` 62/62; `scripts/qa-browser.js` 9/9 including the blessing offer and the Lent ribbon.
 - Not verified: live Ash Wednesday 2027 (previewed with `?path=lent`); sharing a blessing card to a real phone.
+
+## FOR THE RECORD — 11 September 2026 (recovery)
+
+Commission: recover the first ten user prompts in this conversation, diagnose drift, research core + five adjacent topics, complete three flagships.
+
+- Recovered (transcript, 11 user messages): (1) five 90-day ideas after studying Dean; (2) extreme-detail wow deliverable; (3) Build / Baby / Build; (4) FORGE paste; (5–6) ATELIER paste twice; (7) blank UNIVERSAL REBUILD; (8) Finish with grok; (9) Show me your best finished product; (10) 45–60 min sprint. Eleventh: this recovery commission.
+- Built: `studio/recovery/` (brief, knowledge, Dean one-pager, coverage, Notion map); `studio/ninety/SIT.md`; folio `#week` leaf dated 11 Sep; LAUNCH Meta-spend line parked.
+- Team: one lead; three research agents (seasons/niche, memoir/accountability, enablement/factory). Independent review after the files landed.
+- Verified: original wording from `transcript.json` via streaming extract (not memory). Niche listings, ABS PDF, USCCB 2027 calendar, Appfigures, YouVersion, Meta 2022 targeting post, WebKit PWA notes opened 2026-09-11.
+- Not verified: live Pages URL (founder-only); live model eval; Dean's factory mark or family list; full Karr/Wolff books (excerpts only).
+- Assumed: MARKET_STRATEGY.md remains the unconfirmed rebuild target from prompt 7. Other Notion “recovery homes” belong to other chats and must not be merged here.
 

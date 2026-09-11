@@ -1,5 +1,7 @@
 # Red Letter
 
+**Tonight (11 Sep–4 Dec 2026):** the 90-day card is [`studio/ninety/SIT.md`](studio/ninety/SIT.md) — three actions, no login. The bound book is [`studio/ninety/index.html`](studio/ninety/index.html) (open the file; Pages serves this *app*, not that book). Agents: [`studio/recovery/CANONICAL_BRIEF.md`](studio/recovery/CANONICAL_BRIEF.md).
+
 A quiet reading room for the **words Jesus actually spoke**.
 
 Not another Bible app. A daily companion constrained to the red letters of Matthew, Mark, Luke, and John — typeset like a small press, simple like a blank page.

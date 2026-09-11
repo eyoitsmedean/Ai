@@ -3,7 +3,7 @@
 
 The prompt in `PROMPT.md` was built from the person, not from a template, then run. This is the first output.
 
-**Review the bound book:** open `studio/ninety/index.html`. Extreme operating detail — sittings, scripts, Advent rooms, the factory ballot — is in `PLAYBOOK.md`.
+**Tonight:** `SIT.md` (three actions, dated 11 September). **Review the bound book:** `studio/ninety/index.html`. Extreme operating detail — sittings, scripts, Advent rooms, the factory ballot — is in `PLAYBOOK.md`.
 
 Two other agents already gave you ten income plans yesterday. This set is not those plans with new hats. It is what still makes sense after you subtract the research shelf, the newborn month, and the fact that you are already getting paid to do the thing you like.
 

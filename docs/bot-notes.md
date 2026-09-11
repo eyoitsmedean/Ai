@@ -1,4 +1,18 @@
-# Bot working notes — Red Letter — Market Strategy — v2 — 2026-09-07
+# Bot working notes
+
+## Recovery — The Quire — 2026-09-11
+
+Target: this conversation’s 90-day five (`studio/ninety/`), not a new app and not the cash folio.
+
+Opened this pass: App Store listings (Red Letter Cards, Red Letters: Quotes of Christ, Pocket Gospel, Pocket Christ, Android Red Letter KJV); Hallow help centre + Pray40/Pray25; Appfigures Lent surge; YouVersion 1B / impact / Easter 2026; ABS SOTB 2025 PDF + 2026 ch.1; USCCB 2027 calendar; Meta detailed-targeting post 8 Dec 2021; WebKit PWA notes. Memoir/enablement sources listed in `studio/recovery/KNOWLEDGE.md`.
+
+Do not merge Notion “Red Letter · recovery home · 11 Sep” (other chat; forbids Pages).
+
+---
+
+# Market Strategy — v2 — 2026-09-07
+
+Worker: that session · target: `MARKET_STRATEGY.md` · started after a blank UNIVERSAL REBUILD PIPELINE brief.
 
 Worker: this session · target: `MARKET_STRATEGY.md` · started after a blank UNIVERSAL REBUILD PIPELINE brief.
 
