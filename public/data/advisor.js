@@ -57,6 +57,13 @@
     { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
     { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Counted, down to the hairs of your head. You are not a burden to Him — and you are still responsible for what you do next.' },
   ];
+  const CRISIS_PASSAGES = [
+    { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'He leaves peace the way someone leaves a key. It is already in the house.' },
+    { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted. Rest is a gift, not a prize for the strong.' },
+    { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Counted, down to the hairs of your head. You are not a burden to Him.' },
+  ];
+  const THIRD_PERSON_RE = /\b(?:himself|herself|themselves|his life|her life|their life|he wants|she wants|he doesn'?t|she doesn'?t|he wishes|she wishes|he keeps|she keeps|my (?:son|daughter|friend|brother|sister|wife|husband|mom|mum|dad|mother|father|kid|child|student|partner|boyfriend|girlfriend) (?:said|told|wants|is|has|keeps))\b/i;
+  const BETRAYED_RE = /\b(?:cheat(?:ed|ing)\s+on\s+me|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:has\s+been|is|was|'s\s+been|had\s+been)\s+(?:cheating|unfaithful|sleeping\s+with)|(?:his|her)\s+affair|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:had|is\s+having|has\s+been\s+having|was\s+having|'s\s+having|'s\s+been\s+having)\s+an\s+affair|been\s+unfaithful|left\s+me\s+for\s+(?:another|someone|a\s+younger|his|her)|an\s+affair|been\s+cheating|unfaithful)\b/i;
 
   const PREFIX_KEYS = { anxi: 1, worr: 1, argu: 1, griev: 1, forgiv: 1, diagnos: 1, fright: 1 };
   function hasKey(t, key) {
@@ -100,8 +107,10 @@
         );
       }
       return crisis + formatPack(
-        'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
-        passagesFor('Peace'),
+        THIRD_PERSON_RE.test(raw)
+          ? 'Someone you love has said the hardest thing there is to hear. The numbers above are for them and for you — a counselor can tell you what to say tonight, and how to stay close. These words are for you while you make that call.'
+          : 'What you wrote matters more than anything else on this page. The numbers above reach real people, tonight, and they are the first step — not this room. These words are for while you wait on the line, or for after.',
+        CRISIS_PASSAGES,
         'You are not alone in this hour. Please go toward help now.'
       );
     }
@@ -116,7 +125,7 @@
       );
     }
 
-    if (/\b(?:cheat(?:ed|ing)\s+on\s+me|an affair|been cheating|unfaithful|his affair|her affair)\b/i.test(raw)) {
+    if (BETRAYED_RE.test(raw)) {
       return formatPack(
         'The day you find out is not the day He asks you to forgive. He sits with the wound first.',
         BETRAYED_PASSAGES,

@@ -14,7 +14,7 @@ Last verified: **2026-09-11**.
 
 The Advisor decides a **room** once. It writes only from that room. Every quotation is checked against the spoken KJV Gospels. If the question sounds like crisis, poisoning, violence, or bereavement, a **person** is offered first — 988, Poison Control, or the Domestic Violence Hotline — and the verses that follow are from a short safe list, not from the question’s own keywords.
 
-That claim is now true on **both** hosts: the Node server and the static page GitHub Pages actually serves.
+That claim is now true on **both** hosts for the twelve Seek rooms, the high-stakes letters (affair, veteran, the one who hit), and the **crisis-safe list** (John 14:27, Matthew 11:28, Luke 12:7 — not the Peace room’s tribulation verse). The static page GitHub Pages actually serves is the one that must stay in step.
 
 ---
 

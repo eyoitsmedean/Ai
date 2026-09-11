@@ -39,7 +39,7 @@ GitHub Pages will not show this branch until you merge it onto `claude/jesus-tea
    First verse: Luke 15:4. Not “take no thought for the morrow.”
 9. **Advisor, the one who is about to strike.** Type: `I want to hit my kid. I am so tired and he will not stop screaming.`  
    The violence notice first. Opening: *You asked about hurting someone.* First verse: Luke 15:4. The words “not your fault” must not appear.
-10. **Crisis, before send.** Type `I want to die` and stop. The interrupt must appear **before** the letter sends, with 988 and a chat line at 988lifeline.org.
+10. **Crisis, before send.** Type `I want to die` and stop. The interrupt must appear **before** the letter sends, with 988 and a chat line at 988lifeline.org. If a letter is written, the three verses are John 14:27, Matthew 11:28, Luke 12:7 — not “in the world ye shall have tribulation.”
 11. **Poison, before send.** Type `I took too many pills`. The same interrupt, **911 / Poison Control 1-800-222-1222** in red above 988.
 12. **Seven Days.** The ribbon: Come, Peace, Light, Love, Forgive, Abide, Go. Sit Day 1. Missing a day must not shame you.
 
@@ -82,6 +82,14 @@ iOS will not show our in-page install button (`beforeinstallprompt` does not fir
 The morning reminder in Settings is honest only while the page is open. It is not Web Push. Do not promise a ping at 8am after you have left.
 
 ---
+
+## What still differs on a static host
+
+- Today’s morning page, with no `/api/daily`, still shows the single frozen pack in `public/curated.json` rather than the server’s seven-day rotation. The Advisor letters above do not.
+- A question with no room still gets the client’s two calm fallback lines, not the server’s `NO_ROOM_OPENING`.
+- An empty send is rejected by the API, then the page writes the client fallback.
+
+Crisis, betrayal, danger, by-you, Shame, Conflict, and the twelve Seek first verses now match.
 
 ## What this room refuses
 

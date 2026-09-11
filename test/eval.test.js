@@ -102,11 +102,17 @@ describe('evaluation set', () => {
       ['life-44', 'I killed people in Afghanistan and I cannot sleep.', 'Luke 15:4'],
       ['life-27', 'I was a soldier. I killed people in Afghanistan and I can\'t stop seeing their faces.', 'Luke 15:4'],
       ['life-36', 'My wife has been having an affair for two years. I found out on Tuesday.', 'Matthew 11:28'],
+      ['crisis-01', 'I want to die.', 'John 14:27'],
     ];
     for (const [id, input, expected] of cases) {
       assert.equal(firstCite(retrievalLetter(input)), expected, `server ${id}`);
       assert.equal(firstCite(w.RLA_advise(input)), expected, `client ${id}`);
     }
+    const cites = (letter) => [...String(letter).matchAll(/\*\*([^*\n]+)\*\*/g)].map((m) => m[1].trim());
+    assert.deepEqual(cites(retrievalLetter('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
+    assert.deepEqual(cites(w.RLA_advise('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
+    assert.match(w.RLA_advise('My son told me tonight he wants to end his life. What do I say to him?'), /Someone you love has said the hardest thing/);
+    assert.doesNotMatch(w.RLA_advise('I want to die.'), /tribulation|overcome the world/i);
   });
 
   it('every quotation the page can show is His exact words', () => {
