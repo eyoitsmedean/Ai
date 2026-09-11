@@ -13,6 +13,7 @@ const SOURCE = process.argv[2] || path.join(ROOT, 'data', 'red-letter-source.jso
 
 const red = JSON.parse(fs.readFileSync(SOURCE, 'utf8')).verses;
 const kjv = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'gospels-kjv.json'), 'utf8'));
+const frames = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'narrator-frames.json'), 'utf8'));
 
 const spoken = {
   attribution: 'KJV 1769 public domain; red-letter spans from open red-letter maps, then spoken-text extraction',
@@ -26,7 +27,10 @@ for (const [cite, marker] of Object.entries(red)) {
   const [ch, vs] = rest.split(':');
   const full = cleanKjv(kjv.books[book]?.[ch]?.[vs] || '');
   if (!full) continue;
-  const text = marker && marker !== 'full' ? cleanKjv(marker) : extractSpoken(full, cite);
+  // A frame (narrator words taken from the verse itself) outranks a hand-written marker.
+  const custom = marker && marker !== 'full' && !frames[cite];
+  const text = custom ? cleanKjv(marker) : extractSpoken(full, cite);
+  if (custom && !full.includes(text)) throw new Error(`${cite}: marker is not the verse's own text: ${marker}`);
   if (!text) continue;
   if (!spoken.books[book]) spoken.books[book] = {};
   if (!spoken.books[book][ch]) spoken.books[book][ch] = {};

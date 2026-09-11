@@ -6,6 +6,16 @@ const app = require('../server');
 let server;
 let base;
 
+function sseText(raw) {
+  return raw
+    .split('\n')
+    .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+    .map((line) => {
+      try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+    })
+    .join('');
+}
+
 function request(method, path, body) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
@@ -63,6 +73,14 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
+  it('resolves a short encouragement theme name', async () => {
+    const res = await request('POST', '/api/encouragement', { theme: 'Anxiety' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.theme, 'Anxiety & Worry');
+    assert.ok(data.passages.length >= 3);
+  });
+
   it('serves a verified encouragement pack', async () => {
     const res = await request('POST', '/api/encouragement', { theme: 'Peace' });
     const data = JSON.parse(res.raw);
@@ -84,16 +102,55 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.match(res.headers['content-type'] || '', /text\/event-stream/);
     assert.equal(res.headers['x-accel-buffering'], 'no');
-    const letter = res.raw
-      .split('\n')
-      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
-      .map((line) => {
-        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
-      })
-      .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    const letter = sseText(res.raw);
+    // Without a model the harness writes the letter itself, from the need the writer named.
+    assert.match(letter, /Luke 12:32/);
+    assert.match(letter, /Fear not, little flock/);
+    assert.doesNotMatch(letter, /\{\{/, 'placeholders must be filled with corpus text');
+    assert.match(res.raw, /"source":"letterpress"/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('writes a different letter for a different need', async () => {
+    const shame = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I feel so much shame' }],
+    });
+    const shameLetter = sseText(shame.raw);
+    assert.match(shameLetter, /Luke 15:4/);
+    assert.doesNotMatch(shameLetter, /little flock/);
+    const grief = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'my mother died last week' }],
+    });
+    const griefLetter = sseText(grief.raw);
+    assert.match(griefLetter, /Matthew 5:4/);
+    assert.match(griefLetter, /Blessed are they that mourn/);
+  });
+
+  it('stops the letter on a crisis and names 988', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to die' }],
+    });
+    const letter = sseText(res.raw);
+    assert.match(letter, /988/);
+    assert.doesNotMatch(letter, /\*\*(Matthew|Mark|Luke|John)/);
+    const again = await request('POST', '/api/chat', {
+      messages: [
+        { role: 'user', content: 'I want to die' },
+        { role: 'assistant', content: letter },
+        { role: 'user', content: 'I am so ashamed' },
+      ],
+    });
+    const locked = sseText(again.raw);
+    assert.match(locked, /988/);
+    assert.doesNotMatch(locked, /\*\*(Matthew|Mark|Luke|John)/);
+  });
+
+  it('serves the one-screen on /ask', async () => {
+    const res = await request('GET', '/ask');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What is weighing on you today/);
+    assert.match(res.raw, /What this bot cannot do/);
+    assert.match(res.raw, /do not publish/i);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

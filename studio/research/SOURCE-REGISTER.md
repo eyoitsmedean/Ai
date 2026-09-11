@@ -1,0 +1,24 @@
+# Source register
+
+Claims that changed a decision. Dates are when the source was opened or checked in this session unless noted. **Not legal advice.**
+
+| ID | Question | Finding | Source | Date | Limitations | Confidence | Implication |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| S1 | How many user prompts exist in this Cursor run? | 6 genuine; 1 skipped wrapper | Transcript `…/bc-01a06e76-…/transcript.json` (1,308 messages; 7 user / 795 assistant / 506 tool). Filter: skip `<system_notification>` wrappers. | 2026-09-11 | No per-message timestamps on Dean’s prompts. Does not include Grok iOS first-ten. | High | Recovery table has 6 rows. Do not invent 7–10. |
+| S2 | What is the later one-screen law? | Ask / Words / Meaning≤4 / Cannot. Crisis: hotline, stop counsel. WATCH. | Notion page [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0), fetched 2026-09-11 | 2026-09-11 | Household page, not a statute. Parallel Grok F1–F3 already exist. | High | Flagship 2 + crisis stop. |
+| S3 | Which English texts are free for a US public advisor? | WEB dedicated PD; KJV PD in US; ASV PD; BSB dedicated PD (2023-04-30); OEB CC0. NIV/ESV/etc. need a license. | Notion license lock; eBible WEB copyright (opened). | 2026-09-11 | Not counsel. BSB official licensing page was thin on an earlier fetch (recorded on the Notion page). UK Crown prerogative still binds KJV *in the UK*. | Medium-high on WEB/KJV-US; medium on BSB until Dean opens berean.bible himself | Keep KJV labeled. Do not switch. |
+| S4 | WEB copyright / trademark | Text is public domain. Name is a trademark. Do not alter text and still call it WEB. | [https://ebible.org/engwebp/copyright.htm](https://ebible.org/engwebp/copyright.htm) opened 2026-09-11. Master copy noted at eBible.org/web and WorldEnglish.Bible. | 2026-09-11 | Trademark is a name constraint, not a text constraint. | High | Safe *future* candidate. Not loaded in this repo. |
+| S5 | Is 988 a bot? | 988 is the US Suicide & Crisis Lifeline — human counselors (call/text; chat at 988lifeline.org). This page is not 988. | Product copy already in `data/letterpress.js`; 988 is a SAMHSA/Vibrant operated service. This session did not re-open 988lifeline.org. | 2026-09-11 | Operational details of 988 can change; we did not re-verify staffing tonight. | High that we must name a human line; medium on current 988 ops | Name 988, then stop. |
+| S6 | Does California require a pause? | AB 1988 (PAUSE Act, 2025–2026) would require companion-chatbot crisis detection and interruption. Passed Assembly 73–0 (2026-05-21). Senate hearings canceled at author’s request (last 2026-06-26). **Not law.** Defines “credible crisis expression” as contextual, not keywords alone. Dean’s household is Idaho. | [Bill text](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB1988); [status](https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1988); Apr 2026 [committee analysis PDF](https://apcp.assembly.ca.gov/system/files/2026-04/ab-1988-pellerin-apcp-analysis.pdf) | 2026-09-11 | Not Idaho law. Bill text has been amended; versions differ on pause length vs human-review pause. Keyword-only detection is explicitly weaker than the bill’s definition. | High that it is not current law; medium on final text if revived | Stopping counsel is the stricter, defensible product rule regardless of CA. |
+| S7 | Pages live? | 6 Sep 2026: `https://eyoitsmedean.github.io/Ai/` 404; Pages API no site. Workflow exists. | CLAUDE.md 2026-09-06 entry. **Not re-curled tonight.** | 2026-09-06 | Stale-by: re-curl. WATCH makes the question moot for this session. | High for 6 Sep; unknown for 11 Sep | Do not enable Pages. |
+| S8 | Accidental “cut myself shaving” | Phrase carve-out exists; “cut myself again last night” still crisis. | `data/letterpress.js` `looksLikeCrisis`; eval O07 / C05. | 2026-09-11 | Phrase-specific, not a full NLP accident detector. | High for the locked phrases | Keep carve-out. |
+| S9 | Grok F1–F3 already filed? | Yes, children of This week. Different first-ten (Grok iOS). | This week page fetch 2026-09-11 20:56 UTC lists F1, F2, F3. | 2026-09-11 | Did not overwrite those pages. | High | New page is a child of the one-screen page only. |
+
+## Distinctions
+
+- **Fact:** WEB copyright page says the text is PD; the name is trademarked.
+- **Fact:** This transcript contains six user prompts.
+- **Interpretation:** The one-screen is the WATCH surface; the folio remains the long product.
+- **Assumption:** Dean still wants KJV voice on paper until he records WEB.
+- **Recommendation:** Prefer WEB/BSB *if* he opens a public US URL later.
+- **Unresolved:** Which translation he will record; whether he wants the Notion crisis *sentence* to replace the letterpress notice.

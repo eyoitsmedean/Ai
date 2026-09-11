@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Red Letter — Ask</title>
+  <link rel="icon" href="/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    :root {
+      --paper: #F4EFE4;
+      --folio: #FBF7EE;
+      --ink: #1B1610;
+      --ink-2: #4A4034;
+      --ink-3: #7A6E5E;
+      --rule: rgba(27, 22, 16, 0.10);
+      --crimson: #8F1D1D;
+      --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      --body: 'Source Serif 4', 'Palatino Linotype', Palatino, serif;
+      --ui: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .sheet {
+      width: min(560px, 100%);
+      margin: 0 auto;
+      padding: 28px 22px 64px;
+    }
+    .watch {
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      border: 1px solid var(--rule);
+      padding: 10px 12px;
+      margin-bottom: 28px;
+    }
+    .mark {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--crimson);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 20px;
+      color: var(--crimson);
+    }
+    h1 {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: clamp(36px, 8vw, 48px);
+      letter-spacing: -0.03em;
+      text-align: center;
+      line-height: .95;
+    }
+    h1 em { font-style: italic; color: var(--crimson); font-weight: 500; }
+    .deck {
+      font-style: italic;
+      color: var(--ink-2);
+      text-align: center;
+      margin: 16px auto 32px;
+      max-width: 28ch;
+    }
+    .block { margin-bottom: 28px; }
+    .kicker {
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 10px;
+    }
+    label.kicker { display: block; }
+    textarea {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 1px solid var(--rule);
+      background: var(--folio);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 18px;
+      line-height: 1.5;
+      padding: 14px 14px;
+      border-radius: 2px;
+    }
+    textarea:focus { outline: 1px solid var(--crimson); outline-offset: 2px; }
+    button.ask {
+      margin-top: 12px;
+      font-family: var(--ui);
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--crimson);
+      border: 1px solid var(--crimson);
+      padding: 10px 18px;
+      cursor: pointer;
+    }
+    button.ask:disabled { opacity: .45; cursor: default; }
+    .words { color: var(--crimson); font-family: var(--display); font-style: italic; font-size: 22px; line-height: 1.4; }
+    .cite {
+      font-family: var(--ui);
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--ink-3);
+      margin-top: 10px;
+    }
+    .meaning { color: var(--ink-2); max-width: 42ch; }
+    .cannot { color: var(--ink-2); font-size: 16px; }
+    .cannot p + p { margin-top: 10px; }
+    .notice {
+      border-left: 2px solid var(--crimson);
+      padding: 4px 0 4px 14px;
+      color: var(--ink);
+      white-space: pre-wrap;
+    }
+    .hidden { display: none; }
+    .colophon {
+      margin-top: 40px;
+      font-family: var(--ui);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: center;
+    }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <p class="watch">Watch · paper only · do not publish · do not launch · do not store-submit</p>
+    <div class="mark" aria-hidden="true">R</div>
+    <h1>Red <em>Letter</em></h1>
+    <p class="deck">His words, then one implication, then silence.</p>
+
+    <form id="ask-form" class="block" autocomplete="off">
+      <label class="kicker" for="ask">Ask</label>
+      <textarea id="ask" name="ask" maxlength="800" placeholder="What is weighing on you today?" required></textarea>
+      <button class="ask" type="submit" id="ask-btn">Set a line</button>
+    </form>
+
+    <section id="crisis" class="block hidden" aria-live="assertive">
+      <p class="kicker">Stop here</p>
+      <p class="notice" id="crisis-notice"></p>
+    </section>
+
+    <section id="words-block" class="block" aria-live="polite">
+      <p class="kicker">The words</p>
+      <p class="words" id="words">A saying will be set here, in His speech only.</p>
+      <p class="cite" id="cite">King James Version (1769)</p>
+    </section>
+
+    <section id="meaning-block" class="block">
+      <p class="kicker">What that might mean today</p>
+      <p class="meaning" id="meaning">At most four lines, taken from the line already kept for that saying — not a new sermon.</p>
+    </section>
+
+    <section class="block">
+      <p class="kicker">What this bot cannot do</p>
+      <div class="cannot">
+        <p>This is not a pastor, not a church, not a confession booth, and not a crisis counselor.</p>
+        <p>If you are in crisis or thinking about harming yourself, call or text <a href="tel:988">988</a> in the United States, or start at <a href="https://findahelpline.com">findahelpline.com</a>. Talk to a local pastor, counselor, or a trusted human. This page cannot replace them.</p>
+        <p>It will not invent a saying. It will not switch translations. Every line is King James (1769) until Dean records another licensed text.</p>
+      </div>
+    </section>
+
+    <p class="colophon">Set without a model, from His words only · <a href="/">folio</a></p>
+  </main>
+  <script src="/data/curated.js"></script>
+  <script src="/data/letterpress.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('ask-form');
+      var input = document.getElementById('ask');
+      var crisis = document.getElementById('crisis');
+      var notice = document.getElementById('crisis-notice');
+      var words = document.getElementById('words');
+      var cite = document.getElementById('cite');
+      var meaning = document.getElementById('meaning');
+      var stopped = false;
+      var emptyWords = words.textContent;
+      var emptyCite = cite.textContent;
+      var emptyMeaning = meaning.textContent;
+
+      function showNotice(text) {
+        stopped = true;
+        notice.textContent = text;
+        crisis.classList.remove('hidden');
+        words.textContent = emptyWords;
+        cite.textContent = emptyCite;
+        meaning.textContent = emptyMeaning;
+        input.value = '';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var engine = window.RLA_LETTERPRESS;
+        var data = window.RLA_CURATED || { packs: {}, commons: [] };
+        if (!engine) return;
+        if (stopped) {
+          showNotice(engine.CRISIS_NOTICE.replace(/\s+$/, ''));
+          return;
+        }
+        var screen = engine.composeScreen(input.value, {
+          packs: data.packs,
+          commons: data.commons,
+        });
+        if (screen.crisis) {
+          showNotice(screen.notice);
+          return;
+        }
+        crisis.classList.add('hidden');
+        words.textContent = '“' + screen.quote + '”';
+        cite.textContent = screen.verse + ' · ' + screen.translation;
+        meaning.textContent = screen.meaning;
+      });
+    })();
+  </script>
+</body>
+</html>
