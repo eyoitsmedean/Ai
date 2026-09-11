@@ -36,6 +36,7 @@ async function main() {
     const { res, json } = await req('/api/health');
     assert(res.ok && json.ok, 'health not ok');
     assert(json.corpusPassages >= 40, 'corpus too small: ' + json.corpusPassages);
+    assert(json.env == null, 'health must not advertise env');
   });
 
   await check('library books + Mark filter', async () => {
@@ -174,6 +175,8 @@ async function main() {
     assert(appHtml.includes('trust-strip') && appHtml.includes('advisor-hero') && appHtml.includes('Ask the Advisor'), 'missing trust/advisor hero');
     assert(appHtml.includes('share-caption') && /VERIFIED · WEB|Verified · WEB/.test(appHtml), 'missing viral trust share chrome');
     assert(appHtml.includes('function shareVerseBtn') && appHtml.includes('openSharedRef'), 'missing Advisor share / deep-link');
+    assert(appHtml.includes('function renderAdvisorChips') && appHtml.includes('function askLibByIndex'), 'missing hour chips / Ask from library');
+    assert(appHtml.includes('function highlightLibRef'), 'missing library deep-link highlight');
     assert(welcomeHtml.includes('/?tab=advisor'), 'welcome CTA must open the Advisor');
     assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
     assert(appHtml.includes('apple-mobile-web-app-capable'), 'missing iOS A2HS meta');

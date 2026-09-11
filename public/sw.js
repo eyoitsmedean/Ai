@@ -1,4 +1,4 @@
-const CACHE = 'rla-v27';
+const CACHE = 'rla-v28';
 const PRECACHE = [
   '/',
   '/offline',
@@ -9,6 +9,7 @@ const PRECACHE = [
   '/icon-maskable-512.png',
   '/favicon.png',
   '/apple-touch-icon.png',
+  '/og-image.png',
 ];
 
 self.addEventListener('install', (e) => {
