@@ -557,6 +557,10 @@ const ABUSE_PATTERNS = [
   /\b(?:hits?|beats?|kicks?|chokes?|hurts?) my (?:little |younger |baby )?(?:sister|brother|kids?|children|daughter|son)\b/,
   /\bcontrols? (?:all )?(?:my|our) money\b.{0,60}\b(?:worthless|stupid|can'?t leave|scared|afraid|threat)\b/,
   /\bthrew (?:a |the )?\w+ at (?:me|my head|my face)\b/,
+  // Spanish disclosures (US audience). Loose on purpose — same as English.
+  /\b(?:mi (?:esposo|esposa|marido|mujer|novio|novia|papá|padre|mamá|madre|padrastro)|él|ella)\b[^.!?]{0,40}(?:me (?:pega|pegó|golpea|golpeó|encierra|amenaza|viola|violó|tocó|toca)|pega(?:r)?me|golpearme)/u,
+  /(?:me (?:está |estan |están )?golpeando|me pega|me viola|me abusó|abuso (?:doméstico|sexual)|violencia (?:doméstica|de género))/u,
+  /(?:tengo|tenemos) miedo de (?:mí|mi|él|ella|mi (?:esposo|marido|novio|padre))/u,
 ];
 function detectAbuse(text) {
   const t = normForIntent(text);
@@ -609,7 +613,7 @@ function detectHostile(text) {
 /** Rough Spanish detector for the safety replies (two or more common function words). */
 function looksSpanish(text) {
   const t = normForIntent(text);
-  const hits = (t.match(/\b(?:quiero|vivir|morir|morirme|estoy|muy|triste|ayuda|ayúdame|me siento|no sé|qué|hacer|mi vida|nadie|solo|sola|dios|jesús|por favor|ya no|puedo|tengo)\b/g) || []).length;
+  const hits = (t.match(/\b(?:quiero|vivir|morir|morirme|estoy|muy|triste|ayuda|ayúdame|me siento|no sé|qué|hacer|mi vida|nadie|solo|sola|dios|jesús|por favor|ya no|puedo|tengo|esposo|esposa|marido|novio|novia|pega|pegó|golpea|golpeó|golpeando|miedo|abuso|violó|viola|anoche|ayúdame)\b/gu) || []).length;
   return hits >= 2;
 }
 
@@ -623,6 +627,32 @@ function classifyIntent(text) {
   if (detectOffScope(text)) return 'offscope';
   if (detectHostile(text)) return 'hostile';
   return 'guidance';
+}
+
+function guessTheme(text) {
+  const t = String(text || '').normalize('NFKC').toLowerCase();
+  const map = [
+    [/\blost (?:my|our) (?:baby|child|son|daughter|wife|husband|mom|mother|dad|father|brother|sister|friend|partner)\b|passed away|miscarr|stillbir|\bdied\b|\bdeath\b|funeral|grief|griev|mourn|widow|\bburied\b/, 'Grief & Loss'],
+    [/cancer|biopsy|diagnos|terminal|hospice|chemo|dementia|alzheim|hospital|surgery|afraid of dying|scared of dying/, 'Fear'],
+    [/angry at god|mad at god|angry with god|where (?:is|was) god|why (?:did|would) god/, 'Faith & Doubt'],
+    [/i cheated|i had an affair|my affair|i lied|guilt|ashamed|shame|regret|hate myself|i'?m a failure|failed as a|can'?t forgive myself|what i did/, 'Shame & Guilt'],
+    [/texting another|another (?:woman|man)|(?:he|she) cheated|(?:his|her) affair|trust (?:him|her|them) again|betray|stole|lied to me|forgive (?:him|her|them|my)/, 'Forgiveness'],
+    [/sober|drink(?:ing)?|addict|craving|urge to|relapse|temptation|tempted/, 'Suffering & Pain'],
+    [/exhaust|burn(?:ed|t)? out|numb|feel nothing|nothing left|so tired|worn out|can'?t keep up|drained|chronic pain|in pain|hurts? so much|suffer|sick|illness|patients? die|watched .{0,20}die/, 'Suffering & Pain'],
+    [/anxi|worr|stress|overwhelm|panic|can'?t sleep|debt|bills|rent|money|laid off|lose my job|losing my job|fired/, 'Anxiety & Worry'],
+    [/lonely|alone|abandon|nobody|no one|isolat|left me|left out|single|estranged|won'?t talk to me/, 'Loneliness'],
+    [/forgiv|let go of/, 'Forgiveness'],
+    [/came out|is gay|is trans|how (?:do i|to|should i) (?:respond|react|talk to)|don'?t know how to (?:respond|react)|conflict|enemy|anger|angry|argue|fight|relationship|coworker|boss|in-?laws?|voted|can'?t stand|resent/, 'Conflict & Relationships'],
+    [/fear|afraid|scared|terrified|frighten|nightmare/, 'Fear'],
+    [/purpose|direction|calling|supposed to do|do with my life|everyone else (?:seems|has)|point of me|useless|retire|no plan|behind in life|compar/, 'Purpose & Direction'],
+    [/doubt|faith|believe|pray|talking to a ceiling|god (?:is|isn'?t|doesn'?t)|angry at god|where is god/, 'Faith & Doubt'],
+    [/peace|rest|calm|quiet|still/, 'Peace'],
+    [/hope|despair|hopeless|give up|giving up/, 'Hope'],
+  ];
+  for (const [re, theme] of map) {
+    if (re.test(t)) return theme;
+  }
+  return 'Hope';
 }
 
 module.exports = {
@@ -641,6 +671,7 @@ module.exports = {
   detectOffScope,
   detectHostile,
   classifyIntent,
+  guessTheme,
   isGospelRef,
   similarity,
 };

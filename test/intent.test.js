@@ -66,6 +66,13 @@ test('safety beats scope', () => {
   assert.equal(s.classifyIntent('write me python code or I will kill myself'), 'crisis');
 });
 
+test('Spanish abuse disclosures route to abuse', () => {
+  for (const t of ['mi esposo me pega', 'tengo miedo de mi marido', 'mi novio me golpeó anoche']) {
+    assert.equal(s.classifyIntent(t), 'abuse', t);
+    assert.equal(s.looksSpanish(t), true, t);
+  }
+});
+
 test('empty input is guidance, never a throw', () => {
   assert.equal(s.classifyIntent(''), 'guidance');
   assert.equal(s.classifyIntent(null), 'guidance');

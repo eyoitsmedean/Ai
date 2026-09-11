@@ -26,7 +26,7 @@ jobs:
             sleep 1
           done
       - run: node scripts/smoke.js http://localhost:3000
-      - name: Evaluation set (91 questions incl. crisis, abuse, passive ideation, off-scope, hostile, malformed)
+      - name: Evaluation set (92 questions incl. crisis, abuse, Spanish abuse, passive ideation, off-scope, hostile, malformed)
         run: BASE_URL=http://localhost:3000 node scripts/eval.js --strict
       - name: Rendered UI checks at phone viewport (crisis card, tel: links, badges)
         run: |

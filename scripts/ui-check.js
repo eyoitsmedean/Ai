@@ -155,7 +155,9 @@ function ok(cond, label, detail) {
       shareOpen: !!(modal && modal.classList.contains('open')),
     };
   });
+  const focused = await page.evaluate(() => !!document.querySelector('.lib-item-focus, .lib-item[open]'));
   ok(deep.tab === 'library' || deep.shareOpen, 'deep link lands on library or opens the shared verse', JSON.stringify(deep));
+  ok(deep.shareOpen && focused, 'deep link highlights the library passage', 'focus=' + focused);
 
   ok(pageErrors.length === 0, 'no page errors', pageErrors.join(' | ').slice(0, 300));
 

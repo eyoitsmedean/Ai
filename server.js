@@ -17,6 +17,7 @@ const {
   detectPassiveIdeation,
   looksSpanish,
   classifyIntent,
+  guessTheme,
 } = require('./data/scripture');
 
 const app = express();
@@ -212,33 +213,6 @@ function parseJsonLoose(text) {
   );
 }
 
-function guessTheme(text) {
-  const t = String(text).normalize('NFKC').toLowerCase();
-  // Order matters: the most specific, highest-stakes themes first.
-  const map = [
-    [/\blost (?:my|our) (?:baby|child|son|daughter|wife|husband|mom|mother|dad|father|brother|sister|friend|partner)\b|passed away|miscarr|stillbir|\bdied\b|\bdeath\b|funeral|grief|griev|mourn|widow|\bburied\b/, 'Grief & Loss'],
-    [/cancer|biopsy|diagnos|terminal|hospice|chemo|dementia|alzheim|hospital|surgery|afraid of dying|scared of dying/, 'Fear'],
-    [/angry at god|mad at god|angry with god|where (?:is|was) god|why (?:did|would) god/, 'Faith & Doubt'],
-    [/i cheated|i had an affair|my affair|i lied|guilt|ashamed|shame|regret|hate myself|i'?m a failure|failed as a|can'?t forgive myself|what i did/, 'Shame & Guilt'],
-    [/texting another|another (?:woman|man)|(?:he|she) cheated|(?:his|her) affair|trust (?:him|her|them) again|betray|stole|lied to me|forgive (?:him|her|them|my)/, 'Forgiveness'],
-    [/sober|drink(?:ing)?|addict|craving|urge to|relapse|temptation|tempted/, 'Suffering & Pain'],
-    [/exhaust|burn(?:ed|t)? out|numb|feel nothing|nothing left|so tired|worn out|can'?t keep up|drained|chronic pain|in pain|hurts? so much|suffer|sick|illness|patients? die|watched .{0,20}die/, 'Suffering & Pain'],
-    [/anxi|worr|stress|overwhelm|panic|can'?t sleep|debt|bills|rent|money|laid off|lose my job|losing my job|fired/, 'Anxiety & Worry'],
-    [/lonely|alone|abandon|nobody|no one|isolat|left me|left out|single|estranged|won'?t talk to me/, 'Loneliness'],
-    [/forgiv|let go of/, 'Forgiveness'],
-    [/came out|is gay|is trans|how (?:do i|to|should i) (?:respond|react|talk to)|don'?t know how to (?:respond|react)|conflict|enemy|anger|angry|argue|fight|relationship|coworker|boss|in-?laws?|voted|can'?t stand|resent/, 'Conflict & Relationships'],
-    [/fear|afraid|scared|terrified|frighten|nightmare/, 'Fear'],
-    [/purpose|direction|calling|supposed to do|do with my life|everyone else (?:seems|has)|point of me|useless|retire|no plan|behind in life|compar/, 'Purpose & Direction'],
-    [/doubt|faith|believe|pray|talking to a ceiling|god (?:is|isn'?t|doesn'?t)|angry at god|where is god/, 'Faith & Doubt'],
-    [/peace|rest|calm|quiet|still/, 'Peace'],
-    [/hope|despair|hopeless|give up|giving up/, 'Hope'],
-  ];
-  for (const [re, theme] of map) {
-    if (re.test(t)) return theme;
-  }
-  return 'Hope';
-}
-
 function publicCorpusPayload() {
   return {
     translation: corpus.translation,
@@ -377,6 +351,16 @@ If someone may be watching your phone, clear this conversation afterward (Saved 
 
 Jesus never asked anyone to stay in harm's way. When you are safe, I am here — and so are His words about being seen, valued, and not alone.`;
 
+const ABUSE_REPLY_ES = `Gracias por confiarme esto. Lo que describes no es algo que debas soportar, y no es tu culpa. It is not your fault. Soy una guía que comparte las palabras de Jesús — no soy consejero — así que lo más cuidadoso es señalarte a personas entrenadas para esto:
+
+• Si estás en peligro inmediato, llama al **911** (EE. UU.) o a tu número de emergencia local
+• **Línea Nacional contra la Violencia Doméstica** (EE. UU.): llama al **1-800-799-7233** (hay atención en español), envía **START** al **88788**, o entra a https://www.thehotline.org — gratis, confidencial, 24/7
+• Fuera de EE. UU.: https://www.hotpeachpages.net lista líneas de ayuda por país
+
+Si alguien puede estar viendo tu teléfono, borra esta conversación después (Guardados → eliminar).
+
+Jesús nunca pidió que nadie se quedara en peligro. Cuando estés a salvo, estoy aquí.`;
+
 const OFFSCOPE_REPLY = `That is a fair question, but it is outside what I am here for. I am a reflective guide for life's real struggles — fear, grief, decisions, relationships, faith, shame, rest — and I answer only with words Jesus actually spoke in Matthew, Mark, Luke, and John.
 
 For that request, a general assistant or search will serve you better.
@@ -457,7 +441,6 @@ app.get('/api/health', (_req, res) => {
     corpusPassages: corpus.passages.length,
     themes: corpus.THEMES.length,
     freeChatLimit: FREE_CHAT_LIMIT,
-    env: IS_PROD ? 'production' : 'development',
   });
 });
 
@@ -728,7 +711,9 @@ app.post('/api/chat', async (req, res) => {
   // Safety handoffs run before the paywall and never consume a free credit:
   // someone in danger must never meet a 402.
   if (intent === 'crisis' || intent === 'abuse') {
-    const reply = intent === 'crisis' ? (looksSpanish(lastUser) ? CRISIS_REPLY_ES + '\n\n---\n\n' + CRISIS_REPLY : CRISIS_REPLY) : ABUSE_REPLY;
+    const reply = intent === 'crisis'
+      ? (looksSpanish(lastUser) ? CRISIS_REPLY_ES + '\n\n---\n\n' + CRISIS_REPLY : CRISIS_REPLY)
+      : (looksSpanish(lastUser) ? ABUSE_REPLY_ES + '\n\n---\n\n' + ABUSE_REPLY : ABUSE_REPLY);
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');

@@ -229,6 +229,7 @@ a.cite-badge:hover{filter:brightness(.95)}
 .cite-badge.warn{background:rgba(146,100,10,.12);color:var(--gold);border:1px solid rgba(146,100,10,.25)}
 .ground-note{font-size:calc(11px * var(--scale));color:var(--ink-muted);margin-top:8px;line-height:1.4;width:100%}
 :root[data-theme="dark"] .cite-badge.ok,:root.theme-dark .cite-badge.ok{background:rgba(74,222,128,.12);color:#86EFAC;border-color:rgba(74,222,128,.3)}
+.lib-item-focus{outline:2px solid var(--crimson);outline-offset:2px;border-radius:var(--r-sm)}
 .scripture-block{margin:10px 0;padding:12px;background:var(--stone);border-left:3px solid var(--crimson);border-radius:0 var(--r-sm) var(--r-sm) 0}
 .scripture-verse{font-size:calc(11px * var(--scale));font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .scripture-quote{font-family:var(--font-body);font-size:calc(15px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.6}
@@ -978,22 +979,16 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
           <p id="advisor-context-text"></p>
         </div>
         <div class="advisor-hero" id="advisor-hero">
-          <h2>Your Red Letter Advisor</h2>
-          <p>Guidance only from the words Jesus spoke — verified WEB citations, never invented quotes. Bring what’s heavy; leave with His speech.</p>
-          <button type="button" class="cta-btn cta-primary" style="margin:0 auto;display:inline-flex;width:auto;padding:12px 18px" onclick="askAboutTodaysWord()">Start with today’s word</button>
+          <h2>What is weighing on you?</h2>
+          <p>Say it in your own words. The Advisor answers only with words Jesus spoke — verified, checkable, never invented.</p>
+          <button type="button" class="cta-btn cta-primary" style="margin:0 auto;display:inline-flex;width:auto;padding:12px 18px" onclick="document.getElementById('chat-input')?.focus()">Begin</button>
         </div>
         <div class="chat-welcome" id="chat-welcome">
           <h2>Speak what’s on your heart</h2>
           <p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John — grounded and checkable.</p>
         </div>
         <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — a reflective guide with verified Gospel citations. If you're in crisis, call or text 988 (US/Canada) or visit IASP.</p>
-        <div class="suggestions" id="suggestions">
-          <button type="button" class="sug-chip" onclick="askAboutTodaysWord()">About today’s word</button>
-          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm anxious about tomorrow</button>
-          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I need to forgive someone</button>
-          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I feel alone</button>
-          <button type="button" class="sug-chip" onclick="sendSuggestion(this)">I'm searching for purpose</button>
-        </div>
+        <div class="suggestions" id="suggestions"></div>
         <div id="chat-messages"></div>
       </div>
       <div class="chat-input-bar">
@@ -3410,6 +3405,29 @@ function goTab(tab) {
   }
   if (tab === 'journal') { renderJournal(); renderPrayers(); }
   if (tab === 'library' && !libData) loadLibrary();
+  if (tab === 'advisor') {
+    renderAdvisorChips();
+    if (!chatMessages.length && ls('rla-land') === 'advisor') {
+      requestAnimationFrame(() => document.getElementById('chat-input')?.focus({ preventScroll: false }));
+    }
+  }
+}
+
+function advisorChipSet() {
+  const h = new Date().getHours();
+  if (h < 11) return ["I woke up anxious", "I need courage for today", "I'm afraid of what's coming"];
+  if (h < 17) return ["I'm overwhelmed at work", "I need to forgive someone", "I feel alone"];
+  return ["I can't rest", "The day was heavy", "I'm angry at someone"];
+}
+
+function renderAdvisorChips() {
+  const el = document.getElementById('suggestions');
+  if (!el || el.style.display === 'none') return;
+  const chips = ['<button type="button" class="sug-chip" onclick="askAboutTodaysWord()">About today’s word</button>'];
+  advisorChipSet().forEach((label) => {
+    chips.push('<button type="button" class="sug-chip" onclick="sendSuggestion(this)">' + esc(label) + '</button>');
+  });
+  el.innerHTML = chips.join('');
 }
 
 /* ═══ SETTINGS ═══ */
@@ -4176,6 +4194,7 @@ function renderLibList() {
       (p.note ? '<p style="font-size:12px;color:var(--ink-muted);margin-top:8px">' + esc(p.note) + '</p>' : '') +
       '<div class="card-actions">' +
       '<button type="button" class="action-btn" data-lib-action="share" data-lib-idx="' + idx + '">Share</button>' +
+      '<button type="button" class="action-btn" data-lib-action="ask" data-lib-idx="' + idx + '">Ask the Advisor</button>' +
       '<button type="button" class="action-btn" data-lib-action="save" data-lib-idx="' + idx + '">Save</button>' +
       '<button type="button" class="action-btn" data-lib-action="carry" data-lib-idx="' + idx + '">Carry</button>' +
       (p.note && /parable/i.test(p.note)
@@ -4187,6 +4206,29 @@ function renderLibList() {
 
 function passageTheme(p) {
   return Array.isArray(p?.theme) ? (p.theme[0] || '') : (p?.theme || '');
+}
+
+function askLibByIndex(idx) {
+  const p = libPassages[idx];
+  if (!p?.text) return;
+  const phrase = pickCarryPhrase(p.text);
+  const ctx = document.getElementById('advisor-context');
+  const ctxText = document.getElementById('advisor-context-text');
+  if (ctx && ctxText) {
+    ctx.classList.remove('hidden');
+    ctxText.textContent = p.verse + ' — “' + phrase + '”';
+  }
+  goTab('advisor');
+  const input = document.getElementById('chat-input');
+  if (input) {
+    input.value =
+      "I've been sitting with these words of Jesus (" +
+      p.verse +
+      '): "' +
+      phrase +
+      '". Help me live them — what do they ask of me, gently and practically?';
+  }
+  setTimeout(() => sendChat(), 180);
 }
 
 function shareLibByIndex(idx) {
@@ -4212,6 +4254,7 @@ document.getElementById('lib-list')?.addEventListener('click', (e) => {
   const idx = Number(btn.getAttribute('data-lib-idx'));
   if (Number.isNaN(idx)) return;
   if (btn.getAttribute('data-lib-action') === 'share') shareLibByIndex(idx);
+  else if (btn.getAttribute('data-lib-action') === 'ask') askLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'save') saveLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'carry') carryLibByIndex(idx);
   else if (btn.getAttribute('data-lib-action') === 'chamber') {
@@ -4824,10 +4867,31 @@ async function openSharedRef(raw) {
     return v === needle || v.startsWith(needle) || needle.startsWith(v.split(/[–-]/)[0]);
   });
   if (hit?.text) {
+    libQuery = String(hit.verse || ref).split(/[–-]/)[0];
+    const search = document.getElementById('lib-search');
+    if (search) search.value = libQuery;
+    applyLibFilters();
+    highlightLibRef(hit.verse || ref);
     openShareCard({ verse: hit.verse, quote: hit.text, theme: hit.theme || 'His words' });
     return;
   }
   showToast('Looking up ' + ref);
+}
+
+function highlightLibRef(ref) {
+  const needle = String(ref || '').toLowerCase();
+  const items = document.querySelectorAll('.lib-item');
+  items.forEach((el) => el.classList.remove('lib-item-focus'));
+  for (const el of items) {
+    const verse = (el.querySelector('.lib-verse')?.textContent || '').toLowerCase();
+    if (!verse) continue;
+    if (verse === needle || verse.startsWith(needle) || needle.startsWith(verse.split(/[–-]/)[0])) {
+      el.open = true;
+      el.classList.add('lib-item-focus');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
 }
 
 /* ═══ INIT ═══ */
