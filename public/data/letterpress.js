@@ -32,7 +32,7 @@
     [/\b(peace(?! out)|calm|be still|stillness|can'?t (be|sit) still|quiet my)/i, 'Peace'],
   ];
 
-  var CRISIS_RE = /\b(suicid|kill(ing)? myself|(end|ending|take|taking) my (own )?life|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang(ing)? myself|overdos|don'?t want to (live|be here anymore|be alive)|do not want to (live|be here anymore|be alive)|better off dead|no reason to live|not worth living|no point (in )?living|wish i (was|were) dead|wish i (was|were)n'?t (here|alive))\b/i;
+  var CRISIS_RE = /\b(suicid|kill(ing)? myself|(end|ending|take|taking) my (own )?life|end it all|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang(ing)? myself|overdos|don'?t want to (live|be here anymore|be alive)|do not want to (live|be here anymore|be alive)|cannot go on|can'?t go on|jump(ing)? (off|from)|unalive|kms\b|better off dead|no reason to live|not worth living|no point (in )?living|wish i (was|were) dead|wish i (was|were)n'?t (here|alive))\b/i;
 
   var CRISIS_NOTICE = [
     'If you are in danger or thinking of ending your life, please stop here and get human help now.',
@@ -129,8 +129,18 @@
     var raw = String(text || '');
     if (!raw) return false;
     // Accidents are not a crisis. "I cut myself again last night" still is.
-    if (/\bcut(ting)? myself (shaving|cooking|chopping|slicing|on (a |the )?(knife|glass|paper|can|lid))\b/i.test(raw)) return false;
+    if (/\bcut(ting)? myself (while |when )?(shaving|cooking|chopping|slicing|on (a |the )?(knife|glass|paper|can|lid))\b/i.test(raw)) return false;
     return CRISIS_RE.test(raw);
+  }
+
+  function historyHasCrisis(history) {
+    for (var i = 0; i < (history || []).length; i++) {
+      var m = history[i];
+      if (!m || typeof m.content !== 'string') continue;
+      if (m.role === 'user' && looksLikeCrisis(m.content)) return true;
+      if (m.role === 'assistant' && m.content.indexOf('If you are in danger') === 0) return true;
+    }
+    return false;
   }
 
   function guessThemes(text, known) {
@@ -187,7 +197,7 @@
     var raw = String(text || '').trim();
     var themes = guessThemes(raw, Object.keys(packs));
     var primary = themes[0] || null;
-    if (looksLikeCrisis(raw)) {
+    if (looksLikeCrisis(raw) || historyHasCrisis(history)) {
       return {
         theme: primary,
         themes: themes,

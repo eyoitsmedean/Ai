@@ -35,7 +35,7 @@ function runCase(c) {
   const noticeAt = text.indexOf('988');
   const scriptureAt = firstScriptureIndex(text);
   checks.crisis = c.crisis
-    ? noticeAt >= 0 && scriptureAt === -1 && letter.crisis === true
+    ? noticeAt >= 0 && /findahelpline/i.test(text) && scriptureAt === -1 && letter.crisis === true
     : noticeAt === -1 && !letter.crisis;
   checks.canon = c.crisis
     ? letter.passages.length === 0

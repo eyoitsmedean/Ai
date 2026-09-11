@@ -133,6 +133,16 @@ describe('smoke routes', () => {
     const letter = sseText(res.raw);
     assert.match(letter, /988/);
     assert.doesNotMatch(letter, /\*\*(Matthew|Mark|Luke|John)/);
+    const again = await request('POST', '/api/chat', {
+      messages: [
+        { role: 'user', content: 'I want to die' },
+        { role: 'assistant', content: letter },
+        { role: 'user', content: 'I am so ashamed' },
+      ],
+    });
+    const locked = sseText(again.raw);
+    assert.match(locked, /988/);
+    assert.doesNotMatch(locked, /\*\*(Matthew|Mark|Luke|John)/);
   });
 
   it('serves the one-screen on /ask', async () => {

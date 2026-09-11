@@ -99,7 +99,8 @@ STRICT RULES:
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
-• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
+• Never claim to be a person, a pastor, a clinician, or emergency care.
+• If the writer is in danger or thinking of ending their life, do not write empathy, placeholders, or any counsel. The harness will send the crisis notice instead.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -336,7 +337,7 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
+  const crisis = looksLikeCrisis(last.content) || messages.some((m) => m && m.role === 'user' && looksLikeCrisis(m.content));
   const finish = (body, source) => {
     const verified = verifyAndSubstitute(body);
     write({ meta: { source } });

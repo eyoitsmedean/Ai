@@ -162,22 +162,22 @@
       <p class="notice" id="crisis-notice"></p>
     </section>
 
-    <section id="words-block" class="block hidden" aria-live="polite">
+    <section id="words-block" class="block" aria-live="polite">
       <p class="kicker">The words</p>
-      <p class="words" id="words"></p>
-      <p class="cite" id="cite"></p>
+      <p class="words" id="words">A saying will be set here, in His speech only.</p>
+      <p class="cite" id="cite">King James Version (1769)</p>
     </section>
 
-    <section id="meaning-block" class="block hidden">
+    <section id="meaning-block" class="block">
       <p class="kicker">What that might mean today</p>
-      <p class="meaning" id="meaning"></p>
+      <p class="meaning" id="meaning">At most four lines, taken from the line already kept for that saying — not a new sermon.</p>
     </section>
 
     <section class="block">
       <p class="kicker">What this bot cannot do</p>
       <div class="cannot">
         <p>This is not a pastor, not a church, not a confession booth, and not a crisis counselor.</p>
-        <p>If you are in crisis or thinking about harming yourself, call or text 988 in the United States, or start at findahelpline.com. Talk to a local pastor, counselor, or a trusted human. This page cannot replace them.</p>
+        <p>If you are in crisis or thinking about harming yourself, call or text <a href="tel:988">988</a> in the United States, or start at <a href="https://findahelpline.com">findahelpline.com</a>. Talk to a local pastor, counselor, or a trusted human. This page cannot replace them.</p>
         <p>It will not invent a saying. It will not switch translations. Every line is King James (1769) until Dean records another licensed text.</p>
       </div>
     </section>
@@ -192,38 +192,45 @@
       var input = document.getElementById('ask');
       var crisis = document.getElementById('crisis');
       var notice = document.getElementById('crisis-notice');
-      var wordsBlock = document.getElementById('words-block');
-      var meaningBlock = document.getElementById('meaning-block');
       var words = document.getElementById('words');
       var cite = document.getElementById('cite');
       var meaning = document.getElementById('meaning');
+      var stopped = false;
+      var emptyWords = words.textContent;
+      var emptyCite = cite.textContent;
+      var emptyMeaning = meaning.textContent;
 
-      function hide(el) { el.classList.add('hidden'); }
-      function show(el) { el.classList.remove('hidden'); }
+      function showNotice(text) {
+        stopped = true;
+        notice.textContent = text;
+        crisis.classList.remove('hidden');
+        words.textContent = emptyWords;
+        cite.textContent = emptyCite;
+        meaning.textContent = emptyMeaning;
+        input.value = '';
+      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         var engine = window.RLA_LETTERPRESS;
         var data = window.RLA_CURATED || { packs: {}, commons: [] };
         if (!engine) return;
+        if (stopped) {
+          showNotice(engine.CRISIS_NOTICE.replace(/\s+$/, ''));
+          return;
+        }
         var screen = engine.composeScreen(input.value, {
           packs: data.packs,
           commons: data.commons,
         });
         if (screen.crisis) {
-          notice.textContent = screen.notice;
-          show(crisis);
-          hide(wordsBlock);
-          hide(meaningBlock);
-          input.value = '';
+          showNotice(screen.notice);
           return;
         }
-        hide(crisis);
+        crisis.classList.add('hidden');
         words.textContent = '“' + screen.quote + '”';
         cite.textContent = screen.verse + ' · ' + screen.translation;
         meaning.textContent = screen.meaning;
-        show(wordsBlock);
-        show(meaningBlock);
       });
     })();
   </script>

@@ -134,9 +134,11 @@ async function main() {
     const copy = await page.evaluate(() => document.body.innerText);
     assert(/What this bot cannot do/.test(copy), 'cannot-do block missing');
     assert(/do not publish/i.test(copy), 'WATCH banner missing');
+    const firstPaint = await page.evaluate(() => document.body.innerText);
+    assert(/The words/.test(firstPaint) && /What that might mean today/.test(firstPaint), 'four blocks must be visible before an ask');
     await page.type('#ask', 'I feel so much shame');
     await page.click('#ask-btn');
-    await page.waitForFunction(() => !document.getElementById('words-block').classList.contains('hidden'), { timeout: 5000 });
+    await page.waitForFunction(() => /Luke 15:4/.test(document.getElementById('cite').textContent), { timeout: 5000 });
     const saying = await page.evaluate(() => ({
       words: document.getElementById('words').textContent,
       cite: document.getElementById('cite').textContent,
@@ -151,10 +153,18 @@ async function main() {
     await page.waitForFunction(() => !document.getElementById('crisis').classList.contains('hidden'), { timeout: 5000 });
     const crisis = await page.evaluate(() => ({
       notice: document.getElementById('crisis-notice').textContent,
-      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+      words: document.getElementById('words').textContent,
     }));
     assert(/988/.test(crisis.notice), 'one-screen crisis missing 988');
-    assert(crisis.wordsHidden, 'one-screen must hide the saying after a crisis');
+    assert(!/go after that which is lost/.test(crisis.words), 'one-screen must clear the saying after a crisis');
+    await page.evaluate(() => { document.getElementById('ask').value = ''; });
+    await page.type('#ask', 'I feel ashamed');
+    await page.click('#ask-btn');
+    const locked = await page.evaluate(() => ({
+      noticeOn: !document.getElementById('crisis').classList.contains('hidden'),
+      words: document.getElementById('words').textContent,
+    }));
+    assert(locked.noticeOn && !/go after that which is lost/.test(locked.words), 'one-screen must stay stopped after a crisis');
   });
 
   await check('no page errors', async () => {

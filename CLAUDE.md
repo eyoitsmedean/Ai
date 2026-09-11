@@ -41,7 +41,7 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 ### 2026-09-11 — Recovery commission (evening)
 - This Cursor thread has **six** user-authored prompts, not ten. Transcript recovered; one `role: user` wrapper skipped. Table: `studio/CANONICAL-BRIEF.md`.
 - Later Notion law (opened this session) outranks earlier ship energy: **WATCH** — no publish, no launch, no store-submit. One-screen spec. Crisis = hotline then **stop counsel**. Translation is a human gate (WEB/KJV-US). No sixth hub; Grok F1–F3 left untouched.
-- Crisis path no longer prepends a letter after 988. `composeLetter` returns notice-only; `/api/chat` does not start the model. Eval crisis cases require no Scripture.
+- Crisis path no longer prepends a letter after 988. `composeLetter` returns notice-only; `/api/chat` does not start the model. A later turn in the same correspondence stays stopped. Collapse phrasing (`can't go on`, `end it all`) is treated as crisis, not Hope counsel. Eval crisis cases require no Scripture.
 - One-screen WATCH advisor: `public/one-screen.html` (`/ask`). Meaning is curated `context`, ≤4 sentences. Quotes labeled King James Version (1769). Corpus not switched to WEB.
 - Adjacent research filed under `studio/research/` (WEB vs KJV, crisis stop, one-screen vs folio, WATCH vs Pages, meaning vs words).
 - ASSUMED: Dean still wants KJV voice on paper until he records another text. Folio rooms stay.

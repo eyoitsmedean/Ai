@@ -10,7 +10,7 @@ Stop. A crisis cue yields the notice only. No Gospel citation, no “what that m
 
 ## Deeper explanation
 
-The older contract treated 988 as a preface: the reader still received a Shame or Hope letter. That is counsel. It also trains the eval to *require* Scripture after a suicide cue, which is the opposite of a pause.
+The older contract treated 988 as a preface: the reader still received a Shame or Hope letter. That is counsel. It also trains the eval to *require* Scripture after a suicide cue, which is the opposite of a pause. A first-turn stop that then writes Luke 15 on “I am ashamed” is the same failure delayed by one message. The correspondence now stays stopped once a user turn (or a notice) has been a crisis.
 
 988 is a human service (US Suicide & Crisis Lifeline). This page is not 988, not a pastor, and not emergency care. The existing letterpress notice already says so. We kept that notice rather than silently replacing it with the Notion candidate sentence; Dean can swap copy.
 

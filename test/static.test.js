@@ -113,12 +113,16 @@ describe('the static Advisor is the server Advisor', () => {
     assert.match(second, /^You have stayed with this/);
   });
 
-  it('gives a first letter after a crisis stop, because no room opening was sent', () => {
+  it('keeps the stop after a crisis — the next line is not a letter', () => {
     const first = window.RLA_advise('I want to die, I am so ashamed', []);
     assert.match(first, /^If you are in danger/);
     assert.doesNotMatch(first, /Shame says you are the lost sheep/);
-    const second = window.RLA_advise('still ashamed', [{ role: 'assistant', content: first }]);
-    assert.match(second, /Shame says you are the lost sheep/);
+    const second = window.RLA_advise('still ashamed', [
+      { role: 'user', content: 'I want to die, I am so ashamed' },
+      { role: 'assistant', content: first },
+    ]);
+    assert.match(second, /988/);
+    assert.doesNotMatch(second, /\*\*(Matthew|Mark|Luke|John)/);
   });
 
   it('counts abbreviated citations from a model turn as already sent', () => {

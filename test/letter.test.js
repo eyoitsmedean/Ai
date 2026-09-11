@@ -205,6 +205,7 @@ describe('composeLetter', () => {
   it('does not treat an accidental cut as a crisis, and still hears a real one', () => {
     const press = require('../data/letterpress');
     assert.equal(press.looksLikeCrisis('I cut myself shaving'), false);
+    assert.equal(press.looksLikeCrisis('I cut myself while shaving'), false);
     assert.equal(press.looksLikeCrisis('I cut myself on a knife cooking'), false);
     assert.equal(press.looksLikeCrisis('I cut myself again last night'), true);
     assert.equal(press.looksLikeCrisis('I want to die'), true);
@@ -217,6 +218,17 @@ describe('composeLetter', () => {
     assert.deepEqual(citations, []);
     assert.match(text, /988/);
     assert.doesNotMatch(text, /\*\*(Matthew|Mark|Luke|John)/);
+    const collapse = composeLetter("I can't go on");
+    assert.equal(collapse.crisis, true);
+    assert.doesNotMatch(collapse.text, /\*\*(Matthew|Mark|Luke|John)/);
+    const after = composeLetter('I am so ashamed', {
+      history: [
+        { role: 'user', content: 'I want to die' },
+        { role: 'assistant', content: text },
+      ],
+    });
+    assert.equal(after.crisis, true);
+    assert.doesNotMatch(after.text, /\*\*(Matthew|Mark|Luke|John)/);
   });
 
   it('sets one screen from a saying and its stored context', () => {
