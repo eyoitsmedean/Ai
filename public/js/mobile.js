@@ -197,7 +197,7 @@
 
   const MODAL_IDS = [
     'lectio', 'amen', 'cmdk', 'settings-sheet', 'plus-sheet',
-    'share-sheet', 'blessing-sheet', 'install-sheet',
+    'share-sheet', 'blessing-sheet', 'install-sheet', 'crisis-modal',
   ];
   let lastFocused = null;
   let shellInert = false;

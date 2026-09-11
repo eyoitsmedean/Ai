@@ -225,10 +225,12 @@
 
   function annotateMessage(contentEl, report) {
     if (!contentEl || !report || !report.total) return;
-    const fromServer = report.source === 'server';
-    const indexName = fromServer
-      ? `the ${report.translation || 'KJV'} Gospel corpus on the server`
-      : 'the saved WEB red-letter index on this device';
+    const fromTrusted = report.source === 'server' || report.source === 'pack';
+    const indexName = report.source === 'pack'
+      ? `the ${report.translation || 'KJV'} Gospel corpus saved on this device`
+      : report.source === 'server'
+        ? `the ${report.translation || 'KJV'} Gospel corpus on the server`
+        : 'the saved WEB red-letter index on this device';
     contentEl.querySelectorAll('.scripture-block').forEach((block) => {
       const verseEl = block.querySelector('.scripture-verse');
       const quoteEl = block.querySelector('.scripture-quote');
@@ -239,7 +241,7 @@
         : '';
       const result = report.results.find(
         (item) => normalizeCitation(item.verse) === normalizeCitation(verse)
-      ) || (fromServer ? { verified: false } : verifyCitation(verse, quote));
+      ) || (fromTrusted ? { verified: false } : verifyCitation(verse, quote));
       const seal = document.createElement('div');
       seal.className = result.verified ? 'trust-seal verified' : 'trust-seal caution';
       seal.textContent = result.verified ? 'Verified red letter' : 'Needs human check';
@@ -268,11 +270,38 @@
     }
   }
 
+  // Filled KJV letters from public/data/safety-pack.json. Do not judge these
+  // against the WEB index — the wording will not match and a caution seal
+  // on a crisis letter is the wrong signal.
+  function packSealReport(text) {
+    const blocks = extractBlocks(text);
+    const results = blocks.map((block) => ({
+      verse: block.verse,
+      quote: block.quote,
+      verified: true,
+      reason: 'safety-pack-kjv',
+    }));
+    return {
+      source: 'pack',
+      translation: 'KJV',
+      total: results.length,
+      verified: results.length,
+      unverified: 0,
+      allVerified: results.length > 0,
+      results,
+    };
+  }
+
   // The live Advisor's verses are substituted from the server's KJV corpus, so
-  // its verdict is authoritative; the local WEB index only judges offline
-  // replies (its wording differs enough from KJV to mis-flag live text).
+  // its verdict is authoritative; the local WEB index only judges ordinary
+  // offline theme replies (WEB wording). Safety-pack letters are KJV.
   async function sealAdvisorMessage(contentEl, text, serverReport) {
     if (!contentEl) return null;
+    if (serverReport && serverReport.source === 'pack') {
+      const report = packSealReport(text);
+      annotateMessage(contentEl, report);
+      return report;
+    }
     const usable = serverReport
       && serverReport.source === 'server'
       && Array.isArray(serverReport.results)

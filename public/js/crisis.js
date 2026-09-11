@@ -45,6 +45,18 @@
       note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches your phone, clear this conversation afterwards.',
       continueLabel: 'I am safe right now — continue',
     },
+    assault: {
+      eyebrow: 'This was not your fault',
+      title: 'Please reach someone who listens to survivors',
+      body: 'What was done to you is not something you should have to carry alone. Trained advocates at the sexual assault hotline listen every hour of the day, at whatever pace you need — free and confidential. Nothing here will tell you to stay quiet or to pray as if it did not happen.',
+      actions: `
+          <a class="crisis-primary" href="tel:18006564673">Call 1-800-656-4673 (RAINN, US)</a>
+          <a class="crisis-secondary" href="https://hotline.rainn.org/" target="_blank" rel="noopener">Chat at hotline.rainn.org</a>
+          <a class="crisis-secondary" href="tel:18007997233">Call 1-800-799-7233 (US Domestic Violence Hotline)</a>
+          <a class="crisis-secondary" href="https://findahelpline.com/" target="_blank" rel="noopener">Find a helpline in your country</a>`,
+      note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches your phone, clear this conversation afterwards.',
+      continueLabel: 'I am safe right now — continue',
+    },
   };
 
   function ensureModal(kind) {
@@ -57,6 +69,7 @@
       el.setAttribute('role', 'dialog');
       el.setAttribute('aria-modal', 'true');
       el.setAttribute('aria-labelledby', 'crisis-title');
+      el.setAttribute('aria-describedby', 'crisis-body');
       document.body.appendChild(el);
     }
     el.dataset.kind = kind;
@@ -64,7 +77,7 @@
       <div class="crisis-card">
         <div class="crisis-eyebrow">${copy.eyebrow}</div>
         <h2 id="crisis-title">${copy.title}</h2>
-        <p class="crisis-body">${copy.body}</p>
+        <p class="crisis-body" id="crisis-body">${copy.body}</p>
         <div class="crisis-actions">${copy.actions}
         </div>
         <p class="crisis-note">${copy.note}</p>
@@ -78,17 +91,29 @@
 
   function showCrisisModal(kind) {
     return new Promise((resolve) => {
-      const el = ensureModal(kind === 'danger' || kind === 'assault' ? 'danger' : 'crisis');
+      const copyKind = kind === 'assault' ? 'assault' : (kind === 'danger' ? 'danger' : 'crisis');
+      const el = ensureModal(copyKind);
       const opener = document.activeElement;
+      const app = document.getElementById('app');
+      if (app) app.inert = true;
       let settled = false;
+      const focusables = () => [...el.querySelectorAll('a[href], button:not([disabled])')];
       const onKey = (e) => {
-        if (e.key === 'Escape') { e.preventDefault(); finish('close'); }
+        if (e.key === 'Escape') { e.preventDefault(); finish('close'); return; }
+        if (e.key !== 'Tab') return;
+        const list = focusables();
+        if (!list.length) return;
+        const first = list[0];
+        const last = list[list.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       };
       const finish = (action) => {
         if (settled) return;
         settled = true;
         document.removeEventListener('keydown', onKey, true);
         el.classList.remove('on');
+        if (app) app.inert = false;
         if (opener && typeof opener.focus === 'function') {
           try { opener.focus({ preventScroll: true }); } catch (_) { /* detached */ }
         }

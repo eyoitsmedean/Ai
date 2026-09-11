@@ -240,6 +240,8 @@
     /\b(\w+) (beats|hits|chokes|abuses|is beating|is abusing|is hitting|punches|slaps|strangles) (his|her|their) (wife|husband|kids|children|girlfriend|boyfriend|partner|daughter|son|mother|mom|dad|father|dog|cat|baby)\b/,
     { re: /\b(wont|will not|doesnt|does not|refuses to|never lets me|doesnt let me|wont let me) ?(let me )?(leave|go|see (my|anyone)|have (a phone|my phone|money|friends)|talk to (anyone|my (family|friends|mom|mother|dad|sister|brother))|work|drive|go anywhere|out of the house|call (anyone|my)|use the (phone|car))\b/, neg: false },
     /\b(checks?|checking|reads?|reading|monitors?|monitoring|tracks?|tracking|controls?|controlling|took|takes|taking|hides?|hiding|broke|breaks|smashed|smashes|destroyed|destroys) (my|all my|our) (phone|messages|texts|location|money|passport|keys|car keys|documents|id|bank|cards?|paycheck|medication|meds|things|stuff|clothes|laptop) (so i cant|and i cant|and wont|so that i|to keep me|to stop me|when (he|she)s angry|when (he|she) is angry|in (a|his|her) rage|against the wall|in front of)\b/,
+    /\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend|ex|dad|father|mom|mother|stepdad|stepfather)) (took|takes|taking|hid|hides|hiding|stole|has stolen|confiscated|keeps|kept|has) (my|our|the) (passport|passports|green card|visa|immigration papers|papers|documents|id|driver'?s? license|car keys)\b/,
+    /\b(i (need|have|want) to leave|trying to leave|cant leave|cannot leave).{0,48}(he|she|they) (took|has|hid|holds|has my) (my |our )?(passport|keys|phone|papers|documents|id)\b/,
     /\b(kill|hurt|beat|shoot|stab|strangle|choke|drown) (me|us|the (kids|children|baby)|my (kids|children|baby|son|daughter)) (if i|when i|unless i|if we|the next time|next time|when he|when she|tonight)\b/,
     /\b(im|i am|we are|were) (in|not out of) (danger|physical danger|a dangerous situation|an unsafe situation)\b/,
     /\bcall(ed)? the (police|cops) on (him|her|them|my (husband|wife|partner|boyfriend|girlfriend|dad|father|mom|mother|son|ex|stepdad)) (for|after|because|when) (hitting|beating|choking|threatening|attacking|hurting|pushing|strangling|assaulting)/,
@@ -291,8 +293,10 @@
     const list = Array.isArray(messages) ? messages : [];
     const users = list.filter(function (m) { return m && m.role === 'user' && typeof m.content === 'string'; });
     if (!users.length) return { kind: null, carried: false };
-    const current = detectKind(users[users.length - 1].content);
+    const currentText = users[users.length - 1].content;
+    const current = detectKind(currentText);
     if (current) return { kind: current, carried: false };
+    if (looksLikeGreeting(currentText)) return { kind: null, carried: false };
     const n = typeof lookback === 'number' ? lookback : 8;
     const earlier = users.slice(Math.max(0, users.length - 1 - n), users.length - 1);
     for (let i = earlier.length - 1; i >= 0; i -= 1) {
@@ -302,5 +306,26 @@
     return { kind: null, carried: false };
   }
 
-  return { normalize, scrub, detectKind, detectConversation, IDIOMS, CRISIS, ASSAULT, DANGER };
+  // Same doorway as lib/retrieve.js looksLikeGreeting: a bare thanks after a
+  // disclosure is a greeting, not another handoff. Length cap matches the
+  // server so "ok thanks" and a forty-one-character thanks diverge the same way.
+  const GREETING_RE = /^\W*((hi|hello|hey|hiya|yo|good\s+(morning|afternoon|evening|night)|thanks?(\s+you)?(\s+so\s+much)?(\s+for\s+(this|that|listening|the\s+words|your\s+help))?|thank\s+you(\s+so\s+much)?(\s+for\s+(this|that|listening|the\s+words|your\s+help))?|ty|ok(ay)?(\s+thanks?(\s+you)?)?|(ok(ay)?|alright|got\s+it|i\s+see|understood|that\s+helps?|that\s+helped)|amen|bless\s+you|goodnight|good\s+bye|bye|i'?m\s+here|are\s+you\s+there|hello\?|anyone\s+there|(that('?s| is| was) )?(beautiful|helpful|lovely|kind|nice|good)(\s+thank\s+you|\s+thanks)?)[\s.!,]*)+$/i;
+
+  function looksLikeGreeting(query) {
+    const q = String(query || '').trim();
+    return q.length <= 40 && GREETING_RE.test(q);
+  }
+
+  return {
+    normalize,
+    scrub,
+    detectKind,
+    detectConversation,
+    looksLikeGreeting,
+    GREETING_RE,
+    IDIOMS,
+    CRISIS,
+    ASSAULT,
+    DANGER,
+  };
 });

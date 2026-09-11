@@ -305,6 +305,8 @@ describe('shared safety detector: held-out phrasings', () => {
       'does jesus want me to submit to my husband even when he hurts me', 'my husband threw me against the wall. do I have to forgive him',
       'he wont let me leave the house', 'my daughter told me her stepdad touched her', 'my father scares me when he drinks',
       'he says the bible says he can discipline me',
+      'I need to leave but he took my passport',
+      'he hid my car keys',
     ];
     for (const t of held) assert.ok(['danger', 'assault'].includes(S.detectKind(t)), `${t} -> ${S.detectKind(t)}`);
     for (const t of ['my stepdad touches me at night', 'he forced me to have sex', 'I was raped last year']) {
@@ -346,5 +348,18 @@ describe('shared safety detector: held-out phrasings', () => {
     assert.deepEqual(S.detectConversation(convo), { kind: 'danger', carried: true });
     assert.deepEqual(S.detectConversation(convo.slice(0, 1)), { kind: 'danger', carried: false });
     assert.deepEqual(S.detectConversation([{ role: 'user', content: 'my mother died' }]), { kind: null, carried: false });
+    assert.deepEqual(S.detectConversation([
+      { role: 'user', content: 'my husband hits me when he drinks' },
+      { role: 'assistant', content: 'x' },
+      { role: 'user', content: 'ok thanks' },
+    ]), { kind: null, carried: false });
+  });
+
+  it('matches the server greeting doorway on the same phrases', () => {
+    const { looksLikeGreeting: serverGreeting } = require('../lib/retrieve');
+    const phrases = ['hi', 'Thank you.', 'ok thanks', 'amen', 'hello?', 'that helps', 'ok thanks my mother died last week'];
+    for (const t of phrases) {
+      assert.equal(S.looksLikeGreeting(t), serverGreeting(t), t);
+    }
   });
 });
