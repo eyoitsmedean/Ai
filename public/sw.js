@@ -1,4 +1,4 @@
-const CACHE = 'rla-v16';
+const CACHE = 'rla-v17';
 const ROOT = new URL('./', self.location).pathname;
 const PRECACHE = [
   './',

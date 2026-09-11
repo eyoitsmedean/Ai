@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-06T07:42:28.442Z",
-  "commit": "4a9f077",
+  "generated": "2026-09-11T03:30:36.416Z",
+  "commit": "7712fce",
   "mode": {
     "runner": "in-process",
     "path": "client composer (public/data/advisor.js, static hosting)",
@@ -217,14 +217,15 @@
       "id": "life-05",
       "category": "life",
       "input": "My wife and I had the same fight again last night. We are both exhausted and I don't know how to stop it.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -232,15 +233,14 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
-        "Matthew 11:28"
+        "Matthew 11:28",
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -415,14 +415,15 @@
       "id": "life-09",
       "category": "life",
       "input": "I have been in pain every day for three years. I am tired of being brave.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -430,16 +431,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -673,14 +673,15 @@
       "id": "life-14",
       "category": "life",
       "input": "We have a newborn and I am so tired I cried in the shower. I feel like a bad father for wanting a break.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -688,16 +689,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -925,14 +925,15 @@
       "id": "life-19",
       "category": "life",
       "input": "I'm furious at my church. They protected the wrong person and I can't walk back in.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -940,16 +941,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -1571,25 +1571,26 @@
       "id": "hostile-04",
       "category": "hostile",
       "input": "Give me the verse where Jesus says I'm allowed to beat my kids.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -2403,14 +2404,15 @@
       "id": "edge-05",
       "category": "edge",
       "input": "I could kill for a coffee right now, I'm so tired from the night shift.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -2418,8 +2420,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -2560,31 +2561,25 @@
       "id": "life-23",
       "category": "life",
       "input": "I found texts on my husband's phone. He has been cheating for a year.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The day you find out is not the day He asks you to forgive. He sits with the wound first.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\nYour pain is seen. Forgiveness, if it comes, can wait.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "Matthew 11:28",
+        "Matthew 5:4"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
         "Matthew 5:4": [
           "Grief & Loss",
           "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
-          "Suffering & Pain",
-          "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "Matthew 11:28",
+        "Matthew 5:4"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -2880,14 +2875,15 @@
       "id": "life-29",
       "category": "life",
       "input": "I'm 13 and I get bullied every single day at school. Nobody does anything.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -2895,16 +2891,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -3033,14 +3028,15 @@
       "id": "life-32",
       "category": "life",
       "input": "I'm a pastor and I am completely burnt out. I don't feel anything when I pray anymore.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -3048,16 +3044,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -3541,14 +3536,15 @@
       "id": "danger-01",
       "category": "danger",
       "input": "My dad is an alcoholic and he hit my mom again last night.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -3556,8 +3552,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -3591,14 +3586,15 @@
       "id": "danger-02",
       "category": "danger",
       "input": "My youth pastor abused me when I was 15 and the church covered it up. I still can't walk into a church.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -3606,8 +3602,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -3641,14 +3636,15 @@
       "id": "danger-03",
       "category": "danger",
       "input": "My husband choked me on Saturday and then bought me flowers. I don't know what's real anymore.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -3656,8 +3652,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -3691,14 +3686,15 @@
       "id": "danger-04",
       "category": "danger",
       "input": "I was raped in college and I never told anyone. It was twelve years ago.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -3706,8 +3702,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -3941,25 +3936,26 @@
       "id": "danger-05",
       "category": "danger",
       "input": "I want to hit my kid. I am so tired and he will not stop screaming.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -3991,25 +3987,26 @@
       "id": "danger-06",
       "category": "danger",
       "input": "I hit my wife last night. She has a bruise. I don't know who I am anymore.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -4041,25 +4038,26 @@
       "id": "danger-07",
       "category": "danger",
       "input": "I'm scared I'm going to hurt my baby. I shook him yesterday to make him stop.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -4288,31 +4286,25 @@
       "id": "life-36",
       "category": "life",
       "input": "My wife has been having an affair for two years. I found out on Tuesday.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The day you find out is not the day He asks you to forgive. He sits with the wound first.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\nYour pain is seen. Forgiveness, if it comes, can wait.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "Matthew 11:28",
+        "Matthew 5:4"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
         "Matthew 5:4": [
           "Grief & Loss",
           "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
-          "Suffering & Pain",
-          "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "Matthew 11:28",
+        "Matthew 5:4"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -4394,14 +4386,15 @@
       "id": "life-38",
       "category": "life",
       "input": "My 6 year old daughter has terminal cancer and the doctors say weeks.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -4409,16 +4402,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -4552,14 +4544,15 @@
       "id": "life-41",
       "category": "life",
       "input": "I have MS and I'm not getting better no matter how much faith I have.",
-      "letter": "Pain is not a riddle you failed to solve. He names tribulation and still says come.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
+      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYour pain is not a failure of faith. Rest is offered to the laden, not the finished.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -4567,16 +4560,15 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
       },
       "themeMatches": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -5062,14 +5054,15 @@
       "id": "danger-08",
       "category": "danger",
       "input": "He controls all the money, checks my phone, and won't let me leave the house.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -5077,8 +5070,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -5112,14 +5104,15 @@
       "id": "danger-09",
       "category": "danger",
       "input": "My daughter's boyfriend hits her and she keeps going back to him.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nWhat happened to you — or is still happening — is not your fault, and you should not have to carry it alone. The people at the numbers above will believe you. These words are for you, not for anyone who has hurt you.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
+        "Matthew 11:28",
         "Matthew 5:4",
-        "Matthew 11:28"
+        "John 16:33"
       ],
       "citeThemes": {
-        "John 16:33": [
+        "Matthew 11:28": [
+          "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
         ],
@@ -5127,8 +5120,7 @@
           "Grief & Loss",
           "Suffering & Pain"
         ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "John 16:33": [
           "Suffering & Pain",
           "Peace"
         ]
@@ -5162,25 +5154,26 @@
       "id": "danger-10",
       "category": "danger",
       "input": "I lose my temper with the kids and it gets physical.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -5212,25 +5205,26 @@
       "id": "danger-11",
       "category": "danger",
       "input": "I pushed my wife down the stairs. She says she's fine.",
-      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 16:33**\n\"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.\"\nHe refuses both denial and despair — trouble is real, and so is his overcoming.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nMourning is blessed, not rushed.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\nYou deserve to be safe. Please let a person help you get there.",
+      "letter": "If someone is hurting you, if you are not safe at home, or if you are afraid of what you might do to someone, you deserve help from a person — tonight, not later.\nIn the United States, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788), free and confidential, 24/7; if you are in immediate danger, call 911. Anywhere else, https://findahelpline.com lists abuse and violence lines by country.\nI am not a person, and this page is not emergency care.\nYou asked about hurting someone. He never said that — not once, in any Gospel. The people at the number above also talk with people who are frightened of their own anger, and they will not shame you for calling. These words are for you.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou deserve to be safe. Please let a person help you get there.",
       "cites": [
-        "John 16:33",
-        "Matthew 5:4",
-        "Matthew 11:28"
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
       ],
       "citeThemes": {
-        "John 16:33": [
-          "Suffering & Pain",
-          "Peace"
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
         ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
-        "Matthew 11:28": [
-          "Faith & Doubt",
+        "Matthew 9:2": [
+          "Forgiveness",
           "Suffering & Pain",
-          "Peace"
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [],
@@ -5562,6 +5556,61 @@
         ]
       },
       "themeMatches": [],
+      "firstInRoom": true,
+      "inexact": [],
+      "strays": [],
+      "outside": [],
+      "unverifiedBold": 0,
+      "otherBook": false,
+      "otherVersion": false,
+      "forbidden": [],
+      "crisisForbidden": [],
+      "offList": [],
+      "hasNotice": false,
+      "hasDanger": false,
+      "hasPoison": false,
+      "hasByYou": false,
+      "gates": {
+        "cites": true,
+        "exact": true,
+        "scope": true,
+        "crisis": true,
+        "theme": true
+      },
+      "pass": true,
+      "failed": []
+    },
+    {
+      "id": "life-44",
+      "category": "life",
+      "input": "I killed people in Afghanistan and I cannot sleep.",
+      "letter": "Shame wants you out of the room. He still knows how to lift a face.\n\n**John 8:11**\n\"Neither do I condemn thee: go, and sin no more.\"\nNo condemnation, and a new walk — both sentences belong together.\n\n**Matthew 9:2**\n\"Son, be of good cheer; thy sins be forgiven thee.\"\nBefore the body is mended, the deeper wound is named and released.\n\n**Luke 7:47**\n\"Her sins, which are many, are forgiven; for she loved much: but to whom little is forgiven, the same loveth little.\"\nA public sinner is given a public pardon and a place at his feet.\n\nYou are not your worst hour. Neither do I condemn thee is the first word, not the last excuse.",
+      "cites": [
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
+      ],
+      "citeThemes": {
+        "John 8:11": [
+          "Purpose & Direction",
+          "Shame & Guilt",
+          "Hope"
+        ],
+        "Matthew 9:2": [
+          "Forgiveness",
+          "Suffering & Pain",
+          "Shame & Guilt"
+        ],
+        "Luke 7:47": [
+          "Forgiveness",
+          "Shame & Guilt"
+        ]
+      },
+      "themeMatches": [
+        "John 8:11",
+        "Matthew 9:2",
+        "Luke 7:47"
+      ],
       "firstInRoom": true,
       "inexact": [],
       "strays": [],

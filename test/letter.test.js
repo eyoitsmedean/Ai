@@ -71,4 +71,30 @@ describe('the room holds whichever composer wrote the letter', () => {
     assert.equal(both.bereaved, false);
     assert.deepEqual(both.allowed, CRISIS_SAFE);
   });
+
+  it('the day of the affair opens with come, never tribulation or forgive-not', () => {
+    const q = 'My wife has been having an affair for two years. I found out on Tuesday.';
+    const room = roomFor(q);
+    assert.equal(room.betrayed, true);
+    assert.match(room.opening, /not the day He asks you to forgive/);
+    const letter = require('../lib/advise').adviseLetter(q);
+    assert.match(letter, /\*\*Matthew 11:28\*\*/);
+    assert.ok(letter.indexOf('Matthew 11:28') < (letter.indexOf('John 16:33') === -1 ? Infinity : letter.indexOf('John 16:33')));
+    assert.doesNotMatch(letter, /forgive not|tribulation|seventy times/);
+  });
+
+  it('the one who is being hurt is offered rest before tribulation; the one who hit is offered the lost sheep', () => {
+    const victim = require('../lib/advise').adviseLetter('my husband hits me and I am scared');
+    assert.match(victim, /\*\*Matthew 11:28\*\*/);
+    assert.ok(victim.indexOf('Matthew 11:28') < (victim.indexOf('John 16:33') === -1 ? Infinity : victim.indexOf('John 16:33')));
+    const byYou = require('../lib/advise').adviseLetter('I pushed my wife last night and I hate myself');
+    assert.match(byYou, /\*\*Luke 15:4\*\*/);
+    assert.doesNotMatch(byYou, /not your fault/);
+  });
+
+  it('a veteran who cannot sleep is not told to take no thought for the morrow', () => {
+    const letter = require('../lib/advise').adviseLetter('I killed people in Afghanistan and I cannot sleep.');
+    assert.match(letter, /\*\*Luke 15:4\*\*/);
+    assert.doesNotMatch(letter, /morrow|fowls of the air|Take no thought/);
+  });
 });

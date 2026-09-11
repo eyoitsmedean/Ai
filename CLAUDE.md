@@ -52,7 +52,7 @@ The product is advisor-first, not scholarship-first. Scholarship sits behind the
 
 ## Open questions for Dean
 
-1. The verse map now has a named public-domain witness (`docs/red-letter-map.md`). Authorize adding the safe class of omitted sayings (Matthew 8:3, John 21:15, …) through the product layer, or leave production as it is. A wholesale swap is not recommended.
+1. The safe class of omitted sayings is now in the live corpus via `SPOKEN_ADDITIONS` (Matthew 8:3, John 21:15, the sower in Luke 8, …). A wholesale map swap is still not recommended. Remaining contested OSIS-only verses stay out.
 2. Known false triggers of the crisis notice: 'hurt myself lifting boxes', 'cut myself shaving', 'overdose of caffeine', "I don't want to be here anymore, this party is boring". A notice is cheap and a miss is not; say if you want them suppressed.
 3. The verifier judges quotations, books, translations and the forbidden phrases in prose — not meaning. A model sentence like 'here He promises you will never feel anxiety again' after a real citation passes. The model's choice among the room's allowed passages is also untested here (no key). Closing both needs one run of `node scripts/eval.js --url` against a server with a key (about a minute, ~112 calls); a model-graded eval would cost a key per run.
 4. Store distribution (Capacitor vs Flutter vs PWA-only) — see Assumptions.

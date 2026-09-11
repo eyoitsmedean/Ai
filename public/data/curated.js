@@ -627,13 +627,13 @@ window.RLA_CURATED = {
     "closing": "Faith is not the absence of questions. It is staying close enough to touch."
   },
   "Suffering & Pain": {
-    "headline": "In Me Ye Might Have Peace",
-    "opening": "Pain is not a riddle you failed to solve. Jesus names tribulation and still offers peace in himself.",
+    "headline": "Come, then the truth about the day",
+    "opening": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden.",
     "passages": [
       {
-        "verse": "John 16:33",
-        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
-        "context": "He refuses both denial and despair — trouble is real, and so is his overcoming."
+        "verse": "Matthew 11:28",
+        "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
+        "context": "The invitation is to the exhausted, not the already-healed."
       },
       {
         "verse": "Matthew 5:4",
@@ -641,9 +641,9 @@ window.RLA_CURATED = {
         "context": "Mourning is blessed, not rushed."
       },
       {
-        "verse": "Matthew 11:28",
-        "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest.",
-        "context": "The invitation is to the exhausted, not the already-healed."
+        "verse": "John 16:33",
+        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
+        "context": "He refuses both denial and despair — trouble is real, and so is his overcoming."
       }
     ],
     "practice": "Place a hand where it hurts — body or story. Say Matthew 11:28 once. Rest is offered to the laden, not the finished.",

@@ -53,7 +53,7 @@ Three independent reviews on 2026-09-06 (a Breaker agent that built nothing, thr
 | Unit tests | verified | `npm test` — 68 pass (includes both eval runs) |
 | Live HTTP smoke | verified | `npm run smoke` — 10 checks |
 | First-session browser walk (title page, lectio, journal, Seek, Advisor, crisis, poison interrupt, library, blessing, desktop rail, the served composer with no server behind it) | verified | `npm run qa` — 19 checks, headless Chrome 390×844 and 1100×800 |
-| Offline: precache complete (now including `data/signals.js`, cache `rla-v16`), Today renders, blessing link opens from cache | verified | service-worker check in headless Chrome; `test/eval.test.js` asserts `signals.js` is precached |
+| Offline: precache complete (now including `data/signals.js`, cache `rla-v17`), Today renders, blessing link opens from cache | verified | service-worker check in headless Chrome; `test/eval.test.js` asserts `signals.js` is precached |
 | GitHub Pages project path (`github.io/Ai/`) with no API | verified | Chrome with host mapped to a static server under `/Ai/`: Today, Seek, library, curated Advisor, blessing links, zero page errors |
 | Security headers, no `x-powered-by`, missing assets 404 | verified | `test/api.test.js`, smoke |
 | Health endpoint reports version, sayings, model status | verified | `GET /api/health` |

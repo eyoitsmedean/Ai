@@ -51,6 +51,9 @@ describe('named red-letter map (eBible KJV OSIS)', () => {
     assert.equal(spokenAt('Luke', 2, 49), SPOKEN_ADDITIONS['Luke 2:49']);
     assert.equal(spokenAt('Mark', 9, 7), null);
     assert.equal(spokenAt('John', 12, 28), 'Father, glorify thy name.');
+    assert.equal(spokenAt('Matthew', 8, 3), 'I will; be thou clean.');
+    assert.equal(spokenAt('John', 21, 15), 'Simon, son of Jonas, lovest thou me more than these? Feed my lambs.');
+    assert.equal(spokenAt('Luke', 8, 5).startsWith('A sower went out to sow his seed'), true);
   });
 
   it('refuses to overwrite the production spoken corpus from the named map', () => {
