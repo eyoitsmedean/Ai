@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Letter — Ask</title>
+  <meta name="description" content="One screen. His words. Not a pastor. Internal — not a launch." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #F4EFE4;
+      --folio: #FBF7EE;
+      --ink: #1B1610;
+      --mute: #7A6E5E;
+      --rule: rgba(27, 22, 16, 0.10);
+      --crimson: #8F1D1D;
+      --gold: #8A6A28;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; background: var(--paper); color: var(--ink); }
+    body { font-family: 'Instrument Sans', system-ui, sans-serif; }
+    .grain {
+      pointer-events: none; position: fixed; inset: 0; opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    main { max-width: 34rem; margin: 0 auto; padding: 36px 20px 72px; }
+    .watch {
+      letter-spacing: .22em; text-transform: uppercase; font-size: 10px;
+      color: var(--gold); margin-bottom: 18px;
+    }
+    .mark {
+      width: 40px; height: 40px; margin: 0 auto 14px;
+      border: 1px solid var(--crimson); border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: Fraunces, Georgia, serif; font-style: italic;
+      font-size: 20px; color: var(--crimson);
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif; font-weight: 500;
+      font-size: clamp(36px, 9vw, 56px); letter-spacing: -.03em;
+      text-align: center; line-height: .95;
+    }
+    h1 em { font-style: italic; color: var(--crimson); }
+    .deck {
+      font-family: 'Source Serif 4', Georgia, serif; font-style: italic;
+      text-align: center; color: #4A4034; margin: 14px auto 28px; max-width: 28ch; line-height: 1.5;
+    }
+    label.kicker {
+      display: block; letter-spacing: .16em; text-transform: uppercase;
+      font-size: 11px; color: var(--mute); margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%; min-height: 88px; resize: vertical;
+      border: none; border-bottom: 1px solid rgba(27,22,16,.2);
+      background: transparent; font: inherit; font-size: 17px;
+      color: var(--ink); outline: none; padding: 8px 0 10px;
+    }
+    textarea:focus { border-bottom-color: var(--crimson); }
+    button.go {
+      display: inline-block; margin-top: 16px; border: none;
+      background: var(--crimson); color: var(--folio);
+      padding: 12px 18px; letter-spacing: .08em; text-transform: uppercase;
+      font-size: 12px; cursor: pointer;
+    }
+    button.go:disabled { opacity: .45; cursor: wait; }
+    section { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--rule); }
+    .word {
+      font-family: Fraunces, Georgia, serif; font-style: italic;
+      font-size: clamp(20px, 4.4vw, 26px); color: var(--crimson);
+      line-height: 1.4; margin: 8px 0 6px;
+    }
+    .cite { letter-spacing: .14em; text-transform: uppercase; font-size: 11px; color: var(--mute); }
+    .imply {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px; line-height: 1.55; color: #3A3228;
+      white-space: pre-wrap;
+    }
+    .cannot {
+      font-size: 14px; line-height: 1.55; color: var(--mute);
+    }
+    .cannot a { color: var(--crimson); }
+    .crisis {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 18px; line-height: 1.5; color: var(--ink);
+      white-space: pre-wrap;
+    }
+    .hidden { display: none; }
+    footer {
+      margin-top: 40px; font-size: 12px; color: var(--mute); line-height: 1.5;
+    }
+    footer a { color: var(--crimson); }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <main>
+    <p class="watch">Watch · not a launch · not a store</p>
+    <div class="mark" aria-hidden="true">R</div>
+    <h1>Red <em>Letter</em></h1>
+    <p class="deck">Ask. The words. What that might mean. What this cannot do.</p>
+
+    <form id="ask-form">
+      <label class="kicker" for="q">1 · Ask</label>
+      <textarea id="q" name="q" required maxlength="2000" placeholder="What is weighing on you today?"></textarea>
+      <button class="go" type="submit" id="go">Open the words</button>
+    </form>
+
+    <section id="crisis-block" class="hidden" aria-live="polite">
+      <p class="kicker">Stop here</p>
+      <p class="crisis" id="crisis-text"></p>
+    </section>
+
+    <section id="words-block">
+      <p class="kicker">2 · The words</p>
+      <div id="words">
+        <p class="imply">Write what is true. The page will set His speech from the Gospels — King James, public domain in the United States. Nothing is invented.</p>
+      </div>
+    </section>
+
+    <section id="imply-block">
+      <p class="kicker">3 · What that might mean today</p>
+      <p class="imply" id="imply">Four lines at most. After a crisis word, this block stays empty.</p>
+    </section>
+
+    <section>
+      <p class="kicker">4 · What this bot cannot do</p>
+      <p class="cannot">This is not a pastor, not a church, not a confession booth, and not a crisis counselor. If you are in crisis or thinking about harming yourself, please <a href="tel:988">call or text 988</a> (Suicide &amp; Crisis Lifeline) right away, or talk to a local pastor, counselor, or trusted human. This bot cannot replace real people who can help.</p>
+    </section>
+
+    <footer>
+      Internal household screen. Dean records the translation (WEB or KJV, US) before any public URL.
+      Folio stays paper. <a href="/welcome">Welcome</a> · <a href="/">Folio</a>
+    </footer>
+  </main>
+  <script>
+    const form = document.getElementById('ask-form');
+    const go = document.getElementById('go');
+    const words = document.getElementById('words');
+    const imply = document.getElementById('imply');
+    const crisisBlock = document.getElementById('crisis-block');
+    const crisisText = document.getElementById('crisis-text');
+    const wordsBlock = document.getElementById('words-block');
+    const implyBlock = document.getElementById('imply-block');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const q = document.getElementById('q').value.trim();
+      if (!q) return;
+      go.disabled = true;
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'The page could not be set.');
+        if (data.crisis) {
+          crisisText.textContent = data.notice || 'Call or text 988.';
+          crisisBlock.classList.remove('hidden');
+          wordsBlock.classList.add('hidden');
+          implyBlock.classList.add('hidden');
+          imply.textContent = '';
+          words.innerHTML = '';
+          return;
+        }
+        crisisBlock.classList.add('hidden');
+        wordsBlock.classList.remove('hidden');
+        implyBlock.classList.remove('hidden');
+        words.innerHTML = (data.words || []).map((w) => (
+          '<p class="word">“' + escapeHtml(w.quote) + '”</p>' +
+          '<p class="cite">' + escapeHtml(w.verse) + '  ·  ' + escapeHtml(w.translation || 'KJV') + '</p>'
+        )).join('') || '<p class="imply">No spoken saying could be sealed for that. Try naming the feeling again.</p>';
+        imply.textContent = data.implication || '';
+      } catch (err) {
+        implyBlock.classList.remove('hidden');
+        imply.textContent = err.message || 'The page could not be set.';
+      } finally {
+        go.disabled = false;
+      }
+    });
+
+    function escapeHtml(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

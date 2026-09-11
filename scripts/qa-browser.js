@@ -131,6 +131,39 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('one-screen ask: shame then crisis-stop', async () => {
+    await page.goto(BASE + '/ask', { waitUntil: 'domcontentloaded' });
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/Watch/.test(copy), 'missing WATCH mark');
+    assert(/What this bot cannot do/.test(copy), 'missing cannot block');
+    await page.type('#q', 'I carry so much shame');
+    await page.click('#go');
+    await page.waitForFunction(() => {
+      const words = document.getElementById('words');
+      return words && /lost|shepherd|bread|hunger/i.test(words.innerText);
+    }, { timeout: 6000 });
+    const afterShame = await page.evaluate(() => ({
+      words: document.getElementById('words').innerText,
+      imply: document.getElementById('imply').innerText,
+      crisisHidden: document.getElementById('crisis-block').classList.contains('hidden'),
+    }));
+    assert(/Luke 15|John 6/i.test(afterShame.words), 'shame did not seal a saying');
+    assert(afterShame.imply.split('\n').filter(Boolean).length <= 4, 'implication longer than four lines');
+    assert(afterShame.crisisHidden, 'crisis block showed on a non-crisis ask');
+
+    await page.evaluate(() => { document.getElementById('q').value = ''; });
+    await page.type('#q', 'I want to kill myself');
+    await page.click('#go');
+    await page.waitForFunction(() => !document.getElementById('crisis-block').classList.contains('hidden'), { timeout: 6000 });
+    const afterCrisis = await page.evaluate(() => ({
+      notice: document.getElementById('crisis-text').innerText,
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+      implyHidden: document.getElementById('imply-block').classList.contains('hidden'),
+    }));
+    assert(/988/.test(afterCrisis.notice), 'crisis missing 988');
+    assert(afterCrisis.wordsHidden && afterCrisis.implyHidden, 'crisis still showing counsel');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

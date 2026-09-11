@@ -12,6 +12,7 @@ const { createRateLimiter } = require('./lib/rate-limit');
 const { createModel } = require('./lib/model');
 const { ADVISOR_SYSTEM, ENCOURAGE_SYSTEM, FALLBACK_LETTER, dailySystem } = require('./lib/prompts');
 const { letterFor } = require('./lib/letter');
+const { askFor } = require('./lib/ask');
 
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
 const THEME_SET = new Set(themeNames());
@@ -92,6 +93,16 @@ function createApp(options = {}) {
       return curated;
     }
   }
+
+  app.post('/api/ask', (req, res) => {
+    const q = typeof req.body?.q === 'string' ? req.body.q : (typeof req.body?.content === 'string' ? req.body.content : '');
+    if (!q.trim()) return res.status(400).json({ error: 'What is weighing on you?' });
+    if (q.length > 2000) return res.status(400).json({ error: 'That is too long for this page.' });
+    if (!rateLimit(`ask:${clientKey(req)}`, 20, 60 * 1000)) {
+      return res.status(429).json({ error: 'A little space, then ask again.' });
+    }
+    res.json(askFor(q));
+  });
 
   app.get('/api/health', (req, res) => {
     res.json({
@@ -284,6 +295,11 @@ function createApp(options = {}) {
       fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
     }
     res.json({ ok: true });
+  });
+
+  app.get('/ask', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'public', 'ask.html'));
   });
 
   app.get('/welcome', (req, res) => {

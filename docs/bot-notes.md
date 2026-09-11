@@ -1,3 +1,7 @@
+# Red Letter — Recovery flagships — v3 — 2026-09-11
+
+This conversation recovered five user prompts (not ten). Flagships: `docs/CANONICAL-BRIEF.md`, `/ask` (`lib/ask.js`, `public/ask.html`, `POST /api/ask`), `docs/RESEARCH-AND-GATE.md`. WATCH. Folio stays paper. Human gate still open. SW cache `rla-phase0-v13`.
+
 # Red Letter — Trust harness — v2 — 2026-09-11
 
 Sprint (2026-09-11): five shipped items — need opens Sit; no-key Advisor writes a themed sealed letter; Amen offers Send a blessing; crisis matchers aligned (`unalive`); comfort cites no longer collide with Matthew 14:27 / 24:39.

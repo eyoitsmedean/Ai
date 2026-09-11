@@ -26,6 +26,8 @@ npm start              # http://localhost:3000
 
 Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
 
+**Watch — not a launch.** `http://localhost:3000/ask` is the one-screen advisor (Ask → the words → four lines → what this cannot do). It is `noindex`. Crisis names 988 and stops. The folio at `/` stays paper. Dean records WEB or KJV (US) before any public URL. Do not store-submit. See `docs/CANONICAL-BRIEF.md`.
+
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
 ANTHROPIC_MODEL=claude-opus-5

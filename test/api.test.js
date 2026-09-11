@@ -158,4 +158,40 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
   });
+
+  it('serves the one-screen ask page as an internal watch surface', async () => {
+    const res = await request('GET', '/ask');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /noindex/);
+    assert.match(res.raw, /1 · Ask/);
+    assert.match(res.raw, /2 · The words/);
+    assert.match(res.raw, /3 · What that might mean today/);
+    assert.match(res.raw, /4 · What this bot cannot do/);
+    assert.doesNotMatch(res.raw, /Ask Him/i);
+  });
+
+  it('answers /api/ask with sealed speech for shame', async () => {
+    const res = await request('POST', '/api/ask', { q: 'I carry so much shame' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.crisis, false);
+    assert.ok(data.words.some((w) => /Luke 15/.test(w.verse)));
+    assert.ok(data.implication.split('\n').length <= 4);
+    assert.match(data.cannot, /not a pastor/);
+  });
+
+  it('stops /api/ask on crisis — 988, no verses, no implication', async () => {
+    const res = await request('POST', '/api/ask', { content: 'I want to kill myself' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.crisis, true);
+    assert.match(data.notice, /988/);
+    assert.deepEqual(data.words, []);
+    assert.equal(data.implication, '');
+  });
+
+  it('rejects an empty ask', async () => {
+    const res = await request('POST', '/api/ask', { q: '   ' });
+    assert.equal(res.status, 400);
+  });
 });
