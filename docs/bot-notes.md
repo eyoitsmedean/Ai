@@ -25,6 +25,18 @@ Three movements · five plans, roles, taglines, buyers, offers, prices, weeks, k
 4. Idaho small-seller exemption ($5,000) and 6% digital-book tax added to Money & paper.
 5. HTML `#now` card + week-aware Tonight moves.
 
+## Recovery · 11 Sep evening
+
+Six user prompts in this conversation (not ten). Later Notion amendments win: one lane, This week authority, apply HOLD, window Not confirmed.
+
+Flagships:
+- docs/CANONICAL-BRIEF.md
+- docs/RESEARCH-BOOK.md
+- docs/SUNDAY-OPERATOR.md
+- Notion children under Ninety Days · One Plan (same titles, Cursor thread · …)
+
+Playbook first screen now HOLDs video sends until household window is Confirmed or Not needed. Default local note is Not confirmed.
+
 ## Open S1/S2
 
-None at ship. Estimated conversion rates remain unlabeled-as-fact (they carry Estimated).
+None that block ship. Remaining: handbook unread (Gate 4); Mercor hours unknown; SOSBiz $25 inferred.

@@ -1,16 +1,16 @@
 # Ninety Days — Build. Baby. Build.
 
-**Ninety Days — the decision — v2 — 11 Sep 2026**
+**Ninety Days — the decision — v3 — 11 Sep 2026**
 
-Plain-text twin of [`plans/index.html`](./index.html). Open the HTML for checklists, ledger, calendar, and scripts (saved on the device). Read this one on GitHub or print it.
+Plain-text twin of [`plans/index.html`](./index.html). **This file is a parallel draft.** Weekly authority is Notion → This week. Money source of truth is the One Cash Lane operator card. External apply and outreach stay HOLD until you type them.
 
 | | |
 | --- | --- |
-| **Purpose** | Decide this week's yes and no, then do the next hour. |
+| **Purpose** | Decide this week's yes and no without starting a sixth operating system. |
 | **Owner** | Dean |
-| **Status** | Live. Week 2 of 13 began Fri 11 Sep 2026. |
+| **Status** | Live. Week 2 of 13. Household window last recorded Not confirmed. |
 | **Updated** | 11 Sep 2026 |
-| **What changed** | The decision sits on the first screen. Week 1 is behind you — catch up this weekend if the five videos did not go out. Stripe alone delivers the Advent PDF. Idaho's $5,000 small-seller line is now a rule. |
+| **What changed** | The first screen no longer tells you to send videos while the window is unconfirmed. 35% reserve is a household rule. Small-seller line is the current calendar year, with a $7,500 clawback. GitHub names map to Notion lanes (see the brief). |
 
 Everything here is an estimate, not a promise. Compliments are not demand. Only the ledger counts.
 
@@ -28,10 +28,10 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 
 **This week (11–17 Sep).**
 
-1. If last week's five videos went out: send five more. Reply to everyone within a day. First sale builds Thursday, delivers Friday. Ask for one sentence.
-2. If they did not: Stripe $350 link, three scripts on the phone, twenty names from Maps, five sixty-second videos by Sunday. Week 2's five wait until those left the phone.
-3. Advent, in the leftover Thursday: draft the one-line reflections and lay out the PDF from the app's print styles. Write nothing new. One evening.
-4. Sunday fifteen: ledger (even if it is zero). Next week's five names. Close the laptop.
+1. If the household window is **not confirmed**: required work is DEX during scheduled hours. Optional money work is the M4 sheet only after you mark Confirmed or Not needed. Do not send videos, asks, or walks.
+2. Sunday 14 Sep: three minutes on the existing close card. Rest needs no receipt.
+3. If — and only if — the window is open **and** Storefront is the one written lane: then the old catch-up (Stripe, twenty names, five videos) applies.
+4. Advent / Folio stays parked as cash. The Voice Capsule stays parked.
 
 **What it pays.** Recommended stack (I + II): floor **$350** · base **$1,350** · stretch **$4,000**. Hours in the window ≈ 36. That is about **$37/h** at base, **$111/h** at stretch. `[calc]` $1,350 ÷ 36 h; $4,000 ÷ 36 h. Conversion is a guess; the kill rules cap what finding out costs.
 
