@@ -27,6 +27,16 @@ void main() {
     expect(swift.contains('John 14:1'), isTrue);
   });
 
+  test('iOS gallery placeholder is a bundled Word, not empty paper', () {
+    expect(swift.contains('WordStore.bundled.first'), isTrue);
+  });
+
+  test('export compliance is already answered in Info.plist', () {
+    final plist = File('ios/Runner/Info.plist').readAsStringSync();
+    expect(plist.contains('ITSAppUsesNonExemptEncryption'), isTrue);
+    expect(plist.contains('<false/>'), isTrue);
+  });
+
   test('iOS small family shows an opening clause or the address, never an ellipsis rewrite', () {
     expect(swift.contains('func openingClause'), isTrue);
     expect(swift.contains('family == .systemSmall'), isTrue);
@@ -58,6 +68,14 @@ void main() {
     expect(activity.contains('initialLink = null'), isTrue);
     expect(activity.contains('putString("rotation", rotation)'), isTrue);
     expect(layout.contains('autoSizeMinTextSize="12sp"'), isTrue);
+  });
+
+  test('Bless Send is a native share sheet of the Word, not a URL', () {
+    expect(appDelegate.contains('UIActivityViewController'), isTrue);
+    expect(appDelegate.contains('popoverPresentationController'), isTrue);
+    expect(activity.contains('ACTION_SEND'), isTrue);
+    expect(activity.contains('EXTRA_TEXT'), isTrue);
+    expect(activity.contains('createChooser'), isTrue);
   });
 
   test('the store contract is word, citation, rotation — nothing else crosses', () {

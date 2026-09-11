@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:red_words/red_words/app.dart';
 import 'package:red_words/red_words/moment/catalog.dart';
+import 'package:red_words/red_words/moment/models.dart';
 import 'package:red_words/red_words/moment/office.dart';
 import 'package:red_words/red_words/platform/session.dart';
+import 'package:red_words/red_words/screens/pages.dart';
+import 'package:red_words/red_words/theme.dart';
 
 MomentCatalog catalog() =>
     MomentCatalog.parse(File('assets/moments/catalog.json').readAsStringSync());
@@ -78,6 +81,40 @@ void main() {
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
     expect(find.text('Reflect'), findsWidgets);
+    await tester.tap(find.text('Next'));
+    await tester.pump();
+    expect(find.byKey(const Key('sit-rest-word')), findsOneWidget);
+    expect(find.byKey(const Key('sit-rest-ready')), findsNothing);
+    expect(find.text('60'), findsNothing);
+    expect(find.text('59'), findsNothing);
+    await tester.pump(const Duration(seconds: 60));
+    expect(find.byKey(const Key('sit-rest-ready')), findsOneWidget);
+    expect(find.text('0'), findsNothing);
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('sit-reply')), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('sit-reply')), 'I will not carry Tuesday on Monday.');
+    await tester.tap(find.text('Amen'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('I will not carry Tuesday on Monday.'), findsOneWidget);
+  });
+
+  test('blessing share is the Word, never the brand', () {
+    final text = BlessingShare.body(
+      word: 'Peace I leave with you',
+      citation: 'John 14:27',
+    );
+    expect(text, 'Peace I leave with you\n\nJohn 14:27  ·  KJV');
+    expect(text.toLowerCase().contains('red words'), isFalse);
+    expect(text.toLowerCase().contains('streak'), isFalse);
   });
 
   testWidgets('blessing card is the Word, not the brand', (tester) async {
@@ -115,6 +152,8 @@ void main() {
     expect(find.textContaining('Cambridge University Press'), findsOneWidget);
     expect(find.byKey(const Key('about-privacy')), findsOneWidget);
     expect(find.textContaining('collects nothing'), findsOneWidget);
+    expect(find.byKey(const Key('about-lectio')), findsOneWidget);
+    await tester.scrollUntilVisible(find.textContaining('988'), 240);
     expect(find.textContaining('988'), findsOneWidget);
   });
 
@@ -135,5 +174,28 @@ void main() {
     await tester.tap(find.text('Come'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Matthew 11:28'), findsWidgets);
+  });
+
+  testWidgets('Seven ribbon bead opens that day', (tester) async {
+    PathDay? opened;
+    await tester.pumpWidget(
+      PaperScope(
+        colors: RedWordsColors.ordinary,
+        season: const ChurchSeason(id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time'),
+        child: MaterialApp(
+          home: Scaffold(
+            body: SevenRibbon(
+              days: catalog().seven,
+              onOpenDay: (day) => opened = day,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('seven-bead-Come')));
+    await tester.pumpAndSettle();
+    expect(opened?.title, 'Come');
+    expect(opened?.word.citation, contains('Matthew 11:28'));
   });
 }

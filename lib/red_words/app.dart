@@ -171,6 +171,10 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
           onSit: () => setState(() => leaf = AppLeaf.sit),
           onSeek: () => setState(() => leaf = AppLeaf.seek),
           onSeven: () => setState(() => leaf = AppLeaf.seven),
+          onOpenDay: (day) => setState(() {
+            openedDay = day;
+            leaf = AppLeaf.pathDay;
+          }),
           onBless: () => setState(() => leaf = AppLeaf.blessing),
           onAbout: () => setState(() => leaf = AppLeaf.about),
         );
@@ -178,6 +182,8 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
         if (current == null) return const EmptyPage();
         return SitPage(
           moment: current,
+          now: now,
+          session: session,
           onBack: () => setState(() => leaf = AppLeaf.today),
         );
       case AppLeaf.seek:

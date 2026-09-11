@@ -54,6 +54,16 @@ class MainActivity : FlutterActivity() {
                     prefs.edit().putBoolean("hasOpened", true).apply()
                     result.success(null)
                 }
+                "keepReply" -> {
+                    val date = call.argument<String>("date") ?: ""
+                    val text = call.argument<String>("text") ?: ""
+                    prefs.edit().putString("reply.$date", text).apply()
+                    result.success(null)
+                }
+                "loadReply" -> {
+                    val date = call.arguments as? String ?: ""
+                    result.success(prefs.getString("reply.$date", "") ?: "")
+                }
                 else -> result.notImplemented()
             }
         }
@@ -71,6 +81,15 @@ class MainActivity : FlutterActivity() {
                     if (!number.isNullOrBlank()) {
                         startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number")))
                     }
+                    result.success(null)
+                }
+                "share" -> {
+                    val text = call.arguments as? String ?: ""
+                    val send = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, text)
+                    }
+                    startActivity(Intent.createChooser(send, null))
                     result.success(null)
                 }
                 else -> result.notImplemented()

@@ -42,6 +42,14 @@ import WidgetKit
         } else if call.method == "markOpened" {
           UserDefaults.standard.set(true, forKey: "hasOpened")
           result(nil)
+        } else if call.method == "keepReply",
+                  let args = call.arguments as? [String: Any],
+                  let date = args["date"] as? String,
+                  let text = args["text"] as? String {
+          UserDefaults.standard.set(text, forKey: "reply.\(date)")
+          result(nil)
+        } else if call.method == "loadReply", let date = call.arguments as? String {
+          result(UserDefaults.standard.string(forKey: "reply.\(date)") ?? "")
         } else {
           result(FlutterMethodNotImplemented)
         }
@@ -58,6 +66,27 @@ import WidgetKit
           if let url = URL(string: "tel:\(number)") {
             UIApplication.shared.open(url)
           }
+          result(nil)
+        } else if call.method == "share", let text = call.arguments as? String {
+          let sheet = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+          let scene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }
+            ?? UIApplication.shared.connectedScenes.first as? UIWindowScene
+          var host = scene?.keyWindow?.rootViewController
+          while let presented = host?.presentedViewController {
+            host = presented
+          }
+          if let popover = sheet.popoverPresentationController, let view = host?.view {
+            popover.sourceView = view
+            popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+          }
+          guard let presenter = host else {
+            result(FlutterError(code: "NO_HOST", message: "No view controller to present the share sheet.", details: nil))
+            return
+          }
+          presenter.present(sheet, animated: true)
           result(nil)
         } else {
           result(FlutterMethodNotImplemented)

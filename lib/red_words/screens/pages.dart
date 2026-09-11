@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../moment/models.dart';
 import '../moment/office.dart';
+import '../platform/session.dart';
 import '../theme.dart';
 import 'chrome.dart';
 
@@ -126,6 +129,7 @@ class TodayPage extends StatelessWidget {
     required this.onSeek,
     required this.onAbout,
     this.onSeven,
+    this.onOpenDay,
     this.onBless,
   });
 
@@ -137,6 +141,7 @@ class TodayPage extends StatelessWidget {
   final VoidCallback onSeek;
   final VoidCallback onAbout;
   final VoidCallback? onSeven;
+  final ValueChanged<PathDay>? onOpenDay;
   final VoidCallback? onBless;
 
   @override
@@ -213,7 +218,7 @@ class TodayPage extends StatelessWidget {
                   ],
                   if (seven.isNotEmpty) ...[
                     const SizedBox(height: 28),
-                    SevenRibbon(days: seven, onOpen: onSeven),
+                    SevenRibbon(days: seven, onOpen: onSeven, onOpenDay: onOpenDay),
                   ],
                 ],
               ),
@@ -226,19 +231,20 @@ class TodayPage extends StatelessWidget {
 }
 
 class SevenRibbon extends StatelessWidget {
-  const SevenRibbon({super.key, required this.days, this.onOpen});
+  const SevenRibbon({super.key, required this.days, this.onOpen, this.onOpenDay});
 
   final List<PathDay> days;
   final VoidCallback? onOpen;
+  final ValueChanged<PathDay>? onOpenDay;
 
   @override
   Widget build(BuildContext context) {
     final paper = PaperScope.of(context);
-    return GestureDetector(
-      onTap: onOpen,
-      child: Column(
-        children: [
-          Text(
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: onOpen,
+          child: Text(
             'Seven Days',
             style: TextStyle(
               fontSize: 11,
@@ -246,38 +252,60 @@ class SevenRibbon extends StatelessWidget {
               color: paper.colors.gold,
             ),
           ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (final day in days)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Tooltip(
-                    message: day.title,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: paper.colors.crimson.withValues(alpha: 0.55)),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (final day in days)
+              Tooltip(
+                message: day.title,
+                child: GestureDetector(
+                  key: Key('seven-bead-${day.title}'),
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (onOpenDay != null) {
+                      onOpenDay!(day);
+                    } else {
+                      onOpen?.call();
+                    }
+                  },
+                  child: SizedBox(
+                    width: 36,
+                    height: 44,
+                    child: Center(
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: paper.colors.crimson.withValues(alpha: 0.55)),
+                        ),
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
-        ],
-      ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
 
 class SitPage extends StatefulWidget {
-  const SitPage({super.key, required this.moment, required this.onBack});
+  const SitPage({
+    super.key,
+    required this.moment,
+    required this.onBack,
+    required this.now,
+    this.session,
+  });
 
   final DailyMoment moment;
   final VoidCallback onBack;
+  final DateTime now;
+  final SessionStore? session;
 
   @override
   State<SitPage> createState() => _SitPageState();
@@ -286,6 +314,37 @@ class SitPage extends StatefulWidget {
 class _SitPageState extends State<SitPage> {
   static const leaves = ['Read', 'Reflect', 'Rest', 'Respond'];
   int leaf = 0;
+  final _reply = TextEditingController();
+  bool _rested = false;
+  Timer? _restTimer;
+  late final SessionStore _keep;
+
+  @override
+  void initState() {
+    super.initState();
+    _keep = widget.session ?? SessionStore();
+    _loadReply();
+  }
+
+  Future<void> _loadReply() async {
+    final text = await _keep.loadReply(SessionStore.dateKey(widget.now));
+    if (mounted && text.isNotEmpty) _reply.text = text;
+  }
+
+  void _enterRest() {
+    _restTimer?.cancel();
+    _rested = false;
+    _restTimer = Timer(const Duration(seconds: 60), () {
+      if (mounted) setState(() => _rested = true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _restTimer?.cancel();
+    _reply.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -317,9 +376,13 @@ class _SitPageState extends State<SitPage> {
             label: leaf == leaves.length - 1 ? 'Amen' : 'Next',
             onPressed: () {
               if (leaf == leaves.length - 1) {
+                _keep.keepReply(SessionStore.dateKey(widget.now), _reply.text);
                 widget.onBack();
               } else {
-                setState(() => leaf += 1);
+                setState(() {
+                  leaf += 1;
+                  if (leaf == 2) _enterRest();
+                });
               }
             },
           ),
@@ -347,24 +410,60 @@ class _SitPageState extends State<SitPage> {
         );
       case 2:
         return Center(
-          child: Text(
-            _titleCase(catchword(moment.word.text)),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'serif',
-              fontStyle: FontStyle.italic,
-              fontSize: 40,
-              color: paper.colors.crimson,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _titleCase(catchword(moment.word.text)),
+                key: const Key('sit-rest-word'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 40,
+                  color: paper.colors.crimson,
+                ),
+              ),
+              if (_rested) ...[
+                const SizedBox(height: 24),
+                Text(
+                  'When you are ready.',
+                  key: const Key('sit-rest-ready'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: paper.colors.inkMuted),
+                ),
+              ],
+            ],
           ),
         );
       case 3:
-        return Center(
-          child: Text(
-            'One sentence is enough. You do not have to finish the thought.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'serif', fontSize: 18, height: 1.55, color: paper.colors.inkMuted),
-          ),
+        return Column(
+          children: [
+            Text(
+              'One sentence is enough. You do not have to finish the thought.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: 'serif', fontSize: 16, height: 1.55, color: paper.colors.inkMuted),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              key: const Key('sit-reply'),
+              controller: _reply,
+              maxLines: 4,
+              minLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: 'Keep one sentence on this device.',
+                hintStyle: TextStyle(color: paper.colors.inkMuted),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: paper.colors.rule),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: paper.colors.crimson),
+                ),
+              ),
+              style: TextStyle(fontFamily: 'serif', fontSize: 18, height: 1.5, color: paper.colors.ink),
+            ),
+          ],
         );
       default:
         return Center(
@@ -581,7 +680,18 @@ class BlessingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final paper = PaperScope.of(context);
     return FolioScaffold(
-      footer: TextAction(label: 'Back', onPressed: onBack),
+      footer: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextAction(label: 'Back', onPressed: onBack),
+          TextAction(
+            label: 'Send',
+            onPressed: () => LinkBridge.share(
+              BlessingShare.body(word: moment.word.text, citation: moment.word.citation),
+            ),
+          ),
+        ],
+      ),
       child: Column(
         children: [
           const RunningHead(text: 'A blessing'),
@@ -655,6 +765,12 @@ class AboutPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
+            'Sit is inspired by lectio divina — read, reflect, rest, respond. The quiet minute is ours, not a church timer, and not an endorsement.',
+            key: const Key('about-lectio'),
+            style: TextStyle(height: 1.5, fontSize: 13, color: paper.colors.inkMuted),
+          ),
+          const SizedBox(height: 12),
+          Text(
             'Rights in the Authorized (King James) Version of the Bible in the United Kingdom are vested in the Crown and administered by the Crown’s patentee, Cambridge University Press.',
             key: const Key('about-rights'),
             style: TextStyle(height: 1.5, fontSize: 13, color: paper.colors.inkMuted),
@@ -666,7 +782,7 @@ class AboutPage extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Red Words collects nothing. No account, no analytics, no network. The only things written on this device are whether the title leaf has been turned and the seven-day Word rotation the home-screen widget reads.',
+            'Red Words collects nothing. No account, no analytics, no network. This device keeps a first-open flag, the seven-day Word rotation, and an optional one-sentence reply from Sit.',
             key: const Key('about-privacy'),
             style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
           ),

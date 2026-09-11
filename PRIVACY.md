@@ -9,10 +9,11 @@ Red Words collects nothing.
 
 ## What is written on the device
 
-Two things, both local, both deletable by removing the app:
+Three things, all local, all deletable by removing the app:
 
 1. A flag recording that the title leaf has been turned once, so the book opens to Today.
 2. The seven-day Word rotation (sentence and citation only), placed in the app's shared container so the home-screen widget can show the right sentence at each local midnight without the app running. The same seven sentences also ship inside the widget extension, so the card is not blank before first open.
+3. An optional one-sentence reply from Sit → Respond, keyed to the civil date. It never leaves the device.
 
 ## Crisis note
 

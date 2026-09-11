@@ -59,8 +59,8 @@ flutter build appbundle    # Play AAB, same signing
 - Widget: **RedWordsWidget** (`com.redwords.redWords.RedWordsWidget`), App Group `group.com.redwords.redWords`
 - Deep link: `redwords://today`
 - Widget card = the Word only (sentence + citation). No badge, streak, or app name on the card.
-- The widget ships the locked seven-slot rotation inside the extension and rotates at local midnight. Version `0.1.0+3`.
-- A signed IPA still needs a Mac and **Xcode 26**. See `TESTFLIGHT.md`.
+- The widget ships the locked seven-slot rotation inside the extension and rotates at local midnight. Version `0.1.0+4`. iPhone-only (not iPad).
+- A signed IPA still needs a Mac and **Xcode 26**. One sitting: `docs/MAC-DAY.md`. Listing copy: `docs/STORE-LISTING.md`. Runbook: `TESTFLIGHT.md`.
 
 ```bash
 node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js

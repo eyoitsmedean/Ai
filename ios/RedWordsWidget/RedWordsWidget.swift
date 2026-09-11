@@ -94,7 +94,8 @@ struct WordEntry: TimelineEntry {
 
 struct WordProvider: TimelineProvider {
   func placeholder(in context: Context) -> WordEntry {
-    WordEntry(date: Date(), word: "", citation: "")
+    let slot = WordStore.bundled.first ?? WordSlot(word: "", citation: "")
+    return WordEntry(date: Date(), word: slot.word, citation: slot.citation)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (WordEntry) -> Void) {

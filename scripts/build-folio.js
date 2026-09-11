@@ -53,7 +53,8 @@ const identifiers = [
   ['URL scheme', 'redwords://today'],
   ['Display name', 'Red Words'],
   ['iOS floor', '15.0 — Runner and widget'],
-  ['Version', '0.1.0+3'],
+  ['Device family', 'iPhone only (not iPad)'],
+  ['Version', '0.1.0+4'],
   ['Android applicationId', 'com.redwords.red_words'],
 ];
 
@@ -299,7 +300,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <article class="book">
 
 <section class="leaf" id="front">
-  <p class="kicker">A folio for Dean · 5 September 2026</p>
+  <p class="kicker">A folio for Dean · 11 September 2026</p>
   <div class="mark" style="margin: 36px 0 24px">R</div>
   <p class="promise">${esc(catalog.brand.promise)}</p>
   <p class="lede drop" style="margin-top: 28px">
@@ -395,9 +396,9 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 </section>
 
 <section class="leaf" id="lectio">
-  <p class="kicker">Sit — lectio divina</p>
+  <p class="kicker">Sit — inspired by lectio</p>
   <h2 style="font-size: clamp(32px, 5vw, 44px); margin: 12px 0 12px">Four leaves. Amen is allowed to end the room.</h2>
-  <p class="lede">Read is the sentence. Reflect is the note already written for this hour. Rest is one catchword from the saying — not a timer, not a score. Respond is one sentence of your own; you do not have to finish the thought. Next turns the leaf. Amen returns you to Today.</p>
+  <p class="lede">Inspired by lectio divina, not a licensed method and not a church timer. Read is the sentence. Reflect is the note already written for this hour. Rest is one catchword — a quiet minute, no digits, no score. Respond is one sentence kept on this device. Next turns the leaf. Amen returns you to Today.</p>
   <div class="phones">
     <div>
       <div class="phone">
@@ -523,7 +524,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
       <tr><td>Corpus</td><td>${verseCount} red-letter KJV verses. Zero Romans. Zero Psalms. Zero celebrity.</td></tr>
       <tr><td>Empty catalog</td><td>The page is blank. His words will be here when the book is.</td></tr>
       <tr><td>Widget clock</td><td>The locked seven ships inside the widget. iOS renders one entry per local midnight; Android recomputes from the clock. The card is today's Word before the app is opened, and on mornings no one opens the book.</td></tr>
-      <tr><td>Rights</td><td>Rights in the Authorized (King James) Version in the United Kingdom are vested in the Crown, administered by Cambridge University Press. Public domain elsewhere. UK availability is Dean’s call.</td></tr>
+      <tr><td>Device family</td><td>iPhone only. Not iPad. Avoids a 13″ screenshot wall.</td></tr>
+      <tr><td>Rights</td><td>Rights in the Authorized (King James) Version in the United Kingdom are vested in the Crown, administered by Cambridge University Press. Public domain elsewhere. UK availability is Dean’s call. CUP’s 500-verse waiver is liturgical / non-commercial — a store listing is not that waiver.</td></tr>
       <tr><td>Privacy</td><td>Nothing collected. Nothing sent. PRIVACY.md is the policy; About carries it in-app.</td></tr>
     </tbody>
   </table>
@@ -538,7 +540,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 </section>
 
 <section class="leaf">
-  <p class="kicker">What this agent verified · 5 Sep 2026</p>
+  <p class="kicker">What this agent verified · 11 Sep 2026</p>
   <table class="table">
     <thead><tr><th>Check</th><th>Result</th></tr></thead>
     <tbody>
@@ -559,7 +561,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
     <li>Airplane mode. The sentence stays.</li>
     <li>Add the <strong>Word</strong> widget. Confirm the card is only the saying.</li>
     <li>Tap it. You are in Today. <em>redwords://today</em>.</li>
-    <li>Sit: Read → Reflect → Rest → Respond. Amen is allowed to end the room.</li>
+    <li>Sit: Read → Reflect → Rest (one catchword, no countdown) → Respond. Write one sentence. Amen keeps it on this device.</li>
+    <li>Bless: Send. The share sheet is the Word, not the brand.</li>
     <li>Seven: sit Come. Do not look for a streak.</li>
     <li>Bless: hold the cream leaf up. The brand is not on it.</li>
     <li>Add the Word widget before turning the page. The card is already today’s sentence.</li>
