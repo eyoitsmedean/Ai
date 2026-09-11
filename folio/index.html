@@ -115,7 +115,7 @@
     h1 em { color: var(--crimson); font-style: italic; }
     h2 { font-size: 1.85rem; }
     h3 { font-size: 1.2rem; font-style: italic; }
-    p, li, td, .copy, .lead { overflow-wrap: anywhere; word-break: break-word; }
+    p, li, td, .copy, .lead { overflow-wrap: break-word; }
     p.lead { font-size: 1.22rem; max-width: var(--measure); }
     .colophon, .muted, .tiny { color: var(--muted); }
     .tiny { font-family: "Instrument Sans", sans-serif; font-size: 0.78rem; letter-spacing: 0.04em; }
@@ -355,8 +355,11 @@
       .copy { padding-right: 4.4rem; }
       .chosen-banner.show ~ .tonight-dock.show { top: 0; }
       .chosen-banner.show { position: relative; }
+      #tocToggle { display: inline-block; }
     }
-    #tocToggle { display: none; }
+    @media (min-width: 861px) {
+      #tocToggle { display: none; }
+    }
     @media print {
       nav, .actions, .chosen-banner, .copy button { display: none !important; }
       body { background: white; }
