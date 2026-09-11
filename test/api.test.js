@@ -73,6 +73,14 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
+  it('resolves a short encouragement theme name', async () => {
+    const res = await request('POST', '/api/encouragement', { theme: 'Anxiety' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.theme, 'Anxiety & Worry');
+    assert.ok(data.passages.length >= 3);
+  });
+
   it('serves a verified encouragement pack', async () => {
     const res = await request('POST', '/api/encouragement', { theme: 'Peace' });
     const data = JSON.parse(res.raw);

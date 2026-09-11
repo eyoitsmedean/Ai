@@ -70,10 +70,12 @@ describe('static artifacts', () => {
         checked += 1;
       }
     }
-    const { RLA_SEVEN, RLA_CURATED } = loadBrowserGlobals();
+    const { RLA_SEVEN, RLA_MORE, RLA_CURATED } = loadBrowserGlobals();
     assert.deepEqual(plain(RLA_CURATED), json);
     assert.deepEqual(plain(RLA_SEVEN), json.paths.seven);
     assert.equal(RLA_SEVEN.length, 7);
+    assert.deepEqual(plain(RLA_MORE), json.paths.more);
+    assert.ok(RLA_MORE.length >= 11, `only ${RLA_MORE.length} days after Seven`);
     assert.ok(checked >= 95, `only ${checked} quotes checked`);
   });
 });

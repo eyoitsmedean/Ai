@@ -192,6 +192,30 @@ describe('composeLetter', () => {
     assert.deepEqual(seen, ['Luke 15:4']);
   });
 
+  it('names a room from a short alias', () => {
+    const press = require('../data/letterpress');
+    const names = themeNames();
+    assert.equal(press.resolveTheme('Anxiety', names), 'Anxiety & Worry');
+    assert.equal(press.resolveTheme('grief', names), 'Grief & Loss');
+    assert.equal(press.resolveTheme('Shame', names), 'Shame & Guilt');
+    assert.equal(press.resolveTheme('Astrology', names), '');
+    assert.equal(press.resolveTheme('a', names), '');
+  });
+
+  it('does not treat an accidental cut as a crisis, and still hears a real one', () => {
+    const press = require('../data/letterpress');
+    assert.equal(press.looksLikeCrisis('I cut myself shaving'), false);
+    assert.equal(press.looksLikeCrisis('I cut myself on a knife cooking'), false);
+    assert.equal(press.looksLikeCrisis('I cut myself again last night'), true);
+    assert.equal(press.looksLikeCrisis('I want to die'), true);
+  });
+
+  it('tells the truth when no room is named', () => {
+    const { text, theme } = composeLetter('What is the capital of France?');
+    assert.equal(theme, null);
+    assert.match(text, /not as an answer to every question/);
+  });
+
   it('keeps five spoken sayings for every room', () => {
     for (const name of themeNames()) {
       const pack = THEMES[name];

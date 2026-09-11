@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
+const { resolveTheme } = require('./lib/themes');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
@@ -14,7 +15,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
-const THEME_SET = new Set(themeNames());
 
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -267,9 +267,10 @@ app.get('/api/library', (req, res) => {
 });
 
 app.post('/api/encouragement', async (req, res) => {
-  const theme = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
-  if (!theme || theme.length > 80) return res.status(400).json({ error: 'theme required.' });
-  if (!THEME_SET.has(theme)) return res.status(400).json({ error: 'Unknown theme.' });
+  const asked = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
+  if (!asked || asked.length > 80) return res.status(400).json({ error: 'theme required.' });
+  const theme = resolveTheme(asked);
+  if (!theme) return res.status(400).json({ error: 'Unknown theme.' });
   if (!rateLimit(`enc:${clientKey(req)}`, 20, 60 * 60 * 1000)) {
     return res.status(429).json({ error: 'Please return later for more encouragement.' });
   }

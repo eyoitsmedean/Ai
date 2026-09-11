@@ -22,6 +22,7 @@
     return engine.looksLikeCrisis(text) ? engine.CRISIS_NOTICE + body : body;
   };
 
-  /* Seven Days with His words — the named path (Hallow’s lesson, our length). */
+  /* Seven Days with His words; MORE continues the path after day 7. */
   window.RLA_SEVEN = ((data().paths || {}).seven || []).slice();
+  window.RLA_MORE = ((data().paths || {}).more || []).slice();
 })();

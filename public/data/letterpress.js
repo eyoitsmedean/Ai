@@ -42,9 +42,53 @@
   ].join('\n');
 
   var GENERIC = {
-    opening: 'Before anything else, sentences He actually spoke.',
+    opening: 'I keep only the words He spoke. Here are two, set for this hour — not as an answer to every question, only as what I have.',
     closing: 'You can sit with one line. Nothing else is required of this hour.',
   };
+
+  // Short names a reader or client will send ("Anxiety") and the rooms they name.
+  var THEME_ALIASES = {
+    anxiety: 'Anxiety & Worry',
+    worry: 'Anxiety & Worry',
+    grief: 'Grief & Loss',
+    loss: 'Grief & Loss',
+    shame: 'Shame & Guilt',
+    guilt: 'Shame & Guilt',
+    conflict: 'Conflict & Relationships',
+    relationship: 'Conflict & Relationships',
+    relationships: 'Conflict & Relationships',
+    purpose: 'Purpose & Direction',
+    direction: 'Purpose & Direction',
+    faith: 'Faith & Doubt',
+    doubt: 'Faith & Doubt',
+    suffering: 'Suffering & Pain',
+    pain: 'Suffering & Pain',
+    lonely: 'Loneliness',
+    loneliness: 'Loneliness',
+    fear: 'Fear',
+    peace: 'Peace',
+    hope: 'Hope',
+    forgiveness: 'Forgiveness',
+    forgive: 'Forgiveness',
+  };
+
+  function resolveTheme(name, known) {
+    var raw = String(name || '').trim();
+    if (!raw) return '';
+    var list = known && known.length ? known : [];
+    if (list.indexOf(raw) !== -1) return raw;
+    var lower = raw.toLowerCase();
+    var i;
+    for (i = 0; i < list.length; i++) if (list[i].toLowerCase() === lower) return list[i];
+    if (THEME_ALIASES[lower] && (!list.length || list.indexOf(THEME_ALIASES[lower]) !== -1)) return THEME_ALIASES[lower];
+    if (lower.length >= 4) {
+      for (i = 0; i < list.length; i++) {
+        var first = list[i].toLowerCase().split(/[\s&]+/)[0];
+        if (first === lower) return list[i];
+      }
+    }
+    return '';
+  }
 
   // Read when the writer has stayed on one need past the sentences kept for it.
   var CONTINUING = {
@@ -82,7 +126,11 @@
   }
 
   function looksLikeCrisis(text) {
-    return Boolean(text) && CRISIS_RE.test(String(text));
+    var raw = String(text || '');
+    if (!raw) return false;
+    // Accidents are not a crisis. "I cut myself again last night" still is.
+    if (/\bcut(ting)? myself (shaving|cooking|chopping|slicing|on (a |the )?(knife|glass|paper|can|lid))\b/i.test(raw)) return false;
+    return CRISIS_RE.test(raw);
   }
 
   function guessThemes(text, known) {
@@ -197,11 +245,13 @@
 
   return {
     CRISIS_NOTICE: CRISIS_NOTICE,
+    GENERIC: GENERIC,
     NEED_CUES: NEED_CUES,
     citedBefore: citedBefore,
     composeLetter: composeLetter,
     guessThemes: guessThemes,
     looksLikeCrisis: looksLikeCrisis,
     renderLetter: renderLetter,
+    resolveTheme: resolveTheme,
   };
 });

@@ -783,6 +783,7 @@ textarea { font-family: var(--body); }
 .trust-line { font-size: 12.5px; color: var(--ink-3); line-height: 1.55; max-width: 52ch; }
 .trust-line a { color: var(--crimson); }
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+.suggestions.rooms { margin-top: 4px; }
 .chip {
   background: none;
   border: 1px solid var(--rule-2);
@@ -791,6 +792,14 @@ textarea { font-family: var(--body); }
   color: var(--ink-2);
   font-family: var(--body);
   font-style: italic;
+}
+.chip.room {
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  color: var(--ink-3);
 }
 .chip:hover { border-color: var(--crimson); color: var(--crimson); }
 
@@ -1721,6 +1730,16 @@ html.sitting .sit-sheet {
             <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
             <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
           </div>
+          <div class="suggestions rooms" id="room-chips" aria-label="Open a room">
+            <button class="chip room" type="button" data-need="I feel so much shame" onclick="useSuggestion(this)">Shame</button>
+            <button class="chip room" type="button" data-need="my mother died last week" onclick="useSuggestion(this)">Grief</button>
+            <button class="chip room" type="button" data-need="I am so lonely" onclick="useSuggestion(this)">Loneliness</button>
+            <button class="chip room" type="button" data-need="I am in so much pain" onclick="useSuggestion(this)">Suffering</button>
+            <button class="chip room" type="button" data-need="I feel nothing when I pray" onclick="useSuggestion(this)">Doubt</button>
+            <button class="chip room" type="button" data-need="my brother and I are not speaking" onclick="useSuggestion(this)">Conflict</button>
+            <button class="chip room" type="button" data-need="I am losing hope" onclick="useSuggestion(this)">Hope</button>
+            <button class="chip room" type="button" data-need="I just need some peace" onclick="useSuggestion(this)">Peace</button>
+          </div>
           <div class="gate" id="chat-gate">
             <h3>Five letters for today</h3>
             <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
@@ -2288,7 +2307,9 @@ function renderWeekRibbon() {
   paintSeven();
 }
 function sevenDays() {
-  return (window.RLA_SEVEN || []).slice();
+  const seven = (window.RLA_SEVEN || []).slice();
+  const more = (window.RLA_MORE || ((window.RLA_CURATED || {}).paths || {}).more || []).slice();
+  return seven.concat(more);
 }
 function pathState() {
   const raw = parseJSON(ls('rla-seven'), null);
@@ -2323,9 +2344,13 @@ function paintSeven() {
   const state = pathState();
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
+  const cursor = next < 0 ? days.length - 1 : next;
+  const weekStart = Math.floor(cursor / 7) * 7;
+  const slice = days.slice(weekStart, weekStart + 7);
   host.className = 'seven';
-  host.setAttribute('aria-label', 'Seven Days with His words');
-  host.innerHTML = days.map((day, i) => {
+  host.setAttribute('aria-label', weekStart === 0 ? 'Seven Days with His words' : 'More days with His words');
+  host.innerHTML = slice.map((day, j) => {
+    const i = weekStart + j;
     const cls = done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future');
     const locked = next >= 0 && i > next;
     return '<button type="button" class="seven-day ' + cls + '" data-i="' + i + '"' + (locked ? ' disabled' : '') + '>' +
@@ -2339,7 +2364,7 @@ function sitSeven(index) {
   const day = sevenDays()[index];
   if (!day) return;
   sitPayload = {
-    kicker: 'Seven Days · ' + day.title,
+    kicker: (index < 7 ? 'Seven Days · ' : 'Day ' + (index + 1) + ' · ') + day.title,
     title: day.title,
     quote: day.passage,
     verse: day.verse,
@@ -2484,7 +2509,9 @@ async function loadEnc(theme) {
   } catch (e) {
     try {
       const cur = await loadCurated();
-      const pack = cur.packs[theme];
+      const names = Object.keys(cur.packs || {});
+      const resolved = (window.RLA_LETTERPRESS && window.RLA_LETTERPRESS.resolveTheme(theme, names)) || theme;
+      const pack = cur.packs[resolved];
       if (!pack) throw new Error('missing');
       encCache[theme] = pack;
       showEnc(pack, theme);
@@ -2958,16 +2985,23 @@ function restoreLetters() {
       sealLetter(stream.bubble);
     }
   });
-  document.getElementById('suggestions').style.display = 'none';
+  hideSuggestions();
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
     setComposerEnabled(false);
   }
 }
 
+function hideSuggestions() {
+  ['suggestions', 'room-chips'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
 function useSuggestion(btn) {
-  chatInput.value = btn.textContent.trim();
-  document.getElementById('suggestions').style.display = 'none';
+  chatInput.value = (btn.getAttribute('data-need') || btn.textContent).trim();
+  hideSuggestions();
   sendMsg();
 }
 
@@ -2980,13 +3014,13 @@ async function sendMsg(preset) {
   }
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
-    document.getElementById('suggestions').style.display = 'none';
+    hideSuggestions();
     setComposerEnabled(false);
     return;
   }
   chatInput.value = '';
   chatInput.style.height = 'auto';
-  document.getElementById('suggestions').style.display = 'none';
+  hideSuggestions();
   isChatBusy = true;
   document.getElementById('send-btn').disabled = true;
 
@@ -3056,7 +3090,7 @@ async function sendMsg(preset) {
     const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text, chatHistory) : '';
     const commons = ((window.RLA_CURATED || {}).commons || []).slice(0, 2);
     const fallback = living || [
-      'Before anything else, sentences He actually spoke.',
+      ((window.RLA_LETTERPRESS && window.RLA_LETTERPRESS.GENERIC && window.RLA_LETTERPRESS.GENERIC.opening) || 'I keep only the words He spoke.'),
       ...commons.map((p) => `\n**${p.verse}**\n“${p.quote}”\n${p.context}`),
       '',
       'You can sit with one line. Nothing else is required of this hour.',
@@ -3915,6 +3949,9 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
+  if (window.RLA_LETTERPRESS && typeof window.RLA_LETTERPRESS.looksLikeCrisis === 'function') {
+    return window.RLA_LETTERPRESS.looksLikeCrisis(text);
+  }
   return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
 }
 function showCrisisModal() {
