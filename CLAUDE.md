@@ -57,7 +57,7 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 - Mission lock: Universal recovery commission (11 September 2026 evening) — recover this thread, align to Notion WATCH, deliver three flagships.
 - Decisions this session: six prompts recovered; crisis stops counsel; one-screen is the WATCH surface; folio rooms preserved; KJV stays labeled; Pages not enabled; no sixth Notion hub.
-- Work done: `studio/CANONICAL-BRIEF.md`, `studio/research/*`, `studio/HANDOFF.md`, `public/one-screen.html`, crisis stop in letterpress + `/api/chat`, eval/QA updated. Notion child under the existing one-screen page.
+- Work done: `studio/CANONICAL-BRIEF.md`, `studio/research/*`, `studio/HANDOFF.md`, `public/one-screen.html`, crisis stop + correspondence lock, eval 47/47, `npm test` 83/83, `qa` and `qa:static` passed 11 Sep evening. Notion child under the existing one-screen page.
 - Next step: Dean opens `/ask` locally if he wants; records (or refuses) a translation before any public URL; does not enable Pages while WATCH holds. Paste files still require Dean to paste.
 - Open risks: model path unverified without a key; eval does not judge warmth; Pages URL last checked 6 September 2026 (stale-by: re-curl; moot under WATCH); crisis detector is keyword-plus-carve-out, not contextual; Notion crisis *sentence* not swapped in (existing notice kept).
 
