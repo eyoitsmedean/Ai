@@ -2416,6 +2416,9 @@ function startApp() {
 }
 
 function switchTab(tab) {
+  if (typeof closeAmen === 'function') closeAmen();
+  const toast = document.getElementById('toast');
+  if (toast) toast.classList.remove('show');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn, .rail-btn').forEach(b => {
     b.classList.remove('active');
@@ -3115,7 +3118,11 @@ function keepSitReply() {
   openAmen({ quote, verse, holdMs: 3000 });
   if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
     lsSet('rla-install-hint', '1');
-    setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
+    setTimeout(() => {
+      if (document.getElementById('today-page')?.classList.contains('active')) {
+        showToast('Add this room to your home screen — it will wait here in the morning.');
+      }
+    }, 3400);
   }
 }
 
@@ -3252,6 +3259,9 @@ function useSuggestion(btn) {
 }
 
 async function sendMsg(preset) {
+  if (typeof closeAmen === 'function') closeAmen();
+  const toast = document.getElementById('toast');
+  if (toast) toast.classList.remove('show');
   const text = (preset || chatInput.value).trim();
   if (!text || isChatBusy) return;
   if (looksLikeCrisisClient(text)) {

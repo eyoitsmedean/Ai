@@ -69,7 +69,7 @@ describe('evaluation set', () => {
     // bereaved must never be handed "many mansions" or "love your enemies" by one host and not the other.
     const w = clientWindow();
     const enc = w.RLA_CURATED.encouragement;
-    for (const [room, banned] of [['Grief & Loss', /many mansions|prepare a place/i], ['Conflict & Relationships', /enemies|despitefully/i], ['Forgiveness', /forgive not/]]) {
+    for (const [room, banned] of [['Grief & Loss', /many mansions|prepare a place/i], ['Conflict & Relationships', /enemies|despitefully/i], ['Forgiveness', /forgive not/], ['Suffering & Pain', /^These things I have spoken/]]) {
       for (const p of enc[room].passages.slice(0, 2)) assert.doesNotMatch(p.quote, banned, `${room}: ${p.verse}`);
       const server = encouragementFor(room).passages.map((p) => p.verse.replace('-', '–'));
       assert.equal(enc[room].passages[0].verse, server[0], `${room} opens differently on the client`);

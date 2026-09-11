@@ -790,7 +790,8 @@
       "forbid": [
         "forgive not",
         "seventy times",
-        "despitefully"
+        "despitefully",
+        "tribulation"
       ]
     },
     {
@@ -1047,6 +1048,20 @@
       "input": "My son hit me up for money again and I said no. Was that wrong?",
       "crisis": false,
       "danger": false
+    },
+    {
+      "id": "life-44",
+      "category": "life",
+      "input": "I killed people in Afghanistan and I cannot sleep.",
+      "themes": [
+        "Shame & Guilt",
+        "Peace"
+      ],
+      "forbid": [
+        "morrow",
+        "fowls of the air",
+        "take no thought"
+      ]
     }
   ]
 }
