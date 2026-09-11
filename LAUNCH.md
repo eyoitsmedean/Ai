@@ -2,7 +2,7 @@
 
 Research (August 2026): Hallow made ~$40M in 2025 on **one named season** (Pray40 / Lent) plus an **annual** subscription. Ash Wednesday 2026: 263K downloads in a day. Bible Chat wins **downloads** with TikTok “talk to Scripture,” then burns trust with $4.99/week. YouVersion owns reading, is free, and will not leave a red-letter hole for you if you stay a Bible reader.
 
-**Nobody owns “live daily life guided only by the red letters” as a premium brand.** That is the farm.
+**Nobody owns trusted red letters, free, in season.** Three apps now sell “the words Jesus spoke” (see `MARKET_STRATEGY.md` §3). The farm is still the one that does not lock the sentence, does not invent a verse, and follows the church year.
 
 Do not compete with YouVersion. Do not copy Bible Chat’s weekly paywall. Copy Hallow’s *named path* and Bible Chat’s *I can ask him something* — then stay quieter and more honest than both.
 
@@ -48,7 +48,7 @@ Trial: 7 days of live Advisor if you have an API key. Convert after they have *k
 
 - Ash Wednesday: **10 February 2027**
 - Easter: **28 March 2027**
-- The product already changes clothes for Lent. The *path* must be 40 rooms by then. Name it. Film it in January.
+- The product already changes clothes for Lent. The path is named **Stay with me**: 40 rooms from Ash Wednesday, week one is Seven Days, opened by the calendar. Preview it with `/?path=lent`. Film it in January.
 
 Until then, **Seven Days with His words** is the Pray40 you can ship in August.
 

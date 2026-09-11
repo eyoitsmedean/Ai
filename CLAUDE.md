@@ -31,6 +31,7 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 | 6 Sep 2026 | The verifier prints only his speech: epistle, Psalm, deuterocanon, and narrative-Gospel citations are dropped from a reply, never passed through. `1 John` is not `John`. | `lib/scripture.js`, `test/scripture.test.js` |
 | 6 Sep 2026 | The Advisor evaluation set lives in `eval/` and runs with `npm run eval`; quotation of a non-Gospel book is a hard failure, naming one to decline it is not. Fallback-mode results prove the gate and verifier, not tone; the live run is Dean's, from a machine with a key. | `eval/README.md`, `eval/REVIEW.md` |
 | 7 Sep 2026 | `MARKET_STRATEGY.md` is the current strategy page (v2). v1 is archived as `MARKET_STRATEGY.v1.md`. The red-letter niche is occupied (three products) but not owned; money and paid ads stay parked through 4 Dec 2026. | `MARKET_STRATEGY.md`, `docs/bot-notes.md` |
+| 11 Sep 2026 | Lent path *Stay with me*: 40 rooms counted from Ash Wednesday, opened by calendar not streak; week one is Seven Days. First sitting offers a blessing, not an install toast. | `data/paths.js`, `lib/year.js`, `public/index.html` |
 
 ## Open questions (only Dean can close these)
 
@@ -68,4 +69,12 @@ Commission: UNIVERSAL REBUILD PIPELINE on a blank brief. Target assumed: `MARKET
 - Verified this session: 17 URLs opened; `lib/year.js` dates for Advent 2026 / Ash Wednesday 2027 / Easter 2027; HTTP check on every cited URL (Baptist Press 403, replaced).
 - Not verified: live App Store search ads; Hallow's full 2026 Lent close; any paywall in this product (none is on).
 - Assumed: blank brief fields as listed in `docs/bot-notes.md`. Corrected in ten seconds if the target was something else.
+
+## FOR THE RECORD — 11 September 2026
+
+Commission: 45–60 minute sprint, five priorities.
+
+- Built: Lent path *Stay with me* (40 rooms, `lentDayIndex`, `?path=lent`); first sitting opens a blessing instead of an install toast; `LAUNCH.md` aligned with the occupied niche.
+- Verified this session: `npm test` 62/62; `scripts/qa-browser.js` 9/9 including the blessing offer and the Lent ribbon.
+- Not verified: live Ash Wednesday 2027 (previewed with `?path=lent`); sharing a blessing card to a real phone.
 

@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v14';
+const CACHE = 'rla-phase0-v15';
 /* Resolve against the worker's own folder so the app works at the origin root
    (node server.js) and under a project path (GitHub Pages /Ai/). */
 const ROOT = new URL('./', self.location.href);

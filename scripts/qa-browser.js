@@ -110,8 +110,18 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
   });
 
-  await check('Today is a folio, not a dashboard', async () => {
+  await check('first Amen offers a blessing, not an install toast', async () => {
     await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 4000 });
+    const copy = await page.$eval('#blessing-sheet', (el) => el.innerText);
+    assert(/Send a blessing/i.test(copy), 'blessing sheet missing');
+    assert(/Matthew|Mark|Luke|John/i.test(copy), 'blessing must carry the verse they sat with');
+    await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
+    const still = await page.$eval('#blessing-sheet', (el) => el.classList.contains('on'));
+    assert(!still, 'Close should dismiss the blessing');
+  });
+
+  await check('Today is a folio, not a dashboard', async () => {
     const today = await page.evaluate(() => ({
       season: document.documentElement.getAttribute('data-season'),
       seven: document.querySelectorAll('.seven-day').length,
@@ -144,6 +154,18 @@ async function main() {
     assert(!outcome.stillOpen, 'Close should dismiss the modal');
     const benign = await page.evaluate(() => window.RLA_looksLikeCrisis('Herod wanted to kill him as a baby, why'));
     assert(benign === false, 'Bible history must not trip the modal');
+  });
+
+  await check('Lent path preview opens Stay with me', async () => {
+    await page.goto(BASE + '/?path=lent&day=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.reload({ waitUntil: 'networkidle0' });
+    const ribbon = await page.$eval('#week-ribbon', (el) => el.innerText);
+    assert(/Stay with me/i.test(ribbon), 'Lent path name missing');
+    assert(/Room 1 of 40/i.test(ribbon), 'expected 40 rooms, got: ' + ribbon.replace(/\s+/g, ' ').slice(0, 80));
+    assert(/Ashes/i.test(ribbon), 'week names missing');
+    const days = await page.$$eval('#week-ribbon .seven-day', (els) => els.length);
+    assert(days === 40, 'expected 40 day cells, got ' + days);
   });
 
   await check('no page errors', async () => {

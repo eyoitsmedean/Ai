@@ -6,6 +6,7 @@ const {
   ashWednesday,
   churchYear,
   easterSunday,
+  lentDayIndex,
   pentecost,
   ymd,
 } = require('../lib/year');
@@ -47,7 +48,21 @@ describe('adventDayIndex', () => {
 describe('ashWednesday / pentecost', () => {
   it('tracks Easter', () => {
     equal(ymd(ashWednesday(2026)), 20260218);
+    equal(ymd(ashWednesday(2027)), 20270210);
     equal(ymd(pentecost(2026)), 20260524);
+  });
+});
+
+describe('lentDayIndex', () => {
+  it('counts rooms from Ash Wednesday', () => {
+    equal(lentDayIndex(new Date(2027, 1, 10)), 0);
+    equal(lentDayIndex(new Date(2027, 1, 11)), 1);
+    equal(lentDayIndex(new Date(2027, 2, 21)), 39);
+  });
+
+  it('is negative before Lent and keeps counting to Holy Saturday', () => {
+    equal(lentDayIndex(new Date(2027, 1, 9)) < 0, true);
+    equal(lentDayIndex(new Date(2027, 2, 27)) > 39, true);
   });
 });
 

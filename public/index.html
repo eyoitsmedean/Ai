@@ -2068,6 +2068,16 @@ function adventDayIndex(date) {
   const b = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
   return Math.round((a - b) / 86400000);
 }
+function ashWednesday(year) {
+  return addDaysLocal(easterSunday(year), -46);
+}
+function lentDayIndex(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  const start = ashWednesday(d.getFullYear());
+  const a = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const b = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+  return Math.round((a - b) / 86400000);
+}
 function churchYear(date) {
   const d = date instanceof Date ? date : new Date(date || Date.now());
   const year = d.getFullYear();
@@ -2321,16 +2331,17 @@ function renderWeekRibbon() {
   paintSeven();
 }
 /* The ribbon carries one path at a time. Ordinary days: Seven Days.
-   Advent through Christmas: Watch with me, twenty-eight rooms opened by the
-   calendar, not by streak. `?path=advent[&day=N]` previews it out of season. */
+   Advent through Christmas: Watch with me (28). Lent: Stay with me (40).
+   Both open by the calendar, not by streak. `?path=advent|lent[&day=N]`
+   previews a path out of season. */
 function activePath() {
   const params = new URLSearchParams(location.search);
   const preview = params.get('path');
+  const now = new Date();
   const advent = window.RLA_ADVENT;
-  const inSeason = currentSeason.id === 'advent' || currentSeason.id === 'christmas';
-  const wantAdvent = preview === 'advent' || (inSeason && preview !== 'seven');
+  const inAdvent = currentSeason.id === 'advent' || currentSeason.id === 'christmas';
+  const wantAdvent = preview === 'advent' || (inAdvent && preview !== 'seven' && preview !== 'lent');
   if (wantAdvent && advent && Array.isArray(advent.days) && advent.days.length === 28) {
-    const now = new Date();
     const startYear = now.getMonth() < 6 ? now.getFullYear() - 1 : now.getFullYear();
     let index = adventDayIndex(now);
     if (params.has('day')) index = Number(params.get('day')) - 1;
@@ -2342,6 +2353,24 @@ function activePath() {
       days: advent.days.slice(),
       openThrough: openThrough,
       key: 'rla-advent-' + startYear,
+      seasonLabel: 'Advent',
+    };
+  }
+  const lent = window.RLA_LENT;
+  const inLent = currentSeason.id === 'lent';
+  const wantLent = preview === 'lent' || (inLent && preview !== 'seven' && preview !== 'advent');
+  if (wantLent && lent && Array.isArray(lent.days) && lent.days.length === 40) {
+    let index = lentDayIndex(now);
+    if (params.has('day')) index = Number(params.get('day')) - 1;
+    const openThrough = Math.max(0, Math.min(39, Number.isFinite(index) ? index : 0));
+    return {
+      id: 'lent',
+      name: lent.name || 'Stay with me',
+      weeks: lent.weeks || [],
+      days: lent.days.slice(),
+      openThrough: openThrough,
+      key: 'rla-lent-' + now.getFullYear(),
+      seasonLabel: 'Lent',
     };
   }
   return { id: 'seven', name: 'Seven Days', weeks: null, days: (window.RLA_SEVEN || []).slice(), openThrough: null, key: 'rla-seven' };
@@ -2360,10 +2389,11 @@ function paintAdvent(host, path) {
   const open = path.openThrough;
   const kept = path.days.filter((_, i) => done.has(i)).length;
   const weekNow = Math.floor(open / 7);
+  const total = path.days.length;
   host.className = 'advent';
-  host.setAttribute('aria-label', path.name + ', an Advent path of twenty-eight rooms');
-  const head = '<div class="advent-head"><span><strong>' + esc(path.name) + '</strong> · Advent</span>' +
-    '<span>Room ' + (open + 1) + ' of 28' + (kept ? ' · ' + kept + ' kept' : '') + '</span></div>';
+  host.setAttribute('aria-label', path.name + ', a path of ' + total + ' rooms');
+  const head = '<div class="advent-head"><span><strong>' + esc(path.name) + '</strong> · ' + esc(path.seasonLabel || '') + '</span>' +
+    '<span>Room ' + (open + 1) + ' of ' + total + (kept ? ' · ' + kept + ' kept' : '') + '</span></div>';
   const weeks = path.weeks.map((name, w) => {
     const cells = path.days.slice(w * 7, w * 7 + 7).map((day, j) => {
       const i = w * 7 + j;
@@ -2386,7 +2416,7 @@ function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
   const path = activePath();
-  if (path.id === 'advent') { paintAdvent(host, path); return; }
+  if (path.id === 'advent' || path.id === 'lent') { paintAdvent(host, path); return; }
   const days = path.days;
   if (!days.length) {
     host.className = 'week-ribbon';
@@ -2959,10 +2989,7 @@ function keepSitReply() {
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
-  if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
-    lsSet('rla-install-hint', '1');
-    setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
-  }
+  offerFirstBlessing(quote, verse);
 }
 
 function closeSit() {
@@ -3676,6 +3703,12 @@ function revealWords(el, text) {
   });
 }
 
+let afterAmen = null;
+function offerFirstBlessing(quote, verse) {
+  if (!quote || !verse || ls('rla-first-blessing')) return;
+  lsSet('rla-first-blessing', '1');
+  afterAmen = () => openBlessing({ verse: verse, quote: quote });
+}
 function openAmen(opts = {}) {
   const root = document.getElementById('amen');
   const echo = document.getElementById('amen-echo');
@@ -3700,11 +3733,15 @@ function closeAmen() {
   root.classList.remove('on');
   root.setAttribute('aria-hidden', 'true');
   clearTimeout(amenTimer);
+  const next = afterAmen;
+  afterAmen = null;
+  if (typeof next === 'function') next();
 }
 function amenFromSit() {
   if (!sitPayload) return;
   closeSit();
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
+  offerFirstBlessing(sitPayload.quote, sitPayload.verse);
 }
 
 function stopSitListen() {
@@ -3919,7 +3956,7 @@ const COMMANDS = [
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
-  { label: 'Open the path', hint: 'Seven Days · Watch with me', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Open the path', hint: 'Seven Days · Watch with me · Stay with me', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

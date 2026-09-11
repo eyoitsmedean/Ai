@@ -66,3 +66,44 @@ describe('Watch with me (Advent path)', () => {
     assert.equal(w.RLA_pathList('seven').length, 7);
   });
 });
+
+describe('Stay with me (Lent path)', () => {
+  const w = loadBrowserData();
+  const lent = w.RLA_LENT;
+
+  it('has six named weeks and forty rooms', () => {
+    assert.equal(lent.name, 'Stay with me');
+    assert.deepEqual([...lent.weeks], ['Ashes', 'Hunger', 'Mercy', 'Watch', 'Cup', 'Near']);
+    assert.equal(lent.days.length, 40);
+    assert.deepEqual([...lent.days.map((d) => d.week)], Array.from({ length: 40 }, (_, i) => Math.floor(i / 7)));
+  });
+
+  it('opens with Seven Days in unbleached clothes', () => {
+    assert.deepEqual([...lent.days.slice(0, 7).map((d) => d.verse)], [...w.RLA_SEVEN.map((d) => d.verse)]);
+  });
+
+  it('never repeats a room', () => {
+    const verses = lent.days.map((d) => d.verse);
+    assert.equal(new Set(verses).size, verses.length, 'duplicate verses: ' + verses.filter((v, i) => verses.indexOf(v) !== i).join(', '));
+    const titles = lent.days.map((d) => d.title);
+    assert.equal(new Set(titles).size, titles.length, 'duplicate titles: ' + titles.filter((t, i) => titles.indexOf(t) !== i).join(', '));
+  });
+
+  it('keeps titles short enough for seven across a phone', () => {
+    lent.days.forEach((d) => assert.ok(d.title.length <= 8, `${d.title} is too long for the ribbon`));
+  });
+
+  it('quotes only his spoken words, exactly as the KJV has them', () => {
+    lent.days.forEach((d) => {
+      assert.ok(isRedLetter(d.verse), `${d.verse} is not red-letter`);
+      const v = verifyQuote(d.verse, d.passage);
+      assert.ok(v.ok, `${d.verse}: ${v.reason}`);
+      assert.ok(v.score >= 0.9, `${d.verse} drifts from the KJV (score ${v.score})`);
+      assert.ok(d.reflection && d.reflection.length > 20, `${d.title} needs a reflection`);
+    });
+  });
+
+  it('is reachable through RLA_pathList', () => {
+    assert.equal(w.RLA_pathList('lent').length, 40);
+  });
+});

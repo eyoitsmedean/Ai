@@ -48,7 +48,7 @@ Sources this pass: Appfigures Hallow Lent surge; YesPress / Starter Hallow playb
 | Chat should return you to the ritual | Advisor *Sit with this* opens lectio on the sealed verse |
 | Vesper: resume, hour-following sky, no streak nag | Lectio draft + resume slip; vespers/night paper; quiet hour is opt-in |
 | Push without a server is not reliable | Quiet hour writes prefs; periodicsync may notify if installed; missing it never fails |
-| Lent is the payday; Seven is the shippable Pray40 | **Forty** — 40 red-letter rooms ready before Ash Wednesday 10 Feb 2027 |
+| Lent is the payday; Seven is the shippable Pray40 | **Stay with me** — 40 red-letter rooms, calendar-opened from Ash Wednesday 10 Feb 2027 (`?path=lent`) |
 
 ## Follow-ups (next iterations)
 
