@@ -6,6 +6,8 @@ Read this before designing anything. Decisions here are settled; disagree in a s
 
 A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Luke, and John to a modern life situation. Advisor-first, not a scholarship tool. The product intent was inverted once (scholarship-first); do not repeat that.
 
+Human entry: `START_HERE.md`. Recovered brief: `docs/CANONICAL_BRIEF.md`. Evidence: `docs/RESEARCH.md`. Twenty-minute path: `docs/OPERATOR_KIT.md`. Continuation for the next agent: `docs/CONTINUATION.md`.
+
 ## Decisions (settled)
 
 | # | Decision | Recorded | Basis |
@@ -25,6 +27,9 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 | 13 | Retrieval is lexicon + BM25, not raw substring overlap. A 2026 message is translated into the vocabulary the sayings use; BM25 (k1 1.5, b 0.75) ranks; curated room verses are interleaved; unmatched messages get `DEFAULT_CITATIONS`. Crisis still uses only `CRISIS_CITATIONS`. | `lib/retrieve.js` | 2026-09-07; held-out @8 went 4/10 → 10/10 vs the committed substring ranker |
 | 14 | Offline and error letters are built from the same retrieved allow-list as a live model would see (`lib/letter.js`). The generic John 14:27 + Matthew 11:28 pair is only the last resort. | `lib/letter.js`, `server.js` | 2026-09-11 |
 | 15 | Mobile default is Capacitor over `public/`. Config is in-repo; native `ios/` / `android/` trees are generated on Dean’s machine. On-device proof is `DEVICE_CHECKLIST.md`. | `capacitor.config.json` | 2026-09-11; brief default (A) |
+| 16 | Offline / error letters open with the warm line only when a need is recognized (theme or crisis). Otherwise they open with the Gospels-only sentence. | `lib/letter.js` `openingFor` | 2026-09-11; hostile and off-scope were getting “I am here with you” |
+| 17 | Lexicon must not treat “making money” as a money-worry or “cannot stop crying” as addiction. A skeptic / “prove Jesus existed” line retrieves refusal sayings (Luke 4:12, signs, authority), not Matthew 6. | `lib/retrieve.js` | 2026-09-11; found while scoring `eval/OFFLINE_REVIEW.md` |
+| 18 | The live Advisor prompt forbids unprompted emotion-based questions. That is both advisor-first and the NY GBL 47 element we do not want to satisfy. | `server.js` `ADVISOR_SYSTEM` | 2026-09-11; `docs/RESEARCH.md` A3 |
 
 ## Not yet decided (Dean)
 
@@ -44,3 +49,4 @@ A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Lu
 | 2026-09-06 | offline (no key) | claude-opus-5 configured | 61/61; live-only checks not run. Live path exercised against a mock Responses API (rung 2): 61/61 |
 | 2026-09-07 | offline (no key) | claude-opus-5 configured | 61/61 after lexicon+BM25 retrieval rebuild |
 | 2026-09-11 | offline (no key) | claude-opus-5 configured | 61/61 after retrieval-aware fallback letters |
+| 2026-09-11 | offline letters read | deterministic `letterFromSayings` | Eight letters scored in `eval/OFFLINE_REVIEW.md`. Live Claude/Astra letters: still unverified |

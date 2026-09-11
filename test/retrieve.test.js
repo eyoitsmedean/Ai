@@ -78,6 +78,8 @@ describe('retrieve themes', () => {
     assert.ok(!guessThemes("I'm dying to know if God hears me").includes('Grief & Loss'));
     assert.ok(!guessThemes('I still love him').includes('Peace'));
     assert.ok(!guessThemes('I lost my keys').includes('Purpose & Direction'));
+    assert.ok(!guessThemes('This is a scam. Prove Jesus even existed or admit you are making money off desperate people').includes('Anxiety & Worry'));
+    assert.ok(!guessThemes('My father died last month and I cannot stop crying').includes('Shame & Guilt'));
   });
 });
 
@@ -94,6 +96,7 @@ describe('retrieveSayings', () => {
     assert.ok(hitsAt('How do I love people who are cruel to me', ['Matthew 5:44'], 3).length);
     assert.ok(hitsAt('I feel so alone since my divorce', ['John 14:18'], 3).length);
     assert.ok(hitsAt("My teenager won't speak to me", ['Luke 15:20', 'Luke 15:24', 'Luke 15:4'], 8).length);
+    assert.ok(hitsAt('This is a scam. Prove Jesus even existed', ['Mark 11:33', 'Matthew 21:24', 'Luke 4:12', 'Matthew 12:39'], 8).length);
   });
 
   it('falls back to known comfort verses when nothing maps', () => {

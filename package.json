@@ -14,6 +14,7 @@
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
     "eval": "node scripts/eval.js",
+    "review-offline": "node scripts/review-offline.js",
     "qa": "node scripts/qa-browser.js"
   },
   "dependencies": {

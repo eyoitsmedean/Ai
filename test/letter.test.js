@@ -10,7 +10,13 @@ function passages(letter) {
 
 describe('letterFromSayings', () => {
   it('opens with the same line the eval uses to detect the fallback voice', () => {
-    assert.match(letterFromSayings([]), new RegExp(FALLBACK_OPEN));
+    assert.match(letterFromSayings([], { themes: ['Fear'] }), new RegExp(FALLBACK_OPEN));
+  });
+
+  it('does not pretend warmth when no need was recognized', () => {
+    const printed = letterFromSayings([], { themes: [] });
+    assert.match(printed, /Matthew, Mark, Luke, and John/);
+    assert.doesNotMatch(printed, new RegExp(FALLBACK_OPEN));
   });
 
   it('cites the sayings retrieval chose for this question, then verifies them', () => {
@@ -28,9 +34,10 @@ describe('letterFromSayings', () => {
   });
 
   it('hands a crisis reader only comfort verses', () => {
-    const { sayings, crisis } = retrieveSayings('I am suicidal');
+    const { sayings, crisis, themes } = retrieveSayings('I am suicidal');
     assert.equal(crisis, true);
-    const printed = verifyAndSubstitute(letterFromSayings(sayings));
+    const printed = verifyAndSubstitute(letterFromSayings(sayings, { crisis, themes }));
+    assert.match(printed, new RegExp(FALLBACK_OPEN));
     assert.match(printed, /Matthew 11:28/);
     assert.doesNotMatch(printed, /wars and rumours of wars/);
   });

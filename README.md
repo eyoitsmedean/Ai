@@ -26,6 +26,8 @@ npm start              # http://localhost:3000
 
 Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a verified letter built from the sayings retrieved for *this* message (`lib/letter.js`).
 
+If you are Dean (or an agent continuing this work), start at [`START_HERE.md`](START_HERE.md).
+
 ```
 MODEL=claude-opus-5    # or gpt-6-astra
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN — for claude-* models
@@ -69,4 +71,4 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 - **App (Node):** serve this repo with `npm start`.
 - **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
 
-KJV text is public domain. Attribution is printed beside citations.
+KJV text is public domain outside the United Kingdom; UK printing rights are a Crown prerogative (see `docs/RESEARCH.md` C2). Attribution is printed beside citations.

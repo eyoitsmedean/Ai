@@ -7,7 +7,7 @@ Owner: Dean. Branch: `cursor/add-gpt-6-astra-model-0ebd`. Written 2026-09-11.
 | # | Item | Result | Evidence |
 |---|---|---|---|
 | 1 | Every printed Advisor verse is a Gospel saying, substituted from the KJV corpus — never typed from model memory | **verified** (offline path) | `npm run eval` 2026-09-11: 61/61 `verses-verified` and `gospels-only`. Live model letters: **unverified** (no API key in this environment). |
-| 2 | Tone is advisor-first; scholarship is behind the letter | **unverified** | Needs a human reading of live `eval/letters/` after `npm run eval` with a key. Offline letters use a fixed opening plus retrieved verses. |
+| 2 | Tone is advisor-first; scholarship is behind the letter | **unverified** (live) · **reviewed** (offline 8 letters) | Live `eval/letters/` not generated (no key). Offline pack scored 2026-09-11 in `eval/OFFLINE_REVIEW.md`. Openings are warm only when a need is recognized. |
 | 3 | Eval set ≥ 40 including hostile, off-scope, crisis, near-miss; crisis gets a human-help handoff | **verified** | 61 questions in `eval/questions.json`. Offline 2026-09-11: 61/61. Crisis notice first on all 13 crisis items. |
 | 4 | Builds for iOS and Android targets | **unverified** | `capacitor.config.json` is in the repo (`webDir`: `public`). `npx cap add` / Xcode / Gradle / on-device: not run here. Use `DEVICE_CHECKLIST.md`. |
 | 5 | On-device five-minute check | **unverified** | Dean’s step. Checklist is written; no phone was opened in this environment. |
