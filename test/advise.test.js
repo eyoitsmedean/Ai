@@ -134,3 +134,43 @@ describe('one crisis detector everywhere', () => {
     assert.equal(read('data/advisor.js'), read('public/data/advisor.js'), 'data/advisor.js is a stale copy');
   });
 });
+
+describe('on-device composer is the same brain', () => {
+  it('answers the same way the server does on the questions that used to rot', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const vm = require('node:vm');
+    const { fillPlaceholders } = require('../lib/scripture');
+    const ctx = { window: { RLA_LIBRARY: require('../public/library.json') } };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'public/data/advisor.js'), 'utf8'), ctx);
+    const samples = [
+      'I want to kill myself',
+      'my husband hits me',
+      'I feel so much shame',
+      'My mother died last month',
+      'What does Jesus say about the prodigal son?',
+      'Sit with me in Matthew 11:28',
+      'What does Paul say about women in church?',
+      'hello',
+    ];
+    for (const q of samples) {
+      const server = fillPlaceholders(compose(q));
+      const device = ctx.window.RLA_advise(q);
+      assert.ok(device.length > 40, 'device mute on: ' + q);
+      assert.match(device, /\*\*(Matthew|Mark|Luke|John) /);
+      if (/kill myself/.test(q)) {
+        assert.match(device, /988/);
+        assert.match(server, /988/);
+      }
+      if (/hits me/.test(q)) {
+        assert.match(device, /thehotline\.org/);
+        assert.match(server, /thehotline\.org/);
+      }
+      if (/Paul/.test(q)) {
+        assert.match(device, /cannot open the other books/);
+      }
+    }
+    assert.equal(ctx.window.RLA_classify('I want to kill myself').kind, 'crisis');
+    assert.equal(ctx.window.RLA_classify('my husband hits me').kind, 'abuse');
+  });
+});

@@ -44,6 +44,19 @@ describe('extractSpoken', () => {
     assert.equal(lookup('Mark 5:36').text, 'Be not afraid, only believe.');
   });
 
+  it('strips the evangelist’s frame so the library opens on His words', () => {
+    const { stripNarratorFrame } = require('../lib/scripture');
+    assert.match(lookup('Matthew 13:11').text, /^Because it is given unto you/);
+    assert.doesNotMatch(lookup('Matthew 13:11').text, /^He answered/);
+    assert.match(lookup('Matthew 24:39').text, /^And knew not until the flood came/);
+    assert.match(stripNarratorFrame('Then said the lord of the vineyard, What shall I do?'), /^Then said the lord of the vineyard/);
+  });
+
+  it('keeps the English of the cry from the cross', () => {
+    assert.match(lookup('Matthew 27:46').text, /My God, my God, why hast thou forsaken me/);
+    assert.match(lookup('Mark 15:34').text, /My God, my God, why hast thou forsaken me/);
+  });
+
   it('does not invent speech when the verse is already spoken', () => {
     const hit = lookup('John 14:27');
     assert.match(hit.text, /Peace I leave with you/);

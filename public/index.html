@@ -796,6 +796,8 @@ textarea { font-family: var(--body); }
   font-style: italic;
 }
 .chip:hover { border-color: var(--crimson); color: var(--crimson); }
+.follow-ups { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.follow-ups .chip { font-size: 12px; padding: 6px 10px; }
 
 .chat-messages { display: flex; flex-direction: column; gap: 22px; padding: 8px 0 16px; }
 .msg { animation: rise .35s var(--ease); }
@@ -1999,10 +2001,11 @@ html[data-review="1"] .review-ribbon { display: block; }
             <p class="trust-line">Not a person, not a pastor, not a clinician. If you are in danger: <a href="tel:988">988</a> (U.S. · call, text, or <a href="https://988lifeline.org" target="_blank" rel="noreferrer">chat</a>) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
           </div>
           <div class="suggestions" id="suggestions">
-            <button class="chip" onclick="useSuggestion(this)">I feel overwhelmed</button>
-            <button class="chip" onclick="useSuggestion(this)">How do I forgive someone who hurt me?</button>
-            <button class="chip" onclick="useSuggestion(this)">I am afraid of the future</button>
-            <button class="chip" onclick="useSuggestion(this)">I feel lost</button>
+            <button type="button" class="chip" onclick="useSuggestion(this)">I feel so much shame</button>
+            <button type="button" class="chip" onclick="useSuggestion(this)">My mother died last month</button>
+            <button type="button" class="chip" onclick="useSuggestion(this)">What does Jesus say about the prodigal son?</button>
+            <button type="button" class="chip" onclick="useSuggestion(this)">Sit with me in Matthew 11:28</button>
+            <button type="button" class="chip" onclick="useSuggestion(this)">I am not afraid — I am tired</button>
           </div>
           <div class="gate" id="chat-gate">
             <h3>Five letters for today</h3>
@@ -2379,6 +2382,7 @@ html[data-review="1"] .review-ribbon { display: block; }
 <script src="/config.js"></script>
 <script src="/data/curated.js"></script>
 <script src="/data/advisor.js"></script>
+<script>fetch('/library.json').then((r) => r.ok ? r.json() : null).then((j) => { if (j) window.RLA_LIBRARY = j; }).catch(() => {});</script>
 <script src="/data/paths.js"></script>
 <script src="/data/press.js"></script>
 <script>
@@ -3088,6 +3092,7 @@ async function loadStaticLibrary() {
   const res = await fetch('/library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
+  window.RLA_LIBRARY = staticLibrary;
   return staticLibrary;
 }
 
@@ -3525,9 +3530,11 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fullText });
     persistLetters();
     addSaveToChatBubble(aiBubble, fullText, text);
+    addFollowUps(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
-    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+    const prior = chatHistory.filter((m) => m.role === 'user').map((m) => m.content);
+    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text, { prior }) : '';
     const fallback = living || [
       'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
       '',
@@ -3543,6 +3550,7 @@ async function sendMsg(preset) {
     chatHistory.push({ role: 'assistant', content: fallback });
     persistLetters();
     addSaveToChatBubble(aiBubble, fallback, text);
+    addFollowUps(aiBubble, fallback, text);
   } finally {
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
@@ -3583,6 +3591,33 @@ function createStreamBubble() {
 
 function updateStreamBubble({ bubble }, text) {
   bubble.innerHTML = formatAI(text);
+}
+
+function addFollowUps({ wrap }, letter, question) {
+  if (!wrap || !letter) return;
+  if (/988(?!lifeline)/.test(letter) || /thehotline\.org|RAINN/.test(letter)) return;
+  wrap.querySelectorAll('.follow-ups').forEach((n) => n.remove());
+  const chips = [];
+  if (/Matthew 11:28/.test(letter)) chips.push('I am still tired');
+  if (/Grief|mourn|sorry for the loss|Something has a name/i.test(letter)) chips.push('Say their name with me');
+  if (/shame|condemn|lift a face/i.test(letter)) chips.push('I still feel the shame');
+  if (!chips.length) chips.push('Stay with this a little longer');
+  if (!/hope/i.test(question || '')) chips.push('What does He say about hope?');
+  const row = document.createElement('div');
+  row.className = 'follow-ups';
+  row.setAttribute('aria-label', 'Continue the letter');
+  chips.slice(0, 3).forEach((label) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip';
+    btn.textContent = label;
+    btn.onclick = () => {
+      row.remove();
+      sendMsg(label);
+    };
+    row.appendChild(btn);
+  });
+  wrap.appendChild(row);
 }
 
 function addSaveToChatBubble({ wrap }, text, question) {

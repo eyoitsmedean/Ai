@@ -14,11 +14,22 @@ const { THEMES } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 const SET = JSON.parse(fs.readFileSync(path.join(ROOT, 'eval', 'questions.json'), 'utf8'));
-const OUT = path.join(ROOT, 'eval', 'RESULTS.md');
+const OUT = path.join(ROOT, 'eval', process.env.EVAL_DEVICE ? 'RESULTS-device.md' : 'RESULTS.md');
 
 const OTHER_BOOKS = /\b(Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|Samuel|Kings|Chronicles|Ezra|Nehemiah|Esther|Job|Psalms?|Proverbs|Ecclesiastes|Song|Isaiah|Jeremiah|Lamentations|Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi|Acts|Romans|Corinthians|Galatians|Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Philemon|Hebrews|James|Peter|Jude|Revelation)\s+\d{1,3}:\d{1,3}\b|\*\*(?!Matthew|Mark|Luke|John)[A-Z][a-z]+ \d/i;
 
+function loadDevice() {
+  const vm = require('node:vm');
+  const ctx = { window: { RLA_LIBRARY: require(path.join(ROOT, 'public', 'library.json')) } };
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8'), ctx);
+  return ctx.window;
+}
+
 async function boot() {
+  if (process.env.EVAL_DEVICE) {
+    const device = loadDevice();
+    return { base: 'device://advisor', device, close() {} };
+  }
   if (process.env.EVAL_URL) return { base: process.env.EVAL_URL.replace(/\/$/, ''), close() {} };
   process.env.CHAT_RATE_LIMIT = process.env.CHAT_RATE_LIMIT || '1000';
   const app = require('../server');
@@ -27,7 +38,8 @@ async function boot() {
   return { base: `http://127.0.0.1:${server.address().port}`, close: () => server.close() };
 }
 
-async function ask(base, text, attempt = 0) {
+async function ask(base, text, attempt = 0, device) {
+  if (device) return { status: 200, letter: device.RLA_advise(text) };
   const res = await fetch(`${base}/api/chat`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -129,13 +141,16 @@ function check(q, letter) {
 }
 
 (async () => {
-  const { base, close } = await boot();
-  const health = await (await fetch(`${base}/api/health`)).json();
-  const mode = health.anthropic ? 'live model (ANTHROPIC key present)' : 'curated Advisor (no model key)';
+  const { base, close, device } = await boot();
+  const mode = device
+    ? 'on-device composer (public/data/advisor.js)'
+    : (await (await fetch(`${base}/api/health`)).json()).anthropic
+      ? 'live model (ANTHROPIC key present)'
+      : 'curated Advisor (no model key)';
   const rows = [];
   const letters = new Map();
   for (const q of SET.questions) {
-    const { status, letter } = await ask(base, q.text);
+    const { status, letter } = await ask(base, q.text, 0, device);
     const c = check(q, letter);
     if (status !== 200) c.results.unshift({ name: 'HTTP 200', ok: false, note: `status ${status}` });
     letters.set(letter, (letters.get(letter) || 0) + 1);
@@ -164,7 +179,7 @@ function check(q, letter) {
 
   const md = [];
   md.push('# Advisor evaluation — results', '');
-  md.push(`Run: ${now} · Mode: **${mode}** · Host: ${process.env.EVAL_URL || 'in-process'}`, '');
+  md.push(`Run: ${now} · Mode: **${mode}** · Host: ${device ? 'device://advisor' : (process.env.EVAL_URL || 'in-process')}`, '');
   md.push(`**${rows.length - failed.length} of ${rows.length} questions pass every required check.** ${distinct} distinct letters for ${rows.length} questions.`, '');
   md.push('These are the actual answers the product gave, unedited. Read them as the person who typed the question would. The checks are mechanical; the judgement about warmth is yours.', '');
   md.push('| Category | Pass | Of |', '| --- | ---: | ---: |');
