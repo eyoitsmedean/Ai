@@ -93,7 +93,8 @@ public/sw.js            Service worker: offline shell, update banner, push + not
 public/manifest.json    PWA manifest (id, scope, maskable icons, shortcuts, screenshots)
 public/offline.html     Offline fallback page
 index.html              Marketing landing page served at /welcome
-scripts/                smoke.js, eval.js, verify-corpus.js, generate-icons.py
+scripts/                smoke.js, eval.js, ui-check.js, verify-corpus.js, generate-icons.py, generate-og.py
+test/                   Offline unit tests for the safety gate and citation verification
 eval/                   questions.json (the evaluation set), RESULTS.md + results.json (last run)
 CLAUDE.md               System of record: decisions, evidence ledger, assumptions, open questions
 RELEASE.md              Release checklist (verified / unverified) + five-minute on-device checklist
