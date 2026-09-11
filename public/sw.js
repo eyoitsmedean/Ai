@@ -1,16 +1,22 @@
-const CACHE = 'rla-phase0-v11';
+const CACHE = 'rla-phase0-v15';
+/* Resolve against the worker's own folder so the app works at the origin root
+   (node server.js) and under a project path (GitHub Pages /Ai/). */
+const ROOT = new URL('./', self.location.href);
+const ROOT_PATH = ROOT.pathname;
+const SHELL = new URL('index.html', ROOT).href;
 const PRECACHE = [
-  '/index.html',
-  '/manifest.json',
-  '/curated.json',
-  '/library.json',
-  '/data/advisor.js',
-  '/data/curated.js',
-  '/data/paths.js',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
-];
+  'index.html',
+  'manifest.json',
+  'curated.json',
+  'library.json',
+  'data/crisis.js',
+  'data/advisor.js',
+  'data/curated.js',
+  'data/paths.js',
+  'icon-192.png',
+  'icon-512.png',
+  'apple-touch-icon.png',
+].map((p) => new URL(p, ROOT).href);
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -32,7 +38,7 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
-  if (url.pathname.startsWith('/api/')) {
+  if (url.pathname.startsWith(ROOT_PATH + 'api/')) {
     e.respondWith(
       fetch(e.request).catch(() =>
         new Response(JSON.stringify({ error: 'offline', offline: true }), {
@@ -46,7 +52,7 @@ self.addEventListener('fetch', (e) => {
 
   const isDocument =
     e.request.mode === 'navigate' ||
-    url.pathname === '/' ||
+    url.pathname === ROOT_PATH ||
     url.pathname.endsWith('.html') ||
     (e.request.headers.get('accept') || '').includes('text/html');
 
@@ -60,7 +66,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then((cached) => cached || caches.match('/index.html')))
+        .catch(() => caches.match(e.request).then((cached) => cached || caches.match(SHELL)))
     );
     return;
   }

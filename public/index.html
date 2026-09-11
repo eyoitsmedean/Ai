@@ -12,9 +12,9 @@
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
   <title>Red Letter — The Advisor</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -1076,6 +1076,35 @@ textarea { font-family: var(--body); }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
 
+/* Watch with me — four weeks of seven, stacked like quires. */
+.advent { display: flex; flex-direction: column; gap: 14px; margin: 0 0 28px; }
+.advent-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.advent-head strong { font-weight: 500; color: var(--crimson); }
+.advent-week { display: flex; flex-direction: column; gap: 8px; }
+.advent-week-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+}
+.advent-week-name.now { color: var(--crimson); }
+.advent-week .seven { margin: 0; gap: 4px; }
+.advent-week .seven-day { font-size: 10px; letter-spacing: .06em; text-align: center; }
+.advent-week .seven-day.open:not(.done) .seven-dot { border-color: var(--ink-3); }
+
 .epigraph {
   margin: 0 0 36px;
   padding: 0 0 0 16px;
@@ -1943,9 +1972,10 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
-<script src="/data/curated.js"></script>
-<script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
+<script src="./data/crisis.js"></script>
+<script src="./data/curated.js"></script>
+<script src="./data/advisor.js"></script>
+<script src="./data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -2029,6 +2059,24 @@ function easterSunday(year) {
 function adventSunday(year) {
   const start = civilDate(year, 11, 27);
   return addDaysLocal(start, (7 - start.getDay()) % 7);
+}
+function adventDayIndex(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  const year = d.getMonth() < 6 ? d.getFullYear() - 1 : d.getFullYear();
+  const start = adventSunday(year);
+  const a = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const b = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+  return Math.round((a - b) / 86400000);
+}
+function ashWednesday(year) {
+  return addDaysLocal(easterSunday(year), -46);
+}
+function lentDayIndex(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  const start = ashWednesday(d.getFullYear());
+  const a = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const b = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+  return Math.round((a - b) / 86400000);
 }
 function churchYear(date) {
   const d = date instanceof Date ? date : new Date(date || Date.now());
@@ -2282,18 +2330,94 @@ function paintStreak(state) {
 function renderWeekRibbon() {
   paintSeven();
 }
-function sevenDays() {
-  return (window.RLA_SEVEN || []).slice();
+/* The ribbon carries one path at a time. Ordinary days: Seven Days.
+   Advent through Christmas: Watch with me (28). Lent: Stay with me (40).
+   Both open by the calendar, not by streak. `?path=advent|lent[&day=N]`
+   previews a path out of season. */
+function activePath() {
+  const params = new URLSearchParams(location.search);
+  const preview = params.get('path');
+  const now = new Date();
+  const advent = window.RLA_ADVENT;
+  const inAdvent = currentSeason.id === 'advent' || currentSeason.id === 'christmas';
+  const wantAdvent = preview === 'advent' || (inAdvent && preview !== 'seven' && preview !== 'lent');
+  if (wantAdvent && advent && Array.isArray(advent.days) && advent.days.length === 28) {
+    const startYear = now.getMonth() < 6 ? now.getFullYear() - 1 : now.getFullYear();
+    let index = adventDayIndex(now);
+    if (params.has('day')) index = Number(params.get('day')) - 1;
+    const openThrough = Math.max(0, Math.min(27, Number.isFinite(index) ? index : 0));
+    return {
+      id: 'advent',
+      name: advent.name || 'Watch with me',
+      weeks: advent.weeks || [],
+      days: advent.days.slice(),
+      openThrough: openThrough,
+      key: 'rla-advent-' + startYear,
+      seasonLabel: 'Advent',
+    };
+  }
+  const lent = window.RLA_LENT;
+  const inLent = currentSeason.id === 'lent';
+  const wantLent = preview === 'lent' || (inLent && preview !== 'seven' && preview !== 'advent');
+  if (wantLent && lent && Array.isArray(lent.days) && lent.days.length === 40) {
+    let index = lentDayIndex(now);
+    if (params.has('day')) index = Number(params.get('day')) - 1;
+    const openThrough = Math.max(0, Math.min(39, Number.isFinite(index) ? index : 0));
+    return {
+      id: 'lent',
+      name: lent.name || 'Stay with me',
+      weeks: lent.weeks || [],
+      days: lent.days.slice(),
+      openThrough: openThrough,
+      key: 'rla-lent-' + now.getFullYear(),
+      seasonLabel: 'Lent',
+    };
+  }
+  return { id: 'seven', name: 'Seven Days', weeks: null, days: (window.RLA_SEVEN || []).slice(), openThrough: null, key: 'rla-seven' };
 }
-function pathState() {
-  const raw = parseJSON(ls('rla-seven'), null);
+function sevenDays() {
+  return activePath().days;
+}
+function pathState(key) {
+  const raw = parseJSON(ls(key || activePath().key), null);
   if (raw && Array.isArray(raw.done)) return raw;
   return { started: todayStr(), done: [] };
+}
+function paintAdvent(host, path) {
+  const state = pathState(path.key);
+  const done = new Set(state.done || []);
+  const open = path.openThrough;
+  const kept = path.days.filter((_, i) => done.has(i)).length;
+  const weekNow = Math.floor(open / 7);
+  const total = path.days.length;
+  host.className = 'advent';
+  host.setAttribute('aria-label', path.name + ', a path of ' + total + ' rooms');
+  const head = '<div class="advent-head"><span><strong>' + esc(path.name) + '</strong> · ' + esc(path.seasonLabel || '') + '</span>' +
+    '<span>Room ' + (open + 1) + ' of ' + total + (kept ? ' · ' + kept + ' kept' : '') + '</span></div>';
+  const weeks = path.weeks.map((name, w) => {
+    const cells = path.days.slice(w * 7, w * 7 + 7).map((day, j) => {
+      const i = w * 7 + j;
+      const cls = done.has(i) ? 'done' : (i === open ? 'today' : (i > open ? 'future' : 'open'));
+      const locked = i > open;
+      return '<button type="button" class="seven-day ' + cls + '" data-i="' + i + '"' + (locked ? ' disabled' : '') +
+        ' aria-label="' + esc(day.title) + ', ' + esc(day.verse) + (locked ? ', not yet' : '') + '">' +
+        '<span class="seven-dot" aria-hidden="true"></span><span>' + esc(day.title) + '</span></button>';
+    }).join('');
+    const roman = ['I', 'II', 'III', 'IV'][w] || String(w + 1);
+    return '<div class="advent-week"><span class="advent-week-name' + (w === weekNow ? ' now' : '') + '">' + roman + ' · ' + esc(name) + '</span>' +
+      '<div class="seven">' + cells + '</div></div>';
+  }).join('');
+  host.innerHTML = head + weeks;
+  host.querySelectorAll('.seven-day').forEach((btn) => {
+    btn.addEventListener('click', () => sitSeven(Number(btn.getAttribute('data-i'))));
+  });
 }
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
-  const days = sevenDays();
+  const path = activePath();
+  if (path.id === 'advent' || path.id === 'lent') { paintAdvent(host, path); return; }
+  const days = path.days;
   if (!days.length) {
     host.className = 'week-ribbon';
     host.innerHTML = '';
@@ -2315,7 +2439,7 @@ function paintSeven() {
     }
     return;
   }
-  const state = pathState();
+  const state = pathState(path.key);
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
   host.className = 'seven';
@@ -2331,10 +2455,12 @@ function paintSeven() {
   });
 }
 function sitSeven(index) {
-  const day = sevenDays()[index];
+  const path = activePath();
+  const day = path.days[index];
   if (!day) return;
+  const week = path.weeks && path.weeks[day.week] ? ' · ' + path.weeks[day.week] : '';
   sitPayload = {
-    kicker: 'Seven Days · ' + day.title,
+    kicker: path.name + week + ' · ' + day.title,
     title: day.title,
     quote: day.passage,
     verse: day.verse,
@@ -2357,9 +2483,10 @@ function sitSeven(index) {
 }
 function markSevenDay(index) {
   if (index == null || index < 0) return;
-  const state = pathState();
+  const key = activePath().key;
+  const state = pathState(key);
   if (!state.done.includes(index)) state.done.push(index);
-  lsSet('rla-seven', JSON.stringify(state));
+  lsSet(key, JSON.stringify(state));
   paintSeven();
 }
 
@@ -2411,14 +2538,14 @@ function paintThemeIndex() {
 
 async function loadCurated() {
   if (curatedPacks) return curatedPacks;
-  const res = await fetch('/curated.json');
+  const res = await fetch('./curated.json');
   curatedPacks = await res.json();
   return curatedPacks;
 }
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch('./api/daily');
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
   } catch (e) {
@@ -2467,7 +2594,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch('./api/encouragement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -2604,7 +2731,7 @@ function filterStaticLibrary({ book, q, theme, limit, offset }) {
 
 async function loadStaticLibrary() {
   if (staticLibrary) return staticLibrary;
-  const res = await fetch('/library.json');
+  const res = await fetch('./library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
   return staticLibrary;
@@ -2618,7 +2745,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch('./api/library?' + params.toString());
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -2862,10 +2989,7 @@ function keepSitReply() {
   closeSit();
   showToast('Kept in the journal');
   openAmen({ quote, verse, holdMs: 3000 });
-  if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
-    lsSet('rla-install-hint', '1');
-    setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
-  }
+  offerFirstBlessing(quote, verse);
 }
 
 function closeSit() {
@@ -2993,7 +3117,7 @@ async function sendMsg(preset) {
   let opened = false;
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('./api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
@@ -3579,6 +3703,12 @@ function revealWords(el, text) {
   });
 }
 
+let afterAmen = null;
+function offerFirstBlessing(quote, verse) {
+  if (!quote || !verse || ls('rla-first-blessing')) return;
+  lsSet('rla-first-blessing', '1');
+  afterAmen = () => openBlessing({ verse: verse, quote: quote });
+}
 function openAmen(opts = {}) {
   const root = document.getElementById('amen');
   const echo = document.getElementById('amen-echo');
@@ -3603,11 +3733,15 @@ function closeAmen() {
   root.classList.remove('on');
   root.setAttribute('aria-hidden', 'true');
   clearTimeout(amenTimer);
+  const next = afterAmen;
+  afterAmen = null;
+  if (typeof next === 'function') next();
 }
 function amenFromSit() {
   if (!sitPayload) return;
   closeSit();
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
+  offerFirstBlessing(sitPayload.quote, sitPayload.verse);
 }
 
 function stopSitListen() {
@@ -3732,14 +3866,14 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch('./api/library?limit=24');
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
     }
   } catch (_) {}
   try {
-    const res = await fetch('/library.json');
+    const res = await fetch('./library.json');
     const data = await res.json();
     return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
   } catch (_) {
@@ -3822,7 +3956,7 @@ const COMMANDS = [
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
-  { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Open the path', hint: 'Seven Days · Watch with me · Stay with me', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
@@ -3882,7 +4016,7 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return typeof window.RLA_looksLikeCrisis === 'function' && window.RLA_looksLikeCrisis(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {
@@ -3906,7 +4040,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch('./api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
@@ -4015,7 +4149,7 @@ function bindRituals() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 </script>
 </body>

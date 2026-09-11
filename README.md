@@ -1,5 +1,7 @@
 # Red Letter
 
+**Tonight (11 Sep–4 Dec 2026):** the 90-day card is [`studio/ninety/SIT.md`](studio/ninety/SIT.md) — three actions, no login. The bound book is [`studio/ninety/index.html`](studio/ninety/index.html) (open the file; Pages serves this *app*, not that book). Agents: [`studio/recovery/CANONICAL_BRIEF.md`](studio/recovery/CANONICAL_BRIEF.md).
+
 A quiet reading room for the **words Jesus actually spoke**.
 
 Not another Bible app. A daily companion constrained to the red letters of Matthew, Mark, Luke, and John — typeset like a small press, simple like a blank page.
@@ -44,9 +46,13 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Working here
+
+Agents start at `CLAUDE.md` (decisions, open questions, record) and run `studio/ATELIER.md` on the brief in `studio/briefs/`.
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **GitHub Pages:** the workflow publishes `public/`. Enable it once under Settings → Pages → Source: GitHub Actions; the site lands at `https://<owner>.github.io/<repo>/`. Asset paths and the service worker are scope-relative, so the app works at the origin root or under a project path. Today, Seek, and the paths work from bundled data. Advisor needs the API host.
 
 KJV text is public domain. Attribution is printed beside citations.

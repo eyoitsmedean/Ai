@@ -471,7 +471,7 @@ window.RLA_CURATED = {
     "passages": [
       {
         "verse": "Matthew 28:20",
-        "quote": "Lo, I am with you always, even unto the end of the world.",
+        "quote": "Lo, I am with you alway, even unto the end of the world.",
         "context": "His final Gospel promise is presence that does not expire."
       },
       {
