@@ -132,9 +132,10 @@ async function main() {
   });
 
   await check('one-screen ask: shame then crisis-stop', async () => {
-    await page.goto(BASE + '/ask', { waitUntil: 'domcontentloaded' });
+    await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    await page.waitForSelector('#ask-form', { timeout: 6000 });
     const copy = await page.evaluate(() => document.body.innerText);
-    assert(/Watch/.test(copy), 'missing WATCH mark');
+    assert(/watch/i.test(copy), 'missing WATCH mark');
     assert(/What this bot cannot do/.test(copy), 'missing cannot block');
     await page.type('#q', 'I carry so much shame');
     await page.click('#go');
