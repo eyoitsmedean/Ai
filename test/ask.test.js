@@ -30,15 +30,31 @@ test('askFor: empty query does not invent speech', () => {
   const out = askFor('   ');
   assert.equal(out.crisis, false);
   assert.deepEqual(out.words, []);
-  assert.equal(out.implication, '');
+  assert.equal(out.verified, false);
+  assert.doesNotMatch(out.implication, /Peace I leave/);
 });
 
-test('askFor: narrator-style query still only emits spoken-lookup verses', () => {
+test('askFor: narrator-style or off-corpus query does not dump comfort verses', () => {
   const out = askFor('tell me about the beginning');
-  assert.ok(out.words.length >= 1);
-  for (const w of out.words) {
-    assert.ok(w.quote.length > 8);
-    assert.ok(!/^In the beginning was the Word/.test(w.quote));
-    assert.ok(!/^The book of the generation/.test(w.quote));
+  assert.equal(out.crisis, false);
+  assert.equal(out.verified, false);
+  assert.deepEqual(out.words, []);
+  assert.doesNotMatch(out.implication, /In the beginning was the Word/);
+});
+
+test('askFor: ordinary suicidal English stops and does not quote', () => {
+  for (const q of ['I wish I was dead', 'I cannot go on', "I don't want to be here"]) {
+    const out = askFor(q);
+    assert.equal(out.crisis, true, q);
+    assert.deepEqual(out.words, []);
+    assert.equal(out.implication, '');
+    assert.match(out.notice, /988/);
   }
+});
+
+test('askFor: weary opens the rest invitation, not tomorrow-anxiety', () => {
+  const out = askFor('I am so tired and weary');
+  assert.equal(out.crisis, false);
+  assert.ok(out.words.length >= 1);
+  assert.match(out.words.map((w) => w.verse).join(' '), /Matthew 11:28|John 16:33/);
 });

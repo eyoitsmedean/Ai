@@ -3,6 +3,7 @@
 Authoritative instructions, in order:
 
 1. Notion parent: [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0) — WATCH. Folio stays paper. No store. No sixth hub.
+1b. This conversation’s child: [Trust harness PR 29 · one-screen /ask · 11 Sep night](https://app.notion.com/p/3d8b7d53f96981d5b34efff27c0f6808). Do not overwrite Grok F1–F3, PR 18, or masterpiece-protocol recovery pages.
 2. `docs/CANONICAL-BRIEF.md` — recovered prompts, scope, assets, decisions.
 3. `docs/RESEARCH-AND-GATE.md` — sources, five adjacent topics, human-gate checklist.
 4. This file — how to resume.
@@ -13,7 +14,7 @@ This conversation’s first user prompts are **five**, not ten. They are quoted 
 
 - **Evidence:** opened URLs and dates in `docs/RESEARCH-AND-GATE.md`; test output; the files on this branch.
 - **Interpretation:** readability ranking; “WEB recommended.”
-- **Approved direction (later law):** WATCH; one screen; 988 then stop on the public-shaped surface; WEB or KJV-US named as license lock; Dean records before a URL.
+- **Approved direction (later law):** WATCH; one screen; 988 then stop on the public-shaped surface; WEB or KJV-US named as the lock (trademark/PD, not a publisher license); Dean records before a URL.
 
 ## How to add findings without duplication
 

@@ -1,6 +1,6 @@
 # Red Letter — Recovery flagships — v3 — 2026-09-11
 
-This conversation recovered five user prompts (not ten). Flagships: `docs/CANONICAL-BRIEF.md`, `/ask` (`lib/ask.js`, `public/ask.html`, `POST /api/ask`), `docs/RESEARCH-AND-GATE.md`. WATCH. Folio stays paper. Human gate still open. SW cache `rla-phase0-v13`.
+This conversation recovered five user prompts (not ten). Flagships: `docs/CANONICAL-BRIEF.md`, `/ask` (`lib/ask.js`, `public/ask.html`, `POST /api/ask`), `docs/RESEARCH-AND-GATE.md`. WATCH. Folio stays paper. Human gate still open. SW cache `rla-phase0-v13`. Review pass: ordinary crisis English stops; unmatched asks no longer dump John 14:27; IASP quoted accurately; BSB © 2021 footer claim withdrawn after re-open; WEBU distinguished from WEB.
 
 # Red Letter — Trust harness — v2 — 2026-09-11
 

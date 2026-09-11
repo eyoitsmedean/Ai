@@ -51,6 +51,6 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **GitHub Pages:** a historical workflow that publishes `public/`. Do not treat it as a launch while WATCH holds. Do not store-submit.
 
 KJV text is public domain. Attribution is printed beside citations.

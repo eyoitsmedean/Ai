@@ -127,12 +127,12 @@
 
     <section>
       <p class="kicker">4 · What this bot cannot do</p>
-      <p class="cannot">This is not a pastor, not a church, not a confession booth, and not a crisis counselor. If you are in crisis or thinking about harming yourself, please <a href="tel:988">call or text 988</a> (Suicide &amp; Crisis Lifeline) right away, or talk to a local pastor, counselor, or trusted human. This bot cannot replace real people who can help.</p>
+      <p class="cannot" id="cannot">This is not a pastor, not a church, not a confession booth, and not a crisis counselor. If you are in crisis or thinking about harming yourself, please <a href="tel:988">call or text 988</a> (Suicide &amp; Crisis Lifeline), or start at <a href="https://findahelpline.com">findahelpline.com</a>, or talk to a local pastor, counselor, or trusted human. This screen cannot replace real people who can help.</p>
     </section>
 
     <footer>
-      Internal household screen. Dean records the translation (WEB or KJV, US) before any public URL.
-      Folio stays paper. <a href="/welcome">Welcome</a> · <a href="/">Folio</a>
+      Internal household screen. Dean records a named public-domain text (WEB or KJV, US) before any public URL.
+      Folio stays paper. If you set <code>API_ACCESS_KEY</code>, this page needs that key too. <a href="/welcome">Welcome</a> · <a href="/">Folio</a>
     </footer>
   </main>
   <script>
@@ -140,6 +140,7 @@
     const go = document.getElementById('go');
     const words = document.getElementById('words');
     const imply = document.getElementById('imply');
+    const cannot = document.getElementById('cannot');
     const crisisBlock = document.getElementById('crisis-block');
     const crisisText = document.getElementById('crisis-text');
     const wordsBlock = document.getElementById('words-block');
@@ -158,6 +159,7 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'The page could not be set.');
+        if (data.cannot) cannot.textContent = data.cannot;
         if (data.crisis) {
           crisisText.textContent = data.notice || 'Call or text 988.';
           crisisBlock.classList.remove('hidden');
@@ -176,7 +178,10 @@
         )).join('') || '<p class="imply">No spoken saying could be sealed for that. Try naming the feeling again.</p>';
         imply.textContent = data.implication || '';
       } catch (err) {
+        crisisBlock.classList.add('hidden');
+        wordsBlock.classList.remove('hidden');
         implyBlock.classList.remove('hidden');
+        words.innerHTML = '<p class="imply">The page could not be set. If this household uses an access key, the watch screen needs it too.</p>';
         imply.textContent = err.message || 'The page could not be set.';
       } finally {
         go.disabled = false;

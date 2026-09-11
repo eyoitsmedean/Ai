@@ -1,7 +1,7 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid\w*|unaliv\w*|kill(?:ing)? myself|end (?:my life|it all)|take my life|want to die|wanna die|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang myself|overdos\w*|don't want to (?:live|be alive|be here anymore)|do not want to (?:live|be alive)|better off (?:dead|without me)|no reason to live|not worth living|no point in living)\b/i;
+  const CRISIS = /\b(suicid\w*|unaliv\w*|kill(?:ing)? myself|end (?:my life|it all)|take my life|want to die|wanna die|wish i (?:was|were) dead|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang myself|overdos\w*|don't want to (?:live|be alive|be here(?: anymore)?)|do not want to (?:live|be alive|be here(?: anymore)?)|can'?t go on|cannot go on|(?:going to|gonna) jump|better off (?:dead|without me)|no reason to live|not worth living|no point in living)\b/i;
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },

@@ -2,7 +2,7 @@
 
 **Status: WATCH.** Do not publish. Do not launch. Do not store-submit. Folio stays paper.
 
-**Audience:** Dean (owner / final approver). Idaho household. Internal desk only until he records a licensed translation.
+**Audience:** Dean (owner / final approver). Idaho household. Internal desk only until he records a named public-domain text.
 
 **Product when a public URL is later authorized:** one screen. Ask. The words. What that might mean today (four lines at most). What this bot cannot do. Crisis: name 988, then silence.
 
@@ -44,7 +44,7 @@ Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-
 **Explicit later amendments (authoritative, opened 2026-09-11 from Dean’s Notion):**
 
 - Original Red Letter ask (dispatch): “Faith product that does not fake theology.”
-- Page [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0): **WATCH** — do not publish, do not launch, do not store-submit. Folio stays paper. Human gate: Dean records the licensed translation before any public URL.
+- Page [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0): **WATCH** — do not publish, do not launch, do not store-submit. Folio stays paper. Human gate: Dean records a **named public-domain text** (WEB or KJV-US) before any public URL. BSB is a legal alternate, not part of that lock.
 - License lock: **WEB** (public domain; name is a trademark) and **KJV 1769 US-PD**. Household is Idaho. Crown copyright still matters in the UK. Not NIV / ESV / NASB / CSB / The Message without a license in hand.
 - Crisis: name **988**, **stop generating counsel**.
 - Advent window noted: **29 November 2026** (USCCB). Not a launch authorization.
@@ -106,14 +106,14 @@ Unused and left in place: `data/scripture.js`, `data/red-letters.js` (WEB-era), 
 **Improve**
 
 - `/ask` is the public-shaped surface; keep it four blocks, crisis-silent.
-- Label the current corpus honestly: **KJV**, pending Dean’s recording of WEB or BSB.
+- Label the current corpus honestly: **KJV**, pending Dean’s recording of WEB or KJV-US. BSB may be recorded instead; it is not the lock.
 
 **Complete (this turn)**
 
 - Tests and smoke for `/ask`.
 - Research synthesis a specialist can audit.
 - Human-gate memo with a recording checklist.
-- Notion child under the existing Red Letter page (not a new hub).
+- Notion child under the existing Red Letter page (not a new hub): [Trust harness PR 29 · one-screen /ask · 11 Sep night](https://app.notion.com/p/3d8b7d53f96981d5b34efff27c0f6808).
 
 **Retire as current instruction (do not delete files)**
 
@@ -128,11 +128,12 @@ Unused and left in place: `data/scripture.js`, `data/red-letters.js` (WEB-era), 
 
 ## 6. Main obstacles
 
-1. **Human gate still open.** No public URL until Dean records WEB, BSB, or KJV-US. The corpus on disk is KJV.
-2. **WATCH.** Shipping more launch surface would be drift.
-3. **Crisis split.** One-screen stops; folio chat still comforts after 988.
-4. **UK Crown copyright** if KJV ever leaves the US household.
-5. **Other agents** writing parallel recovery on other branches. Coordinate by not overwriting their pages or their files.
+1. **Human gate still open.** No public URL until Dean records WEB or KJV-US (BSB optional). The corpus on disk is KJV.
+2. **`/ask` isolation.** Welcome and the folio do not advertise `/ask`. That is deliberate under WATCH. Open the URL yourself. If `API_ACCESS_KEY` is set, the page needs that key.
+3. **WATCH.** Shipping more launch surface would be drift.
+4. **Crisis split.** One-screen stops; folio chat still comforts after 988.
+5. **UK Crown copyright** if KJV ever leaves the US household.
+6. **Other agents** writing parallel recovery on other branches. Coordinate by not overwriting their pages or their files.
 
 The real obstacle to *use* is not missing code. It is the unrecorded translation and the no-launch rule. The real obstacle to *value tonight* was the missing one-screen and the missing gate memo. Those are the flagships.
 
@@ -142,7 +143,7 @@ The real obstacle to *use* is not missing code. It is the unrecorded translation
 
 A knowledgeable reader can:
 
-1. Open `http://localhost:3000/ask` and complete Ask → words → ≤4 lines → cannot, without a key.
+1. Open `http://localhost:3000/ask` and complete Ask → words → ≤4 lines → cannot, without a key (unless `API_ACCESS_KEY` is set).
 2. Type a shame sentence and see a sealed Luke 15 (or other spoken) citation in crimson, labeled KJV.
 3. Type a crisis sentence and see 988 with **no** verses and **no** implication.
 4. Confirm `noindex` and “Watch · not a launch” on the page.
@@ -156,7 +157,8 @@ A knowledgeable reader can:
 | Item | Kind | Note |
 | --- | --- | --- |
 | Current disk corpus is KJV 1769 | Fact | Label it. Do not call it WEB. |
-| Dean will record WEB or BSB before a URL | Recommendation | See human-gate memo. |
+| Dean will record WEB (or keep KJV-US) before a URL | Recommendation | BSB is an optional alternate, not the lock. See human-gate memo. |
+| `want to die to my old self` trips crisis | Assumption | Accepted over-match. `kms` stays unmatched. |
 | Folio remains paper | Later amendment | Do not convert it into the launch. |
 | `ANTHROPIC_EFFORT=low` | Assumption | Keep until a live letter feels thin. |
 | `kms` is not crisis language | Recommendation | Too many false hits. |
