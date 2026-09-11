@@ -340,7 +340,8 @@
     body.focus-IV .plan:not(#plan-IV),
     body.focus-V .plan:not(#plan-V) { display: none; }
     @media (max-width: 860px) {
-      .shell { grid-template-columns: 1fr; }
+      .shell { grid-template-columns: minmax(0, 1fr); }
+      main, .leaf { min-width: 0; }
       nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding: 0.9rem 1rem 1rem; }
       nav .toc-rest { display: none; }
       nav.is-open .toc-rest { display: block; }
@@ -350,6 +351,8 @@
       .grid-2, .grid-3, .laws, .weeks, .night { grid-template-columns: 1fr; }
       table { font-size: 0.86rem; }
       h1 { font-size: 2.15rem; }
+      .eyebrow { letter-spacing: 0.08em; max-width: 100%; white-space: normal; }
+      .leaf { max-width: 100%; }
       .plan-head { flex-direction: column; align-items: flex-start; }
       .badge { white-space: normal; }
       .copy { padding-right: 4.4rem; }
