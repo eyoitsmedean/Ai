@@ -2139,6 +2139,10 @@ const SIT_SECONDS = 60;
 const SIT_RING = 2 * Math.PI * 52;
 let chatHistory = [];
 let isChatBusy = false;
+const chatInput = document.getElementById('chat-input');
+const SEND_ICON = '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+const STOP_ICON = '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>';
+let chatAbort = null;
 let curatedPacks = null;
 const encCache = {};
 let pendingShareType = null;
@@ -3328,7 +3332,6 @@ function closeSheets() {
   closeAmen();
 }
 
-const chatInput = document.getElementById('chat-input');
 chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
 });
@@ -3378,8 +3381,6 @@ function useSuggestion(btn) {
   sendMsg();
 }
 
-const SEND_ICON = '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
-const STOP_ICON = '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>';
 const ROOM_FALLBACK = [
   'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
   '',
@@ -3391,8 +3392,6 @@ const ROOM_FALLBACK = [
   '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
   'Rest is offered to the exhausted, not the already-composed.',
 ].join('\n');
-
-let chatAbort = null;
 
 function lampOutToday() {
   return chatsToday().n >= FREE_CHATS;
