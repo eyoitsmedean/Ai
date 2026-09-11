@@ -14,13 +14,14 @@ Last updated 2026-09-11 on branch `cursor/recovery-commission-6ab5`.
 | 4 | Builds without error for iOS and Android targets; on-device testing is Dean's step with a five-minute checklist | **VERIFIED for the PWA build** (rung 1+2) · **UNVERIFIED on a physical device** (rung 5 here) | Server starts, 17/17 smoke checks, manifest installable, icons/splash present, Lighthouse mobile 94/100/100/100 (2026-09-05). No native binaries exist (D6: PWA). Five-minute checklist is section C. |
 | 5 | Release checklist marks every item verified or unverified | **VERIFIED** | This file. |
 
-## B. Automated gates (run 2026-09-06 unless noted)
+## B. Automated gates (run 2026-09-11 on this branch unless noted)
 
 | Check | Command | Result | Rung |
 | --- | --- | --- | --- |
-| Smoke suite (health, corpus APIs, grounded SSE, headers, manifest, icons, offline, push lifecycle, SW handlers, red-letter lint, library search) | `node scripts/smoke.js http://localhost:3000` | 17/17 pass | 1 |
-| Evaluation set — corpus mode | `node scripts/eval.js --strict` | 91/91 pass; p95 3 ms (2026-09-06, after Breaker repairs) | 1 |
-| Rendered UI at 390×844: crisis card, tappable 988/911/DV links ≥44 px, IASP/thehotline anchors, ✓ WEB badges linking to ebible.org, off-scope has no verse, no page errors | `node scripts/ui-check.js` | 18/18 pass (2026-09-06) | 1 |
+| Unit tests (intent, theme, verify) | `npm run test:unit` | 15/15 pass | 1 |
+| Smoke suite (health, corpus APIs, grounded SSE, headers, manifest, icons, offline, push lifecycle, SW handlers, red-letter lint, library search, legal page, install sheet, chat-first helpers) | `node scripts/smoke.js http://localhost:3000` | 18/18 pass | 1 |
+| Evaluation set — corpus mode | `node scripts/eval.js --strict` | 92/92 pass; p95 3 ms | 1 |
+| Rendered UI at 390×844: Advisor default, no Encounter intercept, install sheet in DOM, crisis 911/988/chat.988, tappable hotlines ≥44 px, IASP/thehotline, ✓ WEB badges, share modal, off-scope has no verse | `PUPPETEER_DIR=/tmp/rla-qa CHROME_PATH=/usr/local/bin/google-chrome node scripts/ui-check.js` | 27/27 pass | 1 |
 | Breaker probes re-run after repairs: 36 crisis + 20 abuse + 32 life-question + 8 hostile phrasings; paywall-vs-crisis; malformed bodies; 22 crisis msgs vs rate limiter; 10 concurrent same id | `/tmp/breaker/classify.js`, `/tmp/breaker/http.js` (Breaker's scripts, outside repo) | 1 remaining miss, by design ("Nobody would miss me if I was gone" → guidance + 988 line, not the crisis card); all other probes pass | 1 |
 | Evaluation set — model mode | same, with `ANTHROPIC_API_KEY` set | **UNVERIFIED** — no key in this environment | 5 |
 | Every shipped quote verbatim vs WEB | `npm run verify:corpus` | 130/130 verbatim (2026-09-06) | 1 |
