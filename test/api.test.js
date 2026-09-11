@@ -47,6 +47,9 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(data.themes, 12);
+    assert.ok(['anthropic', 'openai'].includes(data.provider));
+    assert.equal(typeof data.model, 'string');
+    assert.deepEqual(data.models, ['claude-opus-5', 'gpt-6-astra']);
   });
 
   it('serves a verified daily page', async () => {
@@ -91,8 +94,9 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /\*\*(Matthew|Mark|Luke|John) /);
+    assert.match(letter, /[“"]/);
+    assert.match(letter, /I am here with you/);
     assert.match(res.raw, /\[DONE\]/);
   });
 

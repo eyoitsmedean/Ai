@@ -1,0 +1,52 @@
+# CLAUDE.md — system of record for Red Letter / The Red Letter Advisor
+
+Read this before designing anything. Decisions here are settled; disagree in a ship note, never by silent reversal. Append, do not rewrite.
+
+## What this is
+
+A chat-first advisor that applies the direct words of Jesus in Matthew, Mark, Luke, and John to a modern life situation. Advisor-first, not a scholarship tool. The product intent was inverted once (scholarship-first); do not repeat that.
+
+Human entry: `START_HERE.md`. Recovered brief: `docs/CANONICAL_BRIEF.md`. Evidence: `docs/RESEARCH.md`. Twenty-minute path: `docs/OPERATOR_KIT.md`. Continuation for the next agent: `docs/CONTINUATION.md`.
+
+## Decisions (settled)
+
+| # | Decision | Recorded | Basis |
+|---|---|---|---|
+| 1 | Name: "The Red Letter Advisor" (room UI wordmark: Red Letter). | brief, 2026-09-06 | Dean |
+| 2 | Palette: parchment paper with one crimson accent (`#8F1D1D`) reserved for Jesus's speech and the single active state. Full scale in `DESIGN.md`. | `DESIGN.md` | Dean |
+| 3 | Scope is Jesus's spoken words only, never the whole Bible. The model may emit only `{{Book Chapter:Verse}}` markers from a retrieved allow-list; the server inserts corpus text. It never types a verse. | `README.md`, `lib/scripture.js` | Dean; commit 564b53b |
+| 4 | Translation: King James Version (1769 text), public domain. Attribution printed beside citations. | `README.md` | Dean. KNOWLEDGE (not re-checked 2026-09-06): the KJV text is public domain worldwide except for Crown letters patent covering printing in the UK; confirm before any UK print or store listing that asserts otherwise |
+| 5 | Crisis handling stays in the product: 988 (US) and findahelpline.com, before the letter, and the letter still comes. | `LAUNCH.md` §97, `lib/crisis.js` | Dean |
+| 6 | Model is operator configuration, not a reader toggle. Choices: `claude-opus-5` (default), `gpt-6-astra`. `MODEL` env selects; provider inferred. | `lib/models.js`, PR #23 | 2026-09-05 |
+| 7 | OpenAI requests send `store: false`; readers' words are not retained in stored-response history. | `lib/models.js` | 2026-09-06 |
+| 8 | Node 22 baseline (`engines`, `.nvmrc`, CI). | `package.json` | 2026-09-06; openai SDK v7 requires it |
+| 9 | Crisis detection has one source, `lib/crisis.js`. The three client copies must match byte-for-byte; `test/crisis.test.js` enforces it. | `lib/crisis.js` | 2026-09-06; the previous pattern missed "suicidal" and "suicide" |
+| 10 | A reader in crisis is offered only the fixed comfort verses in `lib/retrieve.js` (`CRISIS_CITATIONS`), never token-matched sayings. | `lib/retrieve.js` | 2026-09-06; token matching once offered Mark 13's wars and famines |
+| 11 | `npm run eval` is the release gate. `eval/RESULTS.md` must be regenerated on the release commit and must say which mode ran. Nothing is reported as passed that did not run. | `scripts/eval.js` | 2026-09-06 |
+| 12 | The noun "suicide" alone triggers the notice, so "the suicide of my brother still haunts me" receives the 988 line and the comfort verses. Accepted: a bereaved-by-suicide reader is at elevated risk and the notice is gentle; the letter still comes. | `lib/crisis.js`, `test/crisis.test.js` | 2026-09-06, ASSUMED by the builder; Dean may reverse |
+| 13 | Retrieval is lexicon + BM25, not raw substring overlap. A 2026 message is translated into the vocabulary the sayings use; BM25 (k1 1.5, b 0.75) ranks; curated room verses are interleaved; unmatched messages get `DEFAULT_CITATIONS`. Crisis still uses only `CRISIS_CITATIONS`. | `lib/retrieve.js` | 2026-09-07; held-out @8 went 4/10 → 10/10 vs the committed substring ranker |
+| 14 | Offline and error letters are built from the same retrieved allow-list as a live model would see (`lib/letter.js`). The generic John 14:27 + Matthew 11:28 pair is only the last resort. | `lib/letter.js`, `server.js` | 2026-09-11 |
+| 15 | Mobile default is Capacitor over `public/`. Config is in-repo; native `ios/` / `android/` trees are generated on Dean’s machine. On-device proof is `DEVICE_CHECKLIST.md`. | `capacitor.config.json` | 2026-09-11; brief default (A) |
+| 16 | Offline / error letters open with the warm line only when a need is recognized (theme or crisis). Otherwise they open with the Gospels-only sentence. | `lib/letter.js` `openingFor` | 2026-09-11; hostile and off-scope were getting “I am here with you” |
+| 17 | Lexicon must not treat “making money” as a money-worry or “cannot stop crying” as addiction. A skeptic / “prove Jesus existed” line retrieves refusal sayings (Luke 4:12, signs, authority), not Matthew 6. | `lib/retrieve.js` | 2026-09-11; found while scoring `eval/OFFLINE_REVIEW.md` |
+| 18 | The live Advisor prompt forbids unprompted emotion-based questions. That is both advisor-first and the NY GBL 47 element we do not want to satisfy. | `server.js` `ADVISOR_SYSTEM` | 2026-09-11; `docs/RESEARCH.md` A3 |
+
+## Not yet decided (Dean)
+
+- **Mobile stack.** Default is (A) Capacitor — `capacitor.config.json` is now in this branch. Native Kotlin/Swift apps on other branches remain an alternative, not the default.
+- Whether harm-to-others phrasing ("I want to hurt him") should also trigger the human-help notice. Currently it does not; the notice text speaks of ending one's own life.
+- Whether to add an LLM-judged warmth/fit score to the eval. Currently the eval is deterministic and saves live letters for a human to read.
+
+## Known gaps (recorded, not yet fixed)
+
+- `public/library.json` still stores some grouped sayings with narrator frames; `lookup()` now strips known wrappers before print. Rebuild with `npm run spoken` after expanding `SPEECH_INTROS` further if Seek still shows a frame.
+- A live `gpt-6-astra` call has not been made from this repo; the provider is verified against a mock of the Responses API only.
+
+## Eval status
+
+| Date | Mode | Model | Result |
+|---|---|---|---|
+| 2026-09-06 | offline (no key) | claude-opus-5 configured | 61/61; live-only checks not run. Live path exercised against a mock Responses API (rung 2): 61/61 |
+| 2026-09-07 | offline (no key) | claude-opus-5 configured | 61/61 after lexicon+BM25 retrieval rebuild |
+| 2026-09-11 | offline (no key) | claude-opus-5 configured | 61/61 after retrieval-aware fallback letters |
+| 2026-09-11 | offline letters read | deterministic `letterFromSayings` | Eight letters scored in `eval/OFFLINE_REVIEW.md`. Live Claude/Astra letters: still unverified |

@@ -42,6 +42,8 @@ describe('extractSpoken', () => {
     assert.doesNotMatch(lookup('John 8:12').text, /Then spake Jesus/);
     assert.match(lookup('John 8:12').text, /^I am the light/);
     assert.equal(lookup('Mark 5:36').text, 'Be not afraid, only believe.');
+    assert.doesNotMatch(lookup('Mark 13:5').text, /answering them began to say/i);
+    assert.match(lookup('Mark 13:5').text, /^Take heed/i);
   });
 
   it('does not invent speech when the verse is already spoken', () => {

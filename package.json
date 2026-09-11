@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
   "main": "server.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
@@ -10,13 +13,16 @@
     "spoken": "node scripts/build-spoken.js",
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
+    "eval": "node scripts/eval.js",
+    "review-offline": "node scripts/review-offline.js",
     "qa": "node scripts/qa-browser.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "openai": "^7.10.0"
   },
   "devDependencies": {
     "puppeteer-core": "^25.9.0"

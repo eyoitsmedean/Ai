@@ -1,17 +1,18 @@
 require('dotenv').config();
 const express = require('express');
-const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
-const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
+const { DAILY_SCHEMA, ENCOURAGE_SCHEMA } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { letterFromSayings } = require('./lib/letter');
+const { MODEL_CHOICES, resolveModel, createProvider } = require('./lib/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
+const MODEL = resolveModel();
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
 
@@ -27,26 +28,12 @@ app.use(express.static(path.join(__dirname, 'public'), {
   },
 }));
 
-function usableSecret(value) {
-  if (!value) return false;
-  const v = String(value).trim();
-  if (!v) return false;
-  if (/your_api_key|changeme|placeholder|xxx|example/i.test(v)) return false;
-  return true;
-}
-
-const hasAnthropic = usableSecret(process.env.ANTHROPIC_API_KEY) || usableSecret(process.env.ANTHROPIC_AUTH_TOKEN);
-const client = hasAnthropic
-  ? new Anthropic(
-      process.env.ANTHROPIC_AUTH_TOKEN
-        ? { authToken: process.env.ANTHROPIC_AUTH_TOKEN }
-        : { apiKey: process.env.ANTHROPIC_API_KEY }
-    )
-  : null;
+const client = createProvider();
 
 const buckets = new Map();
 
 function rateLimit(key, limit, windowMs) {
+  if (process.env.RATE_LIMIT_OFF === '1') return true;
   const now = Date.now();
   if (buckets.size > 4000) {
     for (const [k, slot] of buckets) {
@@ -98,7 +85,8 @@ STRICT RULES:
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
-• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
+• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.
+• Do not ask unprompted emotion-based questions. Answer the situation they named.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -150,35 +138,14 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-async function generateStructured(system, user, schema, maxTokens) {
-  try {
-    return await client.messages.create({
-      model: MODEL,
-      max_tokens: maxTokens,
-      system,
-      messages: [{ role: 'user', content: user }],
-      ...structuredFormat(schema),
-    });
-  } catch (err) {
-    console.error('Structured output fallback:', err.message);
-    return client.messages.create({
-      model: MODEL,
-      max_tokens: maxTokens,
-      thinking: { type: 'adaptive' },
-      system,
-      messages: [{ role: 'user', content: user }],
-    });
-  }
-}
-
 async function generateDailyFromModel() {
-  const response = await generateStructured(
-    DAILY_SYSTEM,
-    "Generate today's daily affirmation and word.",
-    DAILY_SCHEMA,
-    1400
-  );
-  const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+  const text = await client.generateStructured({
+    system: DAILY_SYSTEM,
+    user: "Generate today's daily affirmation and word.",
+    schema: DAILY_SCHEMA,
+    schemaName: 'daily_page',
+    maxTokens: 1400,
+  });
   return verifyJsonQuotes(parseModelJson(text));
 }
 
@@ -207,7 +174,11 @@ async function fetchDailyContent() {
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
-    anthropic: Boolean(client),
+    live: Boolean(client),
+    anthropic: Boolean(client) && client.name === 'anthropic',
+    provider: MODEL.provider,
+    model: MODEL.id,
+    models: MODEL_CHOICES.map((m) => m.id),
     themes: themeNames().length,
   });
 });
@@ -279,13 +250,13 @@ app.post('/api/encouragement', async (req, res) => {
   }
 
   try {
-    const response = await generateStructured(
-      ENCOURAGE_SYSTEM,
-      `Generate encouragement for: ${theme}`,
-      ENCOURAGE_SCHEMA,
-      1600
-    );
-    const text = response.content.find((b) => b.type === 'text')?.text ?? '';
+    const text = await client.generateStructured({
+      system: ENCOURAGE_SYSTEM,
+      user: `Generate encouragement for: ${theme}`,
+      schema: ENCOURAGE_SCHEMA,
+      schemaName: 'encouragement',
+      maxTokens: 1600,
+    });
     const data = verifyJsonQuotes({ ...parseModelJson(text), theme });
     res.json(data);
   } catch (err) {
@@ -293,20 +264,6 @@ app.post('/api/encouragement', async (req, res) => {
     res.json(curated);
   }
 });
-
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
 
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
@@ -336,8 +293,9 @@ app.post('/api/chat', async (req, res) => {
   res.setHeader('X-Accel-Buffering', 'no');
   if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
+  const gone = () => res.writableEnded || res.destroyed;
   const write = (payload) => {
-    res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    if (!gone()) res.write(`data: ${JSON.stringify(payload)}\n\n`);
   };
 
   const streamText = (text) => {
@@ -348,25 +306,20 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
+  const retrieved = retrieveSayings(last.content);
   const finish = (body) => {
+    if (gone()) return;
     const verified = verifyAndSubstitute(body);
     streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
 
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) {}
-    }
-  });
-
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(letterFromSayings(retrieved.sayings, { crisis, themes: retrieved.themes }));
   }
 
   try {
-    const retrieved = retrieveSayings(last.content);
     const allow = formatAllowList(retrieved.sayings);
     const modelMessages = messages.map((m, i) => {
       if (i !== messages.length - 1) return { role: m.role, content: m.content };
@@ -376,20 +329,11 @@ app.post('/api/chat', async (req, res) => {
       };
     });
 
-    const stream = client.messages.stream({
-      model: MODEL,
-      max_tokens: 1400,
-      thinking: { type: 'adaptive' },
+    const raw = await client.streamText({
       system: ADVISOR_SYSTEM,
       messages: modelMessages,
+      maxTokens: 1400,
     });
-
-    let raw = '';
-    stream.on('text', (text) => {
-      raw += text;
-    });
-
-    await stream.finalMessage();
     finish(raw);
   } catch (err) {
     console.error('Chat error:', err.message);
@@ -398,7 +342,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(letterFromSayings(retrieved.sayings, { crisis, themes: retrieved.themes }));
   }
 });
 
