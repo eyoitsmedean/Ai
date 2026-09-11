@@ -132,10 +132,10 @@ async function main() {
   await check('one-screen sets a saying and stops on crisis', async () => {
     await page.goto(base + '/ask', { waitUntil: 'networkidle0' });
     const copy = await page.evaluate(() => document.body.innerText);
-    assert(/What this bot cannot do/.test(copy), 'cannot-do block missing');
+    assert(/what this bot cannot do/i.test(copy), 'cannot-do block missing');
     assert(/do not publish/i.test(copy), 'WATCH banner missing');
     const firstPaint = await page.evaluate(() => document.body.innerText);
-    assert(/The words/.test(firstPaint) && /What that might mean today/.test(firstPaint), 'four blocks must be visible before an ask');
+    assert(/the words/i.test(firstPaint) && /what that might mean today/i.test(firstPaint), 'four blocks must be visible before an ask');
     await page.type('#ask', 'I feel so much shame');
     await page.click('#ask-btn');
     await page.waitForFunction(() => /Luke 15:4/.test(document.getElementById('cite').textContent), { timeout: 5000 });
