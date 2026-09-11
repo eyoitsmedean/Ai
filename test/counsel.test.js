@@ -2,8 +2,8 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { composeLetter, letterPassesFloor, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY } = require('../lib/counsel');
-const { verifyAndSubstitute, lookup, parseRef, looksLikeCrisis } = require('../lib/scripture');
+const { composeLetter, letterPassesFloor, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY, DANGER_BODY, ENEMY_LOVE } = require('../lib/counsel');
+const { verifyAndSubstitute, lookup, parseRef, looksLikeCrisis, looksLikeAbuse } = require('../lib/scripture');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -85,6 +85,19 @@ describe('the lamp-out letter', () => {
     assert.ok(client.includes(CRISIS_BODY.hear), 'crisis body is on the client');
   });
 
+  it('an abuse line never opens with love-your-enemies', () => {
+    for (const q of ['My husband hits me when he is drunk', 'He raped me and everyone tells me to forgive him', 'My boyfriend won\'t let me leave the house']) {
+      assert.ok(looksLikeAbuse(q), q);
+      const letter = verifyAndSubstitute(composeLetter(q));
+      assert.ok(letter.startsWith(DANGER_BODY.hear), q);
+      assert.ok(!ENEMY_LOVE.test(letter), q);
+      assert.match(letter, /Matthew 10:23|John 10:10/);
+      assert.ok(letterPassesFloor(letter), q);
+    }
+    assert.ok(!looksLikeAbuse('My husband and I fight about everything. I\'m exhausted.'));
+    assert.ok(!looksLikeAbuse('My dad was cruel to us growing up and now he wants a relationship.'));
+  });
+
   it('client and server agree on what a crisis sounds like', () => {
     const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
     const client = html.match(/function looksLikeCrisisClient\(text\) \{\n\s+return (\/.*\/i)\.test/);
@@ -95,5 +108,13 @@ describe('the lamp-out letter', () => {
       assert.ok(looksLikeCrisis(t), t);
     }
     for (const t of ['My dog died', 'I could die laughing', 'the deadline is killing me']) assert.ok(!looksLikeCrisis(t), t);
+  });
+
+  it('client and server agree on what present danger from another person sounds like', () => {
+    const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
+    const client = html.match(/function looksLikeAbuseClient\(text\) \{\n\s+return (\/.*\/i)\.test/);
+    const server = fs.readFileSync(path.join(ROOT, 'lib', 'scripture.js'), 'utf8').match(/function looksLikeAbuse\(text\) \{\n[^\n]*\n\s+return (\/.*\/i)\.test/);
+    assert.ok(client && server, 'both abuse detectors found');
+    assert.equal(client[1], server[1]);
   });
 });

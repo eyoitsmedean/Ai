@@ -36,6 +36,16 @@
     close: 'You are not alone in this hour. Please go toward help now.',
   };
 
+  const DANGER_BODY = {
+    hear: 'What is happening to you is not a riddle you failed. Safety is not a lack of faith.',
+    close: 'You may leave a room that is killing you. A person who can help outranks this page.',
+  };
+
+  const DANGER_PASSAGES = [
+    { verse: 'Matthew 10:23', quote: 'But when they persecute you in this city, flee ye into another: for verily I say unto you, Ye shall not have gone over the cities of Israel, till the Son of man be come.', context: 'He names fleeing a city that persecutes you. Leaving is not the opposite of faith.' },
+    { verse: 'John 10:10', quote: 'The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly.', context: 'The thief comes to steal and kill. He came that you might have life.' },
+  ];
+
   function passagesFor(theme) {
     const enc = window.RLA_CURATED && window.RLA_CURATED.encouragement && window.RLA_CURATED.encouragement[theme];
     return (enc && enc.passages && enc.passages.length) ? enc.passages.slice(0, 3) : ANYONE.passages;
@@ -61,11 +71,14 @@
 
   window.RLA_OUT_OF_ROOM = OUT_OF_ROOM;
   window.RLA_CRISIS_BODY = CRISIS_BODY;
+  window.RLA_DANGER_BODY = DANGER_BODY;
 
   window.RLA_advise = function (text, opts) {
     const raw = String(text || '').trim();
     const crisis = !!(opts && opts.crisis);
+    const abuse = !!(opts && opts.abuse);
     if (!raw) return formatPack(ANYONE.hear, ANYONE.passages, ANYONE.close);
+    if (abuse && !crisis) return formatPack(DANGER_BODY.hear, DANGER_PASSAGES, DANGER_BODY.close);
 
     let best = null;
     let bestN = 0;

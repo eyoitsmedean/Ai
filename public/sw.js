@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v16';
+const CACHE = 'rla-phase0-v17';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',

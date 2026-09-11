@@ -3,7 +3,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, looksLikeAbuse, CRISIS_NOTICE, ABUSE_NOTICE } = require('./lib/scripture');
 const { composeLetter, letterPassesFloor } = require('./lib/counsel');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
@@ -355,13 +355,15 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
+  const abuse = looksLikeAbuse(last.content);
   const finish = (body) => {
     let verified = verifyAndSubstitute(body);
     if (!letterPassesFloor(verified)) {
       // The model cited another author, or nothing of His survived verification: the room writes the letter.
       verified = verifyAndSubstitute(fallbackLetter(last.content));
     }
-    streamText(crisis ? `${CRISIS_NOTICE}\n${verified}` : verified);
+    const prefix = crisis ? CRISIS_NOTICE : abuse ? ABUSE_NOTICE : '';
+    streamText(prefix ? `${prefix}\n${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
