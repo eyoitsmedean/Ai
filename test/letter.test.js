@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { composeLetter, citedBefore } = require('../lib/letter');
 const { guessThemes, retrieveSayings } = require('../lib/retrieve');
 const { verifyAndSubstitute, lookup, parseAllRefs, isRedLetter } = require('../lib/scripture');
-const { THEMES, themeNames } = require('../lib/curated');
+const { THEMES, COMMONS, themeNames } = require('../lib/curated');
 
 describe('guessThemes hears ordinary phrasing', () => {
   it('matches inflected words, not just stems at word end', () => {
@@ -208,6 +208,30 @@ describe('composeLetter', () => {
     assert.equal(press.looksLikeCrisis('I cut myself on a knife cooking'), false);
     assert.equal(press.looksLikeCrisis('I cut myself again last night'), true);
     assert.equal(press.looksLikeCrisis('I want to die'), true);
+  });
+
+  it('stops counsel on a crisis — notice only, no Scripture', () => {
+    const { text, theme, citations, crisis } = composeLetter('I want to die. I am so ashamed.');
+    assert.equal(crisis, true);
+    assert.equal(theme, 'Shame & Guilt');
+    assert.deepEqual(citations, []);
+    assert.match(text, /988/);
+    assert.doesNotMatch(text, /\*\*(Matthew|Mark|Luke|John)/);
+  });
+
+  it('sets one screen from a saying and its stored context', () => {
+    const press = require('../data/letterpress');
+    const screen = press.composeScreen('I feel so much shame', { packs: THEMES, commons: COMMONS });
+    assert.equal(screen.crisis, false);
+    assert.equal(screen.theme, 'Shame & Guilt');
+    assert.equal(screen.verse, 'Luke 15:4');
+    assert.match(screen.quote, /go after that which is lost/);
+    assert.match(screen.meaning, /does not wait for you to find the road back/);
+    assert.equal(screen.translation, 'King James Version (1769)');
+    const crisis = press.composeScreen('I want to die', { packs: THEMES, commons: COMMONS });
+    assert.equal(crisis.crisis, true);
+    assert.equal(crisis.quote, '');
+    assert.match(crisis.notice, /988/);
   });
 
   it('tells the truth when no room is named', () => {

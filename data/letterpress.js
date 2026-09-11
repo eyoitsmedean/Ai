@@ -167,6 +167,18 @@
   /* packs:   { 'Theme': { opening, closing, passages: [{verse, quote, context}], more: [...] } }
      commons: [{verse, quote, context}]
      history: [{ role, content }] — earlier turns of this correspondence */
+  function fourLines(text) {
+    var t = String(text || '').trim();
+    if (!t) return '';
+    var parts = t.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [t];
+    var out = [];
+    for (var i = 0; i < parts.length && out.length < 4; i++) {
+      var piece = String(parts[i] || '').trim();
+      if (piece) out.push(piece);
+    }
+    return out.join(' ');
+  }
+
   function composeLetter(text, opts) {
     opts = opts || {};
     var packs = opts.packs || {};
@@ -175,6 +187,18 @@
     var raw = String(text || '').trim();
     var themes = guessThemes(raw, Object.keys(packs));
     var primary = themes[0] || null;
+    if (looksLikeCrisis(raw)) {
+      return {
+        theme: primary,
+        themes: themes,
+        exhausted: false,
+        crisis: true,
+        citations: [],
+        passages: [],
+        opening: CRISIS_NOTICE.replace(/\s+$/, ''),
+        closing: '',
+      };
+    }
     var used = citedBefore(history);
     var chosen = [];
 
@@ -225,6 +249,7 @@
       theme: primary,
       themes: themes,
       exhausted: exhausted,
+      crisis: false,
       citations: chosen.map(function (p) { return p.verse; }),
       passages: chosen,
       opening: opening,
@@ -232,10 +257,40 @@
     };
   }
 
+  /* One saying + at most four lines of curated context. Used by the WATCH one-screen.
+     Meaning is the stored context, never a new theological sentence. */
+  function composeScreen(text, opts) {
+    var letter = composeLetter(text, opts);
+    if (letter.crisis) {
+      return {
+        crisis: true,
+        theme: letter.theme,
+        verse: '',
+        quote: '',
+        meaning: '',
+        translation: 'King James Version (1769)',
+        notice: letter.opening,
+      };
+    }
+    var p = letter.passages[0] || {};
+    return {
+      crisis: false,
+      theme: letter.theme,
+      verse: p.verse || '',
+      quote: p.quote || '',
+      meaning: fourLines(p.context),
+      translation: 'King James Version (1769)',
+      notice: '',
+    };
+  }
+
   /* placeholders: true → {{Book C:V}} for lib/scripture to fill from the corpus.
      placeholders: false → the hydrated quote text carried by the passage. */
   function renderLetter(letter, opts) {
     opts = opts || {};
+    if (letter && letter.crisis) {
+      return String(letter.opening || CRISIS_NOTICE).replace(/\s+$/, '') + '\n';
+    }
     var body = letter.passages.map(function (p) {
       var head = opts.placeholders ? '{{' + p.verse + '}}' : '**' + p.verse + '**\n“' + p.quote + '”';
       return head + '\n' + p.context;
@@ -249,6 +304,7 @@
     NEED_CUES: NEED_CUES,
     citedBefore: citedBefore,
     composeLetter: composeLetter,
+    composeScreen: composeScreen,
     guessThemes: guessThemes,
     looksLikeCrisis: looksLikeCrisis,
     renderLetter: renderLetter,

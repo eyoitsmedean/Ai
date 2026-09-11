@@ -38,6 +38,14 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 ### 2026-09-06 — Muse
 - "I approve" is authorization to continue, not a password. Stale device code NSXJ-LRXK must not be reused.
 
+### 2026-09-11 — Recovery commission (evening)
+- This Cursor thread has **six** user-authored prompts, not ten. Transcript recovered; one `role: user` wrapper skipped. Table: `studio/CANONICAL-BRIEF.md`.
+- Later Notion law (opened this session) outranks earlier ship energy: **WATCH** — no publish, no launch, no store-submit. One-screen spec. Crisis = hotline then **stop counsel**. Translation is a human gate (WEB/KJV-US). No sixth hub; Grok F1–F3 left untouched.
+- Crisis path no longer prepends a letter after 988. `composeLetter` returns notice-only; `/api/chat` does not start the model. Eval crisis cases require no Scripture.
+- One-screen WATCH advisor: `public/one-screen.html` (`/ask`). Meaning is curated `context`, ≤4 sentences. Quotes labeled King James Version (1769). Corpus not switched to WEB.
+- Adjacent research filed under `studio/research/` (WEB vs KJV, crisis stop, one-screen vs folio, WATCH vs Pages, meaning vs words).
+- ASSUMED: Dean still wants KJV voice on paper until he records another text. Folio rooms stay.
+
 ### 2026-09-11 — Red Letter sprint
 - Short room names (`Anxiety`, `grief`) resolve to the locked room names on `/api/encouragement`, the library filter, and Seek's static fallback. Unknown names still 400.
 - Crisis cue carves out accidental cuts (`shaving`, `cooking`, `on a knife/glass/paper`). The page modal uses the same engine as the letter.
@@ -47,10 +55,10 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## STATE (latest)
 
-- Mission lock: Red Letter sprint (11 September 2026) — five product increments on the letterpress Advisor and the daily path.
-- Decisions this session: short room names resolve; accidental "cut myself shaving" is not a crisis; generic letters tell the truth when no room is named; the path continues after Day 7 from `paths.more`; Advisor empty state has a second row of rooms.
-- Work done: aliases, crisis carve-out, generic opening, path after Seven, room chips. `npm test` 80/80; `npm run eval` 45/45; smoke / browser QA / static QA run this session.
-- Next step: Dean pastes `studio/paste/*.prompt.md` into live chats; enables GitHub Pages or names `[PAGES_URL]`; names two quality-reference apps; confirms or overturns "Red Letter, Advisor as a room".
-- Open risks: model path unverified without a key; eval does not judge warmth; Pages URL still not live as of 6 September 2026 (not re-checked this session — KNOWLEDGE, stale-by: re-curl); "I cut myself shaving" carve-out is phrase-specific.
+- Mission lock: Universal recovery commission (11 September 2026 evening) — recover this thread, align to Notion WATCH, deliver three flagships.
+- Decisions this session: six prompts recovered; crisis stops counsel; one-screen is the WATCH surface; folio rooms preserved; KJV stays labeled; Pages not enabled; no sixth Notion hub.
+- Work done: `studio/CANONICAL-BRIEF.md`, `studio/research/*`, `studio/HANDOFF.md`, `public/one-screen.html`, crisis stop in letterpress + `/api/chat`, eval/QA updated. Notion child under the existing one-screen page.
+- Next step: Dean opens `/ask` locally if he wants; records (or refuses) a translation before any public URL; does not enable Pages while WATCH holds. Paste files still require Dean to paste.
+- Open risks: model path unverified without a key; eval does not judge warmth; Pages URL last checked 6 September 2026 (stale-by: re-curl; moot under WATCH); crisis detector is keyword-plus-carve-out, not contextual; Notion crisis *sentence* not swapped in (existing notice kept).
 
-RESUME_FROM: Red Letter — next commission under the ATELIER brief; start with ANCHOR against CLAUDE.md and `studio/briefs/red-letter.md`.
+RESUME_FROM: Read `studio/CANONICAL-BRIEF.md` and `studio/FUTURE-AGENTS.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub.

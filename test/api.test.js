@@ -126,12 +126,21 @@ describe('smoke routes', () => {
     assert.match(griefLetter, /Blessed are they that mourn/);
   });
 
-  it('keeps the crisis notice ahead of the letter', async () => {
+  it('stops the letter on a crisis and names 988', async () => {
     const res = await request('POST', '/api/chat', {
       messages: [{ role: 'user', content: 'I want to die' }],
     });
     const letter = sseText(res.raw);
-    assert.ok(letter.indexOf('988') < letter.indexOf('**'), '988 must come before the first passage');
+    assert.match(letter, /988/);
+    assert.doesNotMatch(letter, /\*\*(Matthew|Mark|Luke|John)/);
+  });
+
+  it('serves the one-screen on /ask', async () => {
+    const res = await request('GET', '/ask');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /What is weighing on you today/);
+    assert.match(res.raw, /What this bot cannot do/);
+    assert.match(res.raw, /do not publish/i);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {

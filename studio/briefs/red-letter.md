@@ -68,3 +68,14 @@ Quality reference: [DEAN TO NAME TWO APPS] — what to match: time from first op
 | "the mobile stack — propose two options" | Settled by the recorded decision above: web folio here, Flutter in Red Words | INFERRED from the two locks; flag if Dean wants a native Red Letter |
 | "served by GitHub Pages" (my own earlier wording) | The workflow exists and last succeeded on 30 August 2026, but the site is not live at the default URL today | VERIFIED 2026-09-06 — `curl -I https://eyoitsmedean.github.io/Ai/` → 404; `gh api repos/eyoitsmedean/Ai/pages` → 404. Enabling Pages is Dean's step. |
 | Quality reference "<Dean to name two apps>" | Still open | Only Dean can answer |
+
+## Later amendments (11 September 2026) — household law
+
+Opened from Notion this session. They outrank “ship a public URL” in the brief above. Full table: `../CANONICAL-BRIEF.md`.
+
+| Amendment | Effect on this brief |
+| --- | --- |
+| WATCH. Do not publish, launch, or store-submit. Folio stays paper. | Definition of done item 4 (public URL / phone install) is **blocked** on Dean, not an agent task. |
+| One screen: Ask · The words (short) · What that might mean today (≤4 lines) · What this bot cannot do. | Delivered as `public/one-screen.html` (`/ask`). Five rooms stay. |
+| Crisis: name a human hotline, **stop generating counsel**. | Supersedes “988 before any Scripture” — 988 and **no** Scripture. |
+| Dean records the licensed translation before any public URL. WEB/BSB recommended; KJV-US allowed. | Keep shipping labeled KJV 1769. Do not switch the corpus. |

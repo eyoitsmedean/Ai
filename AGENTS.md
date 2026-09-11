@@ -11,8 +11,9 @@ Before doing substantive work, read:
    - 90-day cash plans / folio / Notion OS → [`studio/briefs/ninety-day-folio.md`](studio/briefs/ninety-day-folio.md) · [`studio/locks/ninety-day-folio.md`](studio/locks/ninety-day-folio.md)
    - Muse / Meta Model API → [`studio/briefs/muse.md`](studio/briefs/muse.md) · [`studio/locks/muse.md`](studio/locks/muse.md)
 3. The decisions log in [`CLAUDE.md`](CLAUDE.md). Append to it at RELEASE.
+4. If the work is this Cursor thread or the WATCH one-screen: [`studio/CANONICAL-BRIEF.md`](studio/CANONICAL-BRIEF.md) and [`studio/FUTURE-AGENTS.md`](studio/FUTURE-AGENTS.md)
 
-If the request does not name a project, it is **Red Letter**.
+If the request does not name a project, it is **Red Letter**. Do not publish. Do not store-submit. Do not open a sixth Notion hub.
 
 Do not start a second app. Do not type Scripture — it comes from the corpus. Do not describe as run what was not run. Build the thing.
 

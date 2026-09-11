@@ -18,8 +18,7 @@
       packs: data().packs,
       commons: data().commons,
     });
-    var body = engine.renderLetter(letter, { placeholders: false });
-    return engine.looksLikeCrisis(text) ? engine.CRISIS_NOTICE + body : body;
+    return engine.renderLetter(letter, { placeholders: false });
   };
 
   /* Seven Days with His words; MORE continues the path after day 7. */

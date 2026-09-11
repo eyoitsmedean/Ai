@@ -25,6 +25,7 @@ function serve() {
       const url = new URL(req.url, 'http://x');
       let file = path.join(PUBLIC, decodeURIComponent(url.pathname));
       if (url.pathname === '/' || url.pathname === '/index.html') file = path.join(PUBLIC, 'index.html');
+      if (url.pathname === '/ask') file = path.join(PUBLIC, 'one-screen.html');
       if (!file.startsWith(PUBLIC) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
         res.writeHead(404, { 'Content-Type': 'text/html' });
         return res.end('<h1>404</h1>');
@@ -116,7 +117,7 @@ async function main() {
     assert(/You have stayed with this/.test(opening), 'second turn should continue, got: ' + opening);
   });
 
-  await check('crisis language puts 988 first', async () => {
+  await check('crisis language names 988 and stops counsel', async () => {
     await page.evaluate(() => { window.showCrisisModal = () => Promise.resolve('continue'); });
     await page.type('#chat-input', 'I want to die');
     await page.click('#send-btn');
@@ -125,7 +126,35 @@ async function main() {
     const text = await page.evaluate(() => [...document.querySelectorAll('.msg-ai')].pop().innerText);
     const notice = text.indexOf('988');
     const firstPassage = text.search(/\b(Matthew|Mark|Luke|John) \d+:\d+/i);
-    assert(notice !== -1 && firstPassage !== -1 && notice < firstPassage, '988 must precede the passages');
+    assert(notice !== -1 && firstPassage === -1, 'crisis must stop after 988, no Scripture');
+  });
+
+  await check('one-screen sets a saying and stops on crisis', async () => {
+    await page.goto(base + '/ask', { waitUntil: 'networkidle0' });
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/What this bot cannot do/.test(copy), 'cannot-do block missing');
+    assert(/do not publish/i.test(copy), 'WATCH banner missing');
+    await page.type('#ask', 'I feel so much shame');
+    await page.click('#ask-btn');
+    await page.waitForFunction(() => !document.getElementById('words-block').classList.contains('hidden'), { timeout: 5000 });
+    const saying = await page.evaluate(() => ({
+      words: document.getElementById('words').textContent,
+      cite: document.getElementById('cite').textContent,
+      meaning: document.getElementById('meaning').textContent,
+    }));
+    assert(/Luke 15:4/.test(saying.cite), 'shame one-screen should cite Luke 15:4: ' + saying.cite);
+    assert(/go after that which is lost/.test(saying.words), 'quote missing');
+    assert(/King James Version/.test(saying.cite), 'translation unlabeled');
+    await page.evaluate(() => { document.getElementById('ask').value = ''; });
+    await page.type('#ask', 'I want to die');
+    await page.click('#ask-btn');
+    await page.waitForFunction(() => !document.getElementById('crisis').classList.contains('hidden'), { timeout: 5000 });
+    const crisis = await page.evaluate(() => ({
+      notice: document.getElementById('crisis-notice').textContent,
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+    }));
+    assert(/988/.test(crisis.notice), 'one-screen crisis missing 988');
+    assert(crisis.wordsHidden, 'one-screen must hide the saying after a crisis');
   });
 
   await check('no page errors', async () => {

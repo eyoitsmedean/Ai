@@ -2,6 +2,8 @@
 
 *Paste this whole file as the next message in the chat. It is self-contained: the compact protocol, the project brief, and the commission. If `studio/ATELIER-PROTOCOL.md`, `studio/briefs/red-letter.md`, `studio/locks/red-letter.md`, and `CLAUDE.md` exist in the workspace, read them too — the full protocol and the longer constitution live there.*
 
+*Later law (11 Sep 2026): WATCH — do not publish or store-submit. Crisis input names a hotline and stops counsel. Translation before any public URL is Dean's gate. See `studio/CANONICAL-BRIEF.md`.*
+
 ---
 
 Run the ATELIER PROTOCOL on the project brief below.

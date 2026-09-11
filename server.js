@@ -340,11 +340,19 @@ app.post('/api/chat', async (req, res) => {
   const finish = (body, source) => {
     const verified = verifyAndSubstitute(body);
     write({ meta: { source } });
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    streamText(verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
   const letterpress = () => finish(composeLetter(last.content, { history: messages }).text, 'letterpress');
+
+  if (crisis) {
+    write({ meta: { source: 'crisis' } });
+    streamText(CRISIS_NOTICE);
+    res.write('data: [DONE]\n\n');
+    res.end();
+    return;
+  }
 
   req.on('close', () => {
     if (!res.writableEnded) {
@@ -415,6 +423,11 @@ app.post('/api/waitlist', (req, res) => {
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/ask', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'one-screen.html'));
 });
 
 app.get('*', (req, res, next) => {

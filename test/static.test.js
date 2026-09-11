@@ -100,25 +100,25 @@ describe('the static Advisor is the server Advisor', () => {
     }
   });
 
-  it('RLA_advise renders the letter with real text, no placeholders, and a crisis notice first', () => {
+  it('RLA_advise renders the letter with real text, no placeholders, and stops on crisis', () => {
     const letter = window.RLA_advise('I feel so much shame', []);
     assert.match(letter, /\*\*Luke 15:4\*\*/);
     assert.match(letter, /go after that which is lost/);
     assert.doesNotMatch(letter, /\{\{/);
     const crisis = window.RLA_advise('I want to die', []);
-    assert.ok(crisis.indexOf('988') < crisis.indexOf('**'), '988 must come first');
+    assert.match(crisis, /988/);
+    assert.doesNotMatch(crisis, /\*\*(Matthew|Mark|Luke|John)/);
     const second = window.RLA_advise('still ashamed', [{ role: 'assistant', content: letter }]);
     assert.doesNotMatch(second, /Luke 15:4\*\*/);
     assert.match(second, /^You have stayed with this/);
   });
 
-  it('does not re-read a room opening after a crisis notice stood before it', () => {
+  it('gives a first letter after a crisis stop, because no room opening was sent', () => {
     const first = window.RLA_advise('I want to die, I am so ashamed', []);
     assert.match(first, /^If you are in danger/);
-    assert.match(first, /Shame says you are the lost sheep/);
+    assert.doesNotMatch(first, /Shame says you are the lost sheep/);
     const second = window.RLA_advise('still ashamed', [{ role: 'assistant', content: first }]);
-    assert.doesNotMatch(second, /lost sheep/);
-    assert.match(second, /^You have stayed with this/);
+    assert.match(second, /Shame says you are the lost sheep/);
   });
 
   it('counts abbreviated citations from a model turn as already sent', () => {
