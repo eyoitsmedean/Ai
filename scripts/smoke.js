@@ -99,6 +99,9 @@ async function main() {
     assert(text.includes('id="return-ribbon"'), 'missing day-two ribbon');
     assert(text.includes('id="seven-close"'), 'missing Seven Days last page');
     assert(text.includes('addSitToChatBubble'), 'Advisor must end in Sit');
+    assert(text.includes('id="last-leaf"'), 'Advisor must grow a last leaf');
+    assert(text.includes('id="composer-help"'), 'helpline must sit above the composer');
+    assert(text.includes('id="lib-crisis"'), 'Letters search must put a person first');
     assert(text.includes('encodeBlessingClient'), 'blessing page missing');
     assert(!text.includes('Five letters for today'), 'must not meter His words');
     assert(!text.includes('FREE_CHATS'), 'must not paywall the Advisor');
