@@ -29,7 +29,7 @@ This recovery branch owns `/ask`, `lib/ask.js`, and `docs/*`. Folio UX lives on 
 
 ## Completed vs remaining
 
-**Done on this branch:** brief, research, `/ask`, `/api/ask`, tests/smoke hooks. Notion home for *this* run uses `docs/CANONICAL-BRIEF.md` — ignore cards that point at `docs/CANON.md` or other bcIds.
+**Done on this branch:** brief, research, `/ask`, `/api/ask`, tests/smoke/browser QA. Notion draft home: https://app.notion.com/p/3d8b7d53f969817bb2e5e8b5df86f32f (private until Dean moves it). Ignore cards that point at `docs/CANON.md` or other bcIds.
 
 **Not on this checkout:** `CLAUDE.md`, `RELEASE.md`, 149-q eval, Concordance, Codex.
 

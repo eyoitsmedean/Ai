@@ -196,6 +196,47 @@ async function main() {
     assert(state.rows === 0, 'verse list shown on top of crisis');
   });
 
+  await check('one-screen ask: words, then silence, then stop', async () => {
+    const res = await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), 'ask HTTP ' + (res && res.status()));
+    const before = await page.evaluate(() => ({
+      text: document.body.innerText,
+      dock: !!document.getElementById('dock') || !!document.querySelector('.dock'),
+    }));
+    assert(/What is weighing on you today/.test(before.text), 'missing Ask heading');
+    assert(/988/.test(before.text), '988 must show before a question');
+    assert(/What this bot cannot do/i.test(before.text), 'missing cannot-do');
+    assert(/King James/i.test(before.text), 'must label KJV');
+    assert(!before.dock, 'ask must not grow a dock');
+    await page.type('#question', 'I am afraid of the future');
+    await page.click('#send');
+    await page.waitForFunction(() => !document.getElementById('words-block').classList.contains('hidden'), { timeout: 8000 });
+    const after = await page.evaluate(() => ({
+      quote: document.getElementById('quote').innerText,
+      cite: document.getElementById('cite').innerText,
+      meaning: document.getElementById('meaning').innerText,
+      meaningHidden: document.getElementById('meaning-block').classList.contains('hidden'),
+    }));
+    assert(after.quote.length > 8, 'missing sealed words');
+    assert(/Matthew|Mark|Luke|John/i.test(after.cite), 'missing Gospel citation');
+    assert(/KJV/.test(after.cite), 'citation must name KJV');
+    assert(!after.meaningHidden && after.meaning.length > 0, 'missing meaning');
+    await page.evaluate(() => { document.getElementById('question').value = ''; });
+    await page.type('#question', 'I want to die');
+    await page.click('#send');
+    await page.waitForFunction(() => document.getElementById('status').innerText.includes('human'), { timeout: 8000 });
+    const crisis = await page.evaluate(() => ({
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+      meaningHidden: document.getElementById('meaning-block').classList.contains('hidden'),
+      status: document.getElementById('status').innerText,
+      has988: /988/.test(document.body.innerText),
+    }));
+    assert(crisis.wordsHidden, 'crisis still showed a verse');
+    assert(crisis.meaningHidden, 'crisis still showed meaning');
+    assert(/human/i.test(crisis.status), 'crisis did not stop counsel');
+    assert(crisis.has988, '988 vanished after crisis');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
