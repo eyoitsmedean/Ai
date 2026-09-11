@@ -12,7 +12,7 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 2. Crisis path **stops counsel** (folio, `/api/chat`, one-screen, eval).
 3. One-screen lives at `public/one-screen.html` and `/ask`.
 4. Research on five adjacent questions is in `studio/research/`.
-5. Notion child under the existing one-screen page (no new hub).
+5. Notion child under the existing one-screen page (no new hub): https://app.notion.com/p/3d8b7d53f96981e49951d3d8ffcc2160
 
 ## What you should do next (only if you want)
 
