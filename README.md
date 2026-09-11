@@ -44,9 +44,31 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Phones (Red Words)
+
+The same corpus ships as an offline Flutter shell — **Red Words**, *His words, for this moment.*
+
+```bash
+flutter pub get
+flutter test
+flutter build apk          # Android release APK (debug-signed in this repo)
+flutter build appbundle    # Play AAB, same signing
+```
+
+- iOS workspace: `ios/Runner.xcworkspace` — bundle `com.redwords.redWords`
+- Widget: **RedWordsWidget** (`com.redwords.redWords.RedWordsWidget`), App Group `group.com.redwords.redWords`
+- Deep link: `redwords://today`
+- Widget card = the Word only (sentence + citation). No badge, streak, or app name on the card.
+- The widget ships the locked seven-slot rotation inside the extension and rotates at local midnight. Version `0.1.0+4`. iPhone-only (not iPad).
+- A signed IPA still needs a Mac and **Xcode 26**. One sitting: `docs/MAC-DAY.md`. Listing copy: `docs/STORE-LISTING.md`. Runbook: `TESTFLIGHT.md`.
+
+```bash
+node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js
+```
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
 - **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
 
-KJV text is public domain. Attribution is printed beside citations.
+Quoted verses are the King James Version (1769). The KJV is public domain outside the United Kingdom. In the UK, rights in the Authorized Version are vested in the Crown and administered by Cambridge University Press — see About in the app and `TESTFLIGHT.md` before enabling the UK storefront. Citations print `· KJV`.
