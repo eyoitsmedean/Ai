@@ -53,7 +53,7 @@ const identifiers = [
   ['URL scheme', 'redwords://today'],
   ['Display name', 'Red Words'],
   ['iOS floor', '15.0 — Runner and widget'],
-  ['Version', '0.1.0+2'],
+  ['Version', '0.1.0+3'],
   ['Android applicationId', 'com.redwords.red_words'],
 ];
 
@@ -522,7 +522,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
       ${identifiers.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}
       <tr><td>Corpus</td><td>${verseCount} red-letter KJV verses. Zero Romans. Zero Psalms. Zero celebrity.</td></tr>
       <tr><td>Empty catalog</td><td>The page is blank. His words will be here when the book is.</td></tr>
-      <tr><td>Widget clock</td><td>The seven-slot rotation crosses the App Group once. iOS renders one entry per local midnight; Android recomputes from the clock and wakes after midnight. The card is right on mornings no one opens the book.</td></tr>
+      <tr><td>Widget clock</td><td>The locked seven ships inside the widget. iOS renders one entry per local midnight; Android recomputes from the clock. The card is today's Word before the app is opened, and on mornings no one opens the book.</td></tr>
       <tr><td>Rights</td><td>Rights in the Authorized (King James) Version in the United Kingdom are vested in the Crown, administered by Cambridge University Press. Public domain elsewhere. UK availability is Dean’s call.</td></tr>
       <tr><td>Privacy</td><td>Nothing collected. Nothing sent. PRIVACY.md is the policy; About carries it in-app.</td></tr>
     </tbody>
@@ -562,6 +562,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
     <li>Sit: Read → Reflect → Rest → Respond. Amen is allowed to end the room.</li>
     <li>Seven: sit Come. Do not look for a streak.</li>
     <li>Bless: hold the cream leaf up. The brand is not on it.</li>
+    <li>Add the Word widget before turning the page. The card is already today’s sentence.</li>
     <li>Set the phone’s date forward a day. The card changes without you.</li>
     <li>Leave the app on Seek. Tap the widget. You land on Today.</li>
     <li>On a Mac: <code>ios/Runner.xcworkspace</code>, Team on Runner and RedWordsWidget, App Group <code>group.com.redwords.redWords</code>, Archive.</li>

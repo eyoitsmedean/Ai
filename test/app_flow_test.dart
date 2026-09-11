@@ -39,8 +39,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('today-word')), findsOneWidget);
     expect(find.byKey(const Key('today-citation')), findsOneWidget);
+    expect(find.byKey(const Key('home-card')), findsOneWidget);
+    expect(find.byKey(const Key('home-card-word')), findsOneWidget);
+    expect(find.byKey(const Key('home-card-citation')), findsOneWidget);
     expect(find.textContaining('streak'), findsNothing);
     expect(find.textContaining('Roumie'), findsNothing);
+    final card = tester.widget<Text>(find.byKey(const Key('home-card-citation')));
+    expect(card.data, isNot(contains('Red Words')));
   });
 
   testWidgets('redwords://today skips the title leaf', (tester) async {

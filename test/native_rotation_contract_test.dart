@@ -22,6 +22,9 @@ void main() {
     expect(swift.contains('for dayOffset in 1...6'), isTrue);
     expect(swift.contains('.after(nextMidnight)'), isTrue);
     expect(swift.contains('legacy()'), isTrue, reason: 'falls back to word/citation');
+    expect(swift.contains('static let bundled'), isTrue);
+    expect(swift.contains('Luke 12:7'), isTrue);
+    expect(swift.contains('John 14:1'), isTrue);
   });
 
   test('iOS small family shows an opening clause or the address, never an ellipsis rewrite', () {
@@ -45,6 +48,9 @@ void main() {
     expect(kotlin.contains('setAndAllowWhileIdle'), isTrue);
     expect(kotlin.contains('setExactAndAllowWhileIdle'), isFalse, reason: 'no exact-alarm permission');
     expect(kotlin.contains('getString("rotation"'), isTrue);
+    expect(kotlin.contains('val bundled'), isTrue);
+    expect(kotlin.contains('Luke 12:7'), isTrue);
+    expect(kotlin.contains('John 14:1'), isTrue);
     expect(manifest.contains('com.redwords.red_words.MIDNIGHT'), isTrue);
   });
 

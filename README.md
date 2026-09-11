@@ -59,7 +59,8 @@ flutter build appbundle    # Play AAB, same signing
 - Widget: **RedWordsWidget** (`com.redwords.redWords.RedWordsWidget`), App Group `group.com.redwords.redWords`
 - Deep link: `redwords://today`
 - Widget card = the Word only (sentence + citation). No badge, streak, or app name on the card.
-- A signed IPA still needs a Mac. See `TESTFLIGHT.md`.
+- The widget ships the locked seven-slot rotation inside the extension and rotates at local midnight. Version `0.1.0+3`.
+- A signed IPA still needs a Mac and **Xcode 26**. See `TESTFLIGHT.md`.
 
 ```bash
 node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js
@@ -70,4 +71,4 @@ node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/
 - **App (Node):** serve this repo with `npm start`.
 - **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
 
-KJV text is public domain. Attribution is printed beside citations.
+Quoted verses are the King James Version (1769). The KJV is public domain outside the United Kingdom. In the UK, rights in the Authorized Version are vested in the Crown and administered by Cambridge University Press — see About in the app and `TESTFLIGHT.md` before enabling the UK storefront. Citations print `· KJV`.

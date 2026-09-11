@@ -44,6 +44,21 @@ void main() {
     }
   });
 
+  testWidgets('vespers prompt uses the injected clock, not the wall clock', (tester) async {
+    await tester.pumpWidget(
+      RedWordsApp(
+        catalog: catalog(),
+        now: DateTime(2026, 9, 2, 17),
+        session: SessionStore(opened: true),
+        syncWidget: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('today-office')), findsOneWidget);
+    expect(find.text('Vespers'), findsOneWidget);
+    expect(find.text('Whom will you forgive before sleep?'), findsOneWidget);
+  });
+
   testWidgets('lectio starts on Read with the Word', (tester) async {
     await tester.pumpWidget(
       RedWordsApp(

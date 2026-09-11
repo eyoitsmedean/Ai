@@ -1,73 +1,94 @@
-# TestFlight checklist (Dean, on a Mac)
+# Red Words — ship on a Mac
 
-This Linux agent cannot compile a signed IPA. The iOS project is archive-ready with the locked identifiers. No credentials are stored here.
+**Purpose.** Get a TestFlight build and a Play internal build onto a phone.  
+**Owner.** Dean. **Status.** Ready to archive. **Updated.** 2026-09-11.  
+**What changed.** Version is `0.1.0+3`. Uploads must be built with **Xcode 26** (iOS 26 SDK). The widget now ships the locked seven-slot rotation inside the extension, so the card is today's Word before the app is opened. Old debug-APK checksums were removed — they described a previous binary.
+
+No credentials live in this repo. This Linux checkout cannot produce a signed IPA.
 
 ## Identifiers (do not change)
 
 | Item | Value |
 | --- | --- |
-| Workspace | `ios/Runner.xcworkspace` |
+| Workspace | `ios/Runner.xcworkspace` — never the `.xcodeproj` |
 | App bundle | `com.redwords.redWords` |
 | Widget product | `RedWordsWidget` |
 | Widget bundle | `com.redwords.redWords.RedWordsWidget` |
 | App Group | `group.com.redwords.redWords` |
 | URL scheme | `redwords` → `redwords://today` |
 | Display name | Red Words |
-| Deployment | iOS 15.0 (Runner + widget) |
-| Version | `0.1.0+1` in `pubspec.yaml` — bump **+build** if you upload again |
+| iOS floor | 15.0 (Runner and widget) |
+| Version | `0.1.0+3` in `pubspec.yaml` — bump **+build** on every upload |
+| Android applicationId | `com.redwords.red_words` |
 
-## Once, in Apple Developer
+## 1. Once, in Apple Developer
 
-1. Certificates, Identifiers & Profiles → Identifiers → App IDs
-2. Register **com.redwords.redWords** (App) with App Groups + Associated Domains optional
-3. Register **com.redwords.redWords.RedWordsWidget** (App Extension)
-4. Register App Group **group.com.redwords.redWords**
-5. Attach the group to both App IDs
-6. Profiles: iOS App Store for the app, and a matching profile for the widget extension
-7. App Store Connect → New App → Red Words → bundle `com.redwords.redWords`
+1. Identifiers → App IDs → register **com.redwords.redWords** (App) with App Groups.
+2. Register **com.redwords.redWords.RedWordsWidget** (App Extension).
+3. Register App Group **group.com.redwords.redWords**. Attach it to both App IDs.
+4. Profiles: iOS App Store for the app, and a matching profile for the widget.
+5. App Store Connect → New App → Red Words → bundle `com.redwords.redWords`.
 
-## On the Mac
+Xcode can create the group from Signing & Capabilities if you are signed into the team. The container ID must begin with `group.`.
 
-1. Install Flutter stable and Xcode 16+
-2. `cd` this repo, `flutter pub get`
-3. Open **`ios/Runner.xcworkspace`** (not the `.xcodeproj`)
-4. Signing & Capabilities for **Runner**: your Team; confirm App Group `group.com.redwords.redWords`; URL Type `redwords`
-5. Signing & Capabilities for **RedWordsWidget**: same Team; same App Group
-6. Product → Destination → Any iOS Device (arm64)
-7. Product → Archive
-8. Organizer → Distribute App → App Store Connect → Upload
-9. App Store Connect → TestFlight → wait for processing → add testers → **Submit for Review** is optional; Internal Testing is enough for Kid's Day
+## 2. On the Mac
 
-## App Store Connect fields the reviewer will check
+Apple has required, since 28 April 2026, that App Store Connect uploads be built with **Xcode 26 or later** against the **iOS 26 SDK**. The deployment target stays 15.0. Xcode 16 will fail at upload, not in review.
 
-| Field | What to enter | Why |
+1. Install Flutter stable and Xcode 26.
+2. `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer && sudo xcodebuild -license`
+3. `cd` this repo. `flutter pub get`. `npm test`. `flutter test`.
+4. Open **`ios/Runner.xcworkspace`**.
+5. Signing & Capabilities → **Runner**: your Team; App Group `group.com.redwords.redWords`; URL Type `redwords`.
+6. Signing & Capabilities → **RedWordsWidget**: same Team; same App Group.
+7. Build Phases on Runner: **Embed Foundation Extensions** must sit above the Flutter Run Script (Flutter's extension guide).
+8. Product → Destination → Any iOS Device (arm64) → Archive.
+9. Organizer → **Validate App**, then Distribute → App Store Connect → Upload.
+10. TestFlight → Internal testers (up to 100 App Store Connect users). A build lives 90 days. First build of a new app sent to an *external* group goes to App Review; Internal Testing does not.
+
+Kid's Day (2 Sep 2026) already passed. Internal Testing is still the right first track.
+
+## 3. App Store Connect fields
+
+| Field | Enter | Source |
 | --- | --- | --- |
-| Privacy Policy URL | A public URL serving the text of [`PRIVACY.md`](PRIVACY.md) | Guideline 5.1.1(i): every app needs a privacy policy link in metadata **and** in-app. The About leaf already carries the in-app statement. |
-| App Privacy questionnaire | "Data Not Collected" | Nothing leaves the device; no SDKs. |
-| Review notes | "All Scripture is the King James Version (1769), quoted verbatim from a locked corpus; the app cannot display text that is not in that corpus." | Guideline 1.1.5 rejects "inaccurate or misleading quotations of religious texts." The corpus lock is the compliance mechanism. |
-| Screenshots | Today, Sit, Seven Days, Seek, and the widget | Guideline 4.2 judges "app-like" functionality; show the rooms, not only the card. |
-| Availability | **Decide UK.** Rights in the KJV in the United Kingdom are vested in the Crown and administered by Cambridge University Press; its imprint notice waives permission only for liturgical or non-commercial educational use up to 500 verses. Either request permission from CUP's Permissions Department before enabling the UK, or exclude the UK at first release. | Rights, not review. |
+| Privacy Policy URL | A public URL serving [`PRIVACY.md`](PRIVACY.md) | Guideline 5.1.1(i) — required in metadata **and** in-app. About already carries the in-app statement. |
+| App Privacy questionnaire | Data Not Collected | Nothing is transmitted off the device. Apple: data processed only on device is not "collected." |
+| Review notes | "All Scripture is the King James Version (1769), quoted verbatim from a locked corpus; the app cannot display text that is not in that corpus." | Guideline 1.1.5 — "inaccurate or misleading quotations of religious texts." |
+| Screenshots | Today, Sit, Seven Days, Seek, and the widget | Guideline 4.2 — show rooms, not only a card. |
+| Availability | **Decide UK** before first release | KJV rights in the UK are vested in the Crown, administered by Cambridge University Press. CUP's imprint waives permission only for liturgical / non-commercial use up to 500 verses. Request permission, or exclude the UK. |
 
-Google Play: complete the Data safety form as "No data collected" and paste the same privacy URL.
+Age-rating questions in App Store Connect were refreshed in January 2026. Answer them before submit or the update stalls.
 
-## First-run QA on a phone
+## 4. Google Play (internal)
 
-- First open: title leaf, then **Turn the page**
-- Airplane mode: Today still shows a Gospel sentence
-- Long-press home screen → Widget → **Word** (not a badge, not a streak)
-- Tap the widget → app opens Today (`redwords://today`)
-- The card is the sentence + citation only
-- **Unopened-day test:** set the phone's date forward one day (Settings → General → Date & Time, automatic off), return to the home screen. The card should show a different sentence without opening the app. Set the date back.
-- **Warm-start test:** open the app, go to Seek, press home, tap the widget. You should land on Today, not Seek.
-- Small widget: shows the citation, and the opening clause only when it ends on punctuation. Medium and large show the whole sentence.
+Release signing in this repo is the **debug keystore**. Play will reject that as an upload key. No Play upload key is stored here.
 
-## Android artifacts produced on Linux (not store-signed)
+1. In Play Console create the app. Enroll in Play App Signing (default for new apps). Generate a local **upload** keystore on the Mac; keep it out of git.
+2. Point `android/app/build.gradle.kts` `signingConfig` at that upload keystore locally, or sign the AAB with `jarsigner` / `apksigner`. Do not commit the keystore.
+3. `flutter build appbundle`. Upload the AAB to an internal testing track.
+4. Data safety form: required even when nothing is collected. Answer **No** to collection/sharing. Paste the same privacy URL. [Play Console Help — Data safety](https://support.google.com/googleplay/android-developer/answer/10787469).
+5. Target API: Flutter stable here compiles `targetSdk = 36`. New apps and updates must target API 36 from 31 August 2026.
 
-Built on this agent, debug-keystore signed (Play will not accept this as an upload key):
+## 5. First-run QA on a phone
 
-| File | SHA-256 |
+- First open: title leaf, then **Turn the page**.
+- Airplane mode: Today still shows a Gospel sentence.
+- Today shows **THE CARD** — sentence + citation only, no app name inside the frame.
+- Long-press home screen → Widget → **Word** (not a badge, not a streak). The card is already today's Word, even if you never opened the app.
+- Tap the widget → Today (`redwords://today`).
+- **Unopened-day:** Settings → Date & Time → automatic off → +1 day. Home screen card changes. Set the date back.
+- **Warm-start:** open the app, go to Seek, press home, tap the widget. You land on Today, not Seek.
+- Small widget: citation plus an opening clause that ends on punctuation, or the whole sentence when it is short. Medium and large: the whole sentence.
+- About: Crown/Cambridge rights line, privacy sentence, 988.
+
+## If it fails
+
+| Symptom | What to do |
 | --- | --- |
-| `build/app/outputs/flutter-apk/app-release.apk` (44.8MB) | `f836085ca143fc4e053a553afa9974a2209dacd89892ff5b9ae2af17dadd36b5` |
-| `build/app/outputs/bundle/release/app-release.aab` (44.9MB) | `08f5dc8cbd55b0a569469018a4f73eec153b081fa6b215e3bde849dcec033f00` |
-
-Verified in the APK: label **Red Words**, package `com.redwords.red_words`, version `0.1.0` / `1`, `redwords://today`, `RedWordsWidget` receiver, `provides-component: app-widget`. No Play upload key exists in this repo.
+| Upload rejected for SDK / Xcode | You are not on Xcode 26. Install it; do not raise the iOS 15.0 floor. |
+| Widget missing from the gallery | Widget target not embedded, or signing/App Group missing on **RedWordsWidget**. |
+| Widget blank | First install before this revision. Open the app once (title leaf now writes the rotation) or reinstall this build (bundled seven is inside the extension). |
+| Widget tap opens title, not Today | SceneDelegate is the URL capture. Confirm `redwords` URL type on Runner. |
+| Play rejects the AAB | You uploaded a debug-signed artifact. Make an upload keystore. |
+| 4.2 or 1.1.5 bounce | Screenshots must show Sit / Seven / Seek. Review notes must state the corpus lock. |
