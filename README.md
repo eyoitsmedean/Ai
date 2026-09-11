@@ -46,7 +46,7 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 ## Ninety days
 
-`plans/` holds a founder playbook, not product code: five 90-day plans to earn from this and adjacent work, sized to a few hours a week. Open `plans/index.html` in a browser (checklists, ledger, and calendar are saved on the device), run `npm run plans` to open it on a phone over the same Wi-Fi, or read `plans/PLANS.md`. It is not published by the Pages workflow.
+`plans/` holds a founder playbook, not product code: five 90-day plans to earn from this and adjacent work, sized to a few hours a week. Open `plans/index.html` in a browser (this-week card, checklists, ledger, and calendar are saved on the device), run `npm run plans` to open it on a phone over the same Wi-Fi, or read `plans/PLANS.md`. It is not published by the Pages workflow.
 
 ## Deploy
 
