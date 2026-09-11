@@ -32,6 +32,7 @@
   const MAX_STORED_MESSAGES = 60;
 
   let corpusPromise = null;
+  let safetyPackPromise = null;
   let dailyData = null;
   let currentEncData = null;
   let currentEncTheme = null;
@@ -135,6 +136,30 @@
       });
     }
     return corpusPromise;
+  }
+
+  function loadSafetyPack() {
+    if (!safetyPackPromise) {
+      safetyPackPromise = fetch(appUrl('/data/safety-pack.json'), { cache: 'force-cache' }).then(async (response) => {
+        if (!response.ok) throw new Error(`Safety pack request failed (${response.status})`);
+        const data = await response.json();
+        const kinds = data && data.kinds;
+        if (!kinds || !kinds.crisis || !kinds.danger || !kinds.assault || !kinds.greeting) {
+          throw new Error('Safety pack is malformed');
+        }
+        return data;
+      });
+    }
+    return safetyPackPromise;
+  }
+
+  // Same pairing as server finishWithLetter: notice + filled letter.
+  // Never fall through to theme retrieval for a safety kind (D12).
+  function buildOfflineSafetyReply(kind, carried, pack) {
+    const entry = pack && pack.kinds && pack.kinds[kind];
+    if (!entry || !entry.notice || !entry.letter) return null;
+    const body = carried ? (entry.followup || entry.letter) : entry.letter;
+    return `${entry.notice}${body}`;
   }
 
   async function getOfflineDaily() {
@@ -483,6 +508,33 @@
     lines.push('');
     lines.push('_Offline guidance from the Red Letter library (World English Bible)._');
     return lines.join('\n');
+  }
+
+  async function offlineReplyFor(text, crisisKind, carried) {
+    const safety = global.RedLetterSafety;
+    const greeting = safety && typeof safety.looksLikeGreeting === 'function'
+      && safety.looksLikeGreeting(text);
+    if (crisisKind || greeting) {
+      try {
+        const pack = await loadSafetyPack();
+        if (crisisKind) return buildOfflineSafetyReply(crisisKind, carried, pack);
+        return buildOfflineSafetyReply('greeting', false, pack);
+      } catch (_) {
+        return null;
+      }
+    }
+    return buildOfflineAdvisorReply(text);
+  }
+
+  function offlineFailClosed(crisisKind) {
+    if (!crisisKind) {
+      return 'I could not reach the live Advisor just now. Your question is saved — try again when you are connected, or open Seek for encouragement by theme.';
+    }
+    return [
+      'I could not reach the live Advisor, and the saved safety letter is not on this device yet.',
+      'If you are in danger or thinking of ending your life, stop here and get human help now. In the United States, call or text 988. If someone is hurting you, call 1-800-799-7233. For sexual assault, call 1-800-656-4673. Anywhere else, start at https://findahelpline.com.',
+      'I am not a person, and this page is not emergency care. Do not use Seek for this hour.',
+    ].join('\n\n');
   }
 
   function discussToday(shouldSend = false) {
@@ -855,7 +907,13 @@
       const convo = safety && typeof safety.detectConversation === 'function'
         ? safety.detectConversation((chatHistory || []).concat([{ role: 'user', content: text }]))
         : { kind: ownKind, carried: false };
+      // detectConversation already skips a bare greeting after a disclosure
+      // (same doorway as the server). ownKind wins when this turn names it.
       const crisisKind = ownKind || convo.kind;
+      const carried = Boolean(crisisKind && !ownKind && convo.carried);
+      const greeting = !crisisKind && safety && typeof safety.looksLikeGreeting === 'function'
+        && safety.looksLikeGreeting(text);
+      const packSeal = (crisisKind || greeting) ? { source: 'pack' } : null;
       if (crisisKind) {
         const action = typeof crisis.showCrisisModal === 'function'
           ? await crisis.showCrisisModal(crisisKind)
@@ -900,15 +958,18 @@
           }),
         });
         if (!response.ok) {
-          const offline = await buildOfflineAdvisorReply(text);
+          const offline = await offlineReplyFor(text, crisisKind, carried);
           if (offline) {
             setTyping(false);
             rendered = createMessage('assistant', offline, false);
             addChatSaveButton(rendered, offline, text);
+            let offlineSeal = null;
             if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
-              global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline);
+              offlineSeal = await global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline, packSeal);
             }
-            chatHistory.push({ role: 'assistant', content: offline });
+            chatHistory.push(offlineSeal
+              ? { role: 'assistant', content: offline, seal: offlineSeal }
+              : { role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
             showToast(advisorFallbackToast(response.status));
@@ -946,15 +1007,18 @@
       } catch (error) {
         setTyping(false);
         try {
-          const offline = await buildOfflineAdvisorReply(text);
+          const offline = await offlineReplyFor(text, crisisKind, carried);
           if (offline) {
             if (!rendered) rendered = createMessage('assistant', offline, false);
             else updateStreamMessage(rendered, offline, false);
             addChatSaveButton(rendered, offline, text);
+            let offlineSeal = null;
             if (global.RedLetterTrust && typeof global.RedLetterTrust.sealAdvisorMessage === 'function') {
-              global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline);
+              offlineSeal = await global.RedLetterTrust.sealAdvisorMessage(rendered.content, offline, packSeal);
             }
-            chatHistory.push({ role: 'assistant', content: offline });
+            chatHistory.push(offlineSeal
+              ? { role: 'assistant', content: offline, seal: offlineSeal }
+              : { role: 'assistant', content: offline });
             persistChat();
             incrementChatCount();
             showToast(advisorFallbackToast(navigator.onLine === false ? 0 : -1));
@@ -962,12 +1026,8 @@
           }
         } catch (_) { /* fall through */ }
         if (!rendered) rendered = createMessage('assistant', '', false);
-        updateStreamMessage(
-          rendered,
-          'I could not reach the live Advisor just now. Your question is saved — try again when you are connected, or open Seek for encouragement by theme.',
-          false
-        );
-        showToast('Advisor unavailable — try Seek themes');
+        updateStreamMessage(rendered, offlineFailClosed(crisisKind), false);
+        showToast(crisisKind ? 'Reach a person first — numbers are in the letter' : 'Advisor unavailable — try Seek themes');
         console.error('Chat request failed', error);
       }
     } finally {
@@ -1778,6 +1838,8 @@
     importJournalData,
     buildJournalExport,
     advisorFallbackToast,
+    buildOfflineSafetyReply,
+    offlineReplyFor,
     ls,
     lsSet,
     esc,

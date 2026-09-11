@@ -293,8 +293,10 @@
     const list = Array.isArray(messages) ? messages : [];
     const users = list.filter(function (m) { return m && m.role === 'user' && typeof m.content === 'string'; });
     if (!users.length) return { kind: null, carried: false };
-    const current = detectKind(users[users.length - 1].content);
+    const currentText = users[users.length - 1].content;
+    const current = detectKind(currentText);
     if (current) return { kind: current, carried: false };
+    if (looksLikeGreeting(currentText)) return { kind: null, carried: false };
     const n = typeof lookback === 'number' ? lookback : 8;
     const earlier = users.slice(Math.max(0, users.length - 1 - n), users.length - 1);
     for (let i = earlier.length - 1; i >= 0; i -= 1) {
@@ -304,5 +306,26 @@
     return { kind: null, carried: false };
   }
 
-  return { normalize, scrub, detectKind, detectConversation, IDIOMS, CRISIS, ASSAULT, DANGER };
+  // Same doorway as lib/retrieve.js looksLikeGreeting: a bare thanks after a
+  // disclosure is a greeting, not another handoff. Length cap matches the
+  // server so "ok thanks" and a forty-one-character thanks diverge the same way.
+  const GREETING_RE = /^\W*((hi|hello|hey|hiya|yo|good\s+(morning|afternoon|evening|night)|thanks?(\s+you)?(\s+so\s+much)?(\s+for\s+(this|that|listening|the\s+words|your\s+help))?|thank\s+you(\s+so\s+much)?(\s+for\s+(this|that|listening|the\s+words|your\s+help))?|ty|ok(ay)?(\s+thanks?(\s+you)?)?|(ok(ay)?|alright|got\s+it|i\s+see|understood|that\s+helps?|that\s+helped)|amen|bless\s+you|goodnight|good\s+bye|bye|i'?m\s+here|are\s+you\s+there|hello\?|anyone\s+there|(that('?s| is| was) )?(beautiful|helpful|lovely|kind|nice|good)(\s+thank\s+you|\s+thanks)?)[\s.!,]*)+$/i;
+
+  function looksLikeGreeting(query) {
+    const q = String(query || '').trim();
+    return q.length <= 40 && GREETING_RE.test(q);
+  }
+
+  return {
+    normalize,
+    scrub,
+    detectKind,
+    detectConversation,
+    looksLikeGreeting,
+    GREETING_RE,
+    IDIOMS,
+    CRISIS,
+    ASSAULT,
+    DANGER,
+  };
 });

@@ -104,6 +104,19 @@ async function main() {
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
   });
 
+  await check('offline safety pack', async () => {
+    const { res, json } = await req('/data/safety-pack.json');
+    assert(res.ok && json, 'safety pack not served');
+    assert(json.translation === 'KJV', 'safety pack must be KJV');
+    for (const kind of ['crisis', 'danger', 'assault', 'greeting']) {
+      assert(json.kinds && json.kinds[kind] && json.kinds[kind].letter, `missing ${kind} letter`);
+      assert(!String(json.kinds[kind].letter).includes('{{'), `${kind} still has a marker`);
+    }
+    assert(/988/.test(json.kinds.crisis.notice), 'crisis notice missing 988');
+    assert(/1-800-799-7233/.test(json.kinds.danger.notice), 'danger notice missing DV number');
+    assert(/1-800-656-4673/.test(json.kinds.assault.notice), 'assault notice missing RAINN');
+  });
+
   await check('pwa assets', async () => {
     const manifest = await req('/manifest.json');
     assert(manifest.res.ok && manifest.json, 'manifest not served');

@@ -17,8 +17,8 @@ Write the result next to each line: **ok** / **fail (what you saw)**.
 | 5 | Type **"my husband hits me when he drinks"** → send. | A modal interrupts before sending: "This is not yours to endure", a **1-800-799-7233** button, text START to 88788, 911 line. Tap the phone button — the dialer opens with the number. Back → "I am safe right now — continue" → the letter starts with the hotline notice and never tells you to stay. | |
 | 6 | Type **"I want to die"** → send. | The crisis modal (988) appears; tapping **Call or text 988** opens the dialer. | |
 | 7 | Type **"What is the capital of France?"** → send. | The advisor says it will not pretend to answer, names the four Gospels, and offers one verse (Matthew 11:28). | |
-| 8 | Turn on Airplane Mode → close the app → reopen from the icon. | Today's page still opens from cache; the offline banner shows; the Journal opens and past entries are there. Turn Airplane Mode off. | |
-| 9 | Settings (gear) → scroll to the bottom. | The About text mentions KJV and WEB and includes the Cambridge acknowledgement paragraph; the crisis and domestic-violence lines are present and tappable. | |
+| 8 | Turn on Airplane Mode → close the app → reopen from the icon. Then Advisor → type a danger or crisis line → continue past the modal. | Today's page still opens from cache; the offline banner shows; the Journal opens and past entries are there. After continue, the reply is the **fixed letter with the hotline notice**, not a Seek-style theme pack (Forgiveness / Peace) and not only “could not reach the live Advisor.” Turn Airplane Mode off. | |
+| 9 | Settings (gear) → scroll to the bottom. | The About text mentions KJV and WEB and includes the Cambridge acknowledgement paragraph; crisis (988 US, 988.ca), domestic-violence, and RAINN lines are present and tappable. | |
 | 10 | Rotate the phone, then back. | Layout stays usable; nothing overlaps the notch or home indicator. | |
 
 ## Android (Chrome, Android 12 or later) — about 2 minutes
@@ -30,7 +30,7 @@ Write the result next to each line: **ok** / **fail (what you saw)**.
 | 3 | Repeat iPhone steps 3, 5, 6, 7. | Same results; the danger and crisis modals open the phone dialer via `tel:` links. | |
 | 4 | Today → **Listen** on the reading. | Speech starts; the button toggles pause / resume; stop ends it cleanly. | |
 | 5 | Today → **Share**. | The Android share sheet opens with a rendered card image (or the card downloads if the share sheet declines files). | |
-| 6 | Airplane Mode → reopen from the launcher. | Cached Today page loads; offline banner; Journal intact. | |
+| 6 | Airplane Mode → reopen from the launcher. Then Advisor → a danger or crisis line → continue past the modal. | Cached Today page loads; offline banner; Journal intact. After continue, the reply is the **fixed letter with the hotline notice**, not a Seek-style theme pack. | |
 
 ## If anything fails
 

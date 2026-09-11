@@ -1,7 +1,9 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const letters = require('../lib/letters');
-const { lookup } = require('../lib/scripture');
+const fs = require('fs');
+const path = require('path');
+const { lookup, verifyAndSubstitute } = require('../lib/scripture');
 const { dailySystem } = require('../lib/prompts');
 const { judgeQuote } = require('../lib/report');
 
@@ -31,6 +33,38 @@ describe('lib/letters contracts', () => {
       { role: 'user', content: followup },
     ];
     assert.deepEqual(letters.chatSafety(messages, followup), { kind: 'danger', carried: true });
+  });
+
+  it('chatSafety treats a bare thanks after a disclosure as a greeting', () => {
+    const thanks = 'ok thanks';
+    const messages = [
+      { role: 'user', content: 'My husband hits me when he drinks.' },
+      { role: 'assistant', content: 'You named it.' },
+      { role: 'user', content: thanks },
+    ];
+    assert.deepEqual(letters.chatSafety(messages, thanks), { kind: null, carried: false });
+  });
+});
+
+describe('offline safety pack', () => {
+  it('fills every marker, stays red-letter, and matches the committed JSON', () => {
+    const pack = letters.buildSafetyPack();
+    assert.equal(pack.translation, 'KJV');
+    assert.equal(pack.kinds.assault.followup, verifyAndSubstitute(letters.DANGER_FOLLOWUP_LETTER));
+    for (const kind of ['crisis', 'danger', 'assault']) {
+      const entry = pack.kinds[kind];
+      assert.doesNotMatch(entry.letter, /\{\{/);
+      assert.doesNotMatch(entry.followup, /\{\{/);
+      assert.match(entry.letter, /\*\*(Matthew|Mark|Luke|John) \d+:\d+/);
+      assert.match(entry.notice, /findahelpline\.com/);
+    }
+    assert.doesNotMatch(pack.kinds.greeting.letter, /\{\{/);
+    assert.match(pack.kinds.greeting.letter, /\*\*Matthew 11:28\*\*/);
+    assert.match(pack.kinds.crisis.notice, /988/);
+    assert.match(pack.kinds.danger.notice, /1-800-799-7233/);
+    assert.match(pack.kinds.assault.notice, /1-800-656-4673/);
+    const onDisk = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'public', 'data', 'safety-pack.json'), 'utf8'));
+    assert.deepEqual(onDisk, pack);
   });
 });
 

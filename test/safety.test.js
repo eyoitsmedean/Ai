@@ -348,5 +348,18 @@ describe('shared safety detector: held-out phrasings', () => {
     assert.deepEqual(S.detectConversation(convo), { kind: 'danger', carried: true });
     assert.deepEqual(S.detectConversation(convo.slice(0, 1)), { kind: 'danger', carried: false });
     assert.deepEqual(S.detectConversation([{ role: 'user', content: 'my mother died' }]), { kind: null, carried: false });
+    assert.deepEqual(S.detectConversation([
+      { role: 'user', content: 'my husband hits me when he drinks' },
+      { role: 'assistant', content: 'x' },
+      { role: 'user', content: 'ok thanks' },
+    ]), { kind: null, carried: false });
+  });
+
+  it('matches the server greeting doorway on the same phrases', () => {
+    const { looksLikeGreeting: serverGreeting } = require('../lib/retrieve');
+    const phrases = ['hi', 'Thank you.', 'ok thanks', 'amen', 'hello?', 'that helps', 'ok thanks my mother died last week'];
+    for (const t of phrases) {
+      assert.equal(S.looksLikeGreeting(t), serverGreeting(t), t);
+    }
   });
 });
