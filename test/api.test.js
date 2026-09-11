@@ -47,6 +47,9 @@ describe('smoke routes', () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(data.themes, 12);
+    assert.equal(data.model, 'claude-opus-5');
+    assert.equal(data.effort, 'low');
+    assert.equal(data.anthropic, false);
   });
 
   it('serves a verified daily page', async () => {
@@ -77,6 +80,23 @@ describe('smoke routes', () => {
     assert.equal(res.status, 400);
   });
 
+  it('prefixes a crisis letter with 988', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I want to kill myself tonight' }],
+    });
+    assert.equal(res.status, 200);
+    const letter = res.raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert.match(letter, /988/);
+    assert.match(letter, /findahelpline\.com/);
+    assert.match(letter, /Peace I leave with you/);
+  });
+
   it('streams a verified letter for chat', async () => {
     const res = await request('POST', '/api/chat', {
       messages: [{ role: 'user', content: 'I am afraid of the future' }],
@@ -91,9 +111,24 @@ describe('smoke routes', () => {
         try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
       })
       .join('');
-    assert.match(letter, /John 14:27/);
-    assert.match(letter, /Peace I leave with you/);
+    assert.match(letter, /Fear not, little flock|Be not afraid|hairs of your head/);
     assert.match(res.raw, /\[DONE\]/);
+  });
+
+  it('streams a shame letter from the curated pack when the lamp is out', async () => {
+    const res = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'I feel so much shame' }],
+    });
+    assert.equal(res.status, 200);
+    const letter = res.raw
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => {
+        try { return JSON.parse(line.slice(6)).text || ''; } catch (_) { return ''; }
+      })
+      .join('');
+    assert.match(letter, /Luke 15:4/);
+    assert.match(letter, /lost/);
   });
 
   it('accepts a waitlist email and rejects a bad one', async () => {
@@ -122,5 +157,41 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
+  });
+
+  it('serves the one-screen ask page as an internal watch surface', async () => {
+    const res = await request('GET', '/ask');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /noindex/);
+    assert.match(res.raw, /1 · Ask/);
+    assert.match(res.raw, /2 · The words/);
+    assert.match(res.raw, /3 · What that might mean today/);
+    assert.match(res.raw, /4 · What this bot cannot do/);
+    assert.doesNotMatch(res.raw, /Ask Him/i);
+  });
+
+  it('answers /api/ask with sealed speech for shame', async () => {
+    const res = await request('POST', '/api/ask', { q: 'I carry so much shame' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.crisis, false);
+    assert.ok(data.words.some((w) => /Luke 15/.test(w.verse)));
+    assert.ok(data.implication.split('\n').length <= 4);
+    assert.match(data.cannot, /not a pastor/);
+  });
+
+  it('stops /api/ask on crisis — 988, no verses, no implication', async () => {
+    const res = await request('POST', '/api/ask', { content: 'I want to kill myself' });
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.crisis, true);
+    assert.match(data.notice, /988/);
+    assert.deepEqual(data.words, []);
+    assert.equal(data.implication, '');
+  });
+
+  it('rejects an empty ask', async () => {
+    const res = await request('POST', '/api/ask', { q: '   ' });
+    assert.equal(res.status, 400);
   });
 });

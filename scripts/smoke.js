@@ -79,6 +79,7 @@ async function main() {
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
     assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
+    assert(/lost|shepherd|heaven/i.test(body), 'shame should not get a generic peace letter');
   });
 
   await check('welcome landing', async () => {
@@ -88,11 +89,37 @@ async function main() {
     assert(!text.includes('<<<<<<<'), 'conflict markers on welcome');
   });
 
+  await check('one-screen ask', async () => {
+    const page = await req('/ask');
+    assert(page.res.ok, 'ask page not 200');
+    assert(/noindex/.test(page.text), 'ask page must stay unindexed');
+    assert(/1 · Ask/.test(page.text) && /4 · What this bot cannot do/.test(page.text), 'four blocks missing');
+    assert(!/Ask Him/i.test(page.text), 'must not pretend the model is Jesus');
+
+    const shame = await req('/api/ask', {
+      method: 'POST',
+      body: JSON.stringify({ q: 'I feel so much shame' }),
+    });
+    assert(shame.res.ok && shame.json.words?.length, 'ask shame empty');
+    assert(/Luke 15/.test(shame.json.words.map((w) => w.verse).join(' ')), 'shame should open Luke 15');
+
+    const crisis = await req('/api/ask', {
+      method: 'POST',
+      body: JSON.stringify({ q: 'I want to kill myself' }),
+    });
+    assert(crisis.json.crisis === true, 'crisis not flagged');
+    assert(/988/.test(crisis.json.notice || ''), 'crisis missing 988');
+    assert(!crisis.json.words?.length, 'crisis must not quote after 988');
+    assert(!crisis.json.implication, 'crisis must not keep counseling');
+  });
+
   await check('folio shell', async () => {
     const { res, text } = await req('/');
     assert(res.ok, 'app not 200');
     assert(text.includes('sit-step-4'), 'missing lectio respond leaf');
     assert(text.includes('id="amen"'), 'missing Amen');
+    assert(text.includes('amen-bless') || text.includes('Send a blessing'), 'Amen missing blessing');
+    assert(text.includes('sitWithNeed'), 'need should open Sit');
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');
     assert(text.includes('988'), 'missing crisis line');

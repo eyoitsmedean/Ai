@@ -12,7 +12,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 - **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
 - **Journal** — a commonplace book kept on this device, with a quire of words you have sat with
 
-Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts the spoken corpus text, so the model never types the verse. Daily and encouragement JSON are requested as structured output, then verified the same way.
+Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts spoken-corpus text only; narrator verses (genealogies, prologues) are refused even if the KJV has them. Daily and encouragement JSON are requested as structured output, then verified the same way. Unverified model pages fall back to the curated set.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 
@@ -26,11 +26,15 @@ npm start              # http://localhost:3000
 
 Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
 
+**Watch — not a launch.** `http://localhost:3000/ask` is the one-screen advisor (Ask → the words → four lines → what this cannot do). It is `noindex`. Crisis names 988 and stops. The folio at `/` stays paper. Dean records WEB or KJV (US) before any public URL. Do not store-submit. See `docs/CANONICAL-BRIEF.md`.
+
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
 ANTHROPIC_MODEL=claude-opus-5
+ANTHROPIC_EFFORT=low   # thinking effort; thinking counts against max_tokens
 PORT=3000
 API_ACCESS_KEY=        # optional gate for /api/*
+TRUST_PROXY=1          # set when a reverse proxy sets X-Forwarded-For
 ```
 
 ```bash
@@ -47,6 +51,6 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **GitHub Pages:** a historical workflow that publishes `public/`. Do not treat it as a launch while WATCH holds. Do not store-submit.
 
 KJV text is public domain. Attribution is printed beside citations.

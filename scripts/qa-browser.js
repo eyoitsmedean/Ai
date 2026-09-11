@@ -86,7 +86,12 @@ async function main() {
     await page.click('#ob-ack');
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
-    await page.click('.tp-skip');
+    await page.click('button.tp-need-btn');
+    try {
+      await page.waitForFunction(() => document.getElementById('sit-sheet')?.classList.contains('on'), { timeout: 8000 });
+    } catch (_) {
+      await page.click('.tp-skip');
+    }
     await page.waitForFunction(() => document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
     await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 8000 });
     const quote = await page.$eval('#sit-quote', (el) => el.textContent);
@@ -124,6 +129,40 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+  });
+
+  await check('one-screen ask: shame then crisis-stop', async () => {
+    await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    await page.waitForSelector('#ask-form', { timeout: 6000 });
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/watch/i.test(copy), 'missing WATCH mark');
+    assert(/What this bot cannot do/.test(copy), 'missing cannot block');
+    await page.type('#q', 'I carry so much shame');
+    await page.click('#go');
+    await page.waitForFunction(() => {
+      const words = document.getElementById('words');
+      return words && /lost|shepherd|bread|hunger/i.test(words.innerText);
+    }, { timeout: 6000 });
+    const afterShame = await page.evaluate(() => ({
+      words: document.getElementById('words').innerText,
+      imply: document.getElementById('imply').innerText,
+      crisisHidden: document.getElementById('crisis-block').classList.contains('hidden'),
+    }));
+    assert(/Luke 15|John 6/i.test(afterShame.words), 'shame did not seal a saying');
+    assert(afterShame.imply.split('\n').filter(Boolean).length <= 4, 'implication longer than four lines');
+    assert(afterShame.crisisHidden, 'crisis block showed on a non-crisis ask');
+
+    await page.evaluate(() => { document.getElementById('q').value = ''; });
+    await page.type('#q', 'I want to kill myself');
+    await page.click('#go');
+    await page.waitForFunction(() => !document.getElementById('crisis-block').classList.contains('hidden'), { timeout: 6000 });
+    const afterCrisis = await page.evaluate(() => ({
+      notice: document.getElementById('crisis-text').innerText,
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+      implyHidden: document.getElementById('imply-block').classList.contains('hidden'),
+    }));
+    assert(/988/.test(afterCrisis.notice), 'crisis missing 988');
+    assert(afterCrisis.wordsHidden && afterCrisis.implyHidden, 'crisis still showing counsel');
   });
 
   await check('no page errors', async () => {
