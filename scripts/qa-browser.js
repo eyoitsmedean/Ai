@@ -315,6 +315,14 @@ async function main() {
     assert(await modalOpened, 'crisis modal must open before sending');
     const copy = await page.evaluate(() => document.getElementById('crisis-modal').innerText);
     assert(/988/.test(copy) && /helpline/i.test(copy), 'modal must name 988 and a global directory');
+
+    const abuseOpened = page.evaluate(() => {
+      const p = sendMsg('My husband hits me when he is drunk');
+      return new Promise((resolve) => setTimeout(() => resolve(document.getElementById('abuse-modal').classList.contains('on')), 300)).then((on) => { document.getElementById('abuse-close').click(); return p.then(() => on); });
+    });
+    assert(await abuseOpened, 'abuse modal must open before sending');
+    const abuseCopy = await page.evaluate(() => document.getElementById('abuse-modal').innerText);
+    assert(/799-7233/.test(abuseCopy) && /thehotline/i.test(abuseCopy), 'abuse modal must name the domestic violence hotline');
   });
 
   await check('the curated Advisor is never locked, and a new letter clears the thread', async () => {

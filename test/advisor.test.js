@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
-const { OUT_OF_ROOM, CRISIS_BODY, VOICE } = require('../lib/counsel');
+const { OUT_OF_ROOM, CRISIS_BODY, DANGER_BODY, VOICE } = require('../lib/counsel');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -32,6 +32,13 @@ describe('the client lamp-out letter', () => {
     assert.ok(letter.endsWith(CRISIS_BODY.close));
     assert.ok(!letter.includes(OUT_OF_ROOM.hear));
     assert.doesNotMatch(letter, /988/);
+  });
+
+  it('an abuse line uses the danger body, not a weather-verse and not 988', () => {
+    const letter = win.RLA_advise('My husband hits me', { abuse: true });
+    assert.ok(letter.startsWith(DANGER_BODY.hear));
+    assert.ok(letter.includes('Matthew 10:23'));
+    assert.doesNotMatch(letter, /988|Love your enemies/);
   });
 
   it('reads the need from the writer’s words', () => {

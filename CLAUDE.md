@@ -18,6 +18,7 @@ A chat-first advisor that answers a real life question from the direct words of 
 | Red-letter map is verse-level with partial markers; interrupted verses use ` … ` spans; hand-reviewed cases live in `data/spoken-overrides.json`; John 3:16–21 set red as most KJV editions do | settled, disclosed in Room settings | `data/`, `test/spoken.test.js`, `test/map.test.js` |
 | Privacy: journal and ledger stay on the device; anonymous day totals shared only by an explicit toggle; no tracker, no account | settled | `LAUNCH.md`, `README.md` |
 | Crisis: detector on client *and* server (kept identical by test); the modal offers 988 and findahelpline before a crisis line is sent; the server prepends the notice before any verse | settled | `public/index.html`, `lib/scripture.js`, `test/counsel.test.js` |
+| Present danger from another person: a second door (thehotline 1-800-799-7233 · RAINN 1-800-656-HOPE); never open with Matthew 5:39 / 5:44 / Luke 6:27–28 | settled 2026-09-11 | `lib/scripture.js` `looksLikeAbuse`, `lib/counsel.js` `DANGER_BODY` |
 | When no model is available the server writes the letter from the curated rooms for *this* question; never one fixed page | settled 2026-09-06 | `lib/counsel.js` |
 | **The floor**: every letter, model or not, must print at least one of His sayings from the corpus and cite no other author; a model letter that fails is replaced by the room's own letter | settled 2026-09-06 | `lib/counsel.js` `letterPassesFloor`, `server.js` |
 | **Mobile stack: Capacitor around the existing HTML build** (default per brief). Alternative considered: a React Native / Expo rewrite — rejected for now because it duplicates 4,300 lines of working UI and the church-year, path, and ledger logic, and puts two clients on one corpus. Risk accepted: Apple guideline 4.2 / 4.2.2 rejects "repackaged websites"; the shell must ship with what a website cannot do — the whole room offline, the paths kept on the device, the system share sheet for a blessing — and say so in the review notes; see `RELEASE.md`. | settled 2026-09-06 | `capacitor.config.json`, `scripts/build-shell.js`, `RELEASE.md` |
@@ -39,9 +40,10 @@ A chat-first advisor that answers a real life question from the direct words of 
 
 ## How to check the work
 
-`npm test` (87) · `npm run qa` (16 browser checks; needs a running server and Chrome) · `npm run eval` (46 questions against a live server; writes `eval/RESULTS.md`) · `npm run audit` (frame audit).
+`npm test` · `npm run qa` · `npm run eval` (50 questions; writes `eval/RESULTS.md`) · `npm run audit`. Read `docs/CANONICAL_BRIEF.md` before designing anything.
 
 ## Session log
 
+- **2026-09-11** — Recovery commission: canonical brief recovered from 7 user prompts (not 10); abuse/present-danger door; eval 50; research + ship packet. Do not merge other agents’ PRs onto this line.
 - **2026-09-11** — Sprint: curated Advisor never locked after five live letters; client lamp-out letter matches the server (out-of-room + crisis body); keyboard lifts the composer; morning reminder fires on open/focus between 8 and 10; stop a letter / start a new one. PR stacked on #22.
 - **2026-09-06** — Red-letter map repaired and tested; mid-verse named frames cut; lamp-out letter written per question; evaluation set (46) with results; crisis detector widened and synchronised; API-base switch with CORS allow-list; Capacitor decision and shell build; this file and `RELEASE.md` created. PR [#22](https://github.com/eyoitsmedean/Ai/pull/22).
