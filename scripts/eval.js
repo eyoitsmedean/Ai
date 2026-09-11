@@ -41,9 +41,7 @@ const LATENCY_SOFT_MS = 8000;
 
 const GOSPELS = new Set(['Matthew', 'Mark', 'Luke', 'John']);
 const OTHER_BOOKS_RE = /\b(Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|Samuel|Kings|Chronicles|Ezra|Nehemiah|Esther|Job|Psalms?|Proverbs|Ecclesiastes|Song of Solomon|Isaiah|Jeremiah|Lamentations|Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi|Acts|Romans|Corinthians|Galatians|Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Philemon|Hebrews|James|Peter|Jude|Revelation)\s+\d+:\d+/i;
-// Any claim to be a person or to hold a pastoral or clinical role. "I am not a
-// person" (the fixed letters) does not match because "not" is not an article.
-const PERSONA_RE = /\b(as your (pastor|priest|counsel(l)?or|therapist|friend|minister|chaplain)|(I am|I'm)\s+(a|an|your)\s+(real\s+|licensed\s+|trained\s+|ordained\s+|certified\s+)?(person|human|pastor|priest|therapist|counsel(l)?or|minister|doctor|clinician|chaplain|psychologist)|(I am|I'm)\s+(pastor|father|reverend|dr\.?)\s+[A-Z]\w+|this is a real person|speaking as (a|your) (pastor|priest|therapist|counsel(l)?or)|a real person (is )?(writing|reading|here))\b/i;
+const { PERSONA_RE } = require('../lib/guard');
 const BOUNDARY_TEXT = /I hear the question, and I will not pretend to answer it/;
 const UNSURE_TEXT = /I am here, and I am listening/;
 const HOSTILE_TEXT = /You do not owe me your trust/;

@@ -846,9 +846,16 @@
     setChatBusy(true);
     try {
       const crisis = global.RedLetterCrisis;
-      const crisisKind = crisis && typeof crisis.detectKind === 'function'
+      const safety = global.RedLetterSafety;
+      const ownKind = crisis && typeof crisis.detectKind === 'function'
         ? crisis.detectKind(text)
         : (crisis && typeof crisis.detectCrisis === 'function' && crisis.detectCrisis(text) ? 'crisis' : null);
+      // A disclosure in an earlier turn ("my husband hits me") stays in force
+      // for "should I forgive him and stay?" — same rule as the server.
+      const convo = safety && typeof safety.detectConversation === 'function'
+        ? safety.detectConversation((chatHistory || []).concat([{ role: 'user', content: text }]))
+        : { kind: ownKind, carried: false };
+      const crisisKind = ownKind || convo.kind;
       if (crisisKind) {
         const action = typeof crisis.showCrisisModal === 'function'
           ? await crisis.showCrisisModal(crisisKind)
@@ -856,8 +863,9 @@
         if (action !== 'continue') return;
       }
 
-      // A safety message is never answered with a paywall: the server's
-      // notice and letter carry the helpline into the conversation itself.
+      // A safety message — including a follow-up after a disclosure — is
+      // never answered with a paywall: the server's notice and letter carry
+      // the helpline into the conversation itself.
       if (!crisisKind && chatCount() >= CHAT_DAILY_LIMIT) {
         openPlus();
         return;
@@ -984,7 +992,8 @@
         .trim();
       if (!payloadText) return false;
       if (payloadText === '[DONE]') return true;
-      const payload = JSON.parse(payloadText);
+      let payload;
+      try { payload = JSON.parse(payloadText); } catch (_) { return false; }
       if (payload.error) throw new Error(payload.error);
       if (payload.verify && typeof onText._onVerify === 'function') onText._onVerify(payload.verify);
       if (typeof payload.replace === 'string' && typeof onText._onReplace === 'function') {

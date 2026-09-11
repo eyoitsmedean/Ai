@@ -25,7 +25,9 @@ words only — not the whole Bible.
 | D8 | Only red-letter verses may be rendered as quotations. Narrator lines, other authors and unknown references are dropped from a letter together with their context sentence; a model letter left with zero verifiable sayings is replaced by the retrieval letter. | This session |
 | D9 | Off-scope, hostile and greeting inputs receive fixed honest letters with one open door (`Matthew 11:28`), never a verse chosen by coincidence. | This session |
 | D10 | The evaluation set is `eval/questions.json`, run by `npm run eval`; `eval/RESULTS.md` is generated, never hand-edited, and states which path (retrieval or live model) it ran against. | This session |
-| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v17**. | DEPLOY.md |
+| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v18**. | DEPLOY.md |
+| D12 | Suicidality, assault and abuse are answered by the fixed letters and never by the model, on the first turn and on every follow-up of that conversation. The one thing the page must not do in that moment is improvise. | `lib/letters` path / `server.js` `chatSafety`; recorded 2026-09-07, in force since cf575f2 |
+| D13 | A model letter that claims to be a person or that counsels staying/submitting in place is discarded and replaced by the retrieval letter. Same regex is used by `scripts/eval.js`. | `lib/guard.js`, 2026-09-11 |
 
 ## Third-party material and licences (checked 2026-09-06)
 
@@ -54,4 +56,5 @@ words only — not the whole Bible.
 
 - `npm test` (node:test), `npm run smoke -- http://localhost:3000`, `npm run eval` (server must be running; set `RATE_LIMIT_OFF=1` locally).
 - Never describe a check as passed unless it ran. `RELEASE.md` is the checklist that records verified vs unverified.
-- Verbatim scripture enters the code only from the corpus files; hand-picked citations in `server.js` are self-checked at boot against `lookup()` and must be red-letter.
+- Verbatim scripture enters the code only from the corpus files; hand-picked citations in `lib/letters.js` are self-checked when the module loads (`selfCheckCuratedCitations`) against `lookup()` and must be red-letter — a bad citation stops the server from booting.
+- Layout: `server.js` is routes only. Fixed letters: `lib/letters.js`. Prompts: `lib/prompts.js`. Verdicts: `lib/report.js`. Persona/stay guard: `lib/guard.js`. Detectors shared with the page: `public/js/safety-patterns.js`.

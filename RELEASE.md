@@ -3,15 +3,15 @@
 Every line is marked **VERIFIED** (ran this session, evidence given) or
 **UNVERIFIED** (not run here; who runs it and how). Nothing is described as
 passed that was not run. Last updated 2026-09-06 on branch
-`cursor/world-class-red-letter-4ba9` (v1.5.0, cache v17).
+`cursor/world-class-red-letter-4ba9` (v1.5.0, cache v18).
 
 ## Code and tests
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Unit and route tests | **VERIFIED** — `npm test`: 93 tests, 93 pass, 0 fail (node:test, Node 22.14) | Includes `test/safety.test.js` (shared detectors on held-out phrasings and idioms, client/server parity, red-letter guard, scope, no-key letters) and the fake-SDK stream tests (marker hold-back, malformed `{{` never leaks, narrator / other-author / recited-quote drop, zero-citation floor, abuse disclosure persisting across turns, disconnect abort). |
+| Unit and route tests | **VERIFIED** — `npm test`: 104 tests, 104 pass, 0 fail (node:test, Node 22.14) | Includes `test/safety.test.js` (shared detectors on held-out phrasings and idioms, client/server parity, red-letter guard, scope, no-key letters) and the fake-SDK stream tests (marker hold-back, malformed `{{` never leaks, narrator / other-author / recited-quote drop, zero-citation floor, abuse disclosure persisting across turns, disconnect abort). |
 | Smoke against a running server | **VERIFIED** — `node scripts/smoke.js http://localhost:3111`: 9/9 | health, daily, encouragement, verify, library, chat without key, landing, app shell, PWA assets. |
-| Evaluation set, retrieval path (no API key) | **VERIFIED** — `npm run eval`: 98/98 mechanical checks pass; see `eval/RESULTS.md` | Categories: life 31, hostile 6, off-scope 17, crisis 11, danger 13, edge 14, benign idiom 6. Safety and off-scope questions use held-out phrasings and multi-turn histories, and the runner checks that the named fixed letter was actually spoken (or not spoken) — see README, Evaluation set. |
+| Evaluation set, retrieval path (no API key) | **VERIFIED** — `npm run eval`: 100/100 mechanical checks pass; see `eval/RESULTS.md` | Categories: life 31, hostile 6, off-scope 17, crisis 11, danger 15, edge 14, benign idiom 6. Safety and off-scope questions use held-out phrasings and multi-turn histories, and the runner checks that the named fixed letter was actually spoken (or not spoken) — see README, Evaluation set. |
 | Evaluation set, live model path | **UNVERIFIED** — no `ANTHROPIC_API_KEY` in the build environment | Dean: `ANTHROPIC_API_KEY=… RATE_LIMIT_OFF=1 node server.js` then `npm run eval`; commit the regenerated `eval/RESULTS.md`. Any FAIL row blocks release. |
 | Curated citations resolve to red-letter verses | **VERIFIED** — boot-time self-check in `server.js` throws otherwise; server booted cleanly | Covers every `{{…}}` in the fixed letters and every SITUATIONS verse. |
 | Server loads with and without a key | **VERIFIED** (without) / **UNVERIFIED** (with) | With a key: start the server and watch for `✝ The Red Letter Advisor v1.5.0`. |
@@ -41,7 +41,7 @@ passed that was not run. Last updated 2026-09-06 on branch
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Cache version consistent (`?v=17`, `rla-v17-chapel`) | **VERIFIED** — grep: 11 references in index.html, 11 in sw.js, cache name `rla-v17-chapel`, no `v16` left under `public/` | — |
+| Cache version consistent (`?v=18`, `rla-v18-chapel`) | **VERIFIED** — grep: 11 references in index.html, 11 in sw.js, cache name `rla-v18-chapel` | — |
 | Installs and runs on a real iPhone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`, iPhone section. |
 | Installs and runs on a real Android phone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`, Android section. |
 | Offline reload, self-hosted fonts, dark mode, journal persistence | **VERIFIED earlier in this PR** (Playwright wave 2, 15/15, iPhone 13 viewport, headless) — not re-run after this session's client changes | Re-run `/tmp/rla-qa/wave2.cjs` or the device checklist step 8. |

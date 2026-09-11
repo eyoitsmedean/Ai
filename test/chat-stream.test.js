@@ -250,6 +250,20 @@ describe('live advisor stream', () => {
     assert.doesNotMatch(replace2, /1-800-799-7233/);
   });
 
+  it('replaces a live letter that claims to be a person or counsels staying', async () => {
+    tokens = ['As your pastor, I am a real person who cares.\n\n{{John 14:27}}\nPeace.\n'];
+    const res = await post('/api/chat', { messages: [{ role: 'user', content: 'I am so anxious about tomorrow' }] });
+    const replace = frames(res.raw).find((f) => typeof f.replace === 'string').replace;
+    assert.doesNotMatch(replace, /your pastor|real person who cares/);
+    assert.match(replace, /\*\*(John 14:27|Matthew 11:28|Matthew 6:34|Matthew 6:26)\*\*/);
+
+    tokens = ['Forgive him and stay with him tonight.\n\n{{Matthew 11:28}}\nCome.\n'];
+    const res2 = await post('/api/chat', { messages: [{ role: 'user', content: 'I feel lonely tonight' }] });
+    const replace2 = frames(res2.raw).find((f) => typeof f.replace === 'string').replace;
+    assert.doesNotMatch(replace2, /Forgive him and stay|stay with him tonight/);
+    assert.match(replace2, /\*\*(Matthew 11:28|John 14:27|John 14:18)\*\*/);
+  });
+
   it('aborts the model stream when the client disconnects', async () => {
     tokens = Array.from({ length: 40 }, (_, i) => `word${i} `);
     const before = aborted;
