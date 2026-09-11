@@ -22,8 +22,9 @@
       --measure: 42rem;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
+      overflow-x: hidden;
       margin: 0;
       background:
         radial-gradient(1200px 600px at 10% -10%, rgba(143, 29, 29, 0.05), transparent 50%),
@@ -114,6 +115,7 @@
     h1 em { color: var(--crimson); font-style: italic; }
     h2 { font-size: 1.85rem; }
     h3 { font-size: 1.2rem; font-style: italic; }
+    p, li, td, .copy, .lead { overflow-wrap: anywhere; word-break: break-word; }
     p.lead { font-size: 1.22rem; max-width: var(--measure); }
     .colophon, .muted, .tiny { color: var(--muted); }
     .tiny { font-family: "Instrument Sans", sans-serif; font-size: 0.78rem; letter-spacing: 0.04em; }
@@ -312,8 +314,26 @@
       font-family: "Instrument Sans", sans-serif;
       letter-spacing: 0.04em;
     }
-    .chosen-banner.show { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .chosen-banner.show { display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap; }
     .chosen-banner button { background: var(--folio); color: var(--ink); border: 0; padding: 0.35rem 0.6rem; cursor: pointer; }
+    .tonight-dock {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      background: var(--folio);
+      border-bottom: 1px solid var(--ink);
+      padding: 0.85rem 1.1rem 1rem;
+    }
+    .tonight-dock.show { display: block; }
+    .chosen-banner.show ~ .tonight-dock.show { top: 3.1rem; }
+    .tonight-dock ol { margin: 0.45rem 0 0.7rem; padding-left: 1.15rem; }
+    .tonight-dock li { margin: 0.2rem 0; }
+    .tonight-dock .tiny { margin: 0 0 0.35rem; }
+    .run-btn {
+      margin-top: 0.55rem;
+      display: inline-block;
+    }
     body.focus-I .plan:not(#plan-I),
     body.focus-II .plan:not(#plan-II),
     body.focus-III .plan:not(#plan-III),
@@ -321,12 +341,22 @@
     body.focus-V .plan:not(#plan-V) { display: none; }
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; }
-      nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
-      main { padding: 1.2rem 1rem 4rem; }
-      .leaf { padding: 1.3rem 1.05rem 1.5rem; }
+      nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding: 0.9rem 1rem 1rem; }
+      nav .toc-rest { display: none; }
+      nav.is-open .toc-rest { display: block; }
+      #tocToggle { display: inline-block; margin-top: 0.65rem; }
+      main { padding: 1.1rem 0.85rem 4rem; }
+      .leaf { padding: 1.2rem 0.95rem 1.4rem; }
       .grid-2, .grid-3, .laws, .weeks, .night { grid-template-columns: 1fr; }
       table { font-size: 0.86rem; }
+      h1 { font-size: 2.15rem; }
+      .plan-head { flex-direction: column; align-items: flex-start; }
+      .badge { white-space: normal; }
+      .copy { padding-right: 4.4rem; }
+      .chosen-banner.show ~ .tonight-dock.show { top: 0; }
+      .chosen-banner.show { position: relative; }
     }
+    #tocToggle { display: none; }
     @media print {
       nav, .actions, .chosen-banner, .copy button { display: none !important; }
       body { background: white; }
@@ -343,10 +373,20 @@
     <span id="chosenText"></span>
     <button type="button" id="clearChoice">Show all five</button>
   </div>
+  <aside class="tonight-dock" id="tonightDock" aria-label="Tonight">
+    <p class="tiny" id="tonightLabel">Tonight · three moves</p>
+    <ol id="tonightSteps"></ol>
+    <div class="actions" style="margin-top:0">
+      <button class="btn" type="button" id="tonightCopy">Copy tonight’s ask</button>
+      <a class="btn ghost" id="tonightJump" href="#board">Open the plan</a>
+    </div>
+  </aside>
   <div class="shell">
     <nav aria-label="Folio">
       <div class="mark" aria-hidden="true">D</div>
       <p class="eyebrow">4 Sep – 3 Dec 2026</p>
+      <button class="btn ghost" type="button" id="tocToggle">Contents</button>
+      <div class="toc-rest">
       <a class="toc" href="#cover">Title page</a>
       <a class="toc" href="#you">What is already true</a>
       <a class="toc" href="#laws">Seven laws</a>
@@ -366,6 +406,7 @@
       <p class="eyebrow">Close</p>
       <a class="toc" href="#pick">Pick in 20 minutes</a>
       <a class="toc" href="#sunday">Sunday close</a>
+      </div>
     </nav>
     <main>
       <article class="leaf" id="cover">
@@ -377,7 +418,7 @@
           <div class="stat"><div class="n">1</div><div class="k">Active plan. Never five.</div></div>
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
-        <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; working papers deepened and every load-bearing number audited against live sources 5 September 2026 (see <a href="#evidence">Evidence book</a>). Sources: this repo, Notion “My Life,” public GitHub, Hugging Face, X voice, cloud-agent history. Public copy is family-safe. The private Notion twin carries your real names and page links.</p>
+        <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; numbers audited 5 September; run-sprint 11 September (phone, tonight strip, scoreboard lock, copy-ready asks — see <a href="#evidence">Evidence book</a>). Public copy is family-safe. The private Notion twin carries your real names and page links.</p>
         <div class="actions">
           <button class="btn" type="button" id="unfoldAll">Unfold all working papers</button>
           <button class="btn ghost" type="button" id="foldAll">Fold them</button>
@@ -445,35 +486,40 @@
             </thead>
             <tbody>
               <tr class="pick">
-                <td><strong>I · The Lamp</strong><br>AI artifact evaluator</td>
+                <td><strong>I · The Lamp</strong><br>AI artifact evaluator
+                  <button class="btn run-btn" type="button" data-choose="I">Run The Lamp</button></td>
                 <td>$3,200–$7,680 at 5–8 hrs/wk if accepted</td>
                 <td>No clients. No ads. Your actual job skill. Packet already built.</td>
                 <td>Selection, empty queue, March 2026 platform breach, conflict-of-interest adjacency to the day job</td>
                 <td>Best</td>
               </tr>
               <tr>
-                <td><strong>II · The Room</strong><br>Pitch-to-practice</td>
+                <td><strong>II · The Room</strong><br>Pitch-to-practice
+                  <button class="btn run-btn" type="button" data-choose="II">Run The Room</button></td>
                 <td>$1,396–$2,792 for 4–8 sessions at $349</td>
                 <td>You already run rooms. One 75-minute product. Fast yes.</td>
                 <td>Finding four buyers without the employer graph</td>
                 <td>Good</td>
               </tr>
               <tr>
-                <td><strong>III · The Handoff</strong><br>Workflow Rescue</td>
+                <td><strong>III · The Handoff</strong><br>Workflow Rescue
+                  <button class="btn run-btn" type="button" data-choose="III">Run The Handoff</button></td>
                 <td>$1,500–$3,750 for 1–2 units</td>
                 <td>Highest clean-room ticket you already specified.</td>
                 <td>Longer sales cycle; 20-hour delivery; scope creep</td>
                 <td>Medium</td>
               </tr>
               <tr>
-                <td><strong>IV · The Storefront</strong><br>Friction Audit</td>
+                <td><strong>IV · The Storefront</strong><br>Friction Audit
+                  <button class="btn run-btn" type="button" data-choose="IV">Run The Storefront</button></td>
                 <td>$1,770–$2,950 for 6–10 at $295</td>
                 <td>Walkable Front Range businesses. Public pages only. Same week cash.</td>
                 <td>Hourly floor is tight; easy to underprice your judgment</td>
                 <td>Good</td>
               </tr>
               <tr>
-                <td><strong>V · The Folio</strong><br>Red Letter Advent</td>
+                <td><strong>V · The Folio</strong><br>Red Letter Advent
+                  <button class="btn run-btn" type="button" data-choose="V">Run The Folio</button></td>
                 <td>$0–$2,000 honest range; likely waitlist, not payroll</td>
                 <td>The product exists. Advent falls inside the 90 days. Lent 2027 is the real payday.</td>
                 <td>Consumer apps do not pay a new dad in 12 weeks</td>
@@ -530,6 +576,8 @@
         </ol>
         <h3>Copy — availability line</h3>
         <div class="copy" data-copy="I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
+        <h3>Copy — Saturday apply (only if all five gates are Clear)</h3>
+        <div class="copy" data-copy="I’m applying for the Training / Onboarding / L&amp;D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.">I’m applying for the Training / Onboarding / L&amp;D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.</div>
         <p class="kill"><strong>Kill.</strong> Experience you cannot substantiate. A handbook clause you will not read, or an approval you will not wait for. A trial that wants agent-written scores. Monitoring that cannot be isolated on a separate machine. Twenty-one idle days after acceptance. Hours that shove bedtime.</p>
         <details class="papers">
           <summary>Working papers · The Lamp</summary>
@@ -690,6 +738,12 @@
           <div class="week"><h4>Wk 6–9</h4><p>Deliver one beta or park. Invoice 50% to start, 50% on acceptance.</p></div>
           <div class="week"><h4>Wk 10–12</h4><p>If accepted and hours held: a second beta or reprice to $2,250. If 40 asks and zero paid: kill.</p></div>
         </div>
+        <h3>First 60 minutes</h3>
+        <ol>
+          <li>Only if The Lamp is Park or Close. Two plans is a failed week.</li>
+          <li>Write Cedar &amp; Pine through invoice. Stop at hour 10 even if ugly.</li>
+          <li>List twenty public Maps firms. Do not send the ask tonight.</li>
+        </ol>
         <h3>Copy — outreach</h3>
         <div class="copy" data-copy="Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / nobody called me back] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / “nobody called me back”] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
         <p class="kill"><strong>Kill.</strong> They want an agency retainer. They need logins you should not have. The process is safety-critical. You recognize the firm from work. Delivery will take nights you do not have.</p>
@@ -1147,7 +1201,7 @@ A quiet page for the words Jesus spoke. Free.</div>
         <p class="muted">Sources: this repository (Red Letter product, <code>LAUNCH.md</code>, <code>MARKET_STRATEGY.md</code>), Notion workspace “My Life” (DeanOS, Venture Studio, M4, side-hustle shelf, Newborn Mode, This week), public GitHub <code>eyoitsmedean/Ai</code>, Hugging Face <code>nowaymyguy</code> (no repos), X <code>@Muricaenjoyer</code> (voice, not a channel), Cursor cloud-agent history (native-app ship attempts, Muse, QA). Granola was not signed in. Employer knowledge bases were not used as ingredients.</p>
         <p class="muted">This page does not authorize applications, outreach, purchases, or publishing. You do.</p>
         <footer class="colophon">
-          Printed for one person · 5 September 2026 · Working papers folded until you ask · Every number audited against a live source the same day
+          Printed for one person · 11 September 2026 · Pick one plan · Tonight’s three moves sit at the top
         </footer>
       </article>
     </main>
@@ -1155,6 +1209,10 @@ A quiet page for the words Jesus spoke. Free.</div>
   <script>
     const banner = document.getElementById("chosenBanner");
     const chosenText = document.getElementById("chosenText");
+    const tonightDock = document.getElementById("tonightDock");
+    const tonightSteps = document.getElementById("tonightSteps");
+    const tonightCopy = document.getElementById("tonightCopy");
+    const tonightJump = document.getElementById("tonightJump");
     const names = {
       I: "The Lamp — evaluator cash",
       II: "The Room — $349 rehearsal",
@@ -1162,15 +1220,79 @@ A quiet page for the words Jesus spoke. Free.</div>
       IV: "The Storefront — $295 friction audit",
       V: "The Folio — Red Letter Advent"
     };
-    function applyChoice(id) {
+    const tonight = {
+      I: {
+        steps: [
+          "Household window confirmed? If no or unknown, close this folio.",
+          "Fill the five truth gates. Any Blocked kills the plan — do not apply “to see.”",
+          "If Pursue: save the LLM policy. That is the whole night. Apply only after Gate 4 is Clear."
+        ],
+        ask: "I’m applying for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output."
+      },
+      II: {
+        steps: [
+          "Write the eight-line offer. Price $349 on the first line.",
+          "Invent the 12-minute Northwind Outfitters case. Not an industry you serve at work.",
+          "List ten humans outside the employer graph. Do not message them tonight."
+        ],
+        ask: "If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits."
+      },
+      III: {
+        steps: [
+          "Only if The Lamp is Park or Close. Otherwise this is a second sprint.",
+          "Cap the Cedar & Pine sample at 10 hours, even if ugly.",
+          "Write 20 Maps names from public listings. No asks tonight."
+        ],
+        ask: "Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent."
+      },
+      IV: {
+        steps: [
+          "Phone, personal hotspot, screenshot folder, $295 note with two blanks.",
+          "Ten Maps listings in one town you already drive. Skip any shop you know from work.",
+          "Walk one public path. Write two stalls as observations. Do not submit a form."
+        ],
+        ask: "I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $295 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week."
+      },
+      V: {
+        steps: [
+          "Put the room on a URL you can text. If Pages is live, that counts.",
+          "Sit lectio as a stranger: /?fresh=1. Do not open the codebase.",
+          "Send one blessing to one real person. If the button is furniture, that is the only bug."
+        ],
+        ask: "I was carrying Tuesday on Monday. Then I sat with one sentence.\n[Matthew 6:34 or John 14:27 in crimson]\nA quiet page for the words Jesus spoke. Free."
+      }
+    };
+    function paintTonight(id) {
+      const pack = tonight[id];
+      tonightSteps.innerHTML = "";
+      if (!pack) {
+        tonightDock.classList.remove("show");
+        return;
+      }
+      pack.steps.forEach((line) => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        tonightSteps.appendChild(li);
+      });
+      tonightJump.href = "#plan-" + id;
+      tonightJump.textContent = "Open " + names[id].split("—")[0].trim();
+      tonightDock.classList.add("show");
+    }
+    function applyChoice(id, opts) {
+      const scroll = !opts || opts.scroll !== false;
       document.body.className = id ? "focus-" + id : "";
       if (id) {
         banner.classList.add("show");
         chosenText.textContent = "This quarter: " + names[id] + ". The others are paper.";
         localStorage.setItem("ninety-days-plan", id);
-        document.getElementById("plan-" + id).scrollIntoView({ behavior: "smooth", block: "start" });
+        paintTonight(id);
+        if (scroll) {
+          const dock = document.getElementById("tonightDock");
+          dock.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       } else {
         banner.classList.remove("show");
+        tonightDock.classList.remove("show");
         localStorage.removeItem("ninety-days-plan");
       }
     }
@@ -1178,6 +1300,14 @@ A quiet page for the words Jesus spoke. Free.</div>
       btn.addEventListener("click", () => applyChoice(btn.getAttribute("data-choose")));
     });
     document.getElementById("clearChoice").addEventListener("click", () => applyChoice(""));
+    tonightCopy.addEventListener("click", async () => {
+      const id = localStorage.getItem("ninety-days-plan");
+      const pack = tonight[id];
+      if (!pack) return;
+      await navigator.clipboard.writeText(pack.ask);
+      tonightCopy.textContent = "Copied";
+      setTimeout(() => { tonightCopy.textContent = "Copy tonight’s ask"; }, 1400);
+    });
     document.querySelectorAll(".copy").forEach((block) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -1191,13 +1321,27 @@ A quiet page for the words Jesus spoke. Free.</div>
       block.appendChild(btn);
     });
     const saved = localStorage.getItem("ninety-days-plan");
-    if (saved && names[saved]) applyChoice(saved);
+    if (saved && names[saved]) applyChoice(saved, { scroll: false });
     function setPapers(open) {
       document.querySelectorAll("details.papers").forEach((d) => { d.open = open; });
     }
     document.getElementById("unfoldAll").addEventListener("click", () => setPapers(true));
     document.getElementById("foldAll").addEventListener("click", () => setPapers(false));
     window.addEventListener("beforeprint", () => setPapers(true));
+    const tocToggle = document.getElementById("tocToggle");
+    const nav = document.querySelector("nav");
+    tocToggle.addEventListener("click", () => {
+      nav.classList.toggle("is-open");
+      tocToggle.textContent = nav.classList.contains("is-open") ? "Hide contents" : "Contents";
+    });
+    document.querySelectorAll("nav a.toc").forEach((a) => {
+      a.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 860px)").matches) {
+          nav.classList.remove("is-open");
+          tocToggle.textContent = "Contents";
+        }
+      });
+    });
   </script>
 </body>
 </html>

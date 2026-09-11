@@ -80,6 +80,7 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-06 | Colorado 4.4% for 2026 re-confirmed; TABOR can lower it temporarily (SB24-228 mechanism) | VERIFIED | folio Evidence book note "TABOR-adjustable" |
 | 2026-09-06 | Handoff ceiling $3,750 (beta + one standard unit), not $4,500; hourly stretch ≈ $94 blended | INFERRED from the plan's own weeks | folio Scoreboard, 90-day math, economics, keep table; canvas III; Notion hub and runbook |
 | 2026-09-06 | Butler v. San Miguel County gets a second citation (491 P.3d 506, vLex) | VERIFIED | folio Evidence book, canvas Evidence |
+| 2026-09-11 | Run sprint: phone layout, tonight strip, scoreboard lock, copy-ready Saturday asks | recorded | folio title page, scoreboard, tonight dock |
 
 ## Open questions (batched; recommended default in parentheses)
 
