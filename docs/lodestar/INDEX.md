@@ -19,6 +19,8 @@
 | Choice receipt | deliverable | `plans/index.html` `#choice` | C1, C6 |
 | Ship Package | ship | `docs/lodestar/SHIP.md` | Phase 6 |
 | Defect register | review | `docs/lodestar/DEFECTS.md` | Phase 5 |
-| Director’s Cut | extra | `docs/lodestar/DIRECTORS-CUT.md` | own |
+| Director’s Cut | extra | `docs/lodestar/DIRECTORS-CUT.md` · `plans/hold.html` | own |
+| Capability Census | census | `docs/lodestar/CENSUS.md` | C5 |
+| Playbook QA | test | `scripts/qa-plans.js` · `plans/test-honest-cash.js` | C5 |
 
 **Live Notion (do not overwrite):** This week · Operator Card v2 · Lamp v2 · Room v2 · Sunday close 14 Sep · iOS F1–F3.

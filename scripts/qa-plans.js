@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+/** Phone-viewport QA for the Ninety Days playbook. */
+const puppeteer = require('puppeteer-core');
+const BASE = process.argv[2] || 'http://127.0.0.1:3010';
+const CHROME = process.env.CHROME_PATH || '/usr/local/bin/google-chrome';
+
+function assert(cond, msg) { if (!cond) throw new Error(msg); }
+
+async function main() {
+  const fails = [];
+  const check = async (name, fn) => {
+    try { await fn(); console.log('ok', name); }
+    catch (e) { fails.push(name + ': ' + e.message); console.error('FAIL', name, e.message); }
+  };
+  const browser = await puppeteer.launch({
+    executablePath: CHROME,
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+  });
+  const page = await browser.newPage();
+  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 });
+  const errors = [];
+  page.on('pageerror', (err) => errors.push(String(err)));
+
+  const shotDir = process.env.SHOT_DIR || '/opt/cursor/artifacts/screenshots';
+  const fs = require('fs');
+  fs.mkdirSync(shotDir, { recursive: true });
+  const shot = async (name) => {
+    await page.screenshot({ path: shotDir + '/' + name + '.png', fullPage: false });
+  };
+
+  await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+  await page.evaluate(() => localStorage.removeItem('ninety.v1'));
+  await page.reload({ waitUntil: 'networkidle0' });
+  await shot('playbook-hold-first-screen');
+
+  await check('HOLD card on first screen', async () => {
+    const t = await page.$eval('#now', el => el.innerText);
+    assert(/Money waits/i.test(t), 'missing HOLD headline: ' + t.slice(0, 200));
+    assert(/\$0/.test(t), 'HOLD card should show $0');
+    assert(!/send five/i.test(t), 'must not tell him to send videos');
+  });
+
+  await check('honest cash fact is $0', async () => {
+    const v = await page.$eval('#f-base', el => el.textContent.trim());
+    assert(v === '$0', 'f-base is ' + v);
+  });
+
+  await check('default lane is none', async () => {
+    const rec = await page.$eval('#receipt', el => el.innerText);
+    assert(/No lane is written/i.test(rec), rec);
+  });
+
+  await check('write Lamp under HOLD stays $0', async () => {
+    await page.click('#choice button[data-lane="lamp"]');
+    const rec = await page.$eval('#receipt', el => el.innerText);
+    assert(/The Lamp/i.test(rec), rec);
+    const cash = await page.$eval('#honest', el => el.innerText);
+    assert(/\$0/.test(cash), cash);
+    assert(/window is not open/i.test(cash), cash);
+    assert(!/1,920/.test(cash), 'must not model six weeks');
+  });
+
+  await check('Lamp caption after local Confirmed', async () => {
+    await page.click('#household button[data-w="confirmed"]');
+    const cash = await page.$eval('#honest', el => el.innerText);
+    assert(/\$0 until a billed hour/i.test(cash), cash);
+    assert(!/80/.test(cash) || /Do not multiply/.test(cash), cash);
+    await shot('playbook-lamp-window-open');
+    await page.click('#household button[data-w="not"]');
+  });
+
+  await check('write Storefront still $0 while HOLD', async () => {
+    await page.click('#choice button[data-lane="storefront"]');
+    const rec = await page.$eval('#receipt', el => el.innerText);
+    assert(/Storefront/i.test(rec) && /\$595/.test(rec), rec);
+    const v = await page.$eval('#f-base', el => el.textContent.trim());
+    assert(v === '$0', 'storefront under HOLD must stay $0, got ' + v);
+  });
+
+  await check('Advent week 1 has no buy button', async () => {
+    const res = await page.goto(BASE + '/advent.html', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'advent HTTP ' + (res && res.status()));
+    const t = await page.evaluate(() => document.body.innerText);
+    assert(/Come/i.test(t) && /Matthew 11:28/.test(t), 'missing Day 1');
+    assert(/not for sale/i.test(t), 'missing not-for-sale');
+    assert(!/Stripe|Buy|\$12/.test(t), 'commerce leaked onto Advent');
+    await shot('advent-week-1');
+  });
+
+  await check('offer sheets lock $595', async () => {
+    const res = await page.goto(BASE + '/offers.html', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'offers HTTP');
+    const t = await page.evaluate(() => document.body.innerText);
+    assert(/\$595/.test(t) && /\$349/.test(t) && /\$1,500/.test(t), 'missing Notion locks');
+    assert(/HOLD/.test(t), 'missing HOLD');
+  });
+
+  await check('hold receipt', async () => {
+    const res = await page.goto(BASE + '/hold.html', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'hold HTTP');
+    const t = await page.evaluate(() => document.body.innerText);
+    assert(/\$0/.test(t) && /Not confirmed/.test(t), t.slice(0, 200));
+  });
+
+  await check('no page errors on playbook', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    assert(errors.length === 0, errors.join(' | '));
+    await page.setViewport({ width: 1280, height: 800, deviceScaleFactor: 1 });
+    await shot('playbook-desktop-hold');
+  });
+
+  await browser.close();
+  if (fails.length) {
+    console.error('\n' + fails.length + ' failed');
+    process.exit(1);
+  }
+  console.log('\nall passed');
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });

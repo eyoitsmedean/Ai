@@ -63,53 +63,41 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 
 Build (4 Sep → the birth, about 5 weeks): sell, deliver, close the queues. Baby (birth + 30 days): zero optional hours; links stay live. Build (→ 3 Dec, about 3–4 weeks): re-open into Veterans Day and Advent. The playbook assumes the birth around 10 Oct; the HTML moves the phases when you set the real date.
 
-**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Real hours:** about 39 of a nominal 59 (4.5/week × 13 weeks, minus the 31 Baby days) · **Floor:** $350
+**Window:** Fri 4 Sep – Thu 3 Dec 2026 · **Honest cash until a billed hour:** $0 · **Reserve rule:** 35%
 
 ---
 
-## Choose — the recommended stack
+## Choose — write one Notion lane
 
-| Role | Plan | Why |
+| Lane | Lock | When |
 | --- | --- | --- |
-| **Engine** | I · One-Fix Friday | Highest probability of a first dollar. Local, visual, bounded, two-hour builds. |
-| **Background** | II · Red Letter — Advent | Already built. Finish in September, set 1 Nov to launch by itself, sleep in between. The rehearsal for Lent. |
-| **Swap** | III · The Voice Capsule | The most *you* of the five — and it does not fit beside Advent (see the hours below). Advent now and the Capsule at Memorial Day, or the Capsule now and Advent stays free. |
-| **Optional** | IV · The Civilian Interview | Fastest to sell, easiest to stop. Swap for Plan I if you'd rather talk to veterans than plumbers. |
-| **Upsell** | V · Workflow Rescue | Never sold cold. The answer to a question a One-Fix client will ask — and eleven hours found inside the same budget. |
+| **I · The Lamp** | $0 until billed. Listing $80–$120 is not expected cash. | Grocery default after five truth gates. APPLY HOLD. |
+| **II · The Room** | $349 · 0–3 | If Lamp is blocked and you can name ten humans outside work. |
+| **III · The Handoff** | $1,500 · 12h cap | Never cold. Never with Storefront. |
+| **IV · The Storefront** | $595 · 0–2 | If you would rather walk a public path than coach. GitHub $350 is a draft. |
+| **V · The Folio** | $0 this quarter | Parked as cash. [Advent Week 1](./advent.html) is written. Voice Capsule is parked. |
 
-### Does it fit? — the hours
+Hours below are a drawer. They do not authorize a stack. The old “engine + background ≈ $1,350” headline is retired.
 
-Planning estimates against 4.5 optional hours per Build week; Baby is zero by rule. With the birth on 10 Oct there are about **23 hours before** (5.1 Build weeks) and **15.5 after** (3.4 Build weeks). The HTML recomputes this from the real date.
+### Does it fit? — the hours (drawer)
 
-| Plan | Before the birth | After | Base cash |
-| --- | --- | --- | --- |
-| I · One-Fix Friday (3 h / Build week) | 15.5 h | 10.5 h | $700 + $350 |
-| II · Advent (1.5 h / Sept week + 2.5 in Nov) | 7.5 h | 2.5 h | $300 |
-| III · Voice Capsule (7 h sample + 7 h per capsule) | 7 h | 14 h | $990 |
-| IV · Civilian Interview (1 h / week + 1.5 h per session) | 9.5 h | 8 h | $298 + $447 |
-| V · Workflow Rescue (one client, either Build) | 11 h | 11 h | $1,500 |
-| **Available** | **23 h** | **15.5 h** | |
+Planning estimates against 4.5 optional hours per Build week; Baby is zero by rule. Notion later locked **8 hours all-in**. If those disagree, Notion wins. The HTML recomputes Build hours from the birth date.
 
-- **I + II** (recommended): 23 h before, 13 h after — fits, with two hours to spare after the birth and none before. Base $1,350, stretch $4,000.
-- **I + II + III**: over by 7 h before and 11.5 h after. It does not fit. This is why the Capsule is a swap, not an addition.
-- **I + III**: fits before (22.5 h); over by 9 h after unless One-Fix stops sending in November. Base $2,040.
-- **V** on top of anything: eleven hours that must come out of One-Fix's sends in the same Build. Take it when asked; drop the sends that week.
-
-The old headline — "Engine + Background + Seasonal ≈ $2,700" — assumed hours that do not exist. It is gone.
+GitHub names in the drawer: One-Fix = Storefront draft · Advent = Folio · Voice = parked · Civilian = Room draft · Rescue = Handoff.
 
 ---
 
-## Side by side
+## Side by side — Notion locks, not forecasts
 
-| # | Plan | Price | 90-day cash (floor · base · stretch) | The arithmetic behind the base | Hours in the window | First dollar |
-| --- | --- | --- | --- | --- | --- | --- |
-| I | One-Fix Friday | $350 flat, refund if it doesn't help | $350 · **$1,050** · $2,800 | ~40 videos sent → 3 paid (≈ 1 in 13); stretch 8 | ≈ 26 h (3 / Build week) | Fri 18 Sep |
-| II | Red Letter — Advent edition | $12 PDF; $59.99 year only after 10 PDFs | $0 · **$300** · $1,200 | 25 PDFs; stretch 60 PDFs + 8 Years | ≈ 10 h | Sun 1 Nov (pre-orders) |
-| III | The Voice Capsule | $495 founding (first 3); $750–950 after | $0 · **$990** · $1,485 | 2 capsules paid in full; stretch 3 | ≈ 21 h (+ unpaid sample) | Wed 11 Nov (deposits) |
-| IV | The Civilian Interview | $149 founding (first 5); $199 after | $149 · **$745** · $1,340 | 5 × $149; stretch + 3 × $199 | ≈ 17.5 h | Fri 25 Sep |
-| V | Workflow Rescue | $1,500 fixed, half up front | $0 · **$1,500** · $3,000 | 1 client; stretch 2 | ≈ 11 h, one Build | When a client says "and also…" |
+| Lane | Lock | Honest expected | Possible units | First dollar |
+| --- | --- | --- | --- | --- |
+| I Lamp | listed $80–$120/hr | **$0** | none until billed | After an offer you can read |
+| II Room | $349 | **$0** | $0 / $349 / $698 / $1,047 | When someone pays |
+| III Handoff | $1,500 · 12h | **$0** | $0 / $1,500 / $3,000 | When a client already asked |
+| IV Storefront | $595 | **$0** | $0 / $595 / $1,190 | When someone pays |
+| V Folio | parked | **$0** | none this quarter | Not this quarter |
 
-The conversion assumptions are the weakest numbers on this page. Nobody has data on how a sixty-second phone video converts with Treasure Valley plumbers. Your first twenty sends are that data; the kill rules exist so you stop before the assumption costs more than an evening.
+Conversion assumptions on the old GitHub cards are hypotheses. No videos have been sent. The five long cards below are drafts; use the locks in this table.
 
 ### Risks, priced
 
@@ -126,7 +114,9 @@ The currency at risk is hours, not dollars — every plan spends almost no money
 
 ---
 
-## I · One-Fix Friday — the engine
+The five long cards below are GitHub drafts. They still teach the work. They do not set the price, and they do not lift HOLD.
+
+## I · One-Fix Friday — draft of IV · Storefront
 
 > I find the one thing on your website or Google profile that loses you customers on a phone — and I fix it by Friday.
 
