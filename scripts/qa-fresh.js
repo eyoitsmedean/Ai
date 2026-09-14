@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Ground-truth check for /?fresh=1 and the watched-device wipe.
+ * Ground-truth check for /?fresh=1, the watched-device wipe, and Today cite labels.
  * Usage: node scripts/qa-fresh.js [baseUrl]
  * Requires a running server and system Chrome.
  * Bearing: C4, C6
