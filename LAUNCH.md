@@ -1,3 +1,5 @@
+> **UNBLESSED — LODESTAR Cycle 1.** Held. Named-season / Plus talk waits on Dean’s deploy and device walk. Bearing: C10.
+
 # Launch — what the next 90 days actually are
 
 Research (August 2026): Hallow made ~$40M in 2025 on **one named season** (Pray40 / Lent) plus an **annual** subscription. Ash Wednesday 2026: 263K downloads in a day. Bible Chat wins **downloads** with TikTok “talk to Scripture,” then burns trust with $4.99/week. YouVersion owns reading, is free, and will not leave a red-letter hole for you if you stay a Bible reader.

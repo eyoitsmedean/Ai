@@ -42,7 +42,7 @@
           <a class="crisis-secondary" href="sms:88788?&body=START">Text START to 88788 (US)</a>
           <a class="crisis-secondary" href="https://www.thehotline.org/" target="_blank" rel="noopener">Chat at thehotline.org</a>
           <a class="crisis-secondary" href="https://findahelpline.com/" target="_blank" rel="noopener">Find a helpline in your country</a>`,
-      note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches your phone, clear this conversation afterwards.',
+      note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches this phone, tap Leave quickly — the conversation disappears and this page leaves.',
       continueLabel: 'I am safe right now — continue',
     },
     assault: {
@@ -54,7 +54,7 @@
           <a class="crisis-secondary" href="https://hotline.rainn.org/" target="_blank" rel="noopener">Chat at hotline.rainn.org</a>
           <a class="crisis-secondary" href="tel:18007997233">Call 1-800-799-7233 (US Domestic Violence Hotline)</a>
           <a class="crisis-secondary" href="https://findahelpline.com/" target="_blank" rel="noopener">Find a helpline in your country</a>`,
-      note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches your phone, clear this conversation afterwards.',
+      note: 'If you are in danger right now, call 911 or your local emergency number first. If someone watches this phone, tap Leave quickly — the conversation disappears and this page leaves.',
       continueLabel: 'I am safe right now — continue',
     },
   };
@@ -83,6 +83,7 @@
         <p class="crisis-note">${copy.note}</p>
         <div class="crisis-footer">
           <button type="button" class="crisis-dismiss" id="crisis-continue">${copy.continueLabel}</button>
+          <button type="button" class="crisis-leave" id="crisis-leave">Leave quickly</button>
           <button type="button" class="crisis-close" id="crisis-close">Close</button>
         </div>
       </div>`;
@@ -121,6 +122,13 @@
       };
       document.getElementById('crisis-continue').onclick = () => finish('continue');
       document.getElementById('crisis-close').onclick = () => finish('close');
+      const leave = document.getElementById('crisis-leave');
+      if (leave) {
+        leave.onclick = () => {
+          finish('leave');
+          if (typeof global.leaveQuickly === 'function') global.leaveQuickly();
+        };
+      }
       el.onclick = (e) => { if (e.target === el) finish('close'); };
       document.addEventListener('keydown', onKey, true);
       el.classList.add('on');

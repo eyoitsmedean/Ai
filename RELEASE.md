@@ -47,7 +47,7 @@ passed that was not run. Last updated 2026-09-11 on branch
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Cache version consistent (`?v=19`, `rla-v19-chapel`) | **VERIFIED** — 11 refs in index.html, 11 in sw.js; SW precaches `data/safety-pack.json` | `test/offline-safety.test.js`. |
+| Cache version consistent (`?v=20`, `rla-v20-chapel`) | **VERIFIED** — 11 refs in index.html, 11 in sw.js; SW precaches `data/safety-pack.json` | `test/offline-safety.test.js`. |
 | Installs and runs on a real iPhone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Installs and runs on a real Android phone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Offline reload, fonts, dark mode, journal | **VERIFIED earlier** (Playwright wave 2) — not re-run after v19 client changes | Device checklist step 8. |

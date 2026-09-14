@@ -1112,6 +1112,80 @@
     showToast('Conversation cleared');
   }
 
+  // Session wipe for a watched phone or a guest demo. Journal, streak, theme,
+  // type size and practice marks stay — DESIGN CHOICE (Charter OQ4): a private
+  // journal is not an Advisor transcript, and auto-deleting it on Leave quickly
+  // would punish a survivor who saved a verse. "Clear this phone" (journal too)
+  // is a Next Summit, not this control.
+  const SESSION_WIPE_KEYS = ['rla-chat', 'rla-onboarded'];
+  const SESSION_WIPE_PREFIXES = ['rla-chat-count-'];
+  const ESCAPE_URL = 'https://www.wikipedia.org/';
+
+  function removeLsKey(key) {
+    try {
+      global.localStorage.removeItem(key);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function wipeSessionStorage(options) {
+    const wipeJournal = Boolean(options && options.wipeJournal);
+    chatHistory = [];
+    SESSION_WIPE_KEYS.forEach(removeLsKey);
+    try {
+      const doomed = [];
+      for (let i = 0; i < global.localStorage.length; i += 1) {
+        const key = global.localStorage.key(i);
+        if (key && SESSION_WIPE_PREFIXES.some((prefix) => key.startsWith(prefix))) {
+          doomed.push(key);
+        }
+      }
+      doomed.forEach(removeLsKey);
+    } catch (_) { /* private mode */ }
+    if (wipeJournal) removeLsKey('rla-journal');
+  }
+
+  function consumeFreshQuery() {
+    try {
+      const url = new URL(global.location.href);
+      if (url.searchParams.get('fresh') !== '1') return false;
+      wipeSessionStorage({ wipeJournal: false });
+      url.searchParams.delete('fresh');
+      const query = url.searchParams.toString();
+      global.history.replaceState(null, '', url.pathname + (query ? `?${query}` : '') + url.hash);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function beginAgain(options) {
+    const force = Boolean(options && options.force);
+    if (isChatBusy && !force) {
+      showToast('Please wait for the current response');
+      return false;
+    }
+    closeSettings();
+    wipeSessionStorage({ wipeJournal: Boolean(options && options.wipeJournal) });
+    try {
+      global.location.reload();
+    } catch (_) {
+      showOnboarding();
+    }
+    return true;
+  }
+
+  function leaveQuickly() {
+    wipeSessionStorage({ wipeJournal: false });
+    try {
+      global.location.replace(ESCAPE_URL);
+    } catch (_) {
+      beginAgain({ force: true });
+    }
+  }
+
   // Online but the host has no working /api (static GitHub Pages without an
   // API base, or a server without a key) reads differently from being offline.
   function advisorFallbackToast(status) {
@@ -1809,6 +1883,7 @@
       }
     });
 
+    consumeFreshQuery();
     if (ls('rla-onboarded')) startApp();
     else showOnboarding();
   }
@@ -1833,6 +1908,12 @@
     openPlus,
     closePlus,
     clearChat,
+    beginAgain,
+    leaveQuickly,
+    wipeSessionStorage,
+    consumeFreshQuery,
+    SESSION_WIPE_KEYS,
+    ESCAPE_URL,
     exportJournal,
     importJournalFile,
     importJournalData,

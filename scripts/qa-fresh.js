@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+/**
+ * Ground-truth check for /?fresh=1 and the watched-device wipe.
+ * Usage: node scripts/qa-fresh.js [baseUrl]
+ * Requires a running server and system Chrome.
+ * Bearing: C4, C6
+ */
+'use strict';
+
+const puppeteer = require('puppeteer-core');
+
+const BASE = process.argv[2] || 'http://127.0.0.1:3000';
+const CHROME = process.env.CHROME_PATH || '/usr/local/bin/google-chrome';
+
+function assert(cond, msg) {
+  if (!cond) throw new Error(msg);
+}
+
+async function main() {
+  const fails = [];
+  const ok = (name) => console.log('✓', name);
+  const check = async (name, fn) => {
+    try {
+      await fn();
+      ok(name);
+    } catch (e) {
+      fails.push(`${name}: ${e.message}`);
+      console.error('✗', name, e.message);
+    }
+  };
+
+  const browser = await puppeteer.launch({
+    executablePath: CHROME,
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+  });
+  const page = await browser.newPage();
+  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 });
+
+  await check('fresh=1 wipes session and keeps journal', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-chat', JSON.stringify([{ role: 'user', content: 'guest leftover' }]));
+      localStorage.setItem('rla-chat-count-2099-01-01', '3');
+      localStorage.setItem('rla-journal', JSON.stringify([{ key: 'keep-me', quote: 'x', verse: 'John 14:27' }]));
+    });
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    const state = await page.evaluate(() => ({
+      onboarded: localStorage.getItem('rla-onboarded'),
+      chat: localStorage.getItem('rla-chat'),
+      count: localStorage.getItem('rla-chat-count-2099-01-01'),
+      journal: localStorage.getItem('rla-journal'),
+      url: location.search,
+      onboardVisible: !document.getElementById('onboarding').classList.contains('hidden'),
+    }));
+    assert(!state.onboarded, 'fresh=1 left rla-onboarded');
+    assert(!state.chat, 'fresh=1 left rla-chat');
+    assert(!state.count, 'fresh=1 left a daily chat count');
+    assert(state.journal && state.journal.includes('keep-me'), 'fresh=1 wiped the journal');
+    assert(!state.url.includes('fresh=1'), 'fresh query was not consumed');
+    assert(state.onboardVisible, 'fresh=1 should open onboarding');
+  });
+
+  await check('welcome uses self-hosted type, not Google Fonts CDN', async () => {
+    const res = await page.goto(BASE + '/welcome', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'welcome HTTP ' + (res && res.status()));
+    const html = await page.content();
+    assert(!/fonts\.googleapis\.com/.test(html), 'welcome still loads Google Fonts');
+    assert(/fonts\/fonts\.css/.test(html), 'welcome missing local fonts.css');
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/Red Letter/i.test(copy), 'missing brand');
+    assert(/988/.test(copy), 'missing 988');
+  });
+
+  await check('crisis modal offers Leave quickly', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    const label = await page.evaluate(async () => {
+      if (!window.RedLetterCrisis) return null;
+      const pending = window.RedLetterCrisis.showCrisisModal('danger');
+      await new Promise((r) => requestAnimationFrame(r));
+      const btn = document.getElementById('crisis-leave');
+      const text = btn ? btn.textContent : null;
+      document.getElementById('crisis-close')?.click();
+      await pending;
+      return text;
+    });
+    assert(label === 'Leave quickly', 'Leave quickly missing, got ' + label);
+  });
+
+  await browser.close();
+  if (fails.length) {
+    console.error('\n' + fails.length + ' failed');
+    process.exit(1);
+  }
+  console.log('\nqa-fresh ok');
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

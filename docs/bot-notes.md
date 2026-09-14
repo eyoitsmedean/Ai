@@ -7,7 +7,7 @@ Worker: Cursor cloud agent · recovery commission · 2026-09-11
 1. Recovered the first ten Dean-authored prompts from this run’s transcript (see `docs/CANONICAL-BRIEF.md`).
 2. Closed D12 offline: `public/data/safety-pack.json` + `offlineReplyFor` never theme-retrieves after a safety kind.
 3. Client greeting doorway matches the server (“ok thanks” after a disclosure).
-4. About: 988 US vs 988.ca, RAINN, watched-phone line. `#crisis-modal` in `mobile.js` `MODAL_IDS`. Cache **v19**.
+4. About: 988 US vs 988.ca, RAINN, watched-phone line. `#crisis-modal` in `mobile.js` `MODAL_IDS`. Cache **v20** as of LODESTAR Cycle 1 (`docs/lodestar/`).
 5. Flagships: safety pack (code), `docs/CANONICAL-BRIEF.md` + `docs/RESEARCH.md`, `docs/SHIP.md`.
 6. Pack letters seal as KJV (`source: pack`), not against the WEB index.
 

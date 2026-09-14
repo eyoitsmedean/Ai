@@ -71,13 +71,13 @@
     if (body) {
       if (isIos()) {
         body.innerHTML = [
-          '<p>On iPhone or iPad:</p>',
+          '<p>On iPhone or iPad, in Safari:</p>',
           '<ol class="install-steps">',
-          '<li>Tap the <strong>Share</strong> button in Safari</li>',
-          '<li>Scroll and tap <strong>Add to Home Screen</strong></li>',
-          '<li>Tap <strong>Add</strong> — Red Letter opens full-screen</li>',
+          '<li>Tap the <strong>Share</strong> button</li>',
+          '<li>Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong></li>',
+          '<li>Leave <strong>Open as Web App</strong> on — a Home Screen app keeps your journal and offline words past Safari’s 7-day tab cleanup</li>',
           '</ol>',
-          '<p class="install-note">Works best in Safari. Chrome on iOS cannot install PWAs the same way.</p>',
+          '<p class="install-note">Safari 26 can add any site to the Home Screen. Chrome on iOS cannot install the same way. A Safari tab is not a Home Screen app: the tab can lose saved words after a week without a visit.</p>',
         ].join('');
       } else if (isAndroid()) {
         body.innerHTML = [

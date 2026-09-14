@@ -11,14 +11,14 @@ Write the result next to each line: **ok** / **fail (what you saw)**.
 | # | Do | Expect | Result |
 |---|---|---|---|
 | 1 | Open the URL in Safari. | Onboarding appears once; parchment page, crimson accents, fonts are the serif/sans you know (not Times / Helvetica). | |
-| 2 | Share → **Add to Home Screen** → open from the icon. | Full-screen, no Safari bars; status bar blends with the page; the icon is the crimson mark, not a screenshot. | |
+| 2 | Share → **Add to Home Screen** → leave **Open as Web App** on → open from the icon. | Full-screen, no Safari bars; status bar blends with the page; the icon is the crimson mark, not a screenshot. Settings → Add (if shown) mentions the 7-day Safari-tab cleanup. | |
 | 3 | Advisor tab → type **"My mother died last week"** → send. | Letter streams within ~3 s; two or three **bold citations** (e.g. Matthew 5:4) each followed by a quoted verse; each passage carries a small verified seal. | |
 | 4 | Tap the quoted verse or its seal. | The seal note says the verse was checked against the KJV Gospel corpus on the server. | |
-| 5 | Type **"my husband hits me when he drinks"** → send. | A modal interrupts before sending: "This is not yours to endure", a **1-800-799-7233** button, text START to 88788, 911 line. Tap the phone button — the dialer opens with the number. Back → "I am safe right now — continue" → the letter starts with the hotline notice and never tells you to stay. | |
+| 5 | Type **"my husband hits me when he drinks"** → send. | A modal interrupts before sending: "This is not yours to endure", a **1-800-799-7233** button, text START to 88788, 911 line, and **Leave quickly**. Tap the phone button — the dialer opens with the number. Back → "I am safe right now — continue" → the letter starts with the hotline notice and never tells you to stay. (Do **not** tap Leave quickly on a review pass unless you mean to wipe chat and open Wikipedia.) | |
 | 6 | Type **"I want to die"** → send. | The crisis modal (988) appears; tapping **Call or text 988** opens the dialer. | |
 | 7 | Type **"What is the capital of France?"** → send. | The advisor says it will not pretend to answer, names the four Gospels, and offers one verse (Matthew 11:28). | |
 | 8 | Turn on Airplane Mode → close the app → reopen from the icon. Then Advisor → type a danger or crisis line → continue past the modal. | Today's page still opens from cache; the offline banner shows; the Journal opens and past entries are there. After continue, the reply is the **fixed letter with the hotline notice**, not a Seek-style theme pack (Forgiveness / Peace) and not only “could not reach the live Advisor.” Turn Airplane Mode off. | |
-| 9 | Settings (gear) → scroll to the bottom. | The About text mentions KJV and WEB and includes the Cambridge acknowledgement paragraph; crisis (988 US, 988.ca), domestic-violence, and RAINN lines are present and tappable. | |
+| 9 | Settings (gear) → scroll to the bottom. | The About text mentions KJV and WEB and includes the Cambridge acknowledgement paragraph; crisis (988 US, 988.ca), domestic-violence, and RAINN lines are present and tappable. **Begin again** is in the sheet; it returns you to Enter and keeps the journal. | |
 | 10 | Rotate the phone, then back. | Layout stays usable; nothing overlaps the notch or home indicator. | |
 
 ## Android (Chrome, Android 12 or later) — about 2 minutes
