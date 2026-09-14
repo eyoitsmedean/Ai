@@ -113,6 +113,23 @@ async function main() {
     assert(visible.url === 'https://www.live-local-weather.com/', 'ESCAPE_URL is ' + visible.url);
   });
 
+  await check('Today names the translation on the morning cites', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => {
+      const aff = document.getElementById('aff-verse');
+      const word = document.getElementById('word-verse');
+      return aff && word && /·\s*(KJV|WEB)/.test(aff.textContent) && /·\s*(KJV|WEB)/.test(word.textContent);
+    });
+    const cites = await page.evaluate(() => ({
+      aff: document.getElementById('aff-verse').textContent,
+      word: document.getElementById('word-verse').textContent,
+    }));
+    assert(/·\s*KJV/.test(cites.aff), 'aff-verse unlabeled or not KJV online: ' + cites.aff);
+    assert(/·\s*KJV/.test(cites.word), 'word-verse unlabeled or not KJV online: ' + cites.word);
+  });
+
   await check('crisis modal offers Leave quickly', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
     const label = await page.evaluate(async () => {

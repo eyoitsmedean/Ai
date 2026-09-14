@@ -3,6 +3,11 @@
   'use strict';
 
   function id(name) { return document.getElementById(name); }
+  function labeledCite(verse) {
+    return global.RedLetterCite
+      ? global.RedLetterCite.formatVerseCite(verse)
+      : String(verse || '').replace(/^—\s*/, '').trim();
+  }
   function ls(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
   function lsSet(key, value) { try { localStorage.setItem(key, value); } catch (_) {} }
   function parseJSON(value, fallback) {
@@ -321,7 +326,7 @@
       if (!quote) return null;
       return {
         quote: quote.replace(/[“”]/g, ''),
-        verse: (verse || '').replace(/^—\s*/, ''),
+        verse: labeledCite(verse),
         theme: 'Daily Affirmation',
       };
     }
@@ -352,7 +357,7 @@
       if (!quote) return null;
       return {
         quote: quote.replace(/[“”]/g, ''),
-        verse: (verse || '').replace(/^—\s*/, ''),
+        verse: labeledCite(verse),
         theme: 'Lectio',
       };
     }

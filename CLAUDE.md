@@ -25,7 +25,7 @@ words only — not the whole Bible.
 | D8 | Only red-letter verses may be rendered as quotations. Narrator lines, other authors and unknown references are dropped from a letter together with their context sentence; a model letter left with zero verifiable sayings is replaced by the retrieval letter. | This session |
 | D9 | Off-scope, hostile and greeting inputs receive fixed honest letters with one open door (`Matthew 11:28`), never a verse chosen by coincidence. | This session |
 | D10 | The evaluation set is `eval/questions.json`, run by `npm run eval`; `eval/RESULTS.md` is generated, never hand-edited, and states which path (retrieval or live model) it ran against. | This session |
-| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v22**. | DEPLOY.md |
+| D11 | Cache versioning: bump `?v=N` in `public/index.html`, the matching entries in `public/sw.js`, and the cache name `rla-vN-chapel` together. Currently **v23**. | DEPLOY.md |
 | D12 | Suicidality, assault and abuse are answered by the fixed letters and never by the model, on the first turn and on every follow-up of that conversation. The one thing the page must not do in that moment is improvise. | `lib/letters` path / `server.js` `chatSafety`; recorded 2026-09-07, in force since cf575f2 |
 | D13 | A model letter that claims to be a person or that counsels staying/submitting in place is discarded and replaced by the retrieval letter. Same regex is used by `scripts/eval.js`. | `lib/guard.js`, 2026-09-11 |
 

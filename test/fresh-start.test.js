@@ -66,5 +66,6 @@ describe('watched-device session wipe', () => {
     assert.match(trust, /Verified · KJV pack/);
     assert.match(trust, /Verified · KJV/);
     assert.match(trust, /Verified · WEB/);
+    assert.match(index, /js\/cite\.js\?v=23/);
   });
 });

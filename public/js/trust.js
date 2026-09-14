@@ -24,7 +24,13 @@
   }
 
   function normalizeCitation(cite) {
-    return String(cite || '')
+    const stripped = global.RedLetterCite
+      ? global.RedLetterCite.bareCitation(cite)
+      : String(cite || '')
+        .replace(/^[—–\-\s]+/, '')
+        .replace(/\s*[·•]\s*(KJV(?:\s+pack)?|WEB)\s*$/i, '')
+        .trim();
+    return stripped
       .toLowerCase()
       .replace(/\s+/g, ' ')
       .replace(/[–—]/g, '-')
@@ -331,9 +337,11 @@
     if (!root) return;
     const echo = id('amen-echo');
     const cite = id('amen-cite');
-    const verse = typeof global.cleanCitation === 'function'
-      ? global.cleanCitation(opts.verse)
-      : String(opts.verse || '').replace(/^[—–\-\s]+/, '').trim();
+    const verse = global.RedLetterCite
+      ? global.RedLetterCite.formatVerseCite(opts.verse)
+      : (typeof global.cleanCitation === 'function'
+        ? global.cleanCitation(opts.verse)
+        : String(opts.verse || '').replace(/^[—–\-\s]+/, '').trim());
     if (echo) {
       const quoteText = opts.quote
         ? String(opts.quote).replace(/^["“]|["”]$/g, '')
@@ -407,9 +415,11 @@
       if (!complete.hidden && complete.classList.contains('on') && fired !== today) {
         fired = today;
         const quote = (id('aff-quote') && id('aff-quote').textContent) || '';
-        const verse = typeof global.cleanCitation === 'function'
-          ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
-          : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, '');
+        const verse = global.RedLetterCite
+          ? global.RedLetterCite.formatVerseCite(id('aff-verse') && id('aff-verse').textContent)
+          : (typeof global.cleanCitation === 'function'
+            ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
+            : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, ''));
         setTimeout(() => openAmen({ quote, verse, holdMs: 3200 }), 600);
       }
     }).observe(complete, { attributes: true, attributeFilter: ['hidden', 'class'] });
@@ -476,7 +486,11 @@
           normalizeQuote(blessingPick.quote).slice(0, 40) === normalizeQuote(item.quote).slice(0, 40);
         const short = item.quote.length > 90 ? `${item.quote.slice(0, 90)}…` : item.quote;
         return `<button type="button" class="blessing-item${selected ? ' selected' : ''}" data-index="${index}">
-          <span class="blessing-item-cite">${esc(item.verse)}</span>
+          <span class="blessing-item-cite">${esc(
+            global.RedLetterCite
+              ? global.RedLetterCite.formatVerseCite(item.verse, item.translation || 'WEB')
+              : item.verse
+          )}</span>
           <span class="blessing-item-quote">“${esc(short)}”</span>
         </button>`;
       })
@@ -500,12 +514,18 @@
     preview.innerHTML = [
       note ? `<div class="blessing-preview-note">${esc(note)}</div>` : '',
       `<div class="blessing-preview-quote">“${esc(blessingPick.quote)}”</div>`,
-      `<div class="blessing-preview-cite">${esc(blessingPick.verse)}</div>`,
+      `<div class="blessing-preview-cite">${esc(
+        global.RedLetterCite
+          ? global.RedLetterCite.formatVerseCite(blessingPick.verse, blessingPick.translation || 'WEB')
+          : blessingPick.verse
+      )}</div>`,
     ].join('');
     if (global.RedLetterShare && typeof global.RedLetterShare.prewarm === 'function') {
       global.RedLetterShare.prewarm({
         quote: blessingPick.quote,
-        verse: blessingPick.verse,
+        verse: global.RedLetterCite
+          ? global.RedLetterCite.formatVerseCite(blessingPick.verse, blessingPick.translation || 'WEB')
+          : blessingPick.verse,
         theme: note || 'A blessing for you',
         brand: 'Red Letter',
       });
@@ -520,7 +540,9 @@
     const note = (id('blessing-note') && id('blessing-note').value.trim()) || 'A blessing for you';
     const payload = {
       quote: blessingPick.quote,
-      verse: blessingPick.verse,
+      verse: global.RedLetterCite
+        ? global.RedLetterCite.formatVerseCite(blessingPick.verse, blessingPick.translation || 'WEB')
+        : blessingPick.verse,
       theme: note,
       brand: 'Red Letter',
       style,
@@ -550,10 +572,15 @@
 
   function blessingFromToday() {
     const quote = (id('aff-quote') && id('aff-quote').textContent) || '';
-    const verse = typeof global.cleanCitation === 'function'
-      ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
-      : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, '');
-    openBlessing(quote && verse ? { quote, verse, theme: 'Today' } : null);
+    const verse = global.RedLetterCite
+      ? global.RedLetterCite.formatVerseCite(id('aff-verse') && id('aff-verse').textContent)
+      : (typeof global.cleanCitation === 'function'
+        ? global.cleanCitation(id('aff-verse') && id('aff-verse').textContent)
+        : ((id('aff-verse') && id('aff-verse').textContent) || '').replace(/^[—–\-\s]+/, ''));
+    const translation = global.RedLetterCite
+      ? global.RedLetterCite.citeTranslation(verse)
+      : '';
+    openBlessing(quote && verse ? { quote, verse, theme: 'Today', translation } : null);
   }
 
   function bootTrust() {

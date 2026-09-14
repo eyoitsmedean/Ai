@@ -1,5 +1,7 @@
 # Bot working notes — Red Letter Advisor
 
+**2026-09-14 cite pass.** First ten still in force (inspectable claims). Today / Seek / Journal / Library / Amen / Lectio / Blessing now suffix `· KJV` or `· WEB` from the payload. Online curated is KJV; offline `corpus.json` is WEB. Shared helper `public/js/cite.js`. Cache **v23**.
+
 **2026-09-14 later.** First-ten pass: onboarding now quotes KJV Matthew 11:28 from the corpus (was unlabeled WEB). Seals name KJV / KJV pack / WEB. Settings **Clear this phone** (two-tap) wipes journal + streak; Leave quickly still does not. Cache **v22**.
 
 **ATELIER 2026-09-14.** Cycle 1 Ask closed with a primary source: The Hotline `exit()` and their protect-history utility (last modified 2026-08-20) replace to `https://www.live-local-weather.com/`. Wikipedia was a guess; removed. Settings wipe rows moved to the top of the sheet. Did **not** copy their history-rewriting script (MIT; would intercept PWA navigations).
