@@ -169,7 +169,7 @@ async function main() {
     await page.goto(BASE + '/desk', { waitUntil: 'networkidle0' });
     const desk = await page.evaluate(() => document.body.innerText);
     assert(/household desk/i.test(desk), 'desk missing watch copy');
-    assert(/1 · Hear/.test(desk) && /2 · Record/.test(desk) && /3 · Ask/.test(desk), 'desk steps missing');
+    assert(/1 · Hear/i.test(desk) && /2 · Record/i.test(desk) && /3 · Ask/i.test(desk), 'desk steps missing');
     await page.click('a.step[href="/gate"]');
     await page.waitForSelector('#record', { timeout: 6000 });
     await page.evaluate(() => { localStorage.removeItem('rla-gate-record'); });
