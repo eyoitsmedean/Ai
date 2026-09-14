@@ -7,3 +7,11 @@ android/.gradle/
 android/app/build/
 ios/App/Pods/
 ios/App/build/
+
+# Flutter / store signing — never commit
+*.jks
+*.keystore
+red-words-app/android/key.properties
+red-words-app/android/local.properties
+red-words-app/build/
+red-words-app/.dart_tool/

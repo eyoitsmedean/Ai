@@ -1,3 +1,23 @@
+# Red Words (ship this)
+
+The phone app is the Flutter project in [`red-words-app/`](red-words-app/). Brand: **His words, for this moment.** / **His words. One honest step.**
+
+```bash
+cd red-words-app
+flutter pub get
+flutter analyze
+flutter test
+flutter build appbundle --release
+```
+
+- Android AAB: `red-words-app/build/app/outputs/bundle/release/app-release.aab`
+- iOS archive clicks: [`red-words-app/MAC-TESTFLIGHT.md`](red-words-app/MAC-TESTFLIGHT.md)
+- QA with actual PASS/FAIL: [`red-words-app/QA.md`](red-words-app/QA.md)
+
+The Node “Red Letter” room below is the older web companion. It is not the store app.
+
+---
+
 # Red Letter
 
 A quiet reading room for the **words Jesus actually spoke**.
