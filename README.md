@@ -1,3 +1,23 @@
+# Red Words (ship this)
+
+The phone app is the Flutter project in [`red-words-app/`](red-words-app/). Brand: **His words, for this moment.** / **His words. One honest step.**
+
+```bash
+cd red-words-app
+flutter pub get
+flutter analyze
+flutter test
+flutter build appbundle --release
+```
+
+- Android AAB: `red-words-app/build/app/outputs/bundle/release/app-release.aab`
+- iOS archive clicks: [`red-words-app/MAC-TESTFLIGHT.md`](red-words-app/MAC-TESTFLIGHT.md)
+- QA with actual PASS/FAIL: [`red-words-app/QA.md`](red-words-app/QA.md)
+
+The Node “Red Letter” room below is the older web companion. It is not the store app.
+
+---
+
 # Red Letter
 
 A quiet reading room for the **words Jesus actually spoke**.
@@ -46,7 +66,12 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 ## Deploy
 
-- **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **App (Node):** `npm start` on any host with Node 18+. Bind is `0.0.0.0`. HTTPS belongs on the reverse proxy.
+- **iPhone:** Safari → Share → Add to Home Screen. The room opens standalone. His words stay on the phone.
+- **Android:** Chrome → Install app / Add to Home screen. Same paper, same corpus.
+- **Store shells:** `npx cap add android` and `npx cap add ios`, then `npm run android` / `npm run ios`. The WebView loads `public/`. Chat works offline from the curated Advisor; a live key is optional.
+- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Blessing pages and the Advisor API need the Node host.
+
+A blessing is a URL (`/b/…`) — one cream page, no install wall.
 
 KJV text is public domain. Attribution is printed beside citations.

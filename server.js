@@ -8,13 +8,19 @@ const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { encodeBlessing, decodeBlessing, blessingPage } = require('./lib/blessing');
+const { securityHeaders } = require('./lib/headers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
+const PKG = require('./package.json');
 
+app.set('trust proxy', 1);
+app.disable('x-powered-by');
+app.use(securityHeaders);
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders(res, filePath) {
@@ -209,7 +215,29 @@ app.get('/api/health', (req, res) => {
     ok: true,
     anthropic: Boolean(client),
     themes: themeNames().length,
+    version: PKG.version,
+    pwa: true,
+    unlimited: true,
   });
+});
+
+app.get('/api/blessing/:token', (req, res) => {
+  const parsed = decodeBlessing(req.params.token);
+  if (!parsed) return res.status(404).json({ error: 'This blessing could not be opened.' });
+  res.json({ ok: true, ...parsed, url: `/b/${req.params.token}` });
+});
+
+app.post('/api/blessing', (req, res) => {
+  if (!rateLimit(`bless:${clientKey(req)}`, 30, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Please return later.' });
+  }
+  const token = encodeBlessing({
+    verse: req.body?.verse,
+    quote: req.body?.quote,
+    note: req.body?.note,
+  });
+  if (!token) return res.status(400).json({ error: 'A verse and His words are needed.' });
+  res.json({ ok: true, token, url: `/b/${token}` });
 });
 
 app.get('/api/daily', async (req, res) => {
@@ -326,7 +354,7 @@ app.post('/api/chat', async (req, res) => {
     if (m.content.length > 8000) return res.status(400).json({ error: 'Message is too long.' });
   }
 
-  if (!rateLimit(`chat:${clientKey(req)}`, 10, 60 * 1000)) {
+  if (!rateLimit(`chat:${clientKey(req)}`, 40, 60 * 1000)) {
     return res.status(429).json({ error: 'A little space, then ask again.' });
   }
 
@@ -423,7 +451,19 @@ app.post('/api/waitlist', (req, res) => {
 
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const welcome = path.join(__dirname, 'public', 'welcome.html');
+  res.sendFile(fs.existsSync(welcome) ? welcome : path.join(__dirname, 'index.html'));
+});
+
+app.get('/b/:token', (req, res) => {
+  const parsed = decodeBlessing(req.params.token);
+  if (!parsed) {
+    res.setHeader('Cache-Control', 'no-cache');
+    return res.redirect('/');
+  }
+  const origin = `${req.protocol}://${req.get('host') || 'localhost'}`;
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.type('html').send(blessingPage(parsed, origin));
 });
 
 app.get('*', (req, res, next) => {
@@ -433,8 +473,9 @@ app.get('*', (req, res, next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
+    console.log(`  iPhone / Android PWA: add to home screen from that address`);
   });
 }
 

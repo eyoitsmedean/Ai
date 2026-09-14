@@ -44,6 +44,7 @@ async function main() {
     assert(/988/.test(copy), 'missing 988');
     const href = await page.$eval('a.btn', (a) => a.getAttribute('href'));
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
+    assert(!/Plus/i.test(copy), 'welcome must not sell Plus');
   });
 
   await check('fresh start wipes the last reader', async () => {
@@ -124,6 +125,23 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    const gate = await page.evaluate(() => !!document.getElementById('chat-gate'));
+    assert(!gate, 'paywall gate must not exist');
+  });
+
+  await check('Advisor letter ends in Sit, blessing is a page', async () => {
+    await page.click('#nav-advisor');
+    await page.type('#chat-input', 'I feel shame');
+    await page.click('#send-btn');
+    await page.waitForFunction(() => /John|Matthew/i.test(document.getElementById('chat-messages')?.innerText || ''), { timeout: 20000 });
+    const sit = await page.$('#sit-from-letter');
+    assert(sit, 'Sit with this missing');
+    await page.click('#nav-today');
+    await page.evaluate(() => { if (typeof blessingFromToday === 'function') blessingFromToday(); });
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 8000 });
+    const url = await page.evaluate(() => blessingUrl());
+    assert(/\/b\//.test(url), 'blessing is not a page');
+    await page.evaluate(() => closeBlessing());
   });
 
   await check('no page errors', async () => {

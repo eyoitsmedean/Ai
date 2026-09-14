@@ -117,6 +117,27 @@ describe('smoke routes', () => {
     assert.equal(JSON.parse(missing.raw).allVerified, false);
   });
 
+  it('mints and serves a blessing page', async () => {
+    const minted = await request('POST', '/api/blessing', {
+      verse: 'John 14:27',
+      quote: 'Peace I leave with you, my peace I give unto you.',
+      note: 'For you',
+    });
+    assert.equal(minted.status, 200);
+    const data = JSON.parse(minted.raw);
+    assert.ok(data.token);
+    const page = await request('GET', '/b/' + data.token);
+    assert.equal(page.status, 200);
+    assert.match(page.raw, /Peace I leave with you/);
+    assert.match(page.raw, /Sit with this/);
+  });
+
+  it('sends production headers', async () => {
+    const res = await request('GET', '/');
+    assert.equal(res.headers['x-content-type-options'], 'nosniff');
+    assert.match(res.headers['content-security-policy'] || '', /default-src 'self'/);
+  });
+
   it('searches the spoken library', async () => {
     const res = await request('GET', '/api/library?q=Peace%2C%20be%20still');
     const data = JSON.parse(res.raw);

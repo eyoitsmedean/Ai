@@ -1,0 +1,4 @@
+storePassword=USE_DEAN_PLAY_KEYSTORE
+keyPassword=USE_DEAN_PLAY_KEYSTORE
+keyAlias=upload
+storeFile=/absolute/path/to/dean-upload.jks

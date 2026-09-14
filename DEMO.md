@@ -1,31 +1,32 @@
 # Guest demo — eight minutes
 
-The folio is ready for a real person on a shared phone or laptop.
+The Quiet Page is ready for a real person on a shared iPhone or Android.
 
 ## Before the first guest
 
 1. Start the server: `npm start`
 2. Open **`http://localhost:3000/?fresh=1`**
-3. You should see the title page — *Turn the page* — not last night’s journal.
+3. You should see the paper title page (Matthew 11:28), not last night’s letter.
 
-Between guests: Room settings → **Begin again**, or hit `/?fresh=1` again.
+Between guests: Settings → **Begin again**, or hit `/?fresh=1` again.
+
+On a real phone: open the same URL over your LAN, then **Add to Home Screen** (Safari Share on iPhone; Chrome menu on Android).
 
 ## What to let them do (do not tour features)
 
 | Minute | Let them… | You stay quiet |
 | --- | --- | --- |
-| 0–1 | Arrive from `/welcome` or `/?fresh=1`. Acknowledge the crisis line. Turn the page. Pick a need, or take the morning page. | Do not explain “lectio.” |
-| 1–4 | Sit: Read, Reflect, Rest, Respond. They may close. They may skip the quiet minute. | If they freeze, point at Close. |
-| 4–6 | Today: the sentence, Seven Days, **Hear this office**, or a blessing. | The card downloads if the phone will not share. |
-| 6–8 | Advisor: “I feel so much shame” or whatever they are actually carrying. | If they type crisis language, 988 must appear. That is the test, not a failure. |
+| 0–1 | Arrive from `/welcome` or `/?fresh=1`. Check the trust line. Turn the page. | Do not lecture. |
+| 1–4 | Sit through Read. They may skip the quiet. They may write one sentence. | If they freeze, point at Close. |
+| 4–6 | Today: the sentence, seven beads, **Send a blessing**. | The blessing is a page they can copy. The card still saves if Share will not. |
+| 6–8 | Advisor: “I feel so much shame” or whatever they are carrying. Sit with this. | If they type crisis language, 988 must appear. That is the test, not a failure. |
 
 ## Do not
 
-- Apologize for the quiet minute. Offer **Skip to a reply**.
-- Call it an AI Jesus. The page says it is software, not a person.
-- Skip the wipe between guests. The last person’s shame must not greet the next.
-- Point at a streak they have not earned. A morning counts after they sit.
+- Apologize for the quiet. Offer skip.
+- Call it an AI Jesus. The page says it is software.
+- Skip reset between guests. The last person’s shame must not greet the next.
 
 ## After the room
 
-`npm test` (API) and `npm run qa` (first session).
+`npm test` · `npm run smoke` · `npm run qa` · `npm run qa:mobile` · `npm run demo`
