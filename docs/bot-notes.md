@@ -1,3 +1,7 @@
+# Red Letter — Ask the saying, print the leaf — 2026-09-14 night
+
+Prompt 8 (creative freedom). This conversation has eight user prompts, not ten. `/ask` now sets the retrieved span of the pack saying and binds implication to those verses. Print this leaf after the page is set. Folio crisis letter unchanged.
+
 # Red Letter — Atelier desk — 2026-09-14 evening
 
 First-use door: `GET /desk` (Hear → Record → Ask). Gate draft persists in `localStorage` (`rla-gate-record`). SW v15 bypasses /desk /gate /hear /ask. Folio crisis letter unchanged. Notion: https://app.notion.com/p/3dbb7d53f96981b6a501cdaca530e559

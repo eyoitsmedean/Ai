@@ -73,6 +73,18 @@
       color: var(--mute); margin-top: 18px; display: none;
     }
     body.still .rest { display: block; }
+    .print-leaf {
+      display: none; margin-top: 14px; border: none; background: none;
+      padding: 0; font: inherit; font-size: 12px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--crimson); cursor: pointer;
+    }
+    body.still .print-leaf { display: inline-block; }
+    @media print {
+      .grain, .go, .print-leaf, footer, .watch { display: none !important; }
+      body.still form { opacity: 1; }
+      body { background: #fff; }
+      textarea { border: none; }
+    }
     section { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--rule); }
     .word {
       font-family: Fraunces, Georgia, serif; font-style: italic;
@@ -115,6 +127,7 @@
       <button class="go" type="submit" id="go">Open the words</button>
     </form>
     <p class="rest" id="rest">The page is set. Sit with it. There is nothing else to tap.</p>
+    <button class="print-leaf" type="button" id="print-leaf">Print this leaf</button>
 
     <section id="crisis-block" class="hidden" aria-live="polite">
       <p class="kicker">Stop here</p>
@@ -152,6 +165,8 @@
     const crisisText = document.getElementById('crisis-text');
     const wordsBlock = document.getElementById('words-block');
     const implyBlock = document.getElementById('imply-block');
+
+    document.getElementById('print-leaf').addEventListener('click', () => window.print());
 
     document.getElementById('q').addEventListener('input', () => {
       document.body.classList.remove('still');

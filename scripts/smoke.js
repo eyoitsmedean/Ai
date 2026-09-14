@@ -94,6 +94,7 @@ async function main() {
     assert(page.res.ok, 'ask page not 200');
     assert(/noindex/.test(page.text), 'ask page must stay unindexed');
     assert(/1 · Ask/.test(page.text) && /4 · What this bot cannot do/.test(page.text), 'four blocks missing');
+    assert(/print-leaf/.test(page.text) && /@media print/.test(page.text), 'print leaf missing');
     assert(!/Ask Him/i.test(page.text), 'must not pretend the model is Jesus');
 
     const shame = await req('/api/ask', {

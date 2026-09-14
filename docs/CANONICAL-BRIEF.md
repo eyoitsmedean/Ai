@@ -29,7 +29,7 @@ Until that URL is authorized, the five-room folio remains a paper atelier. The o
 
 ## 2. Recovery of the earliest user prompts
 
-This conversation has **seven** user-authored prompts as of 2026-09-14 (LODESTAR is #6; ATELIER is #7). Prompts 8–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata.
+This conversation has **eight** user-authored prompts as of 2026-09-14 evening (this prompt is #8). Prompts 9–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata. Other chats’ first-tens are not this brief.
 
 Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-tens. Those are **not** this brief. Do not overwrite them.
 
@@ -42,6 +42,7 @@ Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-
 | 5 | ~2026-09-11 21:30 | “UNIVERSAL PROJECT RECOVERY, DEEP RESEARCH, AND EXECUTION COMMISSION… recover the first ten user-authored prompts… Never invent source wording… Choose and complete the three most valuable flagship deliverables…” | Recover the brief, research core + five adjacent topics, produce three complete flagships, review, organize for reuse. Depth over speed. | This document, `/ask`, and `docs/RESEARCH-AND-GATE.md` are those three flagships. | Governs this turn. Does not reverse the WATCH / no-launch law. |
 | 6 | ~2026-09-14 04:02 | “LODESTAR… Intent Charter… five summits… Protect truth + original purpose.” | Charter, align, deepen, summit, prove, ship. Do not rebuild the Charter later; amend it. | Cycle 1: `docs/lodestar/`, `lib/crisis.js`, `eval-ask`, `/gate`, `/hear`, `/ask` stillness. | Folio-after-988 still Dean’s. WATCH stands. |
 | 7 | ~2026-09-14 20:25 | “ATELIER — Useful work, faithfully finished… Recover the user's purpose… A small edit or question deserves direct execution… Create extra projects only when commissioned.” | Recover purpose, build the requested artifact, verify, leave continuity. No new knowledge-base ritual. | Built `GET /desk` (Hear → Record → Ask). Gate draft stays on this device (`rla-gate-record`). | Does not lift WATCH. Folio stays paper. |
+| 8 | ~2026-09-14 20:44 | “You have creative freedom and token freedom to analyze and improve as you see fit, start by reviewing my first 10 prompts for context and guidance” | Review this conversation’s actual prompts, then improve the product. Do not invent missing prompts. | Eight prompts exist here, not ten. Improvement: `/ask` sets the retrieved span of the pack saying; implication is those verses’ stored meaning; print the leaf. | Does not invent prompts 9–10. Does not lift WATCH. Folio-after-988 still Dean’s. |
 
 **Explicit later amendments (authoritative, opened 2026-09-11 from Dean’s Notion):**
 

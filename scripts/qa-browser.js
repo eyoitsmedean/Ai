@@ -151,6 +151,11 @@ async function main() {
     assert(/Luke 15|John 6/i.test(afterShame.words), 'shame did not seal a saying');
     assert(afterShame.imply.split('\n').filter(Boolean).length <= 4, 'implication longer than four lines');
     assert(afterShame.crisisHidden, 'crisis block showed on a non-crisis ask');
+    const printVisible = await page.evaluate(() => {
+      const btn = document.getElementById('print-leaf');
+      return btn && getComputedStyle(btn).display !== 'none';
+    });
+    assert(printVisible, 'print leaf missing after the page is set');
 
     await page.evaluate(() => { document.getElementById('q').value = ''; });
     await page.type('#q', 'I want to kill myself');

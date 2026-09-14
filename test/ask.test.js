@@ -58,3 +58,22 @@ test('askFor: weary opens the rest invitation, not tomorrow-anxiety', () => {
   assert.ok(out.words.length >= 1);
   assert.match(out.words.map((w) => w.verse).join(' '), /Matthew 11:28|John 16:33/);
 });
+
+test('askFor: implication is the stored meaning of the verses shown', () => {
+  const out = askFor('I carry so much shame');
+  assert.match(out.implication, /lost|shepherd|joy|bread/i);
+  assert.doesNotMatch(out.implication, /Shame says you are the lost sheep who should have known better/);
+});
+
+test('askFor: shame may set the wider retrieved span of the same saying', () => {
+  const out = askFor('I carry so much shame');
+  assert.ok(out.words.some((w) => /Luke 15/.test(w.verse)));
+  assert.ok(out.words[0].quote.length > 40);
+});
+
+test('askFor: fear sets a fear saying, not a comfort dump', () => {
+  const out = askFor('I am afraid of the future');
+  assert.equal(out.theme, 'Fear');
+  assert.match(out.words.map((w) => w.verse).join(' '), /Luke 12|Mark 5/);
+  assert.match(out.words[0].quote, /little flock|Fear not|be not afraid/i);
+});
