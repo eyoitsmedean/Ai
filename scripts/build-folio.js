@@ -484,7 +484,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <section class="leaf" id="seven">
   <p class="kicker">Seven Days with His words</p>
   <h2 style="font-size: clamp(32px, 5vw, 44px); margin: 12px 0 12px">Come · Peace · Light · Love · Forgive · Abide · Go</h2>
-  <p class="lede">The Pray40 you can ship before Lent. One room a morning. The ribbon on Today is the first letter of each room — C P L L F A G — not anonymous dots. They do not shame. A tap from Today returns you to Today. A missed morning is never a failure state. Day one is not a program. It is an invitation.</p>
+  <p class="lede">The Pray40 you can ship before Lent. One room a morning. The ribbon sits under the office on Today — the first letter of each room, C P L L F A G, not anonymous dots. They do not shame. A tap from Today returns you to Today. A missed morning is never a failure state. Day one is not a program. It is an invitation.</p>
   <div class="ribbon" aria-label="Seven Days">${catalog.seven.map((d) => `<span>${esc(d.title[0])}</span>`).join('')}</div>
   <div class="seven">
     ${catalog.seven.map((d, i) => `<article class="daycard"><p class="n">Day ${String(i + 1).padStart(2, '0')}</p><h3>${esc(d.title)}</h3><p>${esc(d.passage)}</p><p class="cite" style="margin-top:12px">${esc(d.verse)}</p></article>`).join('')}

@@ -250,6 +250,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('seven-bead-Come')), findsOneWidget);
     await tester.tap(find.byKey(const Key('seven-bead-Come')));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('path-day')), findsOneWidget);

@@ -176,7 +176,11 @@ class TodayPage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: paper.colors.gold),
           ),
-          const SizedBox(height: 18),
+          if (seven.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            SevenRibbon(days: seven, onOpen: onSeven, onOpenDay: onOpenDay),
+          ],
+          const SizedBox(height: 14),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -215,10 +219,6 @@ class TodayPage extends StatelessWidget {
                         color: paper.colors.ink,
                       ),
                     ),
-                  ],
-                  if (seven.isNotEmpty) ...[
-                    const SizedBox(height: 28),
-                    SevenRibbon(days: seven, onOpen: onSeven, onOpenDay: onOpenDay),
                   ],
                 ],
               ),
