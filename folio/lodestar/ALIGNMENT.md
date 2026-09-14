@@ -12,7 +12,7 @@
 | `folio/BRIEF.md` | C5 | On course | Decision-log row 14 Sep. |
 | Scoreboard / keep / $295 papers | C6 | Bad drift (contained) | Already quarantined 11 Sep. Not deleted. |
 | Canvas Working Papers | C2 | Bad drift (stale cash) | Not rewritten this cycle (TypeScript canvas not opened). Flagged. |
-| Hub table Room 4–8 / Handoff $3,750 | C6 | Bad drift | Callout already points at card. Not overwritten. |
+| Hub table Room 4–8 / Handoff $3,750 | C6 | Bad drift → realigned 14 Sep evening | Table + defaults now match Operator Card v2. Prior figures archived in the same sentence. |
 | Hub folio embed (6 Sep HTML) | C2 | Gap | Staged: repo is current; embed swap needs chained upload. Authorization not required to *prepare*; upload is reversible if we don’t delete the old file. Skipped this cycle (expiry risk). |
 | Red Letter / sibling app PRs | C1 | Good drift then parked | Folio parked as cash (C6). Left parked. |
 | ATELIER/CLAUDE.md PR #24 | C4 | Unblessed process OS | Hold. Do not merge into this cash lane. |

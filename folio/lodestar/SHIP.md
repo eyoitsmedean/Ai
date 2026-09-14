@@ -135,6 +135,6 @@ STATUS: complete
 BUILT: week-close.html · keep.html · apply-packet.html · house-hears.html · lamp-drill.html · lodestar KB · Decision Night / index / CANONICAL calendar + evidence + HOLD letter removed from folio
 CHARTER: v1 (14 Sep 2026; A1–A2 proposed, not applied)
 KNOWLEDGE BASE: folio/lodestar/ (INDEX.md)
-OPEN DEFECTS: Minor — canvas cash stale; Notion hub embed 6 Sep; hub table Room 4–8 / Handoff $3,750; no YouTube mastery; handbook unread; historical 11 Sep “Sunday close” sentences left dated
+OPEN DEFECTS: Minor — canvas cash stale (no source in repo); Notion hub embed 6 Sep; no YouTube mastery; handbook unread; historical 11 Sep “Sunday close” sentences left dated. Hub table realigned 14 Sep evening (ATELIER).
 RESUME FROM: next cycle
 ```

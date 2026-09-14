@@ -14,4 +14,6 @@ Skeptic pass 14 Sep 2026 (separate agent). Navigator repair + retest same day. C
 | D8 | Med | decision-night receipt | Dated 11 Sep | 14 Sep + new storage key | Not re-clicked this continuation. Key present in source. |
 | D9 | High | index.html Lamp copy + tonight JS | Apply letter still printed on the paper folio | HOLD-only; letter lives on apply-packet | **PASS.** Repo grep: phrase remains only in DEFECTS.md. |
 
-Open Minor: canvas cash still stale; Notion hub embed still 6 Sep HTML; hub table Room 4–8 / Handoff $3,750 (callout points at card); no YouTube mastery; handbook unread; Decision Night / Operator Friday callouts still contain historical “Sunday close 14 Sep” language under their 11 Sep dates.
+Open Minor: canvas cash still stale (no canvas source in this repo); Notion hub embed still 6 Sep HTML; no YouTube mastery; handbook unread; Decision Night / Operator Friday callouts still contain historical “Sunday close 14 Sep” language under their 11 Sep dates.
+
+**ATELIER 14 Sep evening:** Hub table Room / Handoff / Folio cells + default-pick sentence realigned to Operator Card v2. Re-fetched: Room is 0–3; Handoff $3,000 / 12h; Folio $0 as cash. $3,750 remains only as an archive label.

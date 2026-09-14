@@ -217,6 +217,8 @@ Consumer faith apps print money in Lent (Hallow Ash-Wednesday spike is an Appfig
 
 | Date | Question | Finding | Source | Limits | Confidence | Affects |
 | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-14 eve | L&D listing live? | Yes. HTTP 200. Title “Training / onboarding / L&D Evaluator”. $80 and $120 in page. | Official L&D URL, curl this session (WebFetch timed out) | Advertisement. May close. | High for “still posted” | Lamp default; still $0 |
+| 2026-09-14 eve | GTM listing live? | Yes. $80–$120, IC, apply form. | Official GTM URL, WebFetch this session | Same | High for “still posted” | Lamp default |
 | 2026-09-14 | L&D listing live? | Yes. $80–$120, hourly contract, remote, IC, own schedule, apply form. | Official L&D URL, opened this session | Advertisement. May close. No hire-count. | High for “still posted” | Lamp default; still $0 |
 | 2026-09-14 | GTM listing live? | Yes. Same band and IC terms. | Official GTM URL, opened this session | Same | High for “still posted” | Lamp default |
 | 2026-09-14 | Truncated GTM id | `list_AAABmd4n4p8Vq3FLqL2xP4Cw` → HTTP 404 | WebFetch this session | Do not treat as a live door | High | Dossier URL hygiene |

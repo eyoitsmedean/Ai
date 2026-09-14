@@ -84,9 +84,10 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-11 | Operator Card v2 confirmed as money SoT for this repo twin. Idaho 5.3%. $0 first. Decision Night + Operator lock + CANONICAL.md are the three flagships. Folio cash columns quarantined. Sendable Storefront ask set to $595. Listings rechecked live. | VERIFIED listings + STC; INTERP on $0 first | folio/decision-night.html, folio/CANONICAL.md, folio #operator-lock, Notion Operator Card |
 | 2026-09-11 | Independent review: Lamp apply dock and Saturday copy put behind HOLD; Room/Handoff/Storefront surface math aligned to v2; Front Range line retired; Folio first-60 no longer asks to publish. | recorded | folio/index.html plan leaves + tonight JS |
 | 2026-09-14 | LODESTAR Cycle 1. Intent Charter v1. Calendar: 14 Sep is Monday, not Sunday; 80 days after today. Five summits built. Listings rechecked live. Tax stack computed from opened IRS/Idaho sources. | VERIFIED weekday + listings; computed tax | folio/lodestar/, week-close.html, keep.html, apply-packet.html, house-hears.html, lamp-drill.html |
+| 2026-09-14 | ATELIER finish: hub comparison table realigned to Operator Card v2 (Room 0–3; Handoff $3,000/12h; Folio $0 cash). Evening listing recheck: GTM WebFetch live; L&D curl 200 + $80/$120 in page. Canvas not in repo. | VERIFIED hub re-fetch + listing fetches | Notion hub “The five”; Operator Card remains SoT |
 
 ## Open questions (batched; recommended default in parentheses)
 
 1. Is the Red Letter Advisor brief in the atelier prompt a live commission for this workshop, or the worked example it is labeled as? (Default: example only — it starts on its own kickoff, on its own branch, with `CLAUDE.md` as its system of record.)
 2. Replace `[FEDERAL_MARGINAL_BRACKET]` with the real figure so the keep table narrows from 61–71¢ to one number. (Default: keep the range.)
-3. Should the Notion hub's Handoff row read "$3,750 ceiling" or stay at "$3,000 for two betas"? (Default as of Operator Card v2: $3,000 / 12-hour cap on the card. The $3,750 stretch is archived.)
+3. ~~Should the Notion hub's Handoff row read "$3,750 ceiling" or stay at "$3,000 for two betas"?~~ **Closed 14 Sep evening:** hub row now $3,000 / 12-hour cap; $3,750 labeled archived. Card remains SoT.
