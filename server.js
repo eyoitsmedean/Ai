@@ -474,6 +474,26 @@ app.get('/ask', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'ask.html'));
 });
 
+app.get('/need', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'need.html'));
+});
+
+app.get('/guest', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'guest.html'));
+});
+
+app.get('/colophon', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'colophon.html'));
+});
+
+app.get('/sit', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'sit.html'));
+});
+
 app.get('/b/:token', (req, res) => {
   const parsed = decodeBlessing(req.params.token);
   if (!parsed) {

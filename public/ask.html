@@ -142,7 +142,7 @@
 
     <footer>
       Quoted speech is <span id="translation-name">King James Version (1769)</span>, public domain in the United States.
-      This screen needs no API key. The full reading room is still <a href="/">the folio</a>.
+      This screen needs no API key. <a href="/need">Need</a> · <a href="/guest">Guest hour</a> · <a href="/sit">Sit</a> · <a href="/colophon">Colophon</a> · <a href="/">the folio</a>.
     </footer>
   </div>
   <script>
@@ -170,6 +170,12 @@
         show(wordsBlock, false);
         show(meaningBlock, false);
         status.textContent = 'Please go toward a human now.';
+        return;
+      }
+      if (data.unmatched) {
+        show(wordsBlock, false);
+        show(meaningBlock, false);
+        status.textContent = data.reason || 'This screen can stay quiet.';
         return;
       }
       if (data.words && data.words.quote) {

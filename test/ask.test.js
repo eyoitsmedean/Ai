@@ -52,9 +52,18 @@ describe('answerAsk', () => {
     assert.ok(out.words.quote);
   });
 
-  it('does not answer from Paul', () => {
+  it('refuses Paul instead of inventing a Gospel cover', () => {
     const out = answerAsk('What does Paul say about grace?');
     assert.equal(out.ok, true);
-    assert.match(out.words.citation, /^(Matthew|Mark|Luke|John) /);
+    assert.equal(out.unmatched, true);
+    assert.equal(out.words, null);
+    assert.match(out.reason, /Paul|Matthew/i);
+  });
+
+  it('stays quiet when nothing sealed matches', () => {
+    const out = answerAsk('qzx qzx qzx qzx');
+    assert.equal(out.ok, true);
+    assert.equal(out.unmatched, true);
+    assert.equal(out.words, null);
   });
 });

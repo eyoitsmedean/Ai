@@ -158,6 +158,19 @@ describe('smoke routes', () => {
     assert.doesNotMatch(res.raw, /<<<<<<</);
   });
 
+  it('serves need, guest, and colophon pages', async () => {
+    for (const path of ['/need', '/guest', '/colophon', '/sit']) {
+      const res = await request('GET', path);
+      assert.equal(res.status, 200);
+      assert.match(res.raw, /988/);
+      assert.doesNotMatch(res.raw, /<<<<<<</);
+    }
+    assert.match((await request('GET', '/need')).raw, /concordance of need/i);
+    assert.match((await request('GET', '/guest')).raw, /First guest hour/);
+    assert.match((await request('GET', '/colophon')).raw, /Translation gate/);
+    assert.match((await request('GET', '/sit')).raw, /No reply required/);
+  });
+
   it('answers /api/ask with a sealed saying and stops on crisis', async () => {
     const ok = await request('POST', '/api/ask', { question: 'I feel so much shame' });
     assert.equal(ok.status, 200);

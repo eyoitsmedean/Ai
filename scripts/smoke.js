@@ -105,6 +105,17 @@ async function main() {
     assert(crisis.json?.crisis === true && crisis.json.words == null, 'crisis must stop counsel');
   });
 
+  await check('need guest colophon sit', async () => {
+    const need = await req('/need');
+    assert(need.res.ok && /Matthew 6:34/.test(need.text) && need.text.includes('988'), 'need page incomplete');
+    const guest = await req('/guest');
+    assert(guest.res.ok && /First guest hour/.test(guest.text) && guest.text.includes('988'), 'guest page incomplete');
+    const colo = await req('/colophon');
+    assert(colo.res.ok && /King James Version/.test(colo.text) && /WATCH/.test(colo.text), 'colophon incomplete');
+    const sit = await req('/sit');
+    assert(sit.res.ok && /No reply required/.test(sit.text) && sit.text.includes('988'), 'sit page incomplete');
+  });
+
   await check('welcome landing', async () => {
     const { res, text } = await req('/welcome');
     assert(res.ok, 'welcome not 200');
