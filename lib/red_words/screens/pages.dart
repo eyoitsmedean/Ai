@@ -782,7 +782,7 @@ class AboutPage extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Red Words collects nothing. No account, no analytics, no network. This device keeps a first-open flag, the seven-day Word rotation, and an optional one-sentence reply from Sit.',
+            'Red Words collects nothing. No account, no analytics. Gospel sentences stay on this device. Send and 988 open the system share sheet or dialer; they do not upload your reply.',
             key: const Key('about-privacy'),
             style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
           ),

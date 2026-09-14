@@ -2,7 +2,7 @@
 
 **Purpose.** Get a TestFlight build and a Play internal build onto a phone.  
 **Owner.** Dean. **Status.** Ready to archive. **Updated.** 2026-09-11.  
-**What changed.** Version is `0.1.0+4`. Uploads must be built with **Xcode 26** (iOS 26 SDK). The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only** (no iPad screenshot set). Old debug-APK checksums were removed — they described a previous binary.
+**What changed.** Version is `0.1.0+5`. Uploads must be built with **Xcode 26** (iOS 26 SDK) — still required as of 14 Sep 2026. The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only**. Privacy copy names the share sheet and 988 dialer. Old debug-APK checksums were removed.
 
 No credentials live in this repo. This Linux checkout cannot produce a signed IPA.
 
@@ -19,7 +19,7 @@ No credentials live in this repo. This Linux checkout cannot produce a signed IP
 | Display name | Red Words |
 | iOS floor | 15.0 (Runner and widget) |
 | Device family | iPhone only (`TARGETED_DEVICE_FAMILY = 1`) |
-| Version | `0.1.0+4` in `pubspec.yaml` — bump **+build** on every upload |
+| Version | `0.1.0+5` in `pubspec.yaml` — bump **+build** on every upload |
 | Android applicationId | `com.redwords.red_words` |
 
 ## 1. Once, in Apple Developer

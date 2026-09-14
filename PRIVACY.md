@@ -4,8 +4,9 @@ Red Words collects nothing.
 
 - No account. No sign-in.
 - No analytics, advertising, or crash-reporting SDKs.
-- No network requests. The Gospel sentences ship inside the app and are read from the device.
-- No personal data is collected, stored, transmitted, sold, or shared.
+- The Gospel sentences ship inside the app and are read from the device. The app does not upload them, or your Sit reply.
+- Bless → Send opens the system share sheet. About → 988 can open the phone dialer. Those system sheets are not our servers.
+- No personal data is collected, stored, transmitted, sold, or shared by Red Words.
 
 ## What is written on the device
 

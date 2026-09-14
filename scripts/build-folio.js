@@ -54,7 +54,7 @@ const identifiers = [
   ['Display name', 'Red Words'],
   ['iOS floor', '15.0 — Runner and widget'],
   ['Device family', 'iPhone only (not iPad)'],
-  ['Version', '0.1.0+4'],
+  ['Version', '0.1.0+5'],
   ['Android applicationId', 'com.redwords.red_words'],
 ];
 

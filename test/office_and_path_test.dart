@@ -152,6 +152,7 @@ void main() {
     expect(find.textContaining('Cambridge University Press'), findsOneWidget);
     expect(find.byKey(const Key('about-privacy')), findsOneWidget);
     expect(find.textContaining('collects nothing'), findsOneWidget);
+    expect(find.textContaining('no network'), findsNothing);
     expect(find.byKey(const Key('about-lectio')), findsOneWidget);
     await tester.scrollUntilVisible(find.textContaining('988'), 240);
     expect(find.textContaining('988'), findsOneWidget);

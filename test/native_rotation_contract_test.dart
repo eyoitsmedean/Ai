@@ -35,6 +35,12 @@ void main() {
     final plist = File('ios/Runner/Info.plist').readAsStringSync();
     expect(plist.contains('ITSAppUsesNonExemptEncryption'), isTrue);
     expect(plist.contains('<false/>'), isTrue);
+    expect(plist.contains('UISupportedInterfaceOrientations~ipad'), isFalse);
+  });
+
+  test('Android Bless Send is visible to the package manager', () {
+    expect(manifest.contains('android.intent.action.SEND'), isTrue);
+    expect(layout.contains('Luke 12:7'), isTrue);
   });
 
   test('iOS small family shows an opening clause or the address, never an ellipsis rewrite', () {

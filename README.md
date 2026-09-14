@@ -1,22 +1,56 @@
-# Red Letter
+# Red Words
 
-A quiet reading room for the **words Jesus actually spoke**.
+**His words, for this moment.**
 
-Not another Bible app. A daily companion constrained to the red letters of Matthew, Mark, Luke, and John — typeset like a small press, simple like a blank page.
+A bound book on the phone for the sentences Jesus spoke in Matthew, Mark, Luke, and John. The home-screen widget is the Word only — sentence and citation, no badge, no streak, no app name on the card.
 
-## The room
+This is the existing Ai Gospel / Red Letter corpus. It is not a second app.
 
-- **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
-- **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
-- **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence
-- **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
-- **Journal** — a commonplace book kept on this device, with a quire of words you have sat with
+## On a Mac (the ship)
 
-Quoted verses are checked against the public-domain **King James Version** (1769). The Advisor first retrieves allowed sayings, then the model may emit only `{{John 14:27}}` placeholders. The harness inserts the spoken corpus text, so the model never types the verse. Daily and encouragement JSON are requested as structured output, then verified the same way.
+One sitting: **[`docs/MAC-DAY.md`](docs/MAC-DAY.md)**. Version `0.1.0+5`. Archive with **Xcode 26**.
+
+- Listing paste: [`docs/STORE-LISTING.md`](docs/STORE-LISTING.md)
+- Runbook: [`TESTFLIGHT.md`](TESTFLIGHT.md)
+- Privacy (host this at HTTPS): [`PRIVACY.md`](PRIVACY.md) / [`public/privacy.html`](public/privacy.html)
+- Brief for later work: [`docs/CANONICAL-BRIEF.md`](docs/CANONICAL-BRIEF.md)
+
+```bash
+flutter pub get
+flutter test
+npm test
+```
+
+- Workspace: `ios/Runner.xcworkspace` — bundle `com.redwords.redWords`
+- Widget: **Word** / `RedWordsWidget` (`com.redwords.redWords.RedWordsWidget`)
+- App Group: `group.com.redwords.redWords`
+- Deep link: `redwords://today`
+- iPhone only. Android `applicationId`: `com.redwords.red_words`
+
+```bash
+flutter build apk          # debug-signed in this repo — not a Play upload
+flutter build appbundle    # same signing until you point at an upload keystore
+node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js
+```
+
+Quoted verses are the King James Version (1769). The KJV is public domain outside the United Kingdom. In the UK, rights in the Authorized Version are vested in the Crown and administered by Cambridge University Press — decide UK availability before first release.
 
 This is not a person, and it is not therapy, medical care, or pastoral counseling. In crisis: [988](tel:988) (US, call or text) · [Find A Helpline](https://findahelpline.com).
 
-## Run it
+## The book
+
+- **Today** — one Gospel sentence; the office name follows the civil clock
+- **Sit** — Read, Reflect, Rest (a quiet minute, no countdown), Respond (one sentence on this device)
+- **Seven Days** — Come, Peace, Light, Love, Forgive, Abide, Go. A missed day is never a failure
+- **Seek** — twelve rooms
+- **Bless** — one cream leaf; Send is the Word, not the brand
+- **Word** widget — bundled seven; rotates at local midnight
+
+Empty catalog = a blank page. Nothing is invented to fill the silence.
+
+## Web room (same corpus, not this archive)
+
+The Node folio is still in this repo. It is not the TestFlight binary.
 
 ```bash
 cp .env.example .env   # add ANTHROPIC_API_KEY if you want live generation
@@ -24,7 +58,7 @@ npm install
 npm start              # http://localhost:3000
 ```
 
-Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
+Without an API key, Today and Seek still open from curated pages. Advisor and Journal live here, not in the Flutter book.
 
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
@@ -34,41 +68,7 @@ API_ACCESS_KEY=        # optional gate for /api/*
 ```
 
 ```bash
-npm test
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
 
-The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
-
-## Design
-
-The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
-
-## Phones (Red Words)
-
-The same corpus ships as an offline Flutter shell — **Red Words**, *His words, for this moment.*
-
-```bash
-flutter pub get
-flutter test
-flutter build apk          # Android release APK (debug-signed in this repo)
-flutter build appbundle    # Play AAB, same signing
-```
-
-- iOS workspace: `ios/Runner.xcworkspace` — bundle `com.redwords.redWords`
-- Widget: **RedWordsWidget** (`com.redwords.redWords.RedWordsWidget`), App Group `group.com.redwords.redWords`
-- Deep link: `redwords://today`
-- Widget card = the Word only (sentence + citation). No badge, streak, or app name on the card.
-- The widget ships the locked seven-slot rotation inside the extension and rotates at local midnight. Version `0.1.0+4`. iPhone-only (not iPad).
-- A signed IPA still needs a Mac and **Xcode 26**. One sitting: `docs/MAC-DAY.md`. Listing copy: `docs/STORE-LISTING.md`. Runbook: `TESTFLIGHT.md`.
-
-```bash
-node scripts/export-moments.js   # refresh assets/moments/catalog.json from lib/curated.js
-```
-
-## Deploy
-
-- **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
-
-Quoted verses are the King James Version (1769). The KJV is public domain outside the United Kingdom. In the UK, rights in the Authorized Version are vested in the Crown and administered by Cambridge University Press — see About in the app and `TESTFLIGHT.md` before enabling the UK storefront. Citations print `· KJV`.
+The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). GitHub Pages publishes `public/` from `main` and `claude/jesus-teachings-chatbot-bSBhF`.

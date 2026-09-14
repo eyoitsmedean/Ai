@@ -18,6 +18,7 @@
         android:autoSizeStepGranularity="1sp"
         android:ellipsize="end"
         android:fontFamily="serif"
+        android:text="But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows."
         android:textColor="@color/crimson"
         android:textSize="16sp"
         android:textStyle="italic" />
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:letterSpacing="0.08"
+        android:text="Luke 12:7"
         android:textColor="@color/crimson"
         android:textSize="11sp" />
 </LinearLayout>

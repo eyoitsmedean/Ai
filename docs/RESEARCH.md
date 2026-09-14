@@ -1,6 +1,6 @@
 # Research — Red Words native book
 
-**Coverage date:** 2026-09-11. Rows below were read at the linked official pages (or, where Apple JS-blocked the body, from that same official URL’s extracted wording). No invented citations.
+**Coverage date:** 2026-09-11. S1 re-fetched **2026-09-14** — Xcode 26 / iOS 26 SDK still required. Rows were read at the linked official pages (or, where Apple JS-blocked the body, from that same official URL’s extracted wording). No invented citations.
 
 Facts, interpretations, estimates, assumptions, and recommendations are labeled.
 
@@ -8,7 +8,7 @@ Facts, interpretations, estimates, assumptions, and recommendations are labeled.
 
 | ID | Question | Finding | Source | Fetched | Limit / contrary | Confidence | Implication |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| S1 | iOS upload SDK | Uploads must be built with **Xcode 26 or later** using an **iOS 26 SDK** since **28 Apr 2026**. | [Upcoming Requirements](https://developer.apple.com/news/upcoming-requirements/). Also [news 3 Feb 2026](https://developer.apple.com/news/?id=ueeok6yw) (SDK wording only). | 2026-09-11 | News item requires the SDK, not the Xcode marketing number. In practice the SDK ships with Xcode 26. | High | Archive on Xcode 26. Deployment target stays 15.0. |
+| S1 | iOS upload SDK | Uploads must be built with **Xcode 26 or later** using an **iOS 26 SDK** since **28 Apr 2026**. | [Upcoming Requirements](https://developer.apple.com/news/upcoming-requirements/). Also [news 3 Feb 2026](https://developer.apple.com/news/?id=ueeok6yw) (SDK wording only). | 2026-09-11; **re-fetched 2026-09-14** | News item requires the SDK, not the Xcode marketing number. In practice the SDK ships with Xcode 26. | High | Archive on Xcode 26. Deployment target stays 15.0. |
 | S2 | 6.9″ screenshots | Accepted portrait sizes: **1260×2736**, **1290×2796**, **1320×2868**. | [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/) | 2026-09-11 | 6.5″ is a different slot. 13″ required if iPad is enabled. | High | Listing uses 6.9″. Binary is iPhone-only. |
 | S3 | Lectio order | Classic + current USCCB pastoral: lectio → meditatio → oratio → contemplatio. | [USCCB Meditations](https://www.usccb.org/prayer-and-worship/prayers-and-devotions/meditations); [021425.pdf](https://www.usccb.org/resources/021425.pdf); Guigo II *Scala Claustralium*. | 2026-09-11 | **Contrary:** USCCB National Bible Week PDF still teaches contemplatio before oratio ([lectio-divina.pdf](https://www.usccb.org/bible/national-bible-week/upload/lectio-divina.pdf)). | High on four movements; disputed on last-two order | Sit is **inspired by**, not “is.” About says so. |
 | S4 | 60s Rest before Respond | No USCCB, Vatican, or Guigo timer found. | Same as S3; silence in 021425.pdf (“period of silent reflection,” no seconds). | 2026-09-11 | A Benedictine might insist oratio before contemplatio. | High that it is **unattested** | Quiet minute is a **product beat**. No countdown digits. No Latin badge. |

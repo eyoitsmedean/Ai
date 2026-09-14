@@ -44,7 +44,7 @@ One branch. Do not commit `package-lock.json` version churn (3.x ↔ 1.x). Do no
 
 ## Recording work
 
-- Version: bump `+build` in `pubspec.yaml` on every archive.  
+- Version: current archive is `0.1.0+5`. Bump `+build` in `pubspec.yaml` on every archive.  
 - Folio: `npm run folio` after catalog or copy changes.  
 - PR: update #12; do not open a second native-book PR.  
 - Notion: the recovery home for **this** brief is a private draft titled “Red Words — native book (PR 12)”. The other “ship home” draft is a different workstream.

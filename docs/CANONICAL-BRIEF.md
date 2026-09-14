@@ -1,6 +1,6 @@
 # Canonical brief — Red Words native book
 
-**Version:** 2026-09-11 recovery (v2, after source verification)  
+**Version:** 2026-09-14 atelier pass (`0.1.0+5`)  
 **Audience:** Dean (builder) and any later agent. Not store copy.  
 **Conversation:** six user prompts — `docs/RECOVERY.md`. Prompts 7–10 do not exist.
 
@@ -66,7 +66,7 @@ A person who wants His words for this hour — not a social graph, not a streak,
 ## Preserve / improve / retire
 
 - **Preserve:** identifiers, fail-closed catalog, Word-only widget, web `src/` until native replaces it in the same repo.  
-- **Improve (this cycle):** Mac-day, Sit Rest/Respond, Bless Send, Seven ribbon, iPhone-only family, source-verified operator copy.  
+- **Improve (this cycle):** README leads with the phone ship; privacy names Send and 988; Android `SEND` query; widget picker preview is Luke 12:7; iPad orientation keys removed.  
 - **Retire:** APK SHA-256 theater; Kid’s Day as a live deadline; iPad family.
 
 ## Decisions locked this cycle

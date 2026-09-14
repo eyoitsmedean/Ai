@@ -2,14 +2,15 @@
 
 You are about to put Red Words on a phone. This is the only list you need. Details and failure table live in `TESTFLIGHT.md`. Listing copy lives in `STORE-LISTING.md`.
 
-**Version to upload:** `0.1.0+4` (`pubspec.yaml`). Bump +build if you upload twice.
+**Version to upload:** `0.1.0+5` (`pubspec.yaml`). Bump +build if you upload twice.
 
 ## Before you sit (10 minutes)
 
 - [ ] Xcode **26** installed (required for App Store Connect since 28 April 2026). Deployment target stays 15.0.
 - [ ] Flutter stable on the Mac. `flutter doctor` clean for iOS.
 - [ ] Apple Developer team selected. You can create App IDs today if they do not exist.
-- [ ] A public HTTPS page that is the text of `PRIVACY.md` (or `public/privacy.html` once Pages is serving it from `main`).
+- [ ] A public HTTPS page that is the text of `PRIVACY.md` (drop `public/privacy.html` on any static host today; Pages from `main` after merge).
+- [ ] EU storefronts: Apple requires DSA trader status (in force since 17 Feb 2025). Skip if you are US-only for Internal Testing.
 - [ ] **UK:** exclude the United Kingdom at first release, *or* email `permissions@cambridge.org` before enabling it. [CUP](https://www.cambridge.org/bibles/about/rights-and-permissions/): Crown rights; 500-verse cap; not a complete book; **not ≥25% of the work**. A store listing is commercial.
 
 ## Archive (25 minutes)
