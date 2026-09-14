@@ -89,6 +89,8 @@
     </select>
   </label>
 
+  <p class="tiny" id="pickClosed">Lanes stay folded until the window is Confirmed. Shopping plans on a closed evening is how this becomes another dashboard.</p>
+  <div id="pickBlock" hidden>
   <h2>2 · One of five</h2>
   <p>One lane. The other four stay paper. October is Red: no new asks. Folio is craft, not groceries.</p>
   <div style="overflow:auto">
@@ -140,6 +142,7 @@
     </select>
   </label>
   <p class="tiny" id="authWarn">Copy stays HOLD. This page does not open Mercor and does not send mail.</p>
+  </div>
   <label>One sentence<input type="text" id="note" placeholder="Why this, or why rest" /></label>
 
   <div class="actions noprint">
@@ -171,9 +174,14 @@ function sync() {
   const open = openWindow();
   const auth = document.getElementById("auth");
   const warn = document.getElementById("authWarn");
+  const pick = document.getElementById("pickBlock");
+  const closed = document.getElementById("pickClosed");
+  pick.hidden = !open;
+  closed.hidden = open;
   if (!open) {
     auth.value = "No";
     auth.disabled = true;
+    document.getElementById("choice").value = "None tonight";
     warn.textContent = "Window is not Confirmed. Rest is the finish. Authorization stays No.";
   } else {
     auth.disabled = false;

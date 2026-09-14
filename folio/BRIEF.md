@@ -86,6 +86,7 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-14 | LODESTAR Cycle 1. Intent Charter v1. Calendar: 14 Sep is Monday, not Sunday; 80 days after today. Five summits built. Listings rechecked live. Tax stack computed from opened IRS/Idaho sources. | VERIFIED weekday + listings; computed tax | folio/lodestar/, week-close.html, keep.html, apply-packet.html, house-hears.html, lamp-drill.html |
 | 2026-09-14 | ATELIER finish: hub comparison table realigned to Operator Card v2 (Room 0–3; Handoff $3,000/12h; Folio $0 cash). Evening listing recheck: GTM WebFetch live; L&D curl 200 + $80/$120 in page. Canvas not in repo. | VERIFIED hub re-fetch + listing fetches | Notion hub “The five”; Operator Card remains SoT |
 | 2026-09-14 | Creative pass from first 10 prompts: one door `folio/tonight.html` (close + pick). Prompt 1 easy/beautiful; prompt 9 best finished product. Old rooms kept. Stale “DEX is the job tonight” retired. | DESIGN CHOICE + Chrome HOLD check | folio/tonight.html; pointers on index / week-close / decision-night |
+| 2026-09-14 | Second pass on first 10: lanes fold until window is open; folio dock no longer copies an ask; cover writes the same close receipt. | DESIGN CHOICE + Chrome click/dump | tonight.html; index cover + tonight-dock |
 
 ## Open questions (batched; recommended default in parentheses)
 

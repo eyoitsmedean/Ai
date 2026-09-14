@@ -241,6 +241,8 @@
       text-decoration: none;
     }
     .btn.ghost { background: transparent; color: var(--ink); }
+    #coverClose label { display: block; margin: 0.4rem 0; font-size: 0.95rem; }
+    #coverClose select { width: 100%; padding: 0.4rem 0.5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
     .btn:hover { opacity: 0.88; }
     .weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
     .week h4 {
@@ -387,12 +389,16 @@
     <span id="chosenText"></span>
     <button type="button" id="clearChoice">Show all five</button>
   </div>
-  <aside class="tonight-dock" id="tonightDock" aria-label="Tonight">
-    <p class="tiny" id="tonightLabel">Tonight · three moves</p>
-    <ol id="tonightSteps"></ol>
+  <aside class="tonight-dock show" id="tonightDock" aria-label="Tonight">
+    <p class="tiny" id="tonightLabel">$0 · window last recorded Not confirmed · apply HOLD</p>
+    <ol id="tonightSteps">
+      <li>If the window is not Confirmed, rest. That is a finish.</li>
+      <li>If Confirmed, close the week and pick one lane.</li>
+      <li>This dock does not copy an ask.</li>
+    </ol>
     <div class="actions" style="margin-top:0">
-      <button class="btn" type="button" id="tonightCopy">Copy tonight’s ask</button>
-      <a class="btn ghost" id="tonightJump" href="#board">Open the plan</a>
+      <a class="btn" href="tonight.html" id="tonightCopy">Tonight — close and pick</a>
+      <a class="btn ghost" id="tonightJump" href="tonight.html">One door</a>
     </div>
   </aside>
   <div class="shell">
@@ -444,8 +450,48 @@
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
         <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; numbers audited 5 September; run-sprint 11 September (phone, tonight strip, scoreboard lock); Operator lock 11 September. Public copy is family-safe. The private Notion twin carries your real names and page links. See <a href="CANONICAL.md">CANONICAL.md</a>.</p>
+        <div class="card hold" id="coverClose" style="margin-top:1.2rem;border-left:3px solid var(--crimson);padding:1rem;background:var(--folio)">
+          <p class="tiny" style="margin-top:0">Write the night here if you opened the folio instead of Tonight. Same receipt. No ask is copied.</p>
+          <label>Household window now
+            <select id="cv-window">
+              <option>Not confirmed</option>
+              <option>Confirmed</option>
+              <option>Not needed</option>
+            </select>
+          </label>
+          <label>Lighter or dashboard
+            <select id="cv-q1">
+              <option>Not answered</option>
+              <option>Lighter</option>
+              <option>Another dashboard</option>
+              <option>Did not open it</option>
+            </select>
+          </label>
+          <label>Money / no / gate / motion
+            <select id="cv-q2">
+              <option>Not answered</option>
+              <option>Money</option>
+              <option>A dated no</option>
+              <option>A blocked gate</option>
+              <option>Only motion</option>
+              <option>Nothing — I did not run a lane</option>
+            </select>
+          </label>
+          <label>Disposition
+            <select id="cv-q3">
+              <option>Not answered</option>
+              <option>Continue</option>
+              <option>Park 30 days</option>
+              <option>Close</option>
+            </select>
+          </label>
+          <div class="actions">
+            <button class="btn" type="button" id="cv-write">Write the close</button>
+            <a class="btn ghost" href="tonight.html" id="cv-pick">Pick a lane (window must be open)</a>
+          </div>
+          <pre id="cv-receipt" class="tiny" style="white-space:pre-wrap;background:#1b1610;color:#f4efe4;padding:0.8rem;margin:0.8rem 0 0">The close appears here. It stays on this device.</pre>
+        </div>
         <div class="actions">
-          <a class="btn" href="tonight.html">Tonight — close and pick</a>
           <button class="btn ghost" type="button" id="unfoldAll">Unfold papers</button>
           <button class="btn ghost" type="button" id="foldAll">Fold them</button>
         </div>
@@ -1268,7 +1314,7 @@ A quiet page for the words Jesus spoke. Free.</div>
           <li><strong>Minutes 3–8.</strong> Can you truthfully claim the Lamp’s five gates? If yes and you want cash: choose I. If blocked: continue.</li>
           <li><strong>Minutes 8–12.</strong> Can you name ten humans outside work who might pay $349 to rehearse? If yes: choose II. If you would rather walk storefronts than talk: choose IV.</li>
           <li><strong>Minutes 12–16.</strong> Only choose III if you will send 20 asks and can protect 15-day delivery. Otherwise it is a fantasy client.</li>
-          <li><strong>Minutes 16–20.</strong> Choose V only if you accept that December cash may be zero and you still want Advent to have a URL. Write the choice in ink. Do not start a second plan “on the side.”</li>
+          <li><strong>Minutes 16–20.</strong> Choose V only if you accept $0 cash and no Advent URL. Folio is parked as groceries. Write the choice in ink. Do not start a second plan “on the side.”</li>
         </ol>
         <p>Then do that plan’s first 60 minutes — or stop. Stopping is a valid finish.</p>
       </article>
@@ -1282,7 +1328,7 @@ A quiet page for the words Jesus spoke. Free.</div>
           <li>Did money, a dated no, or a blocked gate appear — or only motion?</li>
           <li>Continue, park 30 days, or close? Park creates no reminder. Close creates no successor.</li>
         </ol>
-        <p>Required work still includes the academy block already on the calendar. That is the job. This folio never eats it.</p>
+        <p>The academy / DEX block named for 8–14 Sep is over. This folio still does not eat required work. If the window is not Confirmed, rest.</p>
         <h3>Parked on purpose</h3>
         <p>Veteran memory-to-music, family adventure composer, Ableton album, owner-judgment libraries, agent-operations tabletop, ProofOps memberships, and every 6–18 month asset stay on the research shelf. They are not worse ideas. They cannot feed a household in 90 days without stealing the household.</p>
         <h3>How this was made</h3>
@@ -1388,14 +1434,44 @@ A quiet page for the words Jesus spoke. Free.</div>
       btn.addEventListener("click", () => applyChoice(btn.getAttribute("data-choose")));
     });
     document.getElementById("clearChoice").addEventListener("click", () => applyChoice(""));
-    tonightCopy.addEventListener("click", async () => {
-      const id = localStorage.getItem("ninety-days-plan");
-      const pack = tonight[id];
-      if (!pack) return;
-      await navigator.clipboard.writeText(pack.ask);
-      tonightCopy.textContent = "Copied";
-      setTimeout(() => { tonightCopy.textContent = "Copy tonight’s ask"; }, 1400);
-    });
+    (function coverClose() {
+      const win = document.getElementById("cv-window");
+      const pick = document.getElementById("cv-pick");
+      const receipt = document.getElementById("cv-receipt");
+      function openWin() {
+        return win.value === "Confirmed" || win.value === "Not needed";
+      }
+      function syncPick() {
+        pick.style.pointerEvents = openWin() ? "" : "none";
+        pick.style.opacity = openWin() ? "1" : "0.4";
+        pick.textContent = openWin() ? "Pick a lane on Tonight" : "Lanes stay folded until the window is open";
+      }
+      win.addEventListener("change", syncPick);
+      document.getElementById("cv-write").addEventListener("click", () => {
+        const open = openWin();
+        const text = [
+          "NINETY DAYS · TONIGHT",
+          "Written 14 Sep 2026 (Monday) · stays on this device",
+          "",
+          "Lighter or dashboard: " + document.getElementById("cv-q1").value,
+          "Money / no / gate / motion: " + document.getElementById("cv-q2").value,
+          "Disposition: " + document.getElementById("cv-q3").value,
+          "Household window: " + win.value,
+          "Choice: None tonight",
+          "External action authorized tonight: No",
+          "",
+          open ? "Window is open. Pick a lane on tonight.html. Apply is HOLD." : "REST IS THE FINISH. Optional work is closed tonight.",
+          "This receipt is not an application."
+        ].join("\n");
+        receipt.textContent = text;
+        try {
+          localStorage.setItem("ninety-days-tonight-2026-09-14", text);
+          localStorage.setItem("ninety-days-week-close-2026-09-14", text);
+          localStorage.setItem("ninety-days-receipt-2026-09-14", text);
+        } catch (e) {}
+      });
+      syncPick();
+    })();
     document.querySelectorAll(".copy").forEach((block) => {
       const btn = document.createElement("button");
       btn.type = "button";
