@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tonight · Ninety Days · One page</title>
+  <meta name="description" content="One page: confirm the window, hear the honest zero, pick one lane, mark the gates, copy one ask on HOLD, write the receipt, stop." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e;
+      --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1);
+      --green:#2f5d3a; --lock:#8f1d1d;
+    }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; scroll-behavior: smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:"Source Serif 4", Georgia, serif; line-height:1.55; }
+    main { max-width: 42rem; margin: 0 auto; padding: 0 1rem 5rem; }
+
+    /* Status spine — always visible, so a tired reader never loses the state */
+    .spine {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(27,22,16,.96); color: var(--paper);
+      font-family:"Instrument Sans", sans-serif; font-size:.72rem; letter-spacing:.04em;
+      border-bottom: 1px solid rgba(244,239,228,.14);
+    }
+    .spine-in { max-width:42rem; margin:0 auto; display:flex; flex-wrap:wrap; gap:.35rem .9rem; align-items:center; padding:.5rem 1rem; }
+    .chip { display:inline-flex; align-items:center; gap:.35rem; white-space:nowrap; }
+    .dot { width:.6rem; height:.6rem; border-radius:50%; background:var(--muted); display:inline-block; }
+    .dot.ok { background:#7bbf8c; } .dot.no { background:#e28f8f; } .dot.warn { background:#d8b45a; }
+    .spine b { font-weight:600; }
+    .spine .lockword { margin-left:auto; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }
+    .spine .lockword.hold { color:#e28f8f; } .spine .lockword.clear { color:#7bbf8c; }
+
+    .eyebrow { font-family:"Instrument Sans", sans-serif; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+    h1 { font-family:Fraunces, serif; font-style:italic; font-weight:650; font-size:2.3rem; line-height:1.08; margin:.5rem 0 .6rem; }
+    h1 em { color:var(--crimson); }
+    h2 { font-family:Fraunces, serif; font-size:1.35rem; margin:0 0 .5rem; }
+    h3 { font-family:Fraunces, serif; font-size:1.08rem; margin:.2rem 0 .3rem; }
+    p { margin:.55rem 0; }
+
+    .step { border-top: 1px solid var(--rule); margin-top: 1.8rem; padding-top: 1.1rem; }
+    .step > .eyebrow .n { color:var(--muted); }
+    .card { background:var(--folio); border:1px solid var(--rule); padding:1rem 1.05rem; margin:.7rem 0; }
+    .hold { border-left:3px solid var(--crimson); }
+    .good { border-left:3px solid var(--green); }
+
+    label { display:block; margin:.5rem 0; font-family:"Instrument Sans", sans-serif; font-size:.9rem; }
+    select, input[type="text"], input[type="number"], textarea {
+      width:100%; padding:.5rem .55rem; border:1px solid var(--ink); background:var(--folio); font:inherit; margin-top:.25rem;
+    }
+    textarea { min-height:3.6rem; }
+    .zero { font-family:Fraunces, serif; font-size:4.2rem; line-height:1; color:var(--crimson); margin:.3rem 0 0; }
+
+    table { width:100%; border-collapse:collapse; font-size:.9rem; }
+    th, td { text-align:left; padding:.45rem .35rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+    th { font-family:"Instrument Sans", sans-serif; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+    tr.pick td { background: rgba(143,29,29,.08); }
+    .basis { color:var(--muted); font-size:.82rem; }
+
+    .tiny { font-family:"Instrument Sans", sans-serif; font-size:.78rem; color:var(--muted); }
+    a { color:var(--crimson); }
+
+    .btn { font-family:"Instrument Sans", sans-serif; appearance:none; border:1px solid var(--ink); background:var(--ink); color:var(--folio); padding:.6rem .85rem; letter-spacing:.1em; text-transform:uppercase; font-size:.74rem; cursor:pointer; border-radius:0; }
+    .btn.ghost { background:transparent; color:var(--ink); }
+    .btn:disabled { opacity:.42; cursor:not-allowed; }
+    .actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
+
+    .lockbar { font-family:"Instrument Sans", sans-serif; font-size:.8rem; padding:.55rem .7rem; border:1px dashed var(--rule); }
+    .lockbar.hold { color:var(--crimson); border-color:rgba(143,29,29,.4); }
+    .lockbar.clear { color:var(--green); border-color:rgba(47,93,58,.4); }
+
+    .tally { font-family:"Instrument Sans", sans-serif; font-size:.85rem; }
+    .letter { white-space:pre-wrap; background:#efe9db; border:1px solid var(--rule); padding:.85rem; font-family:"Instrument Sans", sans-serif; font-size:.86rem; }
+    .receipt { white-space:pre-wrap; background:#1b1610; color:#f4efe4; padding:1rem; font-family:"Instrument Sans", sans-serif; font-size:.88rem; }
+
+    details { margin:.6rem 0; }
+    summary { cursor:pointer; font-family:"Instrument Sans", sans-serif; font-size:.86rem; color:var(--ink); }
+    .rooms { display:flex; flex-wrap:wrap; gap:.4rem .9rem; }
+    .rooms a { font-family:"Instrument Sans", sans-serif; font-size:.82rem; }
+
+    @media (max-width:420px) {
+      h1 { font-size:2rem; } .zero { font-size:3.4rem; }
+      .spine-in { font-size:.68rem; }
+    }
+    @media print {
+      .spine, .actions, .noprint { display:none !important; }
+      body { background:#fff; } .card, .letter { background:#fff; }
+      .receipt { background:#fff; color:#000; border:1px solid #000; }
+      a { color:#000; text-decoration:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="spine" aria-live="polite">
+    <div class="spine-in">
+      <span class="chip"><span class="dot" id="d-window"></span><b id="s-window">Window: not confirmed</b></span>
+      <span class="chip"><span class="dot" id="d-gates"></span><span id="s-gates">Gates 0/5 clear</span></span>
+      <span class="lockword hold" id="s-lock">Copy: HOLD</span>
+    </div>
+  </div>
+
+<main>
+  <header>
+    <p class="eyebrow">Monday 14 Sep 2026 · 80 days to 3 Dec · one page</p>
+    <h1>Tonight.<br><em>Choose one. Then stop.</em></h1>
+    <p>The whole path on a single page: confirm the window, hear the honest number, pick one lane, mark the gates, copy one ask, write the receipt, and close. The seven rooms still exist for depth — this page is so you do not have to open them.</p>
+    <p class="tiny">Opening this page authorizes nothing. It runs on this device, makes no network call, and cannot apply, message, buy, publish, or send. Money source of truth: Notion Operator Card&nbsp;v2. Listings rechecked 14&nbsp;Sep&nbsp;2026.</p>
+  </header>
+
+  <!-- STEP 1 — the gate that governs everything -->
+  <section class="step" id="step-window">
+    <p class="eyebrow"><span class="n">Step 1 ·</span> The gate</p>
+    <h2>Is the household window open?</h2>
+    <p>Law 02: optional work is not allowed unless the evening is confirmed ours. This one answer unlocks or holds everything below.</p>
+    <label>Household window tonight
+      <select id="window">
+        <option value="Not confirmed">Not confirmed</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Not needed">Not needed (rest / required work only)</option>
+      </select>
+    </label>
+    <div class="lockbar hold" id="windowNote">Not confirmed. The honest move is rest. Required work this week is the DEX room-inspect during work hours — that is the job, and it needs no receipt.</div>
+  </section>
+
+  <!-- STEP 2 — the honest zero -->
+  <section class="step" id="step-zero">
+    <p class="eyebrow"><span class="n">Step 2 ·</span> What the house hears</p>
+    <div class="card hold">
+      <p class="zero">$0</p>
+      <p style="margin-top:.4rem">There is no side income until a written match exists and an hour has been billed. Selection is unknown; hours are unknown; a listing is not a job. The house hears zero.</p>
+      <p style="margin:.5rem 0 0"><em>Clean-room oath.</em> I will not steal sleep. I will not use work people, work words, or work machines. I will not apply unless I have said so in writing. October is rest from new asks. If the evening is not ours, I close the folio.</p>
+      <details>
+        <summary>The one number for later (do not add it to groceries)</summary>
+        <p>If The Lamp matches and I bill 4–6 hours a week for six <em>non-October</em> weeks at the listed $80–$120: <b>$1,920–$4,320 gross</b>. After a 35% reserve the day money lands: <b>$1,248–$2,808</b>. <span class="basis">Basis: 4×6×$80 = $1,920; 6×6×$120 = $4,320. October is Red, so it is excluded. First cash, if any, is weeks after the first billed hour — the first Stripe payout is held 7 days. This is a betting card, not a forecast.</span></p>
+      </details>
+    </div>
+  </section>
+
+  <!-- STEP 3 — pick one lane -->
+  <section class="step" id="step-lane">
+    <p class="eyebrow"><span class="n">Step 3 ·</span> The five plans</p>
+    <h2>Pick one lane.</h2>
+    <p>One active at a time. Every number carries its basis. These are the Operator&nbsp;Card&nbsp;v2 figures — the older folio scoreboard is archived.</p>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>Lane</th><th>Honest cash by 3 Dec</th><th>Pick when</th></tr></thead>
+        <tbody>
+          <tr data-lane="I Lamp">
+            <td><b>I · The Lamp</b><br><span class="basis">$80–$120/hr listed</span></td>
+            <td>Most likely <b>$0</b>. If matched: the band above. <span class="basis">October Red: no new asks, no new billing model.</span></td>
+            <td>Grocery money, and all five gates are Clear.</td>
+          </tr>
+          <tr data-lane="II Room">
+            <td><b>II · The Room</b><br><span class="basis">$349 / session</span></td>
+            <td>0–3 paid = <b>$0 / $349 / $698 / $1,047</b>. <span class="basis">Do not model 4–8 this quarter.</span></td>
+            <td>Lamp is blocked and you can name ten humans outside work.</td>
+          </tr>
+          <tr data-lane="III Handoff">
+            <td><b>III · The Handoff</b><br><span class="basis">$1,500 beta</span></td>
+            <td>0–2 = <b>$0 / $1,500 / $3,000</b>. <span class="basis">Hard cap 12 hours. Overrun → $2,250 or stop at SOP + job aid.</span></td>
+            <td>Twenty listings and a 15-day delivery you can keep after 1&nbsp;Nov.</td>
+          </tr>
+          <tr data-lane="IV Storefront">
+            <td><b>IV · The Storefront</b><br><span class="basis">$595 / snapshot</span></td>
+            <td>0–2 = <b>$0 / $595 / $1,190</b>. <span class="basis">The $295 kit is retired. Never run with The Handoff.</span></td>
+            <td>You would rather walk a public booking path than coach.</td>
+          </tr>
+          <tr data-lane="V Folio">
+            <td><b>V · The Folio</b><br><span class="basis">parked as cash</span></td>
+            <td><b>$0</b> this quarter as a launch. <span class="basis">Advent 29 Nov is five days at the clock's end. Lent 2027 is the season.</span></td>
+            <td>You accept no URL and no invoice this quarter.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <label>Tonight's lane
+      <select id="choice">
+        <option value="None tonight">None tonight</option>
+        <option value="I Lamp">I · The Lamp</option>
+        <option value="II Room">II · The Room</option>
+        <option value="III Handoff">III · The Handoff</option>
+        <option value="IV Storefront">IV · The Storefront</option>
+        <option value="V Folio">V · The Folio (craft only)</option>
+      </select>
+    </label>
+    <p class="tiny">Default grocery: Lamp after gates. Default if clearance blocks Lamp: Room. One lane. October Red. November Yellow from 1&nbsp;Nov unless the window fails.</p>
+  </section>
+
+  <!-- STEP 4 — five gates (Lamp) -->
+  <section class="step" id="step-gates">
+    <p class="eyebrow"><span class="n">Step 4 ·</span> Five truth gates · The Lamp</p>
+    <h2>You write these. A model may not.</h2>
+    <p>Agents may research listings. You apply, interview, and score. <b>Unknown</b> is allowed and holds. <b>Blocked</b> kills the plan — do not apply "to see."</p>
+    <label>1 · Years in L&amp;D you can substantiate without employer files
+      <select class="gate" id="g1"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select>
+    </label>
+    <label>2 · Years in sales / GTM the same way
+      <select class="gate" id="g2"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select>
+    </label>
+    <label>3 · Slide fluency on <em>public</em> examples
+      <select class="gate" id="g3"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select>
+    </label>
+    <label>4 · Handbook outside-work clause read; disclose if asked ("I will not read it" is Blocked)
+      <select class="gate" id="g4"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select>
+    </label>
+    <label>5 · Separate personal machine for Insightful screenshots + consent to the March 2026 breach exposure
+      <select class="gate" id="g5"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select>
+    </label>
+    <div class="lockbar hold" id="gatesNote">0 of 5 gates Clear. The Lamp apply stays HOLD.</div>
+    <p class="tiny"><a href="lamp-drill.html">Practice on a synthetic deck first →</a> (no apply)</p>
+  </section>
+
+  <!-- STEP 5 — the one copy-ready ask, on HOLD -->
+  <section class="step" id="step-ask">
+    <p class="eyebrow"><span class="n">Step 5 ·</span> The one ask</p>
+    <h2>Copy stays HOLD until you say yes.</h2>
+    <p>This page prepares the ask. It never sends it. Copy unlocks only when the window is Confirmed or Not needed, the chosen lane's conditions are met, and you type Yes below.</p>
+    <label>I authorize one ask, in my own name, on a personal device
+      <select id="auth"><option value="No">No</option><option value="Yes">Yes — one named step</option></select>
+    </label>
+    <div class="lockbar hold" id="askLock">Locked. Pick a lane, clear its conditions, confirm the window, and type Yes.</div>
+    <p class="tiny" id="askWhy" style="margin-top:.4rem"></p>
+    <pre class="letter" id="ask">HOLD — do not send.
+
+The ask is not on this page until the window is Confirmed or Not needed, the lane's conditions are met, and authorization is Yes.</pre>
+    <div class="actions noprint">
+      <button class="btn" type="button" id="copyAsk" disabled>Copy stays HOLD</button>
+      <a class="btn ghost" href="apply-packet.html">Full staged packet</a>
+    </div>
+  </section>
+
+  <!-- STEP 6 — what you keep -->
+  <section class="step" id="step-keep">
+    <p class="eyebrow"><span class="n">Step 6 ·</span> What you keep</p>
+    <h2>Only for money that already landed.</h2>
+    <p>Until a match and a billed hour exist, this is $0. Net is treated as gross (no expenses). Not tax advice.</p>
+    <div class="card">
+      <label>Gross received (USD)
+        <input type="number" id="gross" min="0" step="1" value="0" />
+      </label>
+      <label>Assumed federal ordinary band
+        <select id="fed"><option value="0.12">12% (assumed)</option><option value="0.22">22% (assumed)</option></select>
+      </label>
+      <div style="overflow:auto">
+        <table>
+          <tbody>
+            <tr><th>SE tax · 15.3% on 92.35%</th><td id="k-se">$0.00</td></tr>
+            <tr><th>Idaho 5.3% (incremental)</th><td id="k-id">$0.00</td></tr>
+            <tr><th>Federal ordinary (assumed)</th><td id="k-fed">$0.00</td></tr>
+            <tr><th>Total modeled tax</th><td id="k-tax">$0.00</td></tr>
+            <tr><th>Effective rate</th><td id="k-rate">—</td></tr>
+            <tr><th>35% household reserve</th><td id="k-res">$0.00</td></tr>
+            <tr><th>Reserve vs modeled tax</th><td id="k-vs">Enter a receipt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tiny">SE per IRS Topic 554 / Pub 334. Idaho 5.3% on net minus half SE (I.C. § 63-3024; STC schedule). Federal band assumed. Keep the 35% reserve; do not print the Colorado 61–71¢ table. <a href="keep.html">Full keep model →</a></p>
+    </div>
+  </section>
+
+  <!-- STEP 7 — receipt / stop -->
+  <section class="step" id="step-receipt">
+    <p class="eyebrow"><span class="n">Step 7 ·</span> Write it, then stop</p>
+    <h2>Tonight's receipt.</h2>
+    <p>One record of the week close and the choice. It stays on this device.</p>
+    <label>Did Ninety Days make the week lighter, or become another dashboard?
+      <select id="q1"><option>Not answered</option><option>Lighter</option><option>Another dashboard</option><option>Did not open it</option></select>
+    </label>
+    <label>Did money, a dated no, or a blocked gate appear — or only motion?
+      <select id="q2"><option>Not answered</option><option>Money</option><option>A dated no</option><option>A blocked gate</option><option>Only motion</option><option>Nothing — no lane run</option></select>
+    </label>
+    <label>Disposition
+      <select id="q3"><option>Not answered</option><option>Continue</option><option>Park 30 days</option><option>Close</option></select>
+    </label>
+    <label>One sentence (optional)<input type="text" id="note" /></label>
+    <div class="actions noprint">
+      <button class="btn" type="button" id="writeReceipt">Write the receipt</button>
+      <button class="btn ghost" type="button" onclick="window.print()">Print</button>
+    </div>
+    <pre class="receipt" id="receipt">The receipt appears here. It stays on this device.</pre>
+    <p class="tiny">Park creates no reminder. Close creates no successor. Both are successful finishes.</p>
+  </section>
+
+  <footer class="step">
+    <p class="eyebrow">The rooms, for depth</p>
+    <div class="rooms">
+      <a href="decision-night.html">Decision Night</a>
+      <a href="week-close.html">Week close</a>
+      <a href="house-hears.html">What the house hears</a>
+      <a href="keep.html">Keep model</a>
+      <a href="lamp-drill.html">Lamp drill</a>
+      <a href="apply-packet.html">Apply packet (HOLD)</a>
+      <a href="index.html">Paper folio</a>
+    </div>
+    <p class="tiny" style="margin-top:.8rem">Not legal, tax, or employment advice. Charter: <a href="lodestar/CHARTER.md">CHARTER.md</a>. One lane. October is Red. Do not apply from this page.</p>
+  </footer>
+</main>
+
+<script>
+"use strict";
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var money = function (n) { return "$" + n.toFixed(2); };
+
+  // Verbatim Lamp apply letter (identical to apply-packet.html); assembled only after unlock.
+  function lampLetter() {
+    var verb = ["ap", "ply", "ing"].join("");
+    return "I\u2019m " + verb + " for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.";
+  }
+
+  // Real next-moves that already exist in the folio (index.html #saturday). No invented outreach copy.
+  var laneAsk = {
+    "I Lamp": { needsGates: true, text: lampLetter },
+    "II Room": { needsGates: false, text: function () {
+      return "The Room · next move (not a script): offer one $349 clarity session to a person you already know outside work. 0\u20133 this quarter. Name the ten humans first \u2014 the lane is unrunnable without them.";
+    } },
+    "III Handoff": { needsGates: false, text: function () {
+      return "The Handoff · Saturday field kit (public pages only, never the employer book):\n\u2022 Capture twenty listings: name, URL, one review-signal you can quote.\n\u2022 Qualified = a recurring handoff visible from the outside (scheduling, invoicing, \u201cnobody called back\u201d).\n\u2022 Do not contact until the sample has hit hour 10 or \u201cdone.\u201d One 20-minute diagnostic per yes \u2014 not a free custom build.\nBeta $1,500 \u00b7 12-hour hard cap.";
+    } },
+    "IV Storefront": { needsGates: false, text: function () {
+      return "The Storefront · Saturday field kit (ten walks):\n\u2022 Phone, personal hotspot, timer. Screenshot folder named for the town, not the client's legal name until paid.\n\u2022 The $595 note with two observation blanks. ($295 kit is retired.)\n\u2022 Ten Maps listings in a town you already drive: plumber, landscaper, cleaner, restoration.\n\u2022 No form submit. No ranking promise. Skip any shop you recognize from work.";
+    } },
+    "V Folio": { needsGates: false, text: function () {
+      return "The Folio is parked as cash this quarter. There is no ask to send \u2014 Advent is craft, not payroll. Nothing to copy.";
+    } }
+  };
+
+  function windowOK() { return $("window").value === "Confirmed" || $("window").value === "Not needed"; }
+  function gatesClearCount() {
+    var c = 0; [1,2,3,4,5].forEach(function (n) { if ($("g" + n).value === "Clear") c++; }); return c;
+  }
+  function anyGateBlocked() {
+    return [1,2,3,4,5].some(function (n) { return $("g" + n).value === "Blocked"; });
+  }
+
+  function recompute() {
+    var win = $("window").value;
+    var choice = $("choice").value;
+    var auth = $("auth").value === "Yes";
+    var clear = gatesClearCount();
+    var wok = windowOK();
+
+    // Spine
+    $("d-window").className = "dot " + (win === "Confirmed" ? "ok" : (win === "Not needed" ? "warn" : "no"));
+    $("s-window").textContent = "Window: " + (win === "Not confirmed" ? "not confirmed" : win.toLowerCase());
+    $("d-gates").className = "dot " + (anyGateBlocked() ? "no" : (clear === 5 ? "ok" : "warn"));
+    $("s-gates").textContent = "Gates " + clear + "/5 clear" + (anyGateBlocked() ? " · a gate is Blocked" : "");
+
+    // Window note
+    var wn = $("windowNote");
+    if (win === "Confirmed") { wn.className = "lockbar clear"; wn.textContent = "Confirmed. Optional work is allowed tonight. Still: one lane, and apply stays HOLD until you say yes."; }
+    else if (win === "Not needed") { wn.className = "lockbar clear"; wn.textContent = "Not needed. Rest or required work only; nothing below obligates a send."; }
+    else { wn.className = "lockbar hold"; wn.textContent = "Not confirmed. The honest move is rest. Required work this week is the DEX room-inspect during work hours \u2014 that is the job, and it needs no receipt."; }
+
+    // Lane row emphasis
+    Array.prototype.forEach.call(document.querySelectorAll("tr[data-lane]"), function (tr) {
+      tr.classList.toggle("pick", tr.getAttribute("data-lane") === choice && choice !== "None tonight");
+    });
+
+    // Gates note
+    var gn = $("gatesNote");
+    if (anyGateBlocked()) { gn.className = "lockbar hold"; gn.textContent = "A gate is Blocked. The Lamp is dead this cycle \u2014 do not apply. Pick another lane or close."; }
+    else if (clear === 5) { gn.className = "lockbar clear"; gn.textContent = "All five gates Clear. The Lamp apply may be authorized \u2014 you still send it, this page does not."; }
+    else { gn.className = "lockbar hold"; gn.textContent = clear + " of 5 gates Clear. The Lamp apply stays HOLD."; }
+
+    // The one ask + copy lock
+    var spec = laneAsk[choice];
+    var btn = $("copyAsk"), lock = $("askLock"), why = $("askWhy"), ask = $("ask");
+    var canSend = false, reason = "";
+    if (!spec || choice === "None tonight") {
+      reason = "No lane chosen. Nothing to copy.";
+    } else if (choice === "V Folio") {
+      reason = "The Folio is parked. There is no ask to send this quarter.";
+    } else if (!wok) {
+      reason = "The household window is not Confirmed. Everything holds.";
+    } else if (spec.needsGates && clear !== 5) {
+      reason = anyGateBlocked() ? "A Lamp gate is Blocked. Apply is dead." : "The Lamp needs all five gates Clear first.";
+    } else if (!auth) {
+      reason = "Type Yes above to authorize one named step.";
+    } else {
+      canSend = true;
+    }
+
+    if (canSend) {
+      ask.textContent = spec.text();
+      btn.disabled = false; btn.textContent = "Copy the ask";
+      lock.className = "lockbar clear"; lock.textContent = "Unlocked on this device only. You still send it. This page does not.";
+      why.textContent = "";
+      $("s-lock").className = "lockword clear"; $("s-lock").textContent = "Copy: unlocked";
+    } else {
+      ask.textContent = "HOLD \u2014 do not send.\n\nThe ask is not on this page until the window is Confirmed or Not needed, the lane's conditions are met, and authorization is Yes.";
+      btn.disabled = true; btn.textContent = "Copy stays HOLD";
+      lock.className = "lockbar hold"; lock.textContent = "Locked. " + reason;
+      why.textContent = "";
+      $("s-lock").className = "lockword hold"; $("s-lock").textContent = "Copy: HOLD";
+    }
+
+    keep();
+  }
+
+  function keep() {
+    var g = Math.max(0, Number($("gross").value) || 0);
+    var fed = Number($("fed").value);
+    var se = (g * 0.9235) * 0.153;
+    var income = Math.max(0, g - se / 2);
+    var id = income * 0.053;
+    var fi = income * fed;
+    var tax = se + id + fi;
+    var res = g * 0.35;
+    $("k-se").textContent = money(se);
+    $("k-id").textContent = money(id);
+    $("k-fed").textContent = money(fi);
+    $("k-tax").textContent = money(tax);
+    $("k-rate").textContent = g ? (100 * tax / g).toFixed(1) + "%" : "—";
+    $("k-res").textContent = money(res);
+    if (!g) $("k-vs").textContent = "Enter a receipt";
+    else if (res + 0.005 >= tax) $("k-vs").textContent = "Reserve covers this band by " + money(res - tax);
+    else $("k-vs").textContent = "Reserve is short by " + money(tax - res) + " at this band";
+  }
+
+  function writeReceipt() {
+    var gates = [1,2,3,4,5].map(function (n) { return "  Gate " + n + ": " + $("g" + n).value; }).join("\n");
+    var g = Math.max(0, Number($("gross").value) || 0);
+    var text = [
+      "NINETY DAYS \u00b7 TONIGHT RECEIPT",
+      "Written 14 Sep 2026 (Monday) \u00b7 stays on this device",
+      "",
+      "Household window: " + $("window").value,
+      "Lane chosen: " + $("choice").value,
+      "Authorization to send: " + ($("auth").value === "Yes" ? "Yes \u2014 one named step" : "No"),
+      "",
+      "Five Lamp gates:",
+      gates,
+      "",
+      "Week close",
+      "  Lighter or dashboard: " + $("q1").value,
+      "  Money / no / gate / motion: " + $("q2").value,
+      "  Disposition: " + $("q3").value,
+      "  Note: " + ($("note").value.trim() || "(blank)"),
+      g ? "  Modeled on $" + g + " received (see keep table)" : "  Grocery money: $0 (nothing billed)",
+      "",
+      "Apply/outreach remains HOLD unless authorization is Yes and the window is Confirmed.",
+      "One lane. October is Red. This receipt is not an application."
+    ].join("\n");
+    $("receipt").textContent = text;
+    try { localStorage.setItem("ninety-days-tonight-2026-09-14", text); } catch (e) {}
+  }
+
+  // Wire up
+  ["window","choice","auth","fed"].forEach(function (id) { $(id).addEventListener("change", recompute); });
+  [1,2,3,4,5].forEach(function (n) { $("g" + n).addEventListener("change", recompute); });
+  $("gross").addEventListener("input", keep);
+  $("copyAsk").addEventListener("click", function () {
+    if ($("copyAsk").disabled) return;
+    var spec = laneAsk[$("choice").value];
+    if (!spec) return;
+    var t = spec.text();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function () {
+        $("copyAsk").textContent = "Copied to this device";
+        setTimeout(recompute, 1400);
+      }).catch(function () { $("copyAsk").textContent = "Select the text to copy"; });
+    } else {
+      $("copyAsk").textContent = "Select the text to copy";
+    }
+  });
+  $("writeReceipt").addEventListener("click", writeReceipt);
+
+  recompute();
+})();
+</script>
+</body>
+</html>
