@@ -1,7 +1,7 @@
 # State of the Project
 **14 Sep 2026 · Week 2 of 13 · Sunday close day**
 
-This week still wins. Household window last recorded **Not confirmed** (fetched 14 Sep; page last edited 11 Sep). External apply / upload / message / purchase / publish remain HOLD. Required work: DEX room-inspect in scheduled hours. Sunday close is three minutes on the existing Notion card. Rest needs no receipt.
+This week still wins. Household window last recorded **Not confirmed** (re-fetched 14 Sep evening; page last edited 11 Sep). 14 Sep is **Monday**. Week-turn was Sun 13; next close Sun 20. Human week 15–21 (child of This week) defaults to rest. External apply stays HOLD. Required work: DEX / Academy in scheduled hours.
 
 Money SoT is Operator Card v2: one lane, $0 until a billed hour, Idaho, 8 hours all-in, October Red, 35% reserve as a household rule. Grocery default after gates is The Lamp. If Lamp is blocked, The Room. Folio is parked as cash.
 

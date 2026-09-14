@@ -88,14 +88,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .decide .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
 .decide .pay .v{font-family:var(--display);font-size:1.15rem;font-weight:500}
 @media (max-width:640px){.decide .pay{grid-template-columns:1fr 1fr}}
-.choice{margin-top:12px}
-.choice .seg{flex-wrap:wrap}
-.receipt{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--crimson-soft);font-size:.95rem}
+.board{margin-top:12px;padding:16px 16px 14px}
+.board .sc{display:block;margin:10px 0 6px}
+.board .sc:first-child{margin-top:0}
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.lanes button{font-family:var(--ui);font-size:.78rem;font-weight:500;padding:8px 6px;border-radius:10px;border:1px solid var(--rule);color:var(--muted);background:var(--paper);text-align:center}
+.lanes button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.receipt{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--crimson-soft);font-size:.92rem}
 .receipt b{font-weight:600}
+.gates{list-style:none;padding:0;margin:8px 0 0}
+.gates li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--rule)}
+.gates .nm{font-size:.92rem}
+.gates .seg button{padding:5px 9px;font-size:.72rem}
 .strip button.paper{opacity:.55}
-.strip button.paper .pr::after{content:' · paper'}
+.strip button.paper .pr::after{content:' \b7 paper'}
 .notion-lock{margin:0 0 16px;padding:10px 12px;border-left:3px solid var(--crimson);font-size:.92rem;color:var(--ink)}
-#honest{margin-top:12px}
 
 /* Nav */
 .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
@@ -386,23 +393,18 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 <div class="wrap title" id="top">
   <h1>Build. <em>Baby.</em> Build.</h1>
   <p class="lede">Ninety days in three movements. Five paper bets. Write one — or none. A listing is not a billed hour.</p>
-  <p class="note">Everything on this page is an estimate, not a promise. Compliments are not demand. Only the ledger counts.</p>
-  <p class="note">Parallel draft. Weekly authority is Notion → This week. Money SoT is the One Cash Lane operator card. Updated 14 Sep 2026. External apply and outreach stay HOLD until you type them.</p>
+  <p class="note">Estimate, not a promise. Only the ledger counts. Parallel draft — This week still wins. Updated 14 Sep 2026 (Monday). Apply and outreach stay HOLD.</p>
   <div class="decide" id="now" aria-live="polite"></div>
-  <div class="leaf" style="margin-top:12px" id="window-box">
-    <h3 style="margin-bottom:6px">Household window</h3>
-    <p class="note" style="margin-bottom:10px">Last recorded on This week: Not confirmed. This page does not override that. A Confirmed or Not needed here is a local note, not a household agreement.</p>
+  <div class="leaf board" id="board">
+    <span class="sc">Household window · This week last recorded Not confirmed</span>
     <div class="seg" id="household" role="group" aria-label="Household window">
       <button data-w="unknown">Not recorded</button>
       <button data-w="not">Not confirmed</button>
       <button data-w="notneeded">Not needed</button>
       <button data-w="confirmed">Confirmed</button>
     </div>
-  </div>
-  <div class="leaf choice" id="choice-box">
-    <h3 style="margin-bottom:6px">Write one lane</h3>
-    <p class="note" style="margin-bottom:10px">Notion names. The other four stay paper. Writing a lane does not lift HOLD and does not confirm the window.</p>
-    <div class="seg" id="choice" role="group" aria-label="Written lane">
+    <span class="sc">Write one lane · does not lift HOLD</span>
+    <div class="lanes" id="choice" role="group" aria-label="Written lane">
       <button data-lane="none">None</button>
       <button data-lane="lamp">I Lamp</button>
       <button data-lane="room">II Room</button>
@@ -411,8 +413,9 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
       <button data-lane="folio">V Folio</button>
     </div>
     <div class="receipt" id="receipt" aria-live="polite"></div>
+    <div id="honest" aria-live="polite"></div>
+    <div id="gates" hidden></div>
   </div>
-  <div class="leaf" id="honest" aria-live="polite"></div>
   <div class="movements" id="movements" aria-label="The three movements"></div>
   <div class="facts">
     <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
@@ -425,7 +428,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
     <a href="#now">This week</a>
-    <a href="#choice-box">Lane</a>
+    <a href="#board">Lane</a>
     <a href="#first">Read first</a>
     <a href="#choose">Choose</a>
     <a href="#plans">The five</a>
@@ -627,10 +630,18 @@ const NOTION = {
 };
 const LAMP_TONIGHT = {
   0:'Nothing is the move. A listing is not a billed hour. Go to bed.',
-  15:'Write one word: Pursue, Park, or Close — after you remember the five gates. Do not apply.',
-  45:'Open the M4 sheet only if the window is open. Fill five gates. Unknown is allowed. Do not apply.',
+  15:'Mark one gate below: unknown, clear, or blocked. Do not apply.',
+  45:'Mark the five gates on this page. Unknown is allowed. Blocked kills Lamp. Do not apply.',
   90:'Required work only: DEX during scheduled hours. Not an application hour.'
 };
+const GATES = [
+  {id:'ld', name:'L&D years'},
+  {id:'gtm', name:'Sales / GTM years'},
+  {id:'slides', name:'Slide fluency'},
+  {id:'ip', name:'Outside-work / IP'},
+  {id:'monitor', name:'Monitoring consent'}
+];
+function defaultGates(){ return {ld:'unknown', gtm:'unknown', slides:'unknown', ip:'unknown', monitor:'unknown'}; }
 
 /* ---------------- Plans ---------------- */
 const PLANS = [
@@ -989,8 +1000,8 @@ const LEDGER = [
 let S = load();
 function load(){
   try{ const s = JSON.parse(localStorage.getItem(KEY)||'{}');
-    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}, s);
-  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}; }
+    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}, s);
+  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}; }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 
@@ -1079,9 +1090,12 @@ function week1Shipped(){
   const c = S.checks.fix || {};
   return !!(c[1] && c[2] && c[3] && c[4]); /* Stripe, scripts, list, five videos */
 }
-function tonightLine(p, min){
+function storefrontCatchup(){
   const w = weekNum();
-  if(p.id==='fix' && !week1Shipped() && w>=2 && w<=5){
+  return windowOpen() && writtenLane()==='storefront' && !week1Shipped() && w>=2 && w<=5;
+}
+function tonightLine(p, min){
+  if(p.id==='fix' && storefrontCatchup()){
     return ({
       0:'Nothing is the move. Go to bed. The five videos wait until you have forty-five minutes.',
       15:'Open Google Maps. Write one name and the one friction you saw on a phone.',
@@ -1118,9 +1132,9 @@ function renderThisWeek(){
       <h2>This week wins. Money waits.</h2>
       <p>Household window is not confirmed. Apply and outreach stay HOLD. Do not send videos, asks, or walks from this page.</p>
       <ol>
-        <li>Required: DEX room-inspect during scheduled work hours.</li>
-        <li>Optional, only if you mark Confirmed or Not needed: M4 twenty-minute sheet. Do not apply.</li>
-        <li>Sunday 14 Sep: three minutes, then close Notion. Rest needs no receipt.</li>
+        <li>Required: DEX / Academy during scheduled work hours.</li>
+        <li>Optional money: none. Human week 15–21 starts Tuesday. Rest is a finish.</li>
+        <li>Next close: Sunday 20 Sep (13 Sep was Sunday; 14 Sep is Monday). Rest needs no receipt.</li>
       </ol>
       <div class="act"><span class="sc">What this page is</span>A parallel draft of five paper bets. ${esc(LANES[writtenLane()].sentence)} One Cash Lane is the money source of truth.</div>
       <div class="pay">
@@ -1130,7 +1144,7 @@ function renderThisWeek(){
       </div>`;
     return;
   }
-  const late = on('fix','a') && !week1Shipped() && w>=2 && w<=5;
+  const late = storefrontCatchup();
   const tasks = weekTasks(w, mv);
   let body;
   if(late){
@@ -1226,7 +1240,34 @@ function renderFacts(B){
   $('#f-base').textContent = money(H.expected);
   $('#f-floor').textContent = '35%';
   const box = $('#honest');
-  if(box) box.innerHTML = `<h3 style="margin-bottom:6px">Honest cash</h3><p>${esc(H.caption)}</p><p class="note" style="margin:0">Ledger received is the only number that may rise. Offer sheets and Advent live beside this file.</p>`;
+  if(box) box.innerHTML = `<p class="note" style="margin:10px 0 0">${esc(H.caption)}</p>`;
+}
+function gateState(){
+  S.gates = Object.assign(defaultGates(), S.gates||{});
+  const vals = GATES.map(g=>S.gates[g.id]||'unknown');
+  return {
+    blocked: vals.some(v=>v==='blocked'),
+    allClear: vals.every(v=>v==='clear')
+  };
+}
+function renderGates(){
+  const box = $('#gates'); if(!box) return;
+  const show = writtenLane()==='lamp';
+  box.hidden = !show;
+  if(!show) return;
+  S.gates = Object.assign(defaultGates(), S.gates||{});
+  const st = gateState();
+  const verdict = st.blocked
+    ? 'A blocked gate kills Lamp. Write Room, or write none. Do not apply.'
+    : st.allClear
+      ? 'Five gates Clear. APPLY still HOLD until you type apply.'
+      : 'Unknown is allowed. Do not apply to see.';
+  box.innerHTML = `<span class="sc">Lamp truth gates · on this page · not an application</span>
+    <ul class="gates">${GATES.map(g=>{
+      const cur = S.gates[g.id]||'unknown';
+      return `<li><span class="nm">${esc(g.name)}</span><div class="seg" role="group" aria-label="${esc(g.name)}">${['unknown','clear','blocked'].map(v=>`<button type="button" data-gate="${g.id}" data-v="${v}" class="${cur===v?'on':''}" aria-pressed="${cur===v}">${v}</button>`).join('')}</div></li>`;
+    }).join('')}</ul>
+    <p class="note" style="margin:10px 0 0">${esc(verdict)}</p>`;
 }
 $('#bud').addEventListener('change', e=>{
   const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
@@ -1254,6 +1295,7 @@ function renderChoice(){
   });
   const rec = $('#receipt');
   if(rec) rec.innerHTML = `<b>Receipt.</b> ${esc(LANES[lane].sentence)}`;
+  renderGates();
   renderFacts();
   renderStrip();
 }
@@ -1271,6 +1313,13 @@ if(ch) ch.addEventListener('click', e=>{
   if(gh){ S.active=gh; S.tonightPlan=gh; }
   save(); renderChoice(); renderThisWeek(); renderTonight(); renderPlan();
   const again=$(`#choice button[data-lane="${b.dataset.lane}"]`); if(again) again.focus();
+});
+const gatesBox = $('#gates');
+if(gatesBox) gatesBox.addEventListener('click', e=>{
+  const b=e.target.closest('button[data-gate]'); if(!b) return;
+  S.gates = Object.assign(defaultGates(), S.gates||{});
+  S.gates[b.dataset.gate] = b.dataset.v;
+  save(); renderGates();
 });
 function renderTonight(){
   renderHousehold();
@@ -1300,7 +1349,7 @@ function renderTonight(){
     $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · no lane</small>Write a lane at the top, or close the laptop. Five paper bets is not five jobs.`;
     return;
   }
-  $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}${week1Shipped()||p.id!=='fix'?'':' · catch-up'}</small>${esc(tonightLine(p, S.tonightMin))}`;
+  $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}${storefrontCatchup()?' · catch-up':''}</small>${esc(tonightLine(p, S.tonightMin))}`;
 }
 $('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
 $('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightMin=Number(b.dataset.m); save(); renderTonight(); });
@@ -1323,9 +1372,10 @@ function renderPlan(){
     <h3 class="name">${esc(p.name)}</h3>
     <p class="line">${esc(p.line)}</p>
     <p class="notion-lock">${esc((NOTION[p.id]||{}).lock || 'Paper bet. Write one lane at the top.')}</p>
+    ${!windowOpen() ? `<p class="notion-lock">HOLD. The week list below is paper. Do not send, walk, or apply from this card.</p>` : ''}
     <div class="kpis">
       <div class="kpi"><span class="sc">Price</span><div class="v">${esc(p.price)}<small>${esc(p.priceNote)}</small></div></div>
-      <div class="kpi"><span class="sc">90-day cash</span><div class="v">${money(p.cash.base)}<small>floor ${money(p.cash.floor)} · stretch ${money(p.cash.stretch)}</small></div></div>
+      <div class="kpi"><span class="sc">Honest cash</span><div class="v">${money(honestCash().expected)}<small>${esc(honestCash().caption)}</small></div></div>
       <div class="kpi"><span class="sc">Time</span><div class="v">${esc(p.hours)}<small>${esc(p.hoursNote)}</small></div></div>
       <div class="kpi"><span class="sc">First dollar</span><div class="v">${esc(p.first)}<small>${esc(p.firstNote)}</small></div></div>
     </div>

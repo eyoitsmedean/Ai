@@ -39,6 +39,8 @@ async function main() {
     assert(/Money waits/i.test(t), 'missing HOLD headline: ' + t.slice(0, 200));
     assert(/\$0/.test(t), 'HOLD card should show $0');
     assert(!/send five/i.test(t), 'must not tell him to send videos');
+    assert(/Sunday 20 Sep/i.test(t), 'weekday repair missing: ' + t);
+    assert(!/Sunday 14 Sep/i.test(t), 'old false Sunday 14 still on first screen');
   });
 
   await check('honest cash fact is $0', async () => {
@@ -59,6 +61,10 @@ async function main() {
     assert(/\$0/.test(cash), cash);
     assert(/window is not open/i.test(cash), cash);
     assert(!/1,920/.test(cash), 'must not model six weeks');
+    const gates = await page.$eval('#gates', el => ({ hidden: el.hidden, text: el.innerText }));
+    assert(!gates.hidden, 'Lamp gates should show');
+    assert(/L&D years/i.test(gates.text), gates.text);
+    assert(!/Start application|Apply now/i.test(gates.text), 'apply leaked onto gates');
   });
 
   await check('Lamp caption after local Confirmed', async () => {
@@ -76,6 +82,21 @@ async function main() {
     assert(/Storefront/i.test(rec) && /\$595/.test(rec), rec);
     const v = await page.$eval('#f-base', el => el.textContent.trim());
     assert(v === '$0', 'storefront under HOLD must stay $0, got ' + v);
+  });
+
+  await check('old One-Fix tick does not force video catch-up', async () => {
+    await page.evaluate(() => {
+      const s = JSON.parse(localStorage.getItem('ninety.v1') || '{}');
+      s.household = 'confirmed';
+      s.choice = 'lamp';
+      s.stack = { fix: { a: true, c: true } };
+      localStorage.setItem('ninety.v1', JSON.stringify(s));
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const t = await page.$eval('#now', el => el.innerText);
+    assert(!/sixty-second videos/i.test(t), 'catch-up leaked under Lamp: ' + t.slice(0, 240));
+    assert(!/Five sixty/i.test(t), t.slice(0, 240));
+    await page.click('#household button[data-w="not"]');
   });
 
   await check('Advent week 1 has no buy button', async () => {

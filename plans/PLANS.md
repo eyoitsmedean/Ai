@@ -29,7 +29,7 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 **This week (11–17 Sep).**
 
 1. If the household window is **not confirmed**: required work is DEX during scheduled hours. Optional money work is the M4 sheet only after you mark Confirmed or Not needed. Do not send videos, asks, or walks.
-2. Sunday 14 Sep: three minutes on the existing close card. Rest needs no receipt.
+2. 14 Sep is Monday. Week-turn was Sunday 13. Next close: Sunday 20 Sep. Rest needs no receipt.
 3. If — and only if — the window is open **and** Storefront is the one written lane: then the old catch-up (Stripe, twenty names, five videos) applies.
 4. Advent / Folio stays parked as cash. The Voice Capsule stays parked.
 

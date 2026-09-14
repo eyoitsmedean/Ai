@@ -40,3 +40,11 @@ Playbook first screen now HOLDs video sends until household window is Confirmed 
 ## Open S1/S2
 
 None that block ship. Remaining: handbook unread (Gate 4); Mercor hours unknown; SOSBiz $25 inferred.
+
+## ATELIER · 14 Sep evening
+
+Purpose unchanged: five paper plans, one live lane, beautiful, no leftover assembly, $0 until billed, HOLD.
+
+Finished: first screen is one board (window + lane + cash + Lamp gates). Catch-up only if Storefront is the written lane. 14 Sep is Monday — next close Sun 20. Human week 15–21 is rest-default; playbook does not add a fourth money lane unless he writes Lamp.
+
+Did not overwrite This week / Operator Card / Sunday close original. Did not apply.
