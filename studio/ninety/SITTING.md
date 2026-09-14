@@ -1,5 +1,6 @@
 # One sitting · 45 minutes
 ### Phone card · 14 September 2026 · two sittings max this season
+Bearing: C5
 
 Open this. Set a 45-minute timer. Do not open the playbook first. Do not open a dossier.
 

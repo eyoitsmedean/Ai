@@ -1,6 +1,8 @@
 # Canonical brief — The Quire
 ### Version 2026-09-11 · conversation `bc-01a06f1d-734e-736f-aa6e-aa05c3167759`
 
+**14 Sep.** Intent Charter and knowledge index: `studio/lodestar/CHARTER.md`, `studio/lodestar/INDEX.md`. This file remains the agent brief. It is not a sixth plan.
+
 This is the system of record for **this** conversation. It is not the cash folio (*Ninety Days · One Plan*), not Red Words, and not the Advisor-rebuild chat that lives on `cursor/recovery-commission-fbba`.
 
 Labels: **EXPLICIT** (Dean said it) · **AMENDED** (later Dean instruction) · **INFERRED** (our reading) · **ASSUMED**.
@@ -116,7 +118,7 @@ Dean has **not** typed “looks good” on the folio, the strategy page, or this
 
 1. **Drift.** Agents treated “wow me” as “keep building the app.” The original ask was five life projects. The app is Book IV’s *door*, not the commission.
 2. **Founder-only gate.** Pages is not enabled. Without a URL, Advent cannot be sent. Nobody else can flip Settings → Pages.
-3. **Calendar slip.** Today is **Friday 11 September**. The week-2 live block (Tue 8 Sep) is past. Factory ballot was due “tonight or Sunday” of 5–7 Sep and is unmarked in this repo (it must live on paper / This week — never a CRM here).
+3. **Calendar slip.** Today is **Monday 14 September** (was Friday 11 September at recovery). The week-2 live block (Tue 8 Sep) is past. Factory ballot remains unmarked in this repo (paper / `REFUSAL.md` — never a CRM here).
 4. **October in 20 days.** Family prep list is the only September family project. If it is not done, the freeze will be improvised.
 5. **Conflicting pages.** `LAUNCH.md` used to tell him to spend $200 on Meta this week. `IMPROVEMENT_PLAN.md` still offers an Expo shell. Other Notion recovery homes forbid Pages. Those contradictions are the obstacle, not missing research.
 6. **No Dean acceptance.** Folio, strategy target, factory pick, chapter hole, and accountability name are his.

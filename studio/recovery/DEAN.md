@@ -1,5 +1,5 @@
 # The Quire — one screen
-### 5 September – 4 December 2026 · updated 14 September
+### 5 September – 4 December 2026 · updated 14 September (LODESTAR Cycle 1)
 
 **What this is.** Five things worth doing in a window that includes a newborn. Not five businesses. Not a sixth Notion hub.
 
@@ -9,9 +9,11 @@
 
 ## First three actions
 
-1. **Enable GitHub Pages** (Settings → Pages → GitHub Actions) and merge [PR #17](https://github.com/eyoitsmedean/Ai/pull/17) when ready. Open `https://eyoitsmedean.github.io/Ai/` on a phone. Sit once. Send the first blessing (`studio/ninety/BLESS.md`) to one named person — no URL.
-2. **Sunday, ten minutes:** who has the boys if she goes in; Tuesday blocks on a real calendar; his birthday (early, or cake at home after the arrival); the bag. Then close Notion.
-3. **Date a card:** Factory = `NONE` (recommended) · or Lamp · or One-Fix. Optional: one accountability name who asks “did you sit?” — not her.
+1. **The Compound is this week** (work hours). One artifact a seller can use without you. Monday twenty. Then shutdown.
+2. **Sunday 20 September, ten minutes** (`studio/ninety/FREEZE.md`): labor-night name, **firstborn week**, Tuesday blocks, birthday, the bag, one sleep-block owner. Then close Notion. Do not make her confirm a window.
+3. **Date the two-step ballot** (`REFUSAL.md`): Factory = `NONE` (recommended) plus one reengagement. If the window is green tonight: sit Today locally (`DOOR.md`) → first blessing (`BLESS.md`) to one named person — no URL. Pages + merge wait for your yes.
+
+After the kids: `studio/ninety/NIGHT.html`.
 
 ---
 
@@ -20,10 +22,10 @@
 | Book | Done by 4 December looks like |
 | --- | --- |
 | Compound | Cohort ran. A handful of used artifacts. One private seat sentence. |
-| October | Household can stand you. Birthday happened. Named adult for the boys. No sixth hub. |
+| October | Household can stand you. Birthday happened. Named adult **and** firstborn week. No sixth hub. |
 | One Chapter | Two sittings if the gate in `SITTING.md` is green (not eight), or a dated refusal because writing was not rest. November: this *or* Advent, unless writing is rest. |
-| Advent | Live URL. First blessing to one named person (no URL in that text). Ten sends later. Day-2 count, even if it is one. |
-| Factory | A dated pick you do not reopen when an agent offers a menu. |
+| Advent | Live URL *or* an honest “I avoided the send.” First blessing to one named person (no URL). Ten sends later. Day-2 count, even if it is one. |
+| Factory | A dated two-step you do not reopen when an agent offers a menu. |
 
 Must run: **October** and **The Compound**.
 
@@ -31,11 +33,12 @@ Must run: **October** and **The Compound**.
 
 ## Where things live
 
-- Tonight: `studio/ninety/SIT.md` (also the repo README). Folio: open `studio/ninety/index.html` as a file — Pages is the app, not the book.
-- Chapter sitting: `studio/ninety/SITTING.md`. First blessing: `studio/ninety/BLESS.md`.
+- Tonight: `studio/ninety/NIGHT.html` · `studio/ninety/SIT.md`. Folio: `studio/ninety/index.html` as a file — Pages is the app, not the book.
+- Chapter: `SITTING.md`. Blessing: `BLESS.md`. Freeze: `FREEZE.md`. Factory: `REFUSAL.md`. Door: `DOOR.md`.
 - Doctrine: `studio/ninety/PLAYBOOK.md`
-- C3/C4 dossiers (14 Sep): `studio/recovery/DOSSIERS-2026-09-14.md`
-- Why: `studio/recovery/KNOWLEDGE.md`
+- Star + dossiers: `studio/lodestar/INDEX.md`
+- C3/C4 long form: `studio/recovery/DOSSIERS-2026-09-14.md`
+- Why (archive): `studio/recovery/KNOWLEDGE.md`
 - Agents: `studio/recovery/CANONICAL_BRIEF.md`
 - Decisions: `CLAUDE.md`
 - App: `public/` — Advent `/?path=advent` · Lent `/?path=lent`

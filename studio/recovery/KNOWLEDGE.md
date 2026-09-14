@@ -130,9 +130,9 @@ Karr (excerpts/interviews, re-opened 14 Sep): nine months on chapter one until v
 
 ## C6 · The Factory
 
-**Answer.** Another 90-day menu is a positive fantasy (Oettingen): it feels like progress and saps the first ugly action. Intention–action gap is the default (Sheeran ~47% of intenders act; Kautonen: 63% of start-up intenders had done little a year later). Implementation intentions (if-then) are the missing object (Gollwitzer & Sheeran 2006, d = 0.65; later meta smaller). An unmarked ranking is an action crisis (Brandstätter) — the expensive state.
+**Answer.** Another 90-day menu is a positive fantasy (Oettingen): it feels like progress and saps the first ugly action. Intention–action gap is the default. **Retired 14 Sep:** “Sheeran ~47% of intenders act.” What the 2006 paper actually is: Webb & Sheeran, *Psychological Bulletin* 132(2), **47 experimental tests**; a medium-to-large intention change (*d* = 0.66) moved behavior only *d* = 0.36 (PubMed 16536643, opened 14 Sep). The 63% figure is Kautonen, van Gelderen & Fink, *ET&P* 2015: of 371 wave-1 intenders, 232 (63%) reported no start-up action a year later (Waves 2011–2012; page opened 14 Sep). Implementation intentions (if-then) close some of the gap — and can also automate a *dead* goal (Bieleke 2021/22). An unmarked ranking is an action crisis (Brandstätter).
 
-**Decision.** Dated ballot. Replacement cue is an action (“open the URL / write 200 words / five first sentences”), not “do not plan.” Recommended mark: **NONE**, because the other four already reengage meaning (Wrosch: disengage *and* reengage).
+**Decision.** Dated two-step ballot (`REFUSAL.md`). Replacement cue is an action already in the four books, not shop labor. Recommended mark: **NONE**, because the other four already reengage meaning (Wrosch 2003: disengage *and* reengage).
 
 ---
 

@@ -3,7 +3,7 @@
 
 This expands `FIVE.md`. It is the object to review: doctrine, calendar, scripts, sitting cards, and kill rules. Nothing here authorizes outreach, spend, application, or publication.
 
-**Dated 11 September 2026.** Week 2 of the cohort is past. For what to do *this week*, open `SIT.md` or the folio leaf `#week`. Do not treat the Tuesday 8 September row below as still ahead of you.
+**Dated 14 September 2026 · day 10.** Week 2 of the cohort is past. For what to do *this week*, open `SIT.md`, `NIGHT.html`, or the folio leaf `#week`. Do not treat the Tuesday 8 September row below as still ahead of you. Knowledge: `studio/lodestar/INDEX.md`.
 
 **How to sit with it (12 minutes).** Title leaf. This week. The math. The pick. Then only the book you will actually run this month. The other four can wait.
 
@@ -144,9 +144,9 @@ Anything medical, legal, or account-numbered does not live in a project folio. Y
 **Allowed**
 
 - Required work, in work hours.
-- Sleep, food, the boys, her, the little.
-- One weekly household window: Confirmed / Not confirmed / Not needed.
+- Sleep, food, the boys, her, the little. Firstborn week has a named owner (`FREEZE.md`).
 - Night work that makes tomorrow morning lighter: a bag, a meal, a text, a load of laundry.
+- Do **not** make her confirm a weekly household window. November is not pre-authorized.
 
 **Forbidden**
 
@@ -163,9 +163,9 @@ Anything medical, legal, or account-numbered does not live in a project folio. Y
 
 ## Sunday, three minutes (keep your existing close)
 
-1. Did the week get lighter?
-2. Is the household window still true?
-3. Continue the freeze, or — only if both adults say yes — name one November craft.
+1. Did the week get lighter for her or the boys?
+2. Do not ask her to confirm a window. If you are in the 6–12 week sleepiness peak, November stays off.
+3. Continue the freeze, or — only if both adults already say the window is green **and** you are not in that peak — name one November craft. Default: watch only.
 
 Park creates no reminder. Close creates no successor.
 
@@ -428,15 +428,15 @@ Your scarce resource is nights. The studio already holds more cash lanes than yo
 
 Read yesterday’s two folios once. Then mark **one**:
 
-| Mark | Pick | November action (only if household window is green) |
+| Mark | Pick | Finish looks like |
 | --- | --- | --- |
-| ☐ | **NONE** | A finish. Compound, October, Chapter, Advent are already a life. |
-| ☐ | **The Lamp** | Freeze M4 as-is. One application *or* one conversation. Not both. Not “to see.” |
-| ☐ | **One-Fix** | Walk into three places you already go. Look at the booking path. Say the sentence or do not. Fifteen minutes each. No site. No logo. |
+| ☐ | **NONE** | Contrast done. Reengagement dated on `REFUSAL.md` the same day. Chat closes when a menu appears. |
+| ☐ | **The Lamp** | Pack frozen. One November act written now: application *or* conversation, not both, only if the window is green. |
+| ☐ | **One-Fix** | Three places you already go. Fifteen minutes. Say the sentence or do not. No site. |
 
 Date the card. Put it on This week. Do not build a new page for the pick.
 
-**Recommended default: NONE.** The other four books are already more than 20–35 hours. A cash lane is how the factory gets back in the house.
+**Recommended default: NONE.** The other four books are already more than 20–35 hours. A cash lane is how the factory gets back in the house. `NONE` is a finish only with a dated reengagement the same day (`REFUSAL.md`). Do not write an if-then that names shop labor.
 
 ## Relapse signs (close the chat)
 

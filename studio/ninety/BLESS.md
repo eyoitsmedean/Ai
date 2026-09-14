@@ -1,5 +1,6 @@
 # First blessing · one person · no market
 ### Phone card · 14 September 2026
+Bearing: C6
 
 This is the first send. It is not the ten Advent names. It is not a streak. It is not a waitlist.
 

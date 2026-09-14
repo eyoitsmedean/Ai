@@ -12,10 +12,10 @@ Live private draft (this session): [The Quire · five things · 11 Sep](https://
 | Question | Answer |
 | --- | --- |
 | What is this for? | Five life projects, 5 Sep–4 Dec 2026, ~20–35 optional hours. |
-| What is complete? | Folio, playbook, Advent + Lent paths, crisis gate, eval (fallback), strategy v2, this-week card. |
-| What do I do next? | `SIT.md` three actions. |
+| What is complete? | Folio, playbook, Advent + Lent paths, crisis gate, eval (fallback), strategy v2, this-week card, LODESTAR Cycle 1 (`studio/lodestar/`). |
+| What do I do next? | `NIGHT.html` after the kids. `SIT.md` three actions. Sunday `FREEZE.md`. Date `REFUSAL.md`. |
 | Where are the deliverables? | Repo paths below. |
-| What evidence? | `KNOWLEDGE.md` |
+| What evidence? | `studio/lodestar/INDEX.md` · `KNOWLEDGE.md` |
 | What is unresolved? | Pages, factory mark, chapter hole, accountability name, live eval. |
 | How to maintain? | Agents read `CANONICAL_BRIEF.md`. Dean edits paper / This week. Do not add a database. |
 
