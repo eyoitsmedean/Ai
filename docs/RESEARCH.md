@@ -61,9 +61,9 @@ Source: [eBible WEB+ copyright](https://ebible.org/engwebp/copyright.htm) and [W
 The 1769 Cambridge standard text is treated in this repo as public-domain in the United States (`data/gospels-kjv.json`, `LICENSE`). That is the sealed atelier corpus.
 
 **KJV (UK)**  
-Opened: [Yale Divinity — King James Bible](https://guides.library.yale.edu/c.php?g=295559&p=7902908) (rights in the *text* claimed in the UK until 2039; Crown via Cambridge).  
+Opened 2026-09-11: [Yale Divinity — King James Bible](https://guides.library.yale.edu/c.php?g=295559&p=7902908) — that URL is now **404** (re-checked 2026-09-14). Current guide: [https://guides.library.yale.edu/newtestament/kjv](https://guides.library.yale.edu/newtestament/kjv) (200 on 2026-09-14) — “a maximum of **500 verses**,” not a complete NT book, not 25% of the host work. The “until 2039” sentence is **not** on the current page and is **not re-established**. Crown / Cambridge remains the UK administrator (secondary).  
 Opened: [Law Stack Exchange, citing Cambridge permissions](https://law.stackexchange.com/questions/20128/is-the-kjv-protected-by-copyright-in-the-uk) — Cambridge’s quoted policy: up to **500 verses**, provided they are not a complete book and not more than 25% of the work.  
-Opened: [Wikipedia, King James Version, copyright section](https://en.wikipedia.org/wiki/King_James_Version#Copyright_status) — that page said “500 **words**.” That conflicts with the Cambridge-quoting sources. **Treat “500 words” as disconfirmed** until Cambridge’s own page is read. Cambridge’s site was Cloudflare-blocked this session.
+Opened: [Wikipedia, King James Version, copyright section](https://en.wikipedia.org/wiki/King_James_Version#Copyright_status) — that page said “500 **words**.” That conflicts with the Cambridge-quoting sources. **Treat “500 words” as disconfirmed** until Cambridge’s own page is read. Cambridge’s site was Cloudflare-blocked this session (and again 2026-09-14).
 
 Dean’s Idaho household does not make UK Crown the *controlling* rule. A GitHub Pages URL on the default branch *would* be reachable from the UK. That is why Pages is not a launch.
 
@@ -163,7 +163,8 @@ Unchanged from `CLAUDE.md`. Seal admits only red letters. `refOther` for Luke 2:
 | --- | --- | --- | --- |
 | 2026-09-11 | https://988lifeline.org/ | US crisis number is 988; call/text/chat | US-scoped |
 | 2026-09-11 | https://findahelpline.com/ | Non-US directory | Directory, not a single hotline |
-| 2026-09-11 | https://guides.library.yale.edu/c.php?g=295559&p=7902908 | UK Crown / Cambridge claim on KJV text to 2039 | Library guide, not counsel |
+| 2026-09-11 | https://guides.library.yale.edu/c.php?g=295559&p=7902908 | Then cited for UK Crown / 2039 | **404 as of 2026-09-14** — do not reuse |
+| 2026-09-14 | https://guides.library.yale.edu/newtestament/kjv | Current Yale KJV guide: 500 **verses**; no “2039” | Library guide, not counsel; Cambridge HTML still unread |
 | 2026-09-11 | https://law.stackexchange.com/questions/20128/is-the-kjv-protected-by-copyright-in-the-uk | Secondary; quotes Cambridge 500-**verse** policy | Not Cambridge primary; not counsel |
 | 2026-09-11 | https://en.wikipedia.org/wiki/King_James_Version#Copyright_status | Said 500 **words** — disconfirmed against the two sources above | Tertiary; conflict |
 | 2026-09-11 | https://www.cambridge.org/about-us/who-we-are/queens-printers-patent (attempt) | Cambridge primary | **Blocked** (Cloudflare) |

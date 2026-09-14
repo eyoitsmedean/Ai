@@ -1,6 +1,9 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const vm = require('node:vm');
 const { composeAsk, CANNOT } = require('../lib/ask');
 const { verifyQuote } = require('../lib/scripture');
 const app = require('../server');
@@ -145,6 +148,32 @@ describe('one-screen composeAsk', () => {
     assert.equal(other.stop, false);
     assert.notEqual(other.citation, 'John 1:1');
     assert.match(other.meaning, /not words He spoke/);
+  });
+});
+
+describe('on-device composeAsk is the same brain', () => {
+  it('matches lib/ask.js on the /ask eval set', () => {
+    const ctx = { window: { RLA_LIBRARY: require('../public/library.json') } };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../public/data/advisor.js'), 'utf8'), ctx);
+    assert.equal(typeof ctx.window.composeAsk, 'function');
+    const set = JSON.parse(fs.readFileSync(path.join(__dirname, '../eval/ask-questions.json'), 'utf8'));
+    for (const item of set.items) {
+      const server = composeAsk(item.text, { prior: item.prior || [] });
+      const device = ctx.window.composeAsk(item.text, { prior: item.prior || [] });
+      assert.equal(device.stop, server.stop, item.id + ' stop');
+      assert.equal(device.kind, server.kind, item.id + ' kind');
+      assert.equal(device.citation, server.citation, item.id + ' citation');
+      assert.equal(device.quote, server.quote, item.id + ' quote');
+    }
+  });
+
+  it('opens Matthew 11:28 from the device lookup and refuses Luke 2:14', () => {
+    const ctx = { window: { RLA_LIBRARY: require('../public/library.json') } };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../public/data/advisor.js'), 'utf8'), ctx);
+    const mine = ctx.window.RLA_lookup('Matthew 11:28');
+    assert.ok(mine && mine.redLetter && /Come unto me/.test(mine.text));
+    const angel = ctx.window.RLA_lookup('Luke 2:14');
+    assert.ok(!angel || !angel.redLetter || !angel.text);
   });
 });
 

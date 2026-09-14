@@ -2,7 +2,7 @@
 # /ask evaluation — results
 
 **13 of 13 pass.**
-Run: 2026-09-14 20:29 UTC · in-process composeAsk
+Run: 2026-09-14 20:29 UTC · on-device composeAsk
 
 - ✓ ask-tired — need
 - ✓ ask-shame — need

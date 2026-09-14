@@ -2,6 +2,12 @@
 
 ---
 
+## ATELIER — 2026-09-14
+
+On-device `composeAsk` now lives in `public/data/advisor.js` (`window.composeAsk`). `/ask` paints from it, then `/api/ask` if the host answers; prior is kept either way. `/letter` uses `RLA_lookup` if the API is down. RESEARCH.md no longer cites the dead Yale URL as current, and does not claim “until 2039.” Folio crisis letters not rewritten. Suite 80 · eval:ask 13/13 · eval:ask:device 13/13 · folio 82/82.
+
+---
+
 ## LODESTAR Cycle 1 — 2026-09-14
 
 Worker: Cursor cloud agent · this conversation’s LODESTAR paste.

@@ -55,11 +55,13 @@ Nothing here is described as passing that was not run. Last run in this reposito
 
 | Claim | Command | Last result |
 | --- | --- | --- |
-| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, `/ask` stop + `/gate` `/letter` | `npm test` | 78 pass, 0 fail |
+| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer + `/ask` composeAsk parity, `/ask` stop + `/gate` `/letter` | `npm test` | 80 pass, 0 fail |
 | `/ask` stop-vs-cite set (crisis, other, loss, ask, abuse, mixed IPV, IPV after crisis, short Spanish, follow-up) | `npm run eval:ask` → `eval/RESULTS-ask.md` | 13/13 |
+| Same 13 items against on-device `composeAsk` | `npm run eval:ask:device` → `eval/RESULTS-ask-device.md` | 13/13 |
+| Same 13 items against on-device `composeAsk` | `npm run eval:ask:device` → `eval/RESULTS-ask-device.md` | 13/13 |
 | Advisor answers 82 questions correctly on the curated path (mis-routing, buried handoffs, echoes, and identical letters all fail the run) | `npm run eval` → `eval/RESULTS.md` | 82/82, 63 distinct letters |
 | Same 82 questions against the on-device composer (Pages / dropped API / phone without a host) | `npm run eval:device` → `eval/RESULTS-device.md` | 82/82, 63 distinct letters |
-| The page works in a phone-sized browser, including Advisor chips/follow-ups, the crisis modal at the daily limit, `/ask`, `/gate`, `/letter` | `npm start` then `npm run qa` | 17 walks pass (2026-09-14) |
+| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer + `/ask` composeAsk parity, `/ask` stop + `/gate` `/letter` | `npm test` | 80 pass, 0 fail |
 | Android debug build | `npm run mobile:apk` | BUILD SUCCESSFUL (2026-09-06) |
 | Live-model path (`ANTHROPIC_API_KEY` set) | `npm run eval` with the key | **unverified** — no key in the build environment |
 | iOS build, on-device behaviour | `MOBILE.md` checklist | **unverified** — needs a Mac and a phone |

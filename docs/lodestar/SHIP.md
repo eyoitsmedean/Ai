@@ -80,10 +80,8 @@ See `docs/lodestar/00-INDEX.md`.
 ## 10. Next Summits
 
 - Folio crisis **stop** + rewrite eval 82 (C4).  
-- On-device `composeAsk` bundle (C3 offline).  
 - WEB/KJV compare beyond Matthew 11:28 (needs opened pages) (C7).  
-- Static `/letter` without Node (C8).  
-- Patch RESEARCH.md dead Yale URL / 2039.
+- Dean records WEB vs KJV-US in CANON (C7).
 
 ## 11. Director’s Cut
 

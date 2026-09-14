@@ -1,6 +1,6 @@
 # Advisor evaluation — results
 
-Run: 2026-09-14 04:23 UTC · Mode: **curated Advisor (no model key)** · Host: in-process
+Run: 2026-09-14 20:29 UTC · Mode: **curated Advisor (no model key)** · Host: in-process
 
 **82 of 82 questions pass every required check.** 63 distinct letters for 82 questions.
 
