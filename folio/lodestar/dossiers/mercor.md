@@ -7,7 +7,13 @@
 **Changed in the project:** apply-packet HOLD lock; house-hears $0; Decision Night / week-close restated; lamp-drill for human scoring.
 
 ## Foundations
-Both listings live 14 Sep (Navigator also opened L&D this session). IC, own schedule, 5+ years, Slides must-have, vendor “no employer confidential info” sentence. LLM policy: no model scoring/justifications. Insightful screenshots. Sat–Fri IST week, Wednesday PST pay, first Stripe payout 7-day hold.
+Both **official** listings live 14 Sep 2026 (Navigator WebFetch this session). IC, own schedule, 5+ years, Slides must-have, vendor “no employer confidential info” sentence. Apply form present on both. LLM policy: no model scoring/justifications (opened prior sessions; not re-opened 14 Sep). Insightful screenshots. Sat–Fri IST week, Wednesday PST pay, first Stripe payout 7-day hold.
+
+| Listing | URL opened 14 Sep | Result | Status |
+| --- | --- | --- | --- |
+| L&D Evaluator | https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator | Open, **$80–$120**, IC, apply form. No “158 hired”. | VERIFIED |
+| GTM Evaluator | https://work.mercor.com/jobs/list_AAABnp6MSjuxnR5XDmVL1Ypb/general-sales-gtm-evaluator | Open, **$80–$120**, IC, apply form. | VERIFIED |
+| Truncated id (do not use) | https://work.mercor.com/jobs/list_AAABmd4n4p8Vq3FLqL2xP4Cw | HTTP 404 | VERIFIED |
 
 ## Frontier
 Pause → cap 0. Offer may be below listing. VPN blocked from 17 Jul 2026. June 25 2026 official breach update still up.

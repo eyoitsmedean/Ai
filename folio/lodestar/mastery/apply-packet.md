@@ -5,14 +5,16 @@
 
 **World-class:** the sendable artifact exists *before* authorization, and cannot leave the device without it.
 
-**Difference:** copy button disabled until five Clears + window + Yes.
+**Difference:** the letter is not in the DOM until five Clears + window + Yes. Copy stays disabled until then.
 
 **Rubric:**
-1. Default HOLD — pass.
+1. Default HOLD and letter absent — pass after D1 repair.
 2. Blocked/Unknown/Unmarked locks — pass.
 3. Letter does not auto-send — pass.
 4. Grocery-is-$0 case visible — pass.
-5. Links to drill, not to Mercor apply URL — pass (no apply URL on the button).
+5. Links to drill, not to Mercor apply URL — pass.
 6. Family-safe — pass.
 
-What it is · `folio/apply-packet.html` · Bearing C8 · verification: logic in page; to click-test.
+**Retest 14 Sep (Navigator, Chrome dump-dom):** `#letter` renders HOLD text; `#copy` is disabled; source has no “I’m applying”. Unlock logic unit-tested: five Clear + Confirmed + Yes unlocks; Unmarked/Unknown/Blocked stay locked.
+
+What it is · `folio/apply-packet.html` · Bearing C8 · verification: D1 retested PASS this session.

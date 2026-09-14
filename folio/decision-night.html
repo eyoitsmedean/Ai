@@ -152,7 +152,7 @@
     const gates = [1,2,3,4,5].map((n) => "Gate " + n + ": " + (document.getElementById("g" + n).value.trim() || "unmarked")).join("\n");
     const text = [
       "NINETY DAYS · CHOICE RECEIPT",
-      "Written 11 Sep 2026 · stays on this device",
+      "Written 14 Sep 2026 · stays on this device",
       "",
       "Household window: " + w,
       "Choice: " + c,
@@ -165,7 +165,7 @@
       "One lane. October is Red. This receipt is not an application."
     ].join("\n");
     document.getElementById("receipt").textContent = text;
-    try { localStorage.setItem("ninety-days-receipt-2026-09-11", text); } catch (e) {}
+    try { localStorage.setItem("ninety-days-receipt-2026-09-14", text); } catch (e) {}
   });
 </script>
 </body>

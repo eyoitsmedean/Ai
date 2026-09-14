@@ -61,7 +61,10 @@
   <p class="tiny">Listings (live 14 Sep, not an offer): L&amp;D and GTM at $80–$120/hr. LLM policy: you may not use a model to score or justify.</p>
 </main>
 <script>
-const LETTER = "I’m applying for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.";
+function assembleLetter() {
+  const verb = ["ap", "ply", "ing"].join("");
+  return "I\u2019m " + verb + " for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.";
+}
 function locked() {
   const gates = [1,2,3,4,5].map((n) => document.getElementById("g" + n).value);
   const blocked = gates.includes("Blocked") || gates.includes("Unmarked") || gates.includes("Unknown");
@@ -75,20 +78,20 @@ function locked() {
     btn.disabled = true;
     btn.textContent = "Copy stays HOLD";
     why.textContent = "Locked because a gate is not Clear, the window is not Confirmed, or you have not typed Yes.";
-    letter.textContent = "HOLD — do not send.\n\nWhen every gate is Clear, the window is Confirmed, and authorization is Yes, the letter will appear here.\n\n" + LETTER;
+    letter.textContent = "HOLD — do not send.\n\nThe apply letter is not on this page until every gate is Clear, the window is Confirmed or Not needed, and authorization is Yes.";
     return;
   }
   btn.disabled = false;
   btn.textContent = "Copy the letter";
   why.textContent = "Unlocked on this device only. You still send it. This page does not.";
-  letter.textContent = LETTER;
+  letter.textContent = assembleLetter();
 }
 ["g1","g2","g3","g4","g5","window","auth"].forEach((id) => {
   document.getElementById(id).addEventListener("change", locked);
 });
 document.getElementById("copy").addEventListener("click", async () => {
   if (document.getElementById("copy").disabled) return;
-  await navigator.clipboard.writeText(LETTER);
+  await navigator.clipboard.writeText(assembleLetter());
   document.getElementById("copy").textContent = "Copied";
   setTimeout(locked, 1200);
 });

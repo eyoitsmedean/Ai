@@ -32,7 +32,7 @@ Lock 35% the day money lands (or raise W-4). Do not pay 1040-ES tomorrow for a f
 Keep 35%. Print $0 first. Do not schedule 15 Sep for this band. ABN $25 is a name filing, not a tax.
 
 ## Claim ledger
-See Scholar-tax report this cycle. Key numbers: SE $271.29 on $1,920; $610.40 on $4,320. 35% covers assumed 12%; short at 22% without QBID.
+Key numbers computed this cycle from opened rates: SE $271.29 on $1,920; $610.40 on $4,320. 35% covers assumed 12%; short at 22% without QBID. The long-form scholar pass lived in the agent thread; this file is the kept dossier.
 
 ## Sources opened 14 Sep
 IRS Topic 554, Pub 334, draft i1040sse, f1040es, p505; I.C. §§ 63-3024, 63-3022, 30-21-214; STC rate schedule, 31 Jul 2026 press release, EPB00744 PDF, EIN00046; sos.idaho.gov business-forms.
