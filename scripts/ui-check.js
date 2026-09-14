@@ -133,10 +133,13 @@ function ok(cond, label, detail) {
       actions: last?.querySelectorAll('.verse-actions').length || 0,
       copy: last?.querySelectorAll('.verse-copy').length || 0,
       sit: last?.querySelectorAll('.verse-sit').length || 0,
+      hear: last?.querySelectorAll('.verse-hear').length || 0,
+      carry: last?.querySelectorAll('.after-carry').length || 0,
       after: last?.querySelectorAll('.after-path').length || 0,
     };
   });
-  ok(verseChrome.actions >= 1 && verseChrome.copy >= 1 && verseChrome.sit >= 1, 'verse object has copy and sit', JSON.stringify(verseChrome));
+  ok(verseChrome.actions >= 1 && verseChrome.copy >= 1 && verseChrome.sit >= 1 && verseChrome.hear >= 1, 'verse object has copy, sit, and hear', JSON.stringify(verseChrome));
+  ok(verseChrome.carry >= 1, 'after-answer can carry the saying', JSON.stringify(verseChrome));
   ok(verseChrome.after >= 1, 'after-answer path is present', JSON.stringify(verseChrome));
   const lectioOpened = await page.evaluate(async () => {
     const btn = document.querySelector('.msg.assistant .verse-sit');

@@ -20,6 +20,7 @@ const {
   guessThemeFromThread,
   verseObject,
   offlineContinuedReply,
+  looksVagueGuidance,
 } = require('./data/scripture');
 
 const app = express();
@@ -862,10 +863,19 @@ app.post('/api/chat', async (req, res) => {
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
     const theme = intent === 'hostile' ? 'Faith & Doubt' : thread.theme;
-    const pack =
+    const vague = intent === 'guidance' && !thread.continuedTheme && looksVagueGuidance(lastUser);
+    let pack =
       intent === 'guidance' && thread.continuedTheme && thread.continuedRefs.length
         ? offlineContinuedReply(thread, lastUser)
         : offlineEncouragement(theme, lastUser);
+    if (vague) {
+      pack = {
+        ...pack,
+        opener:
+          pack.opener +
+          ' If you want, say whether this is worry, grief, fear, or something else — I will stay with His words either way.',
+      };
+    }
     // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
     const picks = intent === 'hostile' ? pack.passages.slice(1, 3) : pack.passages.slice(0, 3);
     const text = [
@@ -898,6 +908,7 @@ app.post('/api/chat', async (req, res) => {
         intent,
         continuedTheme: thread.continuedTheme || undefined,
         continuedRefs: thread.continuedRefs || [],
+        vague: vague || undefined,
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');

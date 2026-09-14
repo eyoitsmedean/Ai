@@ -4000,7 +4000,7 @@ async function sendChat() {
               }
             }
             const firstShare = (ev.citations || []).find((c) => c.verified && c.quote);
-            bubble.innerHTML = formatAI(full) + badges + afterAnswerPath(firstShare);
+            bubble.innerHTML = formatAI(full) + badges + afterAnswerPath(firstShare, { vague: ev.vague });
             if (ev.quota) updateQuotaUI(ev.quota);
             if (ev.continuedTheme && firstShare) {
               setAdvisorSitting(firstShare.verse || firstShare.citation, firstShare.quote, ev.continuedTheme);
@@ -4216,6 +4216,28 @@ document.addEventListener('click', (e) => {
     openShareCard({ verse: host.dataset.verse, quote: host.dataset.quote, theme: 'His words' });
     return;
   }
+  const hearBtn = e.target.closest?.('.verse-hear, .after-hear');
+  if (hearBtn) {
+    e.preventDefault();
+    const host = hearBtn.closest('[data-verse]') || hearBtn;
+    speakVerse(host.dataset.quote, host.dataset.verse);
+    return;
+  }
+  const carryBtn = e.target.closest?.('.after-carry, .verse-carry');
+  if (carryBtn) {
+    e.preventDefault();
+    const host = carryBtn.closest('[data-verse]') || carryBtn;
+    carryFromVerse(host.dataset.verse, host.dataset.quote);
+    return;
+  }
+  const clarifyBtn = e.target.closest?.('.after-clarify-btn');
+  if (clarifyBtn) {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    if (input) input.value = clarifyBtn.dataset.send || '';
+    sendChat();
+    return;
+  }
   const copyBtn = e.target.closest?.('.verse-copy');
   if (copyBtn) {
     e.preventDefault();
@@ -4260,6 +4282,7 @@ function verseActions(verse, quote) {
   const href = webLink(verse);
   return '<div class="verse-actions">' +
     shareVerseBtn(verse, quote) +
+    '<button type="button" class="verse-hear" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Hear</button>' +
     '<button type="button" class="verse-copy" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Copy</button>' +
     '<button type="button" class="verse-context-btn" data-verse="' + esc(verse) + '">Context</button>' +
     '<button type="button" class="verse-plant" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Plant</button>' +
@@ -4268,15 +4291,51 @@ function verseActions(verse, quote) {
     '</div><div class="verse-context" hidden data-for="' + esc(verse) + '"></div>';
 }
 
-function afterAnswerPath(firstShare) {
+function afterAnswerPath(firstShare, opts) {
   if (!firstShare) return '';
   const verse = firstShare.verse || firstShare.citation || '';
   const quote = firstShare.quote || '';
+  const clarify = opts?.vague
+    ? '<div class="after-path after-clarify" data-verse="' + esc(verse) + '">' +
+      '<button type="button" class="after-clarify-btn" data-send="This is worry. I cannot put the rest into words yet.">This is worry</button>' +
+      '<button type="button" class="after-clarify-btn" data-send="This is grief. Someone or something is gone.">This is grief</button>' +
+      '<button type="button" class="after-clarify-btn" data-send="This is fear. I am afraid of what comes next.">This is fear</button>' +
+      '</div>'
+    : '';
   return '<div class="after-path" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">' +
+    '<button type="button" class="after-hear">Hear this</button>' +
+    '<button type="button" class="after-carry">Carry this</button>' +
     '<button type="button" class="after-ask">Ask about this</button>' +
     '<button type="button" class="after-sit">Sit with this</button>' +
     '<button type="button" class="after-share">Share this</button>' +
-    '</div>';
+    '</div>' + clarify;
+}
+
+function speakVerse(quote, verse) {
+  const text = '"' + String(quote || '').replace(/^["“]|["”]$/g, '') + '" ' + (verse || '') + '. World English Bible.';
+  if (!('speechSynthesis' in window)) {
+    showToast('Hearing isn’t available here');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.92;
+  u.lang = navigator.language || 'en-US';
+  window.speechSynthesis.speak(u);
+  showToast('Hearing ' + (verse || 'His words'));
+}
+
+function carryFromVerse(verse, quote) {
+  const phrase = pickCarryPhrase(quote || '');
+  if (!phrase) {
+    showToast('Nothing to carry yet');
+    return;
+  }
+  lsSetJSON('rla-carry', { phrase, verse: verse || '', day: todayISO() });
+  setRhythmFlag('carry', true);
+  renderCarry();
+  renderRhythm();
+  showToast('Carrying this phrase today');
 }
 
 function shareLinkFor(verse) {

@@ -756,6 +756,14 @@ function verseObject(ref) {
   };
 }
 
+function looksVagueGuidance(text) {
+  const t = String(text || '').normalize('NFKC').trim();
+  if (!t || t.length >= 48) return false;
+  if (looksLikeFollowUp(t)) return false;
+  if (detectCrisis(t) || detectAbuse(t) || detectOffScope(t) || detectHostile(t)) return false;
+  return guessTheme(t) === 'Hope';
+}
+
 function guessThemeFromThread(lastUser, messages) {
   const direct = guessTheme(lastUser);
   const refs = lastAssistantRefs(messages);
@@ -820,6 +828,7 @@ module.exports = {
   verseObject,
   webChapterUrl,
   offlineContinuedReply,
+  looksVagueGuidance,
   isGospelRef,
   similarity,
 };

@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const {
   extractGospelRefs,
   looksLikeFollowUp,
+  looksVagueGuidance,
   guessThemeFromThread,
   verseObject,
   classifyIntent,
@@ -12,6 +13,12 @@ const {
 test('extractGospelRefs finds Matthew Mark Luke John only', () => {
   const refs = extractGospelRefs('See **Matthew 6:34** and John 14:27 then Romans 8:28');
   assert.deepEqual(refs, ['Matthew 6:34', 'John 14:27']);
+});
+
+test('looksVagueGuidance is only short Hope, never crisis', () => {
+  assert.equal(looksVagueGuidance('help'), true);
+  assert.equal(looksVagueGuidance("I can't sleep because I'm terrified about losing my job next month."), false);
+  assert.equal(looksVagueGuidance('I want to kill myself'), false);
 });
 
 test('looksLikeFollowUp catches short continuations', () => {

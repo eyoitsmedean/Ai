@@ -102,6 +102,7 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 
 ## Log
 
+- 2026-09-14 — Ambition pass from first ten: Hear + Carry on the saying; vague Hope lines invite one more sentence without withholding verses.
 - 2026-09-14 — ATELIER: corpus follow-ups lead with the prior WEB saying; verse context falls back to the on-device library; `microphone=(self)` so voice can work; operator kit refreshed.
 - 2026-09-14 — LODESTAR Cycle 1: Intent Charter C1–C8 in `docs/lodestar/`; threaded grounding; verse object; `/share` landing; lectio-from-answer; published `#protocol`; honest Plus/Pages; eval 96. Branch `cursor/lodestar-cycle-one-6ab5`.
 - 2026-09-11 — Recovery commission: first ten prompts recovered from transcript (not the later ATELIER block); chat-first default (D16); crisis geography (D17); `/legal`; iOS install coach; share links to Advisor; waitlist file; docs/CANONICAL-BRIEF.md + KNOWLEDGE.md + OPERATOR-KIT.md. Branch `cursor/recovery-commission-6ab5`.

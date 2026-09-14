@@ -184,6 +184,7 @@ async function main() {
     assert(appHtml.includes('/?tab=advisor&ref='), 'share deep links must land on Advisor');
     assert(appHtml.includes('/share?ref='), 'OG share links use /share');
     assert(appHtml.includes('verse-actions') && appHtml.includes('function openLectioFromVerse'), 'missing verse object / sit-from-answer');
+    assert(appHtml.includes('verse-hear') && appHtml.includes('function speakVerse') && appHtml.includes('function carryFromVerse'), 'missing hear / carry from the saying');
     assert(appHtml.includes('id="trust-panel"') && appHtml.includes('id="shared-word-card"'), 'missing trust panel / shared-word welcome');
     assert(appHtml.includes('function plantHarvestFromVerse'), 'missing plant-from-answer');
     assert(/waitlist only|Join waitlist/i.test(appHtml) && !/onclick="openPaywall\(\)">Unlock Plus/.test(appHtml), 'Plus copy still pretends payment exists');
