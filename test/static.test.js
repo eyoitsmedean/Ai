@@ -80,6 +80,18 @@ describe('static artifacts', () => {
   });
 });
 
+describe('WATCH chrome', () => {
+  it('marks folio and one-screen noindex while WATCH holds', () => {
+    for (const rel of ['public/index.html', 'public/one-screen.html']) {
+      const html = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+      assert.match(html, /noindex,\s*nofollow/, rel);
+    }
+    const folio = fs.readFileSync(path.join(ROOT, 'public/index.html'), 'utf8');
+    assert.match(folio, /watch-strip/);
+    assert.match(folio, /href="\/ask"/);
+  });
+});
+
 describe('the static Advisor is the server Advisor', () => {
   const window = loadBrowserGlobals();
 

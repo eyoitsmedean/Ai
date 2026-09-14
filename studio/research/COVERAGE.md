@@ -16,7 +16,7 @@ Legend: **central** controls a ship/watch decision · **supporting** explains ho
 | C6 | May this be published? | central | Notion later law | **WATCH.** No Pages, no store, no public URL from an agent. |
 | C7 | How does the one-screen relate to the five-room folio? | supporting | IA | One-screen is the WATCH surface. Folio stays. Not a replacement. |
 | C8 | Does the letterpress match the server and the static page? | supporting | Engine | One `data/letterpress.js`; `npm run curated` copies it. |
-| C9 | Is the evaluation set honest about crisis? | supporting | Eval | 45 cases; crisis cases now require *no* Scripture. |
+| C9 | Is the evaluation set honest about crisis? | supporting | Eval | 48 cases (C09 added 14 Sep); letter + `composeScreen` checks; crisis cases require *no* Scripture. |
 | C10 | Can idle chats be updated from here? | supporting | Studio | No. Paste files only. |
 
 ## Five adjacent topics (project-wide, not per-agent)

@@ -55,7 +55,7 @@ Audience and use moment: someone carrying a real question about their life, ofte
 Definition of done:
   1. Every quoted saying is the canonical public-domain KJV (1769) text of words Jesus spoke, drawn from data/spoken-gospels.json — never typed from memory by a model or a developer. A model may only emit {{Book Chapter:Verse}} placeholders that the harness fills.
   2. Tone reads as a warm advisor in a quiet folio; scholarship sits behind the answer, not in front of it.
-  3. Passes an evaluation set of at least 40 real questions — including hostile, off-scope, and crisis-adjacent ones — with recorded results (eval/advisor-eval.json, `npm run eval`); crisis-adjacent inputs get 988 (US) and findahelpline.com before any Scripture, inside the product.
+  3. Passes an evaluation set of at least 40 real questions — including hostile, off-scope, and crisis-adjacent ones — with recorded results (eval/advisor-eval.json, `npm run eval`); crisis-adjacent inputs name 988 (US) and findahelpline.com and **stop** — no Scripture after the notice.
   4. Works with no API key: Today, Seek, Sit, Advisor, and Journal all function from generated data on GitHub Pages; `npm test`, `npm run smoke`, `npm run qa`, and `npm run qa:static` pass; on-phone installation and reading is Dean's step and ships as a written five-minute checklist.
   5. The release note marks every item verified or unverified with its rung — nothing described as passed that was not run.
 

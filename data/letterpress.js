@@ -32,11 +32,11 @@
     [/\b(peace(?! out)|calm|be still|stillness|can'?t (be|sit) still|quiet my)/i, 'Peace'],
   ];
 
-  var CRISIS_RE = /\b(suicid|kill(ing)? myself|(end|ending|take|taking) my (own )?life|end it all|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang(ing)? myself|overdos|don'?t want to (live|be here anymore|be alive)|do not want to (live|be here anymore|be alive)|cannot go on|can'?t go on|jump(ing)? (off|from)|unalive|kms\b|better off dead|no reason to live|not worth living|no point (in )?living|wish i (was|were) dead|wish i (was|were)n'?t (here|alive))\b/i;
+  var CRISIS_RE = /\b(suicid|kill(ing)? myself|(end|ending|take|taking) my (own )?life|end it all|want to die|wanna die|self[-\s]?harm|hurt(ing)? myself|cut(ting)? myself|hang(ing)? myself|overdos|don'?t want to (live|be here anymore|be alive)|do not want to (live|be here anymore|be alive)|cannot go on|can'?t go on|jump(ing)? (off|from)|unalive|kms\b|better off dead|no reason to live|not worth living|no point (in )?living|tired of being alive|go to sleep and not wake up|wish i (was|were) dead|wish i (was|were)n'?t (here|alive))\b/i;
 
   var CRISIS_NOTICE = [
     'If you are in danger or thinking of ending your life, please stop here and get human help now.',
-    'In the United States, call or text 988. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.',
+    'In the United States, call or text 988. If someone is physically hurt right now, call 911. Anywhere else, start at https://findahelpline.com — a global directory of verified helplines.',
     'I am not a person, and this page is not emergency care.',
     '',
   ].join('\n');
@@ -279,6 +279,7 @@
         quote: '',
         meaning: '',
         translation: 'King James Version (1769)',
+        verified: false,
         notice: letter.opening,
       };
     }
@@ -290,6 +291,7 @@
       quote: p.quote || '',
       meaning: fourLines(p.context),
       translation: 'King James Version (1769)',
+      verified: Boolean(p.verse && p.quote),
       notice: '',
     };
   }

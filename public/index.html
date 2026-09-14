@@ -7,6 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="A quiet reading room for the words Jesus actually spoke." />
   <meta property="og:title" content="Red Letter" />
   <meta property="og:description" content="Not every verse — His words." />
@@ -167,6 +168,19 @@ textarea { font-family: var(--body); }
   transform: translateY(-140%);
 }
 .skip-link:focus { transform: none; }
+.watch-strip {
+  font-family: var(--ui);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.watch-strip a { color: var(--crimson); text-decoration: none; }
+html.sitting .watch-strip { display: none; }
 .hearing .folio { filter: saturate(.92); }
 .hear-now {
   font-family: var(--display);
@@ -1482,6 +1496,7 @@ html.sitting .sit-sheet {
 </head>
 <body>
 <a class="skip-link" href="#today-page">Skip to the folio</a>
+<p class="watch-strip">Paper only · <a href="/ask">Ask</a> · do not publish · do not launch</p>
 <div class="grain" aria-hidden="true"></div>
 <div class="wash" aria-hidden="true"></div>
 <div class="silk" aria-hidden="true"></div>

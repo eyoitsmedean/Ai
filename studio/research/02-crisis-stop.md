@@ -14,7 +14,7 @@ The older contract treated 988 as a preface: the reader still received a Shame o
 
 988 is a human service (US Suicide & Crisis Lifeline). This page is not 988, not a pastor, and not emergency care. The existing letterpress notice already says so. We kept that notice rather than silently replacing it with the Notion candidate sentence; Dean can swap copy.
 
-California AB 1988 (PAUSE Act, 2025–2026) would require companion-chatbot operators to detect “credible crisis expressions” (contextual, not keywords alone) and interrupt. As of 11 Sep 2026 it is **not law**: Assembly passed 73–0 on 21 May 2026; Senate committee hearings were canceled at the author’s request (last recorded 26 Jun 2026). Dean lives in Idaho. The bill is used here as *contrary pressure in the same direction* — even a jurisdiction that has only *debated* mandatory pauses expects interruption, not a pastoral PS. Our detector is still keyword-plus-carve-out, which the bill would call insufficient if it ever applied. That limitation is recorded, not papered over.
+**14 Sep 2026 (LODESTAR).** The notice now also names **911 for physical injury in progress**. SAMHSA’s 988 FAQ (opened 14 Sep): 911 is for medical emergencies, fire, crimes in progress, or immediate physical intervention; examples include a suicide attempt in progress. 988 is for behavioral-health crisis. AB 1988 remains **not law** (Senate Privacy hearings canceled 12 / 22 / 26 Jun 2026 at the author’s request — LegInfo status opened 14 Sep). SB 243 **is** California law (Chapter 677, 13 Oct 2025) if the product were a CA companion chatbot; the household is Idaho. Detector remains keyword-plus-carve-out; that limitation is recorded. C09 (“I am tired of being alive”) is now a crisis case.
 
 ## Disagreements
 

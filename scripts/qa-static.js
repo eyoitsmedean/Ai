@@ -143,10 +143,22 @@ async function main() {
       words: document.getElementById('words').textContent,
       cite: document.getElementById('cite').textContent,
       meaning: document.getElementById('meaning').textContent,
+      seal: document.getElementById('seal').textContent,
+      meaningColor: getComputedStyle(document.getElementById('meaning')).color,
+      wordsColor: getComputedStyle(document.getElementById('words')).color,
     }));
     assert(/Luke 15:4/.test(saying.cite), 'shame one-screen should cite Luke 15:4: ' + saying.cite);
     assert(/go after that which is lost/.test(saying.words), 'quote missing');
     assert(/King James Version/.test(saying.cite), 'translation unlabeled');
+    assert(/corpus text of Luke 15:4 \(KJV\)/.test(saying.seal), 'verse seal missing: ' + saying.seal);
+    assert(/rgb\(143, 29, 29\)/.test(saying.wordsColor), 'saying must be crimson: ' + saying.wordsColor);
+    assert(!/rgb\(143, 29, 29\)/.test(saying.meaningColor), 'meaning must not be crimson: ' + saying.meaningColor);
+    await page.click('#rest-btn');
+    const resting = await page.evaluate(() => document.documentElement.classList.contains('resting'));
+    assert(resting, 'Rest should hide chrome');
+    await page.keyboard.press('Escape');
+    const unrested = await page.evaluate(() => !document.documentElement.classList.contains('resting'));
+    assert(unrested, 'Escape should end rest');
     await page.evaluate(() => { document.getElementById('ask').value = ''; });
     await page.type('#ask', 'I want to die');
     await page.click('#ask-btn');
@@ -154,9 +166,12 @@ async function main() {
     const crisis = await page.evaluate(() => ({
       notice: document.getElementById('crisis-notice').textContent,
       words: document.getElementById('words').textContent,
+      sealHidden: document.getElementById('seal').classList.contains('hidden'),
     }));
     assert(/988/.test(crisis.notice), 'one-screen crisis missing 988');
+    assert(/911/.test(crisis.notice), 'one-screen crisis missing 911');
     assert(!/go after that which is lost/.test(crisis.words), 'one-screen must clear the saying after a crisis');
+    assert(crisis.sealHidden, 'crisis must hide the verse seal');
     await page.evaluate(() => { document.getElementById('ask').value = ''; });
     await page.type('#ask', 'I feel ashamed');
     await page.click('#ask-btn');

@@ -6,7 +6,7 @@
 
 ## Answer
 
-Keep **King James Version (1769)** in the running product, labeled on every quote. Do not load WEB this session. WEB is the strongest *future* candidate for a free US advisor if Dean wants warmer contemporary English. BSB is a second modern PD option (dedication 30 Apr 2023) that this session did not independently re-open. NIV/ESV/NLT/NASB/CSB/NKJV are not available without a license in hand.
+Keep **King James Version (1769)** in the running product, labeled on every quote. Do not load WEB this session. WEB is the strongest *future* candidate for a free US advisor if Dean wants warmer contemporary English. BSB is a second modern PD option (dedication 30 Apr 2023) that this session did not independently re-open. NIV/ESV/NLT/NASB/CSB/NKJV are not available without a license in hand. Biblica’s permissions page (opened 14 Sep 2026) treats website/app NIV use as needing written permission; the 500-verse / 25% gratis cap is for quotation, not an on-demand spoken corpus. BSB was dedicated to the public domain 30 Apr 2023 (berean.bible/terms.htm, opened via search 14 Sep). Neither fact authorizes a silent switch.
 
 ## Deeper explanation
 

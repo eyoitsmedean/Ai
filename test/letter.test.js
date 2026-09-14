@@ -209,6 +209,9 @@ describe('composeLetter', () => {
     assert.equal(press.looksLikeCrisis('I cut myself on a knife cooking'), false);
     assert.equal(press.looksLikeCrisis('I cut myself again last night'), true);
     assert.equal(press.looksLikeCrisis('I want to die'), true);
+    assert.equal(press.looksLikeCrisis('I am tired of being alive'), true);
+    assert.equal(press.looksLikeCrisis('I want to go to sleep and not wake up'), true);
+    assert.equal(press.looksLikeCrisis("I'm tired of being sick"), false);
   });
 
   it('stops counsel on a crisis — notice only, no Scripture', () => {
@@ -217,6 +220,7 @@ describe('composeLetter', () => {
     assert.equal(theme, 'Shame & Guilt');
     assert.deepEqual(citations, []);
     assert.match(text, /988/);
+    assert.match(text, /911/);
     assert.doesNotMatch(text, /\*\*(Matthew|Mark|Luke|John)/);
     const collapse = composeLetter("I can't go on");
     assert.equal(collapse.crisis, true);
@@ -240,10 +244,14 @@ describe('composeLetter', () => {
     assert.match(screen.quote, /go after that which is lost/);
     assert.match(screen.meaning, /does not wait for you to find the road back/);
     assert.equal(screen.translation, 'King James Version (1769)');
+    assert.equal(screen.verified, true);
     const crisis = press.composeScreen('I want to die', { packs: THEMES, commons: COMMONS });
     assert.equal(crisis.crisis, true);
     assert.equal(crisis.quote, '');
+    assert.equal(crisis.meaning, '');
+    assert.equal(crisis.verified, false);
     assert.match(crisis.notice, /988/);
+    assert.match(crisis.notice, /911/);
   });
 
   it('tells the truth when no room is named', () => {

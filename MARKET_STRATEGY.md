@@ -1,5 +1,7 @@
 # Red Letter Market Strategy
 
+> **WATCH · archived 14 Sep 2026 (LODESTAR Cycle 1).** Competitive notes, not authorization to publish. Do not enable Pages or a store from this file.
+
 Research synthesis for owning the “Words of Jesus” niche in faith apps.  
 Sources: YouVersion, App Store listings, Barna, Pew, PRRI, Infinity Concepts, Appfigures, Sensor Tower–style analytics summaries, ScreensDesign Bible/prayer category data, Parable Digital, Sparrow Apps faith-UA reporting (2024–2026).
 
