@@ -462,7 +462,7 @@ textarea { font-family: var(--body); }
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 16px);
   right: 18px;
-  z-index: 96;
+  z-index: 81;
   border: 0;
   background: none;
   padding: 4px 2px;
@@ -476,6 +476,7 @@ textarea { font-family: var(--body); }
 }
 .leave:hover, .leave:focus-visible { color: var(--ink); }
 .mast { padding-right: 72px; }
+.crisis-card .leave { position: static; float: right; margin: -4px 0 8px; }
 
 .pages { flex: 1; position: relative; overflow: hidden; }
 .page {
@@ -2059,6 +2060,7 @@ html.sitting .sit-sheet {
 
 <div class="crisis-modal" id="crisis-modal" role="dialog" aria-modal="true" aria-labelledby="crisis-title">
   <div class="crisis-card">
+    <a class="leave" id="crisis-leave" href="https://weather.com" rel="noreferrer" onclick="return leaveRoom(event)">Leave</a>
     <p class="eyebrow">You are not alone</p>
     <h2 id="crisis-title">Please reach a person who can help right now</h2>
     <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
@@ -2070,8 +2072,7 @@ html.sitting .sit-sheet {
     </div>
     <p>If you are in immediate danger, call your local emergency number. This page is not a person, and it cannot hand you to a counselor. <a href="./help.html">Keep these numbers even if the room fails</a>.</p>
     <div class="actions">
-      <a class="cta cta-primary" id="crisis-leave" href="https://weather.com" rel="noreferrer" onclick="return leaveRoom(event)">Leave</a>
-      <button class="cta" type="button" id="crisis-continue">I am safe — continue carefully</button>
+      <button class="cta cta-primary" type="button" id="crisis-continue">I am safe — continue carefully</button>
       <button class="ghost" type="button" id="crisis-close">Close</button>
     </div>
   </div>

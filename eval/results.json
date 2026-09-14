@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-14T04:15:24.088Z",
-  "commit": "76c7de1",
+  "generated": "2026-09-14T20:37:47.858Z",
+  "commit": "3e227c0",
   "mode": {
     "runner": "in-process",
     "path": "retrieval",
@@ -4153,21 +4153,20 @@
       "id": "edge-08",
       "category": "edge",
       "input": "I hit my head on the cabinet and beat my brother at chess and now I want to hit the gym. Life is good, just tired.",
-      "letter": "Shame says you are the lost sheep who should have known better. Jesus tells the story from the shepherd’s side — leaving the ninety-nine, carrying the one, throwing a feast in heaven.\n\n**Luke 15:4**\n“What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?”\nHe does not wait for you to find the road back. He comes after what is lost.\n**Luke 15:7**\n“I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.”\nRepentance is not a courtroom. It is a reason for joy.\n**John 6:35**\n“I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.”\nHunger does not make you unworthy of bread. It makes you the one the bread was for.\nName the shame in one sentence. Then read Luke 15:7 and imagine the joy is about you, specifically.\n\nYou are not too far for the shepherd to walk.",
+      "letter": "I could not tell from your words which room they belong in, so I will not pretend to. Here is what He said that holds on most nights. If you can name the weight in one more sentence, I will look again.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted, not the already-healed.\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nPeace is left with you — a gift, not a mood you manufacture.\nBreathe out slowly four times. On each breath, say: “Peace, be still.” Let the words be for your body first.\n\nThe sea in you can hear Him too.",
       "cites": [
-        "Luke 15:4",
-        "Luke 15:7",
-        "John 6:35"
+        "Matthew 11:28",
+        "John 14:27"
       ],
       "citeThemes": {
-        "Luke 15:4": [
-          "Shame & Guilt"
+        "Matthew 11:28": [
+          "Faith & Doubt",
+          "Suffering & Pain",
+          "Peace"
         ],
-        "Luke 15:7": [
-          "Shame & Guilt"
-        ],
-        "John 6:35": [
-          "Shame & Guilt"
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
         ]
       },
       "themeMatches": [],
@@ -5489,25 +5488,23 @@
       "id": "edge-15",
       "category": "edge",
       "input": "My son hit me up for money again and I said no. Was that wrong?",
-      "letter": "The first word to the one in pain is come, not cheer up. Rest is offered to the laden. Only then does He name the tribulation without letting it be the last sentence.\n\n**Matthew 11:28**\n“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”\nThe invitation is to the exhausted. Rest is a gift, not a prize for the strong.\n**Matthew 5:4**\n“Blessed are they that mourn: for they shall be comforted.”\nComfort is promised to those who actually mourn — not to those who pretend the loss was small.\n**Matthew 6:34**\n“Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.”\nHe limits the assignment to today, so your mind does not have to carry a week it has not been given.\nLie down or sit. Place a hand on the place that hurts. Pray Matthew 11:28 as if it were spoken to that place alone.\n\nYour pain is seen. It is not the end of the story.",
+      "letter": "Worry is a room with no windows. Jesus does not scold you for sitting in it — He names the air, the birds, the length of a day, and invites you back into this one hour.\n\n**Matthew 6:34**\n“Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.”\nHe limits the assignment to today, so your mind does not have to carry a week it has not been given.\n**Matthew 6:26**\n“Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?”\nYou are not less tended than the birds. Provision is already in motion before you finish the sentence.\n**John 14:27**\n“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”\nHis peace is not a mood the world can revoke. It is something left with you.\nSit still for two minutes. Name one thing that belongs only to this day. Leave the rest on the table.\n\nYou do not have to finish the future tonight.",
       "cites": [
-        "Matthew 11:28",
-        "Matthew 5:4",
-        "Matthew 6:34"
+        "Matthew 6:34",
+        "Matthew 6:26",
+        "John 14:27"
       ],
       "citeThemes": {
-        "Matthew 11:28": [
-          "Faith & Doubt",
-          "Suffering & Pain",
-          "Peace"
-        ],
-        "Matthew 5:4": [
-          "Grief & Loss",
-          "Suffering & Pain"
-        ],
         "Matthew 6:34": [
           "Anxiety & Worry",
           "Purpose & Direction"
+        ],
+        "Matthew 6:26": [
+          "Anxiety & Worry"
+        ],
+        "John 14:27": [
+          "Anxiety & Worry",
+          "Peace"
         ]
       },
       "themeMatches": [],

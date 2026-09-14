@@ -15,7 +15,7 @@ Client PACKS and server `NEED_CUES` disagreed on six ordinary eval inputs. The a
 
 ## Checks
 
-Recorded after the run in `RELEASE.md` and the PR. Do not treat this file as proof.
+`npm test` 80/80. `npm run eval` 113/113. `npm run eval -- --client` 113/113. `npm run sit` 8/8. `npm run first-word`. `npm run qa` 22/22 against `http://127.0.0.1:3001`.
 
 ## Still Dean-blocked
 

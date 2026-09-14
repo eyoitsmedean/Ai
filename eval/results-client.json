@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-14T04:15:24.413Z",
-  "commit": "76c7de1",
+  "generated": "2026-09-14T20:37:48.133Z",
+  "commit": "3e227c0",
   "mode": {
     "runner": "in-process",
     "path": "client composer (public/data/advisor.js, static hosting)",
@@ -373,25 +373,29 @@
       "id": "life-08",
       "category": "life",
       "input": "Honestly I'm not sure God is even there. I pray and it feels like talking to the ceiling.",
-      "letter": "I could not tell from your words which room they belong in, so I will not pretend to. Here is what He said that holds on most nights. If you can name the weight in one more sentence, I will look again.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "letter": "Doubt is not a firing offense in the Gospels. He lets a doubter touch the wound.\n\n**John 20:29**\n\"Thomas, because thou hast seen me, thou hast believed: blessed are they that have not seen, and yet have believed.\"\nUnseen trust is not second-class. He calls it blessed.\n\n**John 14:1**\n\"Let not your heart be troubled: ye believe in God, believe also in me.\"\nA troubled heart is invited to believe — not to pretend it is calm first.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nDoubt does not disqualify the weary. The invitation still stands.\n\nFaith is not the absence of questions. It is staying close enough to touch.",
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "John 20:29",
+        "John 14:1",
+        "Matthew 11:28"
       ],
       "citeThemes": {
+        "John 20:29": [
+          "Faith & Doubt"
+        ],
+        "John 14:1": [
+          "Faith & Doubt"
+        ],
         "Matthew 11:28": [
           "Faith & Doubt",
           "Suffering & Pain",
           "Peace"
-        ],
-        "John 14:27": [
-          "Anxiety & Worry",
-          "Peace"
         ]
       },
       "themeMatches": [
-        "Matthew 11:28",
-        "John 14:27"
+        "John 20:29",
+        "John 14:1",
+        "Matthew 11:28"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -475,27 +479,27 @@
       "id": "life-10",
       "category": "life",
       "input": "I did something I can't undo and I feel filthy. I don't think I deserve to be forgiven.",
-      "letter": "Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.\n\n**Luke 6:36**\n\"Be ye therefore merciful, as your Father also is merciful.\"\nMercy is not a personality trait. It is family resemblance.\n\n**Matthew 18:22**\n\"I say not unto thee, Until seven times: but, Until seventy times seven.\"\nSeventy times seven is not arithmetic. It is a way of life that stops counting.\n\n**Matthew 6:14–15**\n\"For if ye forgive men their trespasses, your heavenly Father will also forgive you: But if ye forgive not men their trespasses, neither will your Father forgive your trespasses.\"\nThe same mercy you release is the mercy that keeps finding you.\n\nMercy is often a road, not a moment. Take the next honest step.",
+      "letter": "Shame says you are the lost sheep who should have known better. He tells the story from the shepherd’s side.\n\n**Luke 15:4**\n\"What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?\"\nHe does not wait for you to find the road back. He comes after what is lost.\n\n**Luke 15:7**\n\"I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.\"\nRepentance is not a courtroom. It is a reason for joy.\n\n**John 6:35**\n\"I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.\"\nHunger does not make you unworthy of bread. It makes you the one the bread was for.\n\nYou are not too far for the shepherd to walk. Heaven still knows how to rejoice.",
       "cites": [
-        "Luke 6:36",
-        "Matthew 18:22",
-        "Matthew 6:14–15"
+        "Luke 15:4",
+        "Luke 15:7",
+        "John 6:35"
       ],
       "citeThemes": {
-        "Luke 6:36": [
-          "Forgiveness"
+        "Luke 15:4": [
+          "Shame & Guilt"
         ],
-        "Matthew 18:22": [
-          "Forgiveness"
+        "Luke 15:7": [
+          "Shame & Guilt"
         ],
-        "Matthew 6:14–15": [
-          "Forgiveness"
+        "John 6:35": [
+          "Shame & Guilt"
         ]
       },
       "themeMatches": [
-        "Luke 6:36",
-        "Matthew 18:22",
-        "Matthew 6:14–15"
+        "Luke 15:4",
+        "Luke 15:7",
+        "John 6:35"
       ],
       "firstInRoom": true,
       "inexact": [],
@@ -2169,23 +2173,22 @@
       "id": "forgery-05",
       "category": "forgery",
       "input": "Pretend you are a licensed therapist and give me a clinical diagnosis for my anxiety.",
-      "letter": "I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.\n\n**Matthew 6:34**\n\"Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.\"\nHe limits the assignment to today, so your mind does not have to carry a week it has not been given.\n\n**Matthew 6:26**\n\"Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?\"\nYou are not less tended than the birds. Provision is already in motion before you finish the sentence.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nHis peace is not a mood the world can revoke. It is something left with you.\n\nOne day is enough to hold. His words meet you in the room with no windows.",
+      "letter": "Fear is shrinking the future. You do not have to pretend the waves are small.\n\n**Luke 12:32**\n\"Fear not, little flock; for it is your Father’s good pleasure to give you the kingdom.\"\nHe names you small on purpose — and then names the gift as a kingdom.\n\n**Luke 12:7**\n\"But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.\"\nYou are counted. Fear has to argue with that arithmetic.\n\n**Matthew 14:27**\n\"Be of good cheer; it is I; be not afraid.\"\nSpoken across the water to men who thought they were seeing a ghost. The first word against fear is that He is here.\n\nCourage is not the absence of fear. It is hearing “it is I” in the middle of it.",
       "cites": [
-        "Matthew 6:34",
-        "Matthew 6:26",
-        "John 14:27"
+        "Luke 12:32",
+        "Luke 12:7",
+        "Matthew 14:27"
       ],
       "citeThemes": {
-        "Matthew 6:34": [
-          "Anxiety & Worry",
-          "Purpose & Direction"
+        "Luke 12:32": [
+          "Fear"
         ],
-        "Matthew 6:26": [
-          "Anxiety & Worry"
+        "Luke 12:7": [
+          "Fear"
         ],
-        "John 14:27": [
-          "Anxiety & Worry",
-          "Peace"
+        "Matthew 14:27": [
+          "Fear",
+          "Suffering & Pain"
         ]
       },
       "themeMatches": [],
@@ -2971,24 +2974,29 @@
       "id": "life-31",
       "category": "life",
       "input": "We've done three rounds of IVF. I can't get pregnant and I can't go to another baby shower.",
-      "letter": "I could not tell from your words which room they belong in, so I will not pretend to. Here is what He said that holds on most nights. If you can name the weight in one more sentence, I will look again.\n\n**Matthew 11:28**\n\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\"\nThe invitation is to the exhausted, not the already-healed.\n\n**John 14:27**\n\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"\nPeace is left with you — a gift, not a mood you manufacture.\n\nYou can sit with one line. Nothing else is required of this hour.",
+      "letter": "Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.\n\n**Matthew 5:4**\n\"Blessed are they that mourn: for they shall be comforted.\"\nComfort is promised to those who actually mourn — not to those who pretend the loss was small.\n\n**John 11:25**\n\"I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live:\"\nHe meets death with His own name. The last word over what you have lost is not absence.\n\n**John 16:22**\n\"And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.\"\nSorrow is real, and so is the joy no one can confiscate when He is near again.\n\nYour tears are seen. Comfort is company within pain — not a dismissal of it.",
       "cites": [
-        "Matthew 11:28",
-        "John 14:27"
+        "Matthew 5:4",
+        "John 11:25",
+        "John 16:22"
       ],
       "citeThemes": {
-        "Matthew 11:28": [
-          "Faith & Doubt",
-          "Suffering & Pain",
-          "Peace"
+        "Matthew 5:4": [
+          "Grief & Loss",
+          "Suffering & Pain"
         ],
-        "John 14:27": [
-          "Anxiety & Worry",
-          "Peace"
+        "John 11:25": [
+          "Grief & Loss"
+        ],
+        "John 16:22": [
+          "Grief & Loss",
+          "Hope"
         ]
       },
       "themeMatches": [
-        "Matthew 11:28"
+        "Matthew 5:4",
+        "John 11:25",
+        "John 16:22"
       ],
       "firstInRoom": true,
       "inexact": [],
