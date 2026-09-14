@@ -297,6 +297,7 @@ describe('evaluation set', () => {
     assert.match(html, /help\.html/);
     assert.match(html, /atlas\.html/);
     assert.match(html, /id="leave-room"/);
+    assert.ok(html.indexOf('id="leave-room"') < html.indexOf('class="shell"'), 'Leave must sit above the title page, not inside the folio shell');
     assert.match(html, /weather\.com/);
     assert.match(html, /function leaveRoom/);
     assert.match(html, /eBible OSIS 1769/);
