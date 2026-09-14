@@ -15,6 +15,7 @@ Home of what we know. The product lives in `public/` and `lib/`.
 | S1–S5 | [SUMMITS.md](SUMMITS.md) | Mastery + build | mixed |
 | REVIEW | [REVIEW.md](REVIEW.md) | SELF-REVIEW | C4 |
 | SHIP | [SHIP.md](SHIP.md) | Ship package | — |
+| ATELIER | [ATELIER.md](ATELIER.md) | Continuation | C2 C4 C6 |
 | LEDGER | [CLAIM-LEDGER.md](CLAIM-LEDGER.md) | Claims | — |
 
 Prior recovery (do not treat as Charter): `docs/CANONICAL-BRIEF.md`, `docs/RESEARCH.md`, `docs/AGENT-CONTINUE.md`.

@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node --test test/*.test.js",
+    "eval:ask": "node scripts/eval-ask.js",
     "spoken": "node scripts/build-spoken.js",
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
