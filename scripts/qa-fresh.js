@@ -73,6 +73,31 @@ async function main() {
     assert(/988/.test(copy), 'missing 988');
   });
 
+  await check('Begin again is visible on a phone without scrolling Settings', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const visible = await page.evaluate(() => {
+      window.openSettings();
+      const sheet = document.getElementById('settings-sheet');
+      const label = [...sheet.querySelectorAll('.setting-label')].find((el) => el.textContent === 'Begin again');
+      if (!label) return { found: false };
+      const row = label.closest('.setting-row');
+      const r = row.getBoundingClientRect();
+      const s = sheet.getBoundingClientRect();
+      return {
+        found: true,
+        inView: r.top >= s.top && r.bottom <= Math.min(s.bottom, window.innerHeight),
+        url: window.ESCAPE_URL,
+      };
+    });
+    assert(visible.found, 'Begin again row missing');
+    assert(visible.inView, 'Begin again still below the fold');
+    assert(visible.url === 'https://www.live-local-weather.com/', 'ESCAPE_URL is ' + visible.url);
+  });
+
   await check('crisis modal offers Leave quickly', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
     const label = await page.evaluate(async () => {

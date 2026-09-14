@@ -18,12 +18,12 @@ describe('offline safety client contract', () => {
   it('service worker precaches the pack at the current cache version', () => {
     const sw = fs.readFileSync(path.join(__dirname, '..', 'public', 'sw.js'), 'utf8');
     const index = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
-    assert.match(sw, /rla-v20-chapel/);
+    assert.match(sw, /rla-v21-chapel/);
     assert.match(sw, /data\/safety-pack\.json/);
     assert.doesNotMatch(sw, /v=18/);
     assert.doesNotMatch(index, /v=18/);
-    assert.equal((index.match(/\?v=20/g) || []).length, 11);
-    assert.equal((sw.match(/\?v=20/g) || []).length, 11);
+    assert.equal((index.match(/\?v=21/g) || []).length, 11);
+    assert.equal((sw.match(/\?v=21/g) || []).length, 11);
   });
 
   it('About names RAINN and distinguishes 988 US from 988.ca', () => {

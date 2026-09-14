@@ -1119,7 +1119,9 @@
   // is a Next Summit, not this control.
   const SESSION_WIPE_KEYS = ['rla-chat', 'rla-onboarded'];
   const SESSION_WIPE_PREFIXES = ['rla-chat-count-'];
-  const ESCAPE_URL = 'https://www.wikipedia.org/';
+  // The Hotline theme exit() and their 2026-08-20 protect-history utility
+  // both replace to live-local-weather (www on the utility constant).
+  const ESCAPE_URL = 'https://www.live-local-weather.com/';
 
   function removeLsKey(key) {
     try {

@@ -27,7 +27,7 @@ Between guests: Settings → **Begin again**, or hit `/?fresh=1` again. Journal 
 
 - Call it an AI Jesus. The page says it is software, not a person.
 - Skip the wipe between guests. The last person’s shame must not greet the next.
-- Use Leave quickly to reset a demo. It navigates to Wikipedia on purpose.
+- Use Leave quickly to reset a demo. It navigates to a weather page on purpose.
 
 ## After the room
 

@@ -3,8 +3,8 @@
 Every line is marked **VERIFIED** (ran this session, evidence given) or
 **UNVERIFIED** (not run here; who runs it and how). Nothing is described as
 passed that was not run. Last updated 2026-09-14 on branch
-`cursor/lodestar-cycle-1-4ba9` (v1.5.0, cache v20). Prior sprint note: 2026-09-11
-on `cursor/sprint-safety-modules-4ba9` was cache v19 / 112 tests.
+`cursor/lodestar-cycle-1-4ba9` (v1.5.0, cache v21). Prior: Cycle 1 ship was v20;
+2026-09-11 sprint was v19 / 112 tests.
 
 ## Code and tests
 
@@ -48,7 +48,7 @@ on `cursor/sprint-safety-modules-4ba9` was cache v19 / 112 tests.
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Cache version consistent (`?v=20`, `rla-v20-chapel`) | **VERIFIED** — 11 refs in index.html, 11 in sw.js; SW precaches `data/safety-pack.json` | `test/offline-safety.test.js`. |
+| Cache version consistent (`?v=21`, `rla-v21-chapel`) | **VERIFIED** after ATELIER bump — 11 refs in index.html, 11 in sw.js | `test/offline-safety.test.js`. |
 | Installs and runs on a real iPhone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Installs and runs on a real Android phone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Offline reload, fonts, dark mode, journal | **VERIFIED earlier** (Playwright wave 2) — not re-run after v19 client changes | Device checklist step 8. |

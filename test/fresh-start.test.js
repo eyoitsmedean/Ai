@@ -19,7 +19,7 @@ describe('watched-device session wipe', () => {
     assert.match(app, /rla-chat/);
     assert.match(app, /rla-onboarded/);
     assert.match(app, /rla-chat-count-/);
-    assert.match(app, /ESCAPE_URL = 'https:\/\/www\.wikipedia\.org\/'/);
+    assert.match(app, /ESCAPE_URL = 'https:\/\/www\.live-local-weather\.com\/'/);
     assert.match(app, /consumeFreshQuery\(\)/);
     assert.doesNotMatch(app, /if \(wipeJournal\) removeLsKey\('rla-journal'\);\s*removeLsKey\('rla-journal'\)/);
   });

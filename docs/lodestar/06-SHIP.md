@@ -69,7 +69,7 @@ Another cycle: Clear this phone; a Dean-gated rainn.org row in RELEASE that flip
 Proud of: not rewriting your letters, and not pretending rainn.org opened.
 
 ## 13. The Ask
-Do you want Leave quickly to keep Wikipedia, or should it use a URL you choose (weather.gov, google.com, or The Hotline’s own target once we can see it)?
+**Closed 2026-09-14 (ATELIER).** Leave quickly now uses The Hotline’s published target: `https://www.live-local-weather.com/`. Override only if you want a different page.
 
 ## 14. Handoff
 
