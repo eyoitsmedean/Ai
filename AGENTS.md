@@ -4,7 +4,7 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. The syst
 
 Before doing substantive work, read:
 
-1. [`studio/ATELIER-PROTOCOL.md`](studio/ATELIER-PROTOCOL.md) — how to work (Dean's protocol, 6 September 2026; supersedes the Masterpiece Protocol)
+1. [`studio/ATELIER-PROTOCOL.md`](studio/ATELIER-PROTOCOL.md) — MASTERWORK loop (6 September 2026). This thread’s operating brief: [`studio/ATELIER-USEFUL-WORK.md`](studio/ATELIER-USEFUL-WORK.md) (14 Sep).
 2. The matching brief, then its lock:
    - Red Letter web folio, Advisor, Today / Seek / Sit / Journal → [`studio/briefs/red-letter.md`](studio/briefs/red-letter.md) · [`studio/locks/red-letter.md`](studio/locks/red-letter.md)
    - Red Words Flutter / iPhone + Android / widgets → [`studio/briefs/red-words-native.md`](studio/briefs/red-words-native.md) · [`studio/locks/red-words-native.md`](studio/locks/red-words-native.md)
