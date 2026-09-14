@@ -57,6 +57,8 @@ Dislikes (evidence): five live businesses; ceremony; leftover assembly; complime
 - Whether Folio ever becomes cash, or stays a free Advent gift.
 
 ## Provenance
-Read: six user prompts in this cloud-agent transcript (`bc-38e79d95-b47b-42c3-9668-57e2fc0ad41a`); `plans/`, `docs/CANONICAL-BRIEF.md`, `docs/RESEARCH-BOOK.md`, `docs/SUNDAY-OPERATOR.md`; This week, Operator Card v2, One Plan, Lamp v2, Room v2, Sunday close 14 Sep; `data/paths.js` extras; Idaho Tax / Stripe / Mercor pages opened 11 Sep.  
-Could not find: a prior LODESTAR Charter (this is Cycle 1). Prompts 7–10 do not exist — six user prompts only.  
+Read: nine user prompts in transcript `bc-38e79d95` (batch-fetch 14 Sep 20:38Z; 2.79 MB, complete). Prompt 1 is the only product brief. Prompts 2–8 are finish overlays. Prompt 9 asked for the first ten — a tenth does not exist. See `PROMPTS.md`.  
+Could not find: a tenth user prompt.  
 Confidence: high on C1–C4 (quoted). High on C5–C6 (later blessed pages). Medium on which lane survives the gates.
+
+**Amendment 14 Sep evening.** Prompt 9 grants creative improvement toward Prompt 1, not a new commission. Tonight’s one move moved onto the first screen. Default minutes = Rest.

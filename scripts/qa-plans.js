@@ -33,6 +33,8 @@ async function main() {
   await page.evaluate(() => localStorage.removeItem('ninety.v1'));
   await page.reload({ waitUntil: 'networkidle0' });
   await shot('playbook-hold-first-screen');
+  await page.$eval('#tonight-box', el => el.scrollIntoView({block:'start'}));
+  await shot('playbook-tonight-first');
 
   await check('HOLD card on first screen', async () => {
     const t = await page.$eval('#now', el => el.innerText);
@@ -51,6 +53,17 @@ async function main() {
   await check('default lane is none', async () => {
     const rec = await page.$eval('#receipt', el => el.innerText);
     assert(/No lane is written/i.test(rec), rec);
+  });
+
+  await check('tonight lives on the first screen', async () => {
+    const box = await page.$('#tonight-box #tonight-move');
+    assert(box, 'tonight-move missing from the first screen');
+    const t = await page.$eval('#tonight-move', el => el.innerText);
+    assert(/Nothing is the move|window is not confirmed|Go to bed/i.test(t), t);
+    const y = await page.$eval('#tonight-move', el => el.getBoundingClientRect().top);
+    assert(y < 700, 'tonight still buried: top=' + y);
+    const rest = await page.$('#tonight-min button[data-m="0"]');
+    assert(rest, 'Rest button missing');
   });
 
   await check('write Lamp under HOLD stays $0', async () => {

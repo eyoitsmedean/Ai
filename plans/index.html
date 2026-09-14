@@ -88,6 +88,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .decide .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
 .decide .pay .v{font-family:var(--display);font-size:1.15rem;font-weight:500}
 @media (max-width:640px){.decide .pay{grid-template-columns:1fr 1fr}}
+.tonight-now{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule)}
+.tonight-now .move{margin-top:10px;font-size:1.2rem}
+.movements-fold{margin-top:18px}
+.movements-fold summary{cursor:pointer;list-style:none;margin-bottom:10px}
+.movements-fold summary::-webkit-details-marker{display:none}
 .board{margin-top:12px;padding:16px 16px 14px}
 .board .sc{display:block;margin:10px 0 6px}
 .board .sc:first-child{margin-top:0}
@@ -394,6 +399,13 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
   <h1>Build. <em>Baby.</em> Build.</h1>
   <p class="lede">Ninety days in three movements. Five paper bets. Write one — or none. A listing is not a billed hour.</p>
   <p class="note">Estimate, not a promise. Only the ledger counts. Parallel draft — This week still wins. Updated 14 Sep 2026 (Monday). Apply and outreach stay HOLD.</p>
+  <div class="leaf tonight-now" id="tonight-box">
+    <span class="sc">Tonight · one move</span>
+    <div class="seg" id="tonight-min" role="group" aria-label="Minutes available">
+      <button data-m="0">Rest</button><button data-m="15">15</button><button data-m="45">45</button><button data-m="90">90</button>
+    </div>
+    <div class="move" id="tonight-move"></div>
+  </div>
   <div class="decide" id="now" aria-live="polite"></div>
   <div class="leaf board" id="board">
     <span class="sc">Household window · This week last recorded Not confirmed</span>
@@ -416,7 +428,10 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <div id="honest" aria-live="polite"></div>
     <div id="gates" hidden></div>
   </div>
-  <div class="movements" id="movements" aria-label="The three movements"></div>
+  <details class="movements-fold">
+    <summary class="sc">Three movements · a drawer</summary>
+    <div class="movements" id="movements" aria-label="The three movements"></div>
+  </details>
   <div class="facts">
     <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
     <div class="fact"><span class="sc">Real hours</span><span class="v" id="f-hours">≈ 38 of 58</span></div>
@@ -427,6 +442,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
+    <a href="#tonight-box">Tonight</a>
     <a href="#now">This week</a>
     <a href="#board">Lane</a>
     <a href="#first">Read first</a>
@@ -489,17 +505,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     <div class="verdict" id="bud-verdict"></div>
   </div>
 
-  <div class="leaf tonight" style="margin-top:14px">
-    <div>
-      <h3 style="margin-bottom:4px">Tonight</h3>
-      <p class="note" style="margin-bottom:12px">Pick the plan you're running and how many minutes you honestly have. You get one move.</p>
-      <div class="pick" id="tonight-plan"></div>
-      <div style="margin-top:12px"><div class="seg" id="tonight-min" role="group" aria-label="Minutes available">
-        <button data-m="0">0</button><button data-m="15">15</button><button data-m="45">45</button><button data-m="90">90</button>
-      </div></div>
-    </div>
-    <div class="move" id="tonight-move"></div>
-  </div>
+  <p class="note" style="margin-top:14px">Tonight lives on the first screen. The minutes you pick there are the only move.</p>
 </section>
 
 <section id="plans" class="wrap">
@@ -993,15 +999,16 @@ const LEDGER = [
   {c:'Mercor L&D Evaluator listing still live 14 Sep 2026 at advertised $80–$120/hr; HTML does not print hours/week or awarded rate', l:'Verified', s:[['Mercor L&D Evaluator','https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator']], d:'14 Sep 2026', w:'If the URL dies, Lamp has no door. Still $0 until a billed hour.'},
   {c:'Idaho small seller exemption, enacted §63-3622YY(2): current calendar year only; $7,500 clawback on all sales that year', l:'Verified', s:[['Idaho Code §63-3622YY','https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622yy/'],['Tax Commission — small seller exemption','https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/']], d:'14 Sep 2026', w:'A later session bill that restores a two-year lookback would start counting 2025 receipts. The 17 Jul 2025 press release is stale vs the statute.'},
   {c:'2026 Social Security OASDI wage base is $184,500', l:'Verified', s:[['SSA — contribution and benefit base','https://www.ssa.gov/oact/cola/cbb.html']], d:'14 Sep 2026', w:'If W-2 already meets the cap, extra SE is mostly Medicare. Do not lower the 35% rule on that guess.'},
-  {c:'Honest cash on this page is $0 until a billed hour; advertised $80–$120 is never the first-screen number', l:'Your notes', s:['Operator Card v2; honestCash() in this file'], d:'14 Sep 2026', w:'If a dollar hits the ledger, that number — not a model — is the base.'}
+  {c:'Honest cash on this page is $0 until a billed hour; advertised $80–$120 is never the first-screen number', l:'Your notes', s:['Operator Card v2; honestCash() in this file'], d:'14 Sep 2026', w:'If a dollar hits the ledger, that number — not a model — is the base.'},
+  {c:'14 Sep 2026 is Monday; Sunday was 13 Sep; next week-turn is Sunday 20 Sep', l:'Verified', s:['Computed from the civil date; Notion Week-turn · 13 Sep was Sunday (child of This week)'], d:'14 Sep 2026', w:'A close card titled Sunday 14 Sep is a wrong weekday. Use Sun 20, or the week-turn card.'}
 ];
 
 /* ---------------- State ---------------- */
 let S = load();
 function load(){
   try{ const s = JSON.parse(localStorage.getItem(KEY)||'{}');
-    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}, s);
-  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}; }
+    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:0, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}, s);
+  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:0, household:'not', choice:'none', gates:defaultGates(), stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}; }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 
@@ -1130,13 +1137,7 @@ function renderThisWeek(){
     el.classList.add('late');
     el.innerHTML = `<div class="kicker">The decision · Week ${w} of 13 · ${esc(MOVES[mv].name)}</div>
       <h2>This week wins. Money waits.</h2>
-      <p>Household window is not confirmed. Apply and outreach stay HOLD. Do not send videos, asks, or walks from this page.</p>
-      <ol>
-        <li>Required: DEX / Academy during scheduled work hours.</li>
-        <li>Optional money: none. Human week 15–21 starts Tuesday. Rest is a finish.</li>
-        <li>Next close: Sunday 20 Sep (13 Sep was Sunday; 14 Sep is Monday). Rest needs no receipt.</li>
-      </ol>
-      <div class="act"><span class="sc">What this page is</span>A parallel draft of five paper bets. ${esc(LANES[writtenLane()].sentence)} One Cash Lane is the money source of truth.</div>
+      <p>Window not confirmed. HOLD. DEX / Academy in work hours. Human week 15–21: rest is a finish. Next close Sunday 20 Sep.</p>
       <div class="pay">
         <div><span class="sc">Honest cash</span><div class="v">$0</div></div>
         <div><span class="sc">Reserve rule</span><div class="v">35%</div></div>
@@ -1323,7 +1324,8 @@ if(gatesBox) gatesBox.addEventListener('click', e=>{
 });
 function renderTonight(){
   renderHousehold();
-  $('#tonight-plan').innerHTML = PLANS.map(p=>`<button data-p="${p.id}" aria-pressed="${S.tonightPlan===p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
+  const pick = $('#tonight-plan');
+  if(pick) pick.innerHTML = PLANS.map(p=>`<button data-p="${p.id}" aria-pressed="${S.tonightPlan===p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');
   $$('#tonight-min button').forEach(b=>{ const onb = Number(b.dataset.m)===S.tonightMin; b.classList.toggle('on', onb); b.setAttribute('aria-pressed', onb); });
   const p = planById(S.tonightPlan);
   const now = new Date(); now.setHours(0,0,0,0);
@@ -1345,14 +1347,25 @@ function renderTonight(){
     $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · The Lamp</small>${esc(LAMP_TONIGHT[S.tonightMin])}`;
     return;
   }
+  if(writtenLane()==='folio'){
+    $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Folio</small>${S.tonightMin===0?'Nothing is the move. The words stay free.':'Advent Week 1 is already written. Read it, or do not. No invoice. <a href="./advent.html">Open the week</a>.'}`;
+    return;
+  }
   if(writtenLane()==='none'){
-    $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · no lane</small>Write a lane at the top, or close the laptop. Five paper bets is not five jobs.`;
+    $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · no lane</small>Write a lane above, or close the laptop. Five paper bets is not five jobs.`;
     return;
   }
   $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}${storefrontCatchup()?' · catch-up':''}</small>${esc(tonightLine(p, S.tonightMin))}`;
 }
-$('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
-$('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightMin=Number(b.dataset.m); save(); renderTonight(); });
+const tplan = $('#tonight-plan');
+if(tplan) tplan.addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
+const tmin = $('#tonight-min');
+if(tmin) tmin.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  S.tonightMin=Number(b.dataset.m); save(); renderTonight();
+  if(S.tonightMin===0) toast('Rest needs no receipt.');
+  const again=$(`#tonight-min button[data-m="${b.dataset.m}"]`); if(again) again.focus();
+});
 
 /* ---------------- Plans ---------------- */
 function renderStrip(){
