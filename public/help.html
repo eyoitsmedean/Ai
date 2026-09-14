@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="robots" content="noindex" />
+  <title>Help — Red Letter</title>
+  <link rel="icon" href="./icon-192.png" />
+  <style>
+    :root { --paper:#F4EFE4; --ink:#1B1610; --mute:#7A6E5E; --crimson:#8F1D1D; --rule:rgba(27,22,16,.12); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { min-height:100%; background:var(--paper); color:var(--ink); font-family:Georgia, 'Iowan Old Style', serif; }
+    main { max-width:36rem; margin:0 auto; padding:48px 22px 80px; }
+    .kicker { letter-spacing:.22em; text-transform:uppercase; font-size:11px; color:var(--mute); margin-bottom:12px; }
+    h1 { font-weight:500; font-size:clamp(32px, 7vw, 48px); letter-spacing:-.03em; line-height:1.05; margin-bottom:16px; }
+    h1 em { font-style:italic; color:var(--crimson); }
+    .lede { font-style:italic; color:#4A4034; line-height:1.55; margin-bottom:28px; }
+    .card { border-top:1px solid var(--rule); padding:22px 0; }
+    .card h2 { font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--crimson); margin-bottom:8px; }
+    .card p { line-height:1.55; margin-bottom:12px; }
+    a.num { display:block; color:var(--crimson); font-size:22px; text-decoration:none; margin:6px 0; }
+    a.num small { display:block; font-size:13px; color:var(--mute); letter-spacing:.04em; text-transform:uppercase; }
+    .warn { background:#F3E4DC; color:#6B1414; padding:14px 16px; line-height:1.5; margin:16px 0; }
+    .back { display:inline-block; margin-top:28px; color:var(--crimson); }
+    .floor { margin-top:28px; font-size:14px; color:var(--mute); line-height:1.55; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">If the room fails</p>
+    <h1>Reach a <em>person</em></h1>
+    <p class="lede">This page does not quote scripture. It does not write a letter. It cannot hand you to a counselor. The numbers below leave the app.</p>
+
+    <section class="card">
+      <h2>United States — distress</h2>
+      <p>Call or text 988. Chat is a third official channel. You do not have to be suicidal to use it.</p>
+      <a class="num" href="tel:988">988 <small>Call or text</small></a>
+      <a class="num" href="https://chat.988lifeline.org">chat.988lifeline.org <small>Official 988 chat</small></a>
+    </section>
+
+    <section class="card">
+      <h2>Something taken</h2>
+      <p>If you have taken pills or anything else to harm yourself, that is a medical emergency — even if you feel fine. Call 911 if someone collapses, cannot breathe, or has a seizure.</p>
+      <a class="num" href="tel:911">911 <small>Emergency</small></a>
+      <a class="num" href="tel:18002221222">1-800-222-1222 <small>Poison Control</small></a>
+    </section>
+
+    <section class="card">
+      <h2>Violence or abuse</h2>
+      <div class="warn">Internet usage can be monitored and is impossible to erase completely. If you are concerned this screen can be seen, call from a safer phone. Clear the browser history after you leave.</div>
+      <a class="num" href="tel:18007997233">1-800-799-7233 <small>National Domestic Violence Hotline</small></a>
+      <a class="num" href="sms:88788?&amp;body=START">Text START to 88788</a>
+      <p>If you are in immediate danger, call 911.</p>
+    </section>
+
+    <section class="card">
+      <h2>Anywhere else</h2>
+      <a class="num" href="https://findahelpline.com">findahelpline.com <small>Local helplines</small></a>
+    </section>
+
+    <p class="floor">Red Letter is software, not a person, pastor, clinician, or emergency care. A list of numbers is not a handoff. Please stay on the line if you call.</p>
+    <a class="back" href="./">Return to the room</a>
+  </main>
+</body>
+</html>

@@ -6,15 +6,15 @@
 **Format.** This file. The product and the eval are the proof; this is the map.  
 **Not.** A claim that a live user study was run. CI and official pages were.
 
-Last verified: **2026-09-11**.
+Last verified: **2026-09-14** (numbers re-fetched; first-word and Today identity added).
 
 ---
 
 ## The claim, in one breath
 
-The Advisor decides a **room** once. It writes only from that room. Every quotation is checked against the spoken KJV Gospels. If the question sounds like crisis, poisoning, violence, or bereavement, a **person** is offered first — 988, Poison Control, or the Domestic Violence Hotline — and the verses that follow are from a short safe list, not from the question’s own keywords.
+The Advisor decides a **room** once. It writes only from that room. Every quotation is checked against the spoken KJV Gospels. If the question sounds like crisis, poisoning, violence, or bereavement, a **person** is offered first — 988 (call, text, or [chat](https://chat.988lifeline.org)), Poison Control, or the Domestic Violence Hotline — and the verses that follow are from a short safe list, not from the question’s own keywords. A crisis letter **leads** with John 14:27.
 
-That claim is now true on **both** hosts for the twelve Seek rooms, the high-stakes letters (affair, veteran, the one who hit), and the **crisis-safe list** (John 14:27, Matthew 11:28, Luke 12:7 — not the Peace room’s tribulation verse). The static page GitHub Pages actually serves is the one that must stay in step.
+That claim is now true on **both** hosts for the twelve Seek rooms, Today’s morning word, empty send, the high-stakes letters, and the crisis triple. If the composer fails, `help.html` still has the numbers. IASP (10 June 2026) is right that a list is not a handoff — the help card says so.
 
 ---
 

@@ -328,6 +328,26 @@ async function main() {
     assert(chrome.dock === 'none', 'desktop still showing the phone dock');
   });
 
+  await check('offline help card has the numbers and no scripture', async () => {
+    const res = await page.goto(BASE + '/help.html', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'help HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/988/.test(copy) && /1-800-222-1222/.test(copy), 'help missing a number');
+    assert(/chat\.988lifeline\.org/.test(await page.content()), 'help missing official chat');
+    assert(/cannot hand you to a counselor/.test(copy), 'help must not pretend to hand off');
+    assert(!/Matthew|John 14/.test(copy), 'help must not quote scripture');
+  });
+
+  await check('atlas names the first words', async () => {
+    const res = await page.goto(BASE + '/atlas.html', { waitUntil: 'domcontentloaded' });
+    assert(res && res.ok(), 'atlas HTTP ' + (res && res.status()));
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/Conflict/.test(copy), 'atlas missing Conflict');
+    assert(/5:23/.test(copy), 'atlas missing Conflict cite');
+    assert(/15:4/.test(copy), 'atlas missing Shame');
+    assert(/14:27/.test(copy), 'atlas missing Peace / crisis lead');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

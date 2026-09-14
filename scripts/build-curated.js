@@ -6,7 +6,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { THEMES, dailyForDate, themeNames, encouragementFor } = require('../lib/curated');
+const { THEMES, dailyForDate, rotationDays, themeNames, encouragementFor } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 const JS_PATH = path.join(ROOT, 'public', 'data', 'curated.js');
@@ -41,25 +41,45 @@ function writeClientJs() {
   const encouragement = packs();
   const aliases = {};
   for (const name of Object.keys(THEMES)) aliases[name] = name;
+  const rotation = rotationDays();
   const out = [
     '/* Curated red-letter fallbacks — public-domain KJV words of Jesus (four Gospels).',
     '   Encouragement rooms are generated from lib/curated.js (`npm run curated`).',
-    '   Do not edit the encouragement object by hand. Daily rotation may be edited here. */',
+    '   Do not edit the encouragement object by hand. The long daily list feeds Forty.',
+    '   Morning rotation is generated from lib/curated.js and must match /api/daily. */',
     'window.RLA_CURATED = {',
     `  ${dailyBlock.trim()},`,
+    '  rotation: ' + JSON.stringify(rotation, null, 2).replace(/^/gm, '  ').trim() + ',',
     '  encouragement: ' + JSON.stringify(encouragement, null, 2).replace(/^/gm, '  ').trim(),
     '};',
     '',
     'window.RLA_THEME_ALIASES = ' + JSON.stringify(aliases, null, 2) + ';',
+    '',
+    'window.RLA_dailyForDate = function (date) {',
+    '  var days = (window.RLA_CURATED && window.RLA_CURATED.rotation) || [];',
+    '  if (!days.length) return null;',
+    '  var y, m, d;',
+    '  var match = typeof date === "string" && date.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);',
+    '  if (match) { y = Number(match[1]); m = Number(match[2]) - 1; d = Number(match[3]); }',
+    '  else {',
+    '    var src = date instanceof Date ? date : new Date();',
+    '    y = src.getFullYear(); m = src.getMonth(); d = src.getDate();',
+    '  }',
+    '  var local = new Date(y, m, d);',
+    '  var n = days.length;',
+    '  var idx = Math.floor(local.getTime() / 86400000) % n;',
+    '  if (idx < 0) idx += n;',
+    '  return days[idx];',
+    '};',
     '',
   ].join('\n');
   fs.writeFileSync(JS_PATH, out);
 }
 
 function writeSeekJson() {
-  const prev = JSON.parse(fs.readFileSync(JSON_PATH, 'utf8'));
   const next = {
-    daily: prev.daily && prev.daily.affirmation ? prev.daily : dailyForDate(new Date()),
+    daily: dailyForDate(new Date()),
+    days: rotationDays(),
     packs: packs(),
   };
   fs.writeFileSync(JSON_PATH, JSON.stringify(next));

@@ -1,9 +1,11 @@
-const CACHE = 'rla-v18';
+const CACHE = 'rla-v19';
 const ROOT = new URL('./', self.location).pathname;
 const PRECACHE = [
+  './help.html',
   './',
   './index.html',
   './welcome.html',
+  './atlas.html',
   './manifest.json',
   './curated.json',
   './library.json',

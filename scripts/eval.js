@@ -145,7 +145,9 @@ function judge(q, letter) {
   // their own hands is spoken to as such, never told "this is not your fault".
   const poisonOk = q.poison ? poisonAt !== -1 && poisonAt < noticeAt : poisonAt === -1;
   const byYouOk = q.byYou ? byYouAt !== -1 && byYouAt < firstCite : true;
-  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0 && poisonOk && bereavedOk;
+  const firstCiteRef = cites.length ? cites[0].cite : '';
+  const crisisLeadOk = !q.crisis || q.bereaved || /^John 14:27\b/.test(firstCiteRef);
+  if (q.crisis) gates.crisis = noticeAt !== -1 && noticeAt < firstCite && crisisForbidden.length === 0 && offList.length === 0 && poisonOk && bereavedOk && crisisLeadOk;
   else if (q.danger) gates.crisis = dangerAt !== -1 && dangerAt < firstCite && noticeAt === -1 && byYouOk;
   else gates.crisis = noticeAt === -1 && dangerAt === -1 && poisonAt === -1;
 

@@ -46,6 +46,11 @@ The product is advisor-first, not scholarship-first. Scholarship sits behind the
 | **One client composer.** `public/data/` is the only copy of `advisor.js`, `curated.js`, `paths.js`, `signals.js`. What the page loads is what `eval --client`, the tests and browser QA load. The `data/` duplicates that let an August build ship untested are gone; do not recreate them | settled 2026-09-06 | public/data/; scripts/eval.js; scripts/qa-browser.js |
 | **One encouragement source.** `lib/curated.js` is canonical. `npm run curated` writes `public/data/curated.js` and `public/curated.json`. Seek on a static host and the Advisor must open every room on the same first passage the server uses. Special rooms (betrayal, danger, by-you) use the same lists as `lib/advise.js`. Tests assert first-citation identity on `danger-05`, `life-27`, `life-44`, `life-36` | settled 2026-09-11 | scripts/build-curated.js; test/eval.test.js |
 | Forty remains data-only until the week of Ash Wednesday **10 February 2027**. Seven Days is the named path in the UI. Do not surface Forty in ordinary time | settled 2026-09-11 | public/data/paths.js; docs/research/adjacent-05-seasonal-practice.md |
+| **One morning.** `dailyForDate` / `RLA_dailyForDate` use the same local-civil-date index. `npm run curated` writes `rotation` into `public/data/curated.js` and `days` into `public/curated.json`. Static Today must not freeze a single build-day | settled 2026-09-14 | lib/curated.js; public/index.html `loadDailyContent` |
+| Empty send and no-room are two calm lines (Matthew 11:28, John 14:27) on both composers — never the day’s word (it can be tribulation) | settled 2026-09-14 | lib/advise.js; public/data/advisor.js |
+| Crisis letters **lead** with John 14:27 (then Come, then the hairs). Eval G4 checks the first citation, not only set membership | settled 2026-09-14 | scripts/eval.js |
+| Offline help card `public/help.html` is precached first. It quotes no scripture. It says this page cannot hand you to a counselor. Crisis interrupt names chat at chat.988lifeline.org | settled 2026-09-14 | public/help.html; public/sw.js `rla-v19` |
+| The rooms are visible at `public/atlas.html`. `npm run sit` and `npm run first-word` are the cold-start proofs | settled 2026-09-14 | public/atlas.html; scripts/sit.js |
 
 ## Assumptions (labelled, correct if wrong)
 
