@@ -2,20 +2,22 @@
 
 Every line is **verified** (with how, and the rung) or **unverified** (with what it takes). Nothing here is called passed that was not run. Rungs: (1) ran it and observed · (2) automated proxy · (3) hand-traced · (4) checked against a spec · (5) could not verify.
 
-Last updated 2026-09-14, on branch `cursor/lodestar-cycle-1-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
+Last updated 2026-09-14, on branch `cursor/atelier-finish-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
 
 ## What is verified
 
 | Item | How | Rung |
 |---|---|---|
 | Every answer cites only His words, quoted from the KJV corpus, never typed | `npm test` — `test/counsel.test.js` runs all 46 eval questions through `composeLetter` → `verifyAndSubstitute` and checks each quote equals the corpus; `test/map.test.js`, `test/spoken.test.js` guard the map and the frame | 1 |
-| The evaluation set: 46 questions (16 everyday, 10 low-moment, 6 hostile, 6 off-scope, 8 crisis) — historical 2026-09-06 | then 50 (2026-09-11); now 54 | 1 |
+| The evaluation set: 46 questions (16 everyday, 10 low-moment, 6 hostile, 6 off-scope, 8 crisis) — historical 2026-09-06 | then 50 (2026-09-11); 54 (Cycle 1); now 56 | 1 |
 | Eval grown to 54 (Integrity + contract). Offline path **54/54**, 19 distinct citation sets, 2026-09-14 | `npm run eval`; `eval/RESULTS.md` | 1 |
+| Eval grown to 56 (You-are-Jesus + jailbreak). Offline path **56/56**, 19 distinct citation sets, 2026-09-14 | `npm run eval`; `eval/RESULTS.md` #55–#56 stay out of room and do not claim to be Him | 1 |
+| Night latch hides Vespers; title-page ask sends an Integrity letter | `npm run qa` **20/20** (headless Chrome, 390×844) | 1 |
 | Crisis inputs get the human handoff (988 · findahelpline) before any verse | eval `crisis_handoff` 8/8; browser QA opens the modal before sending "I want to die" | 1 |
 | Present-danger / abuse inputs get thehotline (1-800-799-7233) before any verse, and never Matthew 5:44 | unit tests + API test; eval items 47–50; browser QA opens the abuse modal first | 1 |
 | Client and server crisis detectors are identical | `test/counsel.test.js` compares the two regex sources | 1 |
 | Off-scope questions (weather, Python, Paul, Psalm 23, Bitcoin) get an honest out-of-room letter with no other author cited | eval 6/6 | 1 |
-| Hostile questions get a gentle in-scope letter, no argument | eval 6/6 (offline path); tone on the model path is for human review | 1 / 5 |
+| Hostile questions get a gentle in-scope letter, no argument | eval 8/8 (offline path); tone on the model path is for human review | 1 / 5 |
 | Without a model key the server still answers the question's need | `test/api.test.js` (fear → Fear room, grief → Grief room, crisis → notice, blank line, company) | 1 |
 | A model letter that cites another author, or carries no verified saying, never reaches the reader — the room's letter replaces it | `test/counsel.test.js` `letterPassesFloor` (Romans, Psalm, no verse, unfillable marker, typed quote all fail; every offline letter passes) | 1 |
 | Corpus integrity: all 89 Gospel chapters at KJV verse counts; no editorial notes in verse text | `test/corpus.test.js`, `test/map.test.js` | 1 |

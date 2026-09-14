@@ -1,13 +1,13 @@
 # Ship Package — LODESTAR Cycle 1
 
 ## 1. Summary
-Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a letter contract the server actually uses, a blessing from the letter you just received, a night latch that will not count a streak, and a title-page ask that can send a letter in one gesture. Eval is 56/56 on the offline path once this ATELIER pass is run (19 distinct citation sets on everyday/low-moment). Knowledge base: `docs/lodestar/`.
+Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a letter contract the server actually uses, a blessing from the letter you just received, a night latch that will not count a streak, and a title-page ask that can send a letter in one gesture. Eval is **56/56** on the offline path (19 distinct citation sets on everyday/low-moment). Knowledge base: `docs/lodestar/`.
 
 ## 2. Charter check
 - **C1** advanced — Integrity cites Matthew 5:37; John 3 seam + Blayney label disclosed.
 - **C2** advanced — first-ask, blessing-from-letter, night latch, Integrity craft.
 - **C3** advanced — 988 caveat; leaving ≠ vow-break; history warning; Mt 6:14–15 forbidden on abuse.
-- **C4** advanced — contract judge; 54/54 Cycle 1; ATELIER adds #55–#56 (counts after `npm run eval`).
+- **C4** advanced — contract judge; Cycle 1 54/54; ATELIER **56/56** offline including #55–#56.
 - **C5** unchanged — no device, no deploy, no store.
 - **C6** advanced — Advisor chip; contract fails persona. **Proposed amendment:** keep C6 as a numbered goal.
 
@@ -23,7 +23,7 @@ Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a let
 - **Scholar pass** opened primary URLs 2026-09-14 (dossiers list them). I did not re-open every URL myself.
 - **Computed:** Integrity verses looked up in-corpus; composeLetter for q14.
 - **Ran (Cycle 1):** `npm test` **98/98**; `npm run qa` **19/19**; `npm run eval` **54/54** offline, 19 citation sets (2026-09-14).  
-- **ATELIER residuals (this pass):** counts in `RELEASE.md` after the run — do not treat this line as passed until that update.
+- **ATELIER residuals (this pass):** `npm test` **100/100**; `npm run qa` **20/20**; `npm run eval` **56/56** offline, 19 citation sets (2026-09-14).
 - **Not run:** model path (no key); iOS/Android; YouTube; Granola; live Cambridge permissions HTML; RAINN.org; apps (Hallow/Lectio) themselves.
 
 ## 5. Assumptions and limits
