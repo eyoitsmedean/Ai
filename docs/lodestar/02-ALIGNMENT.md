@@ -23,7 +23,7 @@
 | `MARKET_STRATEGY.md` | — | Unblessed | Held as history. Banner already present. Not implemented. |
 | `artifact.html` | — | Unblessed | Redirect stub. Left. Documented. |
 | `public/.well-known/assetlinks.json` stub | C5 | Gap | Held. Play TWA needs Dean yes. |
-| Eval 92 / unit / smoke / ui-check | C7 | On course | **Extended:** follow-up + share + verse-object + protocol checks. |
+| Eval 96 / unit / smoke / ui-check | C7 | On course | **Extended:** follow-up + share + verse-object + protocol checks. |
 | Model-mode eval | C7 | Gap | Cannot fill here (no key). Still UNVERIFIED. |
 | On-device RELEASE §C | C5 | Gap | Cannot fill here. Operator kit stands. |
 | In-memory quota | C5 | Unblessed | Held. Needs shared store at deploy. |
