@@ -72,6 +72,13 @@ class RedWordsColors {
     rule: Color(0x1A1B1610),
   );
 
+  /// Amber cream after vespers. A lamp — never OLED black.
+  static const Color lampPaper = Color(0xFFE8D8B4);
+  static const Color lampFolio = Color(0xFFF0E4C4);
+  static const Color lampInk = Color(0xFF241C12);
+  static const Color lampMuted = Color(0xFF6E5E48);
+  static const Color lampRule = Color(0x261B1610);
+
   factory RedWordsColors.forSeason(ChurchSeason season) {
     switch (season.id) {
       case 'advent':
@@ -86,10 +93,40 @@ class RedWordsColors {
         return ordinary;
     }
   }
+
+  /// Seasonal silk stays. After vespers the leaf becomes a lamp.
+  factory RedWordsColors.forHour(ChurchSeason season, {required bool evening}) {
+    final day = RedWordsColors.forSeason(season);
+    if (!evening) return day;
+    return RedWordsColors(
+      paper: lampPaper,
+      folio: lampFolio,
+      ink: lampInk,
+      inkMuted: lampMuted,
+      crimson: day.crimson,
+      gold: day.gold,
+      rule: lampRule,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RedWordsColors &&
+          paper == other.paper &&
+          folio == other.folio &&
+          ink == other.ink &&
+          inkMuted == other.inkMuted &&
+          crimson == other.crimson &&
+          gold == other.gold &&
+          rule == other.rule;
+
+  @override
+  int get hashCode => Object.hash(paper, folio, ink, inkMuted, crimson, gold, rule);
 }
 
-ThemeData redWordsTheme(ChurchSeason season) {
-  final colors = RedWordsColors.forSeason(season);
+ThemeData redWordsTheme(ChurchSeason season, {bool evening = false}) {
+  final colors = RedWordsColors.forHour(season, evening: evening);
   final base = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -143,5 +180,8 @@ class PaperScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(PaperScope oldWidget) =>
-      colors != oldWidget.colors || season.id != oldWidget.season.id;
+      colors.paper != oldWidget.colors.paper ||
+      colors.crimson != oldWidget.colors.crimson ||
+      colors != oldWidget.colors ||
+      season.id != oldWidget.season.id;
 }

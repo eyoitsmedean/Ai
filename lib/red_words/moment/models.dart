@@ -99,6 +99,9 @@ class PathDay {
   final Saying word;
   final String reflection;
 
+  /// First letter of the room — the ribbon control, not a score.
+  String get initial => title.isEmpty ? '' : title[0];
+
   factory PathDay.fromJson(Map<String, dynamic> json) {
     return PathDay(
       theme: (json['theme'] ?? '').toString(),

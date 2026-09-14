@@ -46,4 +46,7 @@ test('review folio is generated from the locked catalog', () => {
 
   const verseCount = Object.keys(catalog.verses).length;
   assert.ok(html.includes(`${verseCount} red-letter`) || html.includes(`${verseCount} spoken`));
+  assert.match(html, /#E8D8B4/);
+  assert.match(html, /never a black slab/);
+  assert.match(html, /C P L L F A G/);
 });

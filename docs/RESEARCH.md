@@ -31,13 +31,14 @@ Facts, interpretations, estimates, assumptions, and recommendations are labeled.
 | C3 | Fail-closed catalog | Prompt 1 | 37 KJV verses; empty = blank | — | Canon |
 | C4 | Office clock | Prompt 2 | Morning / Afternoon / Vespers / Compline | — | Book |
 | C5 | Sit / lectio | Prompt 2 | Four leaves; Rest then Respond | Last-two lectio order disputed (S3) | Book |
-| C6 | Seven Days | Prompt 2 | Seven beads, seven rooms, no streak | — | Book |
+| C6 | Seven Days | Prompt 2 | Seven initials, seven rooms, no streak | — | Book |
 | C7 | Blessing / share | Prompt 2 / LAUNCH | Native share; Word-only body | iPad popover unused (iPhone-only) | Native |
 | C8 | Identifiers | Prompt 1 | Locked table in TESTFLIGHT | First-Archive embed order | Operator |
 | C9 | Privacy / stores | Prompt 1, 6 | No accounts; HTML ready | Public URL (S10) | Operator |
 | C10 | Church year / silk | Prompt 2 | Tokens in `theme.dart` | Exact seasonal windows vs local diocese | Book |
 | C11 | Kid’s Day → TestFlight | Prompt 1, later | Deadline passed | Dean’s Mac day | Operator |
 | C12 | Xcode 26 | S1 | Policy live | Flutter engine notes on iOS 26 | Operator |
+| C13 | Evening lamp | Prompt 2 / DESIGN.md | `#E8D8B4` after vespers; seasonal crimson stays | Hex is ours, not a sourced liturgical color | Book |
 
 **Excluded as drift:** Advisor-as-this-ship, Journal-as-app, Ask/Saved/Settings shell from `founder-recovery-d607`, “do not merge PR 12,” 40 Lent rooms, celebrity, streaks, payments.
 

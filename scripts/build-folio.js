@@ -32,9 +32,11 @@ const vespersPrompts = [
 const offices = [
   { name: 'Morning', hours: '06:00 – 12:00', watch: 'Dawn', note: 'Today’s light. The sentence meets the first hour.' },
   { name: 'Afternoon', hours: '12:00 – 17:00', watch: 'Day', note: 'The same Word. The clock does not invent a second saying.' },
-  { name: 'Vespers', hours: '17:00 – 21:00', watch: 'Evening', note: 'A prompt from the week. The furniture stays quiet.' },
-  { name: 'Compline', hours: '21:00 – 06:00', watch: 'Night', note: 'Night office. The page is a lamp, never OLED.' },
+  { name: 'Vespers', hours: '17:00 – 21:00', watch: 'Evening', note: 'The paper becomes a lamp. A prompt from the week. The furniture stays quiet.' },
+  { name: 'Compline', hours: '21:00 – 06:00', watch: 'Night', note: 'Night office. Same lamp paper (#E8D8B4). Never OLED.' },
 ];
+
+const lamp = { paper: '#E8D8B4', folio: '#F0E4C4', note: 'A lamp, never a black slab. Seasonal crimson stays in the silk.' };
 
 const seasons = [
   { id: 'ordinary', name: 'Ordinary Time', paper: '#F4EFE4', folio: '#FBF7EE', crimson: '#8F1D1D', gold: '#8A6A28', note: 'Warm paper. The default clothes of the book.' },
@@ -54,7 +56,7 @@ const identifiers = [
   ['Display name', 'Red Words'],
   ['iOS floor', '15.0 — Runner and widget'],
   ['Device family', 'iPhone only (not iPad)'],
-  ['Version', '0.1.0+5'],
+  ['Version', '0.1.0+6'],
   ['Android applicationId', 'com.redwords.red_words'],
 ];
 
@@ -236,6 +238,16 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 .check li::before { content: "○"; position: absolute; left: 0; color: var(--crimson); }
 .seasons { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 22px; }
 @media (max-width: 800px) { .seasons { grid-template-columns: 1fr 1fr; } }
+.ribbon {
+  display: flex; justify-content: center; gap: 22px;
+  margin: 28px 0 8px;
+  font-family: var(--display); font-style: italic; font-size: 28px;
+  color: var(--ink);
+}
+.ribbon span { opacity: .72; min-width: 1em; text-align: center; }
+.lamp-plate { margin-top: 22px; padding: 22px 20px; background: #E8D8B4; border: 1px solid var(--rule); }
+.lamp-plate h3 { font-family: var(--display); font-weight: 500; font-size: 22px; }
+.lamp-plate p { font-family: var(--body); font-size: 15px; line-height: 1.55; color: #241C12; margin-top: 8px; }
 .swatch { padding: 28px 14px 20px; text-align: center; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; }
 .swatch strong { font-family: var(--display); font-weight: 500; font-size: 16px; }
 .swatch em { font-size: 11px; letter-spacing: .06em; font-style: normal; opacity: .75; }
@@ -300,7 +312,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <article class="book">
 
 <section class="leaf" id="front">
-  <p class="kicker">A folio for Dean · 11 September 2026</p>
+  <p class="kicker">A folio for Dean · 14 September 2026</p>
   <div class="mark" style="margin: 36px 0 24px">R</div>
   <p class="promise">${esc(catalog.brand.promise)}</p>
   <p class="lede drop" style="margin-top: 28px">
@@ -454,7 +466,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <section class="leaf" id="office">
   <p class="kicker">The daily office</p>
   <h2 style="font-size: clamp(32px, 5vw, 44px); margin: 12px 0 12px">A clock, not a setting</h2>
-  <p class="lede">Morning before noon. Afternoon until seventeen. Vespers after seventeen. Compline after twenty-one, and again before six. The same Word stays on the page. The hour only changes the running title and, in the evening, offers one prompt from the week.</p>
+  <p class="lede">Morning before noon. Afternoon until seventeen. Vespers after seventeen. Compline after twenty-one, and again before six. The same Word stays on the page. After vespers the paper becomes a lamp. The evening also offers one prompt from the week.</p>
   <div class="clocks">
     ${offices.map((o) => `<article class="clock-card"><h3>${esc(o.name)}</h3><p class="hrs">${esc(o.hours)} · ${esc(o.watch)}</p><p>${esc(o.note)}</p></article>`).join('')}
   </div>
@@ -472,7 +484,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <section class="leaf" id="seven">
   <p class="kicker">Seven Days with His words</p>
   <h2 style="font-size: clamp(32px, 5vw, 44px); margin: 12px 0 12px">Come · Peace · Light · Love · Forgive · Abide · Go</h2>
-  <p class="lede">The Pray40 you can ship before Lent. One room a morning. Beads on Today mark place. They do not shame. A missed morning is never a failure state. Day one is not a program. It is an invitation.</p>
+  <p class="lede">The Pray40 you can ship before Lent. One room a morning. The ribbon on Today is the first letter of each room — C P L L F A G — not anonymous dots. They do not shame. A tap from Today returns you to Today. A missed morning is never a failure state. Day one is not a program. It is an invitation.</p>
+  <div class="ribbon" aria-label="Seven Days">${catalog.seven.map((d) => `<span>${esc(d.title[0])}</span>`).join('')}</div>
   <div class="seven">
     ${catalog.seven.map((d, i) => `<article class="daycard"><p class="n">Day ${String(i + 1).padStart(2, '0')}</p><h3>${esc(d.title)}</h3><p>${esc(d.passage)}</p><p class="cite" style="margin-top:12px">${esc(d.verse)}</p></article>`).join('')}
   </div>
@@ -508,9 +521,13 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 <section class="leaf" id="paper">
   <p class="kicker">The paper changes clothes</p>
   <h2 style="font-size: clamp(32px, 5vw, 44px); margin: 12px 0 12px">You never have to name Advent</h2>
-  <p class="lede">The church year retints the leaf. These are the Flutter tokens — the same hex the phone wears. Silk in the gutter takes the season’s crimson. Dark is a lamp after vespers, never a black slab.</p>
+  <p class="lede">The church year retints the leaf. These are the Flutter tokens — the same hex the phone wears. Silk in the gutter takes the season’s crimson. After vespers the paper becomes a lamp (<code>${lamp.paper}</code>), never a black slab.</p>
   <div class="seasons">
     ${seasons.map((s) => `<div class="swatch" style="background:${s.paper};color:${s.crimson}"><strong>${esc(s.name)}</strong><em>${esc(s.paper)}</em><span style="font-family:var(--body);font-size:13px;margin-top:10px;color:${s.gold}">${esc(s.note)}</span></div>`).join('')}
+  </div>
+  <div class="lamp-plate">
+    <h3>After vespers</h3>
+    <p>${esc(lamp.note)} Paper ${lamp.paper}. Folio ${lamp.folio}.</p>
   </div>
 </section>
 
@@ -540,12 +557,12 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
 </section>
 
 <section class="leaf">
-  <p class="kicker">What this agent verified · 11 Sep 2026</p>
+  <p class="kicker">What this agent verified · 14 Sep 2026</p>
   <table class="table">
     <thead><tr><th>Check</th><th>Result</th></tr></thead>
     <tbody>
       <tr><td>Corpus lock</td><td>${verseCount} spoken Gospel verses, each passed through <code>lookup()</code>.</td></tr>
-      <tr><td>Flutter tests</td><td>Engine parity, office clock, Seven Days, lectio Read leaf, blessing card without the brand, widget craft law, empty catalog.</td></tr>
+      <tr><td>Flutter tests</td><td>Engine parity, office clock, lamp paper after vespers, Seven ribbon initials, PathDay back to the leaf you came from, lectio Rest without a countdown, blessing card without the brand, widget craft law, empty catalog.</td></tr>
       <tr><td>Android</td><td>APK/AAB built on Linux. Debug-signed. Not a Play upload. Label: Red Words. Scheme: redwords://today. App-widget present.</td></tr>
       <tr><td>iOS</td><td>Archive-ready identifiers. A Mac still signs TestFlight. See TESTFLIGHT.md.</td></tr>
       <tr><td>This folio</td><td>Generated from <code>assets/moments/catalog.json</code>. Rebuild with <code>npm run folio</code>.</td></tr>
@@ -563,6 +580,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; }
     <li>Tap it. You are in Today. <em>redwords://today</em>.</li>
     <li>Sit: Read → Reflect → Rest (one catchword, no countdown) → Respond. Write one sentence. Amen keeps it on this device.</li>
     <li>Bless: Send. The share sheet is the Word, not the brand.</li>
+    <li>Seven ribbon: tap C for Come. Back lands on Today. The list still returns to Seven.</li>
+    <li>After seventeen: the paper is a lamp, never a black slab.</li>
     <li>Seven: sit Come. Do not look for a streak.</li>
     <li>Bless: hold the cream leaf up. The brand is not on it.</li>
     <li>Add the Word widget before turning the page. The card is already today’s sentence.</li>

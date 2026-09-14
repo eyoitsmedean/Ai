@@ -260,26 +260,32 @@ class SevenRibbon extends StatelessWidget {
             for (final day in days)
               Tooltip(
                 message: day.title,
-                child: GestureDetector(
-                  key: Key('seven-bead-${day.title}'),
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (onOpenDay != null) {
-                      onOpenDay!(day);
-                    } else {
-                      onOpen?.call();
-                    }
-                  },
-                  child: SizedBox(
-                    width: 36,
-                    height: 44,
-                    child: Center(
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: paper.colors.crimson.withValues(alpha: 0.55)),
+                child: Semantics(
+                  button: true,
+                  label: day.title,
+                  child: GestureDetector(
+                    key: Key('seven-bead-${day.title}'),
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      if (onOpenDay != null) {
+                        onOpenDay!(day);
+                      } else {
+                        onOpen?.call();
+                      }
+                    },
+                    child: SizedBox(
+                      width: 36,
+                      height: 44,
+                      child: Center(
+                        child: Text(
+                          day.initial,
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontStyle: FontStyle.italic,
+                            fontSize: 17,
+                            height: 1,
+                            color: paper.colors.ink.withValues(alpha: 0.72),
+                          ),
                         ),
                       ),
                     ),
@@ -620,6 +626,15 @@ class SevenPage extends StatelessWidget {
           const SizedBox(height: 20),
           for (final day in days)
             ListTile(
+              leading: Text(
+                day.initial,
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 22,
+                  color: paper.colors.ink.withValues(alpha: 0.55),
+                ),
+              ),
               title: Text(day.title, style: const TextStyle(fontFamily: 'serif', fontSize: 20)),
               subtitle: Text(day.word.citation),
               minVerticalPadding: 14,
@@ -646,6 +661,7 @@ class PathDayPage extends StatelessWidget {
         child: TextAction(label: 'Back', onPressed: onBack),
       ),
       child: Column(
+        key: const Key('path-day'),
         children: [
           RunningHead(text: day.title),
           const SizedBox(height: 24),

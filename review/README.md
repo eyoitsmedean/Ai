@@ -13,8 +13,8 @@ What the folio holds, in order:
 3. Title / Today / Sit as phone leaves
 4. Lectio — Read, Reflect, Rest, Respond
 5. Blessing card without the brand
-6. Daily office clock and vespers prompts
-7. Seven Days (Come through Go)
+6. Daily office clock, vespers prompts, and lamp paper after seventeen
+7. Seven Days (Come through Go) — ribbon initials C P L L F A G
 8. Twelve Seek rooms
 9. The seven-morning rotation
 10. Seasonal paper tokens

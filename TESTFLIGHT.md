@@ -1,8 +1,8 @@
 # Red Words — ship on a Mac
 
 **Purpose.** Get a TestFlight build and a Play internal build onto a phone.  
-**Owner.** Dean. **Status.** Ready to archive. **Updated.** 2026-09-11.  
-**What changed.** Version is `0.1.0+5`. Uploads must be built with **Xcode 26** (iOS 26 SDK) — still required as of 14 Sep 2026. The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only**. Privacy copy names the share sheet and 988 dialer. Old debug-APK checksums were removed.
+**Owner.** Dean. **Status.** Ready to archive. **Updated.** 2026-09-14.  
+**What changed.** Version is `0.1.0+6`. Uploads must be built with **Xcode 26** (iOS 26 SDK) — still required as of 14 Sep 2026. After vespers the paper is a lamp (`#E8D8B4`), never OLED. The Seven ribbon is initials, not dots; Back from a Today tap returns to Today. The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only**. Privacy copy names the share sheet and 988 dialer.
 
 No credentials live in this repo. This Linux checkout cannot produce a signed IPA.
 
@@ -19,7 +19,7 @@ No credentials live in this repo. This Linux checkout cannot produce a signed IP
 | Display name | Red Words |
 | iOS floor | 15.0 (Runner and widget) |
 | Device family | iPhone only (`TARGETED_DEVICE_FAMILY = 1`) |
-| Version | `0.1.0+5` in `pubspec.yaml` — bump **+build** on every upload |
+| Version | `0.1.0+6` in `pubspec.yaml` — bump **+build** on every upload |
 | Android applicationId | `com.redwords.red_words` |
 
 ## 1. Once, in Apple Developer
@@ -84,7 +84,8 @@ Release signing in this repo is the **debug keystore**. Play will reject that as
 - About: Crown/Cambridge rights line, privacy sentence, 988.
 - Sit Rest: one catchword; no countdown digits; “When you are ready.” after a minute.
 - Bless Send: share sheet is the sentence + citation + `· KJV`.
-- Seven ribbon: a bead opens that day.
+- Seven ribbon: a letter opens that day. From Today, Back returns to Today. From the Seven list, Back stays in Seven.
+- After 17:00: the paper is a lamp, not a black slab. The Word does not change.
 
 ## If it fails
 

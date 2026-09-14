@@ -41,6 +41,7 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
   AppLeaf leaf = AppLeaf.title;
   ThemeRoom? openedRoom;
   PathDay? openedDay;
+  AppLeaf pathReturn = AppLeaf.seven;
   bool ready = false;
 
   DateTime get now => widget.now ?? DateTime.now();
@@ -130,15 +131,24 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
     if (mounted) setState(() => leaf = AppLeaf.today);
   }
 
+  void _openPathDay(PathDay day, AppLeaf from) {
+    setState(() {
+      openedDay = day;
+      pathReturn = from;
+      leaf = AppLeaf.pathDay;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final season = engine.seasonOn(now);
-    final colors = RedWordsColors.forSeason(season);
+    final evening = engine.officeAt(now).isEvening;
+    final colors = RedWordsColors.forHour(season, evening: evening);
     if (!ready) {
       return MaterialApp(
         title: 'Red Words',
         debugShowCheckedModeBanner: false,
-        theme: redWordsTheme(season),
+        theme: redWordsTheme(season, evening: evening),
         home: Scaffold(backgroundColor: colors.paper, body: const SizedBox.expand()),
       );
     }
@@ -148,7 +158,7 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
       child: MaterialApp(
         title: 'Red Words',
         debugShowCheckedModeBanner: false,
-        theme: redWordsTheme(season),
+        theme: redWordsTheme(season, evening: evening),
         home: _leaf(),
       ),
     );
@@ -171,10 +181,7 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
           onSit: () => setState(() => leaf = AppLeaf.sit),
           onSeek: () => setState(() => leaf = AppLeaf.seek),
           onSeven: () => setState(() => leaf = AppLeaf.seven),
-          onOpenDay: (day) => setState(() {
-            openedDay = day;
-            leaf = AppLeaf.pathDay;
-          }),
+          onOpenDay: (day) => _openPathDay(day, AppLeaf.today),
           onBless: () => setState(() => leaf = AppLeaf.blessing),
           onAbout: () => setState(() => leaf = AppLeaf.about),
         );
@@ -215,10 +222,7 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
         return SevenPage(
           days: engine.seven,
           onBack: () => setState(() => leaf = AppLeaf.today),
-          onOpen: (day) => setState(() {
-            openedDay = day;
-            leaf = AppLeaf.pathDay;
-          }),
+          onOpen: (day) => _openPathDay(day, AppLeaf.seven),
         );
       case AppLeaf.pathDay:
         final day = openedDay;
@@ -226,15 +230,12 @@ class _RedWordsAppState extends State<RedWordsApp> with WidgetsBindingObserver {
           return SevenPage(
             days: engine.seven,
             onBack: () => setState(() => leaf = AppLeaf.today),
-            onOpen: (next) => setState(() {
-              openedDay = next;
-              leaf = AppLeaf.pathDay;
-            }),
+            onOpen: (next) => _openPathDay(next, AppLeaf.seven),
           );
         }
         return PathDayPage(
           day: day,
-          onBack: () => setState(() => leaf = AppLeaf.seven),
+          onBack: () => setState(() => leaf = pathReturn),
         );
       case AppLeaf.blessing:
         if (current == null) return const EmptyPage();

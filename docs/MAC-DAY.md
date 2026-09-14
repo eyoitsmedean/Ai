@@ -2,7 +2,7 @@
 
 You are about to put Red Words on a phone. This is the only list you need. Details and failure table live in `TESTFLIGHT.md`. Listing copy lives in `STORE-LISTING.md`.
 
-**Version to upload:** `0.1.0+5` (`pubspec.yaml`). Bump +build if you upload twice.
+**Version to upload:** `0.1.0+6` (`pubspec.yaml`). Bump +build if you upload twice.
 
 ## Before you sit (10 minutes)
 
@@ -38,11 +38,12 @@ The taps, in order:
 2. Airplane mode. The sentence stays.
 3. Today: THE CARD is sentence + citation.
 4. Sit: Read → Reflect → Rest (one word, no countdown) → Respond (one sentence). Amen. Leave and return: the sentence is still there.
-5. Seven: sit Come. No streak.
-6. Bless: Send. The share sheet is the Word, not the brand.
-7. Add the **Word** widget *before* a reinstall if you want the first-open test; on this build the seven is inside the extension.
-8. Date +1 day. The card should change; if the OS has not reloaded the widget yet, open the app once. This is not a ship gate.
-9. App on Seek → home → tap widget → Today.
+5. After 5pm (or set the clock): the paper is a lamp, not a black slab. The Word does not change.
+6. Seven ribbon: tap **C** (Come). Back returns to Today. Open Seven from the footer, sit Come, Back stays in Seven. No streak.
+7. Bless: Send. The share sheet is the Word, not the brand.
+8. Add the **Word** widget *before* a reinstall if you want the first-open test; on this build the seven is inside the extension.
+9. Date +1 day. The card should change; if the OS has not reloaded the widget yet, open the app once. This is not a ship gate.
+10. App on Seek → home → tap widget → Today.
 
 ## Play (when you want Android testers)
 

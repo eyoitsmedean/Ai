@@ -1,8 +1,8 @@
 # Canonical brief — Red Words native book
 
-**Version:** 2026-09-14 atelier pass (`0.1.0+5`)  
+**Version:** 2026-09-14 lamp / ribbon pass (`0.1.0+6`)  
 **Audience:** Dean (builder) and any later agent. Not store copy.  
-**Conversation:** six user prompts — `docs/RECOVERY.md`. Prompts 7–10 do not exist.
+**Conversation:** eight user prompts — `docs/RECOVERY.md`. Prompts 9–10 do not exist.
 
 ## Intended outcome
 
@@ -28,11 +28,12 @@ A person who wants His words for this hour — not a social graph, not a streak,
 
 - Deepen office, lectio, Seven Days, blessing, silk, printer’s mark — wow via **folio**, not a new product.
 - FORGE / rebuild / sprint: finish the **operator artifact** and hollow rooms; non-destructive; QA twice; never commit to main.
-- This recovery: first-ten (six exist), diagnose drift, five adjacent topics, **three flagships**, Notion when applicable.
+- This recovery: first-ten (eight exist), diagnose drift, five adjacent topics, **three flagships**, Notion when applicable.
+- Prompt 8: creative freedom bounded by the recovered brief — deepen the book, do not start another.
 
 ## Current scope
 
-**In:** Flutter book; iOS/Android widgets; App Group / SharedPreferences; SceneDelegate URL consume-once; Sit Read/Reflect/Rest/Respond (quiet minute, persisted reply); Bless Send; Seven ribbon; church-year paper; store listing copy; privacy HTML; Mac-day runbook; folio; iPhone-only family.
+**In:** Flutter book; iOS/Android widgets; App Group / SharedPreferences; SceneDelegate URL consume-once; Sit Read/Reflect/Rest/Respond (quiet minute, persisted reply); Bless Send; Seven ribbon initials; evening lamp paper; church-year paper; store listing copy; privacy HTML; Mac-day runbook; folio; iPhone-only family.
 
 **Out:** Storyframe, OneDigital, Advisor-as-this-ship, Journal-as-app, payments, accounts, 40 Lent rooms, UK listing without CUP written permission, fake store submit, iPad (13″ screenshot wall), the other workstream that says “do not merge PR 12.”
 
@@ -66,7 +67,7 @@ A person who wants His words for this hour — not a social graph, not a streak,
 ## Preserve / improve / retire
 
 - **Preserve:** identifiers, fail-closed catalog, Word-only widget, web `src/` until native replaces it in the same repo.  
-- **Improve (this cycle):** README leads with the phone ship; privacy names Send and 988; Android `SEND` query; widget picker preview is Luke 12:7; iPad orientation keys removed.  
+- **Improve (this cycle):** evening lamp paper (`#E8D8B4`); Seven ribbon initials; PathDay Back returns to Today when opened from the ribbon.  
 - **Retire:** APK SHA-256 theater; Kid’s Day as a live deadline; iPad family.
 
 ## Decisions locked this cycle
@@ -80,6 +81,9 @@ A person who wants His words for this hour — not a social graph, not a streak,
 | Play Data safety deferred while exclusive-internal | Play Help, fetched 2026-09-11 |
 | UK is Dean’s call | CUP + IPO; store listing is commercial |
 | Lent 40 is out | Adjacent topic; Ash Wednesday 2027-02-10 |
+| Evening paper is a lamp, never OLED | DESIGN.md + folio; hex `#E8D8B4`; seasonal crimson stays |
+| Ribbon letters mark place, not a score | Prompt 2 Seven Days; initials C P L L F A G |
+| PathDay Back returns to the leaf you came from | Ribbon → Today; Seven list → Seven |
 
 ## Acceptance (observable)
 
@@ -87,7 +91,8 @@ A person who wants His words for this hour — not a social graph, not a streak,
 - Widget before first open shows a seeded Word.  
 - Sit Rest is a quiet minute without a countdown; “When you are ready.” after 60s; Respond persists for the civil day.  
 - Bless Send is Word + citation + `· KJV`.  
-- Seven ribbon bead opens that day.  
+- Seven ribbon letter opens that day; Back from a Today tap lands on Today.  
+- After vespers the leaf is lamp paper, luminance well above black.  
 - Dean can archive from `docs/MAC-DAY.md` without reading the chat.
 
 ## Assumptions
@@ -101,4 +106,4 @@ A person who wants His words for this hour — not a social graph, not a streak,
 1. Host a public HTTPS privacy URL (Pages after merge, or any host of `PRIVACY.md`).  
 2. Exclude United Kingdom, or email `permissions@cambridge.org`.  
 3. Create a Play upload keystore off git.  
-4. Install Xcode 26 and archive `0.1.0+4`.
+4. Install Xcode 26 and archive `0.1.0+6`.

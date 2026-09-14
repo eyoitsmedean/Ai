@@ -4,7 +4,7 @@ You are continuing **PR 12** (`cursor/red-words-native-c2d6`), the Flutter bound
 
 ## Where authority lives
 
-1. Dean’s original prompts — `docs/RECOVERY.md` (six exist; do not invent a seventh).  
+1. Dean’s original prompts — `docs/RECOVERY.md` (eight exist; do not invent a ninth).  
 2. Current brief — `docs/CANONICAL-BRIEF.md`.  
 3. Evidence — `docs/RESEARCH.md` (facts vs interpretations vs assumptions).  
 4. Operator — `TESTFLIGHT.md` + `docs/MAC-DAY.md`.  
@@ -44,7 +44,7 @@ One branch. Do not commit `package-lock.json` version churn (3.x ↔ 1.x). Do no
 
 ## Recording work
 
-- Version: current archive is `0.1.0+5`. Bump `+build` in `pubspec.yaml` on every archive.  
+- Version: current archive is `0.1.0+6`. Bump `+build` in `pubspec.yaml` on every archive.  
 - Folio: `npm run folio` after catalog or copy changes.  
 - PR: update #12; do not open a second native-book PR.  
 - Notion: the recovery home for **this** brief is a private draft titled “Red Words — native book (PR 12)”. The other “ship home” draft is a different workstream.

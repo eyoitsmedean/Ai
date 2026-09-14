@@ -177,6 +177,38 @@ void main() {
     expect(find.textContaining('Matthew 11:28'), findsWidgets);
   });
 
+  test('evening paper is a lamp, never a black slab', () {
+    const ordinary = ChurchSeason(id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time');
+    const lent = ChurchSeason(id: 'lent', name: 'Lent', runningHead: 'Lent');
+    final morning = RedWordsColors.forHour(ordinary, evening: false);
+    final vespers = RedWordsColors.forHour(ordinary, evening: true);
+    final lentLamp = RedWordsColors.forHour(lent, evening: true);
+    expect(morning.paper, RedWordsColors.ordinary.paper);
+    expect(vespers.paper, RedWordsColors.lampPaper);
+    expect(vespers.paper, isNot(morning.paper));
+    expect(vespers.paper.computeLuminance(), greaterThan(0.5));
+    expect(vespers.crimson, morning.crimson);
+    expect(lentLamp.crimson, RedWordsColors.lent.crimson);
+    expect(lentLamp.paper, RedWordsColors.lampPaper);
+    expect(const Color(0xFF000000).computeLuminance(), lessThan(0.01));
+  });
+
+  testWidgets('vespers leaf wears lamp paper, not a black slab', (tester) async {
+    await tester.pumpWidget(
+      RedWordsApp(
+        catalog: catalog(),
+        now: DateTime(2026, 9, 2, 21),
+        session: SessionStore(opened: true),
+        syncWidget: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Compline'), findsOneWidget);
+    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
+    expect(scaffold.backgroundColor, RedWordsColors.lampPaper);
+    expect(scaffold.backgroundColor!.computeLuminance(), greaterThan(0.5));
+  });
+
   testWidgets('Seven ribbon bead opens that day', (tester) async {
     PathDay? opened;
     await tester.pumpWidget(
@@ -194,9 +226,59 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    expect(
+      find.descendant(of: find.byKey(const Key('seven-bead-Come')), matching: find.text('C')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: find.byKey(const Key('seven-bead-Peace')), matching: find.text('P')),
+      findsOneWidget,
+    );
     await tester.tap(find.byKey(const Key('seven-bead-Come')));
     await tester.pumpAndSettle();
     expect(opened?.title, 'Come');
     expect(opened?.word.citation, contains('Matthew 11:28'));
+  });
+
+  testWidgets('ribbon from Today returns to Today', (tester) async {
+    await tester.pumpWidget(
+      RedWordsApp(
+        catalog: catalog(),
+        now: DateTime(2026, 9, 2, 8),
+        session: SessionStore(opened: true),
+        syncWidget: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('seven-bead-Come')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('path-day')), findsOneWidget);
+    expect(find.textContaining('Matthew 11:28'), findsWidgets);
+    await tester.tap(find.text('Back'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('today-word')), findsOneWidget);
+    expect(find.byKey(const Key('path-day')), findsNothing);
+    expect(find.text('One room a morning. A missed day is never a failure.'), findsNothing);
+  });
+
+  testWidgets('Seven list Back stays in Seven', (tester) async {
+    await tester.pumpWidget(
+      RedWordsApp(
+        catalog: catalog(),
+        now: DateTime(2026, 9, 2, 8),
+        session: SessionStore(opened: true),
+        syncWidget: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Seven'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Come'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('path-day')), findsOneWidget);
+    await tester.tap(find.text('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('One room a morning. A missed day is never a failure.'), findsOneWidget);
+    expect(find.byKey(const Key('today-word')), findsNothing);
   });
 }
