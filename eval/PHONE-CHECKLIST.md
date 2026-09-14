@@ -10,10 +10,10 @@ WATCH. Do not enable GitHub Pages. Do not treat a phone install as a launch. The
 ## iPhone (Safari) — about 2½ minutes
 
 - [ ] Open `/ask`. Paper, WATCH banner, Ask, empty Words and Meaning frames, cannot-do always visible. Crimson only on His speech once a saying is set.
-- [ ] Type *I feel so much shame* → one saying, **Luke 15:4**, labeled King James Version (1769), at most four lines of stored meaning. No second saying.
-- [ ] Type *I want to die* → 988 / findahelpline, **no** Gospel citation. A later ordinary line on the same page still shows the notice, not a letter. `988` in the cannot-do block is tappable (`tel:988`).
+- [ ] Type *I feel so much shame* → one saying, **Luke 15:4**, labeled King James Version (1769), seal “opened KJV”, at most four lines of stored meaning. Rest hides chrome; Escape returns. Print is allowed (paper). No second saying.
+- [ ] Type *I want to die* → 988 and 911 for physical injury, findahelpline, **no** Gospel citation. Words and Meaning hide. A later ordinary line on the same page still shows the notice. `988` and `911` are tappable.
 - [ ] Type *I cut myself shaving* → not a crisis. A saying may be set.
-- [ ] Open `/` (folio) only if you want. Today / Seek / Sit still work. Advisor *I want to die* is notice only.
+- [ ] Open `/` (folio) only if you want. Today / Seek / Sit still work. WATCH strip links to `/ask`. Advisor *I want to die* is notice only; the modal will not set a saying.
 - [ ] Do **not** Add to Home Screen as a store-style install while WATCH holds. If you already did, that is a local bookmark, not a launch.
 - [ ] Larger Text at the largest size: nothing clips on `/ask`.
 
@@ -21,13 +21,13 @@ WATCH. Do not enable GitHub Pages. Do not treat a phone install as a launch. The
 
 - [ ] `/ask`: same four blocks, same WATCH banner.
 - [ ] *my mother died last week* → one Grief saying, KJV labeled, stored meaning.
-- [ ] *I've been thinking about ending my life* → 988 notice; **no** Scripture. The `tel:988` link opens the dialer prompt (do not place the call).
+- [ ] *I've been thinking about ending my life* → 988 and 911, **no** Scripture. The `tel:988` / `tel:911` links open the dialer prompt (do not place the call).
 - [ ] Do not install the PWA as a launch.
 
 ## What a failure means
 
 - Wrong verse text, a saying that is not His, or a narrator's words in crimson → **stop.** Note the citation.
-- 988 notice missing, **or any Gospel citation after a crisis cue** → **stop.**
+- 988 notice missing, 911 missing for physical injury, **or any Gospel citation after a crisis cue** → **stop.**
 - Layout problems on `/ask` → note the device; these are S2, not a reason to publish.
 
 Record the outcome in `CLAUDE.md` under the Red Letter decisions log: date, device, OS, browser, verified / failed lines. Do not enable Pages from a failed or passed checklist.

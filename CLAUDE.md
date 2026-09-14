@@ -4,7 +4,7 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## How to work here
 
-1. Read [`studio/ATELIER-PROTOCOL.md`](studio/ATELIER-PROTOCOL.md) — Dean's governing protocol (6 September 2026). It supersedes `studio/DEANS-MASTERPIECE-PROTOCOL.md`.
+1. Read [`studio/ATELIER-PROTOCOL.md`](studio/ATELIER-PROTOCOL.md) — Dean's MASTERWORK loop (6 September 2026). It supersedes `studio/DEANS-MASTERPIECE-PROTOCOL.md`. This thread’s 14 Sep paste [`studio/ATELIER-USEFUL-WORK.md`](studio/ATELIER-USEFUL-WORK.md) is the operating brief for scale and finish; it does not delete the 6 Sep protocol.
 2. Read the brief for the work in hand, then its lock for the longer constitution:
    - Red Letter web folio, Advisor, Today / Seek / Sit / Journal → [`studio/briefs/red-letter.md`](studio/briefs/red-letter.md) · [`studio/locks/red-letter.md`](studio/locks/red-letter.md)
    - Red Words Flutter, iPhone + Android, widget → [`studio/briefs/red-words-native.md`](studio/briefs/red-words-native.md) · [`studio/locks/red-words-native.md`](studio/locks/red-words-native.md)
@@ -55,10 +55,10 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## STATE (latest)
 
-- Mission lock: LODESTAR Cycle 1 (14 September 2026) — protect original intent; finish the paper advisor.
-- Decisions this session: Charter v2 (C4 may name 911 for physical injury); WATCH holds; KJV stays labeled; Pages not enabled; no sixth Notion hub; folio continue-carefully held for Dean.
-- Work done: Intent Charter + `studio/lodestar/` KB; folio WATCH strip + `noindex`; one-screen seal / print / 60s rest; crisis stem fix (`suicidal`, `overdose`); eval 50/50; `npm test` 84/84; `qa` + `qa:static` passed 14 Sep.
-- Next step: Dean opens `/ask` locally if he wants (`npm start`); records (or refuses) a translation before any public URL; does not enable Pages while WATCH holds.
-- Open risks: model path unverified without a key; eval does not judge warmth; crisis detector is still keyword-plus-carve-out, not contextual; Notion crisis *sentence* not swapped in.
+- Mission lock: ATELIER useful-work (14 September 2026 evening) — paper advisor; no new knowledge base; finish what the folio still mis-signals.
+- Decisions this session: folio crisis path kept (Dean’s unanswered Ask). Continue is no longer the primary button; copy states no saying will be set. WATCH/911 locked in `qa-browser`. 6 Sep ATELIER file not overwritten.
+- Work done: `studio/ATELIER-USEFUL-WORK.md`; folio modal honesty; PHONE-CHECKLIST + HANDOFF match `/ask` (seal, rest, print, 911).
+- Next step: Dean opens `/ask` locally if he wants; answers whether the folio continue control should be removed; does not enable Pages.
+- Open risks: model path unverified; keyword detector ≠ contextual; continue still exists as a ghost.
 
-RESUME_FROM: Read `studio/lodestar/SHIP.md` and `studio/HANDOFF.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub. Next LODESTAR cycle continues from the Handoff block.
+RESUME_FROM: Read `studio/HANDOFF.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub.

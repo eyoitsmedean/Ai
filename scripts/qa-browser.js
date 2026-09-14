@@ -42,6 +42,7 @@ async function main() {
     const copy = await page.evaluate(() => document.body.innerText);
     assert(/Red Letter/i.test(copy), 'missing brand');
     assert(/988/.test(copy), 'missing 988');
+    assert(/911/.test(copy), 'missing 911');
     const href = await page.$eval('a.btn', (a) => a.getAttribute('href'));
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
   });
@@ -124,6 +125,19 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    const watch = await page.evaluate(() => {
+      const strip = document.querySelector('.watch-strip');
+      return {
+        on: !!strip && getComputedStyle(strip).display !== 'none',
+        href: strip && strip.querySelector('a') && strip.querySelector('a').getAttribute('href'),
+        text: strip ? strip.innerText : '',
+        nineOneOne: /911/.test(document.body.innerText),
+      };
+    });
+    assert(watch.on, 'WATCH strip missing on Today');
+    assert(watch.href === '/ask', 'WATCH strip should open /ask, got ' + watch.href);
+    assert(/paper only/i.test(watch.text), 'WATCH strip copy missing: ' + watch.text);
+    assert(watch.nineOneOne, 'folio Today missing 911');
   });
 
   await check('Advisor hears the need without a model', async () => {

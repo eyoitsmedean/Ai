@@ -11,7 +11,7 @@
 | Minor | Charter DoD said “988-only” | INTENT-CHARTER evolved DoD | Amended to v2 (911 for injury) | — |
 | Minor | Crisis left Words/Meaning frames up | `showNotice` cleared text only | Hide `#words-block` and `#meaning-block` | qa:static |
 | Minor | Crisis latch reset on reload | `stopped` in memory only | `sessionStorage` `rla-ask-stopped` | code review |
-| Minor | Folio modal still offers “continue carefully” | `index.html` crisis-continue | Held — server still emits notice only. Flagged, not retired. | qa:static continue path |
+| Minor | Folio modal still offers a continue control | `index.html` crisis-continue | Held as a ghost (14 Sep evening): “I do not need a saying.” Not removed. | qa:static continue path |
 | Cosmetic | T1 labeled `letterpress.js` VERIFIED as if law | dossier claim ledger | Left as code-existence verify; law rows stay source-tagged | — |
 
 Open Minor carried forward: folio continue UX; keyword detector still not contextual; no phone-loudness check on the WATCH strip; print dialog is human-only.
