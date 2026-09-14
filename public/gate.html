@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Red Letter — Text gate</title>
+  <link rel="icon" href="/icon-192.png" />
+  <style>
+    body { margin: 0; background: #F4EFE4; color: #1B1610; font: 18px/1.5 "Source Serif 4", Palatino, serif; }
+    .watch { background: #1B1610; color: #F4EFE4; font: 12px/1.4 sans-serif; letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 10px 16px; }
+    main { width: min(36rem, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 4rem; }
+    h1 { font: 560 2rem/1.15 Fraunces, Georgia, serif; }
+    button { font: 600 0.95rem sans-serif; border: 1px solid #1B1610; background: #FBF7EE; padding: 0.55rem 1rem; margin: 0.3rem 0.3rem 0 0; cursor: pointer; }
+    button[aria-pressed="true"] { background: #8F1D1D; color: #FBF7EE; border-color: #8F1D1D; }
+    .fine { color: #7A6E5E; font-size: 0.92rem; }
+    a { color: #4A4034; }
+    pre { background: #FBF7EE; padding: 0.8rem; border: 1px solid rgba(27,22,16,.12); white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <p class="watch"><strong>Watch</strong> — household record only. This page does not publish a URL.</p>
+  <main>
+    <h1>Scratch pad — which text, someday</h1>
+    <p>This page is a household note, not the legal record. It does not change live <a href="/ask">/ask</a> answers (still sealed KJV 1769) and it does not publish a URL. C7 is closed only when you type the choice into <code>docs/CANON.md</code> or download this file and keep it with the repo.</p>
+    <p class="fine">WEB text is public domain on eBible; the name is a trademark. KJV-US is the atelier corpus. NIV, ESV, NASB, NRSV, CSB, and The Message stay locked out.</p>
+    <p>
+      <button type="button" data-choice="WEB">WEB</button>
+      <button type="button" data-choice="KJV-US">KJV-US</button>
+      <button type="button" data-choice="not-yet">Not yet</button>
+    </p>
+    <pre id="record">No choice stored on this device.</pre>
+    <p><button type="button" id="download">Download a one-line record</button></p>
+    <p class="fine"><a href="/ask">Back to Ask</a> · This choice stays in this browser unless you download it. Nothing is sent to a server.</p>
+  </main>
+  <script>
+    const KEY = 'rla-text-gate';
+    const rec = document.getElementById('record');
+    function show(choice, at) {
+      rec.textContent = choice
+        ? 'Red Letter text gate\nchoice: ' + choice + '\nrecorded: ' + at + '\nhost: household only\n'
+        : 'No choice stored on this device.';
+      document.querySelectorAll('[data-choice]').forEach((b) => {
+        b.setAttribute('aria-pressed', b.dataset.choice === choice ? 'true' : 'false');
+      });
+    }
+    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved) show(saved.choice, saved.at);
+    document.querySelectorAll('[data-choice]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const row = { choice: b.dataset.choice, at: new Date().toISOString() };
+        localStorage.setItem(KEY, JSON.stringify(row));
+        show(row.choice, row.at);
+      });
+    });
+    document.getElementById('download').addEventListener('click', () => {
+      const row = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!row) {
+        rec.textContent = 'Choose WEB, KJV-US, or Not yet before downloading. Nothing is stored yet.';
+        return;
+      }
+      const blob = new Blob([rec.textContent], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'red-letter-text-gate.txt';
+      a.click();
+    });
+  </script>
+</body>
+</html>

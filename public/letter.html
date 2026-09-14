@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Red Letter — A letter</title>
+  <link rel="icon" href="/icon-192.png" />
+  <style>
+    body { margin: 0; background: #F4EFE4; color: #1B1610; font: 18px/1.55 Palatino, Georgia, serif; }
+    .watch { background: #1B1610; color: #F4EFE4; font: 12px/1.4 sans-serif; letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 10px 16px; }
+    main { width: min(34rem, calc(100% - 2rem)); margin: 0 auto; padding: 2.4rem 0 4rem; }
+    .quote { font: italic 1.45rem/1.4 Georgia, Palatino, serif; color: #8F1D1D; }
+    .cite { margin-top: 0.7rem; font: 0.85rem sans-serif; letter-spacing: .04em; color: #7A6E5E; }
+    .fine { margin-top: 2rem; color: #7A6E5E; font-size: 0.92rem; }
+    a { color: #4A4034; }
+    form { margin: 1.2rem 0; }
+    input { font: inherit; padding: 0.4rem 0.6rem; width: 12rem; }
+    button { font: 600 0.9rem sans-serif; padding: 0.4rem 0.8rem; }
+    @media print {
+      .watch, form, .noprint { display: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+  <p class="watch"><strong>Watch</strong> — a paper leaf. Not a launch.</p>
+  <main>
+    <form>
+      <label for="ref">Saying</label>
+      <input id="ref" name="ref" value="Matthew 11:28" />
+      <button type="submit">Open</button>
+    </form>
+    <p class="quote" id="quote">Looking…</p>
+    <p class="cite" id="cite"></p>
+    <p class="fine" id="colophon">His speech only · King James Version 1769 · United States public-domain wording · not a launch</p>
+    <p class="fine noprint">Print this page if you want paper. A verse that is not His (Luke 2:14, an angel) will not open. <a href="/ask">Ask</a> · <a href="/gate">Text gate</a></p>
+  </main>
+  <script src="/data/advisor.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const ref = params.get('ref') || 'Matthew 11:28';
+    document.getElementById('ref').value = ref;
+
+    function paint(ok, citation, quote) {
+      if (!ok) {
+        document.getElementById('quote').textContent = quote || 'Not His speech, or not found.';
+        document.getElementById('cite').textContent = '';
+        return;
+      }
+      document.getElementById('quote').textContent = '“' + quote + '”';
+      document.getElementById('cite').textContent = citation + ' · KJV 1769';
+      document.title = 'Red Letter — ' + citation;
+    }
+
+    function fromBundle(wanted) {
+      const hit = typeof window.RLA_lookup === 'function' ? window.RLA_lookup(wanted) : null;
+      if (hit && hit.redLetter && hit.text) paint(true, hit.citation, hit.text);
+      else paint(false, '', 'Not His speech, or not found.');
+    }
+
+    function openLeaf(wanted) {
+      fetch('/api/letter?ref=' + encodeURIComponent(wanted))
+        .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+        .then(({ ok, d }) => {
+          if (ok && d.quote) return paint(true, d.citation, d.quote);
+          fromBundle(wanted);
+        })
+        .catch(() => fromBundle(wanted));
+    }
+
+    openLeaf(ref);
+  </script>
+</body>
+</html>
