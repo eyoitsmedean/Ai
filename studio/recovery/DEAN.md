@@ -3,6 +3,8 @@
 
 **What this is.** Five things worth doing in a window that includes a newborn. Not five businesses. Not a sixth Notion hub.
 
+**Tonight.** Remaining September optional is about one hour. Date `REFUSAL.md`. Compound is work hours (`COMPOUND.md`). Sunday: `FREEZE.md`.
+
 **What this is not.** The cash folio *Ninety Days · One Plan*. Red Words. The Advisor-rebuild chat that says “do not enable Pages.”
 
 ---

@@ -13,12 +13,12 @@ This expands `FIVE.md`. It is the object to review: doctrine, calendar, scripts,
 
 | Block | Dates | Optional hours (estimate) | What is allowed |
 | --- | --- | --- | --- |
-| Late summer | Sat 5 – Wed 30 Sep | 12–16 | Work compound in work hours. One family prep list. One URL sitting. Factory pick. Two memoir sittings if the window is open. |
+| Remainder of Sep | Mon 14 eve – Wed 30 Sep | **~1 hour** useful (ceiling ~7–10 if nothing was spent) | Compound at work. Sunday freeze. Date `NONE`. One blessing if the window is green. No chapter unless writing is rest. |
 | Freeze | Thu 1 – Sat 31 Oct | 0 | Job + household. Night work only if it makes tomorrow morning lighter. |
-| Ordinary November | Sun 1 – Sat 28 Nov | 8–12 | Compound evidence page. Advent path + ten sends. Chapter finish + one reader. One factory conversation *or* `NONE`. |
+| Ordinary November | Sun 1 – Sat 28 Nov | 8–12, not pre-authorized | Advent *or* chapter. Seat sentence. Default: watch. |
 | First watch | Sun 29 Nov – Fri 4 Dec | watch only | Be a user of Advent. Count day-2. Close the 90 days. |
 
-Total optional: **about 20–35 hours**. Not eight hours a week. October is not a hole in the plan. It is the plan.
+Original total was **about 20–35 hours** for an unused September. Evening 14 Sep: 10 of 26 September days gone. Ceiling left if November opens: **~15–22 hours**. October is not a hole in the plan. It is the plan.
 
 **Priority if two things collide.** Household gate → job → Compound artifact already started → Advent URL → chapter sitting → factory. Never the other direction.
 

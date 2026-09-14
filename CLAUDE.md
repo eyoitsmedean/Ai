@@ -113,3 +113,11 @@ Commission: accountable practitioner on the existing five; method paste, not a n
 - Not done: enable Pages, merge, send, spend, date the factory card.
 - Assumed: Monday twenty may already have run — card jumps to the artifact if so.
 
+## FOR THE RECORD — 14 September 2026 (first-ten review)
+
+Read transcript this sitting (14 user messages). First ten quoted, not reconstructed. Guidance: five life projects; a wow object; Baby between the Builds; finish the established project; show a finished product; sprint.
+
+- Changed: remaining-capacity math on `SIT.md`, folio `#math`, `NIGHT.html`, `PLAYBOOK.md`, `FIVE.md`. September optional now “about one hour,” with a ~7–10 hour unused-hours ceiling (16/26 × 12–16). Window 91 days; day 10; 17 days to 1 Oct — arithmetic run in Node this sitting.
+- Not a sixth menu. MARKET_STRATEGY not rebuilt (prompt 7 never named a target).
+- Not done: Pages, merge, send, factory date.
+

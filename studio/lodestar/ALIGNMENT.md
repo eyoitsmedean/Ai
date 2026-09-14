@@ -27,7 +27,7 @@ Archive copies live in git (`0196c39`, `0534b8a`, and earlier). Nothing deleted.
 | Factory mark / freeze names / hole / referee | C4 C5 C7 | Gap | Objects exist; marks stay on paper. Only he can date them. |
 
 **State of the Project (14 lines).**  
-The star is still five life projects, 5 Sep–4 Dec, phone, ~20–35 hours.  
+The star is still five life projects, 5 Sep–4 Dec, phone. Original ~20–35 assumed unused September; evening 14 Sep treats remaining Sep optional as ~1 hour (ceiling ~7–10).  
 If two: October and The Compound.  
 Monday 14 Sep is Compound week: one artifact at work, then shutdown.  
 October is 17 days out; the Sunday list names firstborn week and a sleep block.  

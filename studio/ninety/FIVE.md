@@ -7,7 +7,7 @@ The prompt in `PROMPT.md` was built from the person, not from a template, then r
 
 Two other agents already gave you ten income plans yesterday. This set is not those plans with new hats. It is what still makes sense after you subtract the research shelf, the newborn month, and the fact that you are already getting paid to do the thing you like.
 
-**The real 90 days are not ninety working days.** September has maybe three optional weeks. October is a freeze you already wrote into your own constitution. November has evenings. Call it 20–35 optional hours, total. Anything that needs a funnel, a cohort, or a weekly content machine is a fantasy about a different season.
+**The real 90 days are not ninety working days.** Evening 14 September (day 10): remaining September optional is about one hour, not a week. October is a freeze. November has evenings only if the household says so. The original 20–35 assumed an unused September. Anything that needs a funnel, a cohort, or a weekly content machine is a fantasy about a different season.
 
 ---
 
