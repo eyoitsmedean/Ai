@@ -8,7 +8,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
 - **Paths** — **Seven Days** (Come / Peace / Light / Love / Forgive / Abide / Go), then **Forty**: forty leaves bound in five quires — Come, Light, Mercy, Abide, Go — for Lent or for after the week. A leaf is kept by sitting with it; a missed morning is never a failure state
-- **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
+- **Seek** — thirteen encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence
 - **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
 - **Journal** — a commonplace book kept on this device, with a quire of words you have sat with
@@ -45,7 +45,7 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 **The ledger.** LAUNCH's four signals are counted on the reader's device (`rla-ledger`: open, lectio, blessing, advisor, sevenStart, sevenDone; sixty days) and read in Room settings. Nothing leaves the device unless *Share anonymous counts* is on; then completed days are sent once each as plain totals — no name, no device id — to `POST /api/signal`, which appends to `data/signals.jsonl` (gitignored; `RLA_SIGNAL_PATH` overrides). `GET /api/signal/summary?days=30` returns the four LAUNCH ratios with their denominators; because no id travels, "active" is device-days, not unique devices, and the response says so. The toggle only appears when `/api/health` answers, so it is absent on GitHub Pages.
 
-**When the lamp is out.** With no model key (or when the model fails) the server still writes the letter for *this* question: `lib/counsel.js` reads the need from the writer's words (twelve rooms, weighted cues, the same voice lines as the client's offline advisor), takes the passages from the curated rooms, and fills every verse from the corpus. A question that does not reach His words gets an honest out-of-room letter rather than a verse about the weather.
+**When the lamp is out.** With no model key (or when the model fails) the server still writes the letter for *this* question: `lib/counsel.js` reads the need from the writer's words (thirteen rooms, weighted cues, the same voice lines as the client's offline advisor), takes the passages from the curated rooms, and fills every verse from the corpus. A question that does not reach His words gets an honest out-of-room letter rather than a verse about the weather.
 
 **The evaluation set.** `eval/questions.json` holds 46 real questions — everyday, low-moment, hostile, off-scope, crisis. `npm run eval` posts them to a live server and writes `eval/RESULTS.md`: every citation must resolve to His words and quote the corpus exactly; no other author; crisis lines must open with the human handoff (988 · findahelpline) before any verse; off-scope must be answered honestly; answers must vary with the need. The report records which path answered (offline rooms or model); a green offline run says nothing about the model path, and the report says so. Tone is a column for a human reader.
 

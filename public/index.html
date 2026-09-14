@@ -317,8 +317,8 @@ textarea { font-family: var(--body); }
 .tp-open:disabled { opacity: .38; cursor: not-allowed; }
 .tp-open:not(:disabled):hover { transform: translateY(-1px); }
 .tp-note { margin-top: 16px; font-size: 12px; color: var(--ink-4); line-height: 1.5; }
-.tp-need { display: none; margin-top: 8px; }
-.tp-need.on { display: block; animation: rise .4s var(--ease); }
+.tp-need, .tp-ask { display: none; margin-top: 8px; }
+.tp-need.on, .tp-ask.on { display: block; animation: rise .4s var(--ease); }
 .tp-needs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 8px 0 18px; }
 .tp-need-btn {
   background: none;
@@ -849,6 +849,40 @@ html.kb-up .blessing-sheet.on { padding-bottom: calc(28px + env(safe-area-inset-
   color: var(--ink-4);
 }
 .msg-save-btn:hover { color: var(--crimson); }
+.letter-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 4px; }
+.page-chip {
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: var(--ink-4);
+  margin: 10px 0 0;
+}
+.night-latch .night-copy { font-size: 15px; color: var(--ink-3); margin: 14px 0 0; }
+.first-ask-input {
+  width: 100%;
+  min-height: 72px;
+  margin: 12px 0 16px;
+  padding: 12px 0;
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  resize: vertical;
+}
+.first-ask-input:focus { outline: none; border-bottom-color: var(--crimson); }
+.tp-ask-input {
+  width: 100%;
+  min-height: 88px;
+  margin: 8px 0 16px;
+  padding: 12px;
+  border: 1px solid var(--rule-2);
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  resize: vertical;
+}
+html.night-quiet .today-streak,
+html.night-quiet #today-streak-label { visibility: hidden; }
 .typing-indicator { display: none; padding: 4px 0 16px; }
 .typing-indicator.on { display: block; }
 .ink-wait {
@@ -1607,9 +1641,17 @@ html.sitting .sit-sheet {
         <button class="tp-need-btn" type="button" onclick="chooseNeed('Grief & Loss')">Grief</button>
         <button class="tp-need-btn" type="button" onclick="chooseNeed('Fear')">Fear</button>
         <button class="tp-need-btn" type="button" onclick="chooseNeed('Peace')">Peace</button>
+        <button class="tp-need-btn" type="button" onclick="chooseNeed('Integrity')">Honesty</button>
         <button class="tp-need-btn" type="button" onclick="chooseNeed('ask')">To ask</button>
       </div>
       <button class="tp-skip" type="button" onclick="chooseNeed('')">Just the morning page</button>
+    </div>
+    <div class="tp-ask" id="ob-ask">
+      <p class="tp-deck" style="margin:0 0 8px">Write what is on you. One sentence is enough.</p>
+      <label class="sr-only" for="ob-ask-input">What is on you</label>
+      <textarea class="tp-ask-input" id="ob-ask-input" rows="3" placeholder="I need a word for…"></textarea>
+      <button class="tp-open" type="button" onclick="sendOnboardAsk()">Send the letter</button>
+      <button class="tp-skip" type="button" onclick="finishOnboard('ask')">Open the advisor empty</button>
     </div>
   </div>
 </section>
@@ -1659,6 +1701,26 @@ html.sitting .sit-sheet {
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
+        <section class="movement night-latch" id="night-latch" hidden>
+          <p class="eyebrow">Night watch</p>
+          <h2 class="word-title">One lamp. Nothing else is required.</h2>
+          <p class="red-letter" id="night-quote"></p>
+          <p class="cite" id="night-cite"></p>
+          <p class="night-copy">This page will not count a streak tonight. If you need a person: <a href="tel:988">988</a> · <a href="tel:18007997233">1-800-799-7233</a>. Asking is optional.</p>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="sitNightLatch()">Sit with this</button>
+            <button class="ghost" type="button" onclick="switchTab('advisor')">Ask, if you need to</button>
+          </div>
+        </section>
+        <section class="movement first-ask" id="first-ask" hidden>
+          <p class="eyebrow">One thing</p>
+          <h2 class="word-title">Write what is on you.</h2>
+          <label class="sr-only" for="first-ask-input">What is on you</label>
+          <textarea class="first-ask-input" id="first-ask-input" rows="2" placeholder="One sentence is enough…"></textarea>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="sendFirstAsk()">Ask the Advisor</button>
+          </div>
+        </section>
         <p class="hear-now" id="hear-status" hidden>Listening</p>
         <div class="actions" style="margin-bottom:22px">
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
@@ -1747,7 +1809,7 @@ html.sitting .sit-sheet {
       <div class="page" id="seek-page">
         <p class="eyebrow" id="seek-eyebrow">A small hymnal</p>
         <h1 class="display" id="seek-title">Words of <em>encouragement</em></h1>
-        <p class="lede" id="seek-lede" style="margin:14px 0 8px">Twelve rooms. Each one opened with the sentences He actually said.</p>
+        <p class="lede" id="seek-lede" style="margin:14px 0 8px">Thirteen rooms. Each one opened with the sentences He actually said.</p>
         <div class="mode-switch" role="tablist" aria-label="Seek">
           <button class="mode-btn on" id="mode-rooms" role="tab" aria-selected="true" onclick="setSeekMode('rooms')">Rooms</button>
           <button class="mode-btn" id="mode-letters" role="tab" aria-selected="false" onclick="setSeekMode('letters')">The letters</button>
@@ -1823,7 +1885,8 @@ html.sitting .sit-sheet {
             <p class="eyebrow">Correspondence</p>
             <h1 class="display">The <em>Advisor</em></h1>
             <p class="welcome">Write what is true. The reply is written by software, then His words are set on the page from the Gospels.</p>
-            <p class="trust-line">Not a person, not a pastor, not a clinician. If you are in danger: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+            <p class="page-chip">A page, not a pastor. Not a person, not a clinician.</p>
+            <p class="trust-line">If you are in danger: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
             <div class="letter-tools">
               <button class="ghost" type="button" id="new-letter" onclick="startNewLetter()">New letter</button>
             </div>
@@ -2013,8 +2076,8 @@ html.sitting .sit-sheet {
     </label>
   </div>
   <div class="sheet-about">
-    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
-    <p style="margin-top:12px">The red letters follow the King James red-letter tradition begun in 1899. The Greek has no quotation marks, so where a speech ends is an editor’s call; like most KJV editions this room sets John 3:16–21 as His words. Where editions differ, the citation is always printed so you can read the page for yourself.</p>
+    <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text (Blayney Oxford 1769 tradition; public domain in the US) and printed as His speech, not the narrator’s frame. Seek holds thirteen rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>. A 988 counselor may involve emergency services if they believe you are in immediate danger; this page will not call anyone for you.</p>
+    <p style="margin-top:12px">The red letters follow the King James red-letter tradition begun in 1899. The Greek has no quotation marks, so where a speech ends is an editor’s call. Like most KJV editions this room sets John 3:16–21 as His words — NIV 2011 and the NET treat 16–21 as the evangelist. We follow common KJV red-letter practice and say so. The citation is always printed so you can read the page for yourself. We quote the Gospels’ speech of Jesus; we do not rank the rest of Scripture as less inspired.</p>
     <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
@@ -2069,7 +2132,7 @@ html.sitting .sit-sheet {
   <div class="crisis-card">
     <p class="eyebrow">You are not alone</p>
     <h2 id="crisis-title">Please reach a person who can help right now</h2>
-    <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
+    <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free. A 988 counselor may involve emergency services if they believe you are in immediate danger. This page will not call anyone for you.</p>
     <div class="crisis-actions">
       <a href="tel:988">Call or text 988 (US)</a>
       <a href="https://findahelpline.com" target="_blank" rel="noreferrer">Find a helpline anywhere</a>
@@ -2086,7 +2149,7 @@ html.sitting .sit-sheet {
   <div class="crisis-card">
     <p class="eyebrow">You are not alone</p>
     <h2 id="abuse-title">Please reach a person who can help with this</h2>
-    <p>If someone is hurting you, this room is not the place to work it out. Real people are ready — free and confidential. You do not have to stay.</p>
+    <p>If someone is hurting you, this room is not the place to work it out. Real people are ready — free. You do not have to stay. Leaving a room that is killing you does not break a vow. This page may stay in this device’s history.</p>
     <div class="crisis-actions">
       <a href="tel:18007997233">Call 1-800-799-7233 (US domestic violence hotline)</a>
       <a href="sms:88788?body=START">Text START to 88788</a>
@@ -2135,6 +2198,7 @@ const THEMES = [
   ['Shame & Guilt', 'Heaven still knows how to rejoice'],
   ['Peace', 'Not as the world giveth'],
   ['Hope', 'Joy no one can take'],
+  ['Integrity', 'Let the yes be yes'],
 ];
 
 let dailyData = null;
@@ -2299,7 +2363,14 @@ function startNewReader() {
   startApp();
 })();
 
+function nightForced() {
+  return location.hash === '#night' || /[?&]night=1(?:&|$)/.test(location.search);
+}
 function setWatch() {
+  if (nightForced()) {
+    document.documentElement.dataset.watch = 'night';
+    return;
+  }
   const h = new Date().getHours();
   const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
   document.documentElement.dataset.watch = watch;
@@ -2313,6 +2384,27 @@ function showNeedStep() {
 }
 
 function chooseNeed(kind) {
+  if (kind === 'ask') {
+    document.getElementById('ob-need').classList.remove('on');
+    document.getElementById('ob-ask').classList.add('on');
+    const ta = document.getElementById('ob-ask-input');
+    if (ta) ta.focus();
+    return;
+  }
+  finishOnboard(kind);
+}
+
+function sendOnboardAsk() {
+  const text = (document.getElementById('ob-ask-input').value || '').trim();
+  if (!text) {
+    finishOnboard('ask');
+    return;
+  }
+  lsSet('rla-asked-once', '1');
+  finishOnboard('ask', text);
+}
+
+function finishOnboard(kind, preset) {
   lsSet('rla-onboarded', '1');
   if (kind) lsSet('rla-need', kind);
   const ob = document.getElementById('onboarding');
@@ -2322,8 +2414,11 @@ function chooseNeed(kind) {
     document.getElementById('app').removeAttribute('aria-hidden');
     if (!kind) openFirstSit = true;
     startApp();
-    if (kind === 'ask') switchTab('advisor');
-    else if (kind) {
+    if (kind === 'ask') {
+      switchTab('advisor');
+      if (preset) sendMsg(preset);
+      else if (typeof chatInput !== 'undefined' && chatInput) chatInput.focus();
+    } else if (kind) {
       switchTab('seek');
       loadEnc(kind);
     }
@@ -2347,6 +2442,7 @@ function startApp() {
   paintEpigraph();
   loadDailyContent();
   restoreLetters();
+  paintFirstAsk();
   bindRituals();
   checkMorningReminder();
   paintInstallState();
@@ -2800,6 +2896,7 @@ async function paintShareCountsRow() {
 }
 
 function isNightOffice() {
+  if (nightForced()) return true;
   const h = new Date().getHours();
   return h >= 21 || h < 6;
 }
@@ -2826,6 +2923,13 @@ function updateDateUI() {
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('vespers-card').hidden = !evening;
   if (evening) paintVespers();
+  document.documentElement.classList.toggle('night-quiet', night);
+  const streakLabel = document.getElementById('today-streak-label');
+  const streakNum = document.getElementById('streak-num');
+  if (streakLabel) streakLabel.hidden = night;
+  if (streakNum) streakNum.hidden = night;
+  paintNightLatch();
+  paintFirstAsk();
 }
 
 function paintThemeIndex() {
@@ -2885,6 +2989,7 @@ async function loadDailyContent() {
   document.getElementById('word-content').style.display = 'block';
   if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
   paintVespers();
+  paintNightLatch();
   const catchEl = document.getElementById('folio-catch');
   if (catchEl) {
     const word = (getCatchword() || firstCatchword(dailyData.word.passage) || 'Peace');
@@ -2970,7 +3075,7 @@ function setSeekMode(mode) {
   document.getElementById('seek-eyebrow').textContent = rooms ? 'A small hymnal' : 'The spoken corpus';
   document.getElementById('seek-title').innerHTML = rooms ? 'Words of <em>encouragement</em>' : 'The <em>letters</em>';
   document.getElementById('seek-lede').textContent = rooms
-    ? 'Twelve rooms. Each one opened with the sentences He actually said.'
+    ? 'Thirteen rooms. Each one opened with the sentences He actually said.'
     : 'Every saying in Matthew, Mark, Luke, and John — His speech only, not the narrator.';
   document.getElementById('seek-page').scrollTop = 0;
   if (!rooms) {
@@ -3189,6 +3294,14 @@ function sitPayloadFor(type) {
   if (type === 'vespers') {
     const v = vespersSaying();
     return { kicker: officeName() === 'Compline' ? 'Compline' : 'Vespers', title: vespersPrompt(), quote: v.quote, verse: v.verse, reflection: 'Lay the day down beside this sentence.' };
+  }
+  if (type === 'night') {
+    const quoteEl = document.getElementById('night-quote');
+    const citeEl = document.getElementById('night-cite');
+    const quote = (quoteEl && quoteEl.textContent) || '';
+    const verse = (citeEl && citeEl.textContent) || '';
+    if (!quote) return null;
+    return { kicker: 'Night watch', title: 'One lamp', quote, verse, reflection: 'Nothing else is required of this hour. Sit, then rest.' };
   }
   return null;
 }
@@ -3612,6 +3725,8 @@ function updateStreamBubble({ bubble }, text) {
 
 function addSaveToChatBubble({ wrap }, text, question) {
   wrap.querySelector('.letter').innerHTML = formatAI(text);
+  const row = document.createElement('div');
+  row.className = 'letter-actions';
   const saveBtn = document.createElement('button');
   saveBtn.className = 'msg-save-btn';
   saveBtn.textContent = 'Keep in the journal';
@@ -3621,7 +3736,16 @@ function addSaveToChatBubble({ wrap }, text, question) {
     saveBtn.textContent = 'Kept';
     saveBtn.disabled = true;
   };
-  wrap.appendChild(saveBtn);
+  row.appendChild(saveBtn);
+  const saying = extractFirstSaying(text);
+  if (saying && saying.verse && saying.quote) {
+    const blessBtn = document.createElement('button');
+    blessBtn.className = 'msg-save-btn';
+    blessBtn.textContent = 'Send this word';
+    blessBtn.onclick = () => openBlessing(saying);
+    row.appendChild(blessBtn);
+  }
+  wrap.appendChild(row);
 }
 
 function scrollChat() {
@@ -3954,6 +4078,55 @@ function formatAI(text) {
 function extractFirstVerse(text) {
   const m = text.match(/(Matthew|Mark|Luke|John)\s+\d+:\d+/);
   return m ? m[0] : '';
+}
+function extractFirstSaying(text) {
+  const lines = String(text || '').split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].trim().match(/^\*\*([^*]+)\*\*$/);
+    if (!m) continue;
+    const next = (lines[i + 1] || '').trim().replace(/^[“”"]+/, '').replace(/[“”"]+[.,;:]?$/, '');
+    if (next.length > 8) return { verse: m[1], quote: next };
+  }
+  return null;
+}
+function paintNightLatch() {
+  const card = document.getElementById('night-latch');
+  if (!card) return;
+  const night = isNightOffice();
+  card.hidden = !night;
+  if (!night) return;
+  const quote = document.getElementById('night-quote');
+  const cite = document.getElementById('night-cite');
+  if (dailyData && dailyData.word) {
+    quote.textContent = dailyData.word.passage;
+    cite.textContent = dailyData.word.verse;
+  } else {
+    quote.textContent = 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.';
+    cite.textContent = 'John 14:27';
+  }
+}
+function sitNightLatch() {
+  sitWith('night');
+}
+function paintFirstAsk() {
+  const card = document.getElementById('first-ask');
+  if (!card) return;
+  const asked = ls('rla-asked-once') === '1';
+  const hasLetter = Array.isArray(chatHistory) && chatHistory.some((m) => m && m.role === 'assistant');
+  card.hidden = asked || hasLetter || isNightOffice();
+}
+function sendFirstAsk() {
+  const ta = document.getElementById('first-ask-input');
+  const text = (ta && ta.value || '').trim();
+  if (!text) {
+    switchTab('advisor');
+    if (chatInput) chatInput.focus();
+    return;
+  }
+  lsSet('rla-asked-once', '1');
+  paintFirstAsk();
+  switchTab('advisor');
+  sendMsg(text);
 }
 
 const STOP_WORDS = new Set('the a an and or but for with from that this you your i we they to of in on as is be my our not'.split(' '));

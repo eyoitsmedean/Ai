@@ -158,8 +158,8 @@ describe('parseModelJson', () => {
 });
 
 describe('curated packs', () => {
-  it('covers twelve themes with real verses', () => {
-    assert.equal(themeNames().length, 12);
+  it('covers thirteen themes with real verses', () => {
+    assert.equal(themeNames().length, 13);
     for (const name of themeNames()) {
       const pack = encouragementFor(name);
       assert.ok(pack.passages.length >= 3);

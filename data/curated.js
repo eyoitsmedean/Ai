@@ -671,6 +671,29 @@ window.RLA_CURATED = {
     ],
     "practice": "If a specific guilt has a name, write it once. Under it write John 8:11. Neither do I condemn thee is the first word, not the last excuse.",
     "closing": "You are not your worst hour. He still knows how to lift a face."
+  },
+  "Integrity": {
+    "headline": "Let the Yes Be Yes",
+    "opening": "Someone asked you to make the story smoother than the truth. Jesus names split speech and a second master that wants your mouth — not a five-year career plan.",
+    "passages": [
+      {
+        "verse": "Matthew 5:37",
+        "quote": "But let your communication be, Yea, yea; Nay, nay: for whatsoever is more than these cometh of evil.",
+        "context": "The surplus speech is the problem. A true yes or a true no is enough."
+      },
+      {
+        "verse": "Matthew 6:24",
+        "quote": "No man can serve two masters: for either he will hate the one, and love the other; or else he will hold to the one, and despise the other. Ye cannot serve God and mammon.",
+        "context": "When the pressure is a quota or a paycheck, he names two masters. Mammon is trust, not the fact of a wage."
+      },
+      {
+        "verse": "Luke 16:10",
+        "quote": "He that is faithful in that which is least is faithful also in much: and he that is unjust in the least is unjust also in much.",
+        "context": "Faithfulness starts in the small report, not in the heroic refusal you have not been asked for yet."
+      }
+    ],
+    "practice": "Say the next sentence you will actually stand behind. If you cannot say it, do not dress it.",
+    "closing": "You do not have to finish the cost tonight. You can let the next word be true."
   }
 }
 };
