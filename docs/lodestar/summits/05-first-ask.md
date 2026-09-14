@@ -17,10 +17,11 @@ The first useful answer is a letter, not a map of rooms.
 `chooseNeed('ask')` reveals `#ob-ask`. `sendOnboardAsk` onboards, opens Advisor, `sendMsg`. Today also shows `#first-ask` until a letter exists (hidden at night).
 
 ## Checklist
-- [ ] Honesty is a need (opens Integrity in Seek)
-- [ ] Empty send still opens Advisor
-- [ ] Crisis/abuse modals still intercept `sendMsg`
-- [ ] `rla-asked-once` hides the Today strip
+- [x] Honesty is a need (opens Integrity in Seek)
+- [x] Empty send still opens Advisor
+- [x] Crisis/abuse modals still intercept `sendMsg`
+- [x] `rla-asked-once` hides the Today strip
+- [x] QA sends a letter from `#ob-ask` (ATELIER 2026-09-14)
 
 ## Practice loop
 `?fresh=1` → Turn the page → To ask → type rent-worry → letter.

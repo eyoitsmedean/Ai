@@ -21,6 +21,6 @@
 | Mastery: Night latch | `docs/lodestar/summits/04-night.md` | C2 C3 |
 | Mastery: First useful letter | `docs/lodestar/summits/05-first-ask.md` | C2 |
 | Director’s Cut | `docs/lodestar/DIRECTORS_CUT.md` | C1 C6 |
-| Defect Register | `docs/lodestar/DEFECTS.md` | C4 |
+| Defect Register | `docs/lodestar/DEFECTS.md` | C4 · Cycle 1 minors closed ATELIER 2026-09-14 |
 | Ship Package | `docs/lodestar/SHIP.md` | — |
 | Prior brief / research / packet | `docs/CANONICAL_BRIEF.md`, `docs/RESEARCH.md`, `docs/SHIP_PACKET.md` | — |

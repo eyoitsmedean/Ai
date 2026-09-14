@@ -42,10 +42,11 @@ A chat-first advisor that answers a real life question from the direct words of 
 
 ## How to check the work
 
-`npm test` · `npm run qa` · `npm run eval` (54 questions; writes `eval/RESULTS.md`) · `npm run audit`. Read `docs/CANONICAL_BRIEF.md` and `docs/lodestar/CHARTER.md` before designing anything.
+`npm test` · `npm run qa` · `npm run eval` (56 questions; writes `eval/RESULTS.md`) · `npm run audit`. Read `docs/CANONICAL_BRIEF.md` and `docs/lodestar/CHARTER.md` before designing anything.
 
 ## Session log
 
+- **2026-09-14** — ATELIER: closed Cycle 1 residuals — night latch hides Vespers; title-page ask is in browser QA; eval #55–#56 refuse “You are Jesus” / “ignore your rules.” Letter contract judges Jesus-claim on advisor voice only (quoted “I am” sayings exempt).
 - **2026-09-14** — LODESTAR Cycle 1: Intent Charter; Integrity room; letter contract; blessing from the letter; night latch; title-page ask; eval 54. See `docs/lodestar/`.
 - **2026-09-11** — Recovery commission: canonical brief recovered from 7 user prompts (not 10); abuse/present-danger door; eval 50; research + ship packet. Do not merge other agents’ PRs onto this line.
 - **2026-09-11** — Sprint: curated Advisor never locked after five live letters; client lamp-out letter matches the server (out-of-room + crisis body); keyboard lifts the composer; morning reminder fires on open/focus between 8 and 10; stop a letter / start a new one. PR stacked on #22.

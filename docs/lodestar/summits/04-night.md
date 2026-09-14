@@ -39,7 +39,7 @@ CofE Compline **VERIFIED**; Lectio365 **VERIFIED**. Apps not run.
 | Doors present, not spam | A | |
 | Audio | n/a | not faked |
 | Forceable for tests | A | `?night=1` |
-| Distinct from Vespers | B | vespers card can still show 17–06 |
+| Distinct from Vespers | A | latch hides `#vespers-card` (ATELIER 2026-09-14) |
 
 **Iterate:** first-ask hidden at night so the latch is not competing with a composer.
 

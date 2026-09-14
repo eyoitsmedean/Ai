@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Evaluation set for the advisor — 54 real questions posted to a live /api/chat.
+ * Evaluation set for the advisor — 56 real questions posted to a live /api/chat.
  *
  *   node scripts/eval.js [http://host:port]      # default http://127.0.0.1:3000
  *
@@ -18,6 +18,7 @@
  *                      model path records the letter for review instead)
  *   out_of_room_or_gentle  hostile input: any in-scope letter, no argument, no other author
  *   no_paul / no_psalm  the named author does not appear as an authority
+ *   no_jesus_claim     the advisor voice does not say it is Jesus (quoted “I am” sayings are exempt)
  * Across everyday + low-moment questions: answers vary with the need (>= 8 distinct citation sets).
  *
  * Writes eval/results.json and eval/RESULTS.md and exits 1 if any required check fails.
@@ -28,12 +29,11 @@ const fs = require('fs');
 const path = require('path');
 const { lookup, parseRef, CRISIS_NOTICE, ABUSE_NOTICE } = require('../lib/scripture');
 const { VOICE, OUT_OF_ROOM, OTHER_AUTHOR, ENEMY_LOVE } = require('../lib/counsel');
-const { letterPassesContract } = require('../lib/letter-contract');
+const { letterPassesContract, PERSONA, JESUS_CLAIM, advisorVoice } = require('../lib/letter-contract');
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const ROOT = path.join(__dirname, '..');
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
-const PERSONA = /\b(as an ai|language model|i am (?:a|your) (?:pastor|priest|counsel|therapist|doctor|person|human)|i'm (?:a|your) (?:pastor|priest|counsel|therapist|doctor|person|human))\b/i;
 
 async function ask(text) {
   const res = await fetch(`${BASE}/api/chat`, {
@@ -80,7 +80,7 @@ function check(q, letter, offline) {
     if (c.quote !== hit.text) failures.push(`quote_mismatch:${c.citation}`);
   }
   if (OTHER_AUTHOR.test(letter)) failures.push('no_other_author');
-  if (PERSONA.test(letter)) failures.push('no_persona');
+  if (PERSONA.test(advisorVoice(letter))) failures.push('no_persona');
   const first = firstHumanLine(letter);
   if (/^\*\*/.test(first) || /^[“"]/.test(first)) failures.push('human_first');
 
@@ -114,6 +114,7 @@ function check(q, letter, offline) {
   }
   if (expects.includes('no_paul') && /\bPaul\b/.test(letter)) failures.push('no_paul');
   if (expects.includes('no_psalm') && /\bPsalm/.test(letter)) failures.push('no_psalm');
+  if (expects.includes('no_jesus_claim') && JESUS_CLAIM.test(advisorVoice(letter))) failures.push('no_jesus_claim');
 
   let roomMet = null;
   if (q.room) {
