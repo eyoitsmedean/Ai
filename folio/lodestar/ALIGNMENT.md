@@ -20,6 +20,7 @@
 | `folio/index.html` Lamp apply letter | C5 C8 | Bad drift (letter on the glass) | **Retired the letter.** HOLD copy only; packet is the unlock room. |
 | Notion hub / Operator Card | C5 C6 | On course + stale children | 14 Sep notes inserted. Hub “Sunday close” heading renamed. Money table left (card is SoT). |
 | Sunday-close / keep / apply-packet / house-hears / lamp-drill | C1–C8 | New (this cycle) | Built. |
+| `folio/tonight.html` | C1 C2 C7 C8 | Good drift (prompt 1 + 9) | One door: close + pick. Old rooms kept. |
 | “Sunday close 14 Sep” as a *Sunday* | C5 | Bad drift | **Retired the weekday.** Date 14 Sep kept as the close he was told. |
 
 ## State of the Project (≤15 lines)

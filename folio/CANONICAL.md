@@ -77,6 +77,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 | Asset | Location | Authority |
 | --- | --- | --- |
 | Money SoT | Notion Operator Card v2 `3d4b7d53f96981c9b00dc0f64a83fd1a` | Cash, calendar, apply HOLD |
+| Tonight (one door) | `folio/tonight.html` | Close + pick. Best finished surface as of 14 Sep evening. |
 | Tonight card | `folio/decision-night.html` · Notion [Decision Night · 11 Sep 2026](https://app.notion.com/p/3d8b7d53f96981c18483efcc8ccdcdff) | Local receipt; mirrors the card |
 | Paper folio | `folio/index.html` | Run-of-show, copy, kill rules. Money tables archived. |
 | This brief | `folio/CANONICAL.md` | Recovery + evidence + decisions |

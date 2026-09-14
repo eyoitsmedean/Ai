@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tonight · Ninety days · one plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4.5rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.35rem; line-height: 1.08; margin: .15rem 0 .7rem; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.28rem; margin: 1.5rem 0 .45rem; }
+    .lead { font-size: 1.05rem; }
+    .zero { font-family: Fraunces, serif; font-size: 3.4rem; line-height: 1; color: var(--crimson); margin: .2rem 0 .3rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem 1.05rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    .rest { background: #1b1610; color: #f4efe4; }
+    .rest a { color: #e8c56a; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { text-align: left; padding: .42rem .3rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    th { font-family: "Instrument Sans", sans-serif; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    tr.pick td { background: rgba(143,29,29,.06); }
+    label { display: block; margin: .42rem 0; }
+    input, select { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    .btn { font-family: "Instrument Sans", sans-serif; appearance: none; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .55rem .8rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn.ghost { background: transparent; color: var(--ink); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    a { color: var(--crimson); }
+    .receipt { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .88rem; }
+    .depth { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    @media print { .actions, .noprint, .depth { display: none !important; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Monday 14 Sep 2026 · 80 days after today · one door</p>
+  <h1>Tonight.<br><em>Close, then pick.</em></h1>
+  <p class="lead">You asked for five plans that are beautiful to use and easy to execute. This is the finished surface. The other rooms stay. You do not need them to finish the night.</p>
+  <p class="tiny">Opening this page authorizes nothing. No application, outreach, purchase, or publish.</p>
+
+  <p class="zero">$0</p>
+  <p>That is what the house hears until a written match and a billed hour exist. A listing is not a job.</p>
+
+  <div class="card rest" id="windowBanner">
+    <p style="margin:0"><strong>If the household window is not Confirmed, stop here.</strong> Rest is a successful finish. Required work named for 8–14 Sep (DEX room-inspect) is over. There is no optional job tonight.</p>
+  </div>
+
+  <h2>1 · Three minutes</h2>
+  <p>Did this project make the week lighter, or become another dashboard?</p>
+  <label>Lighter or dashboard
+    <select id="q1">
+      <option>Not answered</option>
+      <option>Lighter</option>
+      <option>Another dashboard</option>
+      <option>Did not open it</option>
+    </select>
+  </label>
+  <label>Money, a dated no, a blocked gate — or only motion
+    <select id="q2">
+      <option>Not answered</option>
+      <option>Money</option>
+      <option>A dated no</option>
+      <option>A blocked gate</option>
+      <option>Only motion</option>
+      <option>Nothing — I did not run a lane</option>
+    </select>
+  </label>
+  <label>Disposition
+    <select id="q3">
+      <option>Not answered</option>
+      <option>Continue</option>
+      <option>Park 30 days</option>
+      <option>Close</option>
+    </select>
+  </label>
+  <label>Household window now
+    <select id="window">
+      <option>Not confirmed</option>
+      <option>Confirmed</option>
+      <option>Not needed</option>
+    </select>
+  </label>
+
+  <h2>2 · One of five</h2>
+  <p>One lane. The other four stay paper. October is Red: no new asks. Folio is craft, not groceries.</p>
+  <div style="overflow:auto">
+    <table>
+      <thead><tr><th>Lane</th><th>Honest cash by 3 Dec</th><th>Pick when</th></tr></thead>
+      <tbody>
+        <tr class="pick">
+          <td><strong>I Lamp</strong></td>
+          <td>Most likely $0. If matched: 4–6 h × 6 non-Oct weeks = $1,920–$4,320 gross; 35% reserve $1,248–$2,808.</td>
+          <td>Grocery money and five gates Clear</td>
+        </tr>
+        <tr>
+          <td><strong>II Room</strong></td>
+          <td>0–3 × $349 = $0 / $349 / $698 / $1,047</td>
+          <td>Lamp blocked; ten humans outside work</td>
+        </tr>
+        <tr>
+          <td><strong>III Handoff</strong></td>
+          <td>0–2 × $1,500 = $0 / $1,500 / $3,000. 12-hour cap.</td>
+          <td>Twenty asks you can keep after 1 Nov</td>
+        </tr>
+        <tr>
+          <td><strong>IV Storefront</strong></td>
+          <td>0–2 × $595 = $0 / $595 / $1,190. $295 retired.</td>
+          <td>Walk a public shop, not a coaching room</td>
+        </tr>
+        <tr>
+          <td><strong>V Folio</strong></td>
+          <td>$0 this quarter as cash</td>
+          <td>Advent with no URL and no invoice</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <label>Choice
+    <select id="choice">
+      <option>None tonight</option>
+      <option>I Lamp</option>
+      <option>II Room</option>
+      <option>III Handoff</option>
+      <option>IV Storefront</option>
+      <option>V Folio (craft only)</option>
+    </select>
+  </label>
+  <label>External action tonight
+    <select id="auth">
+      <option>No</option>
+      <option>Yes — one named step in the box below</option>
+    </select>
+  </label>
+  <p class="tiny" id="authWarn">Copy stays HOLD. This page does not open Mercor and does not send mail.</p>
+  <label>One sentence<input type="text" id="note" placeholder="Why this, or why rest" /></label>
+
+  <div class="actions noprint">
+    <button class="btn" type="button" id="write">Write tonight</button>
+    <button class="btn ghost" type="button" onclick="window.print()">Print</button>
+  </div>
+  <pre class="receipt" id="receipt">The night appears here. It stays on this device.</pre>
+
+  <div class="depth noprint">
+    <p class="tiny">Depth, if you want it — not required to finish:</p>
+    <p class="tiny">
+      <a href="house-hears.html">$0, read aloud</a> ·
+      <a href="keep.html">Idaho keep model</a> ·
+      <a href="apply-packet.html">Apply packet (HOLD)</a> ·
+      <a href="lamp-drill.html">Practice, no apply</a> ·
+      <a href="week-close.html">Close only</a> ·
+      <a href="decision-night.html">Decision Night</a> ·
+      <a href="index.html">Paper folio (archived cash labeled)</a>
+    </p>
+    <p class="tiny">Money SoT: Notion Operator Card v2. Listings rechecked 14 Sep — still advertisements. Apply is HOLD until you type Yes on a Confirmed window.</p>
+  </div>
+</main>
+<script>
+function openWindow() {
+  const w = document.getElementById("window").value;
+  return w === "Confirmed" || w === "Not needed";
+}
+function sync() {
+  const open = openWindow();
+  const auth = document.getElementById("auth");
+  const warn = document.getElementById("authWarn");
+  if (!open) {
+    auth.value = "No";
+    auth.disabled = true;
+    warn.textContent = "Window is not Confirmed. Rest is the finish. Authorization stays No.";
+  } else {
+    auth.disabled = false;
+    warn.textContent = "Copy stays HOLD. This page does not open Mercor and does not send mail.";
+  }
+}
+document.getElementById("window").addEventListener("change", sync);
+document.getElementById("write").addEventListener("click", () => {
+  sync();
+  const w = document.getElementById("window").value;
+  const open = openWindow();
+  const auth = open ? document.getElementById("auth").value : "No";
+  const text = [
+    "NINETY DAYS · TONIGHT",
+    "Written 14 Sep 2026 (Monday) · stays on this device",
+    "",
+    "Lighter or dashboard: " + document.getElementById("q1").value,
+    "Money / no / gate / motion: " + document.getElementById("q2").value,
+    "Disposition: " + document.getElementById("q3").value,
+    "Household window: " + w,
+    "Choice: " + document.getElementById("choice").value,
+    "External action authorized tonight: " + auth,
+    "Note: " + (document.getElementById("note").value.trim() || "(blank)"),
+    "",
+    open ? "80 days after today. October is Red. Apply is HOLD unless the authorization line is Yes." : "REST IS THE FINISH. Optional work is closed tonight.",
+    "This receipt is not an application."
+  ].join("\n");
+  document.getElementById("receipt").textContent = text;
+  try {
+    localStorage.setItem("ninety-days-tonight-2026-09-14", text);
+    localStorage.setItem("ninety-days-week-close-2026-09-14", text);
+    localStorage.setItem("ninety-days-receipt-2026-09-14", text);
+  } catch (e) {}
+});
+sync();
+</script>
+</body>
+</html>
