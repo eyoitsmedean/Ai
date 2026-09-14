@@ -1,6 +1,6 @@
 # Recovered user prompts
-**Read:** transcript `bc-38e79d95-b47b-42c3-9668-57e2fc0ad41a` via batch-fetch 14 Sep 2026 20:38Z. File 2.79 MB, 1,448 messages, parsed complete.  
-**User messages:** **9.** There is no tenth. This file does not invent one.
+**Read:** transcript `bc-38e79d95-b47b-42c3-9668-57e2fc0ad41a` via batch-fetch 14 Sep 2026 20:38Z (file 2.79 MB, 1,448 messages, parsed complete) plus this thread’s later turns.  
+**User messages:** **10.** Prompts 9 and 10 are the same sentence. This file does not invent an eleventh.
 
 | # | Kind | What they said (quoted, shortened) | What it authorizes |
 |---|---|---|---|
@@ -12,7 +12,11 @@
 | 6 | Process · Recovery | Recover what I originally wanted. Deep research. Little additional assembly. | Recover Prompt 1; do not restart. |
 | 7 | Process · LODESTAR | Become the mind that understands this project. Protect the truth and the original purpose. | Charter + depth; original purpose stays Prompt 1. |
 | 8 | Process · ATELIER | Useful work, faithfully finished. Recover purpose. Little avoidable cleanup. | Finish the playbook. |
-| 9 | Follow-up | “You have creative freedom and token freedom to analyze and improve as you see fit, start by reviewing my first 10 prompts for context and guidance” | Improve; start from the record. There were not 10. |
+| 9 | Follow-up | “You have creative freedom and token freedom to analyze and improve as you see fit, start by reviewing my first 10 prompts for context and guidance” | Improve; start from the record. Review the ten. |
+| 10 | Follow-up | Identical sentence to #9. | Same grant. Not a new product. Confirm the census is ten, then keep cutting toward Prompt 1. |
 
-**Guidance taken from the nine.**  
-Prompt 1 is the star. 2–8 are finish overlays. 9 is permission to go further toward that star — not to wander. Later blessed Notion (one lane, HOLD, $0 first) still governs money. Do not merge the iOS last-week F1–F3 thread.
+**Guidance taken from the ten.**  
+Prompt 1 is the star. 2–8 are finish overlays. 9–10 are permission to go further toward that star — not to wander. Later blessed Notion (one lane, HOLD, $0 first) still governs money. Do not merge the iOS last-week F1–F3 thread.
+
+**What “easy” means after ten prompts.**  
+The playbook opens in Rest. The drawer (This week, lane, movements, facts, nav, the five cards) waits until he picks minutes. Rest needs no receipt.

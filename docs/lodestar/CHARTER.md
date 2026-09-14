@@ -34,7 +34,7 @@ Origin: evolved, blessed. Do not reverse.
 Dean: employed new parent, Treasure Valley / Idaho. Household is the first beneficiary. The public repo must not carry personal or employer detail.
 
 ## Definition of done (original)
-Five plans he can pick up and run. Beautiful. Easy. Aimed at money in 90 days. Later definition of done (blessed): one lane written; this week’s required work is DEX during scheduled hours; Sunday close 14 Sep; no apply / send / upload while the window is Not confirmed.
+Five plans he can pick up and run. Beautiful. Easy. Aimed at money in 90 days. Later definition of done (blessed): one lane written; this week’s required work is DEX during scheduled hours; next close Sunday 20 Sep; no apply / send / upload while the window is Not confirmed.
 
 ## Constraints and non-negotiables
 - Window last recorded: **Not confirmed**. External apply / upload / message / purchase / publish = HOLD.
@@ -57,8 +57,9 @@ Dislikes (evidence): five live businesses; ceremony; leftover assembly; complime
 - Whether Folio ever becomes cash, or stays a free Advent gift.
 
 ## Provenance
-Read: nine user prompts in transcript `bc-38e79d95` (batch-fetch 14 Sep 20:38Z; 2.79 MB, complete). Prompt 1 is the only product brief. Prompts 2–8 are finish overlays. Prompt 9 asked for the first ten — a tenth does not exist. See `PROMPTS.md`.  
-Could not find: a tenth user prompt.  
+Read: ten user prompts in transcript `bc-38e79d95` (batch-fetch 14 Sep 20:38Z; 2.79 MB, complete) plus this thread. Prompt 1 is the only product brief. Prompts 2–8 are finish overlays. Prompts 9 and 10 are the same sentence. See `PROMPTS.md`.  
 Confidence: high on C1–C4 (quoted). High on C5–C6 (later blessed pages). Medium on which lane survives the gates.
 
-**Amendment 14 Sep evening.** Prompt 9 grants creative improvement toward Prompt 1, not a new commission. Tonight’s one move moved onto the first screen. Default minutes = Rest.
+**Amendment 14 Sep evening.** Prompt 9 grants creative improvement toward Prompt 1, not a new commission. Tonight's one move moved onto the first screen. Default minutes = Rest.
+
+**Amendment 14 Sep night.** Prompt 10 repeats Prompt 9. The census is ten. Rest mode is now the first screen: `body.resting` hides the drawer until he picks 15 / 45 / 90.

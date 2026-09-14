@@ -29,12 +29,54 @@ async function main() {
     await page.screenshot({ path: shotDir + '/' + name + '.png', fullPage: false });
   };
 
+  const openDrawer = async () => {
+    const resting = await page.$eval('body', el => el.classList.contains('resting'));
+    if (resting) await page.click('#tonight-min button[data-m="15"]');
+  };
+
   await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
   await page.evaluate(() => localStorage.removeItem('ninety.v1'));
   await page.reload({ waitUntil: 'networkidle0' });
-  await shot('playbook-hold-first-screen');
+  await shot('playbook-rest-first-screen');
   await page.$eval('#tonight-box', el => el.scrollIntoView({block:'start'}));
   await shot('playbook-tonight-first');
+
+  await check('Rest is the first screen', async () => {
+    const resting = await page.$eval('body', el => el.classList.contains('resting'));
+    assert(resting, 'body.resting missing on default load');
+    const hidden = await page.evaluate(() => {
+      const vis = (sel) => {
+        const el = document.querySelector(sel);
+        if (!el) return null;
+        return getComputedStyle(el).display !== 'none';
+      };
+      return {
+        now: vis('#now'),
+        board: vis('#board'),
+        main: vis('main'),
+        nav: vis('.nav'),
+        tonight: vis('#tonight-box'),
+        quiet: document.querySelector('#quiet') && getComputedStyle(document.querySelector('#quiet')).display !== 'none'
+      };
+    });
+    assert(hidden.tonight, 'tonight hidden during Rest');
+    assert(hidden.quiet, 'quiet footer hidden during Rest');
+    assert(!hidden.now, '#now visible during Rest');
+    assert(!hidden.board, '#board visible during Rest');
+    assert(!hidden.main, 'main visible during Rest');
+    assert(!hidden.nav, 'nav visible during Rest');
+    const quiet = await page.$eval('#quiet', el => el.innerText);
+    assert(/\$0/.test(quiet) && /Sunday 20 Sep/.test(quiet), quiet);
+  });
+
+  await check('15 minutes opens the drawer', async () => {
+    await page.click('#tonight-min button[data-m="15"]');
+    const resting = await page.$eval('body', el => el.classList.contains('resting'));
+    assert(!resting, 'still resting after 15');
+    const nowVis = await page.$eval('#now', el => getComputedStyle(el).display !== 'none');
+    assert(nowVis, '#now still hidden after 15');
+    await shot('playbook-hold-first-screen');
+  });
 
   await check('HOLD card on first screen', async () => {
     const t = await page.$eval('#now', el => el.innerText);
@@ -59,7 +101,7 @@ async function main() {
     const box = await page.$('#tonight-box #tonight-move');
     assert(box, 'tonight-move missing from the first screen');
     const t = await page.$eval('#tonight-move', el => el.innerText);
-    assert(/Nothing is the move|window is not confirmed|Go to bed/i.test(t), t);
+    assert(/Nothing is the move|window is not confirmed|Go to bed|Write one sentence/i.test(t), t);
     const y = await page.$eval('#tonight-move', el => el.getBoundingClientRect().top);
     assert(y < 700, 'tonight still buried: top=' + y);
     const rest = await page.$('#tonight-min button[data-m="0"]');
@@ -106,10 +148,19 @@ async function main() {
       localStorage.setItem('ninety.v1', JSON.stringify(s));
     });
     await page.reload({ waitUntil: 'networkidle0' });
+    await openDrawer();
     const t = await page.$eval('#now', el => el.innerText);
     assert(!/sixty-second videos/i.test(t), 'catch-up leaked under Lamp: ' + t.slice(0, 240));
     assert(!/Five sixty/i.test(t), t.slice(0, 240));
     await page.click('#household button[data-w="not"]');
+  });
+
+  await check('Rest hides the drawer again', async () => {
+    await page.click('#tonight-min button[data-m="0"]');
+    const resting = await page.$eval('body', el => el.classList.contains('resting'));
+    assert(resting, 'Rest did not restore body.resting');
+    const nowVis = await page.$eval('#now', el => getComputedStyle(el).display !== 'none');
+    assert(!nowVis, '#now still visible after Rest');
   });
 
   await check('Advent week 1 has no buy button', async () => {

@@ -5,7 +5,7 @@
 
 | Artifact | Kind | Location | Bearing |
 |---|---|---|---|
-| Recovered prompts (9) | origin | `docs/lodestar/PROMPTS.md` | C1, C5 |
+| Recovered prompts (10; 9≡10) | origin | `docs/lodestar/PROMPTS.md` | C1, C5 |
 | Intent Charter v1 | charter | `docs/lodestar/CHARTER.md` | C1–C6 |
 | Alignment Ledger | ledger | `docs/lodestar/ALIGNMENT.md` | C1–C6 |
 | State of the Project | note | `docs/lodestar/STATE.md` | C1–C6 |

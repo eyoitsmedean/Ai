@@ -5,7 +5,7 @@ This week still wins. Household window last recorded **Not confirmed** (re-fetch
 
 Money SoT is Operator Card v2: one lane, $0 until a billed hour, Idaho, 8 hours all-in, October Red, 35% reserve as a household rule. Grocery default after gates is The Lamp. If Lamp is blocked, The Room. Folio is parked as cash.
 
-The GitHub playbook is a parallel draft. It now writes one Notion lane, stamps the other four paper, and refuses to display advertised evaluator rates as expected cash. Five paper bets still exist. Voice is parked.
+The GitHub playbook is a parallel draft. It opens in Rest (`tonightMin` default 0). The drawer waits until he picks minutes. It writes one Notion lane, stamps the other four paper, and refuses to display advertised evaluator rates as expected cash. Five paper bets still exist. Voice is parked. Ten recovered prompts; 9≡10.
 
 Advent Week 1 is written from the existing Seven — craft, not groceries. The words stay free.
 

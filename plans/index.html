@@ -370,6 +370,23 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--paper);font-family:var(--ui);font-size:.82rem;padding:9px 14px;border-radius:999px;transition:all .25s var(--ease);pointer-events:none;z-index:50}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* Rest — default. The drawer waits until he picks minutes. */
+body.resting{min-height:100dvh}
+body.resting .title{padding-bottom:8px}
+body.resting .title > .lede,
+body.resting .title > .note,
+body.resting #now,
+body.resting #board,
+body.resting .movements-fold,
+body.resting .facts,
+body.resting .nav,
+body.resting main,
+body.resting footer.colophon{display:none !important}
+body.resting .tonight-now{margin-top:28px;padding:24px 22px 22px}
+body.resting .title h1{margin-bottom:4px}
+.quiet{display:none;margin:22px 0 0;padding:0 0 48px;color:var(--muted);font-family:var(--ui);font-size:.78rem;letter-spacing:.04em;line-height:1.5}
+body.resting .quiet{display:block}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 @media print{
@@ -406,6 +423,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
     </div>
     <div class="move" id="tonight-move"></div>
   </div>
+  <p class="quiet" id="quiet">$0 · HOLD · close Sunday 20 Sep · DEX in scheduled hours</p>
   <div class="decide" id="now" aria-live="polite"></div>
   <div class="leaf board" id="board">
     <span class="sc">Household window · This week last recorded Not confirmed</span>
@@ -602,7 +620,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 
 </main>
 
-<footer class="wrap">
+<footer class="wrap colophon">
   <span class="device" aria-hidden="true">R</span>
   <p>Built from your repository, your market research, and your own venture notes. Everything you check or log here stays on this device. Nothing is sent anywhere.</p>
   <p><a href="./offers.html">Offer sheets</a> · <a href="./advent.html">Advent Week 1</a> · <a href="./hold.html">Hold Receipt</a>. Knowledge base lives in the repo at docs/lodestar/INDEX.md — the phone server cannot open it.</p>
@@ -1322,7 +1340,25 @@ if(gatesBox) gatesBox.addEventListener('click', e=>{
   S.gates[b.dataset.gate] = b.dataset.v;
   save(); renderGates();
 });
+function setResting(){
+  const rest = S.tonightMin===0;
+  document.body.classList.toggle('resting', rest);
+  ['now','board'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.toggleAttribute('inert', rest); el.setAttribute('aria-hidden', rest); }
+  });
+  const nav = document.querySelector('.nav');
+  const main = document.querySelector('main');
+  const fold = document.querySelector('.movements-fold');
+  const facts = document.querySelector('.title .facts');
+  [nav, main, fold, facts].forEach(el=>{
+    if(!el) return;
+    el.toggleAttribute('inert', rest);
+    el.setAttribute('aria-hidden', rest);
+  });
+}
 function renderTonight(){
+  setResting();
   renderHousehold();
   const pick = $('#tonight-plan');
   if(pick) pick.innerHTML = PLANS.map(p=>`<button data-p="${p.id}" aria-pressed="${S.tonightPlan===p.id}" class="${S.tonightPlan===p.id?'on':''}">${p.num} · ${esc(p.name)}</button>`).join('');

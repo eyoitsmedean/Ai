@@ -11,9 +11,9 @@ Did not: lift HOLD, apply, confirm the window, finish Gate 4.
 Proposed amendments: none. Cycle 2 may add C7 if Folio is ever un-parked.
 
 ## 3. How to use
-1. Tonight: [Hold Receipt](../../plans/hold.html) or Notion Sunday close · 14 Sep. Rest needs no receipt.  
-2. Money: Notion Operator Card v2, then the playbook first screen.  
-3. Open `plans/index.html` (`npm run plans` → port 3010). Write a lane or write none.  
+1. Tonight: open `plans/index.html`. Default is Rest. Nothing else is on the first screen.  
+2. Money: Notion Operator Card v2. The playbook prints $0 until a billed hour.  
+3. Pick 15 / 45 / 90 only if you have minutes. Then write a lane or write none.  
 4. Sheets: `plans/offers.html`. Craft: `plans/advent.html`.  
 5. Resume a later cycle from `docs/lodestar/INDEX.md` + the handoff block below.
 

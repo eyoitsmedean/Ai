@@ -10,7 +10,7 @@ Plain-text twin of [`plans/index.html`](./index.html). **This file is a parallel
 | **Owner** | Dean |
 | **Status** | Live. Week 2 of 13. Household window last recorded Not confirmed. |
 | **Updated** | 14 Sep 2026 |
-| **What changed** | Write-one-lane receipt. Honest cash is $0 until a billed hour. Notion locks ($595 / $349 / $1,500) demote GitHub draft prices. Advent Week 1 exists as free craft. SSE re-opened: still current calendar year. |
+| **What changed** | The HTML twin opens in Rest. The drawer waits until you pick minutes. Write-one-lane receipt. Honest cash is $0 until a billed hour. Notion locks ($595 / $349 / $1,500) demote GitHub draft prices. Advent Week 1 exists as free craft. SSE re-opened: still current calendar year. |
 
 Everything here is an estimate, not a promise. Compliments are not demand. Only the ledger counts.
 

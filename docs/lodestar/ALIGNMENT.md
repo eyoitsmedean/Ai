@@ -25,6 +25,8 @@
 | Original Notion Lamp / Storefront children | C5 | Bad drift (quarantined) | Not opened as money. Not overwritten. |
 | Folio as public launch this quarter | C4, C6 | Bad drift if sold | Advent page has no buy button, no URL ask. |
 
-**Could not open.** Employer handbook (Gate 4). Mercor offer / Worker Agreement / CIIAA. SOSBiz checkout (online ABN $25 still inferred). YouTube. Prompts 7–10 (they do not exist).
+**Could not open.** Employer handbook (Gate 4). Mercor offer / Worker Agreement / CIIAA. SOSBiz checkout (online ABN $25 still inferred). YouTube.
+
+**Prompts.** All ten exist. 9≡10. Neither commissions a new product.
 
 **Held for Dean (Unblessed / decision).** Whether Folio ever invoices. Whether Lamp remains grocery default after the five gates. Whether the household window is now Confirmed — This week still says Not confirmed as of last edit 11 Sep.
