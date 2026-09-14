@@ -32,6 +32,7 @@ describe('adventSunday', () => {
 describe('ashWednesday / pentecost', () => {
   it('tracks Easter', () => {
     equal(ymd(ashWednesday(2026)), 20260218);
+    equal(ymd(ashWednesday(2027)), 20270210);
     equal(ymd(pentecost(2026)), 20260524);
   });
 });

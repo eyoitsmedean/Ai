@@ -1,0 +1,27 @@
+{
+  "watch": true,
+  "opened": "2026-09-14",
+  "note": "WEBU lines were copied from eBible chapter pages opened this cycle. They are not the live corpus. The live corpus stays KJV until Dean records.",
+  "verses": [
+    {
+      "ref": "John 14:27",
+      "webu": "Peace I leave with you. My peace I give to you; not as the world gives, I give to you. Don’t let your heart be troubled, neither let it be fearful.",
+      "webu_url": "https://ebible.org/engwebu/JHN14.htm"
+    },
+    {
+      "ref": "Matthew 11:28",
+      "webu": "Come to me, all you who labor and are heavily burdened, and I will give you rest.",
+      "webu_url": "https://ebible.org/engwebu/MAT11.htm"
+    },
+    {
+      "ref": "Luke 15:4",
+      "webu": "Which of you men, if you had one hundred sheep and lost one of them, wouldn’t leave the ninety-nine in the wilderness and go after the one that was lost, until he found it?",
+      "webu_url": "https://ebible.org/engwebu/LUK15.htm"
+    },
+    {
+      "ref": "Luke 15:7",
+      "webu": "I tell you that even so there will be more joy in heaven over one sinner who repents, than over ninety-nine righteous people who need no repentance.",
+      "webu_url": "https://ebible.org/engwebu/LUK15.htm"
+    }
+  ]
+}

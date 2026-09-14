@@ -1284,6 +1284,7 @@ html.sitting .sit-sheet {
   color: var(--crimson);
   letter-spacing: -0.03em;
 }
+.amen-actions { margin-top: 28px; justify-content: center; }
 .amen-echo {
   font-family: var(--body);
   font-style: italic;
@@ -1914,6 +1915,9 @@ html.sitting .sit-sheet {
     <p class="amen-word">Amen</p>
     <p class="amen-echo" id="amen-echo" hidden></p>
     <p class="cite" id="amen-cite" hidden></p>
+    <div class="actions amen-actions">
+      <button class="cta cta-primary" type="button" id="amen-bless" onclick="blessingFromAmen()">Send a blessing</button>
+    </div>
   </div>
 </div>
 
@@ -1998,6 +2002,7 @@ let cmdIndex = 0;
 let cmdFiltered = [];
 let ritualsBound = false;
 let openFirstSit = false;
+let pendingNeedSit = '';
 let currentSeason = { id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time', note: 'The long green season. Stay.' };
 
 function civilDate(y, m, d) { return new Date(y, m - 1, d); }
@@ -2142,13 +2147,14 @@ function chooseNeed(kind) {
     ob.classList.add('hidden');
     ob.classList.remove('leaving');
     document.getElementById('app').removeAttribute('aria-hidden');
-    if (!kind) openFirstSit = true;
-    startApp();
-    if (kind === 'ask') switchTab('advisor');
-    else if (kind) {
-      switchTab('seek');
-      loadEnc(kind);
+    if (kind === 'ask') {
+      startApp();
+      switchTab('advisor');
+      return;
     }
+    openFirstSit = true;
+    pendingNeedSit = kind || '';
+    startApp();
   };
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     finish();
@@ -2456,7 +2462,12 @@ async function loadDailyContent() {
   }
   if (openFirstSit) {
     openFirstSit = false;
-    setTimeout(() => sitWith('word'), 520);
+    const need = pendingNeedSit;
+    pendingNeedSit = '';
+    setTimeout(() => {
+      if (need) sitWithNeed(need);
+      else sitWith('word');
+    }, 520);
   }
 }
 
@@ -2780,6 +2791,38 @@ function sitWith(type) {
   showSitStep(1);
 }
 
+async function sitWithNeed(theme) {
+  let verse = '';
+  let quote = '';
+  let reflection = '';
+  try {
+    const cur = await loadCurated();
+    const pack = (cur.packs && cur.packs[theme]) || (cur.encouragement && cur.encouragement[theme]);
+    const first = pack && pack.passages && pack.passages[0];
+    if (first) {
+      verse = first.verse;
+      quote = first.quote;
+      reflection = first.context || pack.opening || '';
+    }
+  } catch (_) {}
+  if (!quote) {
+    sitWith('word');
+    return;
+  }
+  sitPayload = {
+    kicker: theme,
+    title: theme,
+    quote,
+    verse,
+    reflection: reflection || 'Notice the word that stays.',
+  };
+  sitStep = 1;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  paintSitPayload(sitPayload);
+  showSitStep(1);
+}
+
 function showSitStep(n) {
   sitStep = n;
   [1, 2, 3, 4].forEach((i) => {
@@ -2861,7 +2904,7 @@ function keepSitReply() {
   if (sitPayload.pathIndex != null) markSevenDay(sitPayload.pathIndex);
   closeSit();
   showToast('Kept in the journal');
-  openAmen({ quote, verse, holdMs: 3000 });
+  openAmen({ quote, verse, holdMs: 5600 });
   if (!ls('rla-install-hint') && !window.matchMedia('(display-mode: standalone)').matches) {
     lsSet('rla-install-hint', '1');
     setTimeout(() => showToast('Add this room to your home screen — it will wait here in the morning.'), 2800);
@@ -3607,7 +3650,16 @@ function closeAmen() {
 function amenFromSit() {
   if (!sitPayload) return;
   closeSit();
-  openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
+  openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 5600 });
+}
+
+function blessingFromAmen() {
+  const cite = (document.getElementById('amen-cite') || {}).textContent || '';
+  const echo = (document.getElementById('amen-echo') || {}).textContent || '';
+  const quote = echo.replace(/^[“"]+|[”"]+$/g, '').trim();
+  closeAmen();
+  if (cite && quote) openBlessing({ verse: cite, quote });
+  else openBlessing(null);
 }
 
 function stopSitListen() {
@@ -3882,7 +3934,7 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return /\b(suicid\w*|unaliv\w*|kill(?:ing)? myself|end (?:my life|it all)|take my life|want to die|wanna die|wish i (?:was|were) dead|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang myself|overdos\w*|don't want to (?:live|be alive|be here(?: anymore)?)|do not want to (?:live|be alive|be here(?: anymore)?)|can'?t go on|cannot go on|(?:going to|gonna) jump|better off (?:dead|without me)|no reason to live|not worth living|no point in living)\b/i.test(String(text || '').replace(/[‘’]/g, "'"));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {

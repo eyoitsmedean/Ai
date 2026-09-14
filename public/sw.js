@@ -1,4 +1,4 @@
-const CACHE = 'rla-phase0-v11';
+const CACHE = 'rla-phase0-v15';
 const PRECACHE = [
   '/index.html',
   '/manifest.json',
@@ -31,6 +31,11 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
+
+  if (/^\/(ask|gate|hear|desk)(\.html)?$/.test(url.pathname)) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
 
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
