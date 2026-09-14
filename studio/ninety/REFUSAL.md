@@ -36,7 +36,7 @@ Date: _______________
 Reengagement dated the same day (one is enough):
 
 - [ ] `FREEZE.md` done (firstborn week + sleep-block name)
-- [ ] Compound: one work-hours artifact, then *shutdown complete*
+- [ ] `COMPOUND.md`: one work-hours artifact, then *shutdown complete*
 - [ ] One chapter sitting — only if the `SITTING.md` gate is green
 
 **If-then (write the blank):**

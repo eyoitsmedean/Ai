@@ -30,7 +30,7 @@ Total optional: **about 20–35 hours**. Not eight hours a week. October is not 
 
 ## Doctrine
 
-The business that already pays the house is the 90-day business. You run enablement for a twelve-week producer cohort. Week 2 is a live block on **Tuesday 8 September**. Later live blocks land on weeks 4 / 6 / 8 / 10. Same Monday twenty. No new slides.
+The business that already pays the house is the 90-day business. You run enablement for a twelve-week producer cohort. Week 2 is a live block on **Tuesday 8 September**. Later live blocks land on weeks 4 / 6 / 8 / 10. Same Monday twenty. No new slides. The phone card for this week is `COMPOUND.md`.
 
 You already wrote the method. This book does not invent a twelfth module. It makes Q4 *legible* so November-you can say what you now own.
 

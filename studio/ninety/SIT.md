@@ -11,9 +11,7 @@ If you can only run two things until December: **October** and **The Compound**.
 ## Three actions · tonight or this week
 
 ### 1 · The Compound is this week (work hours)
-One artifact a seller can use without you in the room. If it needs a walkthrough, cut it. Monday twenty: five first sentences in the approved system. Then *shutdown complete*. No weekend polish.
-
-Paper line (shapes only): date / opener or one-pager / role not name / what changed / what you will not do next time.
+The card is `COMPOUND.md`. One artifact a seller can use without you. If it needs a walkthrough, cut it. Monday twenty: five first sentences in the approved system — do not rerun it after hours. Then *shutdown complete*. No weekend polish.
 
 ### 2 · The house (`FREEZE.md`)
 Sunday 20 September, ten minutes: labor-night name, **firstborn week**, Tuesday blocks, birthday (early or cake after), the bag. One sleep-block owner. Then close Notion.
@@ -29,7 +27,7 @@ Date the two-step ballot: **NONE** (recommended if the rumination is “founder 
 
 | Book | Object | Done looks like |
 | --- | --- | --- |
-| Compound | This week’s artifact | Used without you. Six outcome lines by December. |
+| Compound | `COMPOUND.md` | Used without you. Six outcome lines by December. |
 | October | `FREEZE.md` | Household can stand you. Firstborn week named. |
 | One Chapter | `SITTING.md` | A sound, or a dated gate-red. Two sittings max. |
 | Advent | `DOOR.md` + `BLESS.md` | URL. First send is a gift. Ten names in November. |

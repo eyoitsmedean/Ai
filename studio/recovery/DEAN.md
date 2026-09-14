@@ -9,7 +9,7 @@
 
 ## First three actions
 
-1. **The Compound is this week** (work hours). One artifact a seller can use without you. Monday twenty. Then shutdown.
+1. **The Compound is this week** (work hours). Open `studio/ninety/COMPOUND.md`. One artifact a seller can use without you. Monday twenty — do not rerun it after hours. Then shutdown.
 2. **Sunday 20 September, ten minutes** (`studio/ninety/FREEZE.md`): labor-night name, **firstborn week**, Tuesday blocks, birthday, the bag, one sleep-block owner. Then close Notion. Do not make her confirm a window.
 3. **Date the two-step ballot** (`REFUSAL.md`): Factory = `NONE` (recommended) plus one reengagement. If the window is green tonight: sit Today locally (`DOOR.md`) → first blessing (`BLESS.md`) to one named person — no URL. Pages + merge wait for your yes.
 

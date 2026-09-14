@@ -11,6 +11,7 @@ Archive copies live in git (`0196c39`, `0534b8a`, and earlier). Nothing deleted.
 | Folio `#advent` | C6 | Bad drift → fixed | No longer claims the URL is already live. |
 | Folio `#factory` | C7 | Gap → filled | Points at `REFUSAL.md` two-step. |
 | `SIT.md` | C1 C4 | Gap → filled | Day 10; Compound week is now. |
+| `COMPOUND.md` | C4 C8 | Gap → filled (14 Sep ATELIER) | Work-hours card. Was a paragraph; now a sitting. |
 | `SITTING.md` `BLESS.md` | C5 C6 | On course | Bearings added. |
 | `FREEZE.md` `REFUSAL.md` `DOOR.md` | C4 C7 C6 | Gap → filled | New objects. |
 | `NIGHT.html` | C2 | Director’s Cut | One-screen leaf. Not a sixth book. |

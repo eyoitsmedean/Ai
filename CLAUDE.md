@@ -103,3 +103,13 @@ Commission: become the mind that understands the 90-day project, write the Inten
 - Not done: enable Pages, merge, send, spend. Queued in `studio/lodestar/SHIP.md`.
 - Assumed: MARKET_STRATEGY.md still unblessed. Night leaf is Director’s Cut, not a sixth book.
 
+## FOR THE RECORD — 14 September 2026 (ATELIER)
+
+Commission: accountable practitioner on the existing five; method paste, not a new project.
+
+- Built: `studio/ninety/COMPOUND.md` — work-hours card for the week-of-14-Sep artifact. Wired from `SIT.md`, folio `#week` / `#compound`, `NIGHT.html`, `REFUSAL.md`, `DEAN.md`.
+- Organizing idea: if they need you in the room, it is not done.
+- Verified: read as a Monday card; grepped the card for employer/product rows (none); folio and night leaf re-rendered after the link. `npm test` not re-run (no `public/` change).
+- Not done: enable Pages, merge, send, spend, date the factory card.
+- Assumed: Monday twenty may already have run — card jumps to the artifact if so.
+

@@ -3,7 +3,7 @@
 
 The prompt in `PROMPT.md` was built from the person, not from a template, then run. This is the first output.
 
-**Tonight:** `SIT.md` (three actions). Chapter sheet: `SITTING.md`. First blessing: `BLESS.md`. **Review the bound book:** `studio/ninety/index.html`. Extreme operating detail is in `PLAYBOOK.md`. C3/C4 dossiers: `studio/recovery/DOSSIERS-2026-09-14.md`.
+**Tonight:** `NIGHT.html` after the kids. This week: `SIT.md`. Compound (work hours): `COMPOUND.md`. Chapter: `SITTING.md`. First blessing: `BLESS.md`. **Review the bound book:** `studio/ninety/index.html`.
 
 Two other agents already gave you ten income plans yesterday. This set is not those plans with new hats. It is what still makes sense after you subtract the research shelf, the newborn month, and the fact that you are already getting paid to do the thing you like.
 

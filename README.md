@@ -1,6 +1,6 @@
 # Red Letter
 
-**Tonight (14 Sep–4 Dec 2026):** after the kids, [`studio/ninety/NIGHT.html`](studio/ninety/NIGHT.html). The week is [`studio/ninety/SIT.md`](studio/ninety/SIT.md). Freeze / sitting / blessing / factory / door: `FREEZE.md` · `SITTING.md` · `BLESS.md` · `REFUSAL.md` · `DOOR.md`. The bound book is [`studio/ninety/index.html`](studio/ninety/index.html) (open the file; Pages serves this *app*, not that book). Why: [`studio/lodestar/INDEX.md`](studio/lodestar/INDEX.md). Agents: [`studio/recovery/CANONICAL_BRIEF.md`](studio/recovery/CANONICAL_BRIEF.md).
+**Tonight (14 Sep–4 Dec 2026):** after the kids, [`studio/ninety/NIGHT.html`](studio/ninety/NIGHT.html). The week is [`studio/ninety/SIT.md`](studio/ninety/SIT.md). Compound (work hours): [`COMPOUND.md`](studio/ninety/COMPOUND.md). Freeze / sitting / blessing / factory / door: `FREEZE.md` · `SITTING.md` · `BLESS.md` · `REFUSAL.md` · `DOOR.md`. The bound book is [`studio/ninety/index.html`](studio/ninety/index.html) (open the file; Pages serves this *app*, not that book). Why: [`studio/lodestar/INDEX.md`](studio/lodestar/INDEX.md).
 
 A quiet reading room for the **words Jesus actually spoke**.
 
