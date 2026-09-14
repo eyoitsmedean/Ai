@@ -14,7 +14,7 @@ If you can only run two things until December: **October** and **The Compound**.
 ### 1 · Open the door (Advent)
 GitHub → this repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**. Merge [PR #17](https://github.com/eyoitsmedean/Ai/pull/17) into `claude/jesus-teachings-chatbot-bSBhF` when you are ready. URL: `https://eyoitsmedean.github.io/Ai/`.
 
-Then text the URL to yourself. Open it as a stranger. Sit Today once. After Amen, send the blessing to one human you love — not a market.
+Then text the URL to yourself. Open it as a stranger. Sit Today once. After Amen, send the first blessing in `BLESS.md` — one named human, the saying you just sat with, no URL, not a market. The ten-name Advent script waits.
 
 If Pages is not live by 30 September, Advent is still possible in November. Name that you avoided the send, and stop for the night.
 
@@ -88,7 +88,7 @@ Any no — or uncertainty — on the family gate pauses everything else.
 ### III · One Chapter — two sittings this season if the window is open
 Default hole: **the apartment and the dog** (Chapter 11). Coming home only if that night is the wrong night for your body. Not both.
 
-**The container is two sittings, not eight.** PLAYBOOK still has an eight-row craft table. Ignore the extra rows unless a sitting is already rest. Enough: one September night on the page, one November read-aloud + send.
+**The container is two sittings, not eight.** The sheet is `SITTING.md`: gate first; a red gate is a finish. PLAYBOOK still has an eight-row craft table. Ignore the extra rows unless a sitting is already rest. Enough: one September night on the page, one November read-aloud + send. If the gate is red, or the night will not leave, November is off.
 
 September: one 45-minute sitting. Stay after the noise. A sound on the page. No lesson. No Nepal. No meaning.
 
@@ -105,7 +105,7 @@ If the September sitting costs her a sleep block, or you do not sleep, or the ni
 ### IV · Advent — the product is built
 *Watch with me*: 28 rooms, calendar-opened from 29 November. *Stay with me*: 40 Lent rooms from 10 February 2027. Preview Lent now: `/?path=lent`. Preview Advent: `/?path=advent&day=6`.
 
-Your job is a URL, one blessing, ten humans before 29 November, day-2 count in the first week. Not a feature.
+Your job is a URL, one first blessing (`BLESS.md`), ten humans before 29 November, day-2 count in the first week. Not a feature. The first send is a gift. The ten are later.
 
 The *name* “red letter” is occupied (small App Store subscriptions; Pocket Gospel is a serious free *iPhone* WEB reader). The *object* — quiet, free, **web**, KJV, his spoken words, no store — is not owned. YouVersion and Hallow own seasons, not this page.
 
@@ -136,7 +136,10 @@ The 4 September cash folios (Notion, *Ninety Days · One Plan*) already exist. R
 | Need | Open |
 | --- | --- |
 | This card in the bound book | `studio/ninety/index.html` → *This week* |
+| 45-minute chapter sheet | `studio/ninety/SITTING.md` |
+| First blessing (one person) | `studio/ninety/BLESS.md` |
 | Doctrine, sittings, scripts | `studio/ninety/PLAYBOOK.md` |
+| C3/C4 dossiers (14 Sep) | `studio/recovery/DOSSIERS-2026-09-14.md` |
 | The five as first written | `studio/ninety/FIVE.md` |
 | Why these five | `studio/recovery/KNOWLEDGE.md` |
 | Agent brief | `studio/recovery/CANONICAL_BRIEF.md` |

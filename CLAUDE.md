@@ -33,6 +33,7 @@ Default branch: `claude/jesus-teachings-chatbot-bSBhF`. There is no `main`. The 
 | 7 Sep 2026 | `MARKET_STRATEGY.md` is the current strategy page (v2). v1 is archived as `MARKET_STRATEGY.v1.md`. The red-letter niche is occupied (three products) but not owned; money and paid ads stay parked through 4 Dec 2026. | `MARKET_STRATEGY.md`, `docs/bot-notes.md` |
 | 11 Sep 2026 | Lent path *Stay with me*: 40 rooms counted from Ash Wednesday, opened by calendar not streak; week one is Seven Days. First sitting offers a blessing, not an install toast. | `data/paths.js`, `lib/year.js`, `public/index.html` |
 | 11 Sep 2026 | Recovery commission on this conversation: the original ask is five 90-day life projects, not a second app. Canonical brief `studio/recovery/CANONICAL_BRIEF.md`. Sit-down card `studio/ninety/SIT.md`. Money/ads stay parked; `LAUNCH.md` no longer tells him to spend $200 this week. Expo in `IMPROVEMENT_PLAN.md` remains drift — do not implement. | `studio/recovery/`, `studio/ninety/SIT.md` |
+| 14 Sep 2026 | C3/C4 doctoral pass. Case against writing this season is now the sitting gate. First blessing is one person, no URL; ten-sends are later. No streak engine. | `studio/recovery/DOSSIERS-2026-09-14.md`, `studio/ninety/SITTING.md`, `studio/ninety/BLESS.md` |
 
 ## Open questions (only Dean can close these)
 

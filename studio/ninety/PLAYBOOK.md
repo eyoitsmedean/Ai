@@ -222,13 +222,16 @@ The decision can be earned later. This chapter is the gap.
 
 ## Two sittings this season · 45 minutes · September and November
 
-The container is two nights. An eight-row craft table follows for if a sitting is already rest. It is not a program. November is this chapter *or* Advent, not both, unless writing is rest.
+The sheet you open is `SITTING.md`. Gate first. Any red close *is* the sitting. The container is two nights. An eight-row craft table follows for if a sitting is already rest. It is not a program. November is this chapter *or* Advent, not both, unless writing is rest.
 
 October is off unless writing steadies you — then one sitting, then stop.
 
+**Why the gate exists (14 Sep).** Father-sleep sits under the adult floor (Mellor 2015; CDC ≥7 h). Unguided veteran writing raises negative affect in the hour and worsened a high-distress 10% class in a later analysis of the same trial (Sayer 2015; Sayer 2019). Karr’s own “why not to write” includes therapy-intent and a body that sobs. Shay’s healing condition is a trusted listener, not a chorus. Dossier: `studio/recovery/DOSSIERS-2026-09-14.md`.
+
 | # | When | Job | Done when |
 | --- | --- | --- | --- |
-| 1 | Sep, night 1 | Open the chapter. Read your 2017 sentences. Write 200 words that stay after the noise. No summary. | A sound is on the page. |
+| 0 | Any night | Three spoken gate questions in `SITTING.md`. | Green — or the file is closed and the sitting happened. |
+| 1 | Sep, night 1 | Open the chapter. Read your 2017 sentences. Write 200 words that stay after the noise. No summary. No single cause. No bow. | A sound is on the page. |
 | 2 | Sep, night 2 | The hand and the dog. Only those two bodies. | You can see what the dog did. |
 | 3 | Sep, night 3 (optional) | The first small stupid thing after. | The scene has a next physical action. |
 | — | October | Off. | — |
@@ -289,8 +292,8 @@ The product is built. The paper already cools in Advent. Nobody owns “daily li
    - URL: `https://eyoitsmedean.github.io/Ai/`. PWA installable.
    - On Pages the Advisor is silent (no `/api`). Today, the path, Seek, Journal, and blessing all work from bundled data. The Advisor needs the node server somewhere; that is not required for Advent week one. If you film clip 3 (Ask), run it from `npm start` on your own machine.
 2. Text the URL to yourself. Open it on a phone as a stranger.
-3. Sit Today → one lectio. Send one blessing to one real person (a human you love, not a market).
-4. Write four numbers on paper: did they find the sentence in one glance? Did lectio need a tutorial? Did the blessing leave the phone? Did you feel the urge to redesign?
+3. Sit Today → one lectio. Send the **first blessing** in `BLESS.md` — one named human, the saying you just sat with, no URL, no market. The ten-name script below is later.
+4. Write four numbers on paper: did they get a saying or a pitch? Did the blessing leave the phone? Did you feel the urge to add a second name? Did you feel the urge to redesign?
 
 If the URL is not live by 30 September, Advent is still possible in November — but September-you was avoiding the scare of sending. Name that and stop for the night.
 
@@ -365,9 +368,24 @@ Phone vertical. Face or handwriting. One crimson sentence. No stock doves. No �
 
 If you post, post as a person, not a brand. The meme account is not the funnel.
 
+## First blessing (tonight, one person)
+
+Open `BLESS.md`. This is not a recruit. Name them before the sheet. The verse is the one you just sat with. No URL.
+
+```
+[Name] —
+
+I sat with this tonight and thought of you.
+
+“[the saying you just heard]”
+[citation]
+
+No need to reply. If it is the wrong night, delete it.
+```
+
 ## Ten sends (before 29 November)
 
-Not a waitlist machine. Ten humans who will open a link.
+Later than the first blessing. Not a waitlist machine. Ten humans who will open a link. Do not send this script as the first text.
 
 ```
 I made a quiet page for the words Jesus actually spoke.

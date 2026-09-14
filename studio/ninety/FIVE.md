@@ -3,7 +3,7 @@
 
 The prompt in `PROMPT.md` was built from the person, not from a template, then run. This is the first output.
 
-**Tonight:** `SIT.md` (three actions, dated 11 September). **Review the bound book:** `studio/ninety/index.html`. Extreme operating detail — sittings, scripts, Advent rooms, the factory ballot — is in `PLAYBOOK.md`.
+**Tonight:** `SIT.md` (three actions). Chapter sheet: `SITTING.md`. First blessing: `BLESS.md`. **Review the bound book:** `studio/ninety/index.html`. Extreme operating detail is in `PLAYBOOK.md`. C3/C4 dossiers: `studio/recovery/DOSSIERS-2026-09-14.md`.
 
 Two other agents already gave you ten income plans yesterday. This set is not those plans with new hats. It is what still makes sense after you subtract the research shelf, the newborn month, and the fact that you are already getting paid to do the thing you like.
 
@@ -64,7 +64,7 @@ Two other agents already gave you ten income plans yesterday. This set is not th
 **The actual work.**
 
 - Pick **one** hole. Coming home, or the apartment and the dog. Not both.
-- Forty-five minutes, two nights a week, only in September and November. October is off unless writing is the thing that steadies you — and even then, one sitting, then stop.
+- Forty-five minutes, two nights this season if the gate in `SITTING.md` is green. October is off unless writing is the thing that steadies you — and even then, one sitting, then stop. A red gate is a finish.
 - Use the companion you already wrote: stay in the room; no TED ending; never invent a name or a crash.
 - When the chapter can be read aloud in under fifteen minutes, give it to one person who will tell you the truth. Not an agent. Not a publisher.
 
@@ -87,7 +87,7 @@ Red Words (native) is a separate ship line. Do not merge the two. If you have a 
 
 **The actual work.**
 
-- *September, one sitting:* real HTTPS URL. PWA installable. Send the link to yourself on a phone. Sit through Today once as a stranger.
+- *September, one sitting:* real HTTPS URL. PWA installable. Send the link to yourself on a phone. Sit through Today once as a stranger. First blessing (`BLESS.md`): one named person, the saying you just sat with, no URL. Ten names come later.
 - *Do not:* add Paul, a feed, a paywall, a new shell, or a second corpus.
 - *November, before the 29th:* the twenty-eight rooms are already wired (*Watch with me*, `data/paths.js`; the ribbon switches on Advent Sunday by itself). Do not touch them. Film three quiet verticals — face or handwriting, one crimson sentence, no stock doves. Send the link to ten people who will actually open it.
 - *29 November – 4 December:* you are a user. Watch who comes back on day two. That number is the only metric.

@@ -1,11 +1,11 @@
 # Knowledge archive
-### The Quire · researched 2026-09-11 · do not invent citations
+### The Quire · researched 2026-09-11 · C3/C4 deepened 2026-09-14 · do not invent citations
 
 **How to read this.** Each topic: the question, the answer, what the sources actually said, disagreement, what we decided, next action. Labels: **FACT** · **SOURCED** · **ESTIMATED** · **INFERRED** · **ASSUMED**.
 
 Authoritative brief: `CANONICAL_BRIEF.md`. This file is evidence and decisions. It is not a sixth plan.
 
-Sources were opened on **2026-09-11**. Full books (Karr, Wolff, Crow, Shay) were **not** in hand; interviews and excerpts only, and that limit is marked.
+Sources were opened on **2026-09-11**. C3 (blessing vs streak) and C4 (one scene; case against writing) were re-opened on **2026-09-14** — see `DOSSIERS-2026-09-14.md`. Full books (Karr, Wolff, Crow, Shay) were **not** in hand either sitting; interviews and excerpts only. “Crow” is still unidentified. Sleep Foundation 2025-07-16 was **not** re-opened on 14 Sep.
 
 ---
 
@@ -17,8 +17,8 @@ Sources were opened on **2026-09-11**. Full books (Karr, Wolff, Crow, Shay) were
 | --- | --- | --- | --- | --- |
 | C1 | What can actually be done in 20–35 optional hours with an October freeze? | Prompt 1 + Newborn Mode | Lead | Sufficient — calendar math is the constraint |
 | C2 | Is the red-letter niche empty or occupied? | Advent / “wow me” product | Research | Sufficient — name occupied, object not |
-| C3 | Are Advent/Lent still real demand windows? | Book IV + Lent 2027 | Research | Sufficient — seasons real; Hallow download *pile* may have peaked |
-| C4 | What does “one chapter” mean in serious memoir practice? | Book III | Research | Sufficient for two sittings |
+| C3 | Are Advent/Lent still real demand windows? What is a first send? | Book IV + Lent 2027 | Research | Sufficient — seasons real; first send is one person, no market (14 Sep) |
+| C4 | What does “one chapter” mean — and should he write this season? | Book III | Research | Sufficient — two sittings *or* a dated refusal; case against is now the gate |
 | C5 | Is “AI changes how sellers talk” a real seat? | Book I | Research | Sufficient — thin real seat, heavy marketing |
 | C6 | Why does he commission more plans? | Book V | Research | Sufficient — fantasy + intention–action gap |
 | C7 | What is clean-room safe after work? | Constraint | Research | Sufficient — shapes only; 15-minute close |
@@ -52,7 +52,7 @@ Chosen for usefulness to *this* brief, not novelty. One set for the project — 
 
 **Answer.** Treat 20–35 optional hours as the budget. October ≈ 0. September has the remaining optional work (Pages, family list, factory mark, at most two memoir sittings). November has evenings. 29 Nov–4 Dec is watch-only.
 
-**Evidence.** Dean’s own Newborn Mode rules (PROMPT.md). Father-sleep literature: first 12 weeks, most fathers <6 hours interrupted sleep; near-miss risk at work rises (Mellor 2015; Coles 2022). Partner sleep is treatment, not lifestyle (CDC; Sleep Foundation 2025-07-16).
+**Evidence.** Dean’s own Newborn Mode rules (PROMPT.md). Father-sleep literature: first 12 weeks, Mellor & Van Vorst 2015 — 5.5 h / 5.9 h interrupted, DS 40%→64%, workplace near-miss +12% / +14%. CDC: adults ≥7 h. The old “Coles 2022” tag for those hours was a mis-cite (14 Sep). Sleep Foundation 2025-07-16 was not re-opened.
 
 **Decision.** The two that must run do not need a second life. Craft yields if the gate is red.
 
@@ -96,7 +96,7 @@ Opened 2026-09-11:
 | Scripture Engaged ~20% (2025) then ~17% (2026) | **SOURCED** | ABS SOTB 2025 PDF; SOTB 2026 ch.1 (fielded Jan 2026) |
 | Advent I 2026 = 29 Nov; Ash Wednesday 2027 = 10 Feb | **FACT** | USCCB 2027 calendar PDF; also `lib/year.js` |
 
-**Decision.** Advent week one is a dress rehearsal, not a download land-grab. Money parked. Organic send only.
+**Decision.** Advent week one is a dress rehearsal, not a download land-grab. Money parked. Organic send only. **14 Sep add:** the *first* human send is a blessing (`BLESS.md`), not the ten-name URL script. YouVersion’s own 2025 story under the 550M shares is one brother, one hospital room. No A/B says share > streak; Lally 2010 (PDF held 14 Sep) says missing one day does not materially affect habit formation. Do not add a streak engine. ABS 2026 (pages opened 14 Sep): Scripture Engaged ~17%; occasional 2025 spike reversed; 74% of plan-followers have read most/all — that licenses the calendar path, not a first-send campaign.
 
 ---
 
@@ -104,13 +104,13 @@ Opened 2026-09-11:
 
 **Answer.** The unit is one night, one room, one body — not an outline of a life.
 
-Karr (excerpts/interviews): nine months on chapter one until voice arrived; memoir dies on voice; do not write for therapy; distance of seven or eight years; she reversed her own abandonment story when the evidence disagreed. Wolff: almost always a mistake to assign a single cause; write as it happened; stern as a short story. *In Pharaoh’s Army* is remembered as discrete episodes (reviews; book not re-read this sitting). O’Brien’s “story-truth” is a **fiction** method — using it inside memoir is invented causality.
+Karr (excerpts/interviews, re-opened 14 Sep): nine months on chapter one until voice arrived; memoir dies on voice; do not write for therapy; *The Cut* quotes “seven or eight years’ distance”; she reversed her own abandonment story when the evidence disagreed; drafting *The Liars’ Club* still cost afternoon collapse and sobbing, and she had done 20 years of therapy first. Wolff (LitHub 2019 intro + Alta 2024, opened 14 Sep): “almost always a mistake to assign a single cause”; stern as a short story; a false claim in memoir “to deceive you about myself… is a lie.” *In Pharaoh’s Army* was **not** re-read. O’Brien’s “story-truth” is a **fiction** method — using it inside memoir is invented causality. Klay (NPR 6 Mar 2014 text): no “comforting stories that allow us to tie a bow.” Shay (excerpt, not the book): healing is communalization — a trusted listener who can retell truthfully. A solitary night is not that.
 
-**Failure modes.** TED ending (Klay: “tie a bow”). Invented causality (Wolff; Karr’s false therapy story). Performing for a buyer (publisher blogs that start with the problem you solve).
+**Failure modes.** TED ending (Klay). Invented causality (Wolff; Karr’s false therapy story). Performing for a buyer. Writing when the gate is red (sleep, a night that will not leave, therapy intent).
 
-**Contrary.** Sayer et al., *JTS* 2015: unguided expressive writing in veterans — small average benefit, immediate negative emotion, ~10% of a high-distress subset worsened. If September destabilizes him, November is off. Clinical, not craft.
+**Contrary — the case against this season (14 Sep).** Mellor & Van Vorst 2015 (Sage opened): fathers 5.5 h / 5.9 h interrupted at 6 / 12 weeks; DS 40%→64%; workplace near-miss +12% / +14%. CDC: adults need ≥7 h. The 11 Sep “Coles 2022” as the <6 h paper was a **mis-cite**; Coles P024 is child-sleep → father health. Sayer et al. *JTS* 2015 (VA PDF opened): small average benefit, immediate negative affect, fewer sessions completed, severe depression excluded, not a substitute for PTSD treatment. The ~10% worsening line is **Sayer et al. 2019** (abstract only): 10% “Severe Baseline Distress–Small Increase,” d = +0.23. If September destabilizes him, November is off. Clinical, not craft.
 
-**Decision.** Two sittings this season if surplus. Default Chapter 11. No query letter. Stop rules in SIT.md.
+**Decision.** Two sittings this season *if the gate is green*. Default Chapter 11. No query letter. Sheet: `SITTING.md`. A red gate is a legal finish.
 
 ---
 
@@ -170,11 +170,11 @@ Karr (excerpts/interviews): nine months on chapter one until voice arrived; memo
 
 **Contribution.** Growth that fits parked money and 20–35 hours.
 
-YouVersion published **550 million+ verse shares in 2025** as a headline metric beside installs (first-party). They also shipped streaks in 2017. Lally et al. 2010 (abstract): missing one opportunity did not materially affect habit formation — which **undercuts** streak-break shame. ABS 2026: occasional Bible use is volatile; plans beat mood-scrolling for finishing. Pocket Gospel’s own copy: “the invitation was never about your streak.”
+YouVersion published **550 million+ verse shares in 2025** as a headline metric beside installs (first-party page re-opened 14 Sep; also 15.7M+ daily engagers). They shipped streaks on **16 Aug 2017** (announcement opened 14 Sep) that count **app opens**. Lally et al. 2010 (**PDF** opened 14 Sep): missing one opportunity did not materially affect habit formation — which **undercuts** streak-break shame. ABS 2026 (pages opened 14 Sep): occasional Bible use is volatile (male occasionals 17%→10%); Scripture Engaged ~17%; 74% of plan-followers have read most/all. Pocket Gospel (opened 14 Sep): “the invitation was never about your streak.” YouVersion’s Collin story is one brother, one room.
 
 **No opened A/B says share > streak.** The product choice is capacity design: one tap sends the *saying*; a missed Tuesday does not shame.
 
-**Decision.** Already shipped: first Amen offers a blessing. Do not add a streak engine. Ten human sends before 29 Nov.
+**Decision.** Already shipped: first Amen offers a blessing. Do not add a streak engine. **First send** (`BLESS.md`) is one named person, the verse just sat with, no URL. Ten human sends before 29 Nov are a *later* script.
 
 ---
 
@@ -198,7 +198,7 @@ The 90-day clock covers **only 29 Nov–4 Dec** of Advent. Ash Wednesday 2027 is
 
 Gornick’s “container” (via secondary craft pages) is **subject bound** — what can be left out — not a sitting count. Weekend mini-retreats and 20-minute rituals exist as productivity folklore, not as a documented literary-success pattern. Karr’s actual container was nine months on chapter one. Wolff’s episode architecture was years.
 
-**Decision.** Two sittings in 2026 is the container. Twelve is retired. If both sittings leave him steadier, 2027 can talk about more. Success is a household that did not pay for the pages.
+**Decision.** Two sittings in 2026 is the container. Twelve is retired. The sheet is `SITTING.md` — a red gate is a legal finish. If both sittings leave him steadier, 2027 can talk about more. Success is a household that did not pay for the pages.
 
 ---
 
@@ -242,6 +242,10 @@ Masicampo & Baumeister 2011: a specific plan clears intrusive thoughts of unfini
 | Hallow Lent pile shrinking | ESTIMATED | Do not chase downloads | Med |
 | YouVersion 1B family installs | SOURCED | Do not compete on scale | High as installs |
 | 550M verse shares (2025) | SOURCED | Blessing loop | High as first-party metric |
+| First send = one person, no URL | PROPOSED | Advent door | Med — capacity, not an A/B |
+| New fathers ~5.5–5.9 h sleep; near-miss +12–14% | SOURCED | Chapter gate | High for Mellor sample |
+| ~10% severe-distress expressive class worsened | SOURCED abstract | Chapter stop | High for that class; medium transfer to a literary scene |
+| “Coles 2022 = <6 h first 12 weeks” | RETIRED | Capacity | Was a mis-cite of Mellor |
 | Ash Wednesday 10 Feb 2027 | FACT | Lent path | High |
 | AI-enablement seat is real-but-thin | SOURCED reqs + analyst blogs | Compound | Med-high |
 | One named referee > Discord | INFERRED | Accountability | Med — no parent/memoir RCT |
@@ -259,6 +263,7 @@ Masicampo & Baumeister 2011: a specific plan clears intrusive thoughts of unfini
 | Show the product | App is Book IV’s door | Do not add features | Advent + Lent already built | Enable Pages |
 | Sprint five priorities | Blessing + Lent + truth | Shipped 11 Sep | paths, toast, LAUNCH niche line | Sit once |
 | Recover original brief | Drift toward the app | This archive + brief | `studio/recovery/` | Three actions in SIT.md |
+| C3/C4 usable objects (14 Sep) | Case against writing; first send ≠ ten-send | Gate on the sitting sheet; split blessing scripts | `SITTING.md` · `BLESS.md` · dossiers | Open the sheet or send one name |
 
 ---
 
@@ -266,7 +271,9 @@ Masicampo & Baumeister 2011: a specific plan clears intrusive thoughts of unfini
 
 - Live Pages URL — not verified; founder-only.
 - Live Advisor tone — no key in this environment.
-- Full Karr / Wolff / Crow / Shay books — not held; excerpts only.
+- Full Karr / Wolff / Crow / Shay books — not held; excerpts only. Crow still unnamed.
+- Sayer 2019 full text — not held; class sizes from the abstract.
+- YouVersion Perfect Weeks page — fetch failed 14 Sep; do not quote.
 - Appfigures / Sensor Tower are estimates; Sensor Tower “AI Insights” posts are low-medium confidence.
 - Whether Dean marked the factory ballot, named a reader, or ran week 2 — unknown here.
 - Gartner primary PDFs were behind a bot wall; used secondary write-ups.
