@@ -3,13 +3,15 @@
 **Use when:** you have fifteen minutes and a phone.  
 **This file is the assembled next step.** You should not need to reread the chat.
 
-Date of this kit: 11 September 2026. Branch: `cursor/recovery-commission-6ab5`.
+Date of this kit: 14 September 2026. Branch: `cursor/lodestar-cycle-one-6ab5`.
 
 ---
 
 ## What this is
 
-Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is on **HTTPS**. The engineering core (verified WEB quotes, crisis gate, 96-question eval) already passed here. What I cannot do without your sign-off is deploy it or submit it to a store.
+Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is on **HTTPS**. The engineering core (verified WEB quotes, crisis gate, 96-question eval, follow-ups that stay with the last saying) already passed here. What I cannot do without your sign-off is deploy it or submit it to a store.
+
+**Sixty seconds on the Advisor (after deploy, or on localhost):** land on Advisor → type a real worry → on a saying, Copy / Sit / Plant / Share → type “What about my kids?” → you should hear “Still with …” and see the *same* verse lead. Type “I want to kill myself” → crisis card, no verses.
 
 ---
 

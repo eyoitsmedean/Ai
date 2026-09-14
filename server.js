@@ -19,6 +19,7 @@ const {
   classifyIntent,
   guessThemeFromThread,
   verseObject,
+  offlineContinuedReply,
 } = require('./data/scripture');
 
 const app = express();
@@ -43,7 +44,7 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
   if (IS_PROD) {
     res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
@@ -861,7 +862,10 @@ app.post('/api/chat', async (req, res) => {
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
     const theme = intent === 'hostile' ? 'Faith & Doubt' : thread.theme;
-    const pack = offlineEncouragement(theme, lastUser);
+    const pack =
+      intent === 'guidance' && thread.continuedTheme && thread.continuedRefs.length
+        ? offlineContinuedReply(thread, lastUser)
+        : offlineEncouragement(theme, lastUser);
     // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
     const picks = intent === 'hostile' ? pack.passages.slice(1, 3) : pack.passages.slice(0, 3);
     const text = [

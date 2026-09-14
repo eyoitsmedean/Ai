@@ -1884,19 +1884,33 @@ async function toggleVerseContext(btn) {
   }
   box.hidden = false;
   box.textContent = 'Looking up the chapter…';
-  try {
-    const res = await api('/api/verse-object?ref=' + encodeURIComponent(verse));
-    if (!res.ok) {
-      box.innerHTML = 'This saying is not in the local library. <a href="' + webLink(verse) + '" target="_blank" rel="noopener">Open the WEB chapter</a>.';
-      return;
-    }
-    const obj = await res.json();
-    const near = (obj.neighbors || []).map((n) => '<div><strong>' + esc(n.verse) + '</strong> — ' + esc((n.text || '').slice(0, 140)) + (n.text && n.text.length > 140 ? '…' : '') + '</div>').join('');
+  const paint = (neighbors) => {
+    const near = (neighbors || []).map((n) => '<div><strong>' + esc(n.verse) + '</strong> — ' + esc((n.text || '').slice(0, 140)) + (n.text && n.text.length > 140 ? '…' : '') + '</div>').join('');
     box.innerHTML = '<p>Same chapter in the library:</p>' + (near || '<p>No other library passages from this chapter yet. The WEB link still opens the full chapter.</p>');
     box.dataset.loaded = '1';
-  } catch {
-    box.textContent = 'Could not load context.';
+  };
+  const localNeighbors = () => {
+    const m = String(verse).match(/^(Matthew|Mark|Luke|John)\s+(\d+):/);
+    if (!m || !libAllPassages.length) return [];
+    return libAllPassages.filter((p) => {
+      const v = String(p.verse || '');
+      return v.startsWith(m[1] + ' ' + m[2] + ':') && v !== verse;
+    }).slice(0, 3);
+  };
+  try {
+    const res = await api('/api/verse-object?ref=' + encodeURIComponent(verse));
+    if (res.ok) {
+      const obj = await res.json();
+      paint(obj.neighbors);
+      return;
+    }
+  } catch {}
+  const fallback = localNeighbors();
+  if (fallback.length) {
+    paint(fallback);
+    return;
   }
+  box.innerHTML = 'This saying is not in the local library. <a href="' + webLink(verse) + '" target="_blank" rel="noopener">Open the WEB chapter</a>.';
 }
 let humanNoticeTimer = 0;
 function showHumanNotice() {

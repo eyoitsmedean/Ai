@@ -150,9 +150,10 @@ function score(q, r) {
         check(r.done?.continuedTheme === q.expectTheme, `continuedTheme=${r.done?.continuedTheme}`, fails);
       }
       if (q.expectRef) {
-        const hay = text + ' ' + (r.done?.continuedRefs || []).join(' ');
-        check(hay.includes(q.expectRef.split('-')[0]), `missing continued ref ${q.expectRef}`, fails);
+        const needle = q.expectRef.replace(/[–-]\d+$/, '');
+        check(text.includes(needle), `reply dropped the prior saying ${q.expectRef}`, fails);
       }
+      check(/still with/i.test(text), 'follow-up used a first-visit opener', fails);
       break;
     case 'edge':
       check(cites.every((c) => c.verified || c.outOfScope === true || !GOSPEL.test(c.verse || c.citation)), 'unverified Gospel citation', fails);

@@ -123,6 +123,8 @@ async function main() {
     assert(/Content-Security-Policy/i.test([...res.headers.keys()].join(' ') ) || res.headers.get('content-security-policy'), 'missing CSP');
     const csp = res.headers.get('content-security-policy') || '';
     assert(csp.includes("default-src 'self'"), 'weak CSP');
+    const pp = res.headers.get('permissions-policy') || '';
+    assert(/microphone=\(self\)/.test(pp), 'voice needs microphone=(self), got ' + pp);
   });
 
   await check('manifest installable', async () => {

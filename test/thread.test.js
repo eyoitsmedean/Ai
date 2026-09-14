@@ -6,6 +6,7 @@ const {
   guessThemeFromThread,
   verseObject,
   classifyIntent,
+  offlineContinuedReply,
 } = require('../data/scripture');
 
 test('extractGospelRefs finds Matthew Mark Luke John only', () => {
@@ -33,6 +34,18 @@ test('guessThemeFromThread continues the last saying on a follow-up', () => {
 
 test('crisis still wins on a follow-up turn', () => {
   assert.equal(classifyIntent('I want to kill myself'), 'crisis');
+});
+
+test('offlineContinuedReply leads with the prior saying, not a first-visit pack', () => {
+  const thread = guessThemeFromThread('What about my kids?', [
+    { role: 'user', content: 'I am terrified about losing my job.' },
+    { role: 'assistant', content: '**Matthew 6:34**\n"Therefore don’t be anxious for tomorrow."\n' },
+    { role: 'user', content: 'What about my kids?' },
+  ]);
+  const pack = offlineContinuedReply(thread, 'What about my kids?');
+  assert.match(pack.opener, /Still with Matthew 6:34/);
+  assert.match(pack.opener, /What about my kids/);
+  assert.equal(pack.passages[0].verse, 'Matthew 6:34');
 });
 
 test('verseObject returns WEB link and neighbors for Matthew 6:34', () => {

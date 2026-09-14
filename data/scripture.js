@@ -462,6 +462,58 @@ function offlineEncouragement(theme, seed) {
   };
 }
 
+function clipAsk(text) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  return t.length > 72 ? t.slice(0, 69) + '…' : t;
+}
+
+/**
+ * Follow-up pack: lead with the sayings already in play, then one same-theme
+ * companion. First-visit theme openers are the wrong voice here.
+ */
+function offlineContinuedReply(thread, lastUser) {
+  const refs = Array.isArray(thread?.continuedRefs) ? thread.continuedRefs : [];
+  const theme = thread?.theme || thread?.continuedTheme || 'Hope';
+  const seen = new Set();
+  const passages = [];
+  for (const ref of refs) {
+    const p = corpus.findByRef(ref);
+    if (!p || seen.has(p.id)) continue;
+    seen.add(p.id);
+    passages.push({
+      verse: corpus.cite(p),
+      quote: p.text,
+      context: 'The saying you were already sitting with.',
+      verified: true,
+      source: 'corpus',
+    });
+  }
+  const pack = offlineEncouragement(theme, lastUser);
+  for (const extra of pack.passages) {
+    if (passages.some((x) => x.verse === extra.verse)) continue;
+    passages.push({
+      ...extra,
+      context: extra.context || 'Same theme — still His words.',
+    });
+    if (passages.length >= 3) break;
+  }
+  const lead = refs[0] || passages[0]?.verse || 'His words';
+  return {
+    theme,
+    opener:
+      'Still with ' +
+      lead +
+      '. You said, “' +
+      clipAsk(lastUser) +
+      '” — here is that word again, and it still holds:',
+    passages,
+    closing: pack.closing,
+    offline: true,
+    verified: true,
+    continued: true,
+  };
+}
+
 function hash(s) {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
@@ -767,6 +819,7 @@ module.exports = {
   looksLikeFollowUp,
   verseObject,
   webChapterUrl,
+  offlineContinuedReply,
   isGospelRef,
   similarity,
 };

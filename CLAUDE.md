@@ -98,10 +98,11 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 - Work done: recovered first 10 prompts from the founding transcript; research archive `docs/KNOWLEDGE.md`; operator kit `docs/OPERATOR-KIT.md`; Advisor default; Encounter skipped on chat path; iOS install sheet; `/legal`; waitlist persistence; crisis copy corrected.
 - Next step: Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
 - Open risks: no production URL (unauthorized to deploy); model-mode unverified; quotas in-memory; companion-statute scope untested.
-- RESUME_FROM: LODESTAR Cycle 1 shipped (Charter v1, five summits). Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
+- RESUME_FROM: ATELIER 2026-09-14 — follow-ups now *quote* the prior saying (not only keep its theme). Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
 
 ## Log
 
+- 2026-09-14 — ATELIER: corpus follow-ups lead with the prior WEB saying; verse context falls back to the on-device library; `microphone=(self)` so voice can work; operator kit refreshed.
 - 2026-09-14 — LODESTAR Cycle 1: Intent Charter C1–C8 in `docs/lodestar/`; threaded grounding; verse object; `/share` landing; lectio-from-answer; published `#protocol`; honest Plus/Pages; eval 96. Branch `cursor/lodestar-cycle-one-6ab5`.
 - 2026-09-11 — Recovery commission: first ten prompts recovered from transcript (not the later ATELIER block); chat-first default (D16); crisis geography (D17); `/legal`; iOS install coach; share links to Advisor; waitlist file; docs/CANONICAL-BRIEF.md + KNOWLEDGE.md + OPERATOR-KIT.md. Branch `cursor/recovery-commission-6ab5`.
 - 2026-09-01 — Encounter (cinematic daily open) and Living Garden shipped. Grace over streaks (D12).
