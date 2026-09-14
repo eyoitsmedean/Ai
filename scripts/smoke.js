@@ -113,6 +113,15 @@ async function main() {
     assert(!crisis.json.implication, 'crisis must not keep counseling');
   });
 
+  await check('gate and hear desks', async () => {
+    const gate = await req('/gate');
+    assert(gate.res.ok && /noindex/.test(gate.text), 'gate missing');
+    const hear = await req('/hear');
+    assert(hear.res.ok && /noindex/.test(hear.text), 'hear missing');
+    const desk = await req('/api/hear');
+    assert(desk.json?.verses?.some((v) => v.kjv_ok), 'hearing desk unsealed');
+  });
+
   await check('folio shell', async () => {
     const { res, text } = await req('/');
     assert(res.ok, 'app not 200');

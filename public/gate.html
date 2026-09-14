@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Letter — Record</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#F4EFE4; --ink:#1B1610; --mute:#7A6E5E; --crimson:#8F1D1D; --gold:#8A6A28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',system-ui,sans-serif; }
+    main { max-width:36rem; margin:0 auto; padding:36px 20px 80px; }
+    .watch { letter-spacing:.22em; text-transform:uppercase; font-size:10px; color:var(--gold); margin-bottom:18px; }
+    h1 { font-family:Fraunces,Georgia,serif; font-weight:500; font-size:clamp(32px,8vw,48px); }
+    h1 em { font-style:italic; color:var(--crimson); }
+    .deck { font-family:'Source Serif 4',Georgia,serif; font-style:italic; margin:12px 0 24px; max-width:34ch; line-height:1.5; color:#4A4034; }
+    ol { padding-left:1.2rem; }
+    li { margin:14px 0; line-height:1.5; }
+    a { color:var(--crimson); }
+    textarea { width:100%; min-height:7rem; margin-top:10px; border:none; border-bottom:1px solid rgba(27,22,16,.2); background:transparent; font:inherit; padding:8px 0; }
+    .note { font-size:14px; color:var(--mute); margin-top:22px; line-height:1.5; }
+    footer { margin-top:36px; font-size:12px; color:var(--mute); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="watch">Watch · human gate · not a launch</p>
+    <h1>Record a <em>text</em></h1>
+    <p class="deck">One sitting. Writing this down is not publishing. The running app stays KJV until the spoken files are rebuilt.</p>
+    <ol>
+      <li>Open the <a href="https://ebible.org/engwebp/copyright.htm">WEB copyright page</a>. Read the trademark sentence. If the words change, the name cannot stay WEB.</li>
+      <li>Sit with <a href="/hear">the hearing desk</a>. John 14:27, Matthew 11:28, Luke 15:4–7. Live KJV beside WEBU opened 14 Sep 2026.</li>
+      <li>If you want BSB instead, open <a href="https://berean.bible/terms.htm">terms.htm</a> (dedication 30 Apr 2023) and <a href="https://berean.bible/licensing.htm">licensing.htm</a>. Both still carry a © 2021 “All rights reserved” footer today. BSB is an alternate, not the lock.</li>
+      <li>Refuse ESV and NIV for this store. Their gratis caps cannot hold Matthew–John spoken text.</li>
+      <li>Write one sentence in your own hand (or here, then copy to paper / Notion under the existing Red Letter page — no sixth hub):</li>
+    </ol>
+    <textarea id="record" placeholder="I record ________ (WEB / WEBU / KJV-US-only / BSB-alternate) as the text Red Letter may quote on a public URL. I have not authorized a launch, a store submit, or GitHub Pages as a product. Idaho. Date: ________"></textarea>
+    <p class="note">This box stays on this device. It is not sent anywhere. After you record, a later worker may rebuild <code>data/spoken-gospels.json</code>. Until then the pages must keep saying KJV.</p>
+    <footer><a href="/hear">Hear</a> · <a href="/ask">Ask</a> · <a href="/">Folio</a></footer>
+  </main>
+</body>
+</html>

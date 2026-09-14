@@ -29,7 +29,7 @@ Until that URL is authorized, the five-room folio remains a paper atelier. The o
 
 ## 2. Recovery of the earliest user prompts
 
-This conversation has **five** user-authored prompts, not ten. Prompts 6–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata.
+This conversation has **six** user-authored prompts as of 2026-09-14 (LODESTAR is #6). Prompts 7–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata.
 
 Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-tens. Those are **not** this brief. Do not overwrite them.
 

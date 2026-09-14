@@ -194,4 +194,22 @@ describe('smoke routes', () => {
     const res = await request('POST', '/api/ask', { q: '   ' });
     assert.equal(res.status, 400);
   });
+
+  it('serves the hearing desk with sealed KJV', async () => {
+    const res = await request('GET', '/api/hear');
+    const data = JSON.parse(res.raw);
+    assert.equal(res.status, 200);
+    assert.equal(data.watch, true);
+    assert.ok(data.verses.some((v) => v.ref === 'John 14:27' && v.kjv_ok));
+  });
+
+  it('serves gate and hear as watch surfaces', async () => {
+    const gate = await request('GET', '/gate');
+    const hear = await request('GET', '/hear');
+    assert.equal(gate.status, 200);
+    assert.match(gate.raw, /noindex/);
+    assert.match(gate.raw, /Human gate|Record a/i);
+    assert.equal(hear.status, 200);
+    assert.match(hear.raw, /noindex/);
+  });
 });

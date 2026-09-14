@@ -13,6 +13,7 @@ const { createModel } = require('./lib/model');
 const { ADVISOR_SYSTEM, ENCOURAGE_SYSTEM, FALLBACK_LETTER, dailySystem } = require('./lib/prompts');
 const { letterFor } = require('./lib/letter');
 const { askFor } = require('./lib/ask');
+const { hearingDesk } = require('./lib/hear');
 
 const GOSPELS = ['Matthew', 'Mark', 'Luke', 'John'];
 const THEME_SET = new Set(themeNames());
@@ -102,6 +103,10 @@ function createApp(options = {}) {
       return res.status(429).json({ error: 'A little space, then ask again.' });
     }
     res.json(askFor(q));
+  });
+
+  app.get('/api/hear', (req, res) => {
+    res.json(hearingDesk());
   });
 
   app.get('/api/health', (req, res) => {
@@ -300,6 +305,16 @@ function createApp(options = {}) {
   app.get('/ask', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.sendFile(path.join(__dirname, 'public', 'ask.html'));
+  });
+
+  app.get('/gate', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'public', 'gate.html'));
+  });
+
+  app.get('/hear', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'public', 'hear.html'));
   });
 
   app.get('/welcome', (req, res) => {

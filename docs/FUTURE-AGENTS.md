@@ -1,5 +1,7 @@
 # Future agents — Red Letter (this conversation)
 
+LODESTAR Cycle 1 (2026-09-14): start at `docs/lodestar/INDEX.md`. Charter v1. Do not rebuild the Charter; amend it.
+
 Authoritative instructions, in order:
 
 1. Notion parent: [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0) — WATCH. Folio stays paper. No store. No sixth hub.
