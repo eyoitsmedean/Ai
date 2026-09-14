@@ -61,7 +61,9 @@ Then, on the same machine:
 python3 tool/check_16kb.py build/app/outputs/bundle/release/app-release.aab
 ```
 
-Play requires 16 KB ELF `LOAD` alignment on 64-bit native libraries for apps targeting API 35+ ([Android page-sizes](https://developer.android.com/guide/practices/page-sizes), retrieved 2026-09-14; wording on that page: starting **1 November 2025**). Flutter ships `libflutter.so`. AGP is already 9.1.0 (`>= 8.5.1`). This script is the proof; do not upload if it prints `UNALIGNED`.
+Play requires 16 KB ELF `LOAD` alignment on 64-bit native libraries for apps targeting API 35+ ([Android page-sizes](https://developer.android.com/guide/practices/page-sizes), retrieved 2026-09-14; wording on that page: starting **1 November 2025**). Flutter ships `libflutter.so`. AGP is already 9.1.0 (`>= 8.5.1`).
+
+The placeholder-signed AAB on 2026-09-14 (Flutter 3.47.4) passed: all six 64-bit `.so` files `ALIGNED` (see `android/BUILD_PROOF.md` Run 4). **Re-run the script on Dean’s Play-signed AAB** before upload; do not upload if it prints `UNALIGNED`.
 
 3. Data safety: **Does the app collect or share any of the required user data types? → No.** Privacy URL = Gate B. Ads: No. See `STORE_ANSWERS.md`.
 4. Recruit 12 people who will **opt in and leave the app installed for 14 days**. Send the Play opt-in link, not a sideload APK. Write their names in a private note. If someone opts out, the 14-day clock for that seat resets.

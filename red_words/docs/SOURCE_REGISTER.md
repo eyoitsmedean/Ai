@@ -10,7 +10,7 @@
 | S6 | `containerBackground` iOS version? | iOS 17+; unguarded fails a 15.0 target. | Multiple secondary + model; Apple page JS-blocked | 2026-09-05 | High | Already guarded on PR 13. |
 | S7 | iOS prefs vs App Group? | Legacy `shared_preferences` → `UserDefaults.standard`. | flutter/packages SharedPreferencesPlugin.swift | 2026-09-05 | High | Widget channel on PR 13. |
 | S8 | Play target API 2026? | New apps/updates target API 36 from 31 Aug 2026. | Play Console Help 11926878 | 2026-09-05 | High | AAB already target 36. |
-| S9 | 16 KB page size? | Apps targeting API 35+ must support 16 KB pages on 64-bit devices. Official page (en) said starting **1 Nov 2025**. Flutter is not Java-only (`libflutter.so`). AGP 9.1.0 already meets Google’s 8.5.1 packaging floor. Artifact must still be checked. | [Android page-sizes](https://developer.android.com/guide/practices/page-sizes) | 2026-09-14 | High on the rule. Alignment of *this* AAB is unproven until `tool/check_16kb.py` is run on a built artifact. | Gate C after `flutter build appbundle`. |
+| S9 | 16 KB page size? | Apps targeting API 35+ must support 16 KB pages on 64-bit devices. Official page (en) said starting **1 Nov 2025**. Flutter is not Java-only (`libflutter.so`). AGP 9.1.0 already meets Google’s 8.5.1 packaging floor. | [Android page-sizes](https://developer.android.com/guide/practices/page-sizes) | 2026-09-14 | High. **This** release APK/AAB (Flutter 3.47.4, placeholder signer) measured ALIGNED: `libflutter.so`/`libapp.so` `0x10000`, `libdatastore_shared_counter.so` `0x4000` on arm64 and x86_64. See `android/BUILD_PROOF.md` Run 4. Re-check after Dean’s Play keystore rebuild. | Gate C. |
 
 ## Five adjacent topics (project-level, not per-agent)
 
