@@ -21,6 +21,7 @@
 | `/sit` | C5 | **New** (Director’s Cut) | Sit-before-ask now has a URL |
 | `public/sw.js` | C5 | On course | Precache v4 includes new rooms |
 | `kb/` | C4 | **New** | Knowledge base created |
+| `eval/ask-questions.json` | C4 C6 | **New** (ATELIER) | 45-q Ask eval on this tree; not a Codex merge |
 
 ## State of the Project (≤15 lines)
 
