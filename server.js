@@ -816,6 +816,7 @@ app.post('/api/chat', async (req, res) => {
   const lastUser = messages[messages.length - 1].content;
   const intent = classifyIntent(lastUser);
   const passive = intent === 'guidance' && detectPassiveIdeation(lastUser);
+  const thread = guessThemeFromThread(lastUser, messages);
 
   // Safety handoffs run before the paywall and never consume a free credit:
   // someone in danger must never meet a 402.
@@ -859,7 +860,6 @@ app.post('/api/chat', async (req, res) => {
   // Verified-corpus reply: used when no AI is configured, and as the graceful
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
-    const thread = guessThemeFromThread(lastUser, messages);
     const theme = intent === 'hostile' ? 'Faith & Doubt' : thread.theme;
     const pack = offlineEncouragement(theme, lastUser);
     // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
@@ -912,12 +912,29 @@ app.post('/api/chat', async (req, res) => {
   let full = '';
   try {
     bumpQuota(id);
+    const modelMessages =
+      intent === 'guidance' && thread.continuedTheme && thread.continuedRefs.length
+        ? messages.map((m, i) =>
+            i === messages.length - 1
+              ? {
+                  role: 'user',
+                  content:
+                    m.content +
+                    '\n\n(Stay with ' +
+                    thread.continuedRefs.join(', ') +
+                    '. Theme: ' +
+                    thread.continuedTheme +
+                    '. Quote those sayings or the same theme from the four Gospels. Do not invent a new subject.)',
+                }
+              : m
+          )
+        : messages;
     const stream = ai.messages.stream({
       model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },
       system: ADVISOR_SYSTEM,
-      messages,
+      messages: modelMessages,
     });
 
     stream.on('text', (text) => {
@@ -942,6 +959,8 @@ app.post('/api/chat', async (req, res) => {
         outOfScope: annotated.outOfScope,
         quota: getQuota(id),
         intent,
+        continuedTheme: thread.continuedTheme || undefined,
+        continuedRefs: thread.continuedRefs || [],
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');

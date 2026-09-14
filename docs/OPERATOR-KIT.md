@@ -9,7 +9,7 @@ Date of this kit: 11 September 2026. Branch: `cursor/recovery-commission-6ab5`.
 
 ## What this is
 
-Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is on **HTTPS**. The engineering core (verified WEB quotes, crisis gate, 92-question eval) already passed here. What I cannot do without your sign-off is deploy it or submit it to a store.
+Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is on **HTTPS**. The engineering core (verified WEB quotes, crisis gate, 96-question eval) already passed here. What I cannot do without your sign-off is deploy it or submit it to a store.
 
 ---
 
@@ -57,7 +57,7 @@ Reply with yes/no:
 
 1. **Store listing later?** Default is no (PWA).  
 2. **Production hostname** you want printed in the footer / VAPID subject.  
-3. **Turn on the AI key** for a model-mode eval (`npm run eval` against the live URL). Corpus mode is already 92/92.
+3. **Turn on the AI key** for a model-mode eval (`npm run eval` against the live URL). Corpus mode is already 96/96.
 
 Do not decide payment yet. Plus is a waitlist file, not a charge.
 

@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE = process.env.BASE_URL || 'http://localhost:3000';
+const BASE = process.env.BASE_URL || process.argv.find((a) => /^https?:\/\//.test(a)) || 'http://localhost:3000';
 const STRICT = process.argv.includes('--strict');
 const OUT_MD = path.join(__dirname, '..', 'eval', 'RESULTS.md');
 const OUT_JSON = path.join(__dirname, '..', 'eval', 'results.json');
