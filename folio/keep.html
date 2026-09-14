@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Keep model · Idaho 1099</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; } html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.1rem; line-height: 1.1; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.3rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    label { display: block; margin: .4rem 0; }
+    input, select { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--rule); }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    a { color: var(--crimson); }
+    .btn { font-family: "Instrument Sans", sans-serif; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .5rem .75rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Bearing C6 · computed 14 Sep 2026 · not a return</p>
+  <h1>What you keep.<br><em>After it lands.</em></h1>
+  <p>Until a match and a billed hour exist, the house hears <strong>$0</strong>. This page only models money that has already arrived. Net is treated as gross (no expenses). Not tax advice.</p>
+
+  <div class="card hold">
+    <label>Gross received (USD)
+      <input type="number" id="gross" min="0" step="1" value="0" />
+    </label>
+    <label>Assumed federal ordinary band
+      <select id="fed">
+        <option value="0.12">12% (assumed)</option>
+        <option value="0.22">22% (assumed)</option>
+      </select>
+    </label>
+    <p class="tiny">SE: 15.3% on 92.35% of net (IRS Topic 554 / Pub 334, opened 14 Sep). Idaho incremental 5.3% on net minus half SE (I.C. § 63-3024; 2026 schedule table not on the STC page). QBID not applied. W-2 Social Security base assumed not filled.</p>
+    <button class="btn" type="button" id="go">Compute</button>
+  </div>
+
+  <table>
+    <tbody>
+      <tr><th>SE tax</th><td id="se">$0.00</td></tr>
+      <tr><th>Idaho 5.3% (incremental)</th><td id="id">$0.00</td></tr>
+      <tr><th>Federal ordinary (assumed)</th><td id="fedout">$0.00</td></tr>
+      <tr><th>Total modeled tax</th><td id="tax">$0.00</td></tr>
+      <tr><th>Effective rate</th><td id="rate">—</td></tr>
+      <tr><th>35% reserve</th><td id="res">$0.00</td></tr>
+      <tr><th>After 35%</th><td id="after">$0.00</td></tr>
+      <tr><th>35% vs tax</th><td id="vs">Enter a receipt</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h2 style="margin-top:0">Locked examples (net = gross)</h2>
+    <p>$1,920 → SE $271.29 · 12% stack ~30.2% · 22% stack ~39.5% · 35% reserve $672 (covers 12%; short at 22%).</p>
+    <p>$4,320 → SE $610.40 · same percentages · 35% reserve $1,512.</p>
+    <p>Household rule stays <strong>35%</strong>. Do not cut it to “Idaho + SE.” Do not print the Colorado 61–71¢ table.</p>
+  </div>
+  <p class="tiny">15 Sep 2026 estimated voucher is for Jun–Aug income. New Sep–Dec 1099, if any, sits in the period due 15 Jan 2027 (IRS 1040-ES / Pub 505, opened 14 Sep). Idaho does not require individual estimates.</p>
+  <div class="actions">
+    <a class="btn" href="house-hears.html" style="text-decoration:none">What the house hears</a>
+    <a href="decision-night.html">Decision Night</a>
+    <a href="lodestar/dossiers/tax-idaho.md">Dossier</a>
+  </div>
+</main>
+<script>
+function money(n) { return "$" + n.toFixed(2); }
+function compute() {
+  const g = Math.max(0, Number(document.getElementById("gross").value) || 0);
+  const fed = Number(document.getElementById("fed").value);
+  const seEarn = g * 0.9235;
+  const se = seEarn * 0.153;
+  const half = se / 2;
+  const income = Math.max(0, g - half);
+  const id = income * 0.053;
+  const fi = income * fed;
+  const tax = se + id + fi;
+  const res = g * 0.35;
+  document.getElementById("se").textContent = money(se);
+  document.getElementById("id").textContent = money(id);
+  document.getElementById("fedout").textContent = money(fi);
+  document.getElementById("tax").textContent = money(tax);
+  document.getElementById("rate").textContent = g ? (100 * tax / g).toFixed(1) + "%" : "—";
+  document.getElementById("res").textContent = money(res);
+  document.getElementById("after").textContent = money(g - res);
+  if (!g) document.getElementById("vs").textContent = "Enter a receipt";
+  else if (res + 0.005 >= tax) document.getElementById("vs").textContent = "Reserve covers this assumed band by " + money(res - tax);
+  else document.getElementById("vs").textContent = "Reserve is short by " + money(tax - res) + " at this assumed federal band";
+}
+document.getElementById("go").addEventListener("click", compute);
+document.getElementById("gross").addEventListener("input", compute);
+document.getElementById("fed").addEventListener("change", compute);
+compute();
+</script>
+</body>
+</html>

@@ -238,8 +238,11 @@
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
+      text-decoration: none;
     }
     .btn.ghost { background: transparent; color: var(--ink); }
+    #coverClose label { display: block; margin: 0.4rem 0; font-size: 0.95rem; }
+    #coverClose select { width: 100%; padding: 0.4rem 0.5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
     .btn:hover { opacity: 0.88; }
     .weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
     .week h4 {
@@ -386,21 +389,31 @@
     <span id="chosenText"></span>
     <button type="button" id="clearChoice">Show all five</button>
   </div>
-  <aside class="tonight-dock" id="tonightDock" aria-label="Tonight">
-    <p class="tiny" id="tonightLabel">Tonight · three moves</p>
-    <ol id="tonightSteps"></ol>
+  <aside class="tonight-dock show" id="tonightDock" aria-label="Tonight">
+    <p class="tiny" id="tonightLabel">$0 · window last recorded Not confirmed · apply HOLD</p>
+    <ol id="tonightSteps">
+      <li>If the window is not Confirmed, rest. That is a finish.</li>
+      <li>If Confirmed, close the week and pick one lane.</li>
+      <li>This dock does not copy an ask.</li>
+    </ol>
     <div class="actions" style="margin-top:0">
-      <button class="btn" type="button" id="tonightCopy">Copy tonight’s ask</button>
-      <a class="btn ghost" id="tonightJump" href="#board">Open the plan</a>
+      <a class="btn" href="tonight.html" id="tonightCopy">Tonight — close and pick</a>
+      <a class="btn ghost" id="tonightJump" href="tonight.html">One door</a>
     </div>
   </aside>
   <div class="shell">
     <nav aria-label="Folio">
       <div class="mark" aria-hidden="true">D</div>
-      <p class="eyebrow">Week 2 · 83 days left</p>
+      <p class="eyebrow">14 Sep · 80 days after today</p>
       <button class="btn ghost" type="button" id="tocToggle">Contents</button>
       <div class="toc-rest">
-      <a class="toc" href="decision-night.html">Decision Night<small>Tonight · money SoT</small></a>
+      <a class="toc" href="tonight.html">Tonight<small>Close + pick · one door</small></a>
+      <a class="toc" href="week-close.html">Week close<small>14 Sep · Monday</small></a>
+      <a class="toc" href="decision-night.html">Decision Night<small>Money card</small></a>
+      <a class="toc" href="house-hears.html">What the house hears<small>$0</small></a>
+      <a class="toc" href="keep.html">Keep model<small>Idaho 1099</small></a>
+      <a class="toc" href="apply-packet.html">Apply packet<small>HOLD</small></a>
+      <a class="toc" href="lamp-drill.html">Lamp drill<small>No apply</small></a>
       <a class="toc" href="#operator-lock">Operator lock<small>Idaho · $0 first</small></a>
       <a class="toc" href="#cover">Title page</a>
       <a class="toc" href="#you">What is already true</a>
@@ -420,25 +433,66 @@
       <a class="toc" href="#evidence">Evidence book</a>
       <p class="eyebrow">Close</p>
       <a class="toc" href="#pick">Pick in 20 minutes</a>
-      <a class="toc" href="#sunday">Sunday close</a>
+      <a class="toc" href="#sunday">Week close</a>
       </div>
     </nav>
     <main>
       <article class="leaf" id="cover">
-        <p class="eyebrow">A private operating folio · not a second brain · Week 2 of 13</p>
+        <p class="eyebrow">A private operating folio · not a second brain · Week close 14 Sep</p>
         <h1>Ninety days.<br><em>One plan.</em></h1>
         <p class="lead">You already have a job, a young family, a truth-first operating system, and a finished product sitting in this repository. You do not need a sixth research shelf. You need one offer that can take money before 3 December — without stealing sleep or contaminating the day job.</p>
         <div class="quarantine">
           <p><strong>Money does not live on the later leaves.</strong> The 4–6 September tables still print Colorado, an 8-week Lamp band, $295 Storefront, and a 20-hour Handoff. Those columns are archived. Current cash is the Operator lock below, <a href="decision-night.html">Decision Night</a>, and the Notion Operator Card. Opening this page authorizes nothing.</p>
         </div>
         <div class="grid-3" style="margin-top:1.4rem">
-          <div class="stat"><div class="n">83</div><div class="k">Days left · 12 Sep → 3 Dec</div></div>
+          <div class="stat"><div class="n">80</div><div class="k">Days after today · 15 Sep → 3 Dec</div></div>
           <div class="stat"><div class="n">$0</div><div class="k">Until a match and a billed hour</div></div>
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
         <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; numbers audited 5 September; run-sprint 11 September (phone, tonight strip, scoreboard lock); Operator lock 11 September. Public copy is family-safe. The private Notion twin carries your real names and page links. See <a href="CANONICAL.md">CANONICAL.md</a>.</p>
+        <div class="card hold" id="coverClose" style="margin-top:1.2rem;border-left:3px solid var(--crimson);padding:1rem;background:var(--folio)">
+          <p class="tiny" style="margin-top:0">Write the night here if you opened the folio instead of Tonight. Same receipt. No ask is copied.</p>
+          <label>Household window now
+            <select id="cv-window">
+              <option>Not confirmed</option>
+              <option>Confirmed</option>
+              <option>Not needed</option>
+            </select>
+          </label>
+          <label>Lighter or dashboard
+            <select id="cv-q1">
+              <option>Not answered</option>
+              <option>Lighter</option>
+              <option>Another dashboard</option>
+              <option>Did not open it</option>
+            </select>
+          </label>
+          <label>Money / no / gate / motion
+            <select id="cv-q2">
+              <option>Not answered</option>
+              <option>Money</option>
+              <option>A dated no</option>
+              <option>A blocked gate</option>
+              <option>Only motion</option>
+              <option>Nothing — I did not run a lane</option>
+            </select>
+          </label>
+          <label>Disposition
+            <select id="cv-q3">
+              <option>Not answered</option>
+              <option>Continue</option>
+              <option>Park 30 days</option>
+              <option>Close</option>
+            </select>
+          </label>
+          <div class="actions">
+            <button class="btn" type="button" id="cv-write">Write the close</button>
+            <a class="btn ghost" href="tonight.html" id="cv-pick">Pick a lane (window must be open)</a>
+          </div>
+          <pre id="cv-receipt" class="tiny" style="white-space:pre-wrap;background:#1b1610;color:#f4efe4;padding:0.8rem;margin:0.8rem 0 0">The close appears here. It stays on this device.</pre>
+        </div>
         <div class="actions">
-          <button class="btn" type="button" id="unfoldAll">Unfold all working papers</button>
+          <button class="btn ghost" type="button" id="unfoldAll">Unfold papers</button>
           <button class="btn ghost" type="button" id="foldAll">Fold them</button>
         </div>
       </article>
@@ -459,9 +513,10 @@
             </tbody>
           </table>
         </div>
-        <p class="tiny">35% is a household reserve rule, not a filed return. Idaho individual rate 5.3% (STC schedule opened 11 Sep). Not tax advice. Required work this week: DEX room-inspect during work hours. Sunday close 14 Sep.</p>
+        <p class="tiny">35% is a household reserve rule, not a filed return. Idaho individual rate 5.3% (statute + 2026 withholding; Year 2026 STC table not on the opened schedule). Not tax advice. Week close is Monday 14 Sep. After today: 80 days. October is Red.</p>
         <div class="actions">
-          <a class="btn" href="decision-night.html">Open Decision Night</a>
+          <a class="btn" href="tonight.html">Tonight</a>
+          <a class="btn ghost" href="decision-night.html">Decision Night</a>
           <a class="btn ghost" href="https://app.notion.com/p/3d4b7d53f96981c9b00dc0f64a83fd1a">Operator Card v2</a>
         </div>
       </article>
@@ -619,10 +674,10 @@
           <li>If Pursue: print or save the LLM policy. That is the whole night.</li>
         </ol>
         <h3>Copy — availability line</h3>
-        <div class="copy" data-copy="I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
-        <h3>Copy — apply letter (HOLD · do not send this week)</h3>
-        <p class="tiny">External apply stays HOLD until you type Yes on Decision Night or the Operator Card. Copying this letter is not authorization. Saturday 12 Sep is not an apply day.</p>
-        <div class="copy" data-copy="HOLD — do not send. External apply is not authorized from this folio. When you type Yes on Decision Night, the letter is: I’m applying for the Training / Onboarding / L&amp;D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.">HOLD — do not send. External apply is not authorized from this folio. When you type Yes on Decision Night, the letter is: I’m applying for the Training / Onboarding / L&amp;D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.</div>
+        <div class="copy" data-send="1" data-copy="I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.">I can reliably support up to eight hours per week on a flexible, self-scheduled basis. Please confirm this meets the engagement’s current requirement. I will complete all evaluations in my own judgment and will not use an LLM to score or justify model output.</div>
+        <h3>Copy — apply letter (HOLD · do not send)</h3>
+        <p class="tiny">External apply stays HOLD until five gates are Clear, the window is Confirmed, and you type Yes. The letter is not printed on this folio. Open <a href="apply-packet.html">Apply packet</a> only when you mean to unlock it. Copying nothing here is authorization of nothing.</p>
+        <div class="copy" data-copy="HOLD — do not send. External apply is not authorized from this folio. The apply letter is not on this page.">HOLD — do not send. External apply is not authorized from this folio. The apply letter is not on this page.</div>
         <p class="kill"><strong>Kill.</strong> Experience you cannot substantiate. A handbook clause you will not read, or an approval you will not wait for. A trial that wants agent-written scores. Monitoring that cannot be isolated on a separate machine. Twenty-one idle days after acceptance. Hours that shove bedtime.</p>
         <details class="papers">
           <summary>Working papers · The Lamp</summary>
@@ -659,7 +714,7 @@
             <h4>Application packet · you write this</h4>
             <p>Availability line (copy above). Two public-safe stories of judging a messy training artifact — no client names. Confirm you will not use an LLM to score. Do not paste Growth Academy language. Do not mention the employer. If clearance is unknown, the packet stays in the drawer.</p>
             <h4>Disclosure note · only if your handbook asks for one</h4>
-            <div class="copy" data-copy="I want to let you know about paid outside work I intend to do on personal time and personal equipment. It is hourly, remote, independent-contractor evaluation of AI-generated documents for an AI-training marketplace. The engagement’s own terms state the work will not involve access to confidential or proprietary information from any employer, client, or institution, and I will not use company clients, materials, devices, or time. If you need anything further to confirm there is no conflict, tell me what you need and I will provide it.">I want to let you know about paid outside work I intend to do on personal time and personal equipment. It is hourly, remote, independent-contractor evaluation of AI-generated documents for an AI-training marketplace. The engagement’s own terms state the work will not involve access to confidential or proprietary information from any employer, client, or institution, and I will not use company clients, materials, devices, or time. If you need anything further to confirm there is no conflict, tell me what you need and I will provide it.</div>
+            <div class="copy" data-send="1" data-copy="I want to let you know about paid outside work I intend to do on personal time and personal equipment. It is hourly, remote, independent-contractor evaluation of AI-generated documents for an AI-training marketplace. The engagement’s own terms state the work will not involve access to confidential or proprietary information from any employer, client, or institution, and I will not use company clients, materials, devices, or time. If you need anything further to confirm there is no conflict, tell me what you need and I will provide it.">I want to let you know about paid outside work I intend to do on personal time and personal equipment. It is hourly, remote, independent-contractor evaluation of AI-generated documents for an AI-training marketplace. The engagement’s own terms state the work will not involve access to confidential or proprietary information from any employer, client, or institution, and I will not use company clients, materials, devices, or time. If you need anything further to confirm there is no conflict, tell me what you need and I will provide it.</div>
             <p class="tiny">The quoted sentence is lifted from the public listing’s contract terms. Send this only if the handbook requires disclosure; if it requires <em>approval</em>, wait for the approval before applying.</p>
             <h4>Night queue</h4>
             <div class="night">
@@ -713,7 +768,7 @@
           <li>List ten people who are not in the employer graph. Do not message them tonight. Messages wait on a Confirmed window and a written choice of The Room.</li>
         </ol>
         <h3>Copy — the ask</h3>
-        <div class="copy" data-copy="If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.">If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.</div>
+        <div class="copy" data-send="1" data-copy="If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.">If your next interview includes a presentation, panel, or take-home case, I run a realistic rehearsal — not a pep talk. You get an original practice case, a mock panel, specific notes on the message and delivery, and a seven-day drill plan. I’m opening three $349 beta slots for people in customer-facing, enablement, or training roles. No insider questions and no outcome guarantees. If useful, I can hold 15 minutes this week to see whether it fits.</div>
         <p class="kill"><strong>Kill.</strong> Recording without consent. Stolen interview questions. Guarantees. Sessions that repeatedly eat bedtime. Acquisition hours exceeding delivery hours after 40 asks.</p>
         <details class="papers">
           <summary>Working papers · The Room</summary>
@@ -790,7 +845,7 @@
           <li>List twenty public Maps firms. Do not send the ask tonight.</li>
         </ol>
         <h3>Copy — outreach</h3>
-        <div class="copy" data-copy="Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / nobody called me back] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / “nobody called me back”] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
+        <div class="copy" data-send="1" data-copy="Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / nobody called me back] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.">Hi [Name] — I help small service firms turn one recurring, messy handoff into a usable operating system: process map, SOP, job aid, owner/metric card, and a 30-day adoption test. I’m validating a tightly bounded three-week beta ($1,500) for one process and no software overhaul. If [specific public signal: missed reviews about scheduling / invoicing / “nobody called me back”] is expensive, would a 20-minute diagnostic be useful? No pitch if the problem is not frequent.</div>
         <p class="kill"><strong>Kill.</strong> They want an agency retainer. They need logins you should not have. The process is safety-critical. You recognize the firm from work. Delivery will take nights you do not have.</p>
         <details class="papers">
           <summary>Working papers · The Handoff</summary>
@@ -868,7 +923,7 @@
           <div class="week"><h4>Wk 9–12</h4><p>Raise price or stop. Convert one buyer into The Handoff if the pain is operational, not copy.</p></div>
         </div>
         <h3>Copy — the note</h3>
-        <div class="copy" data-copy="I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $595 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.">I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $595 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.</div>
+        <div class="copy" data-send="1" data-copy="I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $595 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.">I walked your public booking path on a phone this morning (I did not submit a form). Two places a customer can stall before they reach you: [observation 1], [observation 2]. I do a $595 friction audit: five evidence-linked notes, one rewritten CTA or FAQ, and one thing not to change yet. No login, no SEO promises, no monthly retainer. If you want it, I’ll send the one-page scope and can turn it around this week.</div>
         <p class="kill"><strong>Kill.</strong> They want you in Analytics. They want fake reviews. The job needs accessibility certification you will not give. You cannot separate fact from guess. It takes more than two evenings.</p>
         <details class="papers">
           <summary>Working papers · The Storefront</summary>
@@ -935,10 +990,10 @@
         <ol>
           <li>Sit the local room. Do not publish, enable Pages, or merge. Craft only. $0 cash this quarter.</li>
           <li>Sit the lectio yourself as a stranger: <code>/?fresh=1</code>.</li>
-          <li>Send one blessing to one real person. If the button is furniture, that is tonight’s only bug.</li>
+          <li>Draft one blessing. Do not send it unless the window is Confirmed and you chose Folio as craft.</li>
         </ol>
         <h3>Copy — eight-second ad</h3>
-        <div class="copy" data-copy="I was carrying Tuesday on Monday. Then I sat with one sentence.
+        <div class="copy" data-send="1" data-copy="I was carrying Tuesday on Monday. Then I sat with one sentence.
 [Matthew 6:34 or John 14:27 in crimson]
 A quiet page for the words Jesus spoke. Free.">I was carrying Tuesday on Monday. Then I sat with one sentence.
 [Matthew 6:34 or John 14:27 in crimson]
@@ -1149,6 +1204,17 @@ A quiet page for the words Jesus spoke. Free.</div>
         <p class="eyebrow">Audited 5 September · rechecked 11 September 2026</p>
         <h2>Evidence book</h2>
         <p>Every load-bearing number and date in this folio was checked against a live source and labeled. <strong>Retrieved</strong> means a page was fetched that day. <strong>Estimate</strong> means a third party’s model, not a filing. <strong>Assumed</strong> means a reasonable input you must replace with your own. <strong>Unknown</strong> means nobody can tell you and the folio refuses to guess.</p>
+        <h3>Rechecked 14 September 2026</h3>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr><th>Claim</th><th>Status</th><th>Opened</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td>L&amp;D listing still live $80–$120, IC, own schedule, apply form present</td><td>Retrieved</td><td><a href="https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator" target="_blank" rel="noopener">Mercor L&amp;D</a></td><td>Advertisement still open. Not a grocery instrument. No hire-count on the page.</td></tr>
+              <tr><td>GTM listing still live, same rate and IC terms</td><td>Retrieved</td><td><a href="https://work.mercor.com/jobs/list_AAABnp6MSjuxnR5XDmVL1Ypb/general-sales-gtm-evaluator" target="_blank" rel="noopener">Mercor GTM</a></td><td>Second door still open.</td></tr>
+              <tr><td>14 Sep 2026 weekday</td><td>Retrieved · calendar</td><td>Python date(2026,9,14)</td><td>Monday. “Sunday close 14 Sep” was a weekday error.</td></tr>
+            </tbody>
+          </table>
+        </div>
         <h3>Rechecked 11 September 2026</h3>
         <div style="overflow:auto">
           <table>
@@ -1248,20 +1314,21 @@ A quiet page for the words Jesus spoke. Free.</div>
           <li><strong>Minutes 3–8.</strong> Can you truthfully claim the Lamp’s five gates? If yes and you want cash: choose I. If blocked: continue.</li>
           <li><strong>Minutes 8–12.</strong> Can you name ten humans outside work who might pay $349 to rehearse? If yes: choose II. If you would rather walk storefronts than talk: choose IV.</li>
           <li><strong>Minutes 12–16.</strong> Only choose III if you will send 20 asks and can protect 15-day delivery. Otherwise it is a fantasy client.</li>
-          <li><strong>Minutes 16–20.</strong> Choose V only if you accept that December cash may be zero and you still want Advent to have a URL. Write the choice in ink. Do not start a second plan “on the side.”</li>
+          <li><strong>Minutes 16–20.</strong> Choose V only if you accept $0 cash and no Advent URL. Folio is parked as groceries. Write the choice in ink. Do not start a second plan “on the side.”</li>
         </ol>
         <p>Then do that plan’s first 60 minutes — or stop. Stopping is a valid finish.</p>
       </article>
 
       <article class="leaf" id="sunday">
         <p class="eyebrow">Keep the week small</p>
-        <h2>Sunday close · three minutes</h2>
+        <h2>Week close · three minutes</h2>
+        <p>14 Sep 2026 is Monday. Sunday was 13 Sep. The dated close is <a href="week-close.html">week-close.html</a>.</p>
         <ol>
           <li>Did this folio make the week lighter, or did it become another dashboard?</li>
           <li>Did money, a dated no, or a blocked gate appear — or only motion?</li>
           <li>Continue, park 30 days, or close? Park creates no reminder. Close creates no successor.</li>
         </ol>
-        <p>Required work still includes the academy block already on the calendar. That is the job. This folio never eats it.</p>
+        <p>The academy / DEX block named for 8–14 Sep is over. This folio still does not eat required work. If the window is not Confirmed, rest.</p>
         <h3>Parked on purpose</h3>
         <p>Veteran memory-to-music, family adventure composer, Ableton album, owner-judgment libraries, agent-operations tabletop, ProofOps memberships, and every 6–18 month asset stay on the research shelf. They are not worse ideas. They cannot feed a household in 90 days without stealing the household.</p>
         <h3>How this was made</h3>
@@ -1294,7 +1361,7 @@ A quiet page for the words Jesus spoke. Free.</div>
           "Fill the five truth gates. Any Blocked kills the plan — do not apply “to see.”",
           "If Pursue: save the LLM policy. That is the whole night. Do not apply. HOLD until you type Yes on Decision Night."
         ],
-        ask: "HOLD — do not send. External apply is not authorized from this folio. When you type Yes on Decision Night, the letter is: I’m applying for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output."
+        ask: "HOLD — do not send. External apply is not authorized from this folio. The apply letter is not on this page. Use apply-packet.html only after gates, window, and Yes."
       },
       II: {
         steps: [
@@ -1367,23 +1434,61 @@ A quiet page for the words Jesus spoke. Free.</div>
       btn.addEventListener("click", () => applyChoice(btn.getAttribute("data-choose")));
     });
     document.getElementById("clearChoice").addEventListener("click", () => applyChoice(""));
-    tonightCopy.addEventListener("click", async () => {
-      const id = localStorage.getItem("ninety-days-plan");
-      const pack = tonight[id];
-      if (!pack) return;
-      await navigator.clipboard.writeText(pack.ask);
-      tonightCopy.textContent = "Copied";
-      setTimeout(() => { tonightCopy.textContent = "Copy tonight’s ask"; }, 1400);
-    });
+    (function coverClose() {
+      const win = document.getElementById("cv-window");
+      const pick = document.getElementById("cv-pick");
+      const receipt = document.getElementById("cv-receipt");
+      function openWin() {
+        return win.value === "Confirmed" || win.value === "Not needed";
+      }
+      function syncPick() {
+        pick.style.pointerEvents = openWin() ? "" : "none";
+        pick.style.opacity = openWin() ? "1" : "0.4";
+        pick.textContent = openWin() ? "Pick a lane on Tonight" : "Lanes stay folded until the window is open";
+      }
+      win.addEventListener("change", syncPick);
+      document.getElementById("cv-write").addEventListener("click", () => {
+        const open = openWin();
+        const text = [
+          "NINETY DAYS · TONIGHT",
+          "Written 14 Sep 2026 (Monday) · stays on this device",
+          "",
+          "Lighter or dashboard: " + document.getElementById("cv-q1").value,
+          "Money / no / gate / motion: " + document.getElementById("cv-q2").value,
+          "Disposition: " + document.getElementById("cv-q3").value,
+          "Household window: " + win.value,
+          "Choice: None tonight",
+          "External action authorized tonight: No",
+          "",
+          open ? "Window is open. Pick a lane on tonight.html. Apply is HOLD." : "REST IS THE FINISH. Optional work is closed tonight.",
+          "This receipt is not an application."
+        ].join("\n");
+        receipt.textContent = text;
+        try {
+          localStorage.setItem("ninety-days-tonight-2026-09-14", text);
+          localStorage.setItem("ninety-days-week-close-2026-09-14", text);
+          localStorage.setItem("ninety-days-receipt-2026-09-14", text);
+        } catch (e) {}
+      });
+      syncPick();
+    })();
     document.querySelectorAll(".copy").forEach((block) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.textContent = "Copy";
+      const send = block.getAttribute("data-send") === "1";
+      const HOLD = "HOLD — do not send. Write Tonight first. Copying an ask requires a receipt with the window Confirmed or Not needed and External action authorized: Yes. The wording stays on the page.";
+      btn.textContent = send ? "Copy stays HOLD" : "Copy";
       btn.addEventListener("click", async () => {
-        const text = block.getAttribute("data-copy") || block.innerText.replace(/\nCopy$/, "").trim();
+        const raw = block.getAttribute("data-copy") || block.innerText.replace(/\nCopy.*$/, "").trim();
+        let allowed = false;
+        try {
+          const rec = localStorage.getItem("ninety-days-tonight-2026-09-14") || "";
+          allowed = /Household window: (Confirmed|Not needed)/.test(rec) && /External action authorized tonight: Yes/.test(rec);
+        } catch (e) {}
+        const text = (send && !allowed) ? HOLD : raw;
         await navigator.clipboard.writeText(text);
-        btn.textContent = "Copied";
-        setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+        btn.textContent = (send && !allowed) ? "HOLD copied" : "Copied";
+        setTimeout(() => { btn.textContent = send ? "Copy stays HOLD" : "Copy"; }, 1400);
       });
       block.appendChild(btn);
     });

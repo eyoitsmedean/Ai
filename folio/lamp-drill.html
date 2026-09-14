@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lamp drill · synthetic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; } html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.1rem; line-height: 1.1; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.25rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    label { display: block; margin: .4rem 0; }
+    input, textarea { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    textarea { min-height: 4.2rem; }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    .btn { font-family: "Instrument Sans", sans-serif; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .5rem .75rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; cursor: pointer; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+    a { color: var(--crimson); }
+    .receipt { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .88rem; }
+    ol.rubric li { margin: .35rem 0; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Bearing C1 C5 C8 · synthetic · no apply</p>
+  <h1>Lamp drill.<br><em>You score. Not a model.</em></h1>
+  <p>Mercor’s LLM policy (opened 14 Sep) forbids using a model to assess quality or write justifications. This page is practice on a <em>fictional</em> deck. It is not an application and not a real evaluation.</p>
+  <div class="card hold">
+    <h2 style="margin-top:0">Artifact · Northwind Outfitters · slide 4 of 9</h2>
+    <p><strong>Title on the slide:</strong> “Store-manager onboarding — 90 days to holiday peak.”</p>
+    <p><strong>Bullets as written:</strong></p>
+    <ul>
+      <li>Train all four stores by Black Friday (no year).</li>
+      <li>“Managers will feel confident and customers will notice.”</li>
+      <li>Budget: $40k. No new headcount.</li>
+      <li>Success: “engagement up 40%.” No baseline, no instrument, no owner.</li>
+      <li>Photo: a stock handshake. Alt text empty.</li>
+      <li>Footer: “Confidential — do not share.” (This drill is fictional. Do not paste a work deck here.)</li>
+    </ul>
+  </div>
+  <h2>Rubric · 1–5 · write why in your words</h2>
+  <ol class="rubric">
+    <li>Accuracy / invented facts
+      <input id="s1" placeholder="Score 1–5" />
+      <textarea id="w1" placeholder="One sentence. Observation, not vibe."></textarea>
+    </li>
+    <li>Measurable objective
+      <input id="s2" placeholder="Score 1–5" />
+      <textarea id="w2"></textarea>
+    </li>
+    <li>Audience and constraint fit
+      <input id="s3" placeholder="Score 1–5" />
+      <textarea id="w3"></textarea>
+    </li>
+    <li>Slide craft (hierarchy, alt, density)
+      <input id="s4" placeholder="Score 1–5" />
+      <textarea id="w4"></textarea>
+    </li>
+    <li>Would you ship this to a store manager Friday?
+      <input id="s5" placeholder="Score 1–5" />
+      <textarea id="w5"></textarea>
+    </li>
+  </ol>
+  <p class="tiny">If you asked a model for these scores, the drill failed. Time yourself. Official hourly work is 40–70 minutes per artifact including rubric re-read (folio working papers; not re-timed this session).</p>
+  <div class="actions">
+    <button class="btn" type="button" id="write">Write the score sheet</button>
+    <a href="apply-packet.html">Staged packet (HOLD)</a>
+  </div>
+  <pre class="receipt" id="out">Your sheet stays on this device.</pre>
+</main>
+<script>
+document.getElementById("write").addEventListener("click", () => {
+  const rows = [1,2,3,4,5].map((n) => {
+    const s = document.getElementById("s" + n).value.trim() || "—";
+    const w = document.getElementById("w" + n).value.trim() || "(no justification)";
+    return "C" + n + "  " + s + "  " + w;
+  });
+  const text = ["LAMP DRILL · SYNTHETIC · NOT AN EVALUATION", "14 Sep 2026 · Northwind slide 4", "", ...rows, "", "No employer artifact was used.", "This sheet is not an application."].join("\n");
+  document.getElementById("out").textContent = text;
+  try { localStorage.setItem("ninety-days-lamp-drill", text); } catch (e) {}
+});
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Ninety Days · Canonical brief
 
-Version: 2026-09-11 · C3 recovery  
+Version: 2026-09-14 · C3 recovery + LODESTAR calendar correction  
 Owner: Dean  
 Audience: Dean tonight, and the next agent who opens this tree  
 Money source of truth: [Operator Card v2](https://app.notion.com/p/3d4b7d53f96981c9b00dc0f64a83fd1a)  
@@ -58,7 +58,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 7. Storefront: **$595**. 0–2 jobs. **$295 is retired.** Never with Handoff.
 8. Folio (Red Letter) **parked as cash**. Advent 29 Nov 2026 is five days at the end of the clock. Lent 2027 is the season.
 9. **External apply = HOLD** until Dean types authorization.
-10. Household window last recorded **Not confirmed**. Friday 11 Sep required work = DEX room-inspect during work hours. Sunday close **14 Sep**.
+10. Household window last recorded **Not confirmed**. Friday 11 Sep required work = DEX room-inspect during work hours. Close date given as **14 Sep**. **Correction 14 Sep 2026:** that date is Monday, not Sunday. Sunday was 13 Sep. Use `week-close.html`.
 
 ---
 
@@ -77,6 +77,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 | Asset | Location | Authority |
 | --- | --- | --- |
 | Money SoT | Notion Operator Card v2 `3d4b7d53f96981c9b00dc0f64a83fd1a` | Cash, calendar, apply HOLD |
+| Tonight (one door) | `folio/tonight.html` | Close + pick. Best finished surface as of 14 Sep evening. |
 | Tonight card | `folio/decision-night.html` · Notion [Decision Night · 11 Sep 2026](https://app.notion.com/p/3d8b7d53f96981c18483efcc8ccdcdff) | Local receipt; mirrors the card |
 | Paper folio | `folio/index.html` | Run-of-show, copy, kill rules. Money tables archived. |
 | This brief | `folio/CANONICAL.md` | Recovery + evidence + decisions |
@@ -114,7 +115,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 
 | ID | Question | Tie to objective | Already known | Still uncertain | Evidence needed | If the answer changes… | Owner |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| C1 | Are the Mercor L&D and GTM listings still live at $80–$120/hr, IC, own schedule? | Lamp is the grocery default only if the door is still open. | Yes, opened 11 Sep 2026 this session. | Acceptance, queue, hours. | Periodic re-open of the two URLs. | Dead listing → Lamp is paper. | Research |
+| C1 | Are the Mercor L&D and GTM listings still live at $80–$120/hr, IC, own schedule? | Lamp is the grocery default only if the door is still open. | Yes — both official URLs opened 14 Sep 2026 this session (L&D + GTM). A truncated id `list_AAABmd4n4p8Vq3FLqL2xP4Cw` 404’d; do not use it. | Acceptance, queue, hours. | Periodic re-open of the two official URLs. | Dead listing → Lamp is paper. | Research |
 | C2 | What do the five Lamp gates actually require? | Apply is HOLD until gates are Clear + Pursue. | LLM policy forbids model scoring/justifications. Insightful screenshots. Separate machine. Handbook unread. | Dean’s years, handbook text, breach consent. | Dean marks the gates. Agents cannot. | Any Blocked kills Lamp. | Dean |
 | C3 | What cash is honest by 3 Dec if Lamp matches? | Stops the house from hearing $7,680. | 4–6 h × 6 non-Oct weeks. October Red. $0 until billed hour. | Hours awarded. | Written match + first invoice. | Below 4 h/wk → shrink the band; 0 h → $0. | Strategy |
 | C4 | Idaho tax and the 35% reserve | Keep table must not use Colorado 4.4%. | Leading STC schedule 5.3%; 2026 withholding update 31 Jul 2026. SE 15.3% on 92.35%. | Federal bracket. Exact 2026 taxable-income thresholds on the unlabeled leading table. | Dean’s CPA / return. | Bracket known → narrow keep; reserve rule stays. | Research |
@@ -122,7 +123,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 | C6 | Room / Handoff / Storefront capacity this quarter | Paper alternatives if Lamp is no. | Card: 0–3 / 0–2 / 0–2. $349 / $1,500@12h / $595. | Ten humans. Twenty asks. Local shops Dean will walk. | Dean lists. | No names → those lanes stay paper. | Strategy |
 | C7 | Is Folio (Red Letter) cash this quarter? | Prevents a mobile-app detour. | Advent 29 Nov 2026 (USCCB / Universalis, prior sessions). Five days at clock end. | Whether Dean wants craft anyway. | None for cash. | Craft yes, groceries no. | Strategy |
 | C8 | Clean room / employer graph | Law 03. Every plan dies if broken. | Oath printed. Mercor listing says work will not involve employer confidential info — that is the vendor’s sentence, not a safe-harbor. | Handbook. | Dean reads it. | Disclosure required → wait. | Dean |
-| C9 | Remaining clock | Stops week-1 language. | After 11 Sep through 3 Dec = 83 days / 12 weeks / 96 hours all-in. Week 1 (4–10 Sep) is over. | Whether the window opens. | Calendar only. | Window closed → 96 hours unused is success. | Ops |
+| C9 | Remaining clock | Stops week-1 language. | After 14 Sep through 3 Dec = 80 days (15 Sep–3 Dec inclusive). Week 1 is over. | Whether the window opens. | Calendar only. | Window closed → unused hours are success. | Ops |
 
 **Retired / drift (recorded, not researched further as products).**
 
@@ -148,7 +149,7 @@ Chosen for a decision they change, not novelty.
 
 ## 6. Syntheses (core + adjacent)
 
-### C1 · Listings still live — FACT, opened 11 Sep 2026 this session
+### C1 · Listings still live — FACT, re-opened 14 Sep 2026 this session
 
 - L&D: https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator — $80–$120/hr, hourly contract, remote, IC, own schedule, “will not involve access to confidential or proprietary information from any employer, client, or institution,” weekly Stripe or Wise. 5+ years Training / onboarding / L&D. Slides fluency. Posted ~3 months (page chrome). No “158 hired” figure on the opened page.
 - GTM: https://work.mercor.com/jobs/list_AAABnp6MSjuxnR5XDmVL1Ypb/general-sales-gtm-evaluator — same rate band and IC terms. 5+ years General Sales / GTM.
@@ -217,7 +218,12 @@ Consumer faith apps print money in Lent (Hallow Ash-Wednesday spike is an Appfig
 
 | Date | Question | Finding | Source | Limits | Confidence | Affects |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2026-09-11 | L&D listing live? | Yes. $80–$120, IC, own schedule. | Mercor L&D URL above, opened this session | May close. No hire-count on page. | High for “still posted” | Lamp default |
+| 2026-09-14 eve | L&D listing live? | Yes. HTTP 200. Title “Training / onboarding / L&D Evaluator”. $80 and $120 in page. | Official L&D URL, curl this session (WebFetch timed out) | Advertisement. May close. | High for “still posted” | Lamp default; still $0 |
+| 2026-09-14 eve | GTM listing live? | Yes. $80–$120, IC, apply form. | Official GTM URL, WebFetch this session | Same | High for “still posted” | Lamp default |
+| 2026-09-14 | L&D listing live? | Yes. $80–$120, hourly contract, remote, IC, own schedule, apply form. | Official L&D URL, opened this session | Advertisement. May close. No hire-count. | High for “still posted” | Lamp default; still $0 |
+| 2026-09-14 | GTM listing live? | Yes. Same band and IC terms. | Official GTM URL, opened this session | Same | High for “still posted” | Lamp default |
+| 2026-09-14 | Truncated GTM id | `list_AAABmd4n4p8Vq3FLqL2xP4Cw` → HTTP 404 | WebFetch this session | Do not treat as a live door | High | Dossier URL hygiene |
+| 2026-09-11 | L&D listing live? | Yes. $80–$120, IC, own schedule. | Mercor L&D URL above, opened that session | May close. No hire-count on page. | High for “still posted” | Lamp default |
 | 2026-09-11 | GTM listing live? | Yes. Same band. | Mercor GTM URL, opened this session | Same | High for “still posted” | Lamp default |
 | 2026-09-11 | LLM scoring allowed? | No. | talent.docs.mercor.com/policies/llm-usage | Policy can change | High | Gate 5 / night work |
 | 2026-09-11 | Idaho individual rate | 5.3% on leading STC schedule | tax.idaho.gov rate schedule, opened | Year heading on leading block not in fetch | High for “STC prints 5.3%” | Keep / reserve |
@@ -283,7 +289,7 @@ Knowledge archive, Notion notes, and PR updates support these. They are not a fo
 
 1. Confirm or close the household window. If not Confirmed, rest. DEX room-inspect is the job.
 2. If Confirmed: mark the five Lamp gates on Decision Night. Do not apply.
-3. Sunday close 14 Sep. Three minutes. Continue / Park 30 days / Close.
+3. Week close 14 Sep (Monday). Three minutes on `folio/week-close.html`. Continue / Park 30 days / Close.
 
 ---
 
