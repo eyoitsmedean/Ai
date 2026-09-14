@@ -45,7 +45,7 @@ words only — not the whole Bible.
 | OQ1 | Move the **server** corpus from KJV to WEB so the whole product is public domain worldwide (removes the UK Crown constraint before any paid UK release)? Cost: fetch WEB Gospels from ebible.org, regenerate `data/spoken-gospels.json` and the curated packs' wording, re-run tests and eval; roughly one focused session. | Yes, before a UK or App-Store release; not required for a US web launch. |
 | OQ2 | Run `npm run eval` against a server with `ANTHROPIC_API_KEY` set and commit the live-model `eval/RESULTS.md`. Only Dean holds the key. | Run it before flipping the PR from draft; treat any failure as a blocker. |
 | OQ3 | Capacitor wrapper for App Store / Play listing (D6 alternative). | Defer until the PWA has real users; store submission needs Dean's sign-off anyway. |
-| OQ4 | Should **Leave quickly** also wipe the private journal? | No this cycle. Chat + welcome flag + daily count only. A later “Clear this phone” can take the journal. |
+| OQ4 | Should **Leave quickly** also wipe the private journal? | No. Settings **Clear this phone** (two-tap) wipes the journal. Leave quickly and Begin again do not. |
 
 ## Assumptions made in the absence of instruction
 
