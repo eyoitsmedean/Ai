@@ -4,26 +4,26 @@
   // Every signal — self-harm, poisoning, violence, bereavement — comes from signals.js,
   // the same file the server reads. There is no second copy to drift.
   const S = window.RLA_SIGNALS;
+  const R = window.RLA_ROOMS;
   const inCrisis = (t) => S.looksLikeCrisis(t);
   const DANGER_NOTICE = S.DANGER_NOTICE;
   const POISON_LINE = S.POISON_LINE + '\n';
 
-  // Keys match at the start of a word ("rent" no longer hides in "parents", "pain" in
-  // "Spain"); short keys must end the word too, give or take a suffix. `strong` keys
-  // name the room outright: the widow with bills is in Grief, not Anxiety.
+  // Hear/close only. The room itself is named by rooms.js — the same guessThemes
+  // the server uses. Do not score the question here; that is how first cites drifted.
   const PACKS = [
-    { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep', 'tomorrow', 'interview', 'shaking', 'laid off', 'fired', 'rent', 'bills', 'debt', 'money', 'income', 'bankrupt', 'can\'t stop', 'cant stop', 'lost my job', 'lost the job', 'no savings', 'unemployed', 'out of work'], strong: [] },
-    { theme: 'Fear', hear: 'Fear is shrinking the future. You do not have to pretend the waves are small.', close: 'Courage is not the absence of fear. It is hearing “it is I” in the middle of it.', keys: ['fear', 'afraid', 'scared', 'terrified', 'fright', 'dread', 'unsafe', 'nicu', 'icu', 'scan', 'diagnos', 'biopsy', 'results', 'cancer', 'tumor', 'deport', 'immigration', 'knock at the door', 'won\'t make it', 'might not make it', 'not going to make it'], strong: [] },
-    { theme: 'Grief & Loss', hear: 'Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.', close: 'Your tears are seen. Comfort is company within pain — not a dismissal of it.', keys: ['grief', 'griev', 'loss', 'lost someone', 'died', 'death', 'is dying', 'dying of', 'mourn', 'funeral', 'widow', 'passed away', 'hospice', 'miscarriage', 'stillborn', 'dementia', 'alzheimer', 'friends are dead', 'friends are gone', 'buried'], strong: ['died', 'passed away', 'funeral', 'widow', 'miscarriage', 'stillborn', 'hospice', 'lost my', 'lost our', 'lost a patient', 'a child died', 'taking my baby', 'took my baby', 'my baby died', 'buried'] },
-    { theme: 'Loneliness', hear: 'Loneliness can convince you that you are unseen. You are not an interruption.', close: 'You are someone Jesus calls friend. Presence does not expire at the end of a text thread.', keys: ['lonely', 'alone', 'no one', 'nobody', 'isolated', 'abandoned', 'left out', 'forgotten', 'waiting to die', 'just waiting', 'coming out', 'come out to'], strong: [] },
-    { theme: 'Forgiveness', hear: 'Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.', close: 'Mercy is often a road, not a moment. Take the next honest step.', keys: ['forgiv', 'resent', 'bitter', 'grudge', 'hate them', 'can\'t let go', 'cant let go', 'betray', 'stole from'], strong: [] },
-    { theme: 'Shame & Guilt', hear: 'Shame says you are the lost sheep who should have known better. He tells the story from the shepherd’s side.', close: 'You are not too far for the shepherd to walk. Heaven still knows how to rejoice.', keys: ['shame', 'guilt', 'guilty', 'ashamed', 'disgusted with myself', 'unworthy', 'failure', 'messed up', 'sinned', 'relapse', 'filthy', 'regret', 'i cheated', 'i lied', 'i killed', 'their faces', 'haunted', 'hate myself', 'forgive myself'], strong: ['i killed', 'people i killed', 'their faces', 'i cheated', 'relapse', 'hate myself', 'forgive myself'] },
-    { theme: 'Suffering & Pain', hear: 'The first word to the one in pain is come, not cheer up. Rest is offered to the laden.', close: 'Your pain is not a failure of faith. Rest is offered to the laden, not the finished.', keys: ['pain', 'hurt', 'hurting', 'suffer', 'sick', 'ill', 'illness', 'chronic', 'broken body', 'ache', 'exhausted', 'so tired', 'burnt out', 'bullied', 'bully me', 'bullies me', 'feel numb', 'am numb', 'i\'m numb', 'gone numb', 'furious', 'enraged', 'rage', 'so angry', 'livid', 'covered it up', 'protected the wrong', 'cheated on me', 'cheating on me', 'been cheating', 'his affair', 'her affair', 'an affair', 'unfaithful', 'lost my house', 'lost our house', 'lost my home', 'lost everything', 'in the fire', 'flooded'], strong: ['cheated on me', 'an affair', 'unfaithful', 'been cheating', 'bullied', 'bully me', 'bullies me', 'terminal', 'weeks to live', 'months to live', 'not getting better', 'multiple sclerosis', 'chronic', 'lost my house', 'lost our house', 'lost everything'] },
-    { theme: 'Conflict & Relationships', hear: 'Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.', close: 'You do not have to finish the story today. You can take the next faithful step toward them.', keys: ['conflict', 'fight', 'argu', 'my marriage', 'marriage is', 'save my marriage', 'save our marriage', 'spouse', 'divorce', 'relationship', 'angry at my', 'angry with my', 'angry at him', 'angry at her', 'not speaking', 'barely speaks', 'won\'t talk', 'losing her', 'losing him'], strong: [] },
-    { theme: 'Purpose & Direction', hear: 'Direction-anxiety wants a five-year map. He offers a first thing and a following.', close: 'You do not need the whole map. You need the next yes.', keys: ['purpose', 'direction', 'feel lost', 'feeling lost', 'i\'m lost', 'im lost', 'so lost', 'lost my way', 'career', 'calling', 'what should i do', 'confused', 'plan', 'future job', 'meaning', 'tempted', 'temptation', 'fudge', 'integrity', 'dishonest', 'everyone does it'], strong: [] },
-    { theme: 'Faith & Doubt', hear: 'Doubt is not a firing offense in the Gospels. He lets a doubter touch the wound.', close: 'Faith is not the absence of questions. It is staying close enough to touch.', keys: ['doubt', 'unbelief', 'don\'t believe', 'dont believe', 'struggling to believe', 'questioning', 'is god real', 'where is god', 'angry at god', 'mad at god', 'furious with god', 'blame god'], strong: [] },
-    { theme: 'Peace', hear: 'The world offers a pause between problems. He offers a peace that can sit in a troubled room and still be itself.', close: 'His peace is not the absence of storms. It is his presence within them.', keys: ['peace', 'calm', 'restless heart', 'troubled', 'quiet my'], strong: [] },
-    { theme: 'Hope', hear: 'Hope is not naive optimism. In his words it is anchored in who he is, not in how you feel this hour.', close: 'Good cheer is possible because he has overcome — not because you have to.', keys: ['hope', 'hopeless', 'despair', 'give up', 'pointless', 'empty', 'dark place'], strong: [] }
+    { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.' },
+    { theme: 'Fear', hear: 'Fear is shrinking the future. You do not have to pretend the waves are small.', close: 'Courage is not the absence of fear. It is hearing “it is I” in the middle of it.' },
+    { theme: 'Grief & Loss', hear: 'Grief is not a failure of faith. Something has a name, and it is gone, and you are still here.', close: 'Your tears are seen. Comfort is company within pain — not a dismissal of it.' },
+    { theme: 'Loneliness', hear: 'Loneliness can convince you that you are unseen. You are not an interruption.', close: 'You are someone Jesus calls friend. Presence does not expire at the end of a text thread.' },
+    { theme: 'Forgiveness', hear: 'Forgiveness is one of the hardest sentences he spoke — and one of the freest. You do not have to finish the road today.', close: 'Mercy is often a road, not a moment. Take the next honest step.' },
+    { theme: 'Shame & Guilt', hear: 'Shame says you are the lost sheep who should have known better. He tells the story from the shepherd’s side.', close: 'You are not too far for the shepherd to walk. Heaven still knows how to rejoice.' },
+    { theme: 'Suffering & Pain', hear: 'The first word to the one in pain is come, not cheer up. Rest is offered to the laden.', close: 'Your pain is not a failure of faith. Rest is offered to the laden, not the finished.' },
+    { theme: 'Conflict & Relationships', hear: 'Conflict lodges in the body. He treats the other person as worship’s unfinished business — not a side issue.', close: 'You do not have to finish the story today. You can take the next faithful step toward them.' },
+    { theme: 'Purpose & Direction', hear: 'Direction-anxiety wants a five-year map. He offers a first thing and a following.', close: 'You do not need the whole map. You need the next yes.' },
+    { theme: 'Faith & Doubt', hear: 'Doubt is not a firing offense in the Gospels. He lets a doubter touch the wound.', close: 'Faith is not the absence of questions. It is staying close enough to touch.' },
+    { theme: 'Peace', hear: 'The world offers a pause between problems. He offers a peace that can sit in a troubled room and still be itself.', close: 'His peace is not the absence of storms. It is his presence within them.' },
+    { theme: 'Hope', hear: 'Hope is not naive optimism. In his words it is anchored in who he is, not in how you feel this hour.', close: 'Good cheer is possible because he has overcome — not because you have to.' }
   ];
 
   const FALLBACK = {
@@ -64,26 +64,7 @@
     { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Counted, down to the hairs of your head. You are not a burden to Him.' },
   ];
   const THIRD_PERSON_RE = /\b(?:himself|herself|themselves|his life|her life|their life|he wants|she wants|he doesn'?t|she doesn'?t|he wishes|she wishes|he keeps|she keeps|my (?:son|daughter|friend|brother|sister|wife|husband|mom|mum|dad|mother|father|kid|child|student|partner|boyfriend|girlfriend) (?:said|told|wants|is|has|keeps))\b/i;
-  const BETRAYED_RE = /\b(?:cheat(?:ed|ing)\s+on\s+me|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:has\s+been|is|was|'s\s+been|had\s+been)\s+(?:cheating|unfaithful|sleeping\s+with)|(?:his|her)\s+affair|(?:he|she|my\s+(?:wife|husband|partner|boyfriend|girlfriend|fianc\w+|spouse))\s+(?:had|is\s+having|has\s+been\s+having|was\s+having|'s\s+having|'s\s+been\s+having)\s+an\s+affair|been\s+unfaithful|left\s+me\s+for\s+(?:another|someone|a\s+younger|his|her)|an\s+affair|been\s+cheating|unfaithful)\b/i;
-
-  const PREFIX_KEYS = { anxi: 1, worr: 1, argu: 1, griev: 1, forgiv: 1, diagnos: 1, fright: 1 };
-  function hasKey(t, key) {
-    const k = key.toLowerCase();
-    const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const tail = (k.length <= 5 && !PREFIX_KEYS[k]) ? '(?:s|es|ed|ing|ful|less|ness)?(?=$|[^a-z])' : '';
-    return new RegExp('(?:^|[^a-z])' + esc + tail, 'i').test(t);
-  }
-  function score(text, pack) {
-    const t = text.toLowerCase();
-    let n = 0;
-    for (let i = 0; i < pack.keys.length; i++) {
-      if (hasKey(t, pack.keys[i])) n += pack.keys[i].length > 7 ? 2 : 1;
-    }
-    for (let j = 0; j < (pack.strong || []).length; j++) {
-      if (hasKey(t, pack.strong[j])) n += 4;
-    }
-    return n;
-  }
+  const BETRAYED_RE = R.BETRAYED_RE;
 
   function formatPack(hear, passages, close) {
     let out = hear + '\n\n';
@@ -134,16 +115,19 @@
       );
     }
 
-    let best = null;
-    let bestN = 0;
+    const themes = R && typeof R.guessThemes === 'function' ? R.guessThemes(raw) : [];
+    const theme = themes[0];
+    if (!theme) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
+    let copy = null;
     for (let i = 0; i < PACKS.length; i++) {
-      const n = score(raw, PACKS[i]);
-      if (n > bestN) { best = PACKS[i]; bestN = n; }
+      if (PACKS[i].theme === theme) { copy = PACKS[i]; break; }
     }
-    if (!best || bestN === 0) {
-      return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
-    }
-    return formatPack(best.hear, passagesFor(best.theme), best.close);
+    const enc = window.RLA_CURATED && window.RLA_CURATED.encouragement && window.RLA_CURATED.encouragement[theme];
+    return formatPack(
+      (copy && copy.hear) || (enc && enc.opening) || FALLBACK.hear,
+      passagesFor(theme),
+      (copy && copy.close) || (enc && enc.closing) || FALLBACK.close
+    );
   };
 
   /* Seven Days with His words — the named path (Hallow’s lesson, our length). */

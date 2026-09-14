@@ -17,7 +17,7 @@ How much “no room” should pretend. We chose honesty: “I could not tell… 
 
 ## Methods and limits
 
-Whole-word keys with a small suffix set. Special lists for betrayal, danger, by-you, crisis. **Limit:** client PACKS scoring and server `retrieveSayings` can still disagree on *ordinary* rooms. High-stakes rooms are identity-tested. Meaning after a true cite is untested without a key.
+One `guessThemes` in `public/data/rooms.js`. Special lists for betrayal, danger, by-you, crisis. High-stakes and the six ordinary-drift cases are identity-tested. Meaning after a true cite is untested without a key.
 
 ## What the top 1% know
 

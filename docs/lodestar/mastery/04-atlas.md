@@ -30,7 +30,7 @@ Static HTML, same paper. Linked from settings, command palette, sit walk. Test: 
 
 ## Practice loop
 
-If a first verse changes in `lib/curated.js`, the atlas test fails until the page is updated. (Hard: keep them in sync by hand this cycle; next cycle generate the page.)
+If a first verse changes in `lib/curated.js`, run `npm run curated`. The atlas is generated; the test reads the verse from `encouragementFor`.
 
 ## Traps
 

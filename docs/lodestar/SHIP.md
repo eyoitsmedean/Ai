@@ -66,7 +66,7 @@ See `docs/lodestar/claims.md` and the dossiers. Primary fetches 2026-09-14: 988l
 
 ## 10. Next Summits
 
-Generate atlas from `lib/curated.js`. Meaning judge on model path. Quick-exit on DV. Client/server ordinary-room scoring identity. Forty off-stage build for Feb 2027. Named-map provenance line on the colophon.
+Meaning judge on the model path (needs a key). Forty off-stage build for Feb 2027. Pages merge and the phone walk stay Dean’s. ATELIER closed the generated atlas, Leave, ordinary-room identity, and the named-map colophon — see `docs/lodestar/atelier.md`.
 
 ## 11. Director’s Cut
 
