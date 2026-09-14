@@ -25,6 +25,9 @@ cd red_words
 flutter pub get
 flutter analyze
 flutter test
+bash tool/ship_check.sh
+# after a release build:
+python3 tool/check_16kb.py build/app/outputs/bundle/release/app-release.aab
 ```
 
 First launch opens Matthew 6:34 (`anxiety-mt-6-34`).

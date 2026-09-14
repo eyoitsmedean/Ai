@@ -21,7 +21,7 @@ Play requires this form and a privacy-policy link even when nothing is collected
 | Does your app collect or share any of the required user data types? | **No** |
 | Is all of the user data collected by your app encrypted in transit? | Not asked when "No" above |
 | Do you provide a way for users to request that their data is deleted? | Not asked when "No" above. (Uninstall clears the on-device prefs.) |
-| Privacy policy URL | Host `docs/privacy.html` (HTTPS). Same facts as Settings. Required even for "No". |
+| Privacy policy URL | `https://eyoitsmedean.github.io/Ai/privacy.html` after GitHub Pages is enabled (file is `public/privacy.html`, identical to `docs/privacy.html`). Same facts as Settings. Required even for "No". **Not live as of 2026-09-14** (HTTP 404). |
 | Production access (personal accounts after 2023-11-13) | Closed test, **12 testers opted in for 14 continuous days**, then apply. [Play Help 14151465](https://support.google.com/googleplay/android-developer/answer/14151465). |
 
 Other Play sections
@@ -39,7 +39,7 @@ Apple requires a privacy policy URL for every app (Guideline 5.1.1) and a privac
 | Question | Answer |
 | --- | --- |
 | Do you or your third-party partners collect data from this app? | **No** → label shows **Data Not Collected** |
-| Privacy Policy URL | Host `docs/privacy.html`. **Also required inside the app** (Guideline 5.1.1(i)) — Settings now shows `PrivacyNotice`. |
+| Privacy Policy URL | Same GitHub Pages URL as Play, once live. **Also required inside the app** (Guideline 5.1.1(i)) — Settings shows `PrivacyNotice`. |
 | Privacy manifest (`PrivacyInfo.xcprivacy`) | `shared_preferences_foundation` and `url_launcher_ios` ship their own manifests as CocoaPods/SwiftPM resources; Runner itself uses no required-reason APIs beyond UserDefaults, which the plugin declares. Xcode → Product → Generate Privacy Report on the Mac to confirm before upload. |
 | Encryption export compliance | Uses only OS-provided HTTPS/none; answer **No** to proprietary encryption. (App has no network calls at all.) |
 | Age rating | No objectionable content; religious text. |

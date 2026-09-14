@@ -1,6 +1,38 @@
 # Android release build proof
 
-Three runs on Linux agents. All green.
+Four runs on Linux agents. All green.
+
+## Run 4 — 2026-09-14 (16 KB page-size proof + Flutter 3.47.4)
+
+Toolchain: Flutter stable 3.47.4 (framework `9584c6713b`, Dart 3.13.3, engine `06a2e2a110`), Android SDK 36 / build-tools 36.0.0, AGP 9.1.0, OpenJDK 21.
+
+```
+flutter analyze          No issues found!
+flutter test             +80: All tests passed!
+bash tool/ship_check.sh --artifact build/app/outputs/bundle/release/app-release.aab
+                         OK (analyze + test + 16 KB)
+flutter build apk --release        ✓ app-release.apk (49.9MB)   assembleRelease 171.7s
+flutter build appbundle --release  ✓ app-release.aab (49.5MB)   bundleRelease 7.0s
+```
+
+Badging unchanged (`com.redwords.redwords`, `Red Words`, min 24, target 36). No `android.permission.INTERNET`. Signer unchanged (placeholder, not debug): `CN=Red Words Placeholder, O=Red Words, C=US`.
+
+16 KB ELF `LOAD` alignment (`python3 tool/check_16kb.py`) — all six 64-bit libraries **ALIGNED** on both APK and AAB:
+
+| Library | min LOAD align |
+| --- | --- |
+| `libflutter.so` arm64 / x86_64 | `0x10000` (64 KiB) |
+| `libapp.so` arm64 / x86_64 | `0x10000` (64 KiB) |
+| `libdatastore_shared_counter.so` arm64 / x86_64 | `0x4000` (16 KiB) |
+
+armeabi-v7a is 32-bit and outside Play’s 64-bit 16 KB rule. Source: [Android page-sizes](https://developer.android.com/guide/practices/page-sizes), retrieved 2026-09-14.
+
+SHA-256:
+
+```
+c1b2d627631050699474323153cd8eeadf5dcbf5376ba400072bb80b2a969757  app-release.apk
+195913716f2f5f1db281f5c5d773c6e58fb48ea6b32b963fb0cbb619b1bbbacf  app-release.aab
+```
 
 ## Run 3 — 2026-09-05 (after widget channel + 988 fallback)
 
@@ -95,4 +127,4 @@ Same badging, same placeholder signer. APK SHA-256 `d8c340c417b67fb3b4fa1dc65f5c
 
 ## Not Play-uploadable yet
 
-Both runs used a local placeholder keystore (`/tmp/redwords-placeholder.jks`, gitignored `android/key.properties`). Dean must replace `android/key.properties` with the real Play upload keystore and rebuild the AAB. Nothing else changes.
+Runs 1–4 used a local placeholder keystore (`/tmp/redwords-placeholder.jks`, gitignored `android/key.properties`). Dean must replace `android/key.properties` with the real Play upload keystore and rebuild the AAB. Nothing else changes. After that rebuild, run `python3 tool/check_16kb.py` on the new AAB before upload.

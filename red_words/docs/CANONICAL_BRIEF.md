@@ -24,7 +24,7 @@ Recovered from the conversation transcript of [this agent](https://cursor.com/ag
 
 ## Current scope
 
-- `red_words/` on `cursor/red-words-production-d607` ([PR 13](https://github.com/eyoitsmedean/Ai/pull/13)) + Ask rebuild on `cursor/ask-retriever-rebuild-d607` ([PR 36](https://github.com/eyoitsmedean/Ai/pull/36)) + this recovery branch.
+- `red_words/` on `cursor/red-words-production-d607` ([PR 13](https://github.com/eyoitsmedean/Ai/pull/13)) + Ask rebuild on `cursor/ask-retriever-rebuild-d607` ([PR 36](https://github.com/eyoitsmedean/Ai/pull/36)) + founder recovery (`cursor/founder-recovery-d607`) + CI/privacy/16KB close on `cursor/atelier-ship-close-d607`.
 - Identifiers: iOS `com.redwords.redWords`, widget `com.redwords.redWords.RedWordsWidget`, App Group `group.com.redwords.redWords`, URL `redwords://today`, Android `com.redwords.redwords`, label Red Words.
 
 ## Explicit exclusions
@@ -53,7 +53,7 @@ Recovered from the conversation transcript of [this agent](https://cursor.com/ag
 1. **No Mac in this environment** — iOS archive unproven. Residual, not fakeable.
 2. **No device** — widget follow and `tel:988` unobserved.
 3. **Play production lock for new personal accounts** — closed test, **12 testers opted in for 14 continuous days**, then apply (Play Console Help 14151465, retrieved 2026-09-11). Earlier docs omitted this.
-4. **Privacy URL is founder-hosted** — Apple 5.1.1(i) also requires the policy **inside the app**. In-app copy is now in Settings (`PrivacyNotice`). The public URL is still Dean’s to host (`docs/privacy.html`).
+4. **Privacy URL needs GitHub Pages enabled** — file is `public/privacy.html` (kept identical to `docs/privacy.html` and Settings). Intended URL `https://eyoitsmedean.github.io/Ai/privacy.html` was **404** on 2026-09-14. Dean: Settings → Pages → GitHub Actions, then run the Pages workflow.
 5. **Placeholder keystore** — not Play-uploadable.
 
 ## Preserve / improve / retire
@@ -74,5 +74,5 @@ Recovered from the conversation transcript of [this agent](https://cursor.com/ag
 ## Assumptions
 
 - Dean’s Play account is a **personal** account created after 13 Nov 2023 until he confirms otherwise. If it is an organization account, the 12/14 rule may not apply — check the Dashboard.
-- Dean can host `docs/privacy.html` on any HTTPS URL (GitHub Pages is enough).
+- Dean enables GitHub Pages (Actions source) so `public/privacy.html` is reachable. Any other HTTPS host of the same file is also fine.
 - “Build Baby Build” means ship the founder path, not invent a second product.

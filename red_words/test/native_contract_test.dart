@@ -18,6 +18,7 @@ void main() {
     expect(manifest, isNot(contains('android:label="red_words"')));
     expect(manifest, contains('android:scheme="tel"'));
     expect(manifest, contains('SayingWidgetProvider'));
+    expect(manifest, isNot(contains('android.permission.INTERNET')));
   });
 
   test('iOS widget target is in the pbxproj', () {

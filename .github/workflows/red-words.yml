@@ -1,0 +1,30 @@
+name: Red Words
+
+on:
+  push:
+    paths:
+      - "red_words/**"
+      - "public/privacy.html"
+      - ".github/workflows/red-words.yml"
+  pull_request:
+    paths:
+      - "red_words/**"
+      - "public/privacy.html"
+      - ".github/workflows/red-words.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: red_words
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - run: bash tool/ship_check.sh --skip-flutter

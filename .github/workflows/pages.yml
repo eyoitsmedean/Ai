@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - claude/jesus-teachings-chatbot-bSBhF
+      - cursor/founder-recovery-d607
   workflow_dispatch:
 
 permissions:
