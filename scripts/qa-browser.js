@@ -116,6 +116,10 @@ async function main() {
     const copy = await page.$eval('#blessing-sheet', (el) => el.innerText);
     assert(/Send a blessing/i.test(copy), 'blessing sheet missing');
     assert(/Matthew|Mark|Luke|John/i.test(copy), 'blessing must carry the verse they sat with');
+    assert(/No URL/i.test(copy), 'first blessing must forbid a URL');
+    const market = await page.$$('#blessing-list .blessing-item');
+    assert(market.length === 0, 'first blessing must not be a 24-verse market, got ' + market.length);
+    assert(!/github\.io|http/i.test(copy), 'first blessing sheet must not carry a URL');
     await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
     const still = await page.$eval('#blessing-sheet', (el) => el.classList.contains('on'));
     assert(!still, 'Close should dismiss the blessing');

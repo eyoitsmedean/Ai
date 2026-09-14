@@ -121,3 +121,11 @@ Read transcript this sitting (14 user messages). First ten quoted, not reconstru
 - Not a sixth menu. MARKET_STRATEGY not rebuilt (prompt 7 never named a target).
 - Not done: Pages, merge, send, factory date.
 
+## FOR THE RECORD — 14 September 2026 (first-ten, second pass)
+
+Prompt 9: “Show me your best finished product.” First blessing still opened a 24-verse library picker.
+
+- Built: `openBlessing` now sends only the saying just sat with. No library fetch. Sheet copy: write one name, no URL. QA asserts zero `.blessing-item`s and no URL.
+- Also: `FIVE.md` October line no longer asks her to confirm a household window.
+- Verify: `npm test` and `scripts/qa-browser.js` this sitting (recorded in the commit).
+

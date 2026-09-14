@@ -42,11 +42,11 @@ Two other agents already gave you ten income plans yesterday. This set is not th
 
 **The actual work.**
 
-- *Before October:* name who has the boys if she goes in. Put the Tuesday work block on a calendar you will see. Pick early birthday or cake at home. That is the whole September family project.
-- *October:* one weekly household window, confirmed or not needed. No optional sprint. No new agent. No “just a research hour.”
+- *Before October:* `FREEZE.md` — labor-night name, **firstborn week**, Tuesday blocks, birthday, the bag, one sleep-block owner. Do not make her confirm a window.
+- *October:* no optional sprint. No new agent. No “just a research hour.” November is not pre-authorized.
 - *The only allowed night work:* something that makes tomorrow morning lighter (a bag, a meal, a text). If it is a product, it is the wrong night.
 
-**Done looks like.** 4 December: you are still a person the household can stand. The birthday happened. The arrival had a named adult for the boys. You did not start a sixth hub.
+**Done looks like.** 4 December: you are still a person the household can stand. The birthday happened. Arrival had a named adult **and** the firstborns had a named week. You did not start a sixth hub.
 
 **Kill rule.** Any no — or uncertainty — on the family gate pauses everything else. That already is your rule. Keep it.
 

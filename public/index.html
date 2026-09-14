@@ -1907,9 +1907,9 @@ html.sitting .sit-sheet {
     <div class="sheet-title" id="blessing-title">Send a blessing</div>
     <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
   </div>
-  <p class="sit-copy">One person you love. The saying you just sat with. Not a list, not a market.</p>
+  <p class="sit-copy">Write one name. The saying you just sat with. No URL. Not a list.</p>
   <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
-  <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="Their name, and why this word is for them…"></textarea>
+  <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="Their name — then why this word is for them tonight"></textarea>
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
   <div class="actions" style="margin-top:18px">
@@ -3864,30 +3864,20 @@ async function promptInstall() {
   showToast(choice.outcome === 'accepted' ? 'The room will wait on the home screen' : 'You can keep the room later');
 }
 
-async function blessingSeeds() {
-  try {
-    const res = await fetch('./api/library?limit=24');
-    const data = await res.json();
-    if (data.sayings && data.sayings.length) {
-      return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
-    }
-  } catch (_) {}
-  try {
-    const res = await fetch('./library.json');
-    const data = await res.json();
-    return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
-  } catch (_) {
-    return [];
-  }
-}
 async function openBlessing(seed) {
   closeSit();
   closeSettings();
   closeShareSheet();
-  const picks = await blessingSeeds();
-  if (seed && seed.verse && seed.quote && !picks.some((p) => p.verse === seed.verse)) picks.unshift(seed);
-  blessingPick = seed || picks[0] || null;
-  renderBlessingList(picks);
+  const fromSit = seed && seed.verse && seed.quote ? seed : null;
+  const fromToday = (!fromSit && dailyData && dailyData.affirmation)
+    ? { verse: dailyData.affirmation.verse, quote: dailyData.affirmation.quote }
+    : null;
+  blessingPick = fromSit || fromToday;
+  if (!blessingPick) {
+    showToast('Sit with a saying first');
+    return;
+  }
+  renderBlessingList([]);
   updateBlessingPreview();
   openSheetChrome('blessing-sheet');
 }
@@ -3929,7 +3919,7 @@ function updateBlessingPreview() {
     '<div class="cite">' + esc(blessingPick.verse) + '</div>';
 }
 async function sendBlessing(style) {
-  if (!blessingPick) { showToast('Choose a verse first'); return; }
+  if (!blessingPick) { showToast('Sit with a saying first'); return; }
   closeBlessing();
   await shareItem('blessing', style || 'parchment');
   showToast('Blessing ready to send');
