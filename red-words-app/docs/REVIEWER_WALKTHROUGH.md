@@ -17,8 +17,9 @@ Install from TestFlight or the Play closed-test link. Turn on **airplane mode** 
 
 ## 2. The step
 
-- Tap **I’ll do this**. The cue becomes a committed line.
-- Kill the app. Reopen. The same saying is still there (continuity). The step is still committed.
+- Tap **One honest step**. Write a line in your own words. Tap **I’ll do this**.
+- Optional **Amen** — or **Not now**. The dock leaves during this beat.
+- Kill the app. Reopen. The same saying is still there. The ribbon reads **You said you’d ___**.
 
 ## 3. Ask — retrieve
 

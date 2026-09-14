@@ -41,43 +41,44 @@ class _TodayTabState extends ConsumerState<TodayTab> {
   Widget build(BuildContext context) {
     if (widget.showAmen) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(28, 48, 28, 24),
+        padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Optional.',
-              style: TextStyle(
-                fontSize: 13,
-                letterSpacing: 1.2,
-                color: Brand.muted,
-              ),
-            ),
-            const SizedBox(height: 18),
+            const CrimsonKnot(),
+            const SizedBox(height: 22),
             const Text(
               'Amen, if you want it.',
               key: Key('amen-copy'),
               style: TextStyle(
-                fontFamily: 'serif',
-                fontSize: 24,
+                fontFamily: Brand.serif,
+                fontStyle: FontStyle.italic,
+                fontSize: 26,
                 height: 1.4,
                 color: Brand.ink,
               ),
             ),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                key: const Key('amen'),
-                onPressed: () => ref.read(engineProvider.notifier).amen(),
-                style: FilledButton.styleFrom(backgroundColor: Brand.crimson),
-                child: const Text('Amen'),
+            TextButton(
+              key: const Key('amen'),
+              onPressed: () => ref.read(engineProvider.notifier).amen(),
+              child: const Text(
+                'Amen',
+                style: TextStyle(
+                  fontFamily: Brand.serif,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 20,
+                  color: Brand.crimson,
+                ),
               ),
             ),
             TextButton(
               key: const Key('amen-skip'),
               onPressed: () => ref.read(engineProvider.notifier).amen(),
-              child: const Text('Not now'),
+              child: const Text(
+                'Not now',
+                style: TextStyle(color: Brand.muted),
+              ),
             ),
           ],
         ),
@@ -104,8 +105,9 @@ class _TodayTabState extends ConsumerState<TodayTab> {
               widget.engine.today.step,
               key: const Key('step-body'),
               style: const TextStyle(
-                fontFamily: 'serif',
-                fontSize: 20,
+                fontFamily: Brand.serif,
+                fontStyle: FontStyle.italic,
+                fontSize: 22,
                 height: 1.4,
                 color: Brand.muted,
               ),
@@ -119,7 +121,7 @@ class _TodayTabState extends ConsumerState<TodayTab> {
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
                 hintText: 'In your own words.',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
               ),
             ),
             const Spacer(),
@@ -150,19 +152,28 @@ class _TodayTabState extends ConsumerState<TodayTab> {
         children: [
           if (continuity != null)
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 16, 28, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  continuity,
-                  key: const Key('continuity'),
-                  style: const TextStyle(
-                    fontFamily: 'serif',
-                    fontSize: 16,
-                    height: 1.4,
-                    color: Brand.ink,
+              padding: const EdgeInsets.fromLTRB(28, 20, 28, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    continuity,
+                    key: const Key('continuity'),
+                    style: const TextStyle(
+                      fontFamily: Brand.serif,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 17,
+                      height: 1.4,
+                      color: Brand.ink,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  const SizedBox(
+                    width: 28,
+                    height: 1,
+                    child: ColoredBox(color: Brand.crimson),
+                  ),
+                ],
               ),
             ),
           Expanded(
@@ -174,12 +185,15 @@ class _TodayTabState extends ConsumerState<TodayTab> {
           TextButton(
             key: const Key('save-today'),
             onPressed: () => ref.read(engineProvider.notifier).saveToday(),
-            child: const Text('Keep'),
+            child: const Text('Keep', style: TextStyle(color: Brand.muted)),
           ),
           TextButton(
             key: const Key('open-step'),
             onPressed: () => ref.read(engineProvider.notifier).openStep(),
-            child: const Text('One honest step'),
+            child: const Text(
+              'One honest step',
+              style: TextStyle(color: Brand.crimson, letterSpacing: 0.4),
+            ),
           ),
         ],
       ),

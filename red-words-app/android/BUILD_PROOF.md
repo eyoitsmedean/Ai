@@ -1,5 +1,22 @@
 # Android release build proof
 
+## Run 5 — 2026-09-14 (craft pass: bundled Source Serif 4)
+
+```
+flutter analyze          No issues found!
+flutter test             +89: All tests passed!
+flutter build appbundle --release
+✓ Built build/app/outputs/bundle/release/app-release.aab (50.5MB)
+```
+
+AAB contains `fonts/SourceSerif4.ttf` and `fonts/SourceSerif4-Italic.ttf`. Placeholder signer unchanged.
+
+```
+bbe43662482834ad48f12f5e1d28d38fbdaa5df7b8f09c1b77450a67e0255c0b  app-release.aab
+```
+
+---
+
 ## Run 4 — 2026-09-14 (this branch: `red-words-app/`)
 
 Flutter 3.47.4 stable / Dart 3.13.3, Android SDK 36 / build-tools 36.0.0, Gradle 9.3.1, AGP 9.1.0, OpenJDK 21.

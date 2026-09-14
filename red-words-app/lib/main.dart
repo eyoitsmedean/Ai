@@ -40,10 +40,18 @@ class _RedWordsAppState extends ConsumerState<RedWordsApp> {
           surface: Brand.paper,
           brightness: Brightness.light,
         ),
+        textTheme: ThemeData.light().textTheme.apply(
+          bodyColor: Brand.ink,
+          displayColor: Brand.ink,
+        ),
         navigationBarTheme: const NavigationBarThemeData(
           backgroundColor: Brand.paper,
+          surfaceTintColor: Colors.transparent,
           indicatorColor: Color(0x22000000),
+          elevation: 0,
+          height: 64,
         ),
+        dividerColor: Color(0x1A2A2420),
       ),
       home: const AppShell(),
     );

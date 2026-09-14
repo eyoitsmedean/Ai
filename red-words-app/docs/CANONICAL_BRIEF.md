@@ -8,19 +8,22 @@ A production-ready **offline Flutter app** named Red Words on iPhone and Android
 
 Who it is for: a person who wants His words in the moment, and Dean as the sole founder who must get it through TestFlight and Play.
 
-## Original requirements (user prompts 1–3, this run)
+## Original requirements (Dean’s first 10 prompts)
 
-Recovered from the conversation transcript of [this agent](https://cursor.com/agents/bc-7dd9f8e0-513b-402b-9429-a2632015d607). Eight user prompts exist in the thread, not ten.
+Recovered from the 11 Sep 2026 transcript table on `cursor/recovery-flagships-bca4` (`docs/CANONICAL-BRIEF.md`). Wording is excerpted. Later Red Words amendments (WEB, no chatbot, craft law, PR 13 ship line) govern the product shape. They do not erase the founding job.
 
 | # | Wording (excerpt) | Requirement | Later amendment |
 | --- | --- | --- | --- |
-| 1 | “You are shipping Red Words to production-ready iOS and Android. Be hard on QA.” Locked product: WEB, Gospels only, hierarchy Word → citation → knot → reflection → chips → One honest step. Offline Ask. No invented Scripture. | Ship the existing product, hard QA, one PR. | — |
-| 2 | “Do not rewrite from scratch. Fix these production holes…” Widget pbxproj target; Android id/label; release signing + R8; adaptive icon; 988 `tel` queries + tests; knot/Gospel/refuse tests; honest iOS. | Fix listed holes. Keep analyze + tests green. | — |
-| 3 | “PR 12 just landed… do NOT merge or copy its product.” Today/Sit/Seek on 33 KJV. “Keep your draft …/pull/13 as the ship line.” | PR 13 is the ship line. Fail if KJV/Sit-Seek is taken. | — |
-| 4 | “Build Baby Build” | Execute, do not plan. | Repeated as the operating signal. |
-| 5–6 | FORGE / Universal Rebuild | Research then build; do not paper over widget/988/iOS 17 holes. | Widget channel, 988 fallback, iOS 17 guard shipped on PR 13. |
-| 7 | “pick 5 priorities and push” | Ask retriever rebuild. | PR 36. |
-| 8 | This recovery commission | Recover intent, finish what Dean can actually use. | This document. |
+| 1 | Research best-selling Christian apps, demographics, ads, and red-letter competitors. “Build an app that combines what you learned into the perfect market owning app of spreading the red words… of Jesus, getting encouragement and some guidance using his own words.” Helpful **and** commercial. Long-running. | Own the niche of His spoken words. Not a YouVersion clone. | Commercial launch waits on Dean’s Apple/Play accounts. His words stay free. This tree ships the offline Flutter book (WEB), not the Advisor chatbot. |
+| 2 | “Do research on how to improve the project, then… build, then QA… and run this loop again… to hit a world class standard.” | Research → build → QA → rebuild. | Unchanged. This pass is that loop on `red-words-app/`. |
+| 3 | “put on your creative design brain… impress a human… beautiful, elegant, complex in build but very simple in usage… Notion… exceed your own expectations… be ambitious.” | Paper, not chrome. Expensive to make, cheap to use. | `DESIGN.md` + bundled Source Serif 4. Crimson is speech only. |
+| 4 | “Do what you feel advances this project the most.” | Pick the highest-leverage reversible move. | This pass: type + chrome that leaves + dark paper. Not a second app. |
+| 5 | (same autonomy / execute signal as 4 in later threads) | Do not wait for permission on reversible craft. | Unchanged. |
+| 6 | Household-level stakes. Depth over polish-for-show. | Do not ship a timid slice or a trust-burning chatbot. | Unchanged in spirit. Grocery money is not for unlicensed launches. |
+| 7–9 | Merge-conflict hygiene vs `claude/jesus-teachings-chatbot-bSBhF`. Fetch first. Fix simple conflicts. Report conflicting intents. | Do not smash the Flutter book into the Advisor tree. | Binding. Do not merge PR 12 (KJV / Sit / Seek). |
+| 10 | “Believe you can do more and be ambitious.” | Completeness, not a new category. | Ambition is craft and a honest store path, not Journeys or generative Jesus. |
+
+**This-run ship prompt (2026-09-14).** “You are shipping Red Words to production-ready iPhone AND Android… If a Flutter app is already there, complete THAT.” Hierarchy: Word → citation → knot → reflection → chips → One honest step. Offline Ask. WEB 100. Widget Word + citation + thread. Hard QA. That prompt is an amendment of 1–10, not a replacement.
 
 ## Current scope
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// Locked brand. Crimson is speech, not chrome.
+/// Type: Source Serif 4 (OFL), bundled — never fetched.
 abstract final class Brand {
   static const name = 'Red Words';
   static const promise = 'His words, for this moment';
   static const stepPromise = 'His words. One honest step.';
+  static const serif = 'SourceSerif4';
   static const paper = Color(0xFFF6F0E6);
   static const crimson = Color(0xFF8C1C24);
   static const charcoal = Color(0xFF1C1816);

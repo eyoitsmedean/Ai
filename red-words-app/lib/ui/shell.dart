@@ -9,6 +9,7 @@ import '../store/local_store.dart';
 import 'ask_tab.dart';
 import 'crisis_button.dart';
 import 'saved_tab.dart';
+import 'saying_view.dart';
 import 'settings_tab.dart';
 import 'today_tab.dart';
 
@@ -167,18 +168,57 @@ class _AppShellState extends ConsumerState<AppShell> {
       SavedTab(engine: state.engine!),
       SettingsTab(engine: state.engine!),
     ];
-    return Scaffold(
-      backgroundColor: state.engine!.memory.darkSaying ? Brand.charcoal : Brand.paper,
-      body: SafeArea(child: pages[_tab]),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _tab,
-        onDestinationSelected: (index) => setState(() => _tab = index),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.wb_twilight_outlined), label: 'Today'),
-          NavigationDestination(icon: Icon(Icons.search), label: 'Ask'),
-          NavigationDestination(icon: Icon(Icons.bookmark_border), label: 'Saved'),
-          NavigationDestination(icon: Icon(Icons.settings_outlined), label: 'Settings'),
-        ],
+    final dark = state.engine!.memory.darkSaying;
+    final paper = dark ? Brand.charcoal : Brand.paper;
+    final ink = dark ? Brand.paper : Brand.ink;
+    final hideChrome = _tab == 0 && (state.showStep || state.showAmen);
+    return Theme(
+      data: Theme.of(context).copyWith(
+        scaffoldBackgroundColor: paper,
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: ink,
+          displayColor: ink,
+        ),
+        listTileTheme: ListTileThemeData(textColor: ink, iconColor: ink),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: paper,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          height: 64,
+          indicatorColor: Brand.crimson.withValues(alpha: dark ? 0.22 : 0.10),
+          labelTextStyle: WidgetStatePropertyAll(
+            TextStyle(fontSize: 11, letterSpacing: 1.1, color: ink),
+          ),
+          iconTheme: WidgetStatePropertyAll(IconThemeData(color: ink, size: 20)),
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: paper,
+        body: SafeArea(child: pages[_tab]),
+        bottomNavigationBar: hideChrome
+            ? null
+            : NavigationBar(
+                selectedIndex: _tab,
+                onDestinationSelected: (index) => setState(() => _tab = index),
+                destinations: const [
+                  NavigationDestination(
+                    icon: Icon(Icons.remove),
+                    label: 'Today',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.edit_outlined),
+                    label: 'Ask',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.bookmark_border),
+                    label: 'Saved',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.settings_outlined),
+                    label: 'Settings',
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -192,14 +232,24 @@ class SplashPage extends StatelessWidget {
     return const Scaffold(
       backgroundColor: Brand.paper,
       body: Center(
-        child: Text(
-          Brand.promise,
-          key: Key('splash-promise'),
-          style: TextStyle(
-            fontFamily: 'serif',
-            fontSize: 20,
-            color: Brand.crimson,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CrimsonKnot(key: Key('splash-knot')),
+            SizedBox(height: 22),
+            Text(
+              Brand.promise,
+              key: Key('splash-promise'),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: Brand.serif,
+                fontStyle: FontStyle.italic,
+                fontSize: 22,
+                height: 1.35,
+                color: Brand.crimson,
+              ),
+            ),
+          ],
         ),
       ),
     );

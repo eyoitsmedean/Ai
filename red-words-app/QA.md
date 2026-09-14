@@ -9,7 +9,7 @@ Do not treat this file as an iOS compile success. iOS was not archived here.
 | Check | Result | Repro |
 | --- | --- | --- |
 | `flutter analyze` | **PASS** — No issues found | `cd red-words-app && flutter analyze` |
-| `flutter test` | **PASS** — 88 passed, 0 failed | `cd red-words-app && flutter test` |
+| `flutter test` | **PASS** — 89 passed, 0 failed (2026-09-14 craft pass) | `cd red-words-app && flutter test` |
 | Splash ≤1.5s | **PASS** | `Brand.splashHold` is 900ms; `spine_test` pumps splash then Saying |
 | Saying hierarchy | **PASS** | `hierarchy_test` — Word → citation → knot → reflection → chips → cue. No `Reflection:` label |
 | Step commit (own words) | **PASS** | `spine_test` types “call my sister before noon”, taps I'll do this |
@@ -33,8 +33,8 @@ red-words-app/build/app/outputs/bundle/release/app-release.aab
 
 | Fact | Value |
 | --- | --- |
-| Size | 47.2 MB (49.5 MB as Flutter reported) |
-| SHA-256 | `4064f81bce2c082ba3662be4746e4e449e2ae67204620e8aea2eecf91506c039` |
+| Size | 50.5 MB (Flutter reported; includes bundled Source Serif 4) |
+| SHA-256 | `bbe43662482834ad48f12f5e1d28d38fbdaa5df7b8f09c1b77450a67e0255c0b` |
 | `applicationId` | `com.redwords.redwords` |
 | label | Red Words |
 | minSdk | 24 |

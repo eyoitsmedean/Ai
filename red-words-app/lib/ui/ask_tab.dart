@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../brand.dart';
 import '../engine/pack.dart';
 import '../engine/retrieve.dart';
-import 'saying_view.dart';
 import 'crisis_button.dart';
+import 'saying_view.dart';
 
 class AskTab extends StatefulWidget {
   const AskTab({super.key, required this.pack, required this.dark});
@@ -34,6 +34,7 @@ class _AskTabState extends State<AskTab> {
   @override
   Widget build(BuildContext context) {
     final result = _result;
+    final ink = widget.dark ? Brand.paper : Brand.ink;
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
       children: [
@@ -42,9 +43,9 @@ class _AskTabState extends State<AskTab> {
           style: TextStyle(fontSize: 13, letterSpacing: 1.4, color: Brand.muted),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'On this device. A saying if one fits. Nothing invented.',
-          style: TextStyle(height: 1.4),
+          style: TextStyle(height: 1.45, color: ink),
         ),
         const SizedBox(height: 16),
         TextField(
@@ -52,11 +53,13 @@ class _AskTabState extends State<AskTab> {
           controller: _controller,
           minLines: 2,
           maxLines: 4,
+          style: TextStyle(color: ink, height: 1.4),
+          cursorColor: Brand.crimson,
           textInputAction: TextInputAction.send,
           onSubmitted: (_) => _submit(),
           decoration: const InputDecoration(
             hintText: 'A few honest words.',
-            border: OutlineInputBorder(),
+            border: UnderlineInputBorder(),
           ),
         ),
         const SizedBox(height: 12),
@@ -65,7 +68,10 @@ class _AskTabState extends State<AskTab> {
           child: TextButton(
             key: const Key('ask-submit'),
             onPressed: _submit,
-            child: const Text('Look'),
+            child: const Text(
+              'Look',
+              style: TextStyle(color: Brand.crimson, letterSpacing: 0.4),
+            ),
           ),
         ),
         if (result != null) ...[
@@ -81,7 +87,7 @@ class _AskTabState extends State<AskTab> {
             Text(
               result.message,
               key: Key('ask-${result.kind.name}'),
-              style: const TextStyle(height: 1.45, color: Brand.ink),
+              style: TextStyle(height: 1.45, color: ink),
             ),
           if (result.offer988) const CrisisButton(key: Key('crisis-988')),
         ],

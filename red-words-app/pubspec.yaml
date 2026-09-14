@@ -22,3 +22,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sayings.json
+  fonts:
+    - family: SourceSerif4
+      fonts:
+        - asset: fonts/SourceSerif4.ttf
+        - asset: fonts/SourceSerif4-Italic.ttf
+          style: italic

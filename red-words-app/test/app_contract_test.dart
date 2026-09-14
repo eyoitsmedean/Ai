@@ -29,6 +29,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: SplashPage()));
     expect(find.text(Brand.promise), findsOneWidget);
     expect(find.byKey(const Key('splash-promise')), findsOneWidget);
+    expect(find.byKey(const Key('splash-knot')), findsOneWidget);
     expect(find.textContaining('Journeys'), findsNothing);
     expect(find.textContaining('streak'), findsNothing);
     expect(find.textContaining('chat'), findsNothing);

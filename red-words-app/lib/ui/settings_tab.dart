@@ -18,7 +18,14 @@ class SettingsTab extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
       children: [
-        const Text(Brand.name, style: TextStyle(fontFamily: 'serif', fontSize: 28)),
+        const Text(
+          Brand.name,
+          style: TextStyle(
+            fontFamily: Brand.serif,
+            fontStyle: FontStyle.italic,
+            fontSize: 28,
+          ),
+        ),
         const SizedBox(height: 8),
         const Text(Brand.stepPromise),
         const SizedBox(height: 24),

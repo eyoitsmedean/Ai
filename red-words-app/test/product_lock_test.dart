@@ -24,6 +24,17 @@ void main() {
     expect(ui.contains('seek_tab.dart'), isFalse);
   });
 
+  test('Word is a bundled OFL serif, not a runtime font fetch', () {
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    expect(pubspec, contains('SourceSerif4'));
+    expect(pubspec, contains('fonts/SourceSerif4.ttf'));
+    expect(File('fonts/SourceSerif4.ttf').existsSync(), isTrue);
+    expect(File('fonts/SourceSerif4-Italic.ttf').existsSync(), isTrue);
+    expect(File('fonts/OFL.txt').existsSync(), isTrue);
+    expect(File('lib/brand.dart').readAsStringSync(), contains("serif = 'SourceSerif4'"));
+    expect(pubspec.toLowerCase(), isNot(contains('google_fonts')));
+  });
+
   test('seed pack is WEB 100, not a 33-saying KJV catalog', () {
     final raw = File('assets/sayings.json').readAsStringSync();
     final pack = ScripturePack.parse(raw);

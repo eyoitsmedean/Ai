@@ -38,9 +38,10 @@ class SayingView extends StatelessWidget {
                 saying.word,
                 key: const Key('saying-word'),
                 style: TextStyle(
-                  fontFamily: 'serif',
+                  fontFamily: Brand.serif,
+                  fontStyle: FontStyle.italic,
                   fontSize: 26,
-                  height: 1.35,
+                  height: 1.4,
                   color: Brand.crimson,
                   fontWeight: FontWeight.w400,
                 ),
