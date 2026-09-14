@@ -1,7 +1,7 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const { composeLetter, letterPassesFloor, VOICE } = require('../lib/counsel');
-const { letterPassesContract, PERSONA } = require('../lib/letter-contract');
+const { letterPassesContract, PERSONA, JESUS_CLAIM, advisorVoice } = require('../lib/letter-contract');
 const { verifyAndSubstitute, CRISIS_NOTICE, ABUSE_NOTICE } = require('../lib/scripture');
 
 describe('letter contract', () => {
@@ -29,6 +29,19 @@ describe('letter contract', () => {
     assert.ok(!letterPassesContract(body, { crisis: true }).ok, 'body alone is not the served letter');
     const served = `${CRISIS_NOTICE}\n${body}`;
     assert.deepEqual(letterPassesContract(served, { crisis: true }).failures, []);
+  });
+
+  it('fails when the advisor voice claims to be Jesus', () => {
+    const clean = verifyAndSubstitute(composeLetter('how do I find peace when everything around me is chaos'));
+    const poisoned = 'Yes, I am Jesus. Sit down and listen.\n\n' + clean.split('\n').slice(1).join('\n');
+    assert.ok(JESUS_CLAIM.test(advisorVoice(poisoned)));
+    assert.ok(letterPassesContract(poisoned).failures.includes('no_persona'));
+  });
+
+  it('His quoted I-am sayings do not fail the contract', () => {
+    const letter = verifyAndSubstitute(composeLetter('how do I find peace when everything around me is chaos'));
+    assert.ok(letterPassesContract(letter).ok, letterPassesContract(letter).failures.join(','));
+    assert.ok(!JESUS_CLAIM.test(advisorVoice(letter)));
   });
 
   it('a served abuse letter fails if enemy-love is cited', () => {

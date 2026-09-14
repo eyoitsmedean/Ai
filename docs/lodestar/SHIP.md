@@ -1,13 +1,13 @@
 # Ship Package — LODESTAR Cycle 1
 
 ## 1. Summary
-Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a letter contract the server actually uses, a blessing from the letter you just received, a night latch that will not count a streak, and a title-page ask that can send a letter in one gesture. Eval is 54/54 on the offline path (19 distinct citation sets). Knowledge base: `docs/lodestar/`.
+Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a letter contract the server actually uses, a blessing from the letter you just received, a night latch that will not count a streak, and a title-page ask that can send a letter in one gesture. Eval is 56/56 on the offline path once this ATELIER pass is run (19 distinct citation sets on everyday/low-moment). Knowledge base: `docs/lodestar/`.
 
 ## 2. Charter check
 - **C1** advanced — Integrity cites Matthew 5:37; John 3 seam + Blayney label disclosed.
 - **C2** advanced — first-ask, blessing-from-letter, night latch, Integrity craft.
 - **C3** advanced — 988 caveat; leaving ≠ vow-break; history warning; Mt 6:14–15 forbidden on abuse.
-- **C4** advanced — contract judge; 54/54 offline this session.
+- **C4** advanced — contract judge; 54/54 Cycle 1; ATELIER adds #55–#56 (counts after `npm run eval`).
 - **C5** unchanged — no device, no deploy, no store.
 - **C6** advanced — Advisor chip; contract fails persona. **Proposed amendment:** keep C6 as a numbered goal.
 
@@ -22,7 +22,8 @@ Intent Charter v1 is on disk. The folio has a thirteenth room (Integrity), a let
 - **Read:** recovery brief, CLAUDE, counsel/scripture/curated, eval questions, folio Advisor/Today/blessing/settings.
 - **Scholar pass** opened primary URLs 2026-09-14 (dossiers list them). I did not re-open every URL myself.
 - **Computed:** Integrity verses looked up in-corpus; composeLetter for q14.
-- **Ran:** `npm test` **98/98**; `npm run qa` **19/19** (headless Chrome, 390×844); `npm run eval` **54/54** offline, 19 citation sets (2026-09-14).
+- **Ran (Cycle 1):** `npm test` **98/98**; `npm run qa` **19/19**; `npm run eval` **54/54** offline, 19 citation sets (2026-09-14).  
+- **ATELIER residuals (this pass):** counts in `RELEASE.md` after the run — do not treat this line as passed until that update.
 - **Not run:** model path (no key); iOS/Android; YouTube; Granola; live Cambridge permissions HTML; RAINN.org; apps (Hallow/Lectio) themselves.
 
 ## 5. Assumptions and limits
@@ -45,7 +46,7 @@ See each dossier. Klopsch: Crossway, ABS. John 3: Reading Acts, TIPS. APA PDF 20
 `docs/lodestar/INDEX.md`
 
 ## 10. Next Summits
-WEB second text (Dean). Model-path eval. Multi-turn pressure. “You are Jesus.” IPV quick-exit. High-contrast His-words. Forty night readings.
+WEB second text (Dean). Model-path eval. Multi-turn pressure. IPV quick-exit. High-contrast His-words. Forty night readings.
 
 ## 11. Director’s Cut
 `docs/lodestar/DIRECTORS_CUT.md` — Blayney label, NIV/NET seam, “page not pastor.”
@@ -60,8 +61,10 @@ Keep C6 as a numbered goal — yes or no?
 
 	LODESTAR CYCLE: 1
 	STATUS: complete
+	ATELIER: Cycle 1 residuals closed (night hides Vespers; title-page ask in QA; You-are-Jesus eval #55–#56)
 	BUILT: Integrity room; letter contract; blessing-from-letter; night latch; title-page ask; Charter + dossiers
 	CHARTER: v1 (C6 proposed, not yet dated as an amendment)
 	KNOWLEDGE BASE: docs/lodestar/ (index: docs/lodestar/INDEX.md)
-	OPEN DEFECTS: Minor — title-page ask not e2e in QA; Vespers can still show under night latch; no “You are Jesus” eval item
-	RESUME FROM: next cycle
+	OPEN DEFECTS: none remaining from Cycle 1 register
+	RESUME FROM: next commissioned slice (not another LODESTAR cycle unless asked)
+	THE ASK: Keep C6 as a numbered goal — yes or no?

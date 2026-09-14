@@ -883,6 +883,7 @@ html.kb-up .blessing-sheet.on { padding-bottom: calc(28px + env(safe-area-inset-
 }
 html.night-quiet .today-streak,
 html.night-quiet #today-streak-label { visibility: hidden; }
+html.night-quiet .vespers { display: none; }
 .typing-indicator { display: none; padding: 4px 0 16px; }
 .typing-indicator.on { display: block; }
 .ink-wait {
@@ -2921,8 +2922,8 @@ function updateDateUI() {
       ? 'Evening <em>office</em>'
       : 'Today’s <em>light</em>';
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  document.getElementById('vespers-card').hidden = !evening;
-  if (evening) paintVespers();
+  document.getElementById('vespers-card').hidden = !evening || night;
+  if (evening && !night) paintVespers();
   document.documentElement.classList.toggle('night-quiet', night);
   const streakLabel = document.getElementById('today-streak-label');
   const streakNum = document.getElementById('streak-num');
@@ -4505,7 +4506,7 @@ const COMMANDS = [
   { label: 'Seven Days', hint: 'Path', run: () => { setPathKind('seven', { quiet: true }); switchTab('today'); document.getElementById('path')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Forty', hint: 'Path · the longer story', run: () => beginForty() },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
-  { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById(isNightOffice() ? 'night-latch' : 'vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
   { label: 'Grief & Loss', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Grief & Loss'), 80); } },

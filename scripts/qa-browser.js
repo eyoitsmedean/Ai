@@ -429,6 +429,7 @@ async function main() {
       cite: document.getElementById('night-cite').textContent,
       quiet: document.documentElement.classList.contains('night-quiet'),
       firstAsk: document.getElementById('first-ask').hidden,
+      vespers: document.getElementById('vespers-card').hidden,
     }));
     assert(night.watch === 'night', 'watch is ' + night.watch);
     assert(night.latch, 'night latch hidden');
@@ -436,6 +437,25 @@ async function main() {
     assert(/John|Matthew|Mark|Luke/.test(night.cite), 'night cite missing');
     assert(night.quiet, 'night-quiet class missing');
     assert(night.firstAsk, 'first-ask should stay hidden at night');
+    assert(night.vespers, 'vespers card should stay hidden under the night latch');
+  });
+
+  await check('title-page ask sends a letter', async () => {
+    await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => !document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
+    await page.click('#ob-ack');
+    await page.click('#ob-open');
+    await page.waitForSelector('#ob-need.on', { timeout: 4000 });
+    await page.evaluate(() => { if (typeof chooseNeed === 'function') chooseNeed('ask'); });
+    await page.waitForSelector('#ob-ask.on', { timeout: 4000 });
+    await page.evaluate(() => {
+      document.getElementById('ob-ask-input').value = 'My boss wants me to lie to a customer. If I refuse I might lose my job.';
+      if (typeof sendOnboardAsk === 'function') sendOnboardAsk();
+    });
+    await page.waitForFunction(() => document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
+    await page.waitForFunction(() => /Matthew 5:37/i.test((document.getElementById('chat-messages') || {}).innerText || ''), { timeout: 20000 });
+    const letter = await page.evaluate(() => document.getElementById('chat-messages').innerText);
+    assert(/smoother than the truth/.test(letter), 'title-page ask did not land Integrity');
   });
 
   await check('Seek lists thirteen rooms including Integrity', async () => {
