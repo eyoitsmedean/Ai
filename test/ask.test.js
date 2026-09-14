@@ -49,6 +49,8 @@ describe('one-screen composeAsk', () => {
     assert.equal(abuse.stop, true);
     assert.match(abuse.handoff, /1-800-799-7233/);
     assert.match(abuse.handoff, /800-656-4673/);
+    assert.match(abuse.cannot, /1-800-799-7233/);
+    assert.match(abuse.handoff, /cannot hide a visit/);
     assert.doesNotMatch(abuse.handoff, /Mark 10|John 4/);
     assert.equal(gospelCounsel(abuse.handoff), false);
   });
@@ -59,6 +61,29 @@ describe('one-screen composeAsk', () => {
     assert.equal(out.kind, 'spanishCrisis');
     assert.match(out.handoff, /988/);
     assert.equal(out.quote, '');
+  });
+
+  it('keeps Spanish modalities on a short line and names both numbers when abuse and crisis meet', () => {
+    const short = composeAsk('quiero morir');
+    assert.equal(short.stop, true);
+    assert.equal(short.kind, 'spanishCrisis');
+    assert.match(short.handoff, /AYUDA/);
+    assert.equal(short.quote, '');
+
+    const mixed = composeAsk('my husband hits me and I want to kill myself');
+    assert.equal(mixed.stop, true);
+    assert.equal(mixed.kind, 'abuseCrisis');
+    assert.match(mixed.handoff, /1-800-799-7233/);
+    assert.match(mixed.handoff, /988/);
+    assert.match(mixed.cannot, /1-800-799-7233/);
+    assert.equal(gospelCounsel(mixed.handoff + mixed.quote), false);
+
+    const afterCrisis = composeAsk('my husband hits me and I want to kill myself', {
+      prior: ['I want to kill myself'],
+    });
+    assert.equal(afterCrisis.kind, 'abuseCrisis', 'thread must add NDVH after a crisis line');
+    assert.match(afterCrisis.handoff, /1-800-799-7233/);
+    assert.doesNotMatch(require('fs').readFileSync(require('path').join(__dirname, '../public/ask.html'), 'utf8'), /fonts\.googleapis/);
   });
 
   it('answers a felt need with one sealed saying and ≤4 meaning lines', () => {
@@ -187,6 +212,29 @@ describe('one-screen routes', () => {
     assert.equal(b.quote, '');
     assert.equal(gospelCounsel(JSON.stringify(b)), false);
     assert.match(b.handoff, /988/);
+  });
+
+  it('names NDVH on abuse, not only 988, and serves /gate and /letter', async () => {
+    const abuse = composeAsk('my husband hits me');
+    assert.match(abuse.cannot, /1-800-799-7233/);
+    assert.match(abuse.handoff, /cannot hide a visit/);
+    assert.doesNotMatch(abuse.handoff, /come back/i);
+
+    const es = composeAsk('Estoy muy triste y quiero morir');
+    assert.match(es.handoff, /AYUDA/);
+
+    const other = await request('GET', '/gate');
+    assert.equal(other.status, 200);
+    assert.match(other.raw, /Scratch pad — which text/);
+
+    const letter = await request('GET', '/api/letter?ref=Matthew%2011:28');
+    assert.equal(letter.status, 200);
+    const L = JSON.parse(letter.raw);
+    assert.match(L.citation, /Matthew 11:28/);
+    assert.ok(L.quote.length > 8);
+
+    const angel = await request('GET', '/api/letter?ref=Luke%202:14');
+    assert.equal(angel.status, 404);
   });
 
   it('rejects an empty ask', async () => {

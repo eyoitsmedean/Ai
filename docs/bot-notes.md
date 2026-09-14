@@ -2,6 +2,14 @@
 
 ---
 
+## LODESTAR Cycle 1 — 2026-09-14
+
+Worker: Cursor cloud agent · this conversation’s LODESTAR paste.
+
+Charter in `docs/lodestar/01-CHARTER.md` (C1–C8). Product remains `/ask`. Five summits: `/ask` eval (13), crisis voice (`abuseCrisis`, short Spanish, no Google Fonts), phone LAN note, `/gate` scratch pad, `/letter` + colophon. Folio crisis letters still quote after 988. Suite 78 · eval:ask 13/13 · folio eval 82/82. Do not publish. Do not treat `/gate` as the C7 record.
+
+---
+
 ## Recovery — 2026-09-11 — three flagships
 
 Worker: Cursor cloud agent · this conversation’s recovery commission.

@@ -3,7 +3,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, lookup, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -456,6 +456,22 @@ app.get('/welcome', (req, res) => {
 app.get('/ask', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'ask.html'));
+});
+
+app.get('/gate', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'gate.html'));
+});
+
+app.get('/letter', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'letter.html'));
+});
+
+app.get('/api/letter', (req, res) => {
+  const hit = lookup(String(req.query.ref || ''));
+  if (!hit || !hit.redLetter) return res.status(404).json({ error: 'Not His speech, or not found.' });
+  res.json({ citation: hit.citation, quote: hit.text, edition: 'KJV 1769' });
 });
 
 app.get('/review', (req, res) => {

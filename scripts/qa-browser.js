@@ -461,6 +461,34 @@ async function main() {
     assert(/will not add counsel or a verse/.test(stop.handoff), 'crisis must stop');
     assert(stop.wordsHidden || !stop.quote, 'crisis must not show a Gospel quote');
     assert(!/Come unto me|Peace I leave/i.test(stop.handoff), 'crisis handoff leaked a verse');
+    const fonts = await page.evaluate(() => [...document.querySelectorAll('link')].map((l) => l.href).join(' '));
+    assert(!/fonts\.googleapis|fonts\.gstatic/.test(fonts), '/ask must not phone Google Fonts');
+  });
+
+  await check('text-gate scratch pad and printable letter', async () => {
+    const gate = await page.goto(BASE + '/gate', { waitUntil: 'domcontentloaded' });
+    assert(gate && gate.ok(), '/gate HTTP ' + (gate && gate.status()));
+    const gateCopy = await page.evaluate(() => document.body.innerText);
+    assert(/Watch/i.test(gateCopy), '/gate WATCH missing');
+    assert(/does not change live/i.test(gateCopy), '/gate must not pretend it swapped the corpus');
+    assert(/KJV/.test(gateCopy), '/gate must name KJV');
+
+    const letter = await page.goto(BASE + '/letter?ref=Matthew%2011:28', { waitUntil: 'networkidle0' });
+    assert(letter && letter.ok(), '/letter HTTP ' + (letter && letter.status()));
+    await page.waitForFunction(() => {
+      const q = document.getElementById('quote');
+      return q && /Come unto me/i.test(q.textContent);
+    }, { timeout: 15000 });
+    const leaf = await page.evaluate(() => ({
+      quote: document.getElementById('quote').textContent,
+      cite: document.getElementById('cite').textContent,
+      colo: document.getElementById('colophon').textContent,
+    }));
+    assert(/Matthew 11:28/.test(leaf.cite), 'letter cite: ' + leaf.cite);
+    assert(/His speech only/.test(leaf.colo), 'letter colophon missing');
+
+    await page.goto(BASE + '/letter?ref=Luke%202:14', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => /Not His speech/i.test(document.getElementById('quote').textContent), { timeout: 15000 });
   });
 
   await check('no page errors', async () => {

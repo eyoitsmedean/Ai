@@ -28,9 +28,9 @@ Source: this run’s transcript at `/tmp/cursor/cloud-agent-transcripts/2026-09-
 | 7 | FORGE PROTOCOL — EXECUTE NOW (3,009 words) | Full pipeline; no outlines-as-deliverables; skeptical-client bar | Production rigor | Later: no publish |
 | 8 | FORGE — Universal Project Execution Prompt (2,077 words) | Recover, research, finish usable work | Same | Same |
 | 9 | ATELIER PROTOCOL — MASTER PROMPT (6,798 words) | Truth over polish; no irreversible external action; Gospel citations; iOS/Android; eval ≥40 | `CLAUDE.md`, 82-question eval, Capacitor | **Notion 11 Sep: folio stays paper, no store submit** |
-| 10 | UNIVERSAL REBUILD PIPELINE (2,793 words; brief fields blank) | Rebuild a native artifact; README was the target | README v2 | Still valid as a doc rebuild |
+| 10 | UNIVERSAL REBUILD PIPELINE (2,793 words; brief fields blank) | Rebuild a native artifact; TARGET field was `{{placeholder}}` | Prior cycle rebuilt README — that target was **INFERENCE**, not in the prompt | Still valid as a doc rebuild |
 
-**Human prompts after #10:** (11) `Massive sprint time get to it pick 5 priorities and push for 45 minutes to an hour` — shipped one composer everywhere. (12) this recovery commission.
+**Human prompts after #10:** (11) `Massive sprint time get to it pick 5 priorities and push for 45 minutes to an hour` — shipped one composer everywhere. (12) this recovery commission. (13) LODESTAR — Cycle 1 Charter in `docs/lodestar/01-CHARTER.md` (transcript dump 2026-09-14, 2,449 messages). The 2026-09-11 dump (2,023 messages) is gone.
 
 **Not in this thread’s first ten:** Notion “This week” locks, the Grok iOS last-week dispatch, Origin Map. Those are **later-found law** for the household, not this transcript.
 
@@ -43,7 +43,7 @@ From [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d5
 3. **One screen:** Ask → The words (short) → What that might mean today (four lines max) → What this bot cannot do.
 4. **Crisis:** name a human hotline, **stop generating counsel**.
 5. **Texts:** WEB and KJV-US are the locked pair for a free US advisor. NIV, ESV, NASB, NRSV, CSB, The Message: do not paste into a public advisor. Human gate: Dean records the chosen text before any public URL.
-6. **Household:** Idaho. UK Crown copyright is irrelevant for a US-only advisor; it still matters if a public URL is reachable from the UK.
+6. **Household:** Idaho. UK Crown copyright is irrelevant for a US-only advisor; it still matters if a public URL is reachable from the UK. Idaho’s Conversational AI Safety Act (SB 1297 / Title 48 ch. 21–22, effective 1 July 2027) is the home statute if a URL is ever public; Oregon SB 1546 is adjacent, not controlling. **SOURCE-REPORTED from 2026-09-14 dossier** (`docs/lodestar/dossiers/crisis-handoff.md`).
 7. **This week:** external apply / upload / message / purchase / publish remain HOLD. Household window last recorded: Not confirmed.
 
 ## Scope
@@ -94,6 +94,7 @@ From [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d5
 | 1 | This brief | Dean; the next agent | Before any new work | Recovered intent, later amendments, what not to reverse |
 | 2 | [`docs/RESEARCH.md`](RESEARCH.md) | Dean; the next agent | Before choosing a public text or changing crisis copy | Core + five adjacent questions, dated sources, decisions |
 | 3 | `/ask` | Dean on a phone | Internal review | The one-screen product: Ask → words → meaning → cannot; crisis stops |
+| 4 | `docs/lodestar/` | Dean; the next agent | After Cycle 1 | Intent Charter, dossiers, `/ask` eval, `/gate`, `/letter` |
 
 Start `/ask` with `npm start` and open `http://localhost:3000/ask`. Do not treat `/` as the product.
 

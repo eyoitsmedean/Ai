@@ -7,8 +7,8 @@ The intended product is **one screen** at [`/ask`](http://localhost:3000/ask): A
 Not another Bible app. Constrained to the red letters of Matthew, Mark, Luke, and John. One rule holds the whole thing together: **nothing on the page is presented as His unless the corpus says He said it.** Every claim below comes with the command that proves it.
 
 > **Purpose** · the front door for anyone opening this repo — Dean, a reviewer, a contributor, or the next worker.
-> **Owner** · Dean · **Status** · WATCH; household review; not a launch · **Updated** · 2026-09-11.
-> **What changed in this version** · recovered brief in `docs/CANON.md` · research in `docs/RESEARCH.md` · walkable `/ask` that **stops** on crisis · folio Advisor still answers without a model key (82-question evaluation).
+> **Owner** · Dean · **Status** · WATCH; household review; not a launch · **Updated** · 2026-09-14.
+> **What changed in this version** · LODESTAR Cycle 1 in `docs/lodestar/` · `/ask` eval · `/gate` scratch pad · `/letter` · crisis stop still holds (including mixed IPV + short Spanish).
 
 **If you are in crisis:** this is software, not a person, and not therapy, medical care, or pastoral counseling. In the United States, [988](tel:988) answers by call, text, or chat ([988lifeline.org](https://988lifeline.org)), day and night; anywhere else, [findahelpline.com](https://findahelpline.com) lists verified lines in 175+ countries. The product says the same thing, in the same words, before any letter is sent.
 
@@ -28,6 +28,8 @@ cp .env.example .env   # then set ANTHROPIC_API_KEY
 ## The room
 
 - **Ask (`/ask`)** — the intended product. One screen. Crisis stops. Not a launch.
+- **Text pad (`/gate`)** — household scratch pad for WEB vs KJV-US. Does not change live answers.
+- **A letter (`/letter`)** — one printable saying, His speech only.
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn.
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves.
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence.
@@ -49,14 +51,15 @@ The evaluation set behind these claims is `eval/questions.json` (82 real questio
 
 ## Verify it yourself
 
-Nothing here is described as passing that was not run. Last run in this repository: **2026-09-11**.
+Nothing here is described as passing that was not run. Last run in this repository: **2026-09-14**.
 
 | Claim | Command | Last result |
 | --- | --- | --- |
-| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, `/ask` stop | `npm test` | 76 pass, 0 fail |
+| Corpus whole: 89 chapters at canonical verse counts; seal, Forty order, Advisor routing, crisis-regex parity, on-device composer parity, `/ask` stop + `/gate` `/letter` | `npm test` | 78 pass, 0 fail |
+| `/ask` stop-vs-cite set (crisis, other, loss, ask, abuse, mixed IPV, IPV after crisis, short Spanish, follow-up) | `npm run eval:ask` → `eval/RESULTS-ask.md` | 13/13 |
 | Advisor answers 82 questions correctly on the curated path (mis-routing, buried handoffs, echoes, and identical letters all fail the run) | `npm run eval` → `eval/RESULTS.md` | 82/82, 63 distinct letters |
 | Same 82 questions against the on-device composer (Pages / dropped API / phone without a host) | `npm run eval:device` → `eval/RESULTS-device.md` | 82/82, 63 distinct letters |
-| The page works in a phone-sized browser, including Advisor chips/follow-ups, the crisis modal at the daily limit, and `/ask` | `npm start` then `npm run qa` | 16 walks pass |
+| The page works in a phone-sized browser, including Advisor chips/follow-ups, the crisis modal at the daily limit, `/ask`, `/gate`, `/letter` | `npm start` then `npm run qa` | 17 walks pass (2026-09-14) |
 | Android debug build | `npm run mobile:apk` | BUILD SUCCESSFUL (2026-09-06) |
 | Live-model path (`ANTHROPIC_API_KEY` set) | `npm run eval` with the key | **unverified** — no key in the build environment |
 | iOS build, on-device behaviour | `MOBILE.md` checklist | **unverified** — needs a Mac and a phone |
@@ -73,7 +76,7 @@ Nothing here is described as passing that was not run. Last run in this reposito
 | `API_ACCESS_KEY` | optional gate on `/api/*`: clients must send it as an `x-api-key` header | off |
 | `CHAT_RATE_LIMIT` | Advisor letters per client per minute | `10` |
 
-Routes: `/ask` · `/api/ask` · `/api/health` · `/api/daily` · `/api/themes` · `/api/encouragement` · `/api/library` · `/api/verify` · `/api/chat` · `/api/waitlist` · `/welcome` · `/review`.
+Routes: `/ask` · `/api/ask` (not behind `API_ACCESS_KEY`) · `/gate` · `/letter` · `/api/letter` · `/api/health` · `/api/daily` · `/api/themes` · `/api/encouragement` · `/api/library` · `/api/verify` · `/api/chat` · `/api/waitlist` · `/welcome` · `/review`.
 
 ## Phones
 
@@ -100,7 +103,8 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 | Path | What it is |
 | --- | --- |
-| `docs/CANON.md` | **This conversation’s brief**: first ten prompts, later amendments, what to preserve. |
+| `docs/lodestar/` | **LODESTAR Cycle 1**: Charter, dossiers, Ship Package. Start at `00-INDEX.md`. |
+| `docs/CANON.md` | **This conversation’s recovery brief**: first ten prompts, later amendments, what to preserve. |
 | `docs/RESEARCH.md` | Core and adjacent questions, dated source register. |
 | `CLAUDE.md` | **System of record**: locked decisions, the verified/unverified release checklist, open questions for Dean, session log. Read it before designing anything. |
 | `server.js` · `lib/` | Express app; `advise.js` (curated Advisor), `scripture.js` (corpus, seal, crisis detector), `curated.js` (twelve theme packs), `year.js` (church year) |
