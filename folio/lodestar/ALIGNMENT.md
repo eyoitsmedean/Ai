@@ -22,6 +22,7 @@
 | Sunday-close / keep / apply-packet / house-hears / lamp-drill | C1–C8 | New (this cycle) | Built. |
 | `folio/tonight.html` | C1 C2 C7 C8 | Good drift (prompt 1 + 9) | One door: close + pick. Lanes fold until window is open. Old rooms kept. |
 | Index tonight-dock copy-ask | C5 C8 | Bad drift → retired | Dock no longer copies Room/Handoff/Storefront asks. Cover writes the close. |
+| Plan-leaf Copy buttons | C5 C8 | Bad drift → gated | Six sendable blocks `data-send="1"`. Clipboard is HOLD until Tonight receipt has window + Yes. Asks remain readable. |
 | “Sunday close 14 Sep” as a *Sunday* | C5 | Bad drift | **Retired the weekday.** Date 14 Sep kept as the close he was told. |
 
 ## State of the Project (≤15 lines)

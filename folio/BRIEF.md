@@ -87,6 +87,7 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-14 | ATELIER finish: hub comparison table realigned to Operator Card v2 (Room 0–3; Handoff $3,000/12h; Folio $0 cash). Evening listing recheck: GTM WebFetch live; L&D curl 200 + $80/$120 in page. Canvas not in repo. | VERIFIED hub re-fetch + listing fetches | Notion hub “The five”; Operator Card remains SoT |
 | 2026-09-14 | Creative pass from first 10 prompts: one door `folio/tonight.html` (close + pick). Prompt 1 easy/beautiful; prompt 9 best finished product. Old rooms kept. Stale “DEX is the job tonight” retired. | DESIGN CHOICE + Chrome HOLD check | folio/tonight.html; pointers on index / week-close / decision-night |
 | 2026-09-14 | Second pass on first 10: lanes fold until window is open; folio dock no longer copies an ask; cover writes the same close receipt. | DESIGN CHOICE + Chrome click/dump | tonight.html; index cover + tonight-dock |
+| 2026-09-14 | Third pass: sendable Copy buttons write HOLD unless Tonight receipt has window + Yes. Tonight states what the first ten asked vs what is true. | DESIGN CHOICE + logic test | index.html `.copy[data-send]`; tonight.html |
 
 ## Open questions (batched; recommended default in parentheses)
 

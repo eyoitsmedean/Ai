@@ -36,7 +36,14 @@
     a { color: var(--crimson); }
     .receipt { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .88rem; }
     .depth { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
-    @media print { .actions, .noprint, .depth { display: none !important; } body { background: #fff; } }
+    @media print {
+      .actions, .noprint, .depth, .eyebrow { display: none !important; }
+      body { background: #fff; }
+      main { padding: 0; max-width: 100%; }
+      .zero { font-size: 4.2rem; }
+      .receipt { font-size: 1rem; }
+      h1 { font-size: 2rem; }
+    }
   </style>
 </head>
 <body>
@@ -48,6 +55,9 @@
 
   <p class="zero">$0</p>
   <p>That is what the house hears until a written match and a billed hour exist. A listing is not a job.</p>
+  <div class="card hold">
+    <p style="margin:0"><strong>What your first ten prompts asked, and what is true tonight.</strong> Five plans, beautiful and easy (#1). Depth, not an outline (#2). Finish this project (#3–8). Show the best product (#9). You have them: Lamp, Room, Handoff, Storefront, Folio. Eighty days remain. October is Red. Grocery money is $0. The window is last recorded Not confirmed, so rest is the finish. I will not apply for you.</p>
+  </div>
 
   <div class="card rest" id="windowBanner">
     <p style="margin:0"><strong>If the household window is not Confirmed, stop here.</strong> Rest is a successful finish. Required work named for 8–14 Sep (DEX room-inspect) is over. There is no optional job tonight.</p>
