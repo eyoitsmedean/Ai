@@ -17,7 +17,8 @@ const {
   detectPassiveIdeation,
   looksSpanish,
   classifyIntent,
-  guessTheme,
+  guessThemeFromThread,
+  verseObject,
 } = require('./data/scripture');
 
 const app = express();
@@ -153,6 +154,74 @@ app.use('/api/', (req, res, next) => {
   recent.push(now);
   apiHits.set(id, recent);
   next();
+});
+
+function escHtml(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function sharePageHtml(obj, rawRef) {
+  const verse = obj ? obj.verse : rawRef || 'A word of Jesus';
+  const quote = obj ? obj.text : 'This link opens the Red Letter Advisor so you can read a verified saying of Jesus.';
+  const theme = obj?.theme?.[0] || 'His words';
+  const web = obj?.webUrl || 'https://ebible.org/eng-web/';
+  const ask = '/?tab=advisor&ref=' + encodeURIComponent(verse);
+  const desc = `"${quote.slice(0, 180)}${quote.length > 180 ? '…' : ''}" — ${verse} · World English Bible`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>${escHtml(verse)} · Red Letter Advisor</title>
+  <meta name="description" content="${escHtml(desc)}" />
+  <meta property="og:title" content="${escHtml(verse)} · Red Letter Advisor" />
+  <meta property="og:description" content="${escHtml(desc)}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escHtml(verse)}" />
+  <meta name="twitter:description" content="${escHtml(desc)}" />
+  <link rel="icon" href="/favicon.png" />
+  <style>
+    :root { --ink:#2A2118; --muted:#6B5E52; --crimson:#9F1239; --paper:#F4EDE3; }
+    body { margin:0; font-family: Georgia, "Source Serif 4", serif; background: var(--paper); color: var(--ink); }
+    main { max-width: 28rem; margin: 0 auto; padding: 36px 20px 64px; }
+    .kicker { font-family: system-ui, sans-serif; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+    h1 { font-size: 1.6rem; line-height: 1.2; margin: 8px 0 16px; }
+    blockquote { margin: 0 0 18px; padding: 16px 16px 16px 14px; border-left: 3px solid var(--crimson); background: #fff8f0; font-style: italic; line-height: 1.5; }
+    .cite { font-style: normal; font-weight: 700; font-size: .92rem; color: var(--muted); margin-top: 10px; }
+    .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+    a.btn { display: block; text-align: center; padding: 14px 16px; border-radius: 12px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; min-height: 44px; box-sizing: border-box; }
+    a.primary { background: var(--crimson); color: #fff; }
+    a.ghost { color: var(--crimson); border: 1px solid #E4D8C8; }
+    p.note { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="kicker">Someone shared this word</div>
+    <h1>${escHtml(verse)}</h1>
+    <blockquote>“${escHtml(quote)}”<div class="cite">${escHtml(verse)} · WEB · ${escHtml(theme)}</div></blockquote>
+    <p class="note">Quoted from the public-domain World English Bible. This page is software, not a person. Immediate danger: 911. US crisis: 988.</p>
+    <div class="actions">
+      <a class="btn primary" href="${ask}">Ask the Advisor about this</a>
+      <a class="btn ghost" href="${escHtml(web)}" rel="noopener" target="_blank">Read it on eBible</a>
+      <a class="btn ghost" href="/?tab=advisor">Open the Advisor</a>
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
+app.get('/share', (req, res) => {
+  const raw = String(req.query.ref || '').replace(/\+/g, ' ').trim();
+  const obj = raw ? verseObject(raw) : null;
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.type('html').send(sharePageHtml(obj, raw));
 });
 
 app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -677,6 +746,14 @@ app.get('/api/library', (req, res) => {
   });
 });
 
+app.get('/api/verse-object', (req, res) => {
+  const raw = String(req.query.ref || '').replace(/\+/g, ' ').trim();
+  if (!raw) return res.status(400).json({ error: 'ref required' });
+  const obj = verseObject(raw);
+  if (!obj) return res.status(404).json({ error: 'not_in_corpus', ref: raw });
+  res.json(obj);
+});
+
 app.get('/api/daily', async (_req, res) => {
   try {
     res.json(await getDaily());
@@ -762,7 +839,7 @@ app.post('/api/chat', async (req, res) => {
     return res.status(402).json({
       error: 'daily_limit',
       message:
-        'You have used today’s free Advisor conversations. Come back tomorrow, or unlock Plus for unlimited guidance.',
+        'You have used today’s free Advisor conversations. Come back tomorrow — or join the Plus waitlist. Payment is not available yet.',
       ...quota,
     });
   }
@@ -782,7 +859,8 @@ app.post('/api/chat', async (req, res) => {
   // Verified-corpus reply: used when no AI is configured, and as the graceful
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
-    const theme = intent === 'hostile' ? 'Faith & Doubt' : guessTheme(lastUser);
+    const thread = guessThemeFromThread(lastUser, messages);
+    const theme = intent === 'hostile' ? 'Faith & Doubt' : thread.theme;
     const pack = offlineEncouragement(theme, lastUser);
     // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
     const picks = intent === 'hostile' ? pack.passages.slice(1, 3) : pack.passages.slice(0, 3);
@@ -814,6 +892,8 @@ app.post('/api/chat', async (req, res) => {
         quota: getQuota(id),
         offline: true,
         intent,
+        continuedTheme: thread.continuedTheme || undefined,
+        continuedRefs: thread.continuedRefs || [],
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');

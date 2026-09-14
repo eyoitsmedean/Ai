@@ -127,6 +127,26 @@ function ok(cond, label, detail) {
   ok(g.badgesWarn === 0, 'no unverified badges in corpus mode');
   ok(g.webLinks.length >= 1 && g.webLinks.every((h) => /^https:\/\/ebible\.org\/eng-web\/(MAT|MRK|LUK|JHN)\d{2}\.htm#V\d+$/.test(h)), 'every ✓ WEB badge links to the WEB chapter + verse anchor', g.webLinks.join(' '));
   ok(g.shareBtns >= 1, 'guidance reply has a Share card button', `${g.shareBtns}`);
+  const verseChrome = await page.evaluate(() => {
+    const last = [...document.querySelectorAll('.msg.assistant')].pop();
+    return {
+      actions: last?.querySelectorAll('.verse-actions').length || 0,
+      copy: last?.querySelectorAll('.verse-copy').length || 0,
+      sit: last?.querySelectorAll('.verse-sit').length || 0,
+      after: last?.querySelectorAll('.after-path').length || 0,
+    };
+  });
+  ok(verseChrome.actions >= 1 && verseChrome.copy >= 1 && verseChrome.sit >= 1, 'verse object has copy and sit', JSON.stringify(verseChrome));
+  ok(verseChrome.after >= 1, 'after-answer path is present', JSON.stringify(verseChrome));
+  const lectioOpened = await page.evaluate(async () => {
+    const btn = document.querySelector('.msg.assistant .verse-sit');
+    if (!btn) return false;
+    btn.click();
+    await new Promise((r) => setTimeout(r, 250));
+    return !!document.getElementById('lectio-overlay')?.classList.contains('open');
+  });
+  ok(lectioOpened, 'Sit with this opens lectio from the Advisor verse');
+  await page.evaluate(() => closeLectio());
   await page.screenshot({ path: '/tmp/ui-check-guidance.png' });
 
   // 3b. Share card opens from the button
@@ -165,6 +185,21 @@ function ok(cond, label, detail) {
   const focused = await page.evaluate(() => !!document.querySelector('.lib-item-focus, .lib-item[open]'));
   ok(deep.tab === 'library' || deep.shareOpen, 'deep link lands on library or opens the shared verse', JSON.stringify(deep));
   ok(deep.shareOpen && focused, 'deep link highlights the library passage', 'focus=' + focused);
+
+  await page.goto(BASE + '/?tab=advisor&ref=' + encodeURIComponent('Matthew 6:34'), { waitUntil: 'networkidle0' });
+  await sleep(1200);
+  const welcome = await page.evaluate(() => {
+    const card = document.getElementById('shared-word-card');
+    const tab = document.querySelector('.nav-btn.active')?.dataset?.tab || '';
+    return {
+      tab,
+      welcome: !!(card && !card.classList.contains('hidden')),
+      verse: document.getElementById('shared-word-verse')?.textContent || '',
+      encounter: !!document.getElementById('encounter-overlay')?.classList.contains('open'),
+    };
+  });
+  ok(welcome.tab === 'advisor' && welcome.welcome && /Matthew 6:34/.test(welcome.verse), 'Advisor share link shows the shared-word welcome', JSON.stringify(welcome));
+  ok(!welcome.encounter, 'shared-word welcome does not open Encounter');
 
   ok(pageErrors.length === 0, 'no page errors', pageErrors.join(' | ').slice(0, 300));
 

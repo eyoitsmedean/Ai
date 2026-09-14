@@ -231,6 +231,21 @@ a.cite-badge:hover{filter:brightness(.95)}
 :root[data-theme="dark"] .cite-badge.ok,:root.theme-dark .cite-badge.ok{background:rgba(74,222,128,.12);color:#86EFAC;border-color:rgba(74,222,128,.3)}
 .lib-item-focus{outline:2px solid var(--crimson);outline-offset:2px;border-radius:var(--r-sm)}
 .scripture-block{margin:10px 0;padding:12px;background:var(--stone);border-left:3px solid var(--crimson);border-radius:0 var(--r-sm) var(--r-sm) 0}
+.verse-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.verse-actions button,.verse-actions a{min-height:44px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:12px;font-weight:700;font-family:var(--font-ui,inherit);text-decoration:none;display:inline-flex;align-items:center}
+.verse-actions button:active,.verse-actions a:active{transform:scale(.98)}
+.verse-context{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:calc(13px * var(--scale));color:var(--ink-muted);line-height:1.45}
+.verse-context[hidden]{display:none!important}
+.after-path{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.after-path button{min-height:44px;padding:0 12px;border-radius:999px;border:1px solid rgba(185,28,28,.28);background:rgba(185,28,28,.06);color:var(--crimson);font-size:13px;font-weight:700}
+.shared-word-card{margin:8px 12px 12px;padding:16px;border-radius:var(--r);border:1px solid rgba(185,28,28,.22);background:var(--surface)}
+.shared-word-card.hidden{display:none!important}
+.shared-word-card .kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--crimson);font-weight:700}
+.shared-word-card blockquote{margin:8px 0 12px;font-style:italic;color:var(--crimson-words);line-height:1.45}
+.human-notice{margin:0 12px 10px;padding:10px 12px;border-radius:var(--r-sm);background:rgba(42,33,24,.06);font-size:12px;color:var(--ink-muted);line-height:1.4}
+.human-notice.hidden{display:none!important}
+.trust-panel{font-size:calc(13px * var(--scale));color:var(--ink-muted);line-height:1.45}
+.trust-panel li{margin:0 0 8px}
 .scripture-verse{font-size:calc(11px * var(--scale));font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .scripture-quote{font-family:var(--font-body);font-size:calc(15px * var(--scale));color:var(--crimson-words);font-style:italic;line-height:1.6}
 .scripture-ctx{font-size:calc(13px * var(--scale));color:var(--ink-muted);margin-top:8px}
@@ -986,12 +1001,23 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
         </div>
         <div class="quota-bar hidden" id="quota-bar">
           <span><strong id="quota-bar-num">5</strong> free conversations left today</span>
-          <button type="button" onclick="openPaywall()">Unlock Plus</button>
+          <button type="button" onclick="openPaywall()">Join waitlist</button>
         </div>
         <div id="advisor-mode-banner" class="offline-banner hidden">Corpus mode — verified red-letter passages (AI advisor offline).</div>
         <div class="advisor-context hidden" id="advisor-context">
           <strong>Sitting with</strong>
           <p id="advisor-context-text"></p>
+        </div>
+        <div class="human-notice hidden" id="human-notice" role="status">Still software, not a person — the same as when you started. Immediate danger: 911. US crisis: 988. <a href="/legal#protocol">How we handle crisis</a>.</div>
+        <div class="shared-word-card hidden" id="shared-word-card">
+          <div class="kicker">Someone shared this word with you</div>
+          <h3 id="shared-word-verse"></h3>
+          <blockquote id="shared-word-quote"></blockquote>
+          <div class="after-path">
+            <button type="button" id="shared-word-ask">Ask about this</button>
+            <button type="button" id="shared-word-sit">Sit with this</button>
+            <button type="button" id="shared-word-share">Share card</button>
+          </div>
         </div>
         <div class="advisor-hero" id="advisor-hero">
           <h2>What is weighing on you?</h2>
@@ -1002,7 +1028,7 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
           <h2>Speak what’s on your heart</h2>
           <p>Every response draws only from the direct words Jesus spoke in Matthew, Mark, Luke, and John — grounded and checkable.</p>
         </div>
-        <p class="trust-note" id="advisor-trust">Not a pastor, therapist, or crisis counselor — software that quotes Jesus’s words, with citations you can check. Immediate danger: 911. US crisis: call or text 988, or <a href="https://chat.988lifeline.org" target="_blank" rel="noopener">chat 988</a>. <a href="/legal">Safety &amp; privacy</a>.</p>
+        <p class="trust-note" id="advisor-trust">You are talking to software, not a human. Not a pastor, therapist, or crisis counselor — it quotes Jesus’s words, with citations you can check. Immediate danger: 911. US crisis: call or text 988, or <a href="https://chat.988lifeline.org" target="_blank" rel="noopener">chat 988</a>. <a href="/legal#protocol">Safety protocol</a>.</p>
         <div class="suggestions" id="suggestions"></div>
         <div id="chat-messages"></div>
       </div>
@@ -1069,6 +1095,16 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
       <button type="button" class="ghost-btn" onclick="sendTestPush()" style="min-height:var(--touch);padding:0 14px;font-size:13px">Send a test</button>
     </div>
   </div>
+  <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">How we check</div>
+    <div class="trust-panel" id="trust-panel">
+      <ul>
+        <li>Guidance quotes only Jesus’s words from Matthew–John, from a local World English Bible corpus — never from the model’s memory.</li>
+        <li>Each ✓ WEB badge opens the public eBible chapter at the verse.</li>
+        <li>Suicide, self-harm, and abuse phrases are intercepted before any model call and never use a free credit. <a href="/legal#protocol">Published protocol</a>.</li>
+        <li>Crisis-adjacent wording that is not explicit still gets a 988 line with the scripture answer.</li>
+        <li>This is software. A three-hour reminder repeats that if a conversation runs long.</li>
+      </ul>
+    </div></div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">About</div>
     <p class="about-text">The Red Letter Advisor guides you using only the direct words of Jesus from the four Gospels. Every quote is verified against the World English Bible. This is software, not a person, pastor, or therapist — <a href="/legal">Safety, privacy &amp; terms</a>.</p></div>
   <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px"><div class="setting-label">Add to Home Screen</div>
@@ -1084,10 +1120,10 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
   <div class="thread-list" id="thread-list"></div>
 </div></div>
 <div class="sheet" id="paywall-sheet"><div class="sheet-hd"><h2 class="sheet-title">Red Letter Plus</h2><button type="button" class="sheet-close" onclick="closeSheets()" aria-label="Close">✕</button></div>
-<div class="sheet-body"><p class="about-text">You’ve used today’s free Advisor conversations. Unlimited Red Letter Advisor guidance, premium share cards, and deeper habit craft — Plus is how we keep the corpus free for everyone.</p>
-  <div class="paywall-price">$7.99<span style="font-size:14px;font-weight:500;color:var(--ink-muted)">/mo</span></div>
-  <div class="paywall-sub">or $59.99/year — save 37%</div>
-  <p class="about-text" style="margin-bottom:12px">Coming soon — join the waitlist. His words in Library stay free.</p>
+<div class="sheet-body"><p class="about-text">You’ve used today’s free Advisor conversations. Come back tomorrow, or leave an email if you want to hear when Plus exists. There is no payment on this page — the price below is a planned ask, not a charge.</p>
+  <div class="paywall-price">$7.99<span style="font-size:14px;font-weight:500;color:var(--ink-muted)">/mo planned</span></div>
+  <div class="paywall-sub">or $59.99/year planned — not billed today</div>
+  <p class="about-text" style="margin-bottom:12px">Waitlist only. His words in Library stay free.</p>
   <input type="email" class="paywall-input" id="waitlist-email" placeholder="your@email.com" aria-label="Email" />
   <button type="button" class="paywall-btn" onclick="joinWaitlist()">Join waitlist</button>
 </div></div>
@@ -1789,7 +1825,7 @@ function getHarvest() {
 function recordHarvest() {
   if (!dailyData?.word) return;
   const today = todayISO();
-  const items = getHarvest().filter((h) => h.day !== today);
+  const items = getHarvest().filter((h) => h.day !== today || h.planted);
   items.push({
     day: today,
     verse: dailyData.word.verse,
@@ -1797,6 +1833,78 @@ function recordHarvest() {
     theme: dailyData.word.theme || '',
   });
   lsSetJSON('rla-harvest', items.slice(-60));
+}
+function plantHarvestFromVerse(verse, quote) {
+  const today = todayISO();
+  const items = getHarvest();
+  if (items.some((h) => h.day === today && h.verse === verse && h.planted)) {
+    showToast('Already planted in this week’s garden');
+    return;
+  }
+  items.push({
+    day: today,
+    verse: verse || '',
+    phrase: pickCarryPhrase(quote || ''),
+    theme: '',
+    planted: true,
+  });
+  lsSetJSON('rla-harvest', items.slice(-60));
+  renderHarvest();
+  showToast('Planted in the Living Garden');
+}
+function setAdvisorSitting(verse, quote, theme) {
+  const ctx = document.getElementById('advisor-context');
+  const ctxText = document.getElementById('advisor-context-text');
+  if (!ctx || !ctxText || !verse) return;
+  ctx.classList.remove('hidden');
+  ctxText.textContent = verse + (quote ? ' — “' + pickCarryPhrase(quote) + '”' : '') + (theme ? ' · ' + theme : '');
+}
+function askAboutVerse(verse, quote) {
+  setAdvisorSitting(verse, quote);
+  goTab('advisor');
+  const input = document.getElementById('chat-input');
+  if (input) {
+    input.value =
+      "I've been sitting with these words of Jesus (" +
+      verse +
+      '): "' +
+      pickCarryPhrase(quote || '') +
+      '". Help me live them — what do they ask of me, gently and practically?';
+    input.focus();
+  }
+}
+async function toggleVerseContext(btn) {
+  const verse = btn?.dataset?.verse;
+  if (!verse) return;
+  const box = btn.closest('.scripture-block')?.querySelector('.verse-context');
+  if (!box) return;
+  if (!box.hidden && box.dataset.loaded === '1') {
+    box.hidden = true;
+    return;
+  }
+  box.hidden = false;
+  box.textContent = 'Looking up the chapter…';
+  try {
+    const res = await api('/api/verse-object?ref=' + encodeURIComponent(verse));
+    if (!res.ok) {
+      box.innerHTML = 'This saying is not in the local library. <a href="' + webLink(verse) + '" target="_blank" rel="noopener">Open the WEB chapter</a>.';
+      return;
+    }
+    const obj = await res.json();
+    const near = (obj.neighbors || []).map((n) => '<div><strong>' + esc(n.verse) + '</strong> — ' + esc((n.text || '').slice(0, 140)) + (n.text && n.text.length > 140 ? '…' : '') + '</div>').join('');
+    box.innerHTML = '<p>Same chapter in the library:</p>' + (near || '<p>No other library passages from this chapter yet. The WEB link still opens the full chapter.</p>');
+    box.dataset.loaded = '1';
+  } catch {
+    box.textContent = 'Could not load context.';
+  }
+}
+let humanNoticeTimer = 0;
+function showHumanNotice() {
+  document.getElementById('human-notice')?.classList.remove('hidden');
+}
+function armHumanNotice() {
+  if (humanNoticeTimer) return;
+  humanNoticeTimer = setTimeout(showHumanNotice, 3 * 60 * 60 * 1000);
 }
 function weekStartISO() {
   const now = new Date(todayISO() + 'T12:00:00');
@@ -2118,22 +2226,45 @@ function carryHarvest(day) {
 /* ═══ LECTIO DIVINA (classical midday / anytime) ═══ */
 let lectioStep = 0;
 let lectioPhrase = '';
+let lectioSource = null;
 const LECTIO_COPY = [
   { label: 'Read', guide: 'Receive the whole saying slowly — aloud if you can.', next: 'I have read' },
   { label: 'Notice', guide: 'What word or phrase catches your heart? Name it.', next: 'Hold this word' },
   { label: 'Sit', guide: 'Rest with that phrase. No analysis — companionship.', next: 'Amen · I sat' },
   { label: 'Respond', guide: 'Yield one honest sentence to Him — then carry the phrase.', next: 'Yield · Amen' },
 ];
+function currentLectioWord() {
+  if (lectioSource?.passage) return lectioSource;
+  if (dailyData?.word) return { passage: dailyData.word.passage, verse: dailyData.word.verse };
+  return null;
+}
+function openLectioFromVerse(verse, quote) {
+  if (!quote) {
+    showToast('That saying is still loading');
+    return;
+  }
+  lectioSource = { passage: quote, verse: verse || '' };
+  beginLectio();
+}
 function openLectio() {
   if (!dailyData?.word) {
     showToast('Today’s word is still loading');
     return;
   }
+  lectioSource = { passage: dailyData.word.passage, verse: dailyData.word.verse };
+  beginLectio();
+}
+function beginLectio() {
+  const word = currentLectioWord();
+  if (!word) {
+    showToast('No saying is ready yet');
+    return;
+  }
   lectioStep = 0;
   lectioPhrase = '';
   const overlay = document.getElementById('lectio-overlay');
-  document.getElementById('lectio-quote').textContent = '"' + dailyData.word.passage + '"';
-  document.getElementById('lectio-cite').textContent = dailyData.word.verse + ' · WEB';
+  document.getElementById('lectio-quote').textContent = '"' + word.passage + '"';
+  document.getElementById('lectio-cite').textContent = (word.verse || '') + ' · WEB';
   document.getElementById('lectio-notice')?.classList.add('hidden');
   const notice = document.getElementById('lectio-notice');
   if (notice) notice.value = '';
@@ -2159,16 +2290,17 @@ function renderLectioStep() {
     notice.placeholder = lectioStep === 3 ? 'One sentence of response…' : 'What word or phrase caught you?';
     if (lectioStep === 1 || lectioStep === 3) setTimeout(() => notice.focus(), 80);
   }
+  const word = currentLectioWord();
   if (lectioStep === 2 && lectioPhrase) {
     document.getElementById('lectio-quote').textContent = '"' + lectioPhrase + '"';
-  } else if (lectioStep === 0 && dailyData?.word) {
-    document.getElementById('lectio-quote').textContent = '"' + dailyData.word.passage + '"';
+  } else if (lectioStep === 0 && word) {
+    document.getElementById('lectio-quote').textContent = '"' + word.passage + '"';
   }
 }
 function lectioNext() {
   const notice = document.getElementById('lectio-notice');
   if (lectioStep === 1) {
-    lectioPhrase = (notice?.value || '').trim() || pickCarryPhrase(dailyData?.word?.passage || '');
+    lectioPhrase = (notice?.value || '').trim() || pickCarryPhrase(currentLectioWord()?.passage || '');
   }
   if (lectioStep === 3) {
     const response = (notice?.value || '').trim();
@@ -2177,7 +2309,7 @@ function lectioNext() {
       items.unshift({
         key: 'lectio|' + todayISO() + '|' + Date.now(),
         quote: response,
-        verse: dailyData?.word?.verse || '',
+        verse: currentLectioWord()?.verse || '',
         theme: 'Lectio response',
         savedAt: Date.now(),
       });
@@ -2186,8 +2318,8 @@ function lectioNext() {
     closeLectio();
     lsSet('rla-midday-day', todayISO());
     lsSetJSON('rla-carry', {
-      phrase: lectioPhrase || pickCarryPhrase(dailyData?.word?.passage || ''),
-      verse: dailyData?.word?.verse || '',
+      phrase: lectioPhrase || pickCarryPhrase(currentLectioWord()?.passage || ''),
+      verse: currentLectioWord()?.verse || '',
       day: todayISO(),
     });
     renderCarry();
@@ -2196,7 +2328,7 @@ function lectioNext() {
     markPresence({ skipReflect: true });
     renderDayPoles();
     renderRhythm();
-    openSilence(lectioPhrase || dailyData?.word?.passage, dailyData?.word?.verse);
+    openSilence(lectioPhrase || currentLectioWord()?.passage, currentLectioWord()?.verse);
     showToast('Lectio complete — enter silence');
     return;
   }
@@ -3846,15 +3978,20 @@ async function sendChat() {
                   ? '<a class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" href="' + href + '" target="_blank" rel="noopener" title="' + title + '">' + label + ' ↗</a>'
                   : '<span class="cite-badge ' + (c.verified ? 'ok' : 'warn') + '" title="' + title + '">' + label + '</span>';
               }).join('') + '</div>';
-              const firstShare = ev.citations.find((c) => c.verified && c.quote);
-              if (firstShare) badges += shareVerseBtn(firstShare.verse || firstShare.citation, firstShare.quote);
+              const firstShareBadge = ev.citations.find((c) => c.verified && c.quote);
+              if (firstShareBadge) badges += shareVerseBtn(firstShareBadge.verse || firstShareBadge.citation, firstShareBadge.quote);
               if (ev.grounded != null) {
                 badges += '<p class="ground-note">' + ev.grounded + ' citation' + (ev.grounded === 1 ? '' : 's') +
                   ' grounded to verified text' + (ev.unverified ? ' · ' + ev.unverified + ' unverified' : '') + '</p>';
               }
             }
-            bubble.innerHTML = formatAI(full) + badges;
+            const firstShare = (ev.citations || []).find((c) => c.verified && c.quote);
+            bubble.innerHTML = formatAI(full) + badges + afterAnswerPath(firstShare);
             if (ev.quota) updateQuotaUI(ev.quota);
+            if (ev.continuedTheme && firstShare) {
+              setAdvisorSitting(firstShare.verse || firstShare.citation, firstShare.quote, ev.continuedTheme);
+            }
+            armHumanNotice();
           }
           if (ev.error && ev.partial && full) {
             bubble.innerHTML = formatAI(full) + '<p class="ground-note">The connection dropped before the Advisor finished. What arrived is above.</p>';
@@ -3915,6 +4052,7 @@ function clearChatView() {
     if (el) el.style.display = '';
   });
   document.getElementById('advisor-context')?.classList.add('hidden');
+  document.getElementById('shared-word-card')?.classList.add('hidden');
 }
 function newThread() {
   if (chatStreaming) return;
@@ -4057,10 +4195,45 @@ document.getElementById('chat-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest?.('.share-verse-btn');
-  if (!btn) return;
-  e.preventDefault();
-  openShareCard({ verse: btn.dataset.verse, quote: btn.dataset.quote, theme: 'His words' });
+  const shareBtn = e.target.closest?.('.share-verse-btn, .after-share');
+  if (shareBtn) {
+    e.preventDefault();
+    const host = shareBtn.closest('[data-verse]') || shareBtn;
+    openShareCard({ verse: host.dataset.verse, quote: host.dataset.quote, theme: 'His words' });
+    return;
+  }
+  const copyBtn = e.target.closest?.('.verse-copy');
+  if (copyBtn) {
+    e.preventDefault();
+    const text = '"' + (copyBtn.dataset.quote || '') + '" — ' + (copyBtn.dataset.verse || '') + ' · WEB';
+    navigator.clipboard?.writeText(text).then(() => showToast('Verse copied')).catch(() => showToast('Copy failed'));
+    return;
+  }
+  const plantBtn = e.target.closest?.('.verse-plant');
+  if (plantBtn) {
+    e.preventDefault();
+    plantHarvestFromVerse(plantBtn.dataset.verse, plantBtn.dataset.quote);
+    return;
+  }
+  const sitBtn = e.target.closest?.('.verse-sit, .after-sit');
+  if (sitBtn) {
+    e.preventDefault();
+    const host = sitBtn.closest('[data-verse]') || sitBtn;
+    openLectioFromVerse(host.dataset.verse, host.dataset.quote);
+    return;
+  }
+  const askBtn = e.target.closest?.('.after-ask');
+  if (askBtn) {
+    e.preventDefault();
+    const host = askBtn.closest('[data-verse]');
+    if (host) askAboutVerse(host.dataset.verse, host.dataset.quote);
+    return;
+  }
+  const ctxBtn = e.target.closest?.('.verse-context-btn');
+  if (ctxBtn) {
+    e.preventDefault();
+    toggleVerseContext(ctxBtn);
+  }
 });
 
 // Public WEB chapter page with a verse anchor, e.g. https://ebible.org/eng-web/MAT06.htm#V25
@@ -4069,7 +4242,38 @@ function shareVerseBtn(verse, quote) {
   return '<button type="button" class="share-verse-btn" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '" aria-label="Share ' + esc(verse) + '">Share card</button>';
 }
 
+function verseActions(verse, quote) {
+  const href = webLink(verse);
+  return '<div class="verse-actions">' +
+    shareVerseBtn(verse, quote) +
+    '<button type="button" class="verse-copy" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Copy</button>' +
+    '<button type="button" class="verse-context-btn" data-verse="' + esc(verse) + '">Context</button>' +
+    '<button type="button" class="verse-plant" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Plant</button>' +
+    '<button type="button" class="verse-sit" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Sit</button>' +
+    (href ? '<a class="verse-web" href="' + href + '" target="_blank" rel="noopener">WEB</a>' : '') +
+    '</div><div class="verse-context" hidden data-for="' + esc(verse) + '"></div>';
+}
+
+function afterAnswerPath(firstShare) {
+  if (!firstShare) return '';
+  const verse = firstShare.verse || firstShare.citation || '';
+  const quote = firstShare.quote || '';
+  return '<div class="after-path" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">' +
+    '<button type="button" class="after-ask">Ask about this</button>' +
+    '<button type="button" class="after-sit">Sit with this</button>' +
+    '<button type="button" class="after-share">Share this</button>' +
+    '</div>';
+}
+
 function shareLinkFor(verse) {
+  try {
+    return location.origin + '/share?ref=' + encodeURIComponent(verse || '');
+  } catch {
+    return '/share?ref=' + encodeURIComponent(verse || '');
+  }
+}
+
+function advisorLinkFor(verse) {
   try {
     return location.origin + '/?tab=advisor&ref=' + encodeURIComponent(verse || '');
   } catch {
@@ -4110,7 +4314,7 @@ function formatAI(text) {
           parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
             '</div><div class="scripture-quote">"' + esc(q) + '"</div>' +
             (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') +
-            shareVerseBtn(verse, q) + '</div>');
+            verseActions(verse, q) + '</div>');
           i = j; continue;
         }
       }
@@ -4916,6 +5120,21 @@ function routeFromQuery() {
   if (ref) openSharedRef(ref);
 }
 
+function showSharedWordWelcome(hit) {
+  const card = document.getElementById('shared-word-card');
+  if (!card || !hit?.text) return;
+  document.getElementById('shared-word-verse').textContent = hit.verse || '';
+  document.getElementById('shared-word-quote').textContent = '“' + hit.text + '”';
+  card.classList.remove('hidden');
+  setAdvisorSitting(hit.verse, hit.text, Array.isArray(hit.theme) ? hit.theme[0] : hit.theme);
+  const ask = document.getElementById('shared-word-ask');
+  const sit = document.getElementById('shared-word-sit');
+  const share = document.getElementById('shared-word-share');
+  if (ask) ask.onclick = () => askAboutVerse(hit.verse, hit.text);
+  if (sit) sit.onclick = () => openLectioFromVerse(hit.verse, hit.text);
+  if (share) share.onclick = () => openShareCard({ verse: hit.verse, quote: hit.text, theme: hit.theme || 'His words' });
+}
+
 async function openSharedRef(raw) {
   const ref = String(raw || '').trim();
   if (!ref) return;
@@ -4933,6 +5152,10 @@ async function openSharedRef(raw) {
     if (search) search.value = libQuery;
     applyLibFilters();
     highlightLibRef(hit.verse || ref);
+    if (currentTab() === 'advisor') {
+      showSharedWordWelcome(hit);
+      return;
+    }
     openShareCard({ verse: hit.verse, quote: hit.text, theme: hit.theme || 'His words' });
     return;
   }

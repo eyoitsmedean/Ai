@@ -180,11 +180,17 @@ async function main() {
     assert(appHtml.includes('function openInstallSheet') && appHtml.includes('id="install-sheet"'), 'missing iOS install coach sheet');
     assert(appHtml.includes('goTab(\'advisor\')') && appHtml.includes('function currentTab'), 'missing chat-first default helpers');
     assert(appHtml.includes('/?tab=advisor&ref='), 'share deep links must land on Advisor');
+    assert(appHtml.includes('/share?ref='), 'OG share links use /share');
+    assert(appHtml.includes('verse-actions') && appHtml.includes('function openLectioFromVerse'), 'missing verse object / sit-from-answer');
+    assert(appHtml.includes('id="trust-panel"') && appHtml.includes('id="shared-word-card"'), 'missing trust panel / shared-word welcome');
+    assert(appHtml.includes('function plantHarvestFromVerse'), 'missing plant-from-answer');
+    assert(/waitlist only|Join waitlist/i.test(appHtml) && !/onclick="openPaywall\(\)">Unlock Plus/.test(appHtml), 'Plus copy still pretends payment exists');
     assert(welcomeHtml.includes('/?tab=advisor'), 'welcome CTA must open the Advisor');
     const legal = await fetch(BASE + '/legal');
     assert(legal.ok, 'legal page not 200');
     const legalHtml = await legal.text();
     assert(legalHtml.includes('988') && legalHtml.includes('Privacy') && legalHtml.includes('not a substitute'), 'legal page missing safety/privacy');
+    assert(legalHtml.includes('id="protocol"') && legalHtml.includes('Published safety protocol'), 'legal missing published protocol');
     assert(appHtml.includes('garden-canvas') && appHtml.includes('garden-detail'), 'missing living garden');
     assert(appHtml.includes('apple-mobile-web-app-capable'), 'missing iOS A2HS meta');
     assert(appHtml.includes('apple-touch-startup-image'), 'missing iOS splash');
@@ -205,6 +211,11 @@ async function main() {
       body: JSON.stringify({ citations: [{ verse: 'Matthew 6:34', quote: "don't be anxious for tomorrow" }] }),
     });
     assert(verify.res.ok && verify.json.results?.[0]?.verified, 'verify api');
+    const vo = await req('/api/verse-object?ref=Matthew%206:34');
+    assert(vo.res.ok && vo.json.verse === 'Matthew 6:34' && /MAT06\.htm#V34/.test(vo.json.webUrl), 'verse-object api');
+    const share = await fetch(BASE + '/share?ref=' + encodeURIComponent('Matthew 6:34'));
+    const shareHtml = await share.text();
+    assert(share.ok && shareHtml.includes('og:title') && shareHtml.includes('Matthew 6:34') && shareHtml.includes('/?tab=advisor&ref='), 'share landing missing OG or advisor CTA');
   });
 
   await check('waitlist + offline routes', async () => {

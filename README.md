@@ -74,7 +74,7 @@ This is a PWA, not an App Store / Play listing. `public/.well-known/assetlinks.j
 | --- | --- |
 | `npm run test:unit` (`test/*.test.js`) | Offline safety-gate and citation-verification tests (crisis, abuse, off-scope, hostile, Gospel scope). No server required. |
 | `npm test` (`scripts/smoke.js`) | Live checks against a running server: health, corpus APIs, grounded chat SSE, quota cookie, security headers, manifest installability, icons/splash/OG image, offline route, Web Push lifecycle, service-worker handlers, red-letter purity lint |
-| `npm run eval` (`scripts/eval.js`) | 92-question evaluation set — real life questions, crisis (slang, typos, methods, Spanish), abuse (incl. Spanish), passive ideation, off-scope, hostile, edge, malformed requests — against a running server. Writes `eval/RESULTS.md` with every reply verbatim. `npm run eval:strict` fails on any miss (CI). Re-run after the recovery commission (crisis copy now includes 911 + 988 chat). |
+| `npm run eval` (`scripts/eval.js`) | 96-question evaluation set — real life questions, crisis, abuse, follow-up (keeps the last saying), passive ideation, off-scope, hostile, edge, malformed — against a running server. Writes `eval/RESULTS.md`. `npm run eval:strict` fails on any miss (CI). |
 | `npm run ui-check` (`scripts/ui-check.js`) | Headless Chrome at a phone viewport: the crisis card renders with tappable 988/911/hotline links ≥44 px, ✓ WEB badges link to the WEB verse on ebible.org, off-scope replies carry no verse, no page errors. Needs `puppeteer` (CI installs it). |
 | `npm run verify:corpus` | Every shipped quote vs. WEB source text (network, ~5 min at bible-api's 15 req/30 s limit). `--fix` rewrites drifted quotes to the exact WEB wording. |
 | `npm run icons` | Regenerates all icon and splash assets from `public/icon-1024.png` (needs Python 3 + Pillow). |
@@ -102,12 +102,15 @@ RELEASE.md              Release checklist (verified / unverified) + five-minute 
 docs/CANONICAL-BRIEF.md Recovered brief + first-ten prompt table
 docs/KNOWLEDGE.md       Research syntheses and source register
 docs/OPERATOR-KIT.md    Dean's next three actions and phone checklist
+docs/lodestar/          LODESTAR Cycle 1: Charter, dossiers, summit briefs (start at INDEX.md)
+lib/advisor/            Map to data/scripture.js (do not treat as a second safety gate)
 ```
 
 Client state (journal, saved Advisor conversations, settings, garden) lives in `localStorage` on the device. Server state (quotas, rate limits) is in memory and resets on restart; push subscriptions persist to `PUSH_STORE`.
 
 ## Known limits
 
+- GitHub Pages (`pages.yml`) hosts `public/` only — a static demo. Chat, `/share`, and the safety gate need a Node host.
 - Quotas and rate limits are per-process and in memory; a multi-instance deployment needs a shared store.
 - The AI Advisor has not been exercised end-to-end in this repository's CI (no API key); its failure path to corpus mode is tested.
 - bible-api.com is used only as a fallback verifier for citations outside the curated corpus; if it is unreachable, such citations are shown as "check" rather than ✓ WEB.
