@@ -5,7 +5,10 @@ LODESTAR Cycle 1 (2026-09-14): start at `docs/lodestar/INDEX.md`. Charter v1. Do
 Authoritative instructions, in order:
 
 1. Notion parent: [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0) — WATCH. Folio stays paper. No store. No sixth hub.
-1b. This conversation’s child: [Trust harness PR 29 · one-screen /ask · 11 Sep night](https://app.notion.com/p/3d8b7d53f96981d5b34efff27c0f6808). Do not overwrite Grok F1–F3, PR 18, or masterpiece-protocol recovery pages.
+1b. This conversation’s children (do not overwrite Grok F1–F3, PR 18, or masterpiece-protocol recovery pages):
+    - [Trust harness PR 29 · one-screen /ask · 11 Sep night](https://app.notion.com/p/3d8b7d53f96981d5b34efff27c0f6808)
+    - [LODESTAR Cycle 1 · 14 Sep](https://app.notion.com/p/3dbb7d53f96981a98f01d9cac880f046)
+    - [ATELIER · household desk · 14 Sep](https://app.notion.com/p/3dbb7d53f96981b6a501cdaca530e559)
 2. `docs/CANONICAL-BRIEF.md` — recovered prompts, scope, assets, decisions.
 3. `docs/RESEARCH-AND-GATE.md` — sources, five adjacent topics, human-gate checklist.
 4. This file — how to resume.
