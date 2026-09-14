@@ -26,7 +26,7 @@ Proposed amendments: none. Night leaf is Director’s Cut, not C9.
 
 ## 4 · Verification actually performed
 
-**Did.** Transcript identity this run. Opened: Webb & Sheeran 2006 records (PubMed / White Rose / Manchester); Kautonen et al. 2015 ET&P HTML (232/371); Mellor & Van Vorst 2015 Sage HTML; Daminger 2019 Behavioral Scientist; Wrosch 2003 PDF + PMC 4145404; Bieleke 2021 PDF + 2022 journal page; YouVersion 2025 celebration; `pages.yml`. Grep for the four Major folio/archive lies after repair. Folio + night leaf served over local HTTP and rendered (see verification note at ship). `npm test` if run this pass — recorded in the commit note.
+**Did.** Transcript identity this run. Opened: Webb & Sheeran 2006 records (PubMed / White Rose / Manchester); Kautonen et al. 2015 ET&P HTML (232/371); Mellor & Van Vorst 2015 Sage HTML; Daminger 2019 Behavioral Scientist; Wrosch 2003 PDF + PMC 4145404; Bieleke 2021 PDF + 2022 journal page; YouVersion 2025 celebration; `pages.yml`. Grep for the four Major folio/archive lies after repair. Folio `#week` / `#october` / `#advent` and `NIGHT.html` served on local HTTP and rendered in headless Chrome (phone 390×844 and desktop 1280×800). `npm test` **62/62** after `npm install` (first run failed: missing `dotenv` in this snapshot — install, then pass). Notion draft title + body updated.
 
 **Did not.** YouTube or any transcript. Live `eyoitsmedean.github.io/Ai/`. Full Karr / Wolff / Shay / Oettingen 2016. Sayer 2015 PDF and Lally 2010 PDF not re-fetched this continuation (held 14 Sep by the Scholar sitting). computerUse session not assumed. No Pages enable. No merge. No send. No spend.
 
