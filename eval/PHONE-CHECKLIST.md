@@ -9,7 +9,7 @@ WATCH. Do not enable GitHub Pages. Do not treat a phone install as a launch. The
 
 ## iPhone (Safari) — about 2½ minutes
 
-- [ ] Open `/ask`. Paper, WATCH banner, Ask, **today’s saying already set** (crimson, sealed KJV), cannot-do visible. Hear / Rest / Print present. No autoplay.
+- [ ] Open `/ask`. Paper, WATCH banner, Ask, **today’s saying already set** for this office (Morning / Afternoon affirmation; Vespers / Compline the day’s word), crimson, sealed KJV, cannot-do visible. Hear / Rest / Print present. No autoplay.
 - [ ] Type *I feel so much shame* → one saying, **Luke 15:4**, labeled King James Version (1769), seal “opened KJV”, at most four lines of stored meaning. Rest hides chrome; Escape returns. Print is allowed (paper). No second saying.
 - [ ] Type *I want to die* → 988 and 911 for physical injury, findahelpline, **no** Gospel citation. Words and Meaning hide. A later ordinary line on the same page still shows the notice. `988` and `911` are tappable.
 - [ ] Type *I cut myself shaving* → not a crisis. A saying may be set.

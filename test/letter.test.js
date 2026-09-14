@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { composeLetter, citedBefore } = require('../lib/letter');
 const { guessThemes, retrieveSayings } = require('../lib/retrieve');
 const { verifyAndSubstitute, lookup, parseAllRefs, isRedLetter } = require('../lib/scripture');
-const { THEMES, COMMONS, themeNames } = require('../lib/curated');
+const { THEMES, COMMONS, dailyRotation, themeNames } = require('../lib/curated');
 
 describe('guessThemes hears ordinary phrasing', () => {
   it('matches inflected words, not just stems at word end', () => {
@@ -255,6 +255,46 @@ describe('composeLetter', () => {
     assert.equal(crisis.verified, false);
     assert.match(crisis.notice, /988/);
     assert.match(crisis.notice, /911/);
+  });
+
+  it('sets /ask first paint by the folio office', () => {
+    const press = require('../data/letterpress');
+    const days = dailyRotation();
+    const morning = new Date(2026, 8, 14, 9, 0, 0);
+    const afternoon = new Date(2026, 8, 14, 14, 0, 0);
+    const vespers = new Date(2026, 8, 14, 18, 0, 0);
+    const compline = new Date(2026, 8, 14, 22, 0, 0);
+    assert.equal(press.officeName(new Date(2026, 8, 14, 5, 59, 0)), 'Compline');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 6, 0, 0)), 'Morning');
+    assert.equal(press.officeName(morning), 'Morning');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 11, 59, 0)), 'Morning');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 12, 0, 0)), 'Afternoon');
+    assert.equal(press.officeName(afternoon), 'Afternoon');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 16, 59, 0)), 'Afternoon');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 17, 0, 0)), 'Vespers');
+    assert.equal(press.officeName(vespers), 'Vespers');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 20, 59, 0)), 'Vespers');
+    assert.equal(press.officeName(new Date(2026, 8, 14, 21, 0, 0)), 'Compline');
+    assert.equal(press.officeName(compline), 'Compline');
+
+    const idx = Math.floor(new Date(2026, 8, 14).getTime() / 86400000) % days.length;
+    const day = days[idx];
+    const am = press.composeAskDay(days, morning);
+    const pm = press.composeAskDay(days, vespers);
+    const night = press.composeAskDay(days, compline);
+    assert.equal(am.office, 'Morning');
+    assert.equal(am.evening, false);
+    assert.equal(am.verse, day.affirmation.verse);
+    assert.equal(am.quote, day.affirmation.quote);
+    assert.equal(lookup(am.verse).text, am.quote);
+    assert.equal(pm.office, 'Vespers');
+    assert.equal(pm.evening, true);
+    assert.equal(pm.verse, day.word.verse);
+    assert.equal(pm.quote, day.word.passage);
+    assert.equal(lookup(pm.verse).text, pm.quote);
+    assert.equal(night.office, 'Compline');
+    assert.equal(night.quote, day.word.passage);
+    assert.equal(press.composeAskDay([], morning), null);
   });
 
   it('tells the truth when no room is named', () => {

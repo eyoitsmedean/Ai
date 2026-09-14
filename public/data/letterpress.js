@@ -296,6 +296,58 @@
     };
   }
 
+  /* Same hours as the folio (public/index.html officeName):
+     Compline 21–05, Vespers 17–20, Morning 06–11, Afternoon 12–16. */
+  function officeName(d) {
+    var h = (d instanceof Date ? d : new Date()).getHours();
+    if (h >= 21 || h < 6) return 'Compline';
+    if (h >= 17) return 'Vespers';
+    if (h < 12) return 'Morning';
+    return 'Afternoon';
+  }
+
+  function localDayIndex(d, length) {
+    var date = d instanceof Date ? d : new Date();
+    var midnight = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    var n = length > 0 ? length : 1;
+    return Math.floor(midnight.getTime() / 86400000) % n;
+  }
+
+  /* First paint for /ask: morning/afternoon keep the affirmation;
+     vespers/compline set the day's word, as the folio evening office does. */
+  function composeAskDay(daily, d) {
+    var days = daily || [];
+    if (!days.length) return null;
+    var date = d instanceof Date ? d : new Date();
+    var day = days[localDayIndex(date, days.length)];
+    if (!day) return null;
+    var office = officeName(date);
+    var evening = office === 'Vespers' || office === 'Compline';
+    var quote = '';
+    var verse = '';
+    var meaning = '';
+    if (evening && day.word && day.word.passage && day.word.verse) {
+      quote = day.word.passage;
+      verse = day.word.verse;
+      meaning = fourLines(day.word.reflection || 'Lay the day down beside this sentence.');
+    } else if (day.affirmation && day.affirmation.quote && day.affirmation.verse) {
+      quote = day.affirmation.quote;
+      verse = day.affirmation.verse;
+      meaning = fourLines(day.affirmation.text || (day.word && day.word.reflection) || '');
+    } else {
+      return null;
+    }
+    return {
+      office: office,
+      evening: evening,
+      quote: quote,
+      verse: verse,
+      meaning: meaning,
+      translation: 'King James Version (1769)',
+      verified: Boolean(quote && verse),
+    };
+  }
+
   /* placeholders: true → {{Book C:V}} for lib/scripture to fill from the corpus.
      placeholders: false → the hydrated quote text carried by the passage. */
   function renderLetter(letter, opts) {
@@ -315,9 +367,11 @@
     GENERIC: GENERIC,
     NEED_CUES: NEED_CUES,
     citedBefore: citedBefore,
+    composeAskDay: composeAskDay,
     composeLetter: composeLetter,
     composeScreen: composeScreen,
     guessThemes: guessThemes,
+    officeName: officeName,
     looksLikeCrisis: looksLikeCrisis,
     renderLetter: renderLetter,
     resolveTheme: resolveTheme,

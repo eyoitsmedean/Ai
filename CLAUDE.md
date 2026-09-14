@@ -55,10 +55,10 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## STATE (latest)
 
-- Mission lock: Prompt 9 — recover first prompts, then improve. This thread has **9** user prompts, not 10.
-- Decisions this session: `/ask` opens on today’s folio saying; Hear speaks the saying only, no autoplay. Prompt 10 was not invented.
-- Work done: `public/one-screen.html` today-line + Hear; `studio/CANONICAL-BRIEF.md` table to 9.
+- Mission lock: Prompts 9 and 10 are the same sentence — recover the first ten, then improve. This thread has **10** genuine user prompts (one `system_notification` wrapper is not a prompt).
+- Decisions this session: `/ask` first paint follows the folio office (Morning / Afternoon affirmation; Vespers / Compline the day’s word). Hear still speaks the saying only, no autoplay. WATCH holds.
+- Work done: `composeAskDay` / `officeName` in letterpress; `/ask` office label; SW `rla-phase0-v17`; brief table to 10.
 - Next step: Dean opens `/ask`; still decide folio continue ghost; no Pages.
 - Open risks: model path unverified; keyword ≠ contextual; speechSynthesis device-dependent (not asserted as audio).
 
-RESUME_FROM: `npm start` → `/ask`. Do not publish. Do not invent a tenth prompt for this thread.
+RESUME_FROM: `npm start` → `/ask`. Do not publish. Do not invent a prompt 11.

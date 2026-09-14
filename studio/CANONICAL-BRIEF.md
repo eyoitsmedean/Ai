@@ -1,10 +1,10 @@
 # Canonical brief — this Cursor thread
 
-**Version:** 2026-09-11 evening UTC  
+**Version:** 2026-09-14 evening UTC  
 **Audience:** Dean, and any later agent on `github.com/eyoitsmedean/Ai`  
 **Thread:** Cursor cloud run `bc-01a06e76-0527-7c66-84c2-fc678b9a3801` (“Dean's masterpiece protocol update”)  
-**Transcript recovered:** `/tmp/cursor/cloud-agent-transcripts/2026-09-11T21-34-05Z-dbda/bc-01a06e76-0527-7c66-84c2-fc678b9a3801/transcript.json`  
-**User-authored prompts in this conversation:** **9** (not 10). Prompt 10 does not exist in this transcript. Transcript re-fetched 14 Sep 2026 evening (`/tmp/cursor/cloud-agent-transcripts/2026-09-14T20-38-32Z-07a2/`). Earlier iOS/Grok first-tens are other threads and must not be overwritten.
+**Transcript recovered:** `/tmp/cursor/cloud-agent-transcripts/2026-09-14T20-48-41Z-e483/bc-01a06e76-0527-7c66-84c2-fc678b9a3801/transcript.json`  
+**User-authored prompts in this conversation:** **10**. Prompts 9 and 10 are the same sentence. One `role: user` `system_notification` wrapper (index 747) is not a prompt. Transcript re-fetched 14 Sep 2026 evening. Earlier iOS/Grok first-tens are other threads and must not be overwritten.
 
 This brief is the system of orientation for *this* commission. It does not replace `CLAUDE.md` (atelier-wide decisions) or `studio/briefs/red-letter.md` (ATELIER Part 2). Later amendments below outrank earlier “ship / launch” energy.
 
@@ -22,9 +22,9 @@ By 11 September 2026 the household operator (Notion, Idaho) later-amended that i
 
 ---
 
-## Recovery table — first six user prompts
+## Recovery table — first ten user prompts
 
-Source: this run’s transcript. Wording below is excerpted, not reconstructed. A seventh `role: user` message (transcript index 747, 6 Sep 2026) was a `<system_notification>` subagent-completion wrapper and is **not** a user prompt.
+Source: this run’s transcript. Wording below is excerpted, not reconstructed. A `role: user` message (transcript index 747, 6 Sep 2026) was a `<system_notification>` subagent-completion wrapper and is **not** a user prompt.
 
 | # | Prompt | Distinctive original wording | Requirement or preference | Current implication | Later amendment |
 | --- | --- | --- | --- | --- | --- |
@@ -33,12 +33,13 @@ Source: this run’s transcript. Wording below is excerpted, not reconstructed. 
 | 3 | FORGE | “# FORGE — Universal Project Execution Prompt” / “Take ownership of advancing the project already established… Recover its actual state… produce the strongest finished result” | Recover state, resolve controlling questions, finish. | Same duty as this commission’s recovery + execution loop. | Later ATELIER + Notion WATCH constrain *what* “finished” means (paper, not URL). |
 | 4 | ATELIER PROTOCOL | “# ATELIER PROTOCOL — MASTER PROMPT” / “principal-level practitioner working in Dean's atelier.” Includes a filled example titled “The Red Letter Advisor.” | New governing master prompt. Filled brief asked for a chat-first advisor, evaluation set, production-usable companion. | Adopted verbatim as `studio/ATELIER-PROTOCOL.md`. Brief corrections already recorded: product is **Red Letter**; Advisor is one of five rooms; web folio here, native is **Red Words**; KJV 1769. | Notion one-screen + license lock (11 Sep) later-amend “ship Pages / public URL.” Crisis: **stop generating counsel**, not 988-then-letter. |
 | 5 | Massive sprint | “Massive sprint time get to it pick 5 priorities and push for 45 minutes to an hour” | Five concrete product increments, time-boxed. | Done: theme aliases; shaving carve-out; honest generic opening; path after Day 7; Advisor room chips. | Do not grow a sixth sprint item into a launch. |
-| 6 | This commission | “UNIVERSAL PROJECT RECOVERY…” / “Recover and deeply review my earliest ten prompts” | Recover original intent; three flagships. | This document, research, `/ask`, Notion child. | Prompts 7–9 arrived later in *this* thread. |
+| 6 | This commission | “UNIVERSAL PROJECT RECOVERY…” / “Recover and deeply review my earliest ten prompts” | Recover original intent; three flagships. | This document, research, `/ask`, Notion child. | Prompts 7–10 arrived later in *this* thread. |
 | 7 | LODESTAR | “You are being handed a project I care about” / Intent Charter / five summits | Truth + original purpose; finish. | `studio/lodestar/`, WATCH folio, scored one-screen. | — |
 | 8 | ATELIER useful-work | “Useful work, faithfully finished” / “little avoidable cleanup” | Scale; no new KB; finish. | Folio crisis door demoted; operator sheets match `/ask`. | — |
-| 9 | First ten + improve | “reviewing my first 10 prompts” / “creative freedom” | Recover prompts, then improve. | This row. Thread still has **nine** prompts, not ten. | — |
+| 9 | First ten + improve | Exact: “You have creative freedom and token freedom to analyze and improve as you see fit, start by reviewing my first 10 prompts for context and guidance” | Recover the ten, then improve. | Office-aware `/ask` (this increment). | — |
+| 10 | First ten + improve (repeat) | Identical to #9, byte-for-byte. | Same. | Same increment; not a new ask. | — |
 
-**Fewer than ten prompts:** distinguished from missing access. Nine genuine prompts exist after a 14 Sep evening re-fetch. One skipped `system_notification` wrapper. If a tenth lives in Grok/iOS, it is not this transcript.
+**Ten genuine prompts.** Distinguished from missing access. One skipped `system_notification` wrapper. If an earlier first-ten lives in Grok/iOS, it is not this transcript and must not be overwritten.
 
 ---
 

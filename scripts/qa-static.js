@@ -139,8 +139,15 @@ async function main() {
     const todayLine = await page.evaluate(() => ({
       cite: document.getElementById('cite').textContent,
       seal: document.getElementById('seal').textContent,
+      office: document.getElementById('office').textContent,
       hear: !!document.getElementById('hear-btn'),
     }));
+    const press = require('../data/letterpress');
+    const { dailyRotation } = require('../lib/curated');
+    const expected = press.composeAskDay(dailyRotation(), new Date());
+    assert(expected && expected.verse, 'composeAskDay should yield today’s saying');
+    assert(todayLine.office === expected.office, 'office should match the folio hour, got ' + todayLine.office);
+    assert(todayLine.cite.indexOf(expected.verse) !== -1, 'today’s saying should match the office, got ' + todayLine.cite);
     assert(/(Matthew|Mark|Luke|John) \d+:\d+/.test(todayLine.cite), 'today’s saying should be set on first paint: ' + todayLine.cite);
     assert(/opened KJV/.test(todayLine.seal), 'today’s saying should be sealed');
     assert(todayLine.hear, 'Hear control missing');

@@ -8,7 +8,7 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 
 ## What is done
 
-1. This Cursor thread’s first seven prompts are recovered in `studio/CANONICAL-BRIEF.md` (six at write time) and `studio/lodestar/INTENT-CHARTER.md` (LODESTAR is #7).
+1. This Cursor thread’s first ten prompts are recovered in `studio/CANONICAL-BRIEF.md`. Prompts 9 and 10 are the same sentence. LODESTAR is #7.
 2. Crisis path **stops counsel** (folio, `/api/chat`, one-screen, eval).
 3. One-screen lives at `public/one-screen.html` and `/ask`.
 4. Research on five adjacent questions is in `studio/research/`.
@@ -34,7 +34,7 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 
 ## How to use the one-screen
 
-The page opens on **today’s saying** (same local-midnight rotation as the folio). Type in **Ask** to set another line. Read **The words** (crimson, KJV labeled) and the seal. **Hear** speaks only the saying (no autoplay). **Rest** is 60 seconds. **Print this saying** is paper. A crisis line hides Words and Meaning; 988 and 911 stand.
+The page opens on **today’s saying for this office** — Morning and Afternoon keep the affirmation; Vespers and Compline set the day’s word, same hours as the folio. Type in **Ask** to set another line. Read **The words** (crimson, KJV labeled) and the seal. **Hear** speaks only the saying (no autoplay). **Rest** is 60 seconds. **Print this saying** is paper. A crisis line hides Words and Meaning; 988 and 911 stand.
 
 ## What remains unresolved
 

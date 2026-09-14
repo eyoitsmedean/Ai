@@ -97,6 +97,8 @@ describe('the static Advisor is the server Advisor', () => {
 
   it('exposes the same engine in the browser bundle', () => {
     assert.equal(typeof window.RLA_LETTERPRESS.composeLetter, 'function');
+    assert.equal(typeof window.RLA_LETTERPRESS.composeAskDay, 'function');
+    assert.equal(typeof window.RLA_LETTERPRESS.officeName, 'function');
     assert.equal(window.RLA_LETTERPRESS.NEED_CUES.length, press.NEED_CUES.length);
   });
 

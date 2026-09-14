@@ -74,8 +74,17 @@
       font-style: italic;
       color: var(--ink-2);
       text-align: center;
-      margin: 16px auto 32px;
+      margin: 16px auto 8px;
       max-width: 28ch;
+    }
+    .office {
+      font-family: var(--ui);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: center;
+      margin: 0 auto 32px;
     }
     .block { margin-bottom: 28px; }
     .kicker {
@@ -165,6 +174,7 @@
     html.resting .mark,
     html.resting h1,
     html.resting .deck,
+    html.resting .office,
     html.resting form,
     html.resting .actions,
     html.resting #meaning-block,
@@ -190,6 +200,7 @@
     <div class="mark" aria-hidden="true">R</div>
     <h1>Red <em>Letter</em></h1>
     <p class="deck">His words, then one implication, then silence.</p>
+    <p class="office hidden" id="office"></p>
 
     <form id="ask-form" class="block" autocomplete="off">
       <label class="kicker" for="ask">Ask</label>
@@ -246,6 +257,7 @@
       var restBtn = document.getElementById('rest-btn');
       var printBtn = document.getElementById('print-btn');
       var hearBtn = document.getElementById('hear-btn');
+      var office = document.getElementById('office');
       var wordsBlock = document.getElementById('words-block');
       var meaningBlock = document.getElementById('meaning-block');
       var STOP_KEY = 'rla-ask-stopped';
@@ -284,20 +296,26 @@
         else clearSeal();
       }
 
+      function paintOffice(name) {
+        if (!office) return;
+        if (!name) {
+          office.textContent = '';
+          office.classList.add('hidden');
+          return;
+        }
+        office.textContent = name;
+        office.classList.remove('hidden');
+      }
+
       function paintToday() {
         var data = window.RLA_CURATED;
+        var engine = window.RLA_LETTERPRESS;
         var days = data && data.daily;
-        if (!days || !days.length) return;
-        var now = new Date();
-        var idx = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 86400000) % days.length;
-        var day = days[idx];
-        if (!day || !day.affirmation || !day.affirmation.quote) return;
-        setLine(
-          day.affirmation.quote,
-          day.affirmation.verse,
-          (day.word && day.word.reflection) || '',
-          'King James Version (1769)'
-        );
+        if (!engine || !engine.composeAskDay) return;
+        var line = engine.composeAskDay(days);
+        if (!line) return;
+        paintOffice(line.office);
+        setLine(line.quote, line.verse, line.meaning, line.translation);
       }
 
       function clearSeal() {
@@ -325,6 +343,7 @@
         crisis.classList.remove('hidden');
         wordsBlock.classList.add('hidden');
         meaningBlock.classList.add('hidden');
+        paintOffice('');
         words.textContent = emptyWords;
         cite.textContent = emptyCite;
         meaning.textContent = emptyMeaning;
