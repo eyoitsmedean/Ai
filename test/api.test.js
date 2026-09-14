@@ -54,7 +54,7 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
-    assert.equal(data.themes, 12);
+    assert.equal(data.themes, 13);
   });
 
   it('serves a verified daily page', async () => {
@@ -115,16 +115,26 @@ describe('smoke routes', () => {
     // A crisis line: the human door first, a blank line, then company — never a scope disclaimer.
     const crisis = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'I want to die' }] });
     const crisisLetter = joinStream(crisis.raw);
-    assert.match(crisisLetter, /^If you are in danger[^]*call or text 988[^]*findahelpline\.com[^]*not emergency care\.\n\nWhile you reach a person who can help/);
+    assert.match(crisisLetter, /^If you are in danger[^]*call or text 988[^]*findahelpline\.com[^]*not emergency care\.[^]*While you reach a person who can help/);
+    assert.match(crisisLetter, /will not call anyone for you/);
     assert.ok(crisisLetter.indexOf('988') < crisisLetter.indexOf('**'), 'help before any verse');
     assert.doesNotMatch(crisisLetter, /cannot answer that as it is asked/);
 
     const abuse = await request('POST', '/api/chat', { messages: [{ role: 'user', content: 'My husband hits me when he is drunk' }] });
     const abuseLetter = joinStream(abuse.raw);
     assert.match(abuseLetter, /^If someone is hurting you[^]*1-800-799-7233[^]*thehotline\.org/);
+    assert.match(abuseLetter, /does not break a vow/);
     assert.ok(abuseLetter.indexOf('799-7233') < abuseLetter.indexOf('**'), 'hotline before any verse');
     assert.doesNotMatch(abuseLetter, /Love your enemies|Matthew 5:44|cannot answer that as it is asked/);
     assert.match(abuseLetter, /Matthew 10:23|John 10:10/);
+
+    const integrity = await request('POST', '/api/chat', {
+      messages: [{ role: 'user', content: 'My boss wants me to lie to a customer. If I refuse I might lose my job.' }],
+    });
+    const integrityLetter = joinStream(integrity.raw);
+    assert.match(integrityLetter, /^The next word wants to be smoother than the truth/);
+    assert.match(integrityLetter, /\*\*Matthew 5:37\*\*/);
+    assert.doesNotMatch(integrityLetter, /Matthew 6:26/);
   });
 
   it('answers cross-origin only for origins named in RLA_ALLOWED_ORIGINS', async () => {

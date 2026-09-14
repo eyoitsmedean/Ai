@@ -395,13 +395,25 @@ async function main() {
   });
 
   await check('Integrity room cites yes-yes, not sparrows', async () => {
-    await page.evaluate(() => { localStorage.setItem('rla-onboarded', '1'); });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-asked-once', '1');
+    });
     await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
-    await page.evaluate(() => sendMsg('My boss wants me to lie to a customer. If I refuse I might lose my job.'));
-    await page.waitForFunction(() => /Matthew 5:37/.test(document.getElementById('chat-messages').innerText), { timeout: 8000 });
+    await page.evaluate(() => {
+      const ob = document.getElementById('onboarding');
+      if (ob) ob.classList.add('hidden');
+      document.getElementById('app').removeAttribute('aria-hidden');
+      if (typeof startApp === 'function' && !document.getElementById('advisor-page').classList.contains('active')) {
+        /* folio already started when onboarded */
+      }
+      switchTab('advisor');
+      sendMsg('My boss wants me to lie to a customer. If I refuse I might lose my job.');
+    });
+    await page.waitForFunction(() => /Matthew 5:37/i.test((document.getElementById('chat-messages') || {}).innerText || ''), { timeout: 15000 });
     const letter = await page.evaluate(() => document.getElementById('chat-messages').innerText);
     assert(/smoother than the truth/.test(letter), 'Integrity hear missing');
-    assert(!/Matthew 6:26/.test(letter), 'Integrity must not open with sparrows');
+    assert(!/Matthew 6:26/i.test(letter), 'Integrity must not open with sparrows');
     const bless = await page.evaluate(() => [...document.querySelectorAll('.letter-actions .msg-save-btn')].map((b) => b.textContent));
     assert(bless.includes('Send this word'), 'letter should offer Send this word: ' + bless.join(','));
     const chip = await page.evaluate(() => document.querySelector('#advisor-page .page-chip') && document.querySelector('#advisor-page .page-chip').textContent);

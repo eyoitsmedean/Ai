@@ -115,6 +115,10 @@ describe('the lamp-out letter', () => {
     assert.equal(themesFor('I can\'t stop worrying about money. Rent is due and I don\'t have it.')[0], 'Anxiety & Worry');
   });
 
+  it('a refused oath is Integrity, even when a job is at stake', () => {
+    assert.equal(themesFor('I refuse all oaths because Jesus said swear not at all. Will I lose my job if I won\'t sign?')[0], 'Integrity');
+  });
+
   it('the letter contract holds on served crisis and abuse letters', () => {
     const { CRISIS_NOTICE, ABUSE_NOTICE } = require('../lib/scripture');
     const crisis = CRISIS_NOTICE + '\n' + verifyAndSubstitute(composeLetter('I want to die'));

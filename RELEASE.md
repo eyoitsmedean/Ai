@@ -2,15 +2,15 @@
 
 Every line is **verified** (with how, and the rung) or **unverified** (with what it takes). Nothing here is called passed that was not run. Rungs: (1) ran it and observed · (2) automated proxy · (3) hand-traced · (4) checked against a spec · (5) could not verify.
 
-Last updated 2026-09-11, on branch `cursor/advisor-sprint-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
+Last updated 2026-09-14, on branch `cursor/lodestar-cycle-1-fbba`, in a Linux container with Node 22.14, headless Chrome, no Xcode, no Android SDK.
 
 ## What is verified
 
 | Item | How | Rung |
 |---|---|---|
 | Every answer cites only His words, quoted from the KJV corpus, never typed | `npm test` — `test/counsel.test.js` runs all 46 eval questions through `composeLetter` → `verifyAndSubstitute` and checks each quote equals the corpus; `test/map.test.js`, `test/spoken.test.js` guard the map and the frame | 1 |
-| The evaluation set: 46 questions (16 everyday, 10 low-moment, 6 hostile, 6 off-scope, 8 crisis) | `npm run eval` against a live server — **46/46 passed, 17 distinct answer sets**, offline path; `eval/RESULTS.md` | 1 |
-| Eval grown to 54 (Integrity + contract). Prior 50/50 on 2026-09-11. This cycle’s run is recorded after tests | unverified until `npm run eval` this cycle | 5 |
+| The evaluation set: 46 questions (16 everyday, 10 low-moment, 6 hostile, 6 off-scope, 8 crisis) — historical 2026-09-06 | then 50 (2026-09-11); now 54 | 1 |
+| Eval grown to 54 (Integrity + contract). Offline path **54/54**, 19 distinct citation sets, 2026-09-14 | `npm run eval`; `eval/RESULTS.md` | 1 |
 | Crisis inputs get the human handoff (988 · findahelpline) before any verse | eval `crisis_handoff` 8/8; browser QA opens the modal before sending "I want to die" | 1 |
 | Present-danger / abuse inputs get thehotline (1-800-799-7233) before any verse, and never Matthew 5:44 | unit tests + API test; eval items 47–50; browser QA opens the abuse modal first | 1 |
 | Client and server crisis detectors are identical | `test/counsel.test.js` compares the two regex sources | 1 |
