@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week close · 14 Sep 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; } html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.1rem; line-height: 1.1; margin: .2rem 0 .8rem; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.3rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem 1.05rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    label { display: block; margin: .45rem 0; }
+    input, select, textarea { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    textarea { min-height: 4.5rem; }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    .btn { font-family: "Instrument Sans", sans-serif; appearance: none; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .55rem .8rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; cursor: pointer; }
+    .btn.ghost { background: transparent; color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    a { color: var(--crimson); }
+    .receipt { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    @media print { .actions { display: none !important; } }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Monday 14 Sep 2026 · not Sunday · Bearing C2 C7</p>
+  <h1>Week close.<br><em>Three minutes.</em></h1>
+  <p>Prior pages called this “Sunday close 14 Sep.” <strong>14 Sep is Monday.</strong> Sunday was 13 Sep. The close date you were given is today. If you already rested yesterday, this page still writes the receipt.</p>
+  <p class="tiny">Opening this page authorizes nothing. Grocery money is still $0. Apply is HOLD.</p>
+
+  <div class="card hold">
+    <h2 style="margin-top:0">What is already true</h2>
+    <ul>
+      <li>Week 1 (4–10 Sep) and the Friday 11 Sep routing week are over.</li>
+      <li>Household window last recorded: <em>Not confirmed</em>.</li>
+      <li>Required work named for 8–14 Sep: DEX room-inspect during work hours.</li>
+      <li>After today, 15 Sep–3 Dec inclusive = <strong>80 days</strong>. October is Red. November Yellow starts 1 Nov unless the window fails.</li>
+      <li>15 Sep 2026 is a federal estimated-tax date for <em>Jun–Aug</em> income. It is not a bill for a 1099 that does not exist yet.</li>
+    </ul>
+  </div>
+
+  <h2>Three questions</h2>
+  <label>1. Did Ninety Days make the week lighter, or become another dashboard?
+    <select id="q1"><option>Not answered</option><option>Lighter</option><option>Another dashboard</option><option>Did not open it</option></select>
+  </label>
+  <label>2. Did money, a dated no, or a blocked gate appear — or only motion?
+    <select id="q2"><option>Not answered</option><option>Money</option><option>A dated no</option><option>A blocked gate</option><option>Only motion</option><option>Nothing — I did not run a lane</option></select>
+  </label>
+  <label>3. Continue / Park 30 days / Close
+    <select id="q3"><option>Not answered</option><option>Continue</option><option>Park 30 days</option><option>Close</option></select>
+  </label>
+  <label>Household window now
+    <select id="window"><option>Not confirmed</option><option>Confirmed</option><option>Not needed</option></select>
+  </label>
+  <label>One sentence (optional)<input type="text" id="note" /></label>
+  <div class="actions">
+    <button class="btn" type="button" id="write">Write the close</button>
+    <button class="btn ghost" type="button" onclick="window.print()">Print</button>
+    <a class="btn ghost" href="decision-night.html">Decision Night</a>
+    <a class="btn ghost" href="house-hears.html">What the house hears</a>
+  </div>
+  <pre class="receipt" id="receipt">The close appears here. It stays on this device.</pre>
+
+  <h2>If you Continue</h2>
+  <table>
+    <thead><tr><th>When</th><th>Legal move</th></tr></thead>
+    <tbody>
+      <tr><td>Window still not Confirmed</td><td>Rest. Required work only.</td></tr>
+      <tr><td>Window Confirmed, this week</td><td>Mark five Lamp gates. Do not apply.</td></tr>
+      <tr><td>15 Sep</td><td>Not a new-1099 estimated bill. Ignore unless other 2026 unwithheld income already required a voucher.</td></tr>
+      <tr><td>October</td><td>Red. No new asks. No new billing model.</td></tr>
+      <tr><td>1 Nov</td><td>Yellow unless the window fails.</td></tr>
+      <tr><td>29 Nov</td><td>Advent. Craft, not payroll.</td></tr>
+      <tr><td>3 Dec</td><td>Clock ends.</td></tr>
+    </tbody>
+  </table>
+  <p class="tiny">Park creates no reminder. Close creates no successor. Both are successful finishes.</p>
+</main>
+<script>
+document.getElementById("write").addEventListener("click", () => {
+  const text = [
+    "NINETY DAYS · WEEK CLOSE",
+    "Written 14 Sep 2026 (Monday) · stays on this device",
+    "",
+    "Lighter or dashboard: " + document.getElementById("q1").value,
+    "Money / no / gate / motion: " + document.getElementById("q2").value,
+    "Disposition: " + document.getElementById("q3").value,
+    "Household window: " + document.getElementById("window").value,
+    "Note: " + (document.getElementById("note").value.trim() || "(blank)"),
+    "",
+    "80 days after today. October is Red. Apply is HOLD.",
+    "This close is not an application."
+  ].join("\n");
+  document.getElementById("receipt").textContent = text;
+  try { localStorage.setItem("ninety-days-week-close-2026-09-14", text); } catch (e) {}
+});
+</script>
+</body>
+</html>

@@ -83,6 +83,7 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-11 | Run sprint: phone layout, tonight strip, scoreboard lock, copy-ready Saturday asks | recorded | folio title page, scoreboard, tonight dock |
 | 2026-09-11 | Operator Card v2 confirmed as money SoT for this repo twin. Idaho 5.3%. $0 first. Decision Night + Operator lock + CANONICAL.md are the three flagships. Folio cash columns quarantined. Sendable Storefront ask set to $595. Listings rechecked live. | VERIFIED listings + STC; INTERP on $0 first | folio/decision-night.html, folio/CANONICAL.md, folio #operator-lock, Notion Operator Card |
 | 2026-09-11 | Independent review: Lamp apply dock and Saturday copy put behind HOLD; Room/Handoff/Storefront surface math aligned to v2; Front Range line retired; Folio first-60 no longer asks to publish. | recorded | folio/index.html plan leaves + tonight JS |
+| 2026-09-14 | LODESTAR Cycle 1. Intent Charter v1. Calendar: 14 Sep is Monday, not Sunday; 80 days after today. Five summits built. Listings rechecked live. Tax stack computed from opened IRS/Idaho sources. | VERIFIED weekday + listings; computed tax | folio/lodestar/, week-close.html, keep.html, apply-packet.html, house-hears.html, lamp-drill.html |
 
 ## Open questions (batched; recommended default in parentheses)
 

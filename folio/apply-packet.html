@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lamp packet · HOLD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; } html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.1rem; line-height: 1.1; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.3rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    label { display: block; margin: .4rem 0; }
+    input, select, textarea { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    textarea { min-height: 7rem; }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    .btn { font-family: "Instrument Sans", sans-serif; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .5rem .75rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; cursor: pointer; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .btn.ghost { background: transparent; color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+    a { color: var(--crimson); }
+    .letter { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Bearing C8 · HOLD · 14 Sep 2026</p>
+  <h1>Apply packet.<br><em>Staged, not sent.</em></h1>
+  <p>This page prepares a letter. It does not open Mercor. It does not send mail. Copy stays HOLD until every gate is Clear, the window is Confirmed, and you type Yes.</p>
+
+  <div class="card hold">
+    <p style="margin-top:0"><strong>Why grocery is still $0 even if you later apply.</strong> Official Mercor pages (opened 14 Sep): projects can end early; a pause sets the weekly cap to 0; first Stripe payout is held 7 days; Insightful takes periodic screenshots; listing rate may not be the offer. No opened official alternative pays $80–$120 to grade L&amp;D/GTM decks on evenings.</p>
+  </div>
+
+  <h2>Gates (you write)</h2>
+  <label>1 L&amp;D years without employer files <select id="g1"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select></label>
+  <label>2 Sales / GTM years the same way <select id="g2"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select></label>
+  <label>3 Slide fluency on public examples <select id="g3"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select></label>
+  <label>4 Handbook read; disclose if asked <select id="g4"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select></label>
+  <label>5 Separate machine + breach consent <select id="g5"><option>Unmarked</option><option>Clear</option><option>Unknown</option><option>Blocked</option></select></label>
+  <label>Household window
+    <select id="window"><option>Not confirmed</option><option>Confirmed</option><option>Not needed</option></select>
+  </label>
+  <label>I authorize one apply, in my own name, on a personal machine
+    <select id="auth"><option>No</option><option>Yes</option></select>
+  </label>
+  <p class="tiny" id="why">Copy is locked.</p>
+  <div class="actions">
+    <button class="btn" type="button" id="copy" disabled>Copy stays HOLD</button>
+    <a class="btn ghost" href="lamp-drill.html" style="text-decoration:none;display:inline-block">Practice first</a>
+    <a href="decision-night.html">Decision Night</a>
+  </div>
+  <pre class="letter" id="letter"></pre>
+  <p class="tiny">Listings (live 14 Sep, not an offer): L&amp;D and GTM at $80–$120/hr. LLM policy: you may not use a model to score or justify.</p>
+</main>
+<script>
+const LETTER = "I’m applying for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.";
+function locked() {
+  const gates = [1,2,3,4,5].map((n) => document.getElementById("g" + n).value);
+  const blocked = gates.includes("Blocked") || gates.includes("Unmarked") || gates.includes("Unknown");
+  const win = document.getElementById("window").value;
+  const auth = document.getElementById("auth").value === "Yes";
+  const ok = !blocked && (win === "Confirmed" || win === "Not needed") && auth;
+  const btn = document.getElementById("copy");
+  const why = document.getElementById("why");
+  const letter = document.getElementById("letter");
+  if (!ok) {
+    btn.disabled = true;
+    btn.textContent = "Copy stays HOLD";
+    why.textContent = "Locked because a gate is not Clear, the window is not Confirmed, or you have not typed Yes.";
+    letter.textContent = "HOLD — do not send.\n\nWhen every gate is Clear, the window is Confirmed, and authorization is Yes, the letter will appear here.\n\n" + LETTER;
+    return;
+  }
+  btn.disabled = false;
+  btn.textContent = "Copy the letter";
+  why.textContent = "Unlocked on this device only. You still send it. This page does not.";
+  letter.textContent = LETTER;
+}
+["g1","g2","g3","g4","g5","window","auth"].forEach((id) => {
+  document.getElementById(id).addEventListener("change", locked);
+});
+document.getElementById("copy").addEventListener("click", async () => {
+  if (document.getElementById("copy").disabled) return;
+  await navigator.clipboard.writeText(LETTER);
+  document.getElementById("copy").textContent = "Copied";
+  setTimeout(locked, 1200);
+});
+locked();
+</script>
+</body>
+</html>
