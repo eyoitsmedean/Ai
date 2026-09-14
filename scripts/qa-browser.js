@@ -115,6 +115,9 @@ async function main() {
     await page.waitForSelector('#blessing-sheet.on', { timeout: 4000 });
     const overlap = await page.evaluate(() => {
       const amen = document.getElementById('amen');
+      const visible = [...document.querySelectorAll('#blessing-sheet button, #blessing-sheet .cta')]
+        .filter((el) => el.offsetParent !== null)
+        .map((el) => el.textContent.trim());
       return {
         amenOn: amen.classList.contains('on'),
         amenOpacity: Number(getComputedStyle(amen).opacity),
@@ -122,14 +125,15 @@ async function main() {
         market: document.querySelectorAll('#blessing-list .blessing-item').length,
         firstHidden: document.getElementById('blessing-actions-first').hidden,
         cardHidden: document.getElementById('blessing-actions-card').hidden,
+        visible,
       };
     });
     assert(!overlap.amenOn, 'Amen overlay still on when blessing sheet is open');
     assert(overlap.amenOpacity < 0.05, 'Amen still covering the blessing, opacity=' + overlap.amenOpacity);
     const copy = overlap.copy;
     assert(/Send a blessing/i.test(copy), 'blessing sheet missing');
-    assert(/Copy the blessing/i.test(copy), 'first blessing must copy the saying, not share a card');
-    assert(!/Send the card/i.test(copy), 'first blessing must not offer a product card');
+    assert(overlap.visible.some((t) => /Copy the blessing/i.test(t)), 'first blessing must copy the saying, not share a card');
+    assert(!overlap.visible.some((t) => /Send the card|Dawn|Night/i.test(t)), 'first blessing must not offer a product card, got ' + overlap.visible.join(' | '));
     assert(/Matthew|Mark|Luke|John/i.test(copy), 'blessing must carry the verse they sat with');
     assert(/No URL/i.test(copy), 'first blessing must forbid a URL');
     assert(overlap.market === 0, 'first blessing must not be a 24-verse market, got ' + overlap.market);

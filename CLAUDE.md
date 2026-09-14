@@ -136,5 +136,6 @@ Prompt 9 again: finished product. Amen overlay (z-index 88) was opening the bles
 - Built: `closeAmen` waits for the fade (`transitionend`, 450ms fallback) before `openBlessing`. Blessing sheet sits above a dismissed Amen. First Amen copies the saying (`copyFirstBlessing`) — name required, no Dawn/Night card, no URL. Later blessings still share a card.
 - Folio title kicker: remaining hour, not “for review.”
 - QA: Amen not `.on` and opacity ~0 when blessing is open; first sheet offers Copy, not Send the card.
+- Verify this sitting: `npm test` 62/62 · `scripts/qa-browser.js` 9/9.
 - Not a sixth menu. Pages, merge, send, factory date still founder-only.
 
