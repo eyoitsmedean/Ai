@@ -222,6 +222,11 @@ describe('one-screen routes', () => {
     assert.match(res.raw, /What this bot cannot do/);
     assert.match(res.raw, /World English Bible/);
     assert.match(res.raw, /ebible\.org\/engwebp\/MAT11\.htm/);
+    assert.match(res.raw, /John 16:33/);
+    assert.match(res.raw, /I have overcome the world/);
+    assert.match(res.raw, /Print this saying/);
+    const tired = composeAsk('I am so tired');
+    assert.match(res.raw, new RegExp(tired.quote.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.doesNotMatch(res.raw, /id="sit-quote"/);
     assert.match(res.raw, /tel:988/);
   });

@@ -177,7 +177,7 @@
     <header>
       <a class="mark" href="/ask"><span class="r" aria-hidden="true">R</span><span class="wordmark">Red Letter</span></a>
       <h1>What is weighing on you today?</h1>
-      <p class="lede">Ask in a sentence. This page answers with one saying Jesus spoke, a short plain-speech reading, then silence.</p>
+      <p class="lede">A saying is already here. Ask in a sentence if it is not the one you needed. One of His, a short reading, then silence.</p>
     </header>
 
     <form id="ask-form">
@@ -200,17 +200,16 @@
     <div id="answer" aria-live="polite">
       <section class="block" id="words-block">
         <h2>The words</h2>
-        <div id="example" class="example">
-          <p class="quote">“Come to me, all you who labor and are heavily burdened, and I will give you rest.”</p>
-          <p class="cite">Matthew 11:28 · World English Bible · an example, not tonight’s answer</p>
-          <p class="fine">Opened 2026-09-11 from <a href="https://ebible.org/engwebp/MAT11.htm">eBible, Matthew 11 (WEB)</a>. The WEB <em>text</em> is public domain; the name is a trademark. A live answer uses the sealed KJV 1769 until a text is recorded for any public URL.</p>
-        </div>
-        <p class="quote hidden" id="quote"></p>
-        <p class="cite hidden" id="cite"></p>
+        <p class="quote" id="quote">“These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.”</p>
+        <p class="cite" id="cite">John 16:33 · KJV 1769</p>
+        <p class="fine" id="print-row"><a id="print-leaf" href="/letter?ref=John%2016:33">Print this saying</a></p>
+        <p class="fine" id="web-note">The other locked text, opened 2026-09-11: “Come to me, all you who labor and are heavily burdened, and I will give you rest.” Matthew 11:28 · World English Bible · <a href="https://ebible.org/engwebp/MAT11.htm">eBible, Matthew 11</a>. Live answers stay sealed KJV until a public text is recorded.</p>
       </section>
       <section class="block" id="meaning-block">
         <h2>What that might mean today</h2>
-        <p class="meaning" id="meaning">A live answer will sit here — four lines or fewer. This page will not add a verse after 988.</p>
+        <p class="meaning" id="meaning">Pain is not a riddle you failed to solve.
+The invitation is to the exhausted. Rest is a gift, not a prize for the strong.
+Your pain is seen. It is not the last sentence.</p>
       </section>
       <section class="block hidden" id="handoff-block">
         <h2>Stop here</h2>
@@ -259,12 +258,14 @@ If you are in danger, call 988 in the United States, or start at findahelpline.c
     function show(data) {
       err.classList.add('hidden');
       const stop = Boolean(data.stop);
-      const example = document.getElementById('example');
       const quote = document.getElementById('quote');
       const cite = document.getElementById('cite');
-      example.classList.toggle('hidden', stop || Boolean(data.quote));
+      const printRow = document.getElementById('print-row');
+      const printLeaf = document.getElementById('print-leaf');
       quote.classList.toggle('hidden', stop || !data.quote);
       cite.classList.toggle('hidden', stop || !data.quote);
+      printRow.classList.toggle('hidden', stop || !data.citation);
+      if (data.citation) printLeaf.href = '/letter?ref=' + encodeURIComponent(data.citation);
       document.getElementById('words-block').classList.toggle('hidden', stop);
       document.getElementById('meaning-block').classList.toggle('hidden', stop || !data.meaning);
       document.getElementById('handoff-block').classList.toggle('hidden', !stop);

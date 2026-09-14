@@ -421,6 +421,8 @@ async function main() {
     assert(/Watch/i.test(copy), 'WATCH banner missing');
     assert(/What is weighing on you today/.test(copy), 'ask prompt missing');
     assert(/World English Bible/.test(copy), 'WEB example missing');
+    assert(/John 16:33/.test(copy), 'first paint must already carry a sealed saying');
+    assert(/Print this saying/.test(copy), 'first paint must offer the paper leaf');
     assert(/what that might mean today/i.test(copy), 'meaning heading missing on first paint');
     assert(/what this bot cannot do/i.test(copy), 'cannot-do heading missing on first paint');
     assert(/not a pastor/.test(copy), 'cannot-do copy missing on first paint');

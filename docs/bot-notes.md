@@ -2,6 +2,14 @@
 
 ---
 
+## First ten prompts → first useful answer — 2026-09-14
+
+Read the 13 true human prompts from this run’s transcript (notifications stripped). The first ten are: run muse; I approve; you should have approval; run muse here; “produce a deliverable that wows for me to review”; Build / Baby / Build; FORGE; FORGE universal; ATELIER (filled Red Letter brief); Rebuild pipeline.
+
+H5 + H9 quality line (“time from first open to first useful answer, and warmth”) now govern `/ask` first paint: John 16:33 is already on the page (same output as `composeAsk('I am so tired')`), with Print this saying → `/letter`. WEB Matthew 11:28 stays as the labeled other-text footnote. Folio still quotes after 988. WATCH holds.
+
+---
+
 ## ATELIER — 2026-09-14
 
 On-device `composeAsk` now lives in `public/data/advisor.js` (`window.composeAsk`). `/ask` paints from it, then `/api/ask` if the host answers; prior is kept either way. `/letter` uses `RLA_lookup` if the API is down. RESEARCH.md no longer cites the dead Yale URL as current, and does not claim “until 2039.” Folio crisis letters not rewritten. Suite 80 · eval:ask 13/13 · eval:ask:device 13/13 · folio 82/82.
