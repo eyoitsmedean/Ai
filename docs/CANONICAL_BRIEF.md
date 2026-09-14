@@ -51,6 +51,8 @@ The room (Today, Sit, Seek, Advisor, Journal, Seven, Forty). The corpus tests. T
 
 A second human door: **present danger from another person**. An abused writer no longer receives “love your enemies” as the first word. Eval set is now 50 questions. See `docs/SHIP_PACKET.md`.
 
+**LODESTAR Cycle 1 (2026-09-14):** Intent Charter in `docs/lodestar/CHARTER.md`. Integrity room (Matthew 5:37). Letter contract. Blessing from a finished letter. Night latch. Title-page ask. Eval 54. See `docs/lodestar/SHIP.md`.
+
 ## Acceptance criteria (observable)
 
 - `npm test` green.

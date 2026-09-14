@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { composeLetter, letterPassesFloor, themesFor, VOICE, OUT_OF_ROOM, CRISIS_BODY, DANGER_BODY, ENEMY_LOVE } = require('../lib/counsel');
+const { letterPassesContract } = require('../lib/letter-contract');
 const { verifyAndSubstitute, lookup, parseRef, looksLikeCrisis, looksLikeAbuse } = require('../lib/scripture');
 
 const ROOT = path.join(__dirname, '..');
@@ -18,6 +19,7 @@ describe('the lamp-out letter', () => {
       ['The doctor said stage 3.', 'Suffering & Pain'],
       ['I have no idea what to do with my life', 'Purpose & Direction'],
       ['I am so worried about rent', 'Anxiety & Worry'],
+      ['My boss wants me to lie to a customer. If I refuse I might lose my job.', 'Integrity'],
       ['i am so lonely', 'Loneliness'],
       ['is god even real', 'Faith & Doubt'],
     ];
@@ -96,6 +98,34 @@ describe('the lamp-out letter', () => {
     }
     assert.ok(!looksLikeAbuse('My husband and I fight about everything. I\'m exhausted.'));
     assert.ok(!looksLikeAbuse('My dad was cruel to us growing up and now he wants a relationship.'));
+    assert.ok(!ENEMY_LOVE.test(verifyAndSubstitute(composeLetter('My husband hits me'))));
+  });
+
+  it('an integrity line cites yes-yes, not sparrows', () => {
+    const q = 'My boss wants me to lie to a customer. If I refuse I might lose my job.';
+    assert.equal(themesFor(q)[0], 'Integrity');
+    const letter = verifyAndSubstitute(composeLetter(q));
+    assert.ok(letter.startsWith(VOICE.Integrity.hear));
+    assert.match(letter, /Matthew 5:37/);
+    assert.doesNotMatch(letter, /Matthew 6:26|Matthew 6:34/);
+    assert.ok(letterPassesFloor(letter));
+  });
+
+  it('ordinary rent-worry still opens Anxiety, not Integrity', () => {
+    assert.equal(themesFor('I can\'t stop worrying about money. Rent is due and I don\'t have it.')[0], 'Anxiety & Worry');
+  });
+
+  it('a refused oath is Integrity, even when a job is at stake', () => {
+    assert.equal(themesFor('I refuse all oaths because Jesus said swear not at all. Will I lose my job if I won\'t sign?')[0], 'Integrity');
+  });
+
+  it('the letter contract holds on served crisis and abuse letters', () => {
+    const { CRISIS_NOTICE, ABUSE_NOTICE } = require('../lib/scripture');
+    const crisis = CRISIS_NOTICE + '\n' + verifyAndSubstitute(composeLetter('I want to die'));
+    const abuse = ABUSE_NOTICE + '\n' + verifyAndSubstitute(composeLetter('My husband hits me when he is drunk'));
+    assert.ok(letterPassesContract(crisis, { crisis: true }).ok, letterPassesContract(crisis, { crisis: true }).failures.join(','));
+    assert.ok(letterPassesContract(abuse, { abuse: true }).ok, letterPassesContract(abuse, { abuse: true }).failures.join(','));
+    assert.ok(!letterPassesContract('I hear you. As your pastor I forgive you.\n\n**John 14:27**\n“x”').ok);
   });
 
   it('client and server agree on what a crisis sounds like', () => {

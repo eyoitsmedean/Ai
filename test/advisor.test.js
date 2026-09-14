@@ -46,6 +46,7 @@ describe('the client lamp-out letter', () => {
       ['I am so worried about rent', 'I hear the spiral'],
       ['My mom died three weeks ago', 'Grief is not a failure of faith'],
       ['I feel so much shame', 'Shame wants you out of the room'],
+      ['My boss wants me to lie to a customer', 'The next word wants to be smoother'],
     ];
     for (const [text, hear] of cases) {
       assert.ok(win.RLA_advise(text).startsWith(hear), text);

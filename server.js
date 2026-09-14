@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, looksLikeAbuse, CRISIS_NOTICE, ABUSE_NOTICE } = require('./lib/scripture');
 const { composeLetter, letterPassesFloor } = require('./lib/counsel');
+const { letterPassesContract } = require('./lib/letter-contract');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -363,7 +364,12 @@ app.post('/api/chat', async (req, res) => {
       verified = verifyAndSubstitute(fallbackLetter(last.content));
     }
     const prefix = crisis ? CRISIS_NOTICE : abuse ? ABUSE_NOTICE : '';
-    streamText(prefix ? `${prefix}\n${verified}` : verified);
+    let out = prefix ? `${prefix}\n${verified}` : verified;
+    if (!letterPassesContract(out, { crisis, abuse }).ok) {
+      verified = verifyAndSubstitute(fallbackLetter(last.content));
+      out = prefix ? `${prefix}\n${verified}` : verified;
+    }
+    streamText(out);
     res.write('data: [DONE]\n\n');
     res.end();
   };

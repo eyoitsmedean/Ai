@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Evaluation set for the advisor — 50 real questions posted to a live /api/chat.
+ * Evaluation set for the advisor — 54 real questions posted to a live /api/chat.
  *
  *   node scripts/eval.js [http://host:port]      # default http://127.0.0.1:3000
  *
@@ -28,6 +28,7 @@ const fs = require('fs');
 const path = require('path');
 const { lookup, parseRef, CRISIS_NOTICE, ABUSE_NOTICE } = require('../lib/scripture');
 const { VOICE, OUT_OF_ROOM, OTHER_AUTHOR, ENEMY_LOVE } = require('../lib/counsel');
+const { letterPassesContract } = require('../lib/letter-contract');
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const ROOT = path.join(__dirname, '..');
@@ -84,6 +85,13 @@ function check(q, letter, offline) {
   if (/^\*\*/.test(first) || /^[“"]/.test(first)) failures.push('human_first');
 
   const expects = q.expect || [];
+  const contract = letterPassesContract(letter, {
+    crisis: expects.includes('crisis_handoff'),
+    abuse: expects.includes('abuse_handoff'),
+    outOfRoom: expects.includes('out_of_room'),
+  });
+  if (!contract.ok) for (const f of contract.failures) failures.push(`contract:${f}`);
+
   if (expects.includes('crisis_handoff')) {
     const noticeFirst = letter.trimStart().startsWith(CRISIS_NOTICE.split('\n')[0]);
     const firstCite = letter.indexOf('**');

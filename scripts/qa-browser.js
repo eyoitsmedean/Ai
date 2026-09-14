@@ -87,6 +87,9 @@ async function main() {
     await page.click('#ob-ack');
     await page.click('#ob-open');
     await page.waitForSelector('#ob-need.on', { timeout: 4000 });
+    const needs = await page.$eval('#ob-need', (el) => el.innerText);
+    assert(/Honesty/.test(needs), 'title page should offer Honesty');
+    assert(await page.$('#ob-ask'), 'title-page ask field missing');
     await page.click('.tp-skip');
     await page.waitForFunction(() => document.getElementById('onboarding').classList.contains('hidden'), { timeout: 4000 });
     await page.waitForFunction(() => document.getElementById('sit-sheet').classList.contains('on'), { timeout: 8000 });
@@ -387,7 +390,64 @@ async function main() {
   await check('Room settings says how the red letters are decided', async () => {
     const copy = await page.evaluate(() => document.getElementById('settings-sheet').innerText);
     assert(/red-letter tradition/.test(copy) && /John 3:16–21/.test(copy), 'disclosure missing');
+    assert(/NIV 2011/.test(copy) && /Blayney/.test(copy), 'seam / KJV label missing');
     assert(/not a person/.test(copy) && /988/.test(copy), 'safety copy missing');
+  });
+
+  await check('Integrity room cites yes-yes, not sparrows', async () => {
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.setItem('rla-asked-once', '1');
+    });
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      const ob = document.getElementById('onboarding');
+      if (ob) ob.classList.add('hidden');
+      document.getElementById('app').removeAttribute('aria-hidden');
+      if (typeof startApp === 'function' && !document.getElementById('advisor-page').classList.contains('active')) {
+        /* folio already started when onboarded */
+      }
+      switchTab('advisor');
+      sendMsg('My boss wants me to lie to a customer. If I refuse I might lose my job.');
+    });
+    await page.waitForFunction(() => /Matthew 5:37/i.test((document.getElementById('chat-messages') || {}).innerText || ''), { timeout: 15000 });
+    const letter = await page.evaluate(() => document.getElementById('chat-messages').innerText);
+    assert(/smoother than the truth/.test(letter), 'Integrity hear missing');
+    assert(!/Matthew 6:26/i.test(letter), 'Integrity must not open with sparrows');
+    const bless = await page.evaluate(() => [...document.querySelectorAll('.letter-actions .msg-save-btn')].map((b) => b.textContent));
+    assert(bless.includes('Send this word'), 'letter should offer Send this word: ' + bless.join(','));
+    const chip = await page.evaluate(() => document.querySelector('#advisor-page .page-chip') && document.querySelector('#advisor-page .page-chip').textContent);
+    assert(/not a pastor/.test(chip || ''), 'Advisor chip missing');
+  });
+
+  await check('night latch is one lamp and hides the streak', async () => {
+    await page.goto(BASE + '/?night=1', { waitUntil: 'networkidle0' });
+    const night = await page.evaluate(() => ({
+      watch: document.documentElement.dataset.watch,
+      latch: !document.getElementById('night-latch').hidden,
+      quote: document.getElementById('night-quote').textContent,
+      cite: document.getElementById('night-cite').textContent,
+      quiet: document.documentElement.classList.contains('night-quiet'),
+      firstAsk: document.getElementById('first-ask').hidden,
+    }));
+    assert(night.watch === 'night', 'watch is ' + night.watch);
+    assert(night.latch, 'night latch hidden');
+    assert(night.quote && night.quote.length > 20, 'night latch has no saying');
+    assert(/John|Matthew|Mark|Luke/.test(night.cite), 'night cite missing');
+    assert(night.quiet, 'night-quiet class missing');
+    assert(night.firstAsk, 'first-ask should stay hidden at night');
+  });
+
+  await check('Seek lists thirteen rooms including Integrity', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { if (typeof switchTab === 'function') switchTab('seek'); });
+    const seek = await page.evaluate(() => ({
+      lede: document.getElementById('seek-lede').textContent,
+      rooms: [...document.querySelectorAll('.index-name')].map((el) => el.textContent),
+    }));
+    assert(/Thirteen rooms/.test(seek.lede), 'seek lede is ' + seek.lede);
+    assert(seek.rooms.includes('Integrity'), 'Integrity room missing from Seek');
+    assert(seek.rooms.length === 13, 'expected 13 rooms, got ' + seek.rooms.length);
   });
 
   await check('the library serves the repaired verses on both hosts', async () => {
