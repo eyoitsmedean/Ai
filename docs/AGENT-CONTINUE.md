@@ -1,6 +1,6 @@
 # For the next agent
 
-Read `docs/BRIEF.md` first, then `CLAUDE.md`. Those two are authority. This file is how to continue without reconstructing the chat.
+Read `docs/lodestar/01-charter.md` and `docs/BRIEF.md` first, then `CLAUDE.md`. Those are authority. This file is how to continue without reconstructing the chat. LODESTAR Cycle 1 shipped; resume from `docs/lodestar/SHIP.md`.
 
 ## Where instructions live
 

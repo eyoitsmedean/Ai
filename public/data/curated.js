@@ -1,6 +1,7 @@
 /* Curated red-letter fallbacks — public-domain KJV words of Jesus (four Gospels).
    Encouragement rooms are generated from lib/curated.js (`npm run curated`).
-   Do not edit the encouragement object by hand. Daily rotation may be edited here. */
+   Do not edit the encouragement object by hand. The long daily list feeds Forty.
+   Morning rotation is generated from lib/curated.js and must match /api/daily. */
 window.RLA_CURATED = {
   daily: [
   {
@@ -396,6 +397,127 @@ window.RLA_CURATED = {
     }
   }
 ],
+  rotation: [
+    {
+      "affirmation": {
+        "text": "You are of more value than many sparrows — counted, known, and not forgotten in the ordinary hour.",
+        "verse": "Luke 12:7",
+        "quote": "But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows."
+      },
+      "word": {
+        "theme": "Worth",
+        "title": "Even the Hairs",
+        "passage": "But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.",
+        "verse": "Luke 12:7",
+        "reflection": "Today does not require you to prove you matter. The numbering has already been done. Walk as someone who is known."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "You may come weary. Rest is offered to the heavy-laden, not the already-rested.",
+        "verse": "Matthew 11:28",
+        "quote": "Come unto me, all ye that labour and are heavy laden, and I will give you rest."
+      },
+      "word": {
+        "theme": "Rest",
+        "title": "The Easy Yoke",
+        "passage": "Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+        "verse": "Matthew 11:29",
+        "reflection": "You do not have to finish becoming strong before you are allowed to stop. Learn the lowliness. Let the soul rest."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "Peace has been left with you — not as the world gives, and not as the world can take.",
+        "verse": "John 14:27",
+        "quote": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid."
+      },
+      "word": {
+        "theme": "Peace",
+        "title": "A Different Giving",
+        "passage": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.",
+        "verse": "John 16:33",
+        "reflection": "If your heart is troubled, that is not evidence that peace has failed. It is the exact condition He speaks into. Trouble may stay; so may cheer — because He has already overcome the louder thing."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "You are the light of the world. A city on a hill does not need permission to be seen.",
+        "verse": "Matthew 5:14",
+        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid."
+      },
+      "word": {
+        "theme": "Light",
+        "title": "Cannot Be Hid",
+        "passage": "Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.",
+        "verse": "Matthew 5:16",
+        "reflection": "Shine by doing the next good work quietly. The Father is the one who receives the glory — you only have to stop hiding."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "You are loved with the same love the Father has for the Son. Remain there.",
+        "verse": "John 15:9",
+        "quote": "As the Father hath loved me, so have I loved you: continue ye in my love."
+      },
+      "word": {
+        "theme": "Belonging",
+        "title": "Continue Ye in My Love",
+        "passage": "These things have I spoken unto you, that my joy might remain in you, and that your joy might be full.",
+        "verse": "John 15:11",
+        "reflection": "Joy is not a mood you manufacture. It is what remains when you stay where you have already been placed."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "Take no thought for tomorrow. This day is enough, and you are accompanied inside it.",
+        "verse": "Matthew 6:34",
+        "quote": "Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof."
+      },
+      "word": {
+        "theme": "Today",
+        "title": "Sufficient unto the Day",
+        "passage": "But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.",
+        "verse": "Matthew 6:33",
+        "reflection": "Seek first what cannot rust. The extras you are gripping may be added — they do not have to be hunted."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    },
+    {
+      "affirmation": {
+        "text": "In the world you will have trouble. In Him you may still be of good cheer — He has overcome it.",
+        "verse": "John 16:33",
+        "quote": "These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world."
+      },
+      "word": {
+        "theme": "Courage",
+        "title": "Be of Good Cheer",
+        "passage": "Let not your heart be troubled: ye believe in God, believe also in me.",
+        "verse": "John 14:1",
+        "reflection": "Courage here is not denial. It is locating yourself in the One who has already walked through the thing you fear."
+      },
+      "translation": "KJV",
+      "verified": true,
+      "source": "curated"
+    }
+  ],
   encouragement: {
     "Anxiety & Worry": {
       "theme": "Anxiety & Worry",
@@ -701,4 +823,21 @@ window.RLA_THEME_ALIASES = {
   "Shame & Guilt": "Shame & Guilt",
   "Peace": "Peace",
   "Hope": "Hope"
+};
+
+window.RLA_dailyForDate = function (date) {
+  var days = (window.RLA_CURATED && window.RLA_CURATED.rotation) || [];
+  if (!days.length) return null;
+  var y, m, d;
+  var match = typeof date === "string" && date.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (match) { y = Number(match[1]); m = Number(match[2]) - 1; d = Number(match[3]); }
+  else {
+    var src = date instanceof Date ? date : new Date();
+    y = src.getFullYear(); m = src.getMonth(); d = src.getDate();
+  }
+  var local = new Date(y, m, d);
+  var n = days.length;
+  var idx = Math.floor(local.getTime() / 86400000) % n;
+  if (idx < 0) idx += n;
+  return days[idx];
 };

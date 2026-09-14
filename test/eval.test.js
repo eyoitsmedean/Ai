@@ -6,7 +6,7 @@ const vm = require('vm');
 const { runEval, loadQuestions } = require('../scripts/eval');
 const { isExactSpan, looksLikeCrisis, looksLikeDanger, looksLikePoisoning, looksLikeByYou, looksLikeBereaved, fold } = require('../lib/scripture');
 const SIGNALS = require('../public/data/signals.js');
-const { encouragementFor, THEMES } = require('../lib/curated');
+const { encouragementFor, THEMES, dailyForDate } = require('../lib/curated');
 
 const ROOT = path.join(__dirname, '..');
 
@@ -111,6 +111,10 @@ describe('evaluation set', () => {
     const cites = (letter) => [...String(letter).matchAll(/\*\*([^*\n]+)\*\*/g)].map((m) => m[1].trim());
     assert.deepEqual(cites(retrievalLetter('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
     assert.deepEqual(cites(w.RLA_advise('I want to die.')).slice(0, 3), ['John 14:27', 'Matthew 11:28', 'Luke 12:7']);
+    assert.deepEqual(cites(retrievalLetter('')).slice(0, 2), ['Matthew 11:28', 'John 14:27']);
+    assert.deepEqual(cites(w.RLA_advise('')).slice(0, 2), ['Matthew 11:28', 'John 14:27']);
+    assert.doesNotMatch(retrievalLetter(''), /tribulation|overcome the world/i);
+    assert.doesNotMatch(w.RLA_advise(''), /tribulation|overcome the world/i);
     assert.match(w.RLA_advise('My son told me tonight he wants to end his life. What do I say to him?'), /Someone you love has said the hardest thing/);
     assert.doesNotMatch(w.RLA_advise('I want to die.'), /tribulation|overcome the world/i);
   });
@@ -238,5 +242,46 @@ describe('evaluation set', () => {
     assert.deepEqual(byYou.filter((s) => !looksLikeDanger(s)), []);
     assert.deepEqual(benign.filter((s) => looksLikeDanger(s)), []);
     assert.deepEqual(benign.filter((s) => looksLikeByYou(s)), []);
+  });
+
+  it('static Today uses the same morning rotation as the server', () => {
+    const w = clientWindow();
+    assert.equal(typeof w.RLA_dailyForDate, 'function');
+    assert.ok(Array.isArray(w.RLA_CURATED.rotation) && w.RLA_CURATED.rotation.length >= 7);
+    const json = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', 'curated.json'), 'utf8'));
+    assert.ok(Array.isArray(json.days) && json.days.length === w.RLA_CURATED.rotation.length);
+    for (const date of ['2026-08-29', '2026-08-30', '2026-09-04', '2026-09-11', '2026-09-14']) {
+      const server = dailyForDate(date);
+      const client = w.RLA_dailyForDate(date);
+      assert.equal(client.word.verse, server.word.verse, date + ' word');
+      assert.equal(client.affirmation.verse, server.affirmation.verse, date + ' affirmation');
+    }
+  });
+
+  it('the offline help card and the atlas are in the room', () => {
+    const help = fs.readFileSync(path.join(ROOT, 'public', 'help.html'), 'utf8');
+    assert.match(help, /tel:988/);
+    assert.match(help, /chat\.988lifeline\.org/);
+    assert.match(help, /18002221222/);
+    assert.match(help, /18007997233/);
+    assert.match(help, /impossible to erase completely/);
+    assert.match(help, /cannot hand you to a counselor/);
+    const atlas = fs.readFileSync(path.join(ROOT, 'public', 'atlas.html'), 'utf8');
+    for (const room of Object.keys(THEMES)) {
+      const first = encouragementFor(room).passages[0].verse.replace('–', '-').replace('—', '-');
+      const compact = first.replace(/[–—]/g, '');
+      assert.ok(atlas.includes(room.split(' ')[0]) || atlas.includes(room), 'atlas missing ' + room);
+      assert.ok(atlas.includes(encouragementFor(room).passages[0].verse) || atlas.includes(compact), 'atlas missing first verse of ' + room);
+    }
+    assert.match(atlas, /John 14:27/);
+    assert.match(atlas, /Luke 15:4/);
+    const sw = fs.readFileSync(path.join(ROOT, 'public', 'sw.js'), 'utf8');
+    assert.match(sw, /rla-v19/);
+    assert.ok(sw.indexOf("'./help.html'") < sw.indexOf("'./index.html'"), 'help.html must precache before the folio');
+    assert.match(sw, /atlas\.html/);
+    const html = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8');
+    assert.match(html, /chat\.988lifeline\.org/);
+    assert.match(html, /help\.html/);
+    assert.match(html, /atlas\.html/);
   });
 });

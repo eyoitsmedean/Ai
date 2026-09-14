@@ -27,13 +27,14 @@
   ];
 
   const FALLBACK = {
-    hear: 'I am here with what you brought. Before advice, a sentence he actually spoke.',
+    hear: 'I could not tell from your words which room they belong in, so I will not pretend to. Here is what He said that holds on most nights. If you can name the weight in one more sentence, I will look again.',
     close: 'You can sit with one line. Nothing else is required of this hour.',
     passages: [
       { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted, not the already-healed.' },
       { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'Peace is left with you — a gift, not a mood you manufacture.' }
     ]
   };
+  const EMPTY_HEAR = 'Peace I leave with you.';
 
   function passagesFor(theme) {
     const enc = window.RLA_CURATED && window.RLA_CURATED.encouragement && window.RLA_CURATED.encouragement[theme];
@@ -95,7 +96,7 @@
 
   window.RLA_advise = function (text) {
     const raw = String(text || '').trim();
-    if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
+    if (!raw) return formatPack(EMPTY_HEAR, FALLBACK.passages, FALLBACK.close);
 
     if (inCrisis(raw)) {
       const crisis = (S.looksLikePoisoning(raw) ? POISON_LINE : '') + S.CRISIS_NOTICE;

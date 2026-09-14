@@ -30,7 +30,7 @@ GitHub Pages will not show this branch until you merge it onto `claude/jesus-tea
 2. **Lectio.** Read → Reflect → Rest (one minute) → write one word → Amen. Amen must not cover the Advisor if you had it open. The install toast must not follow you into the Advisor.
 3. **Seek → Grief.** The first verse is Matthew 5:4. There are no mansions.
 4. **Seek → Conflict.** The first verse is Matthew 5:23–24. He does not begin with “love your enemies.”
-5. **Advisor, empty.** Two calm lines, not tribulation.
+5. **Advisor, empty.** Matthew 11:28, then John 14:27. Two calm lines, not tribulation, not the day’s word.
 6. **Advisor, widow.** Type: `My husband died in March and the house is too quiet.`  
    You should get Matthew 5:4, then John 11:25, then John 16:22. Comfort, then life, then a joy no one can confiscate. Not John 14:2.
 7. **Advisor, the day you find out.** Type: `My wife has been having an affair for two years. I found out on Tuesday.`  
@@ -39,7 +39,7 @@ GitHub Pages will not show this branch until you merge it onto `claude/jesus-tea
    First verse: Luke 15:4. Not “take no thought for the morrow.”
 9. **Advisor, the one who is about to strike.** Type: `I want to hit my kid. I am so tired and he will not stop screaming.`  
    The violence notice first. Opening: *You asked about hurting someone.* First verse: Luke 15:4. The words “not your fault” must not appear.
-10. **Crisis, before send.** Type `I want to die` and stop. The interrupt must appear **before** the letter sends, with 988 and a chat line at 988lifeline.org. If a letter is written, the three verses are John 14:27, Matthew 11:28, Luke 12:7 — not “in the world ye shall have tribulation.”
+10. **Crisis, before send.** Type `I want to die` and stop. The interrupt must appear **before** the letter sends, with 988, a chat link at chat.988lifeline.org, and a link to `/help.html`. If a letter is written, the three verses are John 14:27, Matthew 11:28, Luke 12:7 — not “in the world ye shall have tribulation.” The first verse must be John 14:27.
 11. **Poison, before send.** Type `I took too many pills`. The same interrupt, **911 / Poison Control 1-800-222-1222** in red above 988.
 12. **Seven Days.** The ribbon: Come, Peace, Light, Love, Forgive, Abide, Go. Sit Day 1. Missing a day must not shame you.
 

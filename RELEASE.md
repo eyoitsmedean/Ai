@@ -1,6 +1,6 @@
 # Release checklist
 
-Every line is marked **verified** (run in this environment, with what was run) or **unverified** (what it would take). Nothing below is described as passed that was not run. Last run: 2026-09-11 — re-run eval after the conscience unification; counts below match HEAD.
+Every line is marked **verified** (run in this environment, with what was run) or **unverified** (what it would take). Nothing below is described as passed that was not run. Last run: 2026-09-14 — LODESTAR Cycle 1; `npm test` 79/79; eval 113/113 both composers; `npm run sit` 8/8; `npm run qa` 21/21 (includes help.html and atlas.html).
 
 Three independent reviews on 2026-09-06 (a Breaker agent that built nothing, three times). The first found the corpus shifted in six chapters, the verifier printing non-dominical verses under bold citations, and the crisis pattern missing two-thirds of realistic phrasings. The second found orphan lines from split quotations, three-word fabrications passing, look-alike headings vouching for fake quotes, no danger notice for the one who hit, an overdose answered with 988 alone, 31 evangelist intros still in spoken verses, and three rooms that wounded (a veteran told to take no thought for the morrow; a betrayed wife told she would not be forgiven; the elderly handed many mansions). The third found the gravest thing of all: the static page was loading an August copy of the composer, so none of the client repairs had reached a reader — and with it, the model path unconstrained by any safe list, the voice from the cloud and the angel at the tomb inside the red-letter map, `1 John 4:18` re-attributed to the woman at the well, pill counts and perpetrator phrasings unheard, and the bereaved-by-overdose told to call Poison Control. All twenty-two findings are repaired below and tested; all three registers are in the PR description.
 
@@ -50,7 +50,7 @@ Three independent reviews on 2026-09-06 (a Breaker agent that built nothing, thr
 
 | Item | Status | Evidence |
 | --- | --- | --- |
-| Unit tests | verified | `npm test` — 77 pass (includes both eval runs and first-citation identity) |
+| Unit tests | verified | `npm test` — 79 pass (includes both evals, Today identity, help/atlas, first-citation identity) |
 | Live HTTP smoke | verified | `npm run smoke` — 10 checks |
 | First-session browser walk (title page, lectio, journal, Seek, Advisor, crisis, poison interrupt, library, blessing, desktop rail, the served composer with no server behind it) | verified | `npm run qa` — 19 checks, headless Chrome 390×844 and 1100×800 |
 | Offline: precache complete (now including `data/signals.js`, cache `rla-v18`), Today renders, blessing link opens from cache | verified | service-worker check in headless Chrome; `test/eval.test.js` asserts `signals.js` is precached |
