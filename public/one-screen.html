@@ -208,6 +208,7 @@
       <p class="cite" id="cite">King James Version (1769)</p>
       <p class="seal hidden" id="seal"></p>
       <p class="actions hidden" id="actions">
+        <button class="quiet" type="button" id="hear-btn">Hear</button>
         <button class="quiet" type="button" id="rest-btn">Rest</button>
         <button class="quiet" type="button" id="print-btn">Print this saying</button>
       </p>
@@ -244,6 +245,7 @@
       var actions = document.getElementById('actions');
       var restBtn = document.getElementById('rest-btn');
       var printBtn = document.getElementById('print-btn');
+      var hearBtn = document.getElementById('hear-btn');
       var wordsBlock = document.getElementById('words-block');
       var meaningBlock = document.getElementById('meaning-block');
       var STOP_KEY = 'rla-ask-stopped';
@@ -254,12 +256,48 @@
       var emptyMeaning = meaning.textContent;
       try { stopped = sessionStorage.getItem(STOP_KEY) === '1'; } catch (err) { stopped = false; }
 
+      function stopHear() {
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        if (hearBtn) {
+          hearBtn.textContent = 'Hear';
+          hearBtn.setAttribute('aria-pressed', 'false');
+        }
+      }
+
       function endRest() {
         document.documentElement.classList.remove('resting');
         if (restTimer) {
           clearTimeout(restTimer);
           restTimer = null;
         }
+      }
+
+      function setLine(quote, verse, gloss, translation) {
+        stopHear();
+        crisis.classList.add('hidden');
+        wordsBlock.classList.remove('hidden');
+        meaningBlock.classList.remove('hidden');
+        words.textContent = '“' + quote + '”';
+        cite.textContent = verse + ' · ' + (translation || 'King James Version (1769)');
+        meaning.textContent = gloss || '';
+        if (verse && quote) showSeal(verse);
+        else clearSeal();
+      }
+
+      function paintToday() {
+        var data = window.RLA_CURATED;
+        var days = data && data.daily;
+        if (!days || !days.length) return;
+        var now = new Date();
+        var idx = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 86400000) % days.length;
+        var day = days[idx];
+        if (!day || !day.affirmation || !day.affirmation.quote) return;
+        setLine(
+          day.affirmation.quote,
+          day.affirmation.verse,
+          (day.word && day.word.reflection) || '',
+          'King James Version (1769)'
+        );
       }
 
       function clearSeal() {
@@ -282,6 +320,7 @@
         stopped = true;
         try { sessionStorage.setItem(STOP_KEY, '1'); } catch (err) {}
         endRest();
+        stopHear();
         notice.textContent = text;
         crisis.classList.remove('hidden');
         wordsBlock.classList.add('hidden');
@@ -311,17 +350,28 @@
           showNotice(screen.notice);
           return;
         }
-        crisis.classList.add('hidden');
-        wordsBlock.classList.remove('hidden');
-        meaningBlock.classList.remove('hidden');
-        words.textContent = '“' + screen.quote + '”';
-        cite.textContent = screen.verse + ' · ' + screen.translation;
-        meaning.textContent = screen.meaning;
-        if (screen.verified) showSeal(screen.verse);
-        else clearSeal();
+        setLine(screen.quote, screen.verse, screen.meaning, screen.translation);
+      });
+
+      hearBtn.addEventListener('click', function () {
+        if (!window.speechSynthesis) return;
+        if (hearBtn.getAttribute('aria-pressed') === 'true') {
+          stopHear();
+          return;
+        }
+        var said = (words.textContent || '').replace(/[“”]/g, '');
+        if (!said || said === emptyWords) return;
+        var utter = new SpeechSynthesisUtterance(said);
+        utter.rate = 0.88;
+        utter.onend = stopHear;
+        utter.onerror = stopHear;
+        hearBtn.textContent = 'Pause';
+        hearBtn.setAttribute('aria-pressed', 'true');
+        window.speechSynthesis.speak(utter);
       });
 
       restBtn.addEventListener('click', function () {
+        stopHear();
         document.documentElement.classList.add('resting');
         if (restTimer) clearTimeout(restTimer);
         restTimer = setTimeout(endRest, 60000);
@@ -337,6 +387,8 @@
 
       if (stopped && window.RLA_LETTERPRESS) {
         showNotice(window.RLA_LETTERPRESS.CRISIS_NOTICE.replace(/\s+$/, ''));
+      } else {
+        paintToday();
       }
     })();
   </script>

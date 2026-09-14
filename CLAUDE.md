@@ -55,10 +55,10 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## STATE (latest)
 
-- Mission lock: ATELIER useful-work (14 September 2026 evening) — paper advisor; no new knowledge base; finish what the folio still mis-signals.
-- Decisions this session: folio crisis path kept (Dean’s unanswered Ask). Continue is no longer the primary button; copy states no saying will be set. WATCH/911 locked in `qa-browser`. 6 Sep ATELIER file not overwritten.
-- Work done: `studio/ATELIER-USEFUL-WORK.md`; folio modal honesty; PHONE-CHECKLIST + HANDOFF match `/ask` (seal, rest, print, 911).
-- Next step: Dean opens `/ask` locally if he wants; answers whether the folio continue control should be removed; does not enable Pages.
-- Open risks: model path unverified; keyword detector ≠ contextual; continue still exists as a ghost.
+- Mission lock: Prompt 9 — recover first prompts, then improve. This thread has **9** user prompts, not 10.
+- Decisions this session: `/ask` opens on today’s folio saying; Hear speaks the saying only, no autoplay. Prompt 10 was not invented.
+- Work done: `public/one-screen.html` today-line + Hear; `studio/CANONICAL-BRIEF.md` table to 9.
+- Next step: Dean opens `/ask`; still decide folio continue ghost; no Pages.
+- Open risks: model path unverified; keyword ≠ contextual; speechSynthesis device-dependent (not asserted as audio).
 
-RESUME_FROM: Read `studio/HANDOFF.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub.
+RESUME_FROM: `npm start` → `/ask`. Do not publish. Do not invent a tenth prompt for this thread.

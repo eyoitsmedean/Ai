@@ -34,7 +34,7 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 
 ## How to use the one-screen
 
-Type in **Ask**. Submit. Read **The words** (crimson, KJV labeled) and the seal (“opened KJV of …”). Read **What that might mean today** (ink, curated). **Rest** hides chrome for 60 seconds (Escape to leave). **Print this saying** is paper, not a launch. The **cannot-do** block is always there. If you write a crisis line, Words and Meaning hide; 988 and 911 stand.
+The page opens on **today’s saying** (same local-midnight rotation as the folio). Type in **Ask** to set another line. Read **The words** (crimson, KJV labeled) and the seal. **Hear** speaks only the saying (no autoplay). **Rest** is 60 seconds. **Print this saying** is paper. A crisis line hides Words and Meaning; 988 and 911 stand.
 
 ## What remains unresolved
 

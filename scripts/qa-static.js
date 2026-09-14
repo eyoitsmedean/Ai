@@ -136,6 +136,14 @@ async function main() {
     assert(/do not publish/i.test(copy), 'WATCH banner missing');
     const firstPaint = await page.evaluate(() => document.body.innerText);
     assert(/the words/i.test(firstPaint) && /what that might mean today/i.test(firstPaint), 'four blocks must be visible before an ask');
+    const todayLine = await page.evaluate(() => ({
+      cite: document.getElementById('cite').textContent,
+      seal: document.getElementById('seal').textContent,
+      hear: !!document.getElementById('hear-btn'),
+    }));
+    assert(/(Matthew|Mark|Luke|John) \d+:\d+/.test(todayLine.cite), 'today’s saying should be set on first paint: ' + todayLine.cite);
+    assert(/opened KJV/.test(todayLine.seal), 'today’s saying should be sealed');
+    assert(todayLine.hear, 'Hear control missing');
     await page.type('#ask', 'I feel so much shame');
     await page.click('#ask-btn');
     await page.waitForFunction(() => /Luke 15:4/.test(document.getElementById('cite').textContent), { timeout: 5000 });
