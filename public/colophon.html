@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <title>Red Letter — Colophon</title>
+  <link rel="icon" href="/icon-192.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#F4EFE4; --ink:#1B1610; --crimson:#8F1D1D; --mute:#7A6E5E; --rule:rgba(27,22,16,.1); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--paper); color:var(--ink); font-family:'Instrument Sans',system-ui,sans-serif; }
+    .page { max-width:36rem; margin:0 auto; padding:calc(28px + env(safe-area-inset-top)) 22px 64px; }
+    .kicker { letter-spacing:.2em; text-transform:uppercase; font-size:11px; color:var(--mute); }
+    h1 { font-family:Fraunces,Georgia,serif; font-weight:500; font-size:clamp(28px,6vw,40px); margin:8px 0 12px; }
+    h2 { font-family:Fraunces,Georgia,serif; font-weight:500; font-size:22px; margin:28px 0 8px; }
+    p, li, label { font-family:'Source Serif 4',Georgia,serif; line-height:1.55; color:#4A4034; }
+    ul { padding-left:1.2em; margin:8px 0 14px; }
+    a { color:var(--crimson); }
+    .helpline { border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:12px 0; margin:16px 0; }
+    .mark { font-family:Fraunces,Georgia,serif; font-style:italic; color:var(--crimson); font-size:28px; }
+    form { margin-top:16px; }
+    label { display:block; margin:12px 0 4px; }
+    select, input[type=text] { width:100%; padding:10px 8px; border:none; border-bottom:1px solid rgba(27,22,16,.2); background:transparent; font:inherit; font-size:16px; }
+    button { margin-top:16px; min-height:44px; padding:0 16px; border:none; background:var(--crimson); color:#FBF7EE; letter-spacing:.08em; text-transform:uppercase; font-size:12px; }
+    #gate-out { margin-top:12px; color:var(--crimson); min-height:1.4em; }
+    .chip { display:inline-block; border:1px solid var(--rule); padding:4px 8px; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <p class="mark" aria-hidden="true">R</p>
+    <p class="kicker">Printer’s device</p>
+    <h1>Colophon</h1>
+    <p class="chip">Watch · not a launch</p>
+    <p class="helpline">Crisis: <a href="tel:988">988</a> · <a href="https://findahelpline.com" rel="noreferrer">findahelpline.com</a>. Software, not a pastor.</p>
+
+    <h2>What this is</h2>
+    <p>A quiet advisor constrained to the words Jesus spoke in Matthew, Mark, Luke, and John. The folio is a bound book in a browser. The ask screen is one question, one saying, then silence.</p>
+
+    <h2>The text</h2>
+    <ul>
+      <li>Live sealed corpus: <strong>King James Version (1769)</strong>, public domain in the United States.</li>
+      <li>662 sayings · 1,922 spoken verses · <code>data/spoken-gospels.json</code>.</li>
+      <li>The model never types the verse. It may emit a placeholder; the harness inserts the corpus.</li>
+      <li>UK Crown control of the Authorized Version is a UK matter. This household is Idaho. Do not claim worldwide KJV clearance.</li>
+    </ul>
+
+    <h2>What we will not quote on a public URL</h2>
+    <p>NIV, ESV, NLT, NASB, CSB, NKJV, NRSV, The Message — not without a license in hand. WEB, BSB, and OEB are free for a US public advisor after Dean records the choice. Until that line exists, this page stays local.</p>
+
+    <h2>Translation gate</h2>
+    <p>This form writes only to this browser. It does not publish anything. It is the human record the brief asked for.</p>
+    <form id="gate">
+      <label for="who">Recorded by</label>
+      <input id="who" type="text" required maxlength="80" placeholder="Your name" />
+      <label for="text">Text for a future public URL</label>
+      <select id="text" required>
+        <option value="">Choose…</option>
+        <option value="KJV-US">Keep KJV (US only)</option>
+        <option value="WEB">World English Bible (do not alter the wording)</option>
+        <option value="BSB">Berean Standard Bible (verbatim; do not call a change Berean)</option>
+        <option value="OEB">Open English Bible (CC0)</option>
+        <option value="NONE">No public URL. WATCH holds.</option>
+      </select>
+      <label for="note">Note</label>
+      <input id="note" type="text" maxlength="200" placeholder="Optional" />
+      <button type="submit">Record on this device</button>
+      <p id="gate-out"></p>
+    </form>
+
+    <h2>How to leave</h2>
+    <p><a href="/ask">Ask</a> · <a href="/need">Need</a> · <a href="/sit">Sit</a> · <a href="/guest">Guest hour</a> · <a href="/">Folio</a></p>
+    <p style="margin-top:20px;font-size:13px;color:var(--mute)">Bearing: C7. Research: <code>kb/dossiers/01-translation-license.md</code>. Not legal advice.</p>
+  </div>
+  <script>
+    const KEY = 'rla-translation-gate';
+    const out = document.getElementById('gate-out');
+    try {
+      const prev = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (prev && prev.text) {
+        out.textContent = 'Already recorded: ' + prev.text + ' · ' + prev.at + (prev.who ? ' · ' + prev.who : '');
+        document.getElementById('text').value = prev.text;
+        if (prev.who) document.getElementById('who').value = prev.who;
+      }
+    } catch (_) {}
+    document.getElementById('gate').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rec = {
+        who: document.getElementById('who').value.trim(),
+        text: document.getElementById('text').value,
+        note: document.getElementById('note').value.trim(),
+        at: new Date().toISOString(),
+      };
+      localStorage.setItem(KEY, JSON.stringify(rec));
+      out.textContent = 'Recorded on this device only. WATCH still holds until you say otherwise in writing.';
+    });
+  </script>
+</body>
+</html>
