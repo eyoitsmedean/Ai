@@ -98,8 +98,8 @@ Commission: become the mind that understands the 90-day project, write the Inten
 - Charter: `studio/lodestar/CHARTER.md` v1 · C1–C8. Knowledge home: `studio/lodestar/INDEX.md`.
 - Built: `SIT.md` redated day 10; folio `#week` 14 Sep; `FREEZE.md` (firstborn week + sleep block); `REFUSAL.md` (two-step NONE); `DOOR.md` (Pages staged); `NIGHT.html` (Director’s Cut); dossiers + mastery briefs; Sheeran “47%” retired in `KNOWLEDGE.md`.
 - Prior same-day sitting (C3/C4): `SITTING.md`, `BLESS.md`, `DOSSIERS-2026-09-14.md`.
-- Verified this session: Webb & Sheeran 2006 abstracts (47 *tests*, *d* 0.66→0.36); Kautonen et al. 2015 ET&P (232/371 = 63%); Mellor & Van Vorst 2015 Sage HTML; Daminger Behavioral Scientist 2019; Wrosch 2003 PDF/PMC; Bieleke 2021/2022 pages; YouVersion 2025 celebration page; `pages.yml` read. Folio `#week` / `#october` / `#advent` / `#factory` rewritten.
-- Not verified: live Pages URL; YouTube (none accessed); full Karr/Wolff/Shay/Oettingen 2016; Sayer 2015 PDF not re-fetched this pass; computerUse (quota failed 11 Sep — folio checked via local HTTP + script).
+- Verified this session: Webb & Sheeran 2006 abstracts (47 *tests*, *d* 0.66→0.36); Kautonen et al. 2015 ET&P (232/371 = 63%); Mellor & Van Vorst 2015 Sage HTML; Daminger Behavioral Scientist 2019; Wrosch 2003 PDF/PMC; Bieleke 2021/2022 pages; YouVersion 2025 celebration page; `pages.yml` read. Folio `#week` / `#october` / `#advent` / `#factory` rewritten. `npm test` 62/62. Folio + `NIGHT.html` rendered in headless Chrome (phone + desktop).
+- Not verified: live Pages URL; YouTube (none accessed); full Karr/Wolff/Shay/Oettingen 2016; Sayer 2015 PDF not re-fetched this pass.
 - Not done: enable Pages, merge, send, spend. Queued in `studio/lodestar/SHIP.md`.
 - Assumed: MARKET_STRATEGY.md still unblessed. Night leaf is Director’s Cut, not a sixth book.
 
