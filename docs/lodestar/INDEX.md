@@ -15,6 +15,7 @@
 | Sitting report | `sitting-report.md` | C3, C5 |
 | Claim ledger | `claims.md` | C3 |
 | Ship Package | `SHIP.md` | all |
+| ATELIER note | `atelier.md` | C7–C9 |
 | Defect register | `defects.md` | C3 |
 | Archive of prior recovery docs | `docs/BRIEF.md`, `docs/flagship-*` (not deleted) | C1 |
 

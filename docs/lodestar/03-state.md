@@ -6,7 +6,7 @@
 4. Empty send and no-room are two calm lines, not the day’s word and not tribulation.
 5. Crisis letters must *lead* with John 14:27, not merely stay inside a safe set.
 6. `help.html` is a no-script card with official numbers; the service worker caches it first.
-7. `atlas.html` shows twelve first words and what each room refuses.
+7. `atlas.html` is generated from `lib/curated.js`. Leave covers a watched screen. Ordinary rooms share `rooms.js`. The colophon names the editorial cut and the eBible witness.
 8. `npm run sit` and `npm run first-word` prove the conscience without assembling files.
 9. Eval 113/113 both composers and 79 unit tests passed this cycle (2026-09-14).
 10. Model path, Pages merge, and the phone walk remain Dean’s.

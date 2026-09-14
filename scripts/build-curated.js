@@ -30,9 +30,28 @@ function packs() {
 
 function extractDailyArray(src) {
   const start = src.indexOf('daily: [');
-  const enc = src.indexOf('\n  encouragement:');
-  if (start < 0 || enc < 0) throw new Error('public/data/curated.js: cannot find daily / encouragement markers');
-  return src.slice(start, enc).replace(/,+\s*$/, '');
+  if (start < 0) throw new Error('public/data/curated.js: cannot find daily array');
+  let i = start + 'daily: ['.length;
+  let depth = 1;
+  let inStr = false;
+  let quote = '';
+  let esc = false;
+  for (; i < src.length; i++) {
+    const c = src[i];
+    if (inStr) {
+      if (esc) { esc = false; continue; }
+      if (c === '\\') { esc = true; continue; }
+      if (c === quote) inStr = false;
+      continue;
+    }
+    if (c === '"' || c === "'") { inStr = true; quote = c; continue; }
+    if (c === '[') depth += 1;
+    else if (c === ']') {
+      depth -= 1;
+      if (depth === 0) return src.slice(start, i + 1);
+    }
+  }
+  throw new Error('public/data/curated.js: unclosed daily array');
 }
 
 function writeClientJs() {
@@ -85,6 +104,9 @@ function writeSeekJson() {
   fs.writeFileSync(JSON_PATH, JSON.stringify(next));
 }
 
+const { writeAtlas } = require('./build-atlas');
+
 writeClientJs();
 writeSeekJson();
-console.log('Wrote public/data/curated.js and public/curated.json from lib/curated.js (' + themeNames().length + ' rooms)');
+writeAtlas();
+console.log('Wrote public/data/curated.js, public/curated.json, and public/atlas.html from lib/curated.js (' + themeNames().length + ' rooms)');

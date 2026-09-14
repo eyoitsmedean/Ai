@@ -336,6 +336,8 @@ async function main() {
     assert(/chat\.988lifeline\.org/.test(await page.content()), 'help missing official chat');
     assert(/cannot hand you to a counselor/.test(copy), 'help must not pretend to hand off');
     assert(!/Matthew|John 14/.test(copy), 'help must not quote scripture');
+    const leave = await page.$eval('#leave-room', (a) => a.getAttribute('href'));
+    assert(/weather\.com/.test(leave), 'help Leave must cover with weather.com');
   });
 
   await check('atlas names the first words', async () => {
@@ -346,6 +348,19 @@ async function main() {
     assert(/5:23/.test(copy), 'atlas missing Conflict cite');
     assert(/15:4/.test(copy), 'atlas missing Shame');
     assert(/14:27/.test(copy), 'atlas missing Peace / crisis lead');
+  });
+
+  await check('Leave and the named map are on the folio', async () => {
+    const res = await page.goto(BASE + '/?fresh=1', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), 'folio HTTP ' + (res && res.status()));
+    const href = await page.$eval('#leave-room', (a) => a.getAttribute('href'));
+    assert(/weather\.com/.test(href), 'folio Leave must cover with weather.com');
+    const src = await page.evaluate(() => String(window.leaveRoom));
+    assert(/location\.replace/.test(src), 'Leave must replace the history entry');
+    const colo = await page.$eval('#folio-colophon', (el) => el.textContent);
+    assert(/eBible OSIS 1769/.test(colo) && /KJV/.test(colo), 'colophon must name the map');
+    const rooms = await page.evaluate(() => !!(window.RLA_ROOMS && window.RLA_ROOMS.guessThemes));
+    assert(rooms, 'rooms.js must be on the page before a letter is written');
   });
 
   await check('no page errors', async () => {

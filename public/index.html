@@ -458,6 +458,25 @@ textarea { font-family: var(--body); }
   place-items: center;
 }
 .icon-btn svg { width: 15px; height: 15px; }
+.leave {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  right: 18px;
+  z-index: 81;
+  border: 0;
+  background: none;
+  padding: 4px 2px;
+  font-family: var(--sans, 'Instrument Sans', system-ui, sans-serif);
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  cursor: pointer;
+}
+.leave:hover, .leave:focus-visible { color: var(--ink); }
+.mast { padding-right: 72px; }
+.crisis-card .leave { position: static; float: right; margin: -4px 0 8px; }
 
 .pages { flex: 1; position: relative; overflow: hidden; }
 .page {
@@ -1251,7 +1270,7 @@ html.hearing .hear-rule { display: block; }
   .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
   .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
   .crisis-modal, .toast, .week-ribbon, .seven, .mode-switch, .nav-btn,
-  .skip-link, .titlepage { display: none !important; }
+  .skip-link, .titlepage, .leave { display: none !important; }
   .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
   .folio, body { background: #fff !important; }
   body.printing .shell { display: none !important; }
@@ -1552,6 +1571,7 @@ html.sitting .sit-sheet {
 <div class="silk" aria-hidden="true"></div>
 <div id="offline-banner" class="offline-banner" role="status">You’re offline — kept readings remain available.</div>
 
+<a class="leave" id="leave-room" href="https://weather.com" rel="noreferrer" onclick="return leaveRoom(event)">Leave</a>
 <section id="blessing-leaf" class="titlepage hidden" role="dialog" aria-labelledby="bl-kicker">
   <div class="tp-inner">
     <div class="tp-mark" aria-hidden="true">R</div>
@@ -1728,7 +1748,7 @@ html.sitting .sit-sheet {
           <button type="button" onclick="blessingFromToday()">Send a blessing</button>
         </div>
         <div class="colophon">
-          <span id="folio-colophon">Set in the Gospels. Not a person.</span>
+          <span id="folio-colophon">Spoken cut is editorial. Live map unnamed; eBible OSIS 1769 sits beside it. · KJV</span>
           <span class="colophon-catch" id="folio-catch"></span>
         </div>
       </div>
@@ -1986,7 +2006,7 @@ html.sitting .sit-sheet {
   <div class="sheet-about">
     <p><strong>Red Letter</strong> is software, not a person. It answers from the direct words of Jesus in Matthew, Mark, Luke, and John. Quoted scripture is checked against the public-domain King James text and printed as His speech, not the narrator’s frame. Seek holds twelve rooms and the full spoken library. This is not therapy or pastoral care. Crisis: <a href="tel:988">988</a> (U.S.) · <a href="https://chat.988lifeline.org" target="_blank" rel="noreferrer">chat</a> · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
     <p style="margin-top:12px"><a href="./atlas.html">The rooms</a> — first verse, and what each room refuses. · <a href="./help.html">Help that works if this room fails</a>.</p>
-    <p style="margin-top:12px" id="season-colophon">Ordinary Time. Set in Fraunces and Source Serif 4.</p>
+    <p style="margin-top:12px" id="season-colophon">Ordinary Time. Spoken cut is editorial. The live red-letter map is unnamed; eBible.org KJV OSIS 1769 sits beside it. · KJV</p>
     <p style="margin-top:12px"><span class="cmd-hint">⌘K or / finds a word from anywhere in the room.</span></p>
   </div>
 </aside>
@@ -2040,6 +2060,7 @@ html.sitting .sit-sheet {
 
 <div class="crisis-modal" id="crisis-modal" role="dialog" aria-modal="true" aria-labelledby="crisis-title">
   <div class="crisis-card">
+    <a class="leave" id="crisis-leave" href="https://weather.com" rel="noreferrer" onclick="return leaveRoom(event)">Leave</a>
     <p class="eyebrow">You are not alone</p>
     <h2 id="crisis-title">Please reach a person who can help right now</h2>
     <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
@@ -2067,10 +2088,17 @@ html.sitting .sit-sheet {
 </article>
 
 <script src="./data/signals.js"></script>
+<script src="./data/rooms.js"></script>
 <script src="./data/curated.js"></script>
 <script src="./data/advisor.js"></script>
 <script src="./data/paths.js"></script>
 <script>
+function leaveRoom(event) {
+  if (event) event.preventDefault();
+  try { window.location.replace('https://weather.com'); }
+  catch (err) { window.location.href = 'https://weather.com'; }
+  return false;
+}
 const FREE_CHATS = 5;
 const THEMES = [
   ['Anxiety & Worry', 'The unquiet mind'],
@@ -2184,9 +2212,9 @@ function applySeason() {
   const brand = document.getElementById('brand-sub');
   if (brand) brand.textContent = currentSeason.runningHead;
   const folio = document.getElementById('folio-colophon');
-  if (folio) folio.textContent = currentSeason.name + '. Set in the Gospels. Not a person.';
+  if (folio) folio.textContent = currentSeason.name + '. Spoken cut is editorial. Live map unnamed; eBible OSIS 1769 sits beside it. · KJV';
   const sheet = document.getElementById('season-colophon');
-  if (sheet) sheet.textContent = currentSeason.name + '. ' + currentSeason.note + ' Set in Fraunces and Source Serif 4.';
+  if (sheet) sheet.textContent = currentSeason.name + '. ' + currentSeason.note + ' Spoken cut is editorial. The live red-letter map is unnamed; eBible.org KJV OSIS 1769 sits beside it. · KJV';
 }
 
 const VESPERS_PROMPTS = [

@@ -24,9 +24,15 @@
     .warn { background:#F3E4DC; color:#6B1414; padding:14px 16px; line-height:1.5; margin:16px 0; }
     .back { display:inline-block; margin-top:28px; color:var(--crimson); }
     .floor { margin-top:28px; font-size:14px; color:var(--mute); line-height:1.55; }
+    .leave {
+      position:fixed; top:calc(env(safe-area-inset-top, 0px) + 16px); right:18px;
+      font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--mute); text-decoration:none;
+    }
   </style>
 </head>
 <body>
+  <a class="leave" id="leave-room" href="https://weather.com" rel="noreferrer">Leave</a>
   <main>
     <p class="kicker">If the room fails</p>
     <h1>Reach a <em>person</em></h1>
@@ -62,5 +68,12 @@
     <p class="floor">Red Letter is software, not a person, pastor, clinician, or emergency care. A list of numbers is not a handoff. Please stay on the line if you call.</p>
     <a class="back" href="./">Return to the room</a>
   </main>
+  <script>
+    document.getElementById('leave-room').addEventListener('click', function (e) {
+      e.preventDefault();
+      try { window.location.replace('https://weather.com'); }
+      catch (err) { window.location.href = 'https://weather.com'; }
+    });
+  </script>
 </body>
 </html>

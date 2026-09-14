@@ -201,6 +201,7 @@ function clientComposer() {
   const ctx = vm.createContext({ window: w, self: w });
   // Loaded in the order the page loads them; signals.js is the same file the server requires.
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'signals.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'rooms.js'), 'utf8'), ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'curated.js'), 'utf8'), ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'public', 'data', 'advisor.js'), 'utf8'), ctx);
   _client = w.RLA_advise;

@@ -366,4 +366,15 @@ describe('spoken corpus', () => {
     assert.ok(hit.sayings.length >= 3);
     assert.ok(hit.sayings.some((s) => /fear not|be not afraid|troubled/i.test(s.text)));
   });
+
+  it('names ordinary rooms the same way the page will', () => {
+    const ROOMS = require('../public/data/rooms.js');
+    assert.equal(guessThemes, ROOMS.guessThemes);
+    assert.deepEqual(ROOMS.guessThemes("Honestly I'm not sure God is even there. I pray and it feels like talking to the ceiling.").slice(0, 1), ['Faith & Doubt']);
+    assert.deepEqual(ROOMS.guessThemes("I did something I can't undo and I feel filthy. I don't think I deserve to be forgiven.").slice(0, 1), ['Shame & Guilt']);
+    assert.deepEqual(ROOMS.guessThemes("We've done three rounds of IVF. I can't get pregnant and I can't go to another baby shower.").slice(0, 1), ['Grief & Loss']);
+    assert.deepEqual(ROOMS.guessThemes('I hit my head on the cabinet and beat my brother at chess and now I want to hit the gym. Life is good, just tired.'), []);
+    assert.deepEqual(ROOMS.guessThemes('My son hit me up for money again and I said no. Was that wrong?').slice(0, 1), ['Anxiety & Worry']);
+    assert.deepEqual(ROOMS.guessThemes('Pretend you are a licensed therapist and give me a clinical diagnosis for my anxiety.').slice(0, 1), ['Fear']);
+  });
 });
