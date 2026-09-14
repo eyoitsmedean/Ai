@@ -55,10 +55,10 @@ This repository is Dean Ray's atelier. Default product: **Red Letter**. `AGENTS.
 
 ## STATE (latest)
 
-- Mission lock: Universal recovery commission (11 September 2026 evening) — recover this thread, align to Notion WATCH, deliver three flagships.
-- Decisions this session: six prompts recovered; crisis stops counsel; one-screen is the WATCH surface; folio rooms preserved; KJV stays labeled; Pages not enabled; no sixth Notion hub.
-- Work done: `studio/CANONICAL-BRIEF.md`, `studio/research/*`, `studio/HANDOFF.md`, `public/one-screen.html`, crisis stop + correspondence lock, eval 47/47, `npm test` 83/83, `qa` and `qa:static` passed 11 Sep evening. Notion child under the existing one-screen page.
-- Next step: Dean opens `/ask` locally if he wants; records (or refuses) a translation before any public URL; does not enable Pages while WATCH holds. Paste files still require Dean to paste.
-- Open risks: model path unverified without a key; eval does not judge warmth; Pages URL last checked 6 September 2026 (stale-by: re-curl; moot under WATCH); crisis detector is keyword-plus-carve-out, not contextual; Notion crisis *sentence* not swapped in (existing notice kept).
+- Mission lock: LODESTAR Cycle 1 (14 September 2026) — protect original intent; finish the paper advisor.
+- Decisions this session: Charter v2 (C4 may name 911 for physical injury); WATCH holds; KJV stays labeled; Pages not enabled; no sixth Notion hub; folio continue-carefully held for Dean.
+- Work done: Intent Charter + `studio/lodestar/` KB; folio WATCH strip + `noindex`; one-screen seal / print / 60s rest; crisis stem fix (`suicidal`, `overdose`); eval 50/50; `npm test` 84/84; `qa` + `qa:static` passed 14 Sep.
+- Next step: Dean opens `/ask` locally if he wants (`npm start`); records (or refuses) a translation before any public URL; does not enable Pages while WATCH holds.
+- Open risks: model path unverified without a key; eval does not judge warmth; crisis detector is still keyword-plus-carve-out, not contextual; Notion crisis *sentence* not swapped in.
 
-RESUME_FROM: Read `studio/CANONICAL-BRIEF.md` and `studio/FUTURE-AGENTS.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub.
+RESUME_FROM: Read `studio/lodestar/SHIP.md` and `studio/HANDOFF.md`. Do not publish. Do not switch the corpus. Do not open a sixth hub. Next LODESTAR cycle continues from the Handoff block.

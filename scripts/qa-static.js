@@ -150,7 +150,7 @@ async function main() {
     assert(/Luke 15:4/.test(saying.cite), 'shame one-screen should cite Luke 15:4: ' + saying.cite);
     assert(/go after that which is lost/.test(saying.words), 'quote missing');
     assert(/King James Version/.test(saying.cite), 'translation unlabeled');
-    assert(/corpus text of Luke 15:4 \(KJV\)/.test(saying.seal), 'verse seal missing: ' + saying.seal);
+    assert(/opened KJV of Luke 15:4/.test(saying.seal), 'verse seal missing: ' + saying.seal);
     assert(/rgb\(143, 29, 29\)/.test(saying.wordsColor), 'saying must be crimson: ' + saying.wordsColor);
     assert(!/rgb\(143, 29, 29\)/.test(saying.meaningColor), 'meaning must not be crimson: ' + saying.meaningColor);
     await page.click('#rest-btn');
@@ -167,11 +167,14 @@ async function main() {
       notice: document.getElementById('crisis-notice').textContent,
       words: document.getElementById('words').textContent,
       sealHidden: document.getElementById('seal').classList.contains('hidden'),
+      wordsHidden: document.getElementById('words-block').classList.contains('hidden'),
+      meaningHidden: document.getElementById('meaning-block').classList.contains('hidden'),
     }));
     assert(/988/.test(crisis.notice), 'one-screen crisis missing 988');
     assert(/911/.test(crisis.notice), 'one-screen crisis missing 911');
     assert(!/go after that which is lost/.test(crisis.words), 'one-screen must clear the saying after a crisis');
     assert(crisis.sealHidden, 'crisis must hide the verse seal');
+    assert(crisis.wordsHidden && crisis.meaningHidden, 'crisis must hide Words and Meaning frames');
     await page.evaluate(() => { document.getElementById('ask').value = ''; });
     await page.type('#ask', 'I feel ashamed');
     await page.click('#ask-btn');

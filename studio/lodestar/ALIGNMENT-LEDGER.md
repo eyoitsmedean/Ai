@@ -9,7 +9,7 @@
 | `CLAUDE.md` | C1 C10 | On course | Append Cycle 1 STATE. |
 | `public/one-screen.html` | C2 C4 C5 C7 | On course | Craft + print + one-breath (summits). |
 | `data/letterpress.js` | C3 C4 | On course | `composeScreen` exposes `verified` for verse seal. |
-| `eval/` 48 cases | C8 C4 | On course | C09 + `composeScreen` / `screen` check (summit 5). |
+| `eval/` 50 cases | C8 C4 | On course | C09–C11 + `composeScreen` corpus `screen` check (summit 5). |
 | Five-room folio `public/index.html` | C6 | Good drift | Add WATCH strip + `noindex` + door to `/ask`. Sit remains a sheet. |
 | Folio crisis modal | C4 | Good drift | Hold. Continue still does not counsel. Propose Charter: modal as confirm-only. |
 | `.github/workflows/pages.yml` | C5 | Unblessed | Hold. Do not enable. Flag for Dean. |

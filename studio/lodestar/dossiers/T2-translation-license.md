@@ -10,7 +10,7 @@ C3: His words only, from an opened PD or licensed text. C7: Dean records the tra
 - **WEB** text is dedicated to the public domain; the *name* “World English Bible” is an eBible.org trademark. If you change the wording, do not call it WEB. VERIFIED: eBible copyright page via search 14 Sep (`https://ebible.org/engwebp/copyright.htm`); FAQ triangulates.
 - **BSB** dedicated to the public domain 30 Apr 2023. SOURCE-REPORTED: `https://berean.bible/terms.htm` (search 14 Sep).
 - **NIV** gratis quotation: up to 500 verses, not a complete book, not ≥25% of the work — and Biblica’s permissions page treats website/app use as needing written permission; noncommercial partner path excludes AI/ML features. SOURCE-REPORTED: biblica.com/permissions and FAQ (search 14 Sep).
-- Spoken corpus in this repo is **KJV red-letter verses** cut by narrator frames. Count last recorded **1,909** (prior recovery). Not re-counted this session — SOURCE-REPORTED from prior STATE.
+- Spoken corpus in this repo is **KJV red-letter verses** cut by narrator frames. Count **1,909** — VERIFIED 14 Sep 2026 by counting keys in `data/spoken-gospels.json`.
 
 ## Frontier
 Readable modern PD (WEB, BSB) vs inherited folio voice (KJV). Notion license lock prefers WEB/BSB for a *public* US advisor. The running product is labeled KJV.
@@ -46,7 +46,7 @@ A chatbot that can emit any saying is a *full-text* use, not a quotation. Gratis
 | BSB PD as of 30 Apr 2023 | SOURCE-REPORTED | berean.bible/terms.htm via search |
 | NIV website/app needs written permission | SOURCE-REPORTED | biblica.com/permissions via search |
 | Repo ships KJV 1769 labeled | VERIFIED | `composeScreen.translation`, one-screen cite |
-| 1,909 spoken verses | SOURCE-REPORTED | prior recovery; not re-counted 14 Sep |
+| 1,909 spoken verses | VERIFIED | counted `data/spoken-gospels.json` 14 Sep |
 
 ## Sources
 - https://ebible.org/engwebp/copyright.htm

@@ -211,6 +211,9 @@ describe('composeLetter', () => {
     assert.equal(press.looksLikeCrisis('I want to die'), true);
     assert.equal(press.looksLikeCrisis('I am tired of being alive'), true);
     assert.equal(press.looksLikeCrisis('I want to go to sleep and not wake up'), true);
+    assert.equal(press.looksLikeCrisis('I feel suicidal'), true);
+    assert.equal(press.looksLikeCrisis('I want to overdose tonight'), true);
+    assert.equal(press.looksLikeCrisis('I keep thinking about unaliving myself'), true);
     assert.equal(press.looksLikeCrisis("I'm tired of being sick"), false);
   });
 

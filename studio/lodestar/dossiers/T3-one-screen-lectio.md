@@ -6,7 +6,7 @@
 P4: advisor-first, phone, low moment, paper not shout. 11 Sep: one screen — Ask / Words / Meaning / Cannot. Sit already exists as a room. The one-screen must *feel* like that folio without becoming a fifth product.
 
 ## Foundations
-- Four frames visible on first paint. Meaning ≤4 lines from curated `context`. Crisis hides Words/Meaning. VERIFIED in `public/one-screen.html` + `composeScreen`.
+- Four frames visible on first paint. Meaning ≤4 lines from curated `context`. Crisis hides the Words and Meaning blocks (and clears them). VERIFIED in `public/one-screen.html` + `composeScreen`.
 - Crimson is speech, not brand paint (`DESIGN.md` / constitution).
 - Lectio’s last movement is rest (Guigo II, *Scala Claustralium*). SOURCE-REPORTED (standard tradition; Latin text not re-opened this session).
 - Bringhurst measure 45–75 characters; Butterick: body size and contrast over chrome. SOURCE-REPORTED (books not re-downloaded; principles checked against existing CSS).

@@ -37,6 +37,7 @@ A stop that still emits Scripture is counsel. A pause copied from a *canceled* b
 ## Implications (what changed)
 - `CRISIS_NOTICE` names 911 for physical injury. **Bearing: C4**
 - `CRISIS_RE` includes “tired of being alive” and “go to sleep and not wake up.” C09 added. **Bearing: C4 C8**
+- Stem hole fixed 14 Sep (Skeptic): `suicidal`, `overdose`/`overdosing`, `unaliving` now match; C10–C11 added. Trailing `\b` had killed the old `suicid` / `overdos` stems.
 - One-screen cannot-do block repeats 911. **Bearing: C4**
 - This dossier retires the belief that AB 1988 is the statute to implement.
 

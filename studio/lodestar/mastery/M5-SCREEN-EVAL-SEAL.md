@@ -28,7 +28,7 @@ Sealing WEB while showing KJV. Sealing after a model rewrite (we have no model o
 | Every eval case runs `composeScreen` | Pass | `eval-advisor.js` |
 | Crisis screen empty of quote/meaning | Pass | engine + `checks.screen` |
 | Non-crisis screen matches first letter saying | Pass | quote equality |
-| Visible seal names verse + KJV | Pass | “This is the corpus text of … (KJV).” |
+| Visible seal names verse + KJV | Pass | “Kept as the opened KJV of {verse}.” (does not claim a live corpus lookup in the browser) |
 | Seal hidden on crisis | Pass | `verified: false` + UI clear |
 | RESULTS.md lists `screen` | Pass after `npm run eval` | column in renderer |
 | No WEB seal on KJV text | Pass | hardcoded KJV label |

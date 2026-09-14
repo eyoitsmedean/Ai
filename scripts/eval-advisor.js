@@ -51,9 +51,10 @@ function runCase(c) {
   const forbidden = (c.forbidden || []).filter((f) => lowered.includes(f.toLowerCase()));
   checks.echo = !echoed && forbidden.length === 0;
   const screen = press.composeScreen(c.input, { history: [], packs: THEMES, commons: COMMONS });
+  const screenHit = screen.verse ? lookup(screen.verse) : null;
   checks.screen = c.crisis
-    ? screen.crisis === true && !screen.quote
-    : screen.crisis === false && screen.quote === (letter.passages[0] && letter.passages[0].quote) && /King James/.test(screen.translation) && screen.verified === true;
+    ? screen.crisis === true && !screen.quote && !screen.meaning
+    : screen.crisis === false && screenHit && screenHit.text === screen.quote && screen.quote === (letter.passages[0] && letter.passages[0].quote) && /King James/.test(screen.translation) && screen.verified === true;
 
   const pass = Object.values(checks).every(Boolean);
   return { ...c, routed: letter.theme || '—', citations: letter.citations, checks, pass, text, forbiddenHit: forbidden, inputWords };

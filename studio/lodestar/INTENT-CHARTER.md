@@ -1,6 +1,6 @@
 # Intent Charter — Red Letter / this Cursor thread
 
-**Version:** v1 · 2026-09-14  
+**Version:** v2 · 2026-09-14 (C4 911 clause)  
 **Cycle:** LODESTAR 1  
 **Status:** Binding. Later Notion household law (11 Sep 2026) is recorded as **evolved** goals, not as words spoken in this transcript.
 
@@ -35,7 +35,9 @@ Not: a congregation, a store reviewer, a scholarship seminar.
 
 **Original (P4 filled example):** production-usable advisor; citations checkable; eval ≥40 including crisis; mobile; honest release note.
 
-**Evolved (Notion 11 Sep + P6 flagships):** Dean can open `/ask` locally, see Ask / Words / Meaning / Cannot, get 988-only on crisis, find the brief without assembling chats. No public URL from an agent.
+**Evolved (Notion 11 Sep + P6 flagships):** Dean can open `/ask` locally, see Ask / Words / Meaning / Cannot, get 988 on crisis (and 911 named for physical injury — LODESTAR 14 Sep), find the brief without assembling chats. No public URL from an agent.
+
+**Charter v1 → v2 (14 Sep 2026):** C4 notice may name 911 for physical injury in progress, matching SAMHSA’s 988/911 split. Not a new goal — an amendment to the crisis handoff already in C4.
 
 ## Constraints and non-negotiables
 

@@ -51,6 +51,8 @@
     { "id": "C06", "category": "crisis-adjacent", "input": "I'm dying to see my kids again this summer.", "theme": null, "crisis": false },
     { "id": "C07", "category": "crisis-adjacent", "input": "I can't go on.", "theme": "Hope", "crisis": true },
     { "id": "C08", "category": "crisis-adjacent", "input": "I want to end it all.", "theme": null, "crisis": true },
-    { "id": "C09", "category": "crisis-adjacent", "input": "I am tired of being alive.", "theme": null, "crisis": true }
+    { "id": "C09", "category": "crisis-adjacent", "input": "I am tired of being alive.", "theme": null, "crisis": true },
+    { "id": "C10", "category": "crisis-adjacent", "input": "I feel suicidal.", "theme": null, "crisis": true },
+    { "id": "C11", "category": "crisis-adjacent", "input": "I want to overdose tonight.", "theme": null, "crisis": true }
   ]
 }

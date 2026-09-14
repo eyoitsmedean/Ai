@@ -244,11 +244,15 @@
       var actions = document.getElementById('actions');
       var restBtn = document.getElementById('rest-btn');
       var printBtn = document.getElementById('print-btn');
+      var wordsBlock = document.getElementById('words-block');
+      var meaningBlock = document.getElementById('meaning-block');
+      var STOP_KEY = 'rla-ask-stopped';
       var stopped = false;
       var restTimer = null;
       var emptyWords = words.textContent;
       var emptyCite = cite.textContent;
       var emptyMeaning = meaning.textContent;
+      try { stopped = sessionStorage.getItem(STOP_KEY) === '1'; } catch (err) { stopped = false; }
 
       function endRest() {
         document.documentElement.classList.remove('resting');
@@ -269,16 +273,19 @@
           clearSeal();
           return;
         }
-        seal.textContent = 'This is the corpus text of ' + verse + ' (KJV).';
+        seal.textContent = 'Kept as the opened KJV of ' + verse + '.';
         seal.classList.remove('hidden');
         actions.classList.remove('hidden');
       }
 
       function showNotice(text) {
         stopped = true;
+        try { sessionStorage.setItem(STOP_KEY, '1'); } catch (err) {}
         endRest();
         notice.textContent = text;
         crisis.classList.remove('hidden');
+        wordsBlock.classList.add('hidden');
+        meaningBlock.classList.add('hidden');
         words.textContent = emptyWords;
         cite.textContent = emptyCite;
         meaning.textContent = emptyMeaning;
@@ -305,6 +312,8 @@
           return;
         }
         crisis.classList.add('hidden');
+        wordsBlock.classList.remove('hidden');
+        meaningBlock.classList.remove('hidden');
         words.textContent = '“' + screen.quote + '”';
         cite.textContent = screen.verse + ' · ' + screen.translation;
         meaning.textContent = screen.meaning;
@@ -325,6 +334,10 @@
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') endRest();
       });
+
+      if (stopped && window.RLA_LETTERPRESS) {
+        showNotice(window.RLA_LETTERPRESS.CRISIS_NOTICE.replace(/\s+$/, ''));
+      }
     })();
   </script>
 </body>

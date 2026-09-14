@@ -4,11 +4,11 @@ For Dean. Three minutes. Then close the laptop if you want.
 
 ## What this is for
 
-A paper advisor that will not pretend to be a person. Ask one thing. Hear one saying. Read at most four lines of stored meaning. See what the bot cannot do. If the ask is a crisis, it names 988 and stops.
+A paper advisor that will not pretend to be a person. Ask one thing. Hear one saying. Read at most four lines of stored meaning. See what the bot cannot do. If the ask is a crisis, it names 988 (and 911 if someone is physically hurt now) and stops.
 
 ## What is done
 
-1. This Cursor thread’s first six prompts are recovered in `studio/CANONICAL-BRIEF.md`.
+1. This Cursor thread’s first seven prompts are recovered in `studio/CANONICAL-BRIEF.md` (six at write time) and `studio/lodestar/INTENT-CHARTER.md` (LODESTAR is #7).
 2. Crisis path **stops counsel** (folio, `/api/chat`, one-screen, eval).
 3. One-screen lives at `public/one-screen.html` and `/ask`.
 4. Research on five adjacent questions is in `studio/research/`.
@@ -16,7 +16,7 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 
 ## What you should do next (only if you want)
 
-1. Run the folio locally (`npm start`) and open `/ask`. Ask something true. Read the cannot-do block.
+1. Cold start: `npm install` (once) · `npm start` · open `http://127.0.0.1:3000/ask`. Do not open the HTML file from disk — scripts need the server (or any static host of `public/`). Ask something true. Read the cannot-do block.
 2. Record — or refuse to record — a translation for any future public URL. Until you write it down, this stays KJV on paper.
 3. Do **not** enable GitHub Pages tonight. WATCH still holds.
 
@@ -25,7 +25,8 @@ A paper advisor that will not pretend to be a person. Ask one thing. Hear one sa
 | Thing | Place |
 | --- | --- |
 | Brief + recovery table | `studio/CANONICAL-BRIEF.md` |
-| One-screen | http://127.0.0.1:3000/ask (with server) or open `public/one-screen.html` via any static host of `public/` |
+| LODESTAR Cycle 1 | `studio/lodestar/INDEX.md` (Charter, dossiers, Ship) |
+| One-screen | `npm start` → http://127.0.0.1:3000/ask — not `file://` |
 | Folio | `/` — five rooms unchanged |
 | Evidence | `studio/research/SOURCE-REGISTER.md` · `eval/RESULTS.md` |
 | Decisions | `CLAUDE.md` STATE · this file |
