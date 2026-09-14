@@ -141,6 +141,17 @@ function ok(cond, label, detail) {
   ok(verseChrome.actions >= 1 && verseChrome.copy >= 1 && verseChrome.sit >= 1 && verseChrome.hear >= 1, 'verse object has copy, sit, and hear', JSON.stringify(verseChrome));
   ok(verseChrome.carry >= 1, 'after-answer can carry the saying', JSON.stringify(verseChrome));
   ok(verseChrome.after >= 1, 'after-answer path is present', JSON.stringify(verseChrome));
+  const lastCarry = await page.evaluate(() => {
+    const last = [...document.querySelectorAll('.msg.assistant')].pop();
+    const verses = [...last.querySelectorAll('.scripture-block .scripture-verse')].map((el) => el.textContent.trim());
+    return {
+      lastVerse: verses[verses.length - 1] || '',
+      pathVerse: last?.querySelector('.after-path:not(.after-clarify)')?.getAttribute('data-verse') || '',
+      perVerse: last?.querySelectorAll('.verse-carry').length || 0,
+    };
+  });
+  ok(lastCarry.perVerse >= 1, 'each saying has its own Carry', JSON.stringify(lastCarry));
+  ok(lastCarry.pathVerse && lastCarry.lastVerse && (lastCarry.pathVerse === lastCarry.lastVerse || lastCarry.lastVerse.startsWith(lastCarry.pathVerse.split(/[–-]/)[0])), 'after-path Carry stays with the last saying', JSON.stringify(lastCarry));
   const lectioOpened = await page.evaluate(async () => {
     const btn = document.querySelector('.msg.assistant .verse-sit');
     if (!btn) return false;

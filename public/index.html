@@ -4040,11 +4040,13 @@ async function sendChat() {
                   ' grounded to verified text' + (ev.unverified ? ' · ' + ev.unverified + ' unverified' : '') + '</p>';
               }
             }
-            const firstShare = (ev.citations || []).find((c) => c.verified && c.quote);
-            bubble.innerHTML = formatAI(full) + badges + afterAnswerPath(firstShare, { vague: ev.vague });
+            const shares = (ev.citations || []).filter((c) => c.verified && c.quote);
+            const firstShare = shares[0];
+            const lastShare = shares[shares.length - 1] || firstShare;
+            bubble.innerHTML = formatAI(full) + badges + afterAnswerPath(lastShare, { vague: ev.vague });
             if (ev.quota) updateQuotaUI(ev.quota);
-            if (ev.continuedTheme && firstShare) {
-              setAdvisorSitting(firstShare.verse || firstShare.citation, firstShare.quote, ev.continuedTheme);
+            if (ev.continuedTheme && lastShare) {
+              setAdvisorSitting(lastShare.verse || lastShare.citation, lastShare.quote, ev.continuedTheme);
             }
             armHumanNotice();
           }
@@ -4325,6 +4327,7 @@ function verseActions(verse, quote) {
   return '<div class="verse-actions">' +
     shareVerseBtn(verse, quote) +
     '<button type="button" class="verse-hear" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Hear</button>' +
+    '<button type="button" class="verse-carry" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Carry</button>' +
     '<button type="button" class="verse-copy" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Copy</button>' +
     '<button type="button" class="verse-context-btn" data-verse="' + esc(verse) + '">Context</button>' +
     '<button type="button" class="verse-plant" data-verse="' + esc(verse) + '" data-quote="' + esc(quote) + '">Plant</button>' +
