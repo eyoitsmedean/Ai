@@ -17,7 +17,10 @@ const {
   detectPassiveIdeation,
   looksSpanish,
   classifyIntent,
-  guessTheme,
+  guessThemeFromThread,
+  verseObject,
+  offlineContinuedReply,
+  looksVagueGuidance,
 } = require('./data/scripture');
 
 const app = express();
@@ -42,7 +45,7 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
   if (IS_PROD) {
     res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
@@ -153,6 +156,133 @@ app.use('/api/', (req, res, next) => {
   recent.push(now);
   apiHits.set(id, recent);
   next();
+});
+
+function escHtml(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function sharePageHtml(obj, rawRef) {
+  const verse = obj ? obj.verse : rawRef || 'A word of Jesus';
+  const quote = obj ? obj.text : 'This link opens the Red Letter Advisor so you can read a verified saying of Jesus.';
+  const theme = obj?.theme?.[0] || 'His words';
+  const web = obj?.webUrl || 'https://ebible.org/eng-web/';
+  const ask = '/?tab=advisor&ref=' + encodeURIComponent(verse);
+  const desc = `"${quote.slice(0, 180)}${quote.length > 180 ? '…' : ''}" — ${verse} · World English Bible`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>${escHtml(verse)} · Red Letter Advisor</title>
+  <meta name="description" content="${escHtml(desc)}" />
+  <meta property="og:title" content="${escHtml(verse)} · Red Letter Advisor" />
+  <meta property="og:description" content="${escHtml(desc)}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escHtml(verse)}" />
+  <meta name="twitter:description" content="${escHtml(desc)}" />
+  <link rel="icon" href="/favicon.png" />
+  <style>
+    :root { --ink:#2A2118; --muted:#6B5E52; --crimson:#9F1239; --paper:#F4EDE3; }
+    body { margin:0; font-family: Georgia, "Source Serif 4", serif; background: var(--paper); color: var(--ink); }
+    main { max-width: 28rem; margin: 0 auto; padding: 36px 20px 64px; }
+    .kicker { font-family: system-ui, sans-serif; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--crimson); font-weight: 700; }
+    h1 { font-size: 1.6rem; line-height: 1.2; margin: 8px 0 16px; }
+    blockquote { margin: 0 0 18px; padding: 16px 16px 16px 14px; border-left: 3px solid var(--crimson); background: #fff8f0; font-style: italic; line-height: 1.5; }
+    .cite { font-style: normal; font-weight: 700; font-size: .92rem; color: var(--muted); margin-top: 10px; }
+    .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+    a.btn, button.btn { display: block; width: 100%; text-align: center; padding: 14px 16px; border-radius: 12px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; min-height: 44px; box-sizing: border-box; cursor: pointer; }
+    a.primary { background: var(--crimson); color: #fff; }
+    a.ghost, button.ghost { color: var(--crimson); border: 1px solid #E4D8C8; background: transparent; }
+    p.note { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="kicker">Someone shared this word</div>
+    <h1>${escHtml(verse)}</h1>
+    <blockquote>“${escHtml(quote)}”<div class="cite">${escHtml(verse)} · WEB · ${escHtml(theme)}</div></blockquote>
+    <p class="note">Quoted from the public-domain World English Bible. This page is software, not a person. Immediate danger: 911. US crisis: 988.</p>
+    <div class="actions">
+      <a class="btn primary" href="${ask}">Ask the Advisor about this</a>
+      <button type="button" class="btn ghost" id="hear">Hear this word</button>
+      <button type="button" class="btn ghost" id="copy">Copy</button>
+      <button type="button" class="btn ghost" id="carry">Carry this today</button>
+      <a class="btn ghost" href="${escHtml(web)}" rel="noopener" target="_blank">Read it on eBible</a>
+      <a class="btn ghost" href="/?tab=advisor">Open the Advisor</a>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var verse = ${JSON.stringify(verse)};
+      var quote = ${JSON.stringify(quote)};
+      var phrase = ${JSON.stringify(`${quote} — ${verse} (WEB)`)};
+      var hear = document.getElementById('hear');
+      var copy = document.getElementById('copy');
+      var carry = document.getElementById('carry');
+      var speaking = false;
+      function stopHear() {
+        try { speechSynthesis.cancel(); } catch (e) {}
+        speaking = false;
+        if (hear) hear.textContent = 'Hear this word';
+      }
+      if (hear && 'speechSynthesis' in window) {
+        hear.addEventListener('click', function () {
+          if (speaking) { stopHear(); return; }
+          stopHear();
+          var u = new SpeechSynthesisUtterance(quote);
+          u.lang = 'en-US';
+          u.rate = 0.9;
+          u.onend = function () { speaking = false; hear.textContent = 'Hear this word'; };
+          u.onerror = function () { speaking = false; hear.textContent = 'Hear this word'; };
+          speaking = true;
+          hear.textContent = 'Stop';
+          speechSynthesis.speak(u);
+        });
+      } else if (hear) {
+        hear.hidden = true;
+      }
+      if (copy) {
+        copy.addEventListener('click', function () {
+          var done = function () { copy.textContent = 'Copied'; };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(phrase).then(done).catch(function () {
+              copy.textContent = 'Select the verse to copy';
+            });
+          } else {
+            copy.textContent = 'Select the verse to copy';
+          }
+        });
+      }
+      if (carry) {
+        carry.addEventListener('click', function () {
+          try {
+            localStorage.setItem('rla-carry', JSON.stringify({
+              phrase: quote,
+              verse: verse,
+              day: new Date().toISOString().slice(0, 10)
+            }));
+          } catch (e) {}
+          location.href = ${JSON.stringify(ask)};
+        });
+      }
+    })();
+  </script>
+</body>
+</html>`;
+}
+
+app.get('/share', (req, res) => {
+  const raw = String(req.query.ref || '').replace(/\+/g, ' ').trim();
+  const obj = raw ? verseObject(raw) : null;
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.type('html').send(sharePageHtml(obj, raw));
 });
 
 app.get('/welcome', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -677,6 +807,14 @@ app.get('/api/library', (req, res) => {
   });
 });
 
+app.get('/api/verse-object', (req, res) => {
+  const raw = String(req.query.ref || '').replace(/\+/g, ' ').trim();
+  if (!raw) return res.status(400).json({ error: 'ref required' });
+  const obj = verseObject(raw);
+  if (!obj) return res.status(404).json({ error: 'not_in_corpus', ref: raw });
+  res.json(obj);
+});
+
 app.get('/api/daily', async (_req, res) => {
   try {
     res.json(await getDaily());
@@ -739,6 +877,7 @@ app.post('/api/chat', async (req, res) => {
   const lastUser = messages[messages.length - 1].content;
   const intent = classifyIntent(lastUser);
   const passive = intent === 'guidance' && detectPassiveIdeation(lastUser);
+  const thread = guessThemeFromThread(lastUser, messages);
 
   // Safety handoffs run before the paywall and never consume a free credit:
   // someone in danger must never meet a 402.
@@ -762,7 +901,7 @@ app.post('/api/chat', async (req, res) => {
     return res.status(402).json({
       error: 'daily_limit',
       message:
-        'You have used today’s free Advisor conversations. Come back tomorrow, or unlock Plus for unlimited guidance.',
+        'You have used today’s free Advisor conversations. Come back tomorrow — or join the Plus waitlist. Payment is not available yet.',
       ...quota,
     });
   }
@@ -782,8 +921,20 @@ app.post('/api/chat', async (req, res) => {
   // Verified-corpus reply: used when no AI is configured, and as the graceful
   // fallback when the model fails before producing any text.
   async function streamCorpusReply(intro) {
-    const theme = intent === 'hostile' ? 'Faith & Doubt' : guessTheme(lastUser);
-    const pack = offlineEncouragement(theme, lastUser);
+    const theme = intent === 'hostile' ? 'Faith & Doubt' : thread.theme;
+    const vague = intent === 'guidance' && !thread.continuedTheme && looksVagueGuidance(lastUser);
+    let pack =
+      intent === 'guidance' && thread.continuedTheme && thread.continuedRefs.length
+        ? offlineContinuedReply(thread, lastUser)
+        : offlineEncouragement(theme, lastUser);
+    if (vague) {
+      pack = {
+        ...pack,
+        opener:
+          pack.opener +
+          ' If you want, say whether this is worry, grief, fear, or something else — I will stay with His words either way.',
+      };
+    }
     // Hostile: two passages, skipping the first lead (it opens with "Because of your unbelief").
     const picks = intent === 'hostile' ? pack.passages.slice(1, 3) : pack.passages.slice(0, 3);
     const text = [
@@ -814,6 +965,9 @@ app.post('/api/chat', async (req, res) => {
         quota: getQuota(id),
         offline: true,
         intent,
+        continuedTheme: thread.continuedTheme || undefined,
+        continuedRefs: thread.continuedRefs || [],
+        vague: vague || undefined,
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');
@@ -832,12 +986,29 @@ app.post('/api/chat', async (req, res) => {
   let full = '';
   try {
     bumpQuota(id);
+    const modelMessages =
+      intent === 'guidance' && thread.continuedTheme && thread.continuedRefs.length
+        ? messages.map((m, i) =>
+            i === messages.length - 1
+              ? {
+                  role: 'user',
+                  content:
+                    m.content +
+                    '\n\n(Stay with ' +
+                    thread.continuedRefs.join(', ') +
+                    '. Theme: ' +
+                    thread.continuedTheme +
+                    '. Quote those sayings or the same theme from the four Gospels. Do not invent a new subject.)',
+                }
+              : m
+          )
+        : messages;
     const stream = ai.messages.stream({
       model: MODEL,
       max_tokens: 1400,
       thinking: { type: 'adaptive' },
       system: ADVISOR_SYSTEM,
-      messages,
+      messages: modelMessages,
     });
 
     stream.on('text', (text) => {
@@ -862,6 +1033,8 @@ app.post('/api/chat', async (req, res) => {
         outOfScope: annotated.outOfScope,
         quota: getQuota(id),
         intent,
+        continuedTheme: thread.continuedTheme || undefined,
+        continuedRefs: thread.continuedRefs || [],
       })}\n\n`
     );
     res.write('data: [DONE]\n\n');

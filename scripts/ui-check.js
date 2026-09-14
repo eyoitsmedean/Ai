@@ -127,6 +127,40 @@ function ok(cond, label, detail) {
   ok(g.badgesWarn === 0, 'no unverified badges in corpus mode');
   ok(g.webLinks.length >= 1 && g.webLinks.every((h) => /^https:\/\/ebible\.org\/eng-web\/(MAT|MRK|LUK|JHN)\d{2}\.htm#V\d+$/.test(h)), 'every ✓ WEB badge links to the WEB chapter + verse anchor', g.webLinks.join(' '));
   ok(g.shareBtns >= 1, 'guidance reply has a Share card button', `${g.shareBtns}`);
+  const verseChrome = await page.evaluate(() => {
+    const last = [...document.querySelectorAll('.msg.assistant')].pop();
+    return {
+      actions: last?.querySelectorAll('.verse-actions').length || 0,
+      copy: last?.querySelectorAll('.verse-copy').length || 0,
+      sit: last?.querySelectorAll('.verse-sit').length || 0,
+      hear: last?.querySelectorAll('.verse-hear').length || 0,
+      carry: last?.querySelectorAll('.after-carry').length || 0,
+      after: last?.querySelectorAll('.after-path').length || 0,
+    };
+  });
+  ok(verseChrome.actions >= 1 && verseChrome.copy >= 1 && verseChrome.sit >= 1 && verseChrome.hear >= 1, 'verse object has copy, sit, and hear', JSON.stringify(verseChrome));
+  ok(verseChrome.carry >= 1, 'after-answer can carry the saying', JSON.stringify(verseChrome));
+  ok(verseChrome.after >= 1, 'after-answer path is present', JSON.stringify(verseChrome));
+  const lastCarry = await page.evaluate(() => {
+    const last = [...document.querySelectorAll('.msg.assistant')].pop();
+    const verses = [...last.querySelectorAll('.scripture-block .scripture-verse')].map((el) => el.textContent.trim());
+    return {
+      lastVerse: verses[verses.length - 1] || '',
+      pathVerse: last?.querySelector('.after-path:not(.after-clarify)')?.getAttribute('data-verse') || '',
+      perVerse: last?.querySelectorAll('.verse-carry').length || 0,
+    };
+  });
+  ok(lastCarry.perVerse >= 1, 'each saying has its own Carry', JSON.stringify(lastCarry));
+  ok(lastCarry.pathVerse && lastCarry.lastVerse && (lastCarry.pathVerse === lastCarry.lastVerse || lastCarry.lastVerse.startsWith(lastCarry.pathVerse.split(/[–-]/)[0])), 'after-path Carry stays with the last saying', JSON.stringify(lastCarry));
+  const lectioOpened = await page.evaluate(async () => {
+    const btn = document.querySelector('.msg.assistant .verse-sit');
+    if (!btn) return false;
+    btn.click();
+    await new Promise((r) => setTimeout(r, 250));
+    return !!document.getElementById('lectio-overlay')?.classList.contains('open');
+  });
+  ok(lectioOpened, 'Sit with this opens lectio from the Advisor verse');
+  await page.evaluate(() => closeLectio());
   await page.screenshot({ path: '/tmp/ui-check-guidance.png' });
 
   // 3b. Share card opens from the button
@@ -165,6 +199,67 @@ function ok(cond, label, detail) {
   const focused = await page.evaluate(() => !!document.querySelector('.lib-item-focus, .lib-item[open]'));
   ok(deep.tab === 'library' || deep.shareOpen, 'deep link lands on library or opens the shared verse', JSON.stringify(deep));
   ok(deep.shareOpen && focused, 'deep link highlights the library passage', 'focus=' + focused);
+
+  await page.goto(BASE + '/?tab=advisor&ref=' + encodeURIComponent('Matthew 6:34'), { waitUntil: 'networkidle0' });
+  await sleep(1200);
+  const welcome = await page.evaluate(() => {
+    const card = document.getElementById('shared-word-card');
+    const tab = document.querySelector('.nav-btn.active')?.dataset?.tab || '';
+    return {
+      tab,
+      welcome: !!(card && !card.classList.contains('hidden')),
+      verse: document.getElementById('shared-word-verse')?.textContent || '',
+      encounter: !!document.getElementById('encounter-overlay')?.classList.contains('open'),
+    };
+  });
+  ok(welcome.tab === 'advisor' && welcome.welcome && /Matthew 6:34/.test(welcome.verse), 'Advisor share link shows the shared-word welcome', JSON.stringify(welcome));
+  ok(!welcome.encounter, 'shared-word welcome does not open Encounter');
+  const sharedActions = await page.evaluate(() => ({
+    hear: !!document.getElementById('shared-word-hear'),
+    carry: !!document.getElementById('shared-word-carry'),
+  }));
+  ok(sharedActions.hear && sharedActions.carry, 'shared-word card can Hear and Carry', JSON.stringify(sharedActions));
+
+  await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+  await sleep(500);
+  const carriedHome = await page.evaluate(async () => {
+    localStorage.setItem('rla-carry', JSON.stringify({
+      phrase: 'Therefore don’t be anxious for tomorrow, for tomorrow will be anxious for itself.',
+      verse: 'Matthew 6:34',
+      day: new Date().toISOString().slice(0, 10),
+    }));
+    newThread();
+    await new Promise((r) => setTimeout(r, 80));
+    return {
+      sitting: !document.getElementById('advisor-context')?.classList.contains('hidden'),
+      text: document.getElementById('advisor-context-text')?.textContent || '',
+      chip: !!document.querySelector('[data-carry-ask]'),
+      placeholder: document.getElementById('chat-input')?.placeholder || '',
+    };
+  });
+  ok(carriedHome.sitting && /Matthew 6:34/.test(carriedHome.text), 'carried word returns to empty Advisor', JSON.stringify(carriedHome));
+  ok(carriedHome.chip, 'Ask about what I\'m carrying chip is present', JSON.stringify(carriedHome));
+  ok(/carrying/i.test(carriedHome.placeholder), 'composer names the carried word', carriedHome.placeholder);
+
+  await page.goto(BASE + '/share?ref=' + encodeURIComponent('Matthew 6:34'), { waitUntil: 'networkidle0' });
+  await sleep(400);
+  const sharePage = await page.evaluate(async () => {
+    const hear = document.getElementById('hear');
+    const copy = document.getElementById('copy');
+    const carry = document.getElementById('carry');
+    const before = hear ? hear.textContent : '';
+    hear?.click();
+    await new Promise((r) => setTimeout(r, 60));
+    return {
+      hasHear: !!hear,
+      hasCopy: !!copy,
+      hasCarry: !!carry,
+      before,
+      after: hear ? hear.textContent : '',
+    };
+  });
+  ok(sharePage.hasHear && sharePage.hasCopy && sharePage.hasCarry, 'share landing has Hear, Copy, and Carry', JSON.stringify(sharePage));
+  ok(sharePage.before === 'Hear this word' && (sharePage.after === 'Stop' || sharePage.after === 'Hear this word'), 'share Hear toggles from a tap, not on load', JSON.stringify(sharePage));
 
   ok(pageErrors.length === 0, 'no page errors', pageErrors.join(' | ').slice(0, 300));
 

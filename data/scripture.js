@@ -462,6 +462,58 @@ function offlineEncouragement(theme, seed) {
   };
 }
 
+function clipAsk(text) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  return t.length > 72 ? t.slice(0, 69) + '…' : t;
+}
+
+/**
+ * Follow-up pack: lead with the sayings already in play, then one same-theme
+ * companion. First-visit theme openers are the wrong voice here.
+ */
+function offlineContinuedReply(thread, lastUser) {
+  const refs = Array.isArray(thread?.continuedRefs) ? thread.continuedRefs : [];
+  const theme = thread?.theme || thread?.continuedTheme || 'Hope';
+  const seen = new Set();
+  const passages = [];
+  for (const ref of refs) {
+    const p = corpus.findByRef(ref);
+    if (!p || seen.has(p.id)) continue;
+    seen.add(p.id);
+    passages.push({
+      verse: corpus.cite(p),
+      quote: p.text,
+      context: 'The saying you were already sitting with.',
+      verified: true,
+      source: 'corpus',
+    });
+  }
+  const pack = offlineEncouragement(theme, lastUser);
+  for (const extra of pack.passages) {
+    if (passages.some((x) => x.verse === extra.verse)) continue;
+    passages.push({
+      ...extra,
+      context: extra.context || 'Same theme — still His words.',
+    });
+    if (passages.length >= 3) break;
+  }
+  const lead = refs[0] || passages[0]?.verse || 'His words';
+  return {
+    theme,
+    opener:
+      'Still with ' +
+      lead +
+      '. You said, “' +
+      clipAsk(lastUser) +
+      '” — here is that word again, and it still holds:',
+    passages,
+    closing: pack.closing,
+    offline: true,
+    verified: true,
+    continued: true,
+  };
+}
+
 function hash(s) {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
@@ -629,6 +681,103 @@ function classifyIntent(text) {
   return 'guidance';
 }
 
+function extractGospelRefs(text) {
+  const out = [];
+  const re = /\b(Matthew|Mark|Luke|John)\s+(\d+):(\d+)(?:\s*[–-]\s*(\d+))?/g;
+  let m;
+  while ((m = re.exec(String(text || '')))) {
+    const ref = m[4] ? `${m[1]} ${m[2]}:${m[3]}-${m[4]}` : `${m[1]} ${m[2]}:${m[3]}`;
+    if (!out.includes(ref)) out.push(ref);
+  }
+  return out;
+}
+
+function lastAssistantRefs(messages) {
+  const list = Array.isArray(messages) ? messages : [];
+  for (let i = list.length - 1; i >= 0; i--) {
+    const turn = list[i];
+    if (turn && turn.role === 'assistant' && typeof turn.content === 'string') {
+      const refs = extractGospelRefs(turn.content);
+      if (refs.length) return refs;
+    }
+  }
+  return [];
+}
+
+function looksLikeFollowUp(text) {
+  const t = String(text || '').normalize('NFKC').trim();
+  if (!t) return false;
+  if (
+    t.length <= 80 &&
+    /^(what|and |also |how |that |those |the same|same |yes[, ]|ok[, ]|okay[, ]|apply |for my |for our |tell me|more about|sit |pray |and my)/i.test(t)
+  ) {
+    return true;
+  }
+  return /what (about|does that|does this)|tell me more|how (does|do) (that|this|those)|those words|that verse|same (for|about)|apply (that|this|it)/i.test(t);
+}
+
+function webChapterUrl(book, chapter, verse) {
+  const code = { Matthew: 'MAT', Mark: 'MRK', Luke: 'LUK', John: 'JHN' }[book];
+  if (!code || !chapter || !verse) return '';
+  return `https://ebible.org/eng-web/${code}${String(chapter).padStart(2, '0')}.htm#V${verse}`;
+}
+
+function briefPassage(p) {
+  return {
+    verse: `${p.book} ${p.chapter}:${p.verseStart}${p.verseEnd !== p.verseStart ? '–' + p.verseEnd : ''}`,
+    text: p.text,
+    theme: p.theme,
+  };
+}
+
+function verseObject(ref) {
+  const p = corpus.findByRef(ref);
+  if (!p) return null;
+  const verse = `${p.book} ${p.chapter}:${p.verseStart}${p.verseEnd !== p.verseStart ? '–' + p.verseEnd : ''}`;
+  const neighbors = corpus.passages
+    .filter((x) => x.book === p.book && x.chapter === p.chapter && x.id !== p.id)
+    .slice(0, 3)
+    .map(briefPassage);
+  const siblings = corpus.passages
+    .filter((x) => x.id !== p.id && Array.isArray(x.theme) && x.theme.some((t) => p.theme.includes(t)))
+    .slice(0, 3)
+    .map(briefPassage);
+  return {
+    verse,
+    text: p.text,
+    theme: p.theme,
+    book: p.book,
+    chapter: p.chapter,
+    verseStart: p.verseStart,
+    verseEnd: p.verseEnd,
+    webUrl: webChapterUrl(p.book, p.chapter, p.verseStart),
+    neighbors,
+    siblings,
+  };
+}
+
+function looksVagueGuidance(text) {
+  const t = String(text || '').normalize('NFKC').trim();
+  if (!t || t.length >= 48) return false;
+  if (looksLikeFollowUp(t)) return false;
+  if (detectCrisis(t) || detectAbuse(t) || detectOffScope(t) || detectHostile(t)) return false;
+  return guessTheme(t) === 'Hope';
+}
+
+function guessThemeFromThread(lastUser, messages) {
+  const direct = guessTheme(lastUser);
+  const refs = lastAssistantRefs(messages);
+  if (looksLikeFollowUp(lastUser) && refs.length) {
+    for (const ref of refs) {
+      const p = corpus.findByRef(ref);
+      if (p?.theme?.[0]) {
+        return { theme: p.theme[0], continuedTheme: p.theme[0], continuedRefs: refs };
+      }
+    }
+  }
+  return { theme: direct, continuedTheme: null, continuedRefs: refs };
+}
+
 function guessTheme(text) {
   const t = String(text || '').normalize('NFKC').toLowerCase();
   const map = [
@@ -672,6 +821,14 @@ module.exports = {
   detectHostile,
   classifyIntent,
   guessTheme,
+  guessThemeFromThread,
+  extractGospelRefs,
+  lastAssistantRefs,
+  looksLikeFollowUp,
+  verseObject,
+  webChapterUrl,
+  offlineContinuedReply,
+  looksVagueGuidance,
   isGospelRef,
   similarity,
 };

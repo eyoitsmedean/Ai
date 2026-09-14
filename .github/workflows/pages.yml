@@ -1,3 +1,7 @@
+# STATIC DEMO ONLY. This workflow uploads public/ without server.js.
+# Advisor chat, the safety gate, /share, and Web Push will not work on Pages.
+# Do not treat a github.io URL as production. Production is a Node host (see README).
+# Bearing: C5, C7 — LODESTAR Cycle 1
 name: Deploy to GitHub Pages
 
 on:
