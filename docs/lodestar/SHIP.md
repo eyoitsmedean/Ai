@@ -18,7 +18,7 @@ Proposed amendments: none. Cycle 2 may add C7 if Folio is ever un-parked.
 5. Resume a later cycle from `docs/lodestar/INDEX.md` + the handoff block below.
 
 ## 4. Verification actually performed
-Opened: This week, Operator Card v2, Lamp v2; Mercor L&D HTML; §63-3622YY; Idaho SSE page; IRS SE page; SSA wage-base page; Enns written pages; `data/advisor.js` Seven; `lib/year.js` executed; playbook JS `node --check`; `plans/test-honest-cash.js` (8 ok); `scripts/qa-plans.js` in Chrome 390×844 (10 ok) + desktop shot.  
+Opened: This week, Operator Card v2, Lamp v2; Mercor L&D HTML; §63-3622YY; Idaho SSE page; IRS SE page; SSA wage-base page; Enns written pages; `data/advisor.js` Seven; `lib/year.js` executed; playbook JS `node --check`; `plans/test-honest-cash.js` (8 ok); `scripts/qa-plans.js` in Chrome 390×844 (16 ok) + desktop Rest walk (Rest → 15 → Rest → 90).  
 Did not: watch or transcribe YouTube; re-open Mercor JSON; open SOSBiz checkout; read the handbook; send, apply, publish, or buy; overwrite live Notion; run Red Letter `npm test` (product untouched).
 
 ## 5. Assumptions and limits

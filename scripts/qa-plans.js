@@ -78,6 +78,21 @@ async function main() {
     await shot('playbook-hold-first-screen');
   });
 
+  await check('45 and 90 HOLD copy stay distinct', async () => {
+    await page.click('#tonight-min button[data-m="45"]');
+    const t45 = await page.$eval('#tonight-move', el => el.innerText);
+    assert(/45 minutes/i.test(t45), '45 label missing: ' + t45);
+    assert(/M4|five gates|Do not apply/i.test(t45), '45 copy missing: ' + t45);
+    assert(!/90 minutes/i.test(t45), '45 showed 90: ' + t45);
+    assert(!/DEX room-inspect/i.test(t45), '45 showed 90 DEX copy: ' + t45);
+    await page.click('#tonight-min button[data-m="90"]');
+    const t90 = await page.$eval('#tonight-move', el => el.innerText);
+    assert(/90 minutes/i.test(t90), '90 label missing: ' + t90);
+    assert(/DEX room-inspect/i.test(t90), '90 copy missing: ' + t90);
+    assert(!/45 minutes/i.test(t90), '90 showed 45: ' + t90);
+    await page.click('#tonight-min button[data-m="15"]');
+  });
+
   await check('HOLD card on first screen', async () => {
     const t = await page.$eval('#now', el => el.innerText);
     assert(/Money waits/i.test(t), 'missing HOLD headline: ' + t.slice(0, 200));
