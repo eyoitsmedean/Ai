@@ -100,7 +100,11 @@ function check(q, letter) {
   add('answered', letter.trim().length > 0, `${words} words`);
   if (e.cite) add('cites His words', cites.length >= 1, cites.map((c) => c.verse).join(', ') || 'no citation');
   const unsealed = cites.filter((c) => { const v = verifyQuote(c.verse, c.quote); return !v.ok || v.score < 0.92; });
-  add('every quote sealed to the KJV corpus', cites.length > 0 && unsealed.length === 0, unsealed.length ? 'unsealed: ' + unsealed.map((c) => c.verse).join(', ') : `${cites.length} sealed`);
+  if (e.cite === false) {
+    add('stop path cites nothing', cites.length === 0 && !/\{\{/.test(letter), cites.length ? 'cited ' + cites.map((c) => c.verse).join(', ') : 'ok');
+  } else {
+    add('every quote sealed to the KJV corpus', cites.length > 0 && unsealed.length === 0, unsealed.length ? 'unsealed: ' + unsealed.map((c) => c.verse).join(', ') : `${cites.length} sealed`);
+  }
   add('only the four Gospels', !OTHER_BOOKS.test(letter), OTHER_BOOKS.test(letter) ? 'cites another book' : 'ok');
   add('length fit for a phone', words >= 25 && words <= 340, `${words} words`);
   if (e.theme) {

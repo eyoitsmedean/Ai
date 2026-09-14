@@ -39,7 +39,7 @@
 | Minor | Missing SHIP/CLAIMS | index lied | Written | files exist |
 | Cosmetic | Fraunces named on gate/letter | not loaded | left (system fallback) | — |
 
-Folio verses-after-988: **held** (DESIGN CHOICE / known drift). Not a repair this cycle.
+Folio verses-after-988: **held in Cycle 1** (DESIGN CHOICE / known drift). **Closed 2026-09-14** — stop letters + eval `cite: false`. Soft-crisis on the folio still cites.
 
 ## Integrity
 

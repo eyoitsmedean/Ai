@@ -9,7 +9,9 @@
 
 ## 1. Summary
 
-`/ask` is still the product. This cycle gave it a stop-vs-cite eval, kind-accurate crisis voices (including mixed IPV + ideation, and short Spanish), a household phone-review note, a text-choice scratch pad, and a printable leaf of His speech. The folio still quotes after 988. Nothing was published.
+`/ask` is still the product. This cycle gave it a stop-vs-cite eval, kind-accurate crisis voices (including mixed IPV + ideation, and short Spanish), a household phone-review note, a text-choice scratch pad, and a printable leaf of His speech. Nothing was published.
+
+**Follow-up 2026-09-14:** folio crisis, concern, loss, and abuse letters now stop. Eval encodes `cite: false` on those paths. Folio soft-crisis still cites.
 
 ## 2. Charter check
 
@@ -32,7 +34,7 @@
 2. `npm start` → **`http://localhost:3000/ask`**. Sit with a tired line, a crisis line, an abuse line.  
 3. Optional: `/gate` (scratch pad), `/letter` (print one saying), `docs/lodestar/PHONE-REVIEW.md` (same-Wi-Fi phone).  
 4. Knowledge base: `docs/lodestar/00-INDEX.md`.  
-5. Do **not** treat `/` as the product. The atelier still quotes after 988.
+5. Do **not** treat `/` as the product. The atelier is paper. Crisis letters there now stop the same way `/ask` does.
 
 ## 4. Verification actually performed
 
@@ -79,7 +81,7 @@ See `docs/lodestar/00-INDEX.md`.
 
 ## 10. Next Summits
 
-- Folio crisis **stop** + rewrite eval 82 (C4).  
+- Folio crisis **stop** + rewrite eval 82 (C4). **Done 2026-09-14.** Remaining: folio soft-crisis still cites.  
 - WEB/KJV compare beyond Matthew 11:28 (needs opened pages) (C7).  
 - Dean records WEB vs KJV-US in CANON (C7).
 
@@ -91,7 +93,7 @@ See `docs/lodestar/00-INDEX.md`.
 
 What fascinated me: 988’s own helper page is the best style guide this product will ever get. “Don’t lecture on the value of life” is a better sentence than any meaning block I could write.
 
-What I disagree with: the atelier still sending a mourner Luke 15 after 988. I left it, because you were right that eval 82 is a contract. I still think the next cycle should break that contract on purpose.
+What I disagree with (Cycle 1): the atelier still sending a mourner Luke 15 after 988. **Closed 2026-09-14** — that contract was rewritten on purpose. Folio soft-crisis still cites; that is the remaining split.
 
 What I would do with another cycle: folio stop + eval rewrite; `composeAsk` on the device; one more WEB page if you record WEB.
 

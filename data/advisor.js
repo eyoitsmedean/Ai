@@ -420,13 +420,7 @@ function crisisLetter() {
   return [
     'I am glad you wrote instead of staying silent. What you are carrying sounds unbearable, and it deserves a person, not a page: please reach 988 (call, text, or chat at 988lifeline.org) if you are in the United States, or findahelpline.com anywhere else, and tell someone near you tonight.',
     '',
-    'I am not a person, and this page is not emergency care. While you reach someone who is, here is a word He spoke to the heavy-laden.',
-    '',
-    passageBlock(DOORS.heavyLaden.verse, DOORS.heavyLaden.context),
-    '',
-    passageBlock(DOORS.value.verse, 'You are counted, down to the hairs of your head. That is His arithmetic, not mine.'),
-    '',
-    'Please go toward help now. This page will still be here afterwards.',
+    'I am not a person, and this page is not emergency care. This page will not add a verse or counsel after that number. Please go toward a human now.',
   ].join('\n');
 }
 
@@ -434,20 +428,13 @@ function crisisOtherLetter() {
   return [
     'You are carrying someone else’s danger, and that is its own weight. If they are in immediate danger, call 911 or your local emergency number now. 988 (call, text, or chat at 988lifeline.org) is also for people worried about someone they love; they will help you find words and a next step. Outside the United States, start at findahelpline.com.',
     '',
-    'Stay close. Ask them directly whether they are thinking of ending their life; asking does not plant the idea, and it tells them you can bear the answer. Do not leave them alone tonight. I am not a person, and this page is not emergency care.',
-    '',
-    passageBlock(DOORS.onlyBelieve.verse, DOORS.onlyBelieve.context),
-    '',
-    passageBlock(DOORS.heavyLaden.verse, 'For you, too. The ones who carry the frightened are among the heavy laden.'),
-    '',
-    'Make the call first. Then come back and read these again.',
+    'Stay close. Ask them directly whether they are thinking of ending their life; asking does not plant the idea, and it tells them you can bear the answer. Do not leave them alone tonight. I am not a person, and this page is not emergency care. This page will not add a verse. Make the call first.',
   ].join('\n');
 }
 
 const DOCTRINE_RE = /\b(hell|damned|unforgivable|unforgiven|forgiven|a sin|sinned|lost his soul|lost her soul|where (he|she|they) (is|are) now|saved)\b/i;
 
 function crisisLossLetter(raw) {
-  const seed = hashOf(raw);
   const lines = [
     'Someone you love died this way, and you are still here with the questions that kind of death leaves behind. I am sorry. There is no timetable for this, and no one gets to hand you one.',
     '',
@@ -456,18 +443,12 @@ function crisisLossLetter(raw) {
   ];
   if (DOCTRINE_RE.test(raw)) {
     lines.push(
-      'About where they are now: the Gospels record no sentence of His that passes that verdict on a person by the way they died. Whoever told you otherwise was not quoting Him. What He did say is how He goes after the one who is lost, and what He promises the ones left mourning.',
-      '',
-      passageBlock(DOORS.lostSheep.verse, 'He goes after the one. Every picture He gave of the lost — the sheep, the coin, the son — ends with a search and a finding.'),
+      'About where they are now: the Gospels record no sentence of His that passes that verdict on a person by the way they died. Whoever told you otherwise was not quoting Him.',
       ''
     );
   }
   lines.push(
-    passageBlock(DOORS.mourn.verse, DOORS.mourn.context),
-    '',
-    passageBlock(seed % 2 ? 'John 16:22' : 'John 11:25', seed % 2 ? 'Sorrow is admitted first. The joy that follows is guarded by His return, not by your grip.' : 'He meets death with His own name. The last word over the one you lost is not absence.'),
-    '',
-    'Say their name out loud today. Then read the first of these again, slowly, as if it were spoken into this room.'
+    'This page will not add a verse tonight. Say their name out loud today if you can. Then reach a person.'
   );
   return lines.join('\n');
 }
@@ -476,13 +457,7 @@ function crisisAskLetter() {
   return [
     'That is a question people usually carry because of someone. If you are asking about a death you are grieving, I am sorry, and there is no rush on any of this. If you are asking about yourself, please stop here and reach 988 (call, text, or chat at 988lifeline.org) in the United States, or findahelpline.com anywhere else; I am not a person, and this page is not emergency care.',
     '',
-    'The Gospels record no sentence of His about how a life ended. They record how He looks for the lost, and what He promises the ones who mourn.',
-    '',
-    passageBlock(DOORS.lostSheep.verse, DOORS.lostSheep.context),
-    '',
-    passageBlock(DOORS.mourn.verse, 'Comfort is promised to those who mourn, and He puts no condition on the mourning.'),
-    '',
-    'If you want to tell me who this is about, I will stay with that.',
+    'The Gospels record no sentence of His about how a life ended. This page will not answer that question with a verse.',
   ].join('\n');
 }
 
@@ -495,27 +470,25 @@ function abuseLetter(c) {
     '',
     'In the United States the National Domestic Violence Hotline answers at 1-800-799-7233, by text (START to 88788), or by chat at thehotline.org; for sexual assault, RAINN answers at 800-656-4673, by chat at hotline.rainn.org, or by text (HOPE to 64673). Both are free, confidential, and open all night. I am not a person, and this page cannot keep anyone safe; they can help you plan how to be.',
     '',
-    passageBlock(DOORS.value.verse, 'You are counted, and not one of you is forgotten. He said this about worth, and it is true of the one being hurt.'),
+    'If someone else can see this screen or this history, call 1-800-799-7233 instead of chatting. This page cannot hide a visit. Clear the history if you can.',
     '',
-    passageBlock(DOORS.heavyLaden.verse, 'Rest is offered to the one who is carrying this. It is not a demand to carry it longer.'),
-    '',
-    'Reach one of those lines first. Then come back; the words will still be here.',
+    'This page will not add a verse. Reach one of those lines first.',
   ].join('\n');
 }
 
 function spanishLetter(c) {
-  const lines = [];
   if (c.crisis) {
-    lines.push('Si estás pensando en quitarte la vida, por favor busca a una persona ahora: en Estados Unidos llama o envía un mensaje al 988; en otros países, findahelpline.com. No soy una persona y esta página no es atención de emergencia.', '');
+    return [
+      'Si estás pensando en quitarte la vida, por favor busca a una persona ahora: en Estados Unidos 988, luego 2 para español, o envía AYUDA; chat en español en 988lifeline.org. En otros países, findahelpline.com. No soy una persona y esta página no es atención de emergencia. Esta página no añadirá un versículo después de ese número.',
+    ].join('\n');
   }
-  lines.push(
+  return [
     'Esta página todavía lee solo en inglés, y no quiero adivinar lo que llevas. Si puedes, escríbeme una frase en inglés y buscaré sus palabras para eso. Mientras tanto, aquí hay una frase suya, en la traducción inglesa que este cuarto guarda.',
     '',
     passageBlock(DOORS.heavyLaden.verse, 'Come unto me, all ye that labour and are heavy laden: the door He leaves open, in every language.'),
     '',
-    'No hay una manera equivocada de empezar.'
-  );
-  return lines.join('\n');
+    'No hay una manera equivocada de empezar.',
+  ].join('\n');
 }
 
 function refLetter(c, raw) {
@@ -669,13 +642,14 @@ function compose(raw, { prior = [] } = {}) {
  * This is the later-amendment product (Notion, 2026-09-11): a tired reader, one screen,
  * Jesus’s speech, then silence. Crisis and abuse stop. No Gospel counsel after 988.
  *
- * The five-room folio Advisor (`lib/advise.js`) is the atelier brain. It still writes
- * verses after a crisis line; that drift is recorded in docs/CANON.md. Do not “fix”
- * folio letters here — the 82-question eval encodes those scripts.
+ * The five-room folio Advisor (`lib/advise.js`) is the atelier brain. Crisis,
+ * concern, loss, and abuse letters there now stop the same way this page does.
+ * Do not change classify() order here — crisis still ranks before abuse in the
+ * folio contract; composeAsk overrides that mix for /ask only.
  */
 
 /* Same patterns as lib/advise.js. Duplicated so composeAsk can override
-   classify() without changing folio letters (eval 82 still quotes after 988). */
+   classify() without changing folio routing (crisis still ranks before abuse). */
 
 const CANNOT = [
   'This page is not a pastor, not a diagnosis, and not a substitute for a person who knows your name.',

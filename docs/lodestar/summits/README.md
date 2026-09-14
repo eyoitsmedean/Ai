@@ -12,7 +12,7 @@ Candidates generated (16): /ask eval; on-device composeAsk bundle; folio crisis 
 | S4 | Wildcard | `/gate` text record | C7 was a gap with no object Dean can use | C7 |
 | S5 | Wildcard | `/letter` paper leaf | Folio stays paper — give him paper | C8 C1 |
 
-**Next Summits:** folio crisis stop + eval rewrite; on-device `composeAsk` bundle; WEB/KJV compare beyond Matthew 11:28 (needs opened pages).
+**Next Summits:** folio soft-crisis vs `/ask` stop (hope-1 still cites on the folio); WEB/KJV compare beyond Matthew 11:28 (needs opened pages). Folio crisis stop + eval rewrite: **done 2026-09-14**. On-device `composeAsk` bundle: **done**.
 
 ## YouTube
 

@@ -7,8 +7,8 @@
 | --- | --- | --- | --- |
 | `public/ask.html` + `lib/ask.js` + `/ask` | C1 C3 C4 C5 | On course | Deepened: client kind-split, Spanish modalities, abuse cannot, digital-security line |
 | Sealed KJV corpus + seal | C2 | On course | Kept |
-| Folio crisis letters `lib/advise.js` | C4 | Bad drift (atelier) | Held. Eval 82 encodes verses after 988. Not rewritten |
-| 82-question folio eval | C2 C4 (atelier) | Good drift / Gap for `/ask` | Added **separate** `/ask` eval (S1). Folio eval untouched |
+| Folio crisis letters `lib/advise.js` | C4 | On course (closed 2026-09-14) | Stop letters: no verse after 988. Soft-crisis still cites |
+| 82-question folio eval | C2 C4 (atelier) | On course | `cite: false` on crisis/concern/loss/abuse; sealed-check skips empty stop paths |
 | Press / Forty / Sit | C8 | On course as atelier | Kept at `/` |
 | `LAUNCH.md` | C5 | Bad drift | Parked; not executed |
 | Capacitor / `MOBILE.md` | C5 | Unblessed as launch | Local shell only. Phone-review kit added (S3) |
@@ -20,4 +20,4 @@
 
 ## State of the Project (≤15 lines)
 
-The intended product is `/ask`. The folio is the atelier. Crisis on `/ask` stops (including mixed IPV + ideation, and short Spanish); crisis on the folio still quotes after 988 on purpose until eval is rewritten. Dean has not recorded WEB vs KJV. `/gate` is a pad. WATCH holds. Live-model path still unverified. No store, no Pages-as-launch, no Grok overwrite.
+The intended product is `/ask`. The folio is the atelier. Crisis on `/ask` stops (including mixed IPV + ideation, and short Spanish). Folio crisis, concern, loss, and abuse letters now stop too. Folio soft-crisis still cites. Dean has not recorded WEB vs KJV. `/gate` is a pad. WATCH holds. Live-model path still unverified. No store, no Pages-as-launch, no Grok overwrite.

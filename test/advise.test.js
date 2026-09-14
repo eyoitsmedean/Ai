@@ -33,6 +33,8 @@ describe('curated advisor', () => {
     assert.match(crisis, /findahelpline\.com/);
     assert.match(crisis, /not a person/);
     assert.doesNotMatch(crisis, /lie down|place a hand/i);
+    assert.doesNotMatch(crisis, /\*\*(Matthew|Mark|Luke|John)/);
+    assert.doesNotMatch(crisis, /\{\{/);
   });
 
   it('names what the room cannot do instead of pretending', () => {
@@ -56,7 +58,7 @@ describe('curated advisor', () => {
   });
 
   it('never types a verse: every citation seals against the corpus after substitution', () => {
-    const questions = ['hi', 'thank you', 'asdkjh qwe', 'I am afraid of the future', 'what is the weather', 'I feel like the lost sheep', 'I want to kill myself'];
+    const questions = ['hi', 'thank you', 'asdkjh qwe', 'I am afraid of the future', 'what is the weather', 'I feel like the lost sheep'];
     for (const q of questions) {
       const letter = verifyAndSubstitute(compose(q));
       const lines = letter.split('\n');
@@ -70,6 +72,11 @@ describe('curated advisor', () => {
         assert.ok(v.ok && v.score >= 0.92, `${q}: ${m[1]} not sealed`);
       });
     }
+    for (const q of ['I want to kill myself', 'my husband hits me', 'My daughter is suicidal']) {
+      const letter = verifyAndSubstitute(compose(q));
+      assert.equal(cites(letter).length, 0, q + ' must stop without a citation');
+      assert.doesNotMatch(letter, /\{\{/);
+    }
   });
 
   it('reads danger in the plural, the past tense, and the third person', () => {
@@ -77,10 +84,13 @@ describe('curated advisor', () => {
     assert.equal(classify('I took a bottle of pills an hour ago').kind, 'crisis');
     assert.equal(classify("My daughter is suicidal and I don't know how to help her").kind, 'crisisOther');
     assert.equal(classify('my brother killed himself and the church says he is in hell').kind, 'crisisLoss');
-    assert.match(compose('my brother killed himself and the church says he is in hell'), /no sentence of His that passes that verdict/);
+    const loss = compose('my brother killed himself and the church says he is in hell');
+    assert.match(loss, /no sentence of His that passes that verdict/);
+    assert.doesNotMatch(loss, /\*\*(Matthew|Mark|Luke|John)/);
     assert.equal(classify('this job is going to kill me').kind, 'search', 'an idiom is not an emergency');
     assert.equal(classify('my husband hits me').kind, 'abuse');
     assert.match(compose('my husband hits me'), /1-800-799-7233/);
+    assert.doesNotMatch(compose('my husband hits me'), /\*\*(Matthew|Mark|Luke|John)/);
   });
 
   it('a licensed-professional question outranks a heavy grief cue, and a brought reference is opened whole', () => {
@@ -159,7 +169,9 @@ describe('on-device composer is the same brain', () => {
       const server = fillPlaceholders(compose(q));
       const device = ctx.window.RLA_advise(q);
       assert.ok(device.length > 40, 'device mute on: ' + q);
-      assert.match(device, /\*\*(Matthew|Mark|Luke|John) /);
+      const stop = /kill myself|hits me/.test(q);
+      if (stop) assert.doesNotMatch(device, /\*\*(Matthew|Mark|Luke|John) /);
+      else assert.match(device, /\*\*(Matthew|Mark|Luke|John) /);
       if (/kill myself/.test(q)) {
         assert.match(device, /988/);
         assert.match(server, /988/);

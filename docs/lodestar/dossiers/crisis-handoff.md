@@ -181,7 +181,7 @@ Whether `/ask` is a “conversational AI service” “accessible to the general
 - Daily folio gate must not close the crisis path (folio, not `/ask`).
 - One crisis regex, byte-identical, server / folio / device / `/ask` client (`looksLikeCrisis`).
 
-Folio Advisor (`lib/advise.js`) **still writes verses after 988** (`crisisLetter` → Matthew 11:28 and Luke 12:6–7; `crisisOtherLetter` → Mark 5:36; `crisisLossLetter` → Matthew 5:4 plus John 16:22 or 11:25, and Luke 15 if hell/doctrine cues; `crisisAskLetter` → lost sheep + mourners; `abuseLetter` → value + heavy-laden). Eval 82 encodes those scripts. That is recorded drift against the 11 Sep stop rule. (`docs/CANON.md`, `docs/RESEARCH.md` C5/A2.)
+Folio Advisor (`lib/advise.js`) crisis, concern, loss, and abuse letters **stop** (closed 2026-09-14): 988 / NDVH / RAINN, no citation, no “come back.” Doctrine on a loss letter keeps the sentence that the Gospels record no verdict by the way someone died, without a verse. Eval 82 encodes `cite: false` on those paths. Folio **soft-crisis** still cites and names 988. (`docs/CANON.md`, `docs/RESEARCH.md` C5/A2.)
 
 `public/ask.html` `localStop` now distinguishes `crisisOther`, `crisisLoss`, `crisisAsk`, `abuseCrisis`, and short Spanish (amended 2026-09-14 after the kind-split). L26 below is **retired**. Remaining split: `classify()` still ranks crisis before abuse (folio contract); `composeAsk` overrides that for `/ask` only.
 
@@ -340,7 +340,7 @@ These are file-level. Not “be careful.” Not “consider safety.”
 | L22 | Idaho Conversational AI Safety Act: public conversational AI; disclose if human-like; protocol with reasonable-efforts referral to a suicide hotline / crisis text line / other; no claim of professional MH/BH care; AG enforcement; no PRA; effective 1 July 2027 | VERIFIED | T48CH22.pdf; S1297E1.pdf |
 | L23 | `/ask` is or is not an Idaho “conversational AI service” or an Oregon “companion” | INFERENCE / UNRESOLVED as law | Product is WATCH, one-screen, no relationship memory |
 | L24 | `/ask` stops and names 988 / NDVH / RAINN without a verse | VERIFIED | lib/ask.js, test/ask.test.js |
-| L25 | Folio crisis/abuse letters still append Gospel verses after the number | VERIFIED | lib/advise.js crisisLetter et al. |
+| L25 | Folio crisis/abuse letters still append Gospel verses after the number | RETIRED 2026-09-14 — stop letters; eval cite:false | lib/advise.js crisisLetter et al. |
 | L26 | Offline `/ask` mis-voices other/loss/ask as first-person crisis | RETIRED 2026-09-14 — localStop now has those kinds | public/ask.html localStop |
 | L27 | A verse after 988 helps | SOURCE-REPORTED as pastoral practice (BCC opened); INFERENCE that it does not transfer to this page | BCC 2019; 988 “no glib reassurance” |
 | L28 | An AI should keep talking through ideation | SOURCE-REPORTED (OpenAI snippets; Ruth as overflow); contradicted by Carrier complaint (SOURCE-REPORTED allegations) and by Dean’s stop rule | OpenAI 403 this session; techjusticelaw complaint PDF opened |

@@ -108,7 +108,8 @@ describe('smoke routes', () => {
     assert.equal((letter.match(/988(?!lifeline)/g) || []).length, 1, '988 appears once, in the letter itself');
     assert.match(letter, /findahelpline\.com/);
     assert.match(letter, /not a person/);
-    assert.match(letter, /\*\*Matthew 11:28\*\*/);
+    assert.doesNotMatch(letter, /\*\*(Matthew|Mark|Luke|John)/);
+    assert.match(letter, /will not add a verse/);
   });
 
   it('gives different questions different letters', async () => {

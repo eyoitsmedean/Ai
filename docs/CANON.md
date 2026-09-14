@@ -2,7 +2,7 @@
 
 **Status:** WATCH. Not a launch. Not a store submit. Idaho household. External publish remains HOLD.
 **Owner:** Dean. **Audience:** Dean on a phone; the next agent on this branch.
-**Updated:** 2026-09-11. **Version:** 2.
+**Updated:** 2026-09-14. **Version:** 3.
 **Authoritative locations:** this file · `CLAUDE.md` (product locks) · Notion [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d53f969812f9d88eac827b219e0) (later amendment).
 
 This is the brief for **this** conversation (`cursor.com/agents/bc-9d879086-030e-42d8-9728-b1e611e98634`, repo `eyoitsmedean/Ai`, branch `cursor/press-atelier-review-8634`). It is not the Grok iOS “last-week chats” commission. That thread already has its own F1–F3 on This week. Do not overwrite those pages.
@@ -57,7 +57,7 @@ From [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d5
 | Asset | Verdict | Location |
 | --- | --- | --- |
 | Sealed KJV Gospels + red-letter map | **Keep.** 3,779 verses, 1,923 spoken, 663 sayings. Tests pin counts. | `data/`, `lib/scripture.js` |
-| Curated Advisor + 82-question eval + device bundle | **Keep** as the atelier brain. Crisis letters still add verses after 988 — that **drifts** from the 11 Sep stop rule. | `lib/advise.js`, `eval/` |
+| Curated Advisor + 82-question eval + device bundle | **Keep** as the atelier brain. Crisis, concern, loss, and abuse letters **stop** (no verse after 988). Soft-crisis on the folio still cites. Eval encodes the stop. | `lib/advise.js`, `eval/` |
 | The Press / Forty / lectio | **Keep** as paper/atelier. Do not treat as a launch surface. | `/review`, `REVIEW.md` |
 | Capacitor / Android APK / `MOBILE.md` | **Retire as a launch path.** Allowed as a local shell. No store. | `android/`, `MOBILE.md` |
 | `LAUNCH.md` pricing / 90-day farm | **Park.** Conflicts with WATCH. | `LAUNCH.md` |
@@ -69,7 +69,7 @@ From [Red Letter · one screen · not a launch](https://app.notion.com/p/3d8b7d5
 
 1. No `ANTHROPIC_API_KEY` here — live-model path unverified.
 2. Dean has not recorded WEB vs KJV for a public URL — human gate still open.
-3. Folio Advisor still writes verses after a crisis line — later amendment says stop.
+3. Folio **soft-crisis** (someone who says they are not suicidal) still cites *and* names 988. `/ask` stops on that path. Closed 2026-09-14: folio crisis/abuse/concern/loss letters no longer quote after 988.
 4. GitHub Pages on the default branch would be a public URL if enabled — do not merge as a launch.
 5. Granola MCP needs auth; meeting notes were not read.
 
@@ -101,7 +101,7 @@ Start `/ask` with `npm start` and open `http://localhost:3000/ask`. Do not treat
 ## For the next agent
 
 - Authoritative instructions: this file, then `CLAUDE.md` locks, then Dean’s later Notion amendments.
-- Evidence vs direction: `docs/RESEARCH.md` is evidence and recommendation. This file is approved direction for *this* thread. Folio crisis letters are known drift; do not rewrite them without rewriting `eval/`.
+- Evidence vs direction: `docs/RESEARCH.md` is evidence and recommendation. This file is approved direction for *this* thread. Folio crisis/abuse/concern/loss letters stop (2026-09-14); `eval/` encodes `cite: false` on those paths. Do not put verses back on a stop letter without rewriting eval. Soft-crisis on the folio still cites.
 - Add findings to RESEARCH’s source register; do not invent citations.
 - Coordinate edits: one owner per file; check git before rewriting CANON.
 - Record completed work in `CLAUDE.md` session log and `docs/bot-notes.md`.

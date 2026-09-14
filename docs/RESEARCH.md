@@ -103,7 +103,7 @@ Oregon [SB 1546 (enrolled, 2026 session)](https://olis.oregonlegislature.gov/liz
 
 ### Decision this cycle
 
-`/ask` implements stop. The folio Advisor still appends Matthew 11:28 (and kin) after 988. That is recorded drift. Do not silently change folio letters this cycle — `npm run eval` (82) encodes the old scripts. Changing folio crisis copy is a future eval rewrite, not a drive-by.
+`/ask` implements stop. Folio crisis, concern, loss, and abuse letters now stop the same way (2026-09-14): 988 / NDVH / RAINN, no `{{` citation, no “come back and read these.” Eval 82 encodes `cite: false` on those paths. Folio **soft-crisis** (hope-1) still cites and names 988 — that is the remaining atelier/product split. Do not put verses back on a stop letter without rewriting `eval/`.
 
 ---
 
@@ -187,5 +187,5 @@ Unchanged from `CLAUDE.md`. Seal admits only red letters. `refOther` for Luke 2:
 1. Finished work I can review (prompts 5–10) → what is the product? → Notion one-screen + WATCH → `/ask`, not a store build → `public/ask.html`.
 2. Do not publish (This week) → is Pages a launch? → Pages on default branch is a URL → do not merge as launch → README/CLAUDE say WATCH.
 3. License lock → which text? → WEB PD + KJV-US atelier + UK Crown if global → human gate; one WEB example only → RESEARCH + empty state.
-4. Stop counsel after 988 → does folio comply? → `lib/advise.js` still quotes after 988 → `/ask` stops; folio drift recorded → `lib/ask.js`.
+4. Stop counsel after 988 → does folio comply? → crisis/abuse/concern/loss letters stop (2026-09-14); soft-crisis on the folio still cites → `lib/advise.js`, `eval/questions.json`.
 5. Folio stays paper → kill Press? → no; it is atelier → keep `/` ; point reviewers at `/ask`.

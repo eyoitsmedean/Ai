@@ -2,11 +2,21 @@
 
 ---
 
+## Folio stop — 2026-09-14
+
+Same first-ten read as the pass before this: Muse / approve; wow-quality deliverable; Build; FORGE; ATELIER (Jesus’s words, warmth, crisis handoff, no store); rebuild pipeline. Later amendment that still wins: name a human, **stop**.
+
+The remaining contradiction those prompts will not allow: folio Advisor quoting after 988. Closed. `crisisLetter` / `crisisOtherLetter` / `crisisLossLetter` / `crisisAskLetter` / `abuseLetter` / Spanish-crisis now stop (no `{{`, no “come back”). Eval `cite: false` on crisis-1…9, concern, loss, abuse. Soft-crisis hope-1 still cites. `classify()` order unchanged.
+
+WATCH holds. Not a launch.
+
+---
+
 ## First ten prompts → first useful answer — 2026-09-14
 
 Read the 13 true human prompts from this run’s transcript (notifications stripped). The first ten are: run muse; I approve; you should have approval; run muse here; “produce a deliverable that wows for me to review”; Build / Baby / Build; FORGE; FORGE universal; ATELIER (filled Red Letter brief); Rebuild pipeline.
 
-H5 + H9 quality line (“time from first open to first useful answer, and warmth”) now govern `/ask` first paint: John 16:33 is already on the page (same output as `composeAsk('I am so tired')`), with Print this saying → `/letter`. WEB Matthew 11:28 stays as the labeled other-text footnote. Folio still quotes after 988. WATCH holds.
+H5 + H9 quality line (“time from first open to first useful answer, and warmth”) now govern `/ask` first paint: John 16:33 is already on the page (same output as `composeAsk('I am so tired')`), with Print this saying → `/letter`. WEB Matthew 11:28 stays as the labeled other-text footnote. Folio crisis/abuse letters now stop. WATCH holds.
 
 ---
 
