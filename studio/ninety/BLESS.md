@@ -4,7 +4,7 @@ Bearing: C6
 
 This is the first send. It is not the ten Advent names. It is not a streak. It is not a waitlist.
 
-Sit Today once. After Amen, send **this** — to one human you already love. Then stop recruiting for the night.
+Sit Today once. After Amen **clears**, copy **this** — to one human you already love. Then stop recruiting for the night.
 
 ---
 
@@ -35,7 +35,7 @@ I sat with this tonight and thought of you.
 No need to reply. If it is the wrong night, delete it.
 ```
 
-If the Amen sheet already has a card, keep the verse, keep their name in the note, and delete any product sentence before you hit send.
+The first Amen sheet copies the saying. It does not share a Red Letter card. Later blessings may use a card; tonight does not.
 
 ---
 

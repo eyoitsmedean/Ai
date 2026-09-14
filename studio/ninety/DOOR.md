@@ -8,7 +8,7 @@ Nobody else can flip Pages. This page stages every reversible step. Enabling Pag
 
 ## What success is
 
-A URL a stranger can open. You sit Today once as that stranger. After Amen you send `BLESS.md` (one person, **no URL**). If the URL 404s, sit locally tomorrow. Do not rebuild.
+A URL a stranger can open. You sit Today once as that stranger. After Amen **clears** you send `BLESS.md` (one person, **no URL**, no product card). If the URL 404s, sit locally tomorrow. Do not rebuild.
 
 Target URL: `https://eyoitsmedean.github.io/Ai/`
 

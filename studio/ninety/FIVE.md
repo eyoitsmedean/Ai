@@ -87,7 +87,7 @@ Red Words (native) is a separate ship line. Do not merge the two. If you have a 
 
 **The actual work.**
 
-- *September, one sitting:* real HTTPS URL. PWA installable. Send the link to yourself on a phone. Sit through Today once as a stranger. First blessing (`BLESS.md`): one named person, the saying you just sat with, no URL. Ten names come later.
+- *September, one sitting:* real HTTPS URL. PWA installable. Send the link to yourself on a phone. Sit through Today once as a stranger. First blessing (`BLESS.md`): after Amen **clears**, one named person, the saying you just sat with, copied as text — no URL, no card. Ten names come later.
 - *Do not:* add Paul, a feed, a paywall, a new shell, or a second corpus.
 - *November, before the 29th:* the twenty-eight rooms are already wired (*Watch with me*, `data/paths.js`; the ribbon switches on Advent Sunday by itself). Do not touch them. Film three quiet verticals — face or handwriting, one crimson sentence, no stock doves. Send the link to ten people who will actually open it.
 - *29 November – 4 December:* you are a user. Watch who comes back on day two. That number is the only metric.

@@ -113,12 +113,27 @@ async function main() {
   await check('first Amen offers a blessing, not an install toast', async () => {
     await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
     await page.waitForSelector('#blessing-sheet.on', { timeout: 4000 });
-    const copy = await page.$eval('#blessing-sheet', (el) => el.innerText);
+    const overlap = await page.evaluate(() => {
+      const amen = document.getElementById('amen');
+      return {
+        amenOn: amen.classList.contains('on'),
+        amenOpacity: Number(getComputedStyle(amen).opacity),
+        copy: document.getElementById('blessing-sheet').innerText,
+        market: document.querySelectorAll('#blessing-list .blessing-item').length,
+        firstHidden: document.getElementById('blessing-actions-first').hidden,
+        cardHidden: document.getElementById('blessing-actions-card').hidden,
+      };
+    });
+    assert(!overlap.amenOn, 'Amen overlay still on when blessing sheet is open');
+    assert(overlap.amenOpacity < 0.05, 'Amen still covering the blessing, opacity=' + overlap.amenOpacity);
+    const copy = overlap.copy;
     assert(/Send a blessing/i.test(copy), 'blessing sheet missing');
+    assert(/Copy the blessing/i.test(copy), 'first blessing must copy the saying, not share a card');
+    assert(!/Send the card/i.test(copy), 'first blessing must not offer a product card');
     assert(/Matthew|Mark|Luke|John/i.test(copy), 'blessing must carry the verse they sat with');
     assert(/No URL/i.test(copy), 'first blessing must forbid a URL');
-    const market = await page.$$('#blessing-list .blessing-item');
-    assert(market.length === 0, 'first blessing must not be a 24-verse market, got ' + market.length);
+    assert(overlap.market === 0, 'first blessing must not be a 24-verse market, got ' + overlap.market);
+    assert(!overlap.firstHidden && overlap.cardHidden, 'first blessing must hide Dawn/Night cards');
     assert(!/github\.io|http/i.test(copy), 'first blessing sheet must not carry a URL');
     await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
     const still = await page.$eval('#blessing-sheet', (el) => el.classList.contains('on'));

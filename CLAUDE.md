@@ -129,3 +129,12 @@ Prompt 9: “Show me your best finished product.” First blessing still opened 
 - Also: `FIVE.md` October line no longer asks her to confirm a household window.
 - Verify: `npm test` and `scripts/qa-browser.js` this sitting (recorded in the commit).
 
+## FOR THE RECORD — 14 September 2026 (first-ten, third pass)
+
+Prompt 9 again: finished product. Amen overlay (z-index 88) was opening the blessing sheet immediately, so “Amen” covered the gift for ~400ms.
+
+- Built: `closeAmen` waits for the fade (`transitionend`, 450ms fallback) before `openBlessing`. Blessing sheet sits above a dismissed Amen. First Amen copies the saying (`copyFirstBlessing`) — name required, no Dawn/Night card, no URL. Later blessings still share a card.
+- Folio title kicker: remaining hour, not “for review.”
+- QA: Amen not `.on` and opacity ~0 when blessing is open; first sheet offers Copy, not Send the card.
+- Not a sixth menu. Pages, merge, send, factory date still founder-only.
+

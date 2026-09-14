@@ -935,6 +935,7 @@ textarea { font-family: var(--body); }
   border-left: 1px solid var(--rule);
 }
 .settings-sheet.on { transform: none; }
+#blessing-sheet { z-index: 92; }
 .sheet-handle { display: none; }
 .sheet-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; }
@@ -1907,12 +1908,15 @@ html.sitting .sit-sheet {
     <div class="sheet-title" id="blessing-title">Send a blessing</div>
     <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
   </div>
-  <p class="sit-copy">Write one name. The saying you just sat with. No URL. Not a list.</p>
+  <p class="sit-copy" id="blessing-copy">Write one name. The saying you just sat with. No URL. Not a list.</p>
   <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
   <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="Their name — then why this word is for them tonight"></textarea>
   <div class="blessing-preview" id="blessing-preview"></div>
   <div id="blessing-list"></div>
-  <div class="actions" style="margin-top:18px">
+  <div class="actions" id="blessing-actions-first" style="margin-top:18px" hidden>
+    <button class="cta cta-primary" type="button" onclick="copyFirstBlessing()">Copy the blessing</button>
+  </div>
+  <div class="actions" id="blessing-actions-card" style="margin-top:18px">
     <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
     <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
     <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
@@ -3707,7 +3711,7 @@ let afterAmen = null;
 function offerFirstBlessing(quote, verse) {
   if (!quote || !verse || ls('rla-first-blessing')) return;
   lsSet('rla-first-blessing', '1');
-  afterAmen = () => openBlessing({ verse: verse, quote: quote });
+  afterAmen = () => openBlessing({ verse: verse, quote: quote, first: true });
 }
 function openAmen(opts = {}) {
   const root = document.getElementById('amen');
@@ -3735,7 +3739,25 @@ function closeAmen() {
   clearTimeout(amenTimer);
   const next = afterAmen;
   afterAmen = null;
-  if (typeof next === 'function') next();
+  if (typeof next !== 'function') return;
+  let done = false;
+  const go = () => {
+    if (done) return;
+    done = true;
+    root.removeEventListener('transitionend', onEnd);
+    next();
+  };
+  const onEnd = (e) => {
+    if (e.target !== root) return;
+    if (e.propertyName && e.propertyName !== 'opacity') return;
+    go();
+  };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    go();
+    return;
+  }
+  root.addEventListener('transitionend', onEnd);
+  setTimeout(go, 450);
 }
 function amenFromSit() {
   if (!sitPayload) return;
@@ -3864,6 +3886,18 @@ async function promptInstall() {
   showToast(choice.outcome === 'accepted' ? 'The room will wait on the home screen' : 'You can keep the room later');
 }
 
+function paintBlessingMode(first) {
+  const copy = document.getElementById('blessing-copy');
+  const firstActions = document.getElementById('blessing-actions-first');
+  const cardActions = document.getElementById('blessing-actions-card');
+  if (copy) {
+    copy.textContent = first
+      ? 'Write one name. Copy the saying you just sat with. Send it yourself. No URL. Not a list.'
+      : 'Write one name. The saying you just sat with. No URL. Not a list.';
+  }
+  if (firstActions) firstActions.hidden = !first;
+  if (cardActions) cardActions.hidden = !!first;
+}
 async function openBlessing(seed) {
   closeSit();
   closeSettings();
@@ -3877,6 +3911,7 @@ async function openBlessing(seed) {
     showToast('Sit with a saying first');
     return;
   }
+  paintBlessingMode(!!(seed && seed.first));
   renderBlessingList([]);
   updateBlessingPreview();
   openSheetChrome('blessing-sheet');
@@ -3923,6 +3958,26 @@ async function sendBlessing(style) {
   closeBlessing();
   await shareItem('blessing', style || 'parchment');
   showToast('Blessing ready to send');
+}
+async function copyFirstBlessing() {
+  if (!blessingPick) { showToast('Sit with a saying first'); return; }
+  const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
+  if (!note) {
+    showToast('Write one name first');
+    const field = document.getElementById('blessing-note');
+    if (field) field.focus();
+    return;
+  }
+  const quote = String(blessingPick.quote || '').replace(/^["“]|["”]$/g, '');
+  const text = note.split(/[\n]/)[0].trim() + ' —\n\nI sat with this tonight and thought of you.\n\n“' + quote + '”\n' + blessingPick.verse + '\n\nNo need to reply. If it is the wrong night, delete it.';
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('Copied — send it yourself. No URL.');
+  } catch (_) {
+    showToast('Copy failed — write it from the sheet');
+    return;
+  }
+  closeBlessing();
 }
 
 function printSitting() {

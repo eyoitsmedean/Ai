@@ -292,7 +292,7 @@ The product is built. The paper already cools in Advent. Nobody owns “daily li
    - URL: `https://eyoitsmedean.github.io/Ai/`. PWA installable.
    - On Pages the Advisor is silent (no `/api`). Today, the path, Seek, Journal, and blessing all work from bundled data. The Advisor needs the node server somewhere; that is not required for Advent week one. If you film clip 3 (Ask), run it from `npm start` on your own machine.
 2. Text the URL to yourself. Open it on a phone as a stranger.
-3. Sit Today → one lectio. Send the **first blessing** in `BLESS.md` — one named human, the saying you just sat with, no URL, no market. The ten-name script below is later.
+3. Sit Today → one lectio. After Amen **clears**, send the **first blessing** in `BLESS.md` — one named human, the saying you just sat with, copied as text. No URL, no card, no market. The ten-name script below is later.
 4. Write four numbers on paper: did they get a saying or a pitch? Did the blessing leave the phone? Did you feel the urge to add a second name? Did you feel the urge to redesign?
 
 If the URL is not live by 30 September, Advent is still possible in November — but September-you was avoiding the scare of sending. Name that and stop for the night.
