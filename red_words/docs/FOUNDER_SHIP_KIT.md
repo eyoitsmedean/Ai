@@ -2,7 +2,7 @@
 
 Use this on a Monday morning. Do the steps in order. Skip nothing that is marked **gate**.
 
-Last updated: 2026-09-11. Evidence dates are on the cited pages.
+Last updated: 2026-09-14. Evidence dates are on the cited pages.
 
 ## What is already done (do not redo)
 
@@ -24,14 +24,24 @@ Last updated: 2026-09-11. Evidence dates are on the cited pages.
 
 If the Dashboard shows a production-access application, you are in scope. Start the closed test **this week**. Do not plan a Friday production cut.
 
-## Gate B — Host the privacy policy (30 minutes)
+## Gate B — Host the privacy policy (15 minutes)
 
 Apple: “All apps must include a link to their privacy policy in the App Store Connect metadata field **and within the app**” (Guideline 5.1.1(i), developer.apple.com/app-store/review/guidelines/, retrieved 2026-09-11). Play also requires a URL on Data safety.
 
-1. Take `red_words/docs/privacy.html` from this repo.
-2. Publish it at a stable HTTPS URL (GitHub Pages on a small public repo is enough). Incognito-load it. No login wall. No cookie banner that hides the text.
-3. Put that URL in App Store Connect → App Information → Privacy Policy, and Play Console → App content → Privacy policy.
-4. Do not change the wording unless the app changes. Settings already shows the same facts.
+The policy file is already in two places that **must stay identical** (`flutter test` checks this):
+
+- `red_words/docs/privacy.html` — source of truth next to the app
+- `public/privacy.html` — what GitHub Pages serves
+
+**Intended URL** (live only after the two clicks below; fetched 2026-09-14 and it was **404**):
+
+`https://eyoitsmedean.github.io/Ai/privacy.html`
+
+1. GitHub repo **Ai** → Settings → Pages → Source: **GitHub Actions**.
+2. Actions → **Deploy to GitHub Pages** → Run workflow (this branch, or after merge to `cursor/founder-recovery-d607` / `claude/jesus-teachings-chatbot-bSBhF` / `main`).
+3. Incognito-load the URL. No login wall. No cookie banner that hides the text.
+4. Put that URL in App Store Connect → App Information → Privacy Policy, and Play Console → App content → Privacy policy.
+5. Do not change the wording unless the app changes. Settings already shows the same facts.
 
 ## Gate C — Android, real keystore, closed test
 
@@ -44,6 +54,14 @@ flutter build appbundle --release
 ```
 
 Upload `build/app/outputs/bundle/release/app-release.aab` to a **closed** testing track (not production).
+
+Then, on the same machine:
+
+```bash
+python3 tool/check_16kb.py build/app/outputs/bundle/release/app-release.aab
+```
+
+Play requires 16 KB ELF `LOAD` alignment on 64-bit native libraries for apps targeting API 35+ ([Android page-sizes](https://developer.android.com/guide/practices/page-sizes), retrieved 2026-09-14; wording on that page: starting **1 November 2025**). Flutter ships `libflutter.so`. AGP is already 9.1.0 (`>= 8.5.1`). This script is the proof; do not upload if it prints `UNALIGNED`.
 
 3. Data safety: **Does the app collect or share any of the required user data types? → No.** Privacy URL = Gate B. Ads: No. See `STORE_ANSWERS.md`.
 4. Recruit 12 people who will **opt in and leave the app installed for 14 days**. Send the Play opt-in link, not a sideload APK. Write their names in a private note. If someone opts out, the 14-day clock for that seat resets.
