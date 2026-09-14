@@ -48,3 +48,7 @@ Purpose unchanged: five paper plans, one live lane, beautiful, no leftover assem
 Finished: first screen is one board (window + lane + cash + Lamp gates). Catch-up only if Storefront is the written lane. 14 Sep is Monday — next close Sun 20. Human week 15–21 is rest-default; playbook does not add a fourth money lane unless he writes Lamp.
 
 Did not overwrite This week / Operator Card / Sunday close original. Did not apply.
+
+## Prompt 9 · 14 Sep
+
+Transcript re-read: **9** user messages, not 10. Prompt 1 remains the commission. Tonight’s one move is now the first card. Rest is the default minute. Movements folded into a drawer.
