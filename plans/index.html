@@ -88,6 +88,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .decide .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
 .decide .pay .v{font-family:var(--display);font-size:1.15rem;font-weight:500}
 @media (max-width:640px){.decide .pay{grid-template-columns:1fr 1fr}}
+.choice{margin-top:12px}
+.choice .seg{flex-wrap:wrap}
+.receipt{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--crimson-soft);font-size:.95rem}
+.receipt b{font-weight:600}
+.strip button.paper{opacity:.55}
+.strip button.paper .pr::after{content:' · paper'}
+.notion-lock{margin:0 0 16px;padding:10px 12px;border-left:3px solid var(--crimson);font-size:.92rem;color:var(--ink)}
+#honest{margin-top:12px}
 
 /* Nav */
 .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
@@ -377,9 +385,9 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 
 <div class="wrap title" id="top">
   <h1>Build. <em>Baby.</em> Build.</h1>
-  <p class="lede">Ninety days in three movements. Sell and deliver until the birth. Then nothing, for at least thirty days. Then open the doors again into Veterans Day and Advent. Five paper bets. Run one — or none.</p>
+  <p class="lede">Ninety days in three movements. Five paper bets. Write one — or none. A listing is not a billed hour.</p>
   <p class="note">Everything on this page is an estimate, not a promise. Compliments are not demand. Only the ledger counts.</p>
-  <p class="note">This file is a parallel draft. Weekly authority is Notion → This week. Money source of truth is the One Cash Lane operator card. Updated 11 Sep 2026. External apply and outreach stay HOLD until you type them.</p>
+  <p class="note">Parallel draft. Weekly authority is Notion → This week. Money SoT is the One Cash Lane operator card. Updated 14 Sep 2026. External apply and outreach stay HOLD until you type them.</p>
   <div class="decide" id="now" aria-live="polite"></div>
   <div class="leaf" style="margin-top:12px" id="window-box">
     <h3 style="margin-bottom:6px">Household window</h3>
@@ -391,18 +399,33 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
       <button data-w="confirmed">Confirmed</button>
     </div>
   </div>
+  <div class="leaf choice" id="choice-box">
+    <h3 style="margin-bottom:6px">Write one lane</h3>
+    <p class="note" style="margin-bottom:10px">Notion names. The other four stay paper. Writing a lane does not lift HOLD and does not confirm the window.</p>
+    <div class="seg" id="choice" role="group" aria-label="Written lane">
+      <button data-lane="none">None</button>
+      <button data-lane="lamp">I Lamp</button>
+      <button data-lane="room">II Room</button>
+      <button data-lane="handoff">III Handoff</button>
+      <button data-lane="storefront">IV Storefront</button>
+      <button data-lane="folio">V Folio</button>
+    </div>
+    <div class="receipt" id="receipt" aria-live="polite"></div>
+  </div>
+  <div class="leaf" id="honest" aria-live="polite"></div>
   <div class="movements" id="movements" aria-label="The three movements"></div>
   <div class="facts">
     <div class="fact"><span class="sc">Window</span><span class="v">4 Sep – 3 Dec</span></div>
     <div class="fact"><span class="sc">Real hours</span><span class="v" id="f-hours">≈ 38 of 58</span></div>
-    <div class="fact"><span class="sc">Your base case</span><span class="v" id="f-base">$1,350</span></div>
-    <div class="fact"><span class="sc">Floor</span><span class="v" id="f-floor">$350</span></div>
+    <div class="fact"><span class="sc">Honest cash</span><span class="v" id="f-base">$0</span></div>
+    <div class="fact"><span class="sc">Reserve rule</span><span class="v" id="f-floor">35%</span></div>
   </div>
 </div>
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
     <a href="#now">This week</a>
+    <a href="#choice-box">Lane</a>
     <a href="#first">Read first</a>
     <a href="#choose">Choose</a>
     <a href="#plans">The five</a>
@@ -420,11 +443,11 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
   <div class="head"><span class="n">i</span><h2>Read first</h2><span class="sc">Six rules</span></div>
   <ol class="rules">
     <li><b>Sell before you build.</b> Every plan's first week is a message to a stranger, not a document. Ten unpaid build hours is the ceiling before someone has said yes with money.</li>
-    <li><b>One engine.</b> Pick one plan to actually run. One more may run in the background if its work is finished before the baby arrives. Two engines is none.</li>
+    <li><b>One engine.</b> Write one lane at the top. The other four stay paper. Two engines is none. A background Advent build is craft, not a second cash job.</li>
     <li><b>Four and a half hours.</b> Tuesday sixty, Thursday ninety, Saturday sixty, Sunday fifteen. That is the whole budget. If a week needs more, the plan is wrong, not the week.</li>
     <li><b>Baby is a phase, not a pause.</b> From the day the baby arrives until at least thirty days after, optional work is zero. Links stay live. Auto-replies do the talking. Nothing restarts on a date; the second Build begins when both of you say yes.</li>
     <li><b>Clean room.</b> Personal devices, accounts, time, and words. No client in insurance, benefits, HR, staffing, or finance. Nothing from work: no contacts, templates, decks, language. Read your outside-work clause once, yourself, before the first paid job. If it's ambiguous, one written question.</li>
-    <li><b>Payment beats praise.</b> "I'd totally buy that" is not a data point. A deposit is. Log only money. Thirty percent of every dollar goes to the tax jar the day it arrives.</li>
+    <li><b>Payment beats praise.</b> "I'd totally buy that" is not a data point. A deposit is. Log only money. Thirty-five percent of every dollar goes to the household reserve the day it arrives — a rule, not a computed return.</li>
   </ol>
 
   <div class="leaf" style="margin-top:22px">
@@ -440,16 +463,16 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 </section>
 
 <section id="choose" class="wrap">
-  <div class="head"><span class="n">ii</span><h2>Choose</h2><span class="sc">The recommended stack</span></div>
+  <div class="head"><span class="n">ii</span><h2>Choose</h2><span class="sc">Five paper bets · write one</span></div>
   <div class="leaf">
     <div class="stack">
-      <div class="tier"><span class="sc">Engine</span><div><b><button class="link" data-go="fix">I · One-Fix Friday</button></b><p>Highest probability of a first dollar. Local, visual, bounded, two-hour builds. Uses the one skill you have that almost nobody in a small town has: directing agents to ship in an evening.</p></div></div>
-      <div class="tier"><span class="sc">Background</span><div><b><button class="link" data-go="red">II · Red Letter — Advent</button></b><p>Already built. Finish the Advent companion in September, set 1 Nov to launch by itself, sleep in between. Low cash now; it is the rehearsal for Lent, which your own research calls the payday.</p></div></div>
-      <div class="tier"><span class="sc">Swap</span><div><b><button class="link" data-go="voice">III · The Voice Capsule</button></b><p>The most <em>you</em> of the five — and it does not fit beside Advent. Its September sample and two November capsules take the same hours. Choose: Advent now and the Capsule at Memorial Day, or the Capsule now and Advent stays free. The panel below does the arithmetic.</p></div></div>
-      <div class="tier"><span class="sc">Optional</span><div><b><button class="link" data-go="interview">IV · The Civilian Interview</button></b><p>Fastest to sell, easiest to stop. Run it instead of Plan I if you'd rather talk to veterans than to plumbers.</p></div></div>
-      <div class="tier"><span class="sc">Upsell</span><div><b><button class="link" data-go="rescue">V · Workflow Rescue</button></b><p>Never sold cold. It is the answer to a question a One-Fix client will ask you. One in the window is $1,500 — and about eleven hours you must find inside the same budget.</p></div></div>
+      <div class="tier"><span class="sc">I · Lamp</span><div><b>The Lamp</b><p>Grocery default after five truth gates. Advertised $80–$120/hr is not expected cash. $0 until a billed hour. Apply stays HOLD.</p></div></div>
+      <div class="tier"><span class="sc">II · Room</span><div><b><button class="link" data-go="interview">The Room · $349</button></b><p>Backup if Lamp is blocked. 0–3 this quarter. GitHub &quot;Civilian Interview $149&quot; is a draft.</p></div></div>
+      <div class="tier"><span class="sc">III · Handoff</span><div><b><button class="link" data-go="rescue">The Handoff · $1,500</button></b><p>Never cold. 12-hour cap. Never with Storefront. GitHub name: Workflow Rescue.</p></div></div>
+      <div class="tier"><span class="sc">IV · Storefront</span><div><b><button class="link" data-go="fix">The Storefront · $595</button></b><p>0–2 jobs. GitHub &quot;One-Fix Friday $350&quot; is a draft. Do not send videos while HOLD.</p></div></div>
+      <div class="tier"><span class="sc">V · Folio</span><div><b><button class="link" data-go="red">The Folio · parked</button></b><p>Advent craft may exist. No invoice this quarter. <a href="./advent.html">Week 1 is written</a>. Voice Capsule is parked on Venture Studio.</p></div></div>
     </div>
-    <p class="note" style="margin:16px 0 0">Every number on this page is a planning estimate, not a forecast. Each plan's card shows the arithmetic behind its base case; the panel below shows whether the hours exist.</p>
+    <p class="note" style="margin:16px 0 0">Write the lane at the top of this page. Hours below are a drawer, not a stack to run. Offer sheets: <a href="./offers.html">offers.html</a>.</p>
   </div>
 
   <div class="leaf" style="margin-top:14px" id="budget">
@@ -573,6 +596,7 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 <footer class="wrap">
   <span class="device" aria-hidden="true">R</span>
   <p>Built from your repository, your market research, and your own venture notes. Everything you check or log here stays on this device. Nothing is sent anywhere.</p>
+  <p><a href="./offers.html">Offer sheets</a> · <a href="./advent.html">Advent Week 1</a> · <a href="./hold.html">Hold Receipt</a> · <a href="../docs/lodestar/INDEX.md">Knowledge base</a></p>
   <p>Set in Fraunces, Source Serif 4, and Instrument Sans. Paper, ink, one red.</p>
 </footer>
 
@@ -585,6 +609,28 @@ footer .device{width:26px;height:26px;font-size:15px;margin-bottom:12px}
 const START = new Date(2026,8,4);      // Fri 4 Sep 2026
 const END   = new Date(2026,11,3);     // Thu 3 Dec 2026
 const KEY   = 'ninety.v1';
+
+const LANES = {
+  none:{label:'None yet', github:null, sentence:'No lane is written. The five stay paper. That is a legal finish.'},
+  lamp:{label:'I · The Lamp', github:null, sentence:'You wrote The Lamp. $0 until a billed hour. The other four are paper. Do not apply from this page.'},
+  room:{label:'II · The Room', github:'interview', sentence:'You wrote The Room ($349, 0–3). The other four are paper. Do not send asks while HOLD.'},
+  handoff:{label:'III · The Handoff', github:'rescue', sentence:'You wrote The Handoff ($1,500, 12h cap). Never with Storefront. Do not pitch cold.'},
+  storefront:{label:'IV · The Storefront', github:'fix', sentence:'You wrote The Storefront ($595, 0–2). The $350 GitHub card is a draft. Do not send videos while HOLD.'},
+  folio:{label:'V · The Folio', github:'red', sentence:'You wrote The Folio. Parked as cash. Week 1 is written. No invoice.'}
+};
+const NOTION = {
+  fix:{lane:'IV · Storefront', lock:'Notion lock: $595 · 0–2 jobs · never with Handoff. The $350 on this card is a parallel draft.'},
+  interview:{lane:'II · Room', lock:'Notion lock: $349 · 0–3. The $149 founding price on this card is a parallel draft.'},
+  rescue:{lane:'III · Handoff', lock:'Notion lock: $1,500 · 12-hour cap. Never with Storefront.'},
+  red:{lane:'V · Folio', lock:'Parked as cash. Craft may exist. No invoice this quarter. Advent Week 1 is already written.'},
+  voice:{lane:'Parked', lock:'Not a 2026 cash lane. Venture Studio. Not writable at the top of this page.'}
+};
+const LAMP_TONIGHT = {
+  0:'Nothing is the move. A listing is not a billed hour. Go to bed.',
+  15:'Write one word: Pursue, Park, or Close — after you remember the five gates. Do not apply.',
+  45:'Open the M4 sheet only if the window is open. Fill five gates. Unknown is allowed. Do not apply.',
+  90:'Required work only: DEX during scheduled hours. Not an application hour.'
+};
 
 /* ---------------- Plans ---------------- */
 const PLANS = [
@@ -932,15 +978,19 @@ const LEDGER = [
   {c:'The King James text is public domain in the United States', l:'Knowledge', s:['Long-settled; the app already relies on it. In the UK, printing the KJV is restricted by letters patent.'], d:'—', w:'Sell the Advent PDF in the US without concern; check before printing it for sale in the UK.'},
   {c:'Fraunces, Source Serif 4, Instrument Sans are served by Google Fonts under the SIL Open Font License', l:'Knowledge', s:['Google Fonts; OFL permits use and embedding, including commercial'], d:'—', w:'Nothing for this page; if you sell the PDF with these fonts embedded, OFL allows it.'},
   {c:'What you have done and can do (Marine, sales floor, senior director, enablement, Ableton and Push 2, this repository)', l:'Your notes', s:['Your Notion and Drive, read during the build; the repository itself'], d:CHECKED, w:'The "Why you" paragraphs are wrong in the same place. Correct the note and the plan.'},
-  {c:'lib/year.js computes the church year; share-card and print/broadside code exist in the app', l:'Verified', s:['Opened and ran in this repository'], d:CHECKED, w:'Plan II\'s "already built" claim weakens by the missing piece.'}
+  {c:'lib/year.js computes the church year; share-card and print/broadside code exist in the app', l:'Verified', s:['Opened and ran in this repository'], d:CHECKED, w:'Plan II\'s "already built" claim weakens by the missing piece.'},
+  {c:'Mercor L&D Evaluator listing still live 14 Sep 2026 at advertised $80–$120/hr; HTML does not print hours/week or awarded rate', l:'Verified', s:[['Mercor L&D Evaluator','https://work.mercor.com/jobs/list_AAABnp6MQafnea1bEmZCHpqN/training-onboarding-l-d-evaluator']], d:'14 Sep 2026', w:'If the URL dies, Lamp has no door. Still $0 until a billed hour.'},
+  {c:'Idaho small seller exemption, enacted §63-3622YY(2): current calendar year only; $7,500 clawback on all sales that year', l:'Verified', s:[['Idaho Code §63-3622YY','https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622yy/'],['Tax Commission — small seller exemption','https://tax.idaho.gov/taxes/sales-use/exemptions/sales-and-use-taxes-exemptions-for-individuals/small-seller-exemption/']], d:'14 Sep 2026', w:'A later session bill that restores a two-year lookback would start counting 2025 receipts. The 17 Jul 2025 press release is stale vs the statute.'},
+  {c:'2026 Social Security OASDI wage base is $184,500', l:'Verified', s:[['SSA — contribution and benefit base','https://www.ssa.gov/oact/cola/cbb.html']], d:'14 Sep 2026', w:'If W-2 already meets the cap, extra SE is mostly Medicare. Do not lower the 35% rule on that guess.'},
+  {c:'Honest cash on this page is $0 until a billed hour; advertised $80–$120 is never the first-screen number', l:'Your notes', s:['Operator Card v2; honestCash() in this file'], d:'14 Sep 2026', w:'If a dollar hits the ledger, that number — not a model — is the base.'}
 ];
 
 /* ---------------- State ---------------- */
 let S = load();
 function load(){
   try{ const s = JSON.parse(localStorage.getItem(KEY)||'{}');
-    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', stack:{fix:{a:true,c:true}, red:{a:true,c:true}}}, s);
-  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', stack:{fix:{a:true,c:true}, red:{a:true,c:true}}}; }
+    return Object.assign({checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}, s);
+  }catch(e){ return {checks:{}, ledger:[], baby:'2026-10-10', active:'fix', tonightPlan:'fix', tonightMin:45, household:'not', choice:'none', stack:{fix:{a:false,c:false}, red:{a:false,c:false}}}; }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 
@@ -1009,6 +1059,22 @@ function weekNum(d){
   return Math.min(13, Math.ceil(dayIndex(now)/7));
 }
 function windowOpen(){ return S.household==='confirmed' || S.household==='notneeded'; }
+function writtenLane(){ return LANES[S.choice] ? S.choice : 'none'; }
+function honestCash(){
+  const lane = writtenLane();
+  const units = {
+    none:{expected:0, caption:'$0. Write a lane, or do not. A listing is not a billed hour.'},
+    lamp:{expected:0, caption:'$0 until a billed hour. Do not multiply $80–$120 by weeks.'},
+    folio:{expected:0, caption:'$0. Folio is parked as cash.'},
+    room:{expected:0, caption:'Expected $0. Possible units $0 / $349 / $698 / $1,047. Do not model 4–8.'},
+    handoff:{expected:0, caption:'Expected $0. Possible units $0 / $1,500 / $3,000. 12h cap.'},
+    storefront:{expected:0, caption:'Expected $0. Possible units $0 / $595 / $1,190. Never with Handoff.'}
+  };
+  const u = units[lane] || units.none;
+  if(!windowOpen()) return {expected:0, caption:'$0. The window is not open. Money waits.'};
+  return u;
+}
+function githubOfLane(lane){ return (LANES[lane]||LANES.none).github; }
 function week1Shipped(){
   const c = S.checks.fix || {};
   return !!(c[1] && c[2] && c[3] && c[4]); /* Stripe, scripts, list, five videos */
@@ -1038,7 +1104,7 @@ function renderThisWeek(){
   }
   if(w===14){
     el.classList.remove('late');
-    el.innerHTML = `<div class="kicker">The decision</div><h2>Ninety days done.</h2><p>Open the ledger. 30% of whatever is there belongs in the tax jar. Point Advent at Lent.</p>`;
+    el.innerHTML = `<div class="kicker">The decision</div><h2>Ninety days done.</h2><p>Open the ledger. 35% of whatever is there belongs in the household reserve. Point Advent at Lent. Folio stays free unless you un-park it.</p>`;
     return;
   }
   if(mv==='b'){
@@ -1056,9 +1122,9 @@ function renderThisWeek(){
         <li>Optional, only if you mark Confirmed or Not needed: M4 twenty-minute sheet. Do not apply.</li>
         <li>Sunday 14 Sep: three minutes, then close Notion. Rest needs no receipt.</li>
       </ol>
-      <div class="act"><span class="sc">What this page is</span>A parallel draft of five paper bets. One Cash Lane is the money source of truth. Folio (Advent) is parked as cash. The Voice Capsule is parked.</div>
+      <div class="act"><span class="sc">What this page is</span>A parallel draft of five paper bets. ${esc(LANES[writtenLane()].sentence)} One Cash Lane is the money source of truth.</div>
       <div class="pay">
-        <div><span class="sc">Honest cash until a billed hour</span><div class="v">$0</div></div>
+        <div><span class="sc">Honest cash</span><div class="v">$0</div></div>
         <div><span class="sc">Reserve rule</span><div class="v">35%</div></div>
         <div><span class="sc">Hours left before the birth</span><div class="v">${h1(hoursLeftBefore())} of ${h1(B.avail.a)}</div></div>
       </div>`;
@@ -1088,8 +1154,8 @@ function renderThisWeek(){
       A week that steals sleep ends the plan for the week. Forty videos and zero sales by 2 Oct → stop Storefront or change the trade.
     </div>
     <div class="pay">
-      <div><span class="sc">Your base</span><div class="v">${money(B.base)}</div></div>
-      <div><span class="sc">Floor</span><div class="v">${money(B.floor)}</div></div>
+      <div><span class="sc">Honest cash</span><div class="v">${money(honestCash().expected)}</div></div>
+      <div><span class="sc">Reserve rule</span><div class="v">35%</div></div>
       <div><span class="sc">Hours left before the birth</span><div class="v">${h1(hoursLeftBefore())} of ${h1(B.avail.a)}</div></div>
     </div>`;
 }
@@ -1155,9 +1221,12 @@ function renderBudget(){
 function renderFacts(B){
   B = B || budget();
   const real = B.avail.a + B.avail.c, nominal = 13*WEEK_HOURS;
+  const H = honestCash();
   $('#f-hours').textContent = `≈ ${Math.round(real)} of ${Math.round(nominal)}`;
-  $('#f-base').textContent = money(B.base);
-  $('#f-floor').textContent = money(B.floor);
+  $('#f-base').textContent = money(H.expected);
+  $('#f-floor').textContent = '35%';
+  const box = $('#honest');
+  if(box) box.innerHTML = `<h3 style="margin-bottom:6px">Honest cash</h3><p>${esc(H.caption)}</p><p class="note" style="margin:0">Ledger received is the only number that may rise. Offer sheets and Advent live beside this file.</p>`;
 }
 $('#bud').addEventListener('change', e=>{
   const cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
@@ -1176,11 +1245,32 @@ function renderHousehold(){
     b.setAttribute('aria-pressed', onb);
   });
 }
+function renderChoice(){
+  const lane = writtenLane();
+  $$('#choice button').forEach(b=>{
+    const onb = b.dataset.lane === lane;
+    b.classList.toggle('on', onb);
+    b.setAttribute('aria-pressed', onb);
+  });
+  const rec = $('#receipt');
+  if(rec) rec.innerHTML = `<b>Receipt.</b> ${esc(LANES[lane].sentence)}`;
+  renderFacts();
+  renderStrip();
+}
 const hh = $('#household');
 if(hh) hh.addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
-  S.household=b.dataset.w; save(); renderHousehold(); renderThisWeek(); renderTonight();
+  S.household=b.dataset.w; save(); renderHousehold(); renderThisWeek(); renderTonight(); renderChoice();
   const again=$(`#household button[data-w="${b.dataset.w}"]`); if(again) again.focus();
+});
+const ch = $('#choice');
+if(ch) ch.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  S.choice=b.dataset.lane;
+  const gh = githubOfLane(S.choice);
+  if(gh){ S.active=gh; S.tonightPlan=gh; }
+  save(); renderChoice(); renderThisWeek(); renderTonight(); renderPlan();
+  const again=$(`#choice button[data-lane="${b.dataset.lane}"]`); if(again) again.focus();
 });
 function renderTonight(){
   renderHousehold();
@@ -1202,6 +1292,14 @@ function renderTonight(){
     $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · window HOLD</small>${esc(hold)}`;
     return;
   }
+  if(writtenLane()==='lamp'){
+    $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · The Lamp</small>${esc(LAMP_TONIGHT[S.tonightMin])}`;
+    return;
+  }
+  if(writtenLane()==='none'){
+    $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · no lane</small>Write a lane at the top, or close the laptop. Five paper bets is not five jobs.`;
+    return;
+  }
   $('#tonight-move').innerHTML = `<small>${S.tonightMin===0?'No minutes':S.tonightMin+' minutes'} · Plan ${p.num}${week1Shipped()||p.id!=='fix'?'':' · catch-up'}</small>${esc(tonightLine(p, S.tonightMin))}`;
 }
 $('#tonight-plan').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; S.tonightPlan=b.dataset.p; save(); renderTonight(); const again=$(`#tonight-plan button[data-p="${b.dataset.p}"]`); if(again) again.focus(); });
@@ -1209,8 +1307,12 @@ $('#tonight-min').addEventListener('click', e=>{ const b=e.target.closest('butto
 
 /* ---------------- Plans ---------------- */
 function renderStrip(){
-  $('#strip').innerHTML = PLANS.map(p=>`<button role="tab" aria-selected="${S.active===p.id}" data-p="${p.id}" class="${S.active===p.id?'on':''}">
-    <div class="num">${p.num}</div><div class="nm">${esc(p.name)}</div><div class="pr">${esc(p.price)}</div><div class="done">${doneCount(p)} / ${p.checks.length} done</div></button>`).join('');
+  const live = githubOfLane(writtenLane());
+  $('#strip').innerHTML = PLANS.map(p=>{
+    const paper = live ? p.id!==live : true;
+    return `<button role="tab" aria-selected="${S.active===p.id}" data-p="${p.id}" class="${S.active===p.id?'on':''}${paper?' paper':''}">
+    <div class="num">${p.num}</div><div class="nm">${esc(p.name)}</div><div class="pr">${esc(p.price)}</div><div class="done">${doneCount(p)} / ${p.checks.length} done</div></button>`;
+  }).join('');
 }
 function renderPlan(){
   const p = planById(S.active); const c = S.checks[p.id]||{}; const done = doneCount(p);
@@ -1220,6 +1322,7 @@ function renderPlan(){
     <div class="sc role"><span class="red">Plan ${p.num}</span> · ${esc(p.role)}</div>
     <h3 class="name">${esc(p.name)}</h3>
     <p class="line">${esc(p.line)}</p>
+    <p class="notion-lock">${esc((NOTION[p.id]||{}).lock || 'Paper bet. Write one lane at the top.')}</p>
     <div class="kpis">
       <div class="kpi"><span class="sc">Price</span><div class="v">${esc(p.price)}<small>${esc(p.priceNote)}</small></div></div>
       <div class="kpi"><span class="sc">90-day cash</span><div class="v">${money(p.cash.base)}<small>floor ${money(p.cash.floor)} · stretch ${money(p.cash.stretch)}</small></div></div>
@@ -1376,7 +1479,7 @@ const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting)
 $$('main section').forEach(s=>io.observe(s));
 
 /* ---------------- Go ---------------- */
-function renderAll(){ renderCounter(); renderMovements(); renderBudget(); renderThisWeek(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); renderChecked(); }
+function renderAll(){ renderCounter(); renderMovements(); renderBudget(); renderThisWeek(); renderTonight(); renderStrip(); renderPlan(); renderCompare(); renderCal(); renderLedger(); renderChecked(); renderChoice(); }
 renderAll();
 })();
 </script>

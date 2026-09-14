@@ -1,16 +1,16 @@
 # Ninety Days — Build. Baby. Build.
 
-**Ninety Days — the decision — v3 — 11 Sep 2026**
+**Ninety Days — the decision — v4 — 14 Sep 2026**
 
-Plain-text twin of [`plans/index.html`](./index.html). **This file is a parallel draft.** Weekly authority is Notion → This week. Money source of truth is the One Cash Lane operator card. External apply and outreach stay HOLD until you type them.
+Plain-text twin of [`plans/index.html`](./index.html). **This file is a parallel draft.** Weekly authority is Notion → This week. Money source of truth is the One Cash Lane operator card. External apply and outreach stay HOLD until you type them. Prior v3 remains in git.
 
 | | |
 | --- | --- |
 | **Purpose** | Decide this week's yes and no without starting a sixth operating system. |
 | **Owner** | Dean |
 | **Status** | Live. Week 2 of 13. Household window last recorded Not confirmed. |
-| **Updated** | 11 Sep 2026 |
-| **What changed** | The first screen no longer tells you to send videos while the window is unconfirmed. 35% reserve is a household rule. Small-seller line is the current calendar year, with a $7,500 clawback. GitHub names map to Notion lanes (see the brief). |
+| **Updated** | 14 Sep 2026 |
+| **What changed** | Write-one-lane receipt. Honest cash is $0 until a billed hour. Notion locks ($595 / $349 / $1,500) demote GitHub draft prices. Advent Week 1 exists as free craft. SSE re-opened: still current calendar year. |
 
 Everything here is an estimate, not a promise. Compliments are not demand. Only the ledger counts.
 
@@ -22,9 +22,9 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 
 **Where you are.** Friday 11 Sep 2026. Day 8 of 90. Week 2 of 13. First Build (until the birth). About 23 optional hours remain before a 10 Oct birth, then 31 Baby days at zero, then about 15.5 hours after. `[calc]` from 4.5 h × Build days.
 
-**The gap.** The window has started. Week 1's job was a Stripe link, three scripts, twenty names, and five videos sent. If those left the phone, you are on plan. If they did not, that is this weekend — not a new plan.
+**The gap.** The window has started and is still **Not confirmed**. A Stripe-and-videos catch-up is not this weekend.
 
-**The call.** Run **I · One-Fix Friday** as the engine. Finish **II · Red Letter — Advent** in September and let 1 Nov launch itself. Do not add the Voice Capsule beside Advent. Do not pitch Workflow Rescue. The Civilian Interview only replaces One-Fix if you would rather talk to veterans than plumbers.
+**The call.** Write **one** Notion lane, or none. Grocery default after five gates: **The Lamp** ($0 until billed). If Lamp is blocked: **The Room** ($349, 0–3). Folio is parked as cash. Voice is parked. Do not run a GitHub “engine + background” stack.
 
 **This week (11–17 Sep).**
 
@@ -33,7 +33,7 @@ Everything here is an estimate, not a promise. Compliments are not demand. Only 
 3. If — and only if — the window is open **and** Storefront is the one written lane: then the old catch-up (Stripe, twenty names, five videos) applies.
 4. Advent / Folio stays parked as cash. The Voice Capsule stays parked.
 
-**What it pays.** Recommended stack (I + II): floor **$350** · base **$1,350** · stretch **$4,000**. Hours in the window ≈ 36. That is about **$37/h** at base, **$111/h** at stretch. `[calc]` $1,350 ÷ 36 h; $4,000 ÷ 36 h. Conversion is a guess; the kill rules cap what finding out costs.
+**What it pays.** Honest cash until a billed hour: **$0**. Lamp does not become $80–$120 × weeks on this page. Room / Handoff / Storefront possible units live on the offer sheets. Conversion is a guess; the kill rules cap what finding out costs.
 
 **What stops it.** Forty videos and zero sales by **2 Oct** → stop One-Fix or change the trade. Family gate: a week that steals sleep or moves load onto your partner ends that plan for the week. The household is the judge, not the ledger.
 
