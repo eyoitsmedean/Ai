@@ -1116,7 +1116,7 @@
   // type size and practice marks stay — DESIGN CHOICE (Charter OQ4): a private
   // journal is not an Advisor transcript, and auto-deleting it on Leave quickly
   // would punish a survivor who saved a verse. "Clear this phone" (journal too)
-  // is a Next Summit, not this control.
+  // is a separate Settings control (clearThisPhone), not this path.
   const SESSION_WIPE_KEYS = ['rla-chat', 'rla-onboarded'];
   const SESSION_WIPE_PREFIXES = ['rla-chat-count-'];
   // The Hotline theme exit() and their 2026-08-20 protect-history utility
@@ -1186,6 +1186,45 @@
     } catch (_) {
       beginAgain({ force: true });
     }
+  }
+
+  function wipePracticeMarks() {
+    try {
+      const doomed = [];
+      for (let i = 0; i < global.localStorage.length; i += 1) {
+        const key = global.localStorage.key(i);
+        if (key && key.startsWith('rla-practice-')) doomed.push(key);
+      }
+      doomed.forEach(removeLsKey);
+    } catch (_) { /* private mode */ }
+    removeLsKey('rla-streak-v2');
+  }
+
+  function clearThisPhone() {
+    const btn = id('clear-phone-btn');
+    if (!btn || btn.dataset.armed !== '1') {
+      if (btn) {
+        btn.dataset.armed = '1';
+        btn.textContent = 'Tap again to erase';
+        global.setTimeout(() => {
+          if (btn.dataset.armed === '1') {
+            btn.dataset.armed = '';
+            btn.textContent = 'Clear this phone';
+          }
+        }, 4000);
+      }
+      return false;
+    }
+    btn.dataset.armed = '';
+    closeSettings();
+    wipeSessionStorage({ wipeJournal: true });
+    wipePracticeMarks();
+    try {
+      global.location.reload();
+    } catch (_) {
+      showOnboarding();
+    }
+    return true;
   }
 
   // Online but the host has no working /api (static GitHub Pages without an
@@ -1912,6 +1951,7 @@
     clearChat,
     beginAgain,
     leaveQuickly,
+    clearThisPhone,
     wipeSessionStorage,
     consumeFreshQuery,
     SESSION_WIPE_KEYS,

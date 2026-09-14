@@ -1,6 +1,8 @@
 # Bot working notes — Red Letter Advisor
 
-**ATELIER 2026-09-14.** Cycle 1 Ask closed with a primary source: The Hotline `exit()` and their protect-history utility (last modified 2026-08-20) replace to `https://www.live-local-weather.com/`. Wikipedia was a guess; removed. Settings wipe rows moved to the top of the sheet. Cache **v21**. Did **not** copy their history-rewriting script (MIT; would intercept PWA navigations).
+**2026-09-14 later.** First-ten pass: onboarding now quotes KJV Matthew 11:28 from the corpus (was unlabeled WEB). Seals name KJV / KJV pack / WEB. Settings **Clear this phone** (two-tap) wipes journal + streak; Leave quickly still does not. Cache **v22**.
+
+**ATELIER 2026-09-14.** Cycle 1 Ask closed with a primary source: The Hotline `exit()` and their protect-history utility (last modified 2026-08-20) replace to `https://www.live-local-weather.com/`. Wikipedia was a guess; removed. Settings wipe rows moved to the top of the sheet. Did **not** copy their history-rewriting script (MIT; would intercept PWA navigations).
 
 # Recovery cycle 2026-09-11
 

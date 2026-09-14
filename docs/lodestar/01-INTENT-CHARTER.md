@@ -53,7 +53,7 @@ A production PWA on iPhone and Android that a stranger can install, ask a real q
 OQ1 KJV → WEB for UK paid release.  
 OQ2 Live-model eval with his key.  
 OQ3 Capacitor later.  
-OQ4 (this cycle) Whether “Leave quickly” should also wipe the private journal — **DESIGN CHOICE** held: chat + onboard + daily count only.
+OQ4 Whether “Leave quickly” should also wipe the private journal — **DESIGN CHOICE** held: no. **Clear this phone** (Settings, two-tap) wipes the journal. Leave quickly does not.
 
 ## Provenance
 **Read:** this run’s transcript via extractors (15 Dean-authored user messages); `CLAUDE.md`; `README.md`; `docs/CANONICAL-BRIEF.md`; `docs/SHIP.md`; `docs/RESEARCH.md`; `docs/research/*`; `RELEASE.md`; `docs/DEVICE-CHECKLIST.md`; product source on `8385505`.  

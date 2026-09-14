@@ -39,7 +39,7 @@ The committed `eval/RESULTS.md` states which path it ran against. Against the re
 cp .env.example .env   # add ANTHROPIC_API_KEY if you want live generation
 npm install
 npm start              # http://localhost:3000
-npm test               # 48 tests: routes, verification, streaming hold-back, church year
+npm test               # 119 tests: routes, verification, streaming, safety pack, wipe contracts
 ```
 
 ```
@@ -52,7 +52,9 @@ PORT=3000
 
 ```bash
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
-npm run check    # syntax-check server + every client module
+npm run check      # syntax-check server + every client module
+npm run helplines  # re-fetch operator pages (BLOCKED ≠ FAIL)
+npm run qa-fresh   # Chrome: /?fresh=1 wipe, welcome fonts, Leave quickly
 ```
 
 ## Layout

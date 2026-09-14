@@ -8,6 +8,7 @@ const crisis = fs.readFileSync(path.join(__dirname, '..', 'public', 'js', 'crisi
 const index = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
 const welcome = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const mobile = fs.readFileSync(path.join(__dirname, '..', 'public', 'js', 'mobile.js'), 'utf8');
+const trust = fs.readFileSync(path.join(__dirname, '..', 'public', 'js', 'trust.js'), 'utf8');
 
 describe('watched-device session wipe', () => {
   it('implements fresh=1, Begin again, and Leave quickly', () => {
@@ -54,5 +55,16 @@ describe('watched-device session wipe', () => {
     assert.match(index, /id="colophon"/);
     assert.match(index, /Fraunces, Literata, Figtree/);
     assert.match(index, /No webfont CDN/);
+  });
+
+  it('onboarding quotes Matthew 11:28 from the KJV corpus, labeled', () => {
+    assert.match(index, /Come unto me, all ye that labour and are heavy laden/);
+    assert.match(index, /Matthew 11:28 · KJV/);
+    assert.doesNotMatch(index, /heavily burdened/);
+    assert.match(app, /function clearThisPhone/);
+    assert.match(index, /Clear this phone/);
+    assert.match(trust, /Verified · KJV pack/);
+    assert.match(trust, /Verified · KJV/);
+    assert.match(trust, /Verified · WEB/);
   });
 });

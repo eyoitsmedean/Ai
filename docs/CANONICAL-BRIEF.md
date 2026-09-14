@@ -117,7 +117,7 @@ Notifications (CI conclusions, subagent-finished) were skipped. They are not use
 - After a crisis/danger/assault modal, if `/api/chat` fails, the page shows **notice + the matching filled letter**, never a WEB theme pack.
 - “ok thanks” after a disclosure does not re-open the modal (same as the server greeting doorway).
 - About lists 988 (US), 988.ca (Canada), DV, RAINN.
-- Cache `?v=21` and `rla-v21-chapel` together; SW precaches `data/safety-pack.json`.
+- Cache `?v=21` and `rla-v22-chapel` together; SW precaches `data/safety-pack.json`.
 - RELEASE.md does not mark live-model or device rows verified unless they ran.
 
 ---

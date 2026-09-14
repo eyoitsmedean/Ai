@@ -244,7 +244,13 @@
       ) || (fromTrusted ? { verified: false } : verifyCitation(verse, quote));
       const seal = document.createElement('div');
       seal.className = result.verified ? 'trust-seal verified' : 'trust-seal caution';
-      seal.textContent = result.verified ? 'Verified red letter' : 'Needs human check';
+      seal.textContent = result.verified
+        ? (report.source === 'pack'
+          ? 'Verified · KJV pack'
+          : report.source === 'server'
+            ? 'Verified · KJV'
+            : 'Verified · WEB')
+        : 'Needs human check';
       seal.title = result.verified
         ? `This citation and its wording match ${indexName}`
         : `This citation was not confirmed against ${indexName} — read carefully`;

@@ -43,7 +43,7 @@ Pages serves `public/` from `main` at `https://<user>.github.io/Ai/`. It has no 
 
 ## Cache versioning
 
-Every asset URL carries `?v=N` and the service worker cache is `rla-vN-chapel`. Bump both together (`sed -i 's/?v=21/?v=22/g' public/index.html public/sw.js` and the `CACHE` constant). Currently **v21**. Installed clients pick the new worker up within the hour (`reg.update()` runs hourly) or on next launch. After changing a safety letter or notice, run `npm run safety-pack` and commit `public/data/safety-pack.json`.
+Every asset URL carries `?v=N` and the service worker cache is `rla-vN-chapel`. Bump both together (`sed -i 's/?v=22/?v=23/g' public/index.html public/sw.js` and the `CACHE` constant). Currently **v22**. Installed clients pick the new worker up within the hour (`reg.update()` runs hourly) or on next launch. After changing a safety letter or notice, run `npm run safety-pack` and commit `public/data/safety-pack.json`.
 
 ## iOS notes (verified against WebKit sources)
 

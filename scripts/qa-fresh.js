@@ -60,6 +60,8 @@ async function main() {
     assert(state.journal && state.journal.includes('keep-me'), 'fresh=1 wiped the journal');
     assert(!state.url.includes('fresh=1'), 'fresh query was not consumed');
     assert(state.onboardVisible, 'fresh=1 should open onboarding');
+    const quote = await page.$eval('.ob-quote', (el) => el.textContent);
+    assert(/Come unto me, all ye that labour/.test(quote), 'onboarding is not the KJV of Matthew 11:28');
   });
 
   await check('welcome uses self-hosted type, not Google Fonts CDN', async () => {
