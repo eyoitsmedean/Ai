@@ -78,7 +78,13 @@ async function main() {
     assert(res.ok, 'chat status ' + res.status);
     const body = await res.text();
     assert(body.includes('data:'), 'not SSE');
-    assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
+    const letter = body
+      .split('\n')
+      .filter((line) => line.startsWith('data: ') && line !== 'data: [DONE]')
+      .map((line) => { try { return JSON.parse(line.slice(6)).text || ''; } catch { return ''; } })
+      .join('');
+    assert(/Luke 15:4/.test(letter), 'shame should be met with the lost sheep, not a form letter');
+    assert(!letter.includes('{{'), 'placeholders must be filled');
   });
 
   await check('welcome landing', async () => {

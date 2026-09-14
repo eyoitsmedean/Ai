@@ -1,0 +1,48 @@
+# Operator handoff — 11 September 2026 evening
+
+For Dean. Three minutes. Then close the laptop if you want.
+
+## What this is for
+
+A paper advisor that will not pretend to be a person. Ask one thing. Hear one saying. Read at most four lines of stored meaning. See what the bot cannot do. If the ask is a crisis, it names 988 (and 911 if someone is physically hurt now) and stops.
+
+## What is done
+
+1. This Cursor thread’s first ten prompts are recovered in `studio/CANONICAL-BRIEF.md`. Prompts 9 and 10 are the same sentence. LODESTAR is #7.
+2. Crisis path **stops counsel** (folio, `/api/chat`, one-screen, eval).
+3. One-screen lives at `public/one-screen.html` and `/ask`.
+4. Research on five adjacent questions is in `studio/research/`.
+5. Notion child under the existing one-screen page (no new hub): https://app.notion.com/p/3d8b7d53f96981e49951d3d8ffcc2160
+
+## What you should do next (only if you want)
+
+1. Cold start: `npm install` (once) · `npm start` · open `http://127.0.0.1:3000/ask`. Do not open the HTML file from disk — scripts need the server (or any static host of `public/`). Ask something true. Read the cannot-do block.
+2. Record — or refuse to record — a translation for any future public URL. Until you write it down, this stays KJV on paper.
+3. Do **not** enable GitHub Pages tonight. WATCH still holds.
+
+## Where the finished things are
+
+| Thing | Place |
+| --- | --- |
+| Brief + recovery table | `studio/CANONICAL-BRIEF.md` |
+| LODESTAR Cycle 1 | `studio/lodestar/INDEX.md` (Charter, dossiers, Ship) |
+| One-screen | `npm start` → http://127.0.0.1:3000/ask — not `file://` |
+| Folio | `/` — five rooms unchanged |
+| Evidence | `studio/research/SOURCE-REGISTER.md` · `eval/RESULTS.md` |
+| Decisions | `CLAUDE.md` STATE · this file |
+| Unresolved | Translation gate; room-vs-chat-first confirmation; quality-reference apps |
+
+## How to use the one-screen
+
+The page opens on **today’s saying for this office** — Morning and Afternoon keep the affirmation; Vespers and Compline set the day’s word, same hours as the folio. Type in **Ask** to set another line. Read **The words** (crimson, KJV labeled) and the seal. **Hear** speaks only the saying (no autoplay). **Rest** is 60 seconds. **Print this saying** is paper. A crisis line hides Words and Meaning; 988 and 911 stand.
+
+## What remains unresolved
+
+- Which translation you will record before a URL.
+- Whether you want the Notion crisis *sentence* instead of the letterpress notice.
+- Whether “Red Letter, Advisor as a room” still stands.
+- Household window: still **Not confirmed** on This week.
+
+## Maintain
+
+Do not add a sixth hub. Do not unpark AEVUM from this repo. Do not paste NIV/ESV into a public advisor. After engine edits: `npm run curated` then `npm test` and `npm run eval`.

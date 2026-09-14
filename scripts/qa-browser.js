@@ -42,6 +42,7 @@ async function main() {
     const copy = await page.evaluate(() => document.body.innerText);
     assert(/Red Letter/i.test(copy), 'missing brand');
     assert(/988/.test(copy), 'missing 988');
+    assert(/911/.test(copy), 'missing 911');
     const href = await page.$eval('a.btn', (a) => a.getAttribute('href'));
     assert(href === '/' || href.endsWith('/'), 'CTA should open the folio');
   });
@@ -124,6 +125,75 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    const watch = await page.evaluate(() => {
+      const strip = document.querySelector('.watch-strip');
+      return {
+        on: !!strip && getComputedStyle(strip).display !== 'none',
+        href: strip && strip.querySelector('a') && strip.querySelector('a').getAttribute('href'),
+        text: strip ? strip.innerText : '',
+        nineOneOne: /911/.test(document.body.innerText),
+      };
+    });
+    assert(watch.on, 'WATCH strip missing on Today');
+    assert(watch.href === '/ask', 'WATCH strip should open /ask, got ' + watch.href);
+    assert(/paper only/i.test(watch.text), 'WATCH strip copy missing: ' + watch.text);
+    assert(watch.nineOneOne, 'folio Today missing 911');
+  });
+
+  await check('Advisor hears the need without a model', async () => {
+    await page.evaluate(() => switchTab('advisor'));
+    const rooms = await page.evaluate(() => [...document.querySelectorAll('#room-chips .chip.room')].map((b) => b.textContent.trim()));
+    assert(rooms.includes('Shame') && rooms.includes('Grief'), 'room chips missing: ' + rooms.join(', '));
+    await page.type('#chat-input', 'I feel so much shame');
+    await page.click('#send-btn');
+    await page.waitForFunction(
+      () => document.querySelectorAll('.msg-ai .scripture-block').length >= 2,
+      { timeout: 10000 }
+    );
+    const letter = await page.evaluate(() => {
+      const wrap = [...document.querySelectorAll('.msg-ai')].pop();
+      return {
+        text: wrap.innerText,
+        cites: [...wrap.querySelectorAll('.scripture-verse')].map((e) => e.textContent.trim()),
+        colophon: !!wrap.querySelector('.letter-colophon'),
+      };
+    });
+    assert(letter.cites.some((c) => /Luke 15:4/.test(c)), 'shame should meet the lost sheep, got ' + letter.cites.join(', '));
+    assert(!/\{\{/.test(letter.text), 'placeholder leaked into the page');
+    assert(letter.colophon, 'letter should say it was set without a model');
+    await page.waitForFunction(
+      () => [...document.querySelectorAll('.msg-ai')].pop().querySelectorAll('.trust-seal.ok').length >= 2,
+      { timeout: 8000 }
+    );
+  });
+
+  await check('second letter does not repeat the first', async () => {
+    await page.type('#chat-input', 'I still feel ashamed');
+    await page.click('#send-btn');
+    await page.waitForFunction(
+      () => document.querySelectorAll('.msg-ai').length >= 2 &&
+        [...document.querySelectorAll('.msg-ai')].pop().querySelector('.msg-save-btn'),
+      { timeout: 10000 }
+    );
+    const cites = await page.evaluate(() =>
+      [...document.querySelectorAll('.msg-ai')].map((w) =>
+        [...w.querySelectorAll('.scripture-verse')].map((e) => e.textContent.trim()))
+    );
+    const first = new Set(cites[0]);
+    assert(cites[1].length >= 1, 'second letter has no passage');
+    assert(cites[1].every((c) => !first.has(c)), 'second letter repeated ' + cites[1].join(', '));
+  });
+
+  await check('the mark survives a reload', async () => {
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.evaluate(() => switchTab('advisor'));
+    await page.waitForSelector('.msg-ai .msg-save-btn', { timeout: 6000 });
+    const state = await page.evaluate(() => ({
+      letters: document.querySelectorAll('.msg-ai').length,
+      marks: document.querySelectorAll('.msg-ai .letter-colophon').length,
+    }));
+    assert(state.letters === 2, 'expected two restored letters, got ' + state.letters);
+    assert(state.marks === 2, 'restored letters lost their mark: ' + state.marks);
   });
 
   await check('no page errors', async () => {

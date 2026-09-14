@@ -1,7 +1,7 @@
 {
   "name": "red-letter-advisor",
   "version": "1.0.0",
-  "description": "A chatbot that responds with guidance from the words of Jesus Christ as recorded in the four Gospels",
+  "description": "Red Letter — a quiet reading room for the words Jesus actually spoke (KJV), with an Advisor that writes from them without a model",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,7 +10,12 @@
     "spoken": "node scripts/build-spoken.js",
     "icons": "python3 scripts/make-icons.py",
     "smoke": "node scripts/smoke.js",
-    "qa": "node scripts/qa-browser.js"
+    "qa": "node scripts/qa-browser.js",
+    "curated": "node scripts/build-curated.js",
+    "curated:check": "node scripts/build-curated.js --check",
+    "qa:static": "node scripts/qa-static.js",
+    "eval": "node scripts/eval-advisor.js",
+    "eval:check": "node scripts/eval-advisor.js --check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

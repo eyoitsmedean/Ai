@@ -5,15 +5,16 @@ const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
+const { resolveTheme } = require('./lib/themes');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const { composeLetter } = require('./lib/letter');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
-const THEME_SET = new Set(themeNames());
 
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -98,7 +99,8 @@ STRICT RULES:
 • Speak with warmth, without judgment, accessible to any background — never assume the reader's level of faith.
 • The scripture passages carry the weight. Keep your own framing minimal.
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
-• Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
+• Never claim to be a person, a pastor, a clinician, or emergency care.
+• If the writer is in danger or thinking of ending their life, do not write empathy, placeholders, or any counsel. The harness will send the crisis notice instead.`;
 
 const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
@@ -208,6 +210,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     anthropic: Boolean(client),
+    advisor: client ? 'model' : 'letterpress',
     themes: themeNames().length,
   });
 });
@@ -265,9 +268,10 @@ app.get('/api/library', (req, res) => {
 });
 
 app.post('/api/encouragement', async (req, res) => {
-  const theme = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
-  if (!theme || theme.length > 80) return res.status(400).json({ error: 'theme required.' });
-  if (!THEME_SET.has(theme)) return res.status(400).json({ error: 'Unknown theme.' });
+  const asked = typeof req.body?.theme === 'string' ? req.body.theme.trim() : '';
+  if (!asked || asked.length > 80) return res.status(400).json({ error: 'theme required.' });
+  const theme = resolveTheme(asked);
+  if (!theme) return res.status(400).json({ error: 'Unknown theme.' });
   if (!rateLimit(`enc:${clientKey(req)}`, 20, 60 * 60 * 1000)) {
     return res.status(429).json({ error: 'Please return later for more encouragement.' });
   }
@@ -293,20 +297,6 @@ app.post('/api/encouragement', async (req, res) => {
     res.json(curated);
   }
 });
-
-const FALLBACK_LETTER = [
-  'I am here with you, and I will not rush past what you just named.',
-  '',
-  '**John 14:27**',
-  '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-  'These words meet a troubled heart without asking it to perform calm first.',
-  '',
-  '**Matthew 11:28**',
-  '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-  'The invitation is for the exhausted — including this moment.',
-  '',
-  'Sit with these two sentences. You do not have to solve the whole day.',
-].join('\n');
 
 app.post('/api/chat', async (req, res) => {
   const messages = req.body?.messages;
@@ -347,13 +337,23 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
-  const finish = (body) => {
+  const crisis = looksLikeCrisis(last.content) || messages.some((m) => m && m.role === 'user' && looksLikeCrisis(m.content));
+  const finish = (body, source) => {
     const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    write({ meta: { source } });
+    streamText(verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
+  const letterpress = () => finish(composeLetter(last.content, { history: messages }).text, 'letterpress');
+
+  if (crisis) {
+    write({ meta: { source: 'crisis' } });
+    streamText(CRISIS_NOTICE);
+    res.write('data: [DONE]\n\n');
+    res.end();
+    return;
+  }
 
   req.on('close', () => {
     if (!res.writableEnded) {
@@ -362,7 +362,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return letterpress();
   }
 
   try {
@@ -390,7 +390,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     await stream.finalMessage();
-    finish(raw);
+    finish(raw, 'model');
   } catch (err) {
     console.error('Chat error:', err.message);
     if (!res.headersSent) {
@@ -398,7 +398,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    letterpress();
   }
 });
 
@@ -424,6 +424,11 @@ app.post('/api/waitlist', (req, res) => {
 app.get('/welcome', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/ask', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'one-screen.html'));
 });
 
 app.get('*', (req, res, next) => {

@@ -1,5 +1,7 @@
 # Launch — what the next 90 days actually are
 
+> **WATCH · archived 14 Sep 2026 (LODESTAR Cycle 1).** Do not treat this file as a current ship plan. Household law: no publish, no launch, no store-submit. The product has **five** rooms (Today · Seek · Sit · Advisor · Journal), not four. History only — do not delete.
+
 Research (August 2026): Hallow made ~$40M in 2025 on **one named season** (Pray40 / Lent) plus an **annual** subscription. Ash Wednesday 2026: 263K downloads in a day. Bible Chat wins **downloads** with TikTok “talk to Scripture,” then burns trust with $4.99/week. YouVersion owns reading, is free, and will not leave a red-letter hole for you if you stay a Bible reader.
 
 **Nobody owns “live daily life guided only by the red letters” as a premium brand.** That is the farm.
