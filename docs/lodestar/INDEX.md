@@ -10,3 +10,5 @@
 Project law still: `docs/CANONICAL-BRIEF.md`, `docs/RESEARCH-AND-GATE.md`, `docs/FUTURE-AGENTS.md`.
 
 Homes: **project** = `lib/`, `public/`, `server.js`. **knowledge** = this folder.
+
+ATELIER (2026-09-14): first-use door is `/desk`. Note: `docs/atelier/DESK.md`. Do not start a Cycle 2 Charter.

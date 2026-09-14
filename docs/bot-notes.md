@@ -1,3 +1,7 @@
+# Red Letter — Atelier desk — 2026-09-14 evening
+
+First-use door: `GET /desk` (Hear → Record → Ask). Gate draft persists in `localStorage` (`rla-gate-record`). SW v15 bypasses /desk /gate /hear /ask. Folio crisis letter unchanged.
+
 # Red Letter — LODESTAR Cycle 1 — 2026-09-14
 
 Charter v1 in `docs/lodestar/`. Built: `lib/crisis.js`, `npm run eval-ask`, `/gate`, `/hear`, `/ask` stillness. WATCH. Human gate still open.

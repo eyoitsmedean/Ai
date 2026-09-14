@@ -8,7 +8,7 @@
 
 **Not the product:** a store app, a five-room launch, a cash folio, a pastor, a church, a confession booth, or a model that pretends to be Jesus.
 
-Version: 2026-09-11 night · this conversation only (`bc-01a079a6-24e8-7a9d-a0d6-7339bea028bf`) · branch `cursor/trust-harness-rebuild-28bf` · [PR 29](https://github.com/eyoitsmedean/Ai/pull/29)
+Version: 2026-09-14 evening · this conversation only (`bc-01a079a6-24e8-7a9d-a0d6-7339bea028bf`) · branch `cursor/trust-harness-rebuild-28bf` · [PR 29](https://github.com/eyoitsmedean/Ai/pull/29)
 
 ---
 
@@ -29,7 +29,7 @@ Until that URL is authorized, the five-room folio remains a paper atelier. The o
 
 ## 2. Recovery of the earliest user prompts
 
-This conversation has **six** user-authored prompts as of 2026-09-14 (LODESTAR is #6). Prompts 7–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata.
+This conversation has **seven** user-authored prompts as of 2026-09-14 (LODESTAR is #6; ATELIER is #7). Prompts 8–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata.
 
 Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-tens. Those are **not** this brief. Do not overwrite them.
 
@@ -40,6 +40,8 @@ Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-
 | 3 | ~2026-09-08 01:38 | “Show me your best finished product” | Present the product as it actually runs, not notes. | Folio at `/` is the finished paper room. `/ask` is the finished one-screen. | Later: folio stays paper; `/ask` is what a public URL would be. |
 | 4 | ~2026-09-11 03:26 | “Massive sprint time get to it pick 5 priorities and push for 45 minutes to an hour” | Choose five priorities and ship them. | Shipped: Need → Sit; themed no-key letters; Amen → blessing; aligned crisis matchers; comfort-cite fix. | Still valid as completed work. Do not reopen unless a defect appears. |
 | 5 | ~2026-09-11 21:30 | “UNIVERSAL PROJECT RECOVERY, DEEP RESEARCH, AND EXECUTION COMMISSION… recover the first ten user-authored prompts… Never invent source wording… Choose and complete the three most valuable flagship deliverables…” | Recover the brief, research core + five adjacent topics, produce three complete flagships, review, organize for reuse. Depth over speed. | This document, `/ask`, and `docs/RESEARCH-AND-GATE.md` are those three flagships. | Governs this turn. Does not reverse the WATCH / no-launch law. |
+| 6 | ~2026-09-14 04:02 | “LODESTAR… Intent Charter… five summits… Protect truth + original purpose.” | Charter, align, deepen, summit, prove, ship. Do not rebuild the Charter later; amend it. | Cycle 1: `docs/lodestar/`, `lib/crisis.js`, `eval-ask`, `/gate`, `/hear`, `/ask` stillness. | Folio-after-988 still Dean’s. WATCH stands. |
+| 7 | ~2026-09-14 20:25 | “ATELIER — Useful work, faithfully finished… Recover the user's purpose… A small edit or question deserves direct execution… Create extra projects only when commissioned.” | Recover purpose, build the requested artifact, verify, leave continuity. No new knowledge-base ritual. | Built `GET /desk` (Hear → Record → Ask). Gate draft stays on this device (`rla-gate-record`). | Does not lift WATCH. Folio stays paper. |
 
 **Explicit later amendments (authoritative, opened 2026-09-11 from Dean’s Notion):**
 

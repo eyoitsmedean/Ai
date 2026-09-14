@@ -165,6 +165,21 @@ async function main() {
     assert(afterCrisis.wordsHidden && afterCrisis.implyHidden, 'crisis still showing counsel');
   });
 
+  await check('desk then gate draft survives reload', async () => {
+    await page.goto(BASE + '/desk', { waitUntil: 'networkidle0' });
+    const desk = await page.evaluate(() => document.body.innerText);
+    assert(/household desk/i.test(desk), 'desk missing watch copy');
+    assert(/1 · Hear/.test(desk) && /2 · Record/.test(desk) && /3 · Ask/.test(desk), 'desk steps missing');
+    await page.click('a.step[href="/gate"]');
+    await page.waitForSelector('#record', { timeout: 6000 });
+    await page.evaluate(() => { localStorage.removeItem('rla-gate-record'); });
+    await page.type('#record', 'I record WEBU. Not a launch. Idaho.');
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForSelector('#record');
+    const kept = await page.$eval('#record', (el) => el.value);
+    assert(/WEBU/.test(kept), 'gate draft did not stay on this device');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

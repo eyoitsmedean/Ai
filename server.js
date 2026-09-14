@@ -317,6 +317,11 @@ function createApp(options = {}) {
     res.sendFile(path.join(__dirname, 'public', 'hear.html'));
   });
 
+  app.get('/desk', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'public', 'desk.html'));
+  });
+
   app.get('/welcome', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.sendFile(path.join(__dirname, 'index.html'));

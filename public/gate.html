@@ -39,7 +39,15 @@
     </ol>
     <textarea id="record" placeholder="I record ________ (WEB / WEBU / KJV-US-only / BSB-alternate) as the text Red Letter may quote on a public URL. I have not authorized a launch, a store submit, or GitHub Pages as a product. Idaho. Date: ________"></textarea>
     <p class="note">This box stays on this device. It is not sent anywhere. After you record, a later worker may rebuild <code>data/spoken-gospels.json</code>. Until then the pages must keep saying KJV.</p>
-    <footer><a href="/hear">Hear</a> · <a href="/ask">Ask</a> · <a href="/">Folio</a></footer>
+    <footer><a href="/desk">Desk</a> · <a href="/hear">Hear</a> · <a href="/ask">Ask</a></footer>
   </main>
+  <script>
+    const KEY = 'rla-gate-record';
+    const box = document.getElementById('record');
+    try { box.value = localStorage.getItem(KEY) || ''; } catch (_) {}
+    box.addEventListener('input', () => {
+      try { localStorage.setItem(KEY, box.value); } catch (_) {}
+    });
+  </script>
 </body>
 </html>

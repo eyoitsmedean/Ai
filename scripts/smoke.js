@@ -113,6 +113,12 @@ async function main() {
     assert(!crisis.json.implication, 'crisis must not keep counseling');
   });
 
+  await check('household desk', async () => {
+    const desk = await req('/desk');
+    assert(desk.res.ok && /noindex/.test(desk.text), 'desk missing');
+    assert(/href="\/hear"/.test(desk.text) && /href="\/gate"/.test(desk.text) && /href="\/ask"/.test(desk.text), 'desk steps missing');
+  });
+
   await check('gate and hear desks', async () => {
     const gate = await req('/gate');
     assert(gate.res.ok && /noindex/.test(gate.text), 'gate missing');

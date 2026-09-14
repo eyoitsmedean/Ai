@@ -10,7 +10,7 @@ Authoritative instructions, in order:
 3. `docs/RESEARCH-AND-GATE.md` — sources, five adjacent topics, human-gate checklist.
 4. This file — how to resume.
 
-This conversation’s first user prompts are **five**, not ten. They are quoted in the brief. Do not invent a longer history. Do not treat another chat’s first-ten (Grok iOS, PR 18, masterpiece-protocol) as this one.
+This conversation’s user prompts are **seven** as of 2026-09-14 (LODESTAR is #6; ATELIER is #7). Prompts beyond that are only what the transcript contains. Do not invent a longer history. Do not treat another chat’s first-ten as this one.
 
 ## What is evidence, interpretation, or approved direction
 
@@ -32,4 +32,4 @@ A short dated note at the top of `docs/bot-notes.md`. Link the commit. Say what 
 
 ## Current next executable step
 
-Wait for Dean to record a translation, or — if he asks — rebuild the spoken corpus from WEB/BSB **after** that recording. Do not lift WATCH. Do not store-submit.
+Open `/desk` after `npm start`. Hear, then record on `/gate`. Wait for Dean’s recording before any corpus rebuild. Folio-after-988 is still his call. Do not lift WATCH.
