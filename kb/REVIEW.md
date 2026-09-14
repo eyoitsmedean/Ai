@@ -35,7 +35,7 @@ Cold start: `kb/SHIP.md` then `/ask`. Guest page is usable without the folio. Co
 Every new room carries a bearing in-footer. `/sit` is Director’s Cut serving C5 (sit before ask) — not a new Charter goal.
 
 ## Integrity
-No YouTube cited. `npm test` was run after install (54/54) and again after this repair. Browser QA is a later step on a this-branch server — do not treat this file as a browser pass.
+No YouTube cited. `npm test` after install: 54/54. After Need/Sit repair: **56/56**. Browser QA on `http://127.0.0.1:3010` after first push: Ask (fear / Paul / unmatched), Need, Sit timer, Guest, Colophon gate, Welcome — all behaved. Recording saved. Not a real-guest test.
 
 ## Defect register
 

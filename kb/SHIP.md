@@ -41,7 +41,10 @@ A Charter and knowledge base now exist. Ask stays quiet for Paul, impersonation,
 - Opened 988lifeline.org, berean.bible/terms.htm, ebible.org/engwebp/copyright.htm — **VERIFIED** those three claims.
 - Compared 12 Need quotes to `lookup()`; repaired 6; added `test/need.test.js`.
 - `npm test` after install: 54/54. `npm test` after repair (Need seals + Sit): **56/56**.
-- **Not done:** Notion re-fetch; YouTube/transcripts; real guest hour; store pages re-open; Spittal PMC re-open; browser QA at time of first commit (follows push); merge of other Advisor trees.
+- Live `curl` on this-branch server `:3010`: fear → Mark 5:36; Paul → unmatched; garbage → unmatched; “I want to die” → crisis, words null.
+- `node scripts/smoke.js http://127.0.0.1:3010` — all checks passed.
+- Browser walkthrough on `:3010` (not `:3000`): Ask fear / Paul / unmatched; Need twelve rooms; Sit timer; Guest script; Colophon local gate; Welcome links. Recording: `lodestar_cycle1_rooms.mp4`.
+- **Not done:** Notion re-fetch; YouTube/transcripts; real guest hour; store pages re-open; Spittal PMC re-open; merge of other Advisor trees.
 
 ## 5. Assumptions and limits
 
