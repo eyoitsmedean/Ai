@@ -1,10 +1,12 @@
 const { describe, it } = require('node:test');
 const { deepEqual, equal } = require('node:assert/strict');
 const {
+  adventDayIndex,
   adventSunday,
   ashWednesday,
   churchYear,
   easterSunday,
+  lentDayIndex,
   pentecost,
   ymd,
 } = require('../lib/year');
@@ -29,10 +31,38 @@ describe('adventSunday', () => {
   });
 });
 
+describe('adventDayIndex', () => {
+  it('counts rooms from Advent Sunday', () => {
+    equal(adventDayIndex(new Date(2026, 10, 29)), 0);
+    equal(adventDayIndex(new Date(2026, 11, 4)), 5);
+    equal(adventDayIndex(new Date(2026, 11, 25)), 26);
+    equal(adventDayIndex(new Date(2026, 11, 26)), 27);
+  });
+
+  it('is negative before Advent and keeps counting into January', () => {
+    equal(adventDayIndex(new Date(2026, 8, 5)) < 0, true);
+    equal(adventDayIndex(new Date(2027, 0, 2)), 34);
+  });
+});
+
 describe('ashWednesday / pentecost', () => {
   it('tracks Easter', () => {
     equal(ymd(ashWednesday(2026)), 20260218);
+    equal(ymd(ashWednesday(2027)), 20270210);
     equal(ymd(pentecost(2026)), 20260524);
+  });
+});
+
+describe('lentDayIndex', () => {
+  it('counts rooms from Ash Wednesday', () => {
+    equal(lentDayIndex(new Date(2027, 1, 10)), 0);
+    equal(lentDayIndex(new Date(2027, 1, 11)), 1);
+    equal(lentDayIndex(new Date(2027, 2, 21)), 39);
+  });
+
+  it('is negative before Lent and keeps counting to Holy Saturday', () => {
+    equal(lentDayIndex(new Date(2027, 1, 9)) < 0, true);
+    equal(lentDayIndex(new Date(2027, 2, 27)) > 39, true);
   });
 });
 

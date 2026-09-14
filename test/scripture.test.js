@@ -227,3 +227,34 @@ describe('spoken corpus', () => {
     assert.ok(hit.sayings.some((s) => /fear not|be not afraid|troubled/i.test(s.text)));
   });
 });
+
+describe('the verifier never prints words he did not say', () => {
+  const { parseRef, verifyAndSubstitute } = require('../lib/scripture');
+
+  it('does not read an epistle as the Gospel of John', () => {
+    assert.equal(parseRef('1 John 4:18'), null);
+    assert.equal(parseRef('2 John 1:6'), null);
+    assert.equal(parseRef('3 John 1:4'), null);
+    assert.equal(parseRef('John 4:18').book, 'John');
+  });
+
+  it('drops epistle, Psalm, and narrative citations from an advisor reply', () => {
+    const reply = [
+      'Fear is real.',
+      '**1 John 4:18**',
+      '“There is no fear in love; but perfect love casteth out fear.”',
+      '**Psalm 23:1**',
+      '“The LORD is my shepherd; I shall not want.”',
+      '**Matthew 1:1**',
+      '“The book of the generation of Jesus Christ.”',
+      '**John 14:27**',
+      '“Peace I leave with you.”',
+      'He gives it.',
+    ].join('\n');
+    const out = verifyAndSubstitute(reply);
+    assert.doesNotMatch(out, /1 John|Psalm|five husbands|generation of Jesus|shepherd; I shall/);
+    assert.match(out, /\*\*John 14:27\*\*\n“Peace I leave with you, my peace I give unto you/);
+    assert.match(out, /Fear is real\./);
+    assert.match(out, /He gives it\./);
+  });
+});

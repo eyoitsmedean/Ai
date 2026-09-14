@@ -110,8 +110,41 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
   });
 
-  await check('Today is a folio, not a dashboard', async () => {
+  await check('first Amen offers a blessing, not an install toast', async () => {
     await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 4000 });
+    const overlap = await page.evaluate(() => {
+      const amen = document.getElementById('amen');
+      const visible = [...document.querySelectorAll('#blessing-sheet button, #blessing-sheet .cta')]
+        .filter((el) => el.offsetParent !== null)
+        .map((el) => el.textContent.trim());
+      return {
+        amenOn: amen.classList.contains('on'),
+        amenOpacity: Number(getComputedStyle(amen).opacity),
+        copy: document.getElementById('blessing-sheet').innerText,
+        market: document.querySelectorAll('#blessing-list .blessing-item').length,
+        firstHidden: document.getElementById('blessing-actions-first').hidden,
+        cardHidden: document.getElementById('blessing-actions-card').hidden,
+        visible,
+      };
+    });
+    assert(!overlap.amenOn, 'Amen overlay still on when blessing sheet is open');
+    assert(overlap.amenOpacity < 0.05, 'Amen still covering the blessing, opacity=' + overlap.amenOpacity);
+    const copy = overlap.copy;
+    assert(/Send a blessing/i.test(copy), 'blessing sheet missing');
+    assert(overlap.visible.some((t) => /Copy the blessing/i.test(t)), 'first blessing must copy the saying, not share a card');
+    assert(!overlap.visible.some((t) => /Send the card|Dawn|Night/i.test(t)), 'first blessing must not offer a product card, got ' + overlap.visible.join(' | '));
+    assert(/Matthew|Mark|Luke|John/i.test(copy), 'blessing must carry the verse they sat with');
+    assert(/No URL/i.test(copy), 'first blessing must forbid a URL');
+    assert(overlap.market === 0, 'first blessing must not be a 24-verse market, got ' + overlap.market);
+    assert(!overlap.firstHidden && overlap.cardHidden, 'first blessing must hide Dawn/Night cards');
+    assert(!/github\.io|http/i.test(copy), 'first blessing sheet must not carry a URL');
+    await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
+    const still = await page.$eval('#blessing-sheet', (el) => el.classList.contains('on'));
+    assert(!still, 'Close should dismiss the blessing');
+  });
+
+  await check('Today is a folio, not a dashboard', async () => {
     const today = await page.evaluate(() => ({
       season: document.documentElement.getAttribute('data-season'),
       seven: document.querySelectorAll('.seven-day').length,
@@ -124,6 +157,38 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+  });
+
+  await check('crisis modal opens before a 2 a.m. sentence is sent', async () => {
+    const outcome = await page.evaluate(async () => {
+      const input = document.getElementById('chat-input');
+      const modal = document.getElementById('crisis-modal');
+      input.value = "I don't want to be here anymore";
+      const sending = sendMsg();
+      await new Promise((r) => setTimeout(r, 50));
+      const shown = modal.classList.contains('on');
+      const copy = modal.innerHTML;
+      document.getElementById('crisis-close').click();
+      await sending;
+      return { shown, has988: /988/.test(copy), hasHelpline: /findahelpline/.test(copy), stillOpen: modal.classList.contains('on') };
+    });
+    assert(outcome.shown, 'crisis modal did not open');
+    assert(outcome.has988 && outcome.hasHelpline, 'modal must name 988 and findahelpline.com');
+    assert(!outcome.stillOpen, 'Close should dismiss the modal');
+    const benign = await page.evaluate(() => window.RLA_looksLikeCrisis('Herod wanted to kill him as a baby, why'));
+    assert(benign === false, 'Bible history must not trip the modal');
+  });
+
+  await check('Lent path preview opens Stay with me', async () => {
+    await page.goto(BASE + '/?path=lent&day=1', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.reload({ waitUntil: 'networkidle0' });
+    const ribbon = await page.$eval('#week-ribbon', (el) => el.innerText);
+    assert(/Stay with me/i.test(ribbon), 'Lent path name missing');
+    assert(/Room 1 of 40/i.test(ribbon), 'expected 40 rooms, got: ' + ribbon.replace(/\s+/g, ' ').slice(0, 80));
+    assert(/Ashes/i.test(ribbon), 'week names missing');
+    const days = await page.$$eval('#week-ribbon .seven-day', (els) => els.length);
+    assert(days === 40, 'expected 40 day cells, got ' + days);
   });
 
   await check('no page errors', async () => {
