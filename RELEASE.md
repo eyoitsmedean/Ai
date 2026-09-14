@@ -18,7 +18,7 @@ Last updated 2026-09-14 on branch `cursor/lodestar-cycle-one-6ab5`.
 
 | Check | Command | Result | Rung |
 | --- | --- | --- | --- |
-| Unit tests (intent, theme, verify, thread) | `npm run test:unit` | 20/20 pass | 1 |
+| Unit tests (intent, theme, verify, thread) | `npm run test:unit` | 21/21 pass | 1 |
 | Smoke suite (health, corpus APIs, grounded SSE, headers, manifest, icons, offline, push lifecycle, SW handlers, red-letter lint, library search, legal page, install sheet, chat-first helpers, `/share`, verse-object) | `node scripts/smoke.js http://127.0.0.1:3010` | 18/18 pass | 1 |
 | Evaluation set — corpus mode | `node scripts/eval.js --strict http://127.0.0.1:3010` | 96/96 pass; p95 4 ms | 1 |
 | Rendered UI at 390×844: Advisor default, verse object, lectio-from-answer, shared-word welcome, crisis 911/988/chat.988, library `?ref=` card | `PUPPETEER_DIR=/tmp/rla-qa CHROME_PATH=/usr/bin/google-chrome node scripts/ui-check.js http://127.0.0.1:3010` | 32/32 pass | 1 |
