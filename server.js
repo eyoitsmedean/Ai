@@ -197,9 +197,9 @@ function sharePageHtml(obj, rawRef) {
     blockquote { margin: 0 0 18px; padding: 16px 16px 16px 14px; border-left: 3px solid var(--crimson); background: #fff8f0; font-style: italic; line-height: 1.5; }
     .cite { font-style: normal; font-weight: 700; font-size: .92rem; color: var(--muted); margin-top: 10px; }
     .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
-    a.btn { display: block; text-align: center; padding: 14px 16px; border-radius: 12px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; min-height: 44px; box-sizing: border-box; }
+    a.btn, button.btn { display: block; width: 100%; text-align: center; padding: 14px 16px; border-radius: 12px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; min-height: 44px; box-sizing: border-box; cursor: pointer; }
     a.primary { background: var(--crimson); color: #fff; }
-    a.ghost { color: var(--crimson); border: 1px solid #E4D8C8; }
+    a.ghost, button.ghost { color: var(--crimson); border: 1px solid #E4D8C8; background: transparent; }
     p.note { color: var(--muted); font-size: .9rem; line-height: 1.45; }
   </style>
 </head>
@@ -211,10 +211,69 @@ function sharePageHtml(obj, rawRef) {
     <p class="note">Quoted from the public-domain World English Bible. This page is software, not a person. Immediate danger: 911. US crisis: 988.</p>
     <div class="actions">
       <a class="btn primary" href="${ask}">Ask the Advisor about this</a>
+      <button type="button" class="btn ghost" id="hear">Hear this word</button>
+      <button type="button" class="btn ghost" id="copy">Copy</button>
+      <button type="button" class="btn ghost" id="carry">Carry this today</button>
       <a class="btn ghost" href="${escHtml(web)}" rel="noopener" target="_blank">Read it on eBible</a>
       <a class="btn ghost" href="/?tab=advisor">Open the Advisor</a>
     </div>
   </main>
+  <script>
+    (function () {
+      var verse = ${JSON.stringify(verse)};
+      var quote = ${JSON.stringify(quote)};
+      var phrase = ${JSON.stringify(`${quote} — ${verse} (WEB)`)};
+      var hear = document.getElementById('hear');
+      var copy = document.getElementById('copy');
+      var carry = document.getElementById('carry');
+      var speaking = false;
+      function stopHear() {
+        try { speechSynthesis.cancel(); } catch (e) {}
+        speaking = false;
+        if (hear) hear.textContent = 'Hear this word';
+      }
+      if (hear && 'speechSynthesis' in window) {
+        hear.addEventListener('click', function () {
+          if (speaking) { stopHear(); return; }
+          stopHear();
+          var u = new SpeechSynthesisUtterance(quote);
+          u.lang = 'en-US';
+          u.rate = 0.9;
+          u.onend = function () { speaking = false; hear.textContent = 'Hear this word'; };
+          u.onerror = function () { speaking = false; hear.textContent = 'Hear this word'; };
+          speaking = true;
+          hear.textContent = 'Stop';
+          speechSynthesis.speak(u);
+        });
+      } else if (hear) {
+        hear.hidden = true;
+      }
+      if (copy) {
+        copy.addEventListener('click', function () {
+          var done = function () { copy.textContent = 'Copied'; };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(phrase).then(done).catch(function () {
+              copy.textContent = 'Select the verse to copy';
+            });
+          } else {
+            copy.textContent = 'Select the verse to copy';
+          }
+        });
+      }
+      if (carry) {
+        carry.addEventListener('click', function () {
+          try {
+            localStorage.setItem('rla-carry', JSON.stringify({
+              phrase: quote,
+              verse: verse,
+              day: new Date().toISOString().slice(0, 10)
+            }));
+          } catch (e) {}
+          location.href = ${JSON.stringify(ask)};
+        });
+      }
+    })();
+  </script>
 </body>
 </html>`;
 }

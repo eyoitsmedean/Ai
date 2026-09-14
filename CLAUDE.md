@@ -98,10 +98,11 @@ React Native / Expo rewrite was rejected: it discards the verified HTML build an
 - Work done: recovered first 10 prompts from the founding transcript; research archive `docs/KNOWLEDGE.md`; operator kit `docs/OPERATOR-KIT.md`; Advisor default; Encounter skipped on chat path; iOS install sheet; `/legal`; waitlist persistence; crisis copy corrected.
 - Next step: Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
 - Open risks: no production URL (unauthorized to deploy); model-mode unverified; quotas in-memory; companion-statute scope untested.
-- RESUME_FROM: ATELIER 2026-09-14 — follow-ups now *quote* the prior saying (not only keep its theme). Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
+- RESUME_FROM: 2026-09-14 carry→Advisor + /share Hear. Dean deploys HTTPS and runs RELEASE.md §C. Then `npm run eval` against a keyed server if he wants model-mode.
 
 ## Log
 
+- 2026-09-14 — First-ten loop: a carried word now returns to empty Advisor (sitting-with + chip); `/share` Hear/Copy/Carry is tap-only (no autoplay). Library Carry stays on Advisor (C4).
 - 2026-09-14 — Ambition pass from first ten: Hear + Carry on the saying; vague Hope lines invite one more sentence without withholding verses.
 - 2026-09-14 — ATELIER: corpus follow-ups lead with the prior WEB saying; verse context falls back to the on-device library; `microphone=(self)` so voice can work; operator kit refreshed.
 - 2026-09-14 — LODESTAR Cycle 1: Intent Charter C1–C8 in `docs/lodestar/`; threaded grounding; verse object; `/share` landing; lectio-from-answer; published `#protocol`; honest Plus/Pages; eval 96. Branch `cursor/lodestar-cycle-one-6ab5`.

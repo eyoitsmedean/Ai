@@ -1014,6 +1014,8 @@ html[data-hour="morning"] .garden-stage{background:linear-gradient(180deg,#FBF3E
           <h3 id="shared-word-verse"></h3>
           <blockquote id="shared-word-quote"></blockquote>
           <div class="after-path">
+            <button type="button" id="shared-word-hear">Hear this</button>
+            <button type="button" id="shared-word-carry">Carry this</button>
             <button type="button" id="shared-word-ask">Ask about this</button>
             <button type="button" id="shared-word-sit">Sit with this</button>
             <button type="button" id="shared-word-share">Share card</button>
@@ -3258,6 +3260,8 @@ function clearCarry() {
   try { localStorage.removeItem('rla-carry'); } catch {}
   closeMemorize();
   renderCarry();
+  syncComposerPlaceholder();
+  if (!chatMessages.length) renderAdvisorChips();
 }
 
 /* ═══ MEMORIZE (grace fill-in — Altar / Bearing Fruit pattern) ═══ */
@@ -3595,7 +3599,7 @@ function goTab(tab) {
   if (tab === 'journal') { renderJournal(); renderPrayers(); }
   if (tab === 'library' && !libData) loadLibrary();
   if (tab === 'advisor') {
-    renderAdvisorChips();
+    restoreCarryToAdvisor();
     if (!chatMessages.length && ls('rla-land') === 'advisor') {
       requestAnimationFrame(() => document.getElementById('chat-input')?.focus({ preventScroll: false }));
     }
@@ -3609,10 +3613,47 @@ function advisorChipSet() {
   return ["I can't rest", "The day was heavy", "I'm angry at someone"];
 }
 
+function todayCarry() {
+  const data = lsJSON('rla-carry', null);
+  if (!data?.phrase || data.day !== todayISO()) return null;
+  return data;
+}
+
+function syncComposerPlaceholder() {
+  const input = document.getElementById('chat-input');
+  if (!input) return;
+  input.placeholder = todayCarry()
+    ? 'Ask about the word you’re carrying…'
+    : "Share what's weighing on you…";
+}
+
+function restoreCarryToAdvisor() {
+  const data = todayCarry();
+  syncComposerPlaceholder();
+  const shared = document.getElementById('shared-word-card');
+  const sharedOpen = !!(shared && !shared.classList.contains('hidden'));
+  if (data && !sharedOpen) setAdvisorSitting(data.verse, data.phrase);
+  if (!chatMessages.length) renderAdvisorChips();
+}
+
+function askAboutCarriedWord() {
+  const data = todayCarry();
+  if (!data) {
+    askAboutTodaysWord();
+    return;
+  }
+  askAboutVerse(data.verse, data.phrase);
+  setTimeout(() => sendChat(), 180);
+}
+
 function renderAdvisorChips() {
   const el = document.getElementById('suggestions');
   if (!el || el.style.display === 'none') return;
-  const chips = ['<button type="button" class="sug-chip" onclick="askAboutTodaysWord()">About today’s word</button>'];
+  const chips = [];
+  if (todayCarry()) {
+    chips.push('<button type="button" class="sug-chip" data-carry-ask="1" onclick="askAboutCarriedWord()">Ask about what I\'m carrying</button>');
+  }
+  chips.push('<button type="button" class="sug-chip" onclick="askAboutTodaysWord()">About today’s word</button>');
   advisorChipSet().forEach((label) => {
     chips.push('<button type="button" class="sug-chip" onclick="sendSuggestion(this)">' + esc(label) + '</button>');
   });
@@ -4075,6 +4116,7 @@ function newThread() {
   lsSet('rla-thread-current', '');
   clearChatView();
   updateAdvisorBar();
+  restoreCarryToAdvisor();
   closeSheets();
   document.getElementById('chat-input')?.focus();
 }
@@ -4335,6 +4377,7 @@ function carryFromVerse(verse, quote) {
   setRhythmFlag('carry', true);
   renderCarry();
   renderRhythm();
+  restoreCarryToAdvisor();
   showToast('Carrying this phrase today');
 }
 
@@ -4591,7 +4634,7 @@ function carryLibByIndex(idx) {
   lsSetJSON('rla-carry', { phrase, verse: p.verse, day: todayISO() });
   renderCarry();
   showToast('Carrying this phrase today');
-  goTab('today');
+  goTab('advisor');
 }
 
 /* ═══ JOURNAL ═══ */
@@ -5203,6 +5246,10 @@ function showSharedWordWelcome(hit) {
   const ask = document.getElementById('shared-word-ask');
   const sit = document.getElementById('shared-word-sit');
   const share = document.getElementById('shared-word-share');
+  const hear = document.getElementById('shared-word-hear');
+  const carry = document.getElementById('shared-word-carry');
+  if (hear) hear.onclick = () => speakVerse(hit.text, hit.verse);
+  if (carry) carry.onclick = () => carryFromVerse(hit.verse, hit.text);
   if (ask) ask.onclick = () => askAboutVerse(hit.verse, hit.text);
   if (sit) sit.onclick = () => openLectioFromVerse(hit.verse, hit.text);
   if (share) share.onclick = () => openShareCard({ verse: hit.verse, quote: hit.text, theme: hit.theme || 'His words' });
@@ -5270,6 +5317,7 @@ function initApp() {
   wireOnlineStatus();
   goTab('advisor');
   routeFromQuery();
+  restoreCarryToAdvisor();
   if (currentTab() === 'today') routeByHour();
   const nav = document.getElementById('bottom-nav');
   const indicator = document.getElementById('nav-indicator');

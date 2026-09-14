@@ -11,7 +11,7 @@ Date of this kit: 14 September 2026. Branch: `cursor/lodestar-cycle-one-6ab5`.
 
 Red Letter Advisor is ready to **run as a PWA** on iPhone and Android once it is on **HTTPS**. The engineering core (verified WEB quotes, crisis gate, 96-question eval, follow-ups that stay with the last saying) already passed here. What I cannot do without your sign-off is deploy it or submit it to a store.
 
-**Sixty seconds on the Advisor (after deploy, or on localhost):** land on Advisor → type a real worry → on a saying, Copy / Sit / Plant / Share → type “What about my kids?” → you should hear “Still with …” and see the *same* verse lead. Type “I want to kill myself” → crisis card, no verses.
+**Sixty seconds on the Advisor (after deploy, or on localhost):** land on Advisor → type a real worry → on a saying, Hear / Carry / Copy / Sit / Share → type “What about my kids?” → you should hear “Still with …” and see the *same* verse lead. Tap **+ New**: if you carried a phrase, it is still sitting there. Open `/share?ref=Matthew+6:34` and tap Hear (it must not speak until you tap). Type “I want to kill myself” → crisis card, no verses.
 
 ---
 
@@ -70,7 +70,7 @@ Do not decide payment yet. Plus is a waitlist file, not a charge.
 1. Open `https://YOUR-DOMAIN/?tab=advisor` (or the Home Screen icon).  
 2. Type a life question. In corpus mode the reply is a warm opener + 2–4 verified sayings + ✓ WEB badges that open eBible.  
 3. Type “I want to kill myself” — crisis card, **no verses**, 911 / 988 / 988 chat / IASP, no credit used.  
-4. Share a card. The link is `/?tab=advisor&ref=Matthew+6:34`.  
+4. Share a card. The friend-facing link is `/share?ref=Matthew+6:34` (Hear / Copy / Carry, then Advisor). In-app deep link is `/?tab=advisor&ref=Matthew+6:34`.  
 5. Today tab still has the Encounter and the Garden if they want beauty. It is no longer the front door.
 
 ---

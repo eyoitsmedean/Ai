@@ -203,6 +203,52 @@ function ok(cond, label, detail) {
   });
   ok(welcome.tab === 'advisor' && welcome.welcome && /Matthew 6:34/.test(welcome.verse), 'Advisor share link shows the shared-word welcome', JSON.stringify(welcome));
   ok(!welcome.encounter, 'shared-word welcome does not open Encounter');
+  const sharedActions = await page.evaluate(() => ({
+    hear: !!document.getElementById('shared-word-hear'),
+    carry: !!document.getElementById('shared-word-carry'),
+  }));
+  ok(sharedActions.hear && sharedActions.carry, 'shared-word card can Hear and Carry', JSON.stringify(sharedActions));
+
+  await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
+  await sleep(500);
+  const carriedHome = await page.evaluate(async () => {
+    localStorage.setItem('rla-carry', JSON.stringify({
+      phrase: 'Therefore don’t be anxious for tomorrow, for tomorrow will be anxious for itself.',
+      verse: 'Matthew 6:34',
+      day: new Date().toISOString().slice(0, 10),
+    }));
+    newThread();
+    await new Promise((r) => setTimeout(r, 80));
+    return {
+      sitting: !document.getElementById('advisor-context')?.classList.contains('hidden'),
+      text: document.getElementById('advisor-context-text')?.textContent || '',
+      chip: !!document.querySelector('[data-carry-ask]'),
+      placeholder: document.getElementById('chat-input')?.placeholder || '',
+    };
+  });
+  ok(carriedHome.sitting && /Matthew 6:34/.test(carriedHome.text), 'carried word returns to empty Advisor', JSON.stringify(carriedHome));
+  ok(carriedHome.chip, 'Ask about what I\'m carrying chip is present', JSON.stringify(carriedHome));
+  ok(/carrying/i.test(carriedHome.placeholder), 'composer names the carried word', carriedHome.placeholder);
+
+  await page.goto(BASE + '/share?ref=' + encodeURIComponent('Matthew 6:34'), { waitUntil: 'networkidle0' });
+  await sleep(400);
+  const sharePage = await page.evaluate(async () => {
+    const hear = document.getElementById('hear');
+    const copy = document.getElementById('copy');
+    const carry = document.getElementById('carry');
+    const before = hear ? hear.textContent : '';
+    hear?.click();
+    await new Promise((r) => setTimeout(r, 60));
+    return {
+      hasHear: !!hear,
+      hasCopy: !!copy,
+      hasCarry: !!carry,
+      before,
+      after: hear ? hear.textContent : '',
+    };
+  });
+  ok(sharePage.hasHear && sharePage.hasCopy && sharePage.hasCarry, 'share landing has Hear, Copy, and Carry', JSON.stringify(sharePage));
+  ok(sharePage.before === 'Hear this word' && (sharePage.after === 'Stop' || sharePage.after === 'Hear this word'), 'share Hear toggles from a tap, not on load', JSON.stringify(sharePage));
 
   ok(pageErrors.length === 0, 'no page errors', pageErrors.join(' | ').slice(0, 300));
 

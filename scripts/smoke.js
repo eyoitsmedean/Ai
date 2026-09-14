@@ -185,6 +185,7 @@ async function main() {
     assert(appHtml.includes('/share?ref='), 'OG share links use /share');
     assert(appHtml.includes('verse-actions') && appHtml.includes('function openLectioFromVerse'), 'missing verse object / sit-from-answer');
     assert(appHtml.includes('verse-hear') && appHtml.includes('function speakVerse') && appHtml.includes('function carryFromVerse'), 'missing hear / carry from the saying');
+    assert(appHtml.includes('function restoreCarryToAdvisor') && appHtml.includes('function askAboutCarriedWord'), 'missing carried-word return to Advisor');
     assert(appHtml.includes('id="trust-panel"') && appHtml.includes('id="shared-word-card"'), 'missing trust panel / shared-word welcome');
     assert(appHtml.includes('function plantHarvestFromVerse'), 'missing plant-from-answer');
     assert(/waitlist only|Join waitlist/i.test(appHtml) && !/onclick="openPaywall\(\)">Unlock Plus/.test(appHtml), 'Plus copy still pretends payment exists');
@@ -219,6 +220,9 @@ async function main() {
     const share = await fetch(BASE + '/share?ref=' + encodeURIComponent('Matthew 6:34'));
     const shareHtml = await share.text();
     assert(share.ok && shareHtml.includes('og:title') && shareHtml.includes('Matthew 6:34') && shareHtml.includes('/?tab=advisor&ref='), 'share landing missing OG or advisor CTA');
+    assert(shareHtml.includes('id="hear"') && shareHtml.includes('id="copy"') && shareHtml.includes('id="carry"'), 'share landing missing Hear / Copy / Carry');
+    assert(/getElementById\('hear'\)[\s\S]*addEventListener\('click'[\s\S]*speechSynthesis\.speak/.test(shareHtml), 'share Hear must be a click handler, never autoplay');
+    assert(!/onload=|DOMContentLoaded[\s\S]*speechSynthesis\.speak/.test(shareHtml), 'share page must not speak on load');
   });
 
   await check('waitlist + offline routes', async () => {

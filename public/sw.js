@@ -1,4 +1,4 @@
-const CACHE = 'rla-v30';
+const CACHE = 'rla-v31';
 const PRECACHE = [
   '/',
   '/offline',

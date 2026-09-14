@@ -13,6 +13,8 @@
 | `public/index.html` Advisor default | C4 | On course | Kept. Encounter still skipped on Advisor. |
 | Scripture blocks (share-only) | C8 | Gap | **Filled:** verse object actions (copy / context / plant / sit / share). |
 | Follow-up answers ignoring last verse | C2, C4 | Gap | **Filled:** server continues last Gospel theme; UI chips + context strip. |
+| Carried word stranded on Today; Library Carry yanked to Today | C4 | Bad drift | **Realigned:** empty Advisor restores today’s carry; Library Carry stays on Advisor. |
+| `/share` landing mute | C8 | Gap | **Filled:** tap-only Hear / Copy / Carry (no autoplay). |
 | `?ref=` opens share modal on Advisor | C4, C8 | Good drift / friction | **Realigned:** Advisor deep-link shows shared-word welcome; library `?tab=library&ref=` still opens the card (ui-check). |
 | Per-verse Open Graph | C8 | Gap | **Filled:** `/share?ref=` server page. |
 | Lectio only from Today’s word | C8 | Gap | **Filled:** Sit-with-this from any Advisor verse. |
