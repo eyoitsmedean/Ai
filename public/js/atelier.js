@@ -50,9 +50,11 @@
     root.classList.remove('is-closing');
     revealWords(q, quote);
     if (c) {
-      c.textContent = typeof global.cleanCitation === 'function'
-        ? global.cleanCitation(cite)
-        : String(cite || '').replace(/^[—–\-\s]+/, '');
+      c.textContent = global.RedLetterCite
+        ? global.RedLetterCite.formatVerseCite(cite)
+        : (typeof global.cleanCitation === 'function'
+          ? global.cleanCitation(cite)
+          : String(cite || '').replace(/^[—–\-\s]+/, ''));
     }
     root.classList.add('on');
     root.setAttribute('aria-hidden', 'false');

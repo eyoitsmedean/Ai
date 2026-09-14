@@ -40,8 +40,10 @@
   }
 
   function cleanCitation(verse) {
+    if (global.RedLetterCite) return global.RedLetterCite.bareCitation(verse);
     return String(verse || '')
       .replace(/^[—–\-\s]+/, '')
+      .replace(/\s*[·•]\s*(KJV(?:\s+pack)?|WEB)\s*$/i, '')
       .replace(/\s+/g, ' ')
       .trim();
   }

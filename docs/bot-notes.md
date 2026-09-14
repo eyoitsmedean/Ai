@@ -1,4 +1,12 @@
-# Bot working notes — Red Letter Advisor — recovery cycle 2026-09-11
+# Bot working notes — Red Letter Advisor
+
+**2026-09-14 cite pass.** First ten still in force (inspectable claims). Today / Seek / Journal / Library / Amen / Lectio / Blessing now suffix `· KJV` or `· WEB` from the payload. Online curated is KJV; offline `corpus.json` is WEB. Shared helper `public/js/cite.js`. Cache **v23**.
+
+**2026-09-14 later.** First-ten pass: onboarding now quotes KJV Matthew 11:28 from the corpus (was unlabeled WEB). Seals name KJV / KJV pack / WEB. Settings **Clear this phone** (two-tap) wipes journal + streak; Leave quickly still does not. Cache **v22**.
+
+**ATELIER 2026-09-14.** Cycle 1 Ask closed with a primary source: The Hotline `exit()` and their protect-history utility (last modified 2026-08-20) replace to `https://www.live-local-weather.com/`. Wikipedia was a guess; removed. Settings wipe rows moved to the top of the sheet. Did **not** copy their history-rewriting script (MIT; would intercept PWA navigations).
+
+# Recovery cycle 2026-09-11
 
 Worker: Cursor cloud agent · recovery commission · 2026-09-11
 
@@ -7,7 +15,7 @@ Worker: Cursor cloud agent · recovery commission · 2026-09-11
 1. Recovered the first ten Dean-authored prompts from this run’s transcript (see `docs/CANONICAL-BRIEF.md`).
 2. Closed D12 offline: `public/data/safety-pack.json` + `offlineReplyFor` never theme-retrieves after a safety kind.
 3. Client greeting doorway matches the server (“ok thanks” after a disclosure).
-4. About: 988 US vs 988.ca, RAINN, watched-phone line. `#crisis-modal` in `mobile.js` `MODAL_IDS`. Cache **v19**.
+4. About: 988 US vs 988.ca, RAINN, watched-phone line. `#crisis-modal` in `mobile.js` `MODAL_IDS`. Cache **v20** as of LODESTAR Cycle 1 (`docs/lodestar/`).
 5. Flagships: safety pack (code), `docs/CANONICAL-BRIEF.md` + `docs/RESEARCH.md`, `docs/SHIP.md`.
 6. Pack letters seal as KJV (`source: pack`), not against the WEB index.
 

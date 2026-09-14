@@ -1,3 +1,5 @@
+> **UNBLESSED — LODESTAR Cycle 1.** Held, not retired. Growth copy ahead of ship; C4/C6 still outrank acquisition. See Alignment Ledger. Bearing: C7 (review), not a live launch plan.
+
 # Red Letter Market Strategy
 
 Research synthesis for owning the “Words of Jesus” niche in faith apps.  

@@ -115,6 +115,16 @@
     return Math.floor((current - start) / 86400000);
   }
 
+  function verseLabel(ref, translation) {
+    return global.RedLetterCite
+      ? global.RedLetterCite.formatVerseCite(ref, translation)
+      : String(ref || '').replace(/^[—–\-\s]+/, '').trim();
+  }
+
+  function readingTranslation(value) {
+    return global.RedLetterCite ? global.RedLetterCite.citeTranslation(value) : '';
+  }
+
   function showToast(message) {
     const toast = id('toast');
     if (!toast) return;
@@ -165,7 +175,11 @@
   async function getOfflineDaily() {
     const corpus = await loadCorpus();
     if (!corpus.daily.length) throw new Error('No offline daily readings are available');
-    return corpus.daily[dayOfYear() % corpus.daily.length];
+    return {
+      ...corpus.daily[dayOfYear() % corpus.daily.length],
+      translation: readingTranslation(corpus.translation) || 'WEB',
+      source: 'corpus',
+    };
   }
 
   async function fetchJSON(url, options) {
@@ -398,13 +412,14 @@
   function renderDaily(data) {
     const affirmation = data.affirmation;
     const word = data.word;
+    const translation = readingTranslation(data.translation);
     const values = {
       'aff-text': affirmation.text,
       'aff-quote': `“${affirmation.quote}”`,
-      'aff-verse': `— ${affirmation.verse}`,
+      'aff-verse': `— ${verseLabel(affirmation.verse, translation)}`,
       'word-theme': word.theme || 'Reflection',
       'word-title': word.title,
-      'word-verse': word.verse,
+      'word-verse': verseLabel(word.verse, translation),
       'word-reflection': word.reflection || '',
     };
     Object.entries(values).forEach(([elementId, value]) => {
@@ -597,8 +612,13 @@
     } catch (apiError) {
       try {
         const corpus = await loadCorpus();
-        data = corpus.encouragement[theme];
-        if (!validEncouragement(data)) throw new Error('Offline encouragement is unavailable');
+        const pack = corpus.encouragement[theme];
+        if (!validEncouragement(pack)) throw new Error('Offline encouragement is unavailable');
+        data = {
+          ...pack,
+          translation: readingTranslation(corpus.translation) || 'WEB',
+          source: 'corpus',
+        };
       } catch (corpusError) {
         if (requestId !== encouragementRequest) return;
         showThemeGrid();
@@ -653,12 +673,13 @@
     const passages = id('enc-passages');
     if (passages) {
       passages.innerHTML = '';
+      const translation = readingTranslation(data.translation);
       data.passages.forEach((passage) => {
         const card = document.createElement('div');
         card.className = 'passage-card';
         const verse = document.createElement('div');
         verse.className = 'passage-verse-tag';
-        verse.textContent = passage.verse || '';
+        verse.textContent = verseLabel(passage.verse, translation);
         const quote = document.createElement('div');
         quote.className = 'passage-quote';
         quote.textContent = `“${passage.quote || ''}”`;
@@ -1112,6 +1133,121 @@
     showToast('Conversation cleared');
   }
 
+  // Session wipe for a watched phone or a guest demo. Journal, streak, theme,
+  // type size and practice marks stay — DESIGN CHOICE (Charter OQ4): a private
+  // journal is not an Advisor transcript, and auto-deleting it on Leave quickly
+  // would punish a survivor who saved a verse. "Clear this phone" (journal too)
+  // is a separate Settings control (clearThisPhone), not this path.
+  const SESSION_WIPE_KEYS = ['rla-chat', 'rla-onboarded'];
+  const SESSION_WIPE_PREFIXES = ['rla-chat-count-'];
+  // The Hotline theme exit() and their 2026-08-20 protect-history utility
+  // both replace to live-local-weather (www on the utility constant).
+  const ESCAPE_URL = 'https://www.live-local-weather.com/';
+
+  function removeLsKey(key) {
+    try {
+      global.localStorage.removeItem(key);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function wipeSessionStorage(options) {
+    const wipeJournal = Boolean(options && options.wipeJournal);
+    chatHistory = [];
+    SESSION_WIPE_KEYS.forEach(removeLsKey);
+    try {
+      const doomed = [];
+      for (let i = 0; i < global.localStorage.length; i += 1) {
+        const key = global.localStorage.key(i);
+        if (key && SESSION_WIPE_PREFIXES.some((prefix) => key.startsWith(prefix))) {
+          doomed.push(key);
+        }
+      }
+      doomed.forEach(removeLsKey);
+    } catch (_) { /* private mode */ }
+    if (wipeJournal) removeLsKey('rla-journal');
+  }
+
+  function consumeFreshQuery() {
+    try {
+      const url = new URL(global.location.href);
+      if (url.searchParams.get('fresh') !== '1') return false;
+      wipeSessionStorage({ wipeJournal: false });
+      url.searchParams.delete('fresh');
+      const query = url.searchParams.toString();
+      global.history.replaceState(null, '', url.pathname + (query ? `?${query}` : '') + url.hash);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function beginAgain(options) {
+    const force = Boolean(options && options.force);
+    if (isChatBusy && !force) {
+      showToast('Please wait for the current response');
+      return false;
+    }
+    closeSettings();
+    wipeSessionStorage({ wipeJournal: Boolean(options && options.wipeJournal) });
+    try {
+      global.location.reload();
+    } catch (_) {
+      showOnboarding();
+    }
+    return true;
+  }
+
+  function leaveQuickly() {
+    wipeSessionStorage({ wipeJournal: false });
+    try {
+      global.location.replace(ESCAPE_URL);
+    } catch (_) {
+      beginAgain({ force: true });
+    }
+  }
+
+  function wipePracticeMarks() {
+    try {
+      const doomed = [];
+      for (let i = 0; i < global.localStorage.length; i += 1) {
+        const key = global.localStorage.key(i);
+        if (key && key.startsWith('rla-practice-')) doomed.push(key);
+      }
+      doomed.forEach(removeLsKey);
+    } catch (_) { /* private mode */ }
+    removeLsKey('rla-streak-v2');
+  }
+
+  function clearThisPhone() {
+    const btn = id('clear-phone-btn');
+    if (!btn || btn.dataset.armed !== '1') {
+      if (btn) {
+        btn.dataset.armed = '1';
+        btn.textContent = 'Tap again to erase';
+        global.setTimeout(() => {
+          if (btn.dataset.armed === '1') {
+            btn.dataset.armed = '';
+            btn.textContent = 'Clear this phone';
+          }
+        }, 4000);
+      }
+      return false;
+    }
+    btn.dataset.armed = '';
+    closeSettings();
+    wipeSessionStorage({ wipeJournal: true });
+    wipePracticeMarks();
+    try {
+      global.location.reload();
+    } catch (_) {
+      showOnboarding();
+    }
+    return true;
+  }
+
   // Online but the host has no working /api (static GitHub Pages without an
   // API base, or a server without a key) reads differently from being offline.
   function advisorFallbackToast(status) {
@@ -1293,7 +1429,7 @@
         '</div>',
         `<div class="journal-title">${esc(item.title || 'Saved reflection')}</div>`,
         `<div class="journal-body">${esc(item.body || '')}</div>`,
-        item.verse ? `<div class="journal-verse">${esc(item.verse)}</div>` : '',
+        item.verse ? `<div class="journal-verse">${esc(verseLabel(item.verse, item.translation))}</div>` : '',
         '</article>',
       ].join('');
     }).join('');
@@ -1333,6 +1469,7 @@
         title: dailyData.affirmation.text,
         body: dailyData.affirmation.quote,
         verse: dailyData.affirmation.verse,
+        translation: readingTranslation(dailyData.translation),
       };
     } else if (type === 'word' && dailyData) {
       item = {
@@ -1342,6 +1479,7 @@
         title: dailyData.word.title,
         body: dailyData.word.passage,
         verse: dailyData.word.verse,
+        translation: readingTranslation(dailyData.translation),
       };
     } else if (type === 'enc' && currentEncData) {
       const first = currentEncData.passages[0] || {};
@@ -1352,6 +1490,7 @@
         title: currentEncData.headline,
         body: [currentEncData.opening, first.quote].filter(Boolean).join('\n\n'),
         verse: first.verse || '',
+        translation: readingTranslation(currentEncData.translation),
       };
     }
     if (!item) return;
@@ -1412,13 +1551,13 @@
     if (type === 'aff' && dailyData) {
       payload = {
         quote: dailyData.affirmation.quote,
-        verse: dailyData.affirmation.verse,
+        verse: verseLabel(dailyData.affirmation.verse, dailyData.translation),
         theme: 'Daily Affirmation',
       };
     } else if (type === 'word' && dailyData) {
       payload = {
         quote: dailyData.word.passage,
-        verse: dailyData.word.verse,
+        verse: verseLabel(dailyData.word.verse, dailyData.translation),
         theme: dailyData.word.theme,
       };
     } else if (type === 'enc' && currentEncData) {
@@ -1426,7 +1565,7 @@
       if (first) {
         payload = {
           quote: first.quote,
-          verse: first.verse,
+          verse: verseLabel(first.verse, currentEncData.translation),
           theme: currentEncTheme || currentEncData.theme,
         };
       }
@@ -1478,7 +1617,7 @@
     body.style.flex = '1';
     const verse = document.createElement('div');
     verse.className = 'passage-verse-tag';
-    verse.textContent = item.verse || '';
+    verse.textContent = verseLabel(item.verse, 'WEB');
     const quote = document.createElement('div');
     quote.className = 'passage-quote';
     quote.textContent = `“${item.quote || ''}”`;
@@ -1489,7 +1628,10 @@
     share.type = 'button';
     share.className = 'action-btn-dark';
     share.textContent = 'Share';
-    share.addEventListener('click', () => sharePayload(item));
+    share.addEventListener('click', () => sharePayload({
+      ...item,
+      verse: verseLabel(item.verse, 'WEB'),
+    }));
 
     const save = document.createElement('button');
     save.type = 'button';
@@ -1512,6 +1654,7 @@
           title: item.theme || item.verse,
           body: item.quote,
           verse: item.verse,
+          translation: 'WEB',
         });
         showToast('Saved to Journal ✦');
       }
@@ -1809,6 +1952,7 @@
       }
     });
 
+    consumeFreshQuery();
     if (ls('rla-onboarded')) startApp();
     else showOnboarding();
   }
@@ -1833,6 +1977,13 @@
     openPlus,
     closePlus,
     clearChat,
+    beginAgain,
+    leaveQuickly,
+    clearThisPhone,
+    wipeSessionStorage,
+    consumeFreshQuery,
+    SESSION_WIPE_KEYS,
+    ESCAPE_URL,
     exportJournal,
     importJournalFile,
     importJournalData,

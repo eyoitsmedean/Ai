@@ -2,14 +2,15 @@
 
 Every line is marked **VERIFIED** (ran this session, evidence given) or
 **UNVERIFIED** (not run here; who runs it and how). Nothing is described as
-passed that was not run. Last updated 2026-09-11 on branch
-`cursor/sprint-safety-modules-4ba9` (v1.5.0, cache v19).
+passed that was not run. Last updated 2026-09-14 on branch
+`cursor/lodestar-cycle-1-4ba9` (v1.5.0, cache v23). Prior: first-ten pass was v22; ATELIER was v21; Cycle 1 ship was v20;
+2026-09-11 sprint was v19 / 112 tests.
 
 ## Code and tests
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Unit and route tests | **VERIFIED** — `npm test`: 112 tests, 112 pass, 0 fail (node:test, Node 22.14) | Adds `test/offline-safety.test.js` (client never theme-retrieves after a safety kind; pack JSON matches `buildSafetyPack()`; cache v19; About RAINN / 988.ca) and greeting-doorway cases in `test/letters.test.js` / `test/safety.test.js`. |
+| Unit and route tests | **VERIFIED** — `npm test`: 123 tests, 123 pass, 0 fail (node:test, Node 22.14) | Adds `test/cite.test.js` (KJV/WEB labels) on top of wipe/colophon/install and helpline-script contracts. |
 | Syntax check | **VERIFIED** — `npm run check` exit 0 | Includes `scripts/build-safety-pack.js`. |
 | Smoke against a running server | **VERIFIED** — `node scripts/smoke.js http://127.0.0.1:3111`: 10/10 | health, daily, encouragement, verify, library, chat without key, landing, app shell, **offline safety pack**, PWA assets. |
 | Evaluation set, retrieval path (no API key) | **VERIFIED** — `node scripts/eval.js --url http://127.0.0.1:3111`: 100/100; see `eval/RESULTS.md` | Categories: life 31, hostile 6, off-scope 17, crisis 11, danger 15, edge 14, benign idiom 6. |
@@ -47,7 +48,7 @@ passed that was not run. Last updated 2026-09-11 on branch
 
 | Item | Status | Evidence / how to verify |
 |---|---|---|
-| Cache version consistent (`?v=19`, `rla-v19-chapel`) | **VERIFIED** — 11 refs in index.html, 11 in sw.js; SW precaches `data/safety-pack.json` | `test/offline-safety.test.js`. |
+| Cache version consistent (`?v=23`, `rla-v23-chapel`) | **VERIFIED** this pass — 12 refs in index.html, 12 in sw.js (includes `js/cite.js`) | `test/offline-safety.test.js`. |
 | Installs and runs on a real iPhone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Installs and runs on a real Android phone | **UNVERIFIED** — needs a device | `docs/DEVICE-CHECKLIST.md`. |
 | Offline reload, fonts, dark mode, journal | **VERIFIED earlier** (Playwright wave 2) — not re-run after v19 client changes | Device checklist step 8. |

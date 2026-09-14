@@ -54,6 +54,7 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.equal(data.verified, true);
+    assert.equal(data.translation, 'KJV');
     assert.match(data.affirmation.verse, /^(Matthew|Mark|Luke|John) /);
     assert.ok(data.affirmation.quote.length > 8);
   });
@@ -68,6 +69,7 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.equal(data.verified, true);
+    assert.equal(data.translation, 'KJV');
     assert.ok(data.passages.length >= 3);
     assert.match(data.passages[0].quote, /Peace/i);
   });

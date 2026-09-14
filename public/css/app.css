@@ -2769,6 +2769,14 @@ body::before {
   color: var(--ink-4, var(--ink-3));
 }
 
+.sheet-about .colophon-type {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: calc(11px * var(--scale));
+  letter-spacing: 0.02em;
+  color: var(--ink-4, var(--ink-3));
+}
+
 .sheet-about a {
   color: var(--ink-2);
   text-decoration: underline;
@@ -3034,7 +3042,8 @@ body::before {
 }
 
 .crisis-dismiss,
-.crisis-close {
+.crisis-close,
+.crisis-leave {
   padding: 10px 14px;
   font-family: var(--font-ui);
   font-size: 12.5px;
@@ -3045,10 +3054,21 @@ body::before {
   transition: color 200ms var(--ease), border-color 200ms var(--ease);
 }
 
+.crisis-leave {
+  color: var(--crimson);
+  border-color: color-mix(in srgb, var(--crimson) 35%, var(--line));
+}
+
 .crisis-dismiss:hover,
-.crisis-close:hover {
+.crisis-close:hover,
+.crisis-leave:hover {
   color: var(--ink);
   border-color: var(--ink-4);
+}
+
+.crisis-leave:hover {
+  color: var(--crimson);
+  border-color: var(--crimson);
 }
 
 /* ── Toast ────────────────────────────────────────────────────────────── */
@@ -4426,6 +4446,7 @@ textarea {
 
 .journal-delete,
 .crisis-dismiss,
+.crisis-leave,
 .lectio-close {
   min-width: var(--touch-min);
   min-height: var(--touch-min);

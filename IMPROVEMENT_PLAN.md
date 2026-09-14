@@ -1,3 +1,5 @@
+> **ARCHIVED 2026-09-14 — LODESTAR Cycle 1.** Do not treat as current product state. Several “critical” rows (onboarding never hides; missing icons) were fixed before this note. Live plan: `docs/lodestar/`. Prior text kept below. Bearing: C9.
+
 # World-Class Improvement Plan
 
 Research → gaps → build targets for The Red Letter Advisor.

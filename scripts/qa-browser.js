@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 /**
- * First-session browser QA for the editorial folio.
+ * ARCHIVED 2026-09-14 — LODESTAR Cycle 1.
+ * Expects the old folio onboarding (`#ob-ack`, “Turn the page”, `#sit-sheet`).
+ * Current first-session check: `npm run qa-fresh`.
+ * Do not treat a failure here as a product regression.
  * Usage: node scripts/qa-browser.js [baseUrl]
- * Requires a running server and system Chrome.
  */
 const puppeteer = require('puppeteer-core');
 

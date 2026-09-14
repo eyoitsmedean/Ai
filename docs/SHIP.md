@@ -70,7 +70,7 @@ Live-model and physical-device rows stay **UNVERIFIED** until you run them.
 
 ## Decisions that stay settled
 
-See `CLAUDE.md` D1–D13. In one line: advisor-first, red-letter only, model never types a verse, PWA, fixed letters for crisis/danger/assault, cache version bump is atomic (`?v=19` + `rla-v19-chapel`).
+See `CLAUDE.md` D1–D13. In one line: advisor-first, red-letter only, model never types a verse, PWA, fixed letters for crisis/danger/assault, cache version bump is atomic (`?v=23` + `rla-v23-chapel`).
 
 Open: OQ1 (KJV→WEB before paid UK), OQ2 (this package, action 2), OQ3 (Capacitor later).
 

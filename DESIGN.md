@@ -1,3 +1,5 @@
+> **UNBLESSED / aspirational — LODESTAR Cycle 1.** Taste still holds (C2). Shipped type is **Fraunces / Literata / Figtree**, self-hosted (`CLAUDE.md` D2), not the Source Serif 4 / Instrument Sans stack named in places below. Do not restyle the PWA from this file. Bearing: C2.
+
 # Red Letter — a design language
 
 Complex in the making. Almost invisible in the using.
