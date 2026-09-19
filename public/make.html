@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4EFE4" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="A quiet motif from a sealed saying. Not a hymn. Not a launch." />
+  <title>Red Letter — Maker</title>
+  <link rel="icon" href="/icon-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      min-height: 100svh;
+      background: #F4EFE4;
+      color: #1B1610;
+      font-family: 'Palatino Linotype', Palatino, Georgia, serif;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .watch {
+      background: #1B1610;
+      color: #F4EFE4;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .watch strong { font-weight: 600; letter-spacing: 0.14em; }
+    main { width: min(40rem, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 4rem; }
+    header { margin-bottom: 1.75rem; }
+    .mark { display: inline-flex; align-items: center; gap: 0.65rem; text-decoration: none; color: inherit; }
+    .r {
+      width: 1.7rem; height: 1.7rem;
+      border: 1px solid rgba(27,22,16,0.22);
+      border-radius: 999px; display: grid; place-items: center;
+      font-family: Georgia, Palatino, serif; font-style: italic; color: #8F1D1D; font-size: 1.05rem;
+    }
+    .wordmark { font-family: Georgia, Palatino, serif; font-weight: 560; font-size: 1.05rem; }
+    h1 {
+      font-family: Georgia, Palatino, serif; font-weight: 560;
+      font-size: clamp(1.85rem, 6vw, 2.35rem); line-height: 1.15;
+      margin: 1.1rem 0 0.55rem;
+    }
+    .lede { color: #4A4034; max-width: 34rem; }
+    label {
+      display: block;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #7A6E5E; margin-bottom: 0.45rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid rgba(27,22,16,0.16);
+      background: #FBF7EE; color: #1B1610;
+      border-radius: 2px; padding: 0.7rem 0.9rem;
+      font: inherit;
+    }
+    input:focus { outline: 2px solid #8F1D1D; outline-offset: 2px; }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
+    button, .chip {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      border: 1px solid rgba(27,22,16,0.16);
+      background: #FBF7EE; color: #1B1610;
+      border-radius: 999px; padding: 0.45rem 0.85rem;
+      font-size: 0.92rem; cursor: pointer;
+    }
+    button.primary {
+      background: #8F1D1D; color: #FBF7EE; border-color: #8F1D1D;
+      padding: 0.55rem 1.15rem; font-weight: 600;
+    }
+    button:disabled { opacity: 0.45; }
+    button[aria-pressed="true"] { background: #1B1610; color: #FBF7EE; border-color: #1B1610; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+    .chip { background: transparent; }
+    .block { margin-top: 1.6rem; padding-top: 1.15rem; border-top: 1px solid rgba(27,22,16,0.10); }
+    .block h2 {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #7A6E5E; font-weight: 500; margin-bottom: 0.55rem;
+    }
+    .quote { font-family: Georgia, Palatino, serif; font-style: italic; font-size: 1.28rem; line-height: 1.55; color: #8F1D1D; }
+    .quote .q-word {
+      font: inherit; font-style: italic; color: inherit;
+      background: transparent; border: 0; border-radius: 2px;
+      padding: 0 0.08em; cursor: pointer;
+    }
+    .quote .q-word:hover { background: rgba(143,29,29,0.08); }
+    .quote .q-word.on { background: #8F1D1D; color: #FBF7EE; }
+    .cite { margin-top: 0.55rem; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.82rem; letter-spacing: 0.04em; color: #7A6E5E; }
+    .handoff, .cannot { color: #4A4034; white-space: pre-wrap; }
+    .handoff { color: #1B1610; }
+    .fine { margin-top: 0.45rem; font-size: 0.85rem; color: #7A6E5E; }
+    .fine a, footer a { color: #4A4034; }
+    footer {
+      margin-top: 2.4rem; padding-top: 1rem;
+      border-top: 1px solid rgba(27,22,16,0.10);
+      font-size: 0.92rem; color: #7A6E5E;
+    }
+    .err { color: #8F1D1D; margin-top: 0.7rem; font-size: 0.95rem; }
+    .hidden { display: none; }
+    .staff { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; margin-top: 0.85rem; }
+    .phrase {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+      padding: 0.25rem 0.45rem 0.1rem;
+    }
+    .rails {
+      position: absolute;
+      left: 0.45rem; right: 0.45rem; top: 0.3rem;
+      height: 6.5rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      pointer-events: none;
+    }
+    .rail { height: 1px; background: rgba(27,22,16,0.11); }
+    .notes {
+      position: relative;
+      display: flex; flex-wrap: wrap; align-items: flex-end;
+      gap: 0.22rem 0.32rem;
+      min-height: 8.5rem;
+      padding-bottom: 0.1rem;
+    }
+    .pad {
+      --deg: 0;
+      width: 2.7rem;
+      height: calc(1.55rem + (var(--deg) * 0.95rem));
+      padding: 0;
+      border: 0;
+      background: transparent;
+      border-radius: 0;
+      display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+      cursor: pointer;
+    }
+    .pad .dot {
+      width: 0.62rem; height: 0.62rem; margin-bottom: 0.28rem;
+      border-radius: 999px; background: rgba(143,29,29,0.38);
+      box-shadow: 0 0 0 4px rgba(143,29,29,0.06);
+    }
+    .pad .word {
+      display: block; max-width: 2.7rem;
+      font-size: 0.62rem; letter-spacing: 0.01em; color: #4A4034;
+      line-height: 1.15; word-break: break-word;
+    }
+    .pad .name {
+      display: block; font-size: 0.58rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #9A8E7C; margin-top: 0.12rem;
+    }
+    .pad.on .dot { background: #8F1D1D; box-shadow: 0 0 0 5px rgba(143,29,29,0.16); }
+    .pad.on .word, .pad.on .name { color: #8F1D1D; font-weight: 600; }
+    .pad:focus-visible { outline: 2px solid #8F1D1D; outline-offset: 2px; }
+    .controls { margin-top: 0.85rem; }
+    .seg {
+      display: inline-flex; gap: 0.2rem; align-items: center;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: #7A6E5E;
+    }
+    .seg button { padding: 0.32rem 0.7rem; font-size: 0.82rem; }
+    input[type="range"] { width: min(14rem, 100%); accent-color: #8F1D1D; }
+    @media (max-width: 420px) {
+      body { font-size: 17px; }
+      .quote { font-size: 1.15rem; }
+      .pad { width: 2.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <p class="watch"><strong>Watch</strong> — not a launch. Household review only. Do not publish or submit to a store.</p>
+  <main>
+    <header>
+      <a class="mark" href="/ask"><span class="r" aria-hidden="true">R</span><span class="wordmark">Red Letter</span></a>
+      <h1>Hear the words as a motif.</h1>
+      <p class="lede">The tune is not His. Each word chooses a step; a comma is a breath; the last word of a phrase sits so the motif can rest. The staff will not play until you ask.</p>
+    </header>
+
+    <form id="make-form">
+      <label for="make-input">A saying, or what you are carrying</label>
+      <input id="make-input" name="text" maxlength="400" autocomplete="off" placeholder="John 16:33" />
+      <div class="row">
+        <button type="submit" class="primary" id="make-go">Open</button>
+        <span class="fine">His speech only. Sealed KJV.</span>
+      </div>
+      <div class="chips">
+        <button type="button" class="chip" data-ref="John 16:33">John 16:33</button>
+        <button type="button" class="chip" data-ref="Matthew 11:28">Matthew 11:28</button>
+        <button type="button" class="chip" data-ref="John 14:27">John 14:27</button>
+        <button type="button" class="chip" data-ref="Matthew 5:4">Matthew 5:4</button>
+        <button type="button" class="chip" data-ref="Luke 12:32">Luke 12:32</button>
+        <button type="button" class="chip" data-ask="I am so tired">I am so tired</button>
+      </div>
+      <p class="err hidden" id="make-err" role="alert"></p>
+    </form>
+
+    <div id="answer" aria-live="polite">
+      <section class="block hidden" id="handoff-block">
+        <h2>Stop here</h2>
+        <p class="handoff" id="handoff"></p>
+      </section>
+      <section class="block" id="words-block">
+        <h2>The words</h2>
+        <p class="quote" id="quote">Open a saying. The staff stays quiet until you press Play.</p>
+        <p class="cite" id="cite"></p>
+      </section>
+      <section class="block hidden" id="staff-block">
+        <h2>The motif</h2>
+        <div class="staff" id="staff"></div>
+        <div class="controls">
+          <div class="row">
+            <button type="button" class="primary" id="play">Play</button>
+            <button type="button" id="stop">Stop</button>
+            <span class="seg" aria-label="Register">
+              <button type="button" id="reg-sit">Sit</button>
+              <button type="button" id="reg-mid" aria-pressed="true">Mid</button>
+              <button type="button" id="reg-lift">Lift</button>
+            </span>
+            <span class="seg" aria-label="Voices">
+              <button type="button" id="voice-one" aria-pressed="true">One</button>
+              <button type="button" id="voice-two">Two</button>
+            </span>
+          </div>
+          <div class="row">
+            <label for="tempo" style="margin:0">Tempo</label>
+            <input type="range" id="tempo" min="52" max="92" value="72" />
+            <span class="fine" id="tempo-read">72</span>
+          </div>
+        </div>
+        <p class="fine" id="scale-line"></p>
+        <p class="fine">Press a word or a note. Space plays and stops. The drone is A. Two adds a quiet fifth. None of that is His tune.</p>
+      </section>
+      <section class="block" id="cannot-block">
+        <h2>What this cannot do</h2>
+        <p class="cannot" id="cannot">This page is not a hymnbook, not a recording of His voice, and not a launch.
+If you are in danger, call 988 in the United States, or start at findahelpline.com anywhere else.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>Crisis: <a href="tel:988">988</a> in the United States (call, text, or chat at <a href="https://988lifeline.org/">988lifeline.org</a>). Anywhere else: <a href="https://findahelpline.com/">findahelpline.com</a>.</p>
+      <p style="margin-top:0.45rem">Atelier only. <a href="/ask">Ask</a> · <a href="/letter">A letter</a> · <a href="/">Folio</a></p>
+    </footer>
+  </main>
+  <script>
+    const form = document.getElementById('make-form');
+    const input = document.getElementById('make-input');
+    const err = document.getElementById('make-err');
+    const quoteEl = document.getElementById('quote');
+    const citeEl = document.getElementById('cite');
+    const staffEl = document.getElementById('staff');
+    const staffBlock = document.getElementById('staff-block');
+    const handoffBlock = document.getElementById('handoff-block');
+    const handoffEl = document.getElementById('handoff');
+    const cannotEl = document.getElementById('cannot');
+    const wordsBlock = document.getElementById('words-block');
+    const scaleLine = document.getElementById('scale-line');
+    const playBtn = document.getElementById('play');
+    const stopBtn = document.getElementById('stop');
+    const tempo = document.getElementById('tempo');
+    const tempoRead = document.getElementById('tempo-read');
+
+    let motif = null;
+    let ctx = null;
+    let droneNodes = [];
+    let playing = false;
+    let heard = false;
+    let timers = [];
+    let register = 1;
+    let fifth = false;
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+      }[c]));
+    }
+
+    function renderQuote(quote, notes) {
+      const re = /[A-Za-z']+|[^A-Za-z']+/g;
+      let html = '“';
+      let ni = 0;
+      const s = String(quote || '');
+      let m;
+      while ((m = re.exec(s))) {
+        const tok = m[0];
+        if (/[A-Za-z']/.test(tok)) {
+          while (ni < notes.length && notes[ni].kind !== 'tone') ni += 1;
+          if (ni < notes.length) {
+            html += '<button type="button" class="q-word" data-i="' + ni + '">' + esc(tok) + '</button>';
+            ni += 1;
+            continue;
+          }
+        }
+        html += esc(tok);
+      }
+      return html + '”';
+    }
+
+    function showErr(msg) {
+      err.textContent = msg || '';
+      err.classList.toggle('hidden', !msg);
+    }
+
+    function setPlayLabel() {
+      playBtn.textContent = playing ? 'Stop' : (heard ? 'Again' : 'Play');
+    }
+
+    function clearLights() {
+      [...staffEl.querySelectorAll('.pad')].forEach((p) => p.classList.remove('on'));
+      [...quoteEl.querySelectorAll('.q-word')].forEach((p) => p.classList.remove('on'));
+    }
+
+    function light(i) {
+      clearLights();
+      const pad = staffEl.querySelector('.pad[data-i="' + i + '"]');
+      const word = quoteEl.querySelector('.q-word[data-i="' + i + '"]');
+      if (pad) pad.classList.add('on');
+      if (word) word.classList.add('on');
+    }
+
+    function stopDrone() {
+      droneNodes.forEach((n) => {
+        try { n.stop(); } catch (e) {}
+      });
+      droneNodes = [];
+    }
+
+    function stopSound() {
+      playing = false;
+      timers.forEach((id) => clearTimeout(id));
+      timers = [];
+      clearLights();
+      stopDrone();
+      if (ctx) ctx.close().catch(() => {});
+      ctx = null;
+      setPlayLabel();
+    }
+
+    function paint(data) {
+      stopSound();
+      heard = false;
+      setPlayLabel();
+      motif = data && data.ok ? data : null;
+      if (data && data.stop) {
+        wordsBlock.classList.add('hidden');
+        staffBlock.classList.add('hidden');
+        handoffBlock.classList.remove('hidden');
+        handoffEl.textContent = data.handoff || '';
+        cannotEl.textContent = data.cannot || cannotEl.textContent;
+        quoteEl.textContent = '';
+        citeEl.textContent = '';
+        staffEl.innerHTML = '';
+        return;
+      }
+      handoffBlock.classList.add('hidden');
+      wordsBlock.classList.remove('hidden');
+      if (!data || !data.ok) {
+        staffBlock.classList.add('hidden');
+        quoteEl.textContent = data && data.error === 'not-his'
+          ? 'Those words are not His speech. This room will not open them.'
+          : 'Open a saying. The staff stays quiet until you press Play.';
+        citeEl.textContent = '';
+        staffEl.innerHTML = '';
+        return;
+      }
+      const tones = data.notes.filter((n) => n.kind === 'tone');
+      quoteEl.innerHTML = renderQuote(data.quote, data.notes);
+      quoteEl.querySelectorAll('.q-word').forEach((btn) => {
+        btn.addEventListener('click', () => tap(Number(btn.dataset.i)));
+      });
+      citeEl.textContent = data.citation + ' · ' + (data.edition || 'KJV 1769');
+      scaleLine.textContent = (data.scale || 'A minor pentatonic')
+        + ' · ' + tones.length + ' words · '
+        + (data.phrases || 1) + (data.phrases === 1 ? ' phrase' : ' phrases')
+        + ' · the tune is not His';
+      staffEl.innerHTML = '';
+      const byPhrase = new Map();
+      data.notes.forEach((n, i) => {
+        if (n.kind !== 'tone') return;
+        const p = n.phrase || 0;
+        if (!byPhrase.has(p)) byPhrase.set(p, []);
+        byPhrase.get(p).push({ n, i });
+      });
+      byPhrase.forEach((items) => {
+        const phrase = document.createElement('div');
+        phrase.className = 'phrase';
+        const rails = document.createElement('div');
+        rails.className = 'rails';
+        rails.setAttribute('aria-hidden', 'true');
+        for (let r = 0; r < 6; r += 1) {
+          const rail = document.createElement('div');
+          rail.className = 'rail';
+          rails.appendChild(rail);
+        }
+        const notesEl = document.createElement('div');
+        notesEl.className = 'notes';
+        items.forEach(({ n, i }) => {
+          const pad = document.createElement('button');
+          pad.type = 'button';
+          pad.className = 'pad';
+          pad.dataset.i = String(i);
+          pad.dataset.degree = String(n.degree);
+          pad.style.setProperty('--deg', String(n.degree));
+          pad.setAttribute('aria-label', n.word + ', ' + n.name);
+          pad.innerHTML = '<span class="dot"></span><span class="word">' + esc(n.word) + '</span><span class="name">' + esc(n.name) + '</span>';
+          pad.addEventListener('click', () => tap(i));
+          notesEl.appendChild(pad);
+        });
+        phrase.appendChild(rails);
+        phrase.appendChild(notesEl);
+        staffEl.appendChild(phrase);
+      });
+      staffBlock.classList.remove('hidden');
+    }
+
+    function ensureCtx() {
+      if (!ctx || ctx.state === 'closed') ctx = new AudioContext();
+      return ctx;
+    }
+
+    function tone(audio, hz, when, dur) {
+      const f = hz * register;
+      const master = audio.createGain();
+      master.gain.setValueAtTime(0.0001, when);
+      master.gain.exponentialRampToValueAtTime(0.12, when + 0.04);
+      master.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+      master.connect(audio.destination);
+
+      function voice(freq, amt, type) {
+        const osc = audio.createOscillator();
+        const g = audio.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, when);
+        g.gain.setValueAtTime(amt, when);
+        osc.connect(g);
+        g.connect(master);
+        osc.start(when);
+        osc.stop(when + dur + 0.03);
+      }
+
+      voice(f, 1, 'sine');
+      voice(f * 2, 0.18, 'sine');
+      if (fifth) voice(f * 1.5, 0.16, 'sine');
+    }
+
+    function startDrone(audio) {
+      stopDrone();
+      const osc = audio.createOscillator();
+      const g = audio.createGain();
+      const now = audio.currentTime;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime((motif && motif.drone) || 220, now);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.03 * register, now + 0.4);
+      osc.connect(g);
+      g.connect(audio.destination);
+      osc.start(now);
+      droneNodes = [osc];
+    }
+
+    function tap(i) {
+      if (!motif || !motif.notes[i] || motif.notes[i].kind !== 'tone') return;
+      const audio = ensureCtx();
+      const n = motif.notes[i];
+      tone(audio, n.hz, audio.currentTime, Math.max(0.2, n.beats * 0.38));
+      light(i);
+      setTimeout(() => {
+        const pad = staffEl.querySelector('.pad[data-i="' + i + '"]');
+        const word = quoteEl.querySelector('.q-word[data-i="' + i + '"]');
+        if (pad) pad.classList.remove('on');
+        if (word) word.classList.remove('on');
+      }, 320);
+    }
+
+    async function playAll() {
+      if (!motif || !motif.notes.length) return;
+      if (playing) { stopSound(); return; }
+      stopSound();
+      heard = true;
+      const audio = ensureCtx();
+      playing = true;
+      setPlayLabel();
+      startDrone(audio);
+      const bpm = Number(tempo.value) || 72;
+      const beat = 60 / bpm;
+      let t = 0.12;
+      motif.notes.forEach((n, i) => {
+        const start = t;
+        const dur = n.beats * beat;
+        if (n.kind === 'tone') {
+          tone(audio, n.hz, audio.currentTime + start, Math.max(0.16, dur * 0.88));
+          timers.push(setTimeout(() => light(i), start * 1000));
+        } else {
+          timers.push(setTimeout(() => clearLights(), start * 1000));
+        }
+        t += dur;
+      });
+      timers.push(setTimeout(() => {
+        playing = false;
+        clearLights();
+        stopDrone();
+        if (ctx) ctx.close().catch(() => {});
+        ctx = null;
+        setPlayLabel();
+      }, (t + 0.35) * 1000));
+    }
+
+    async function openMotif({ ref, text }) {
+      showErr('');
+      const body = ref ? { ref } : { text };
+      const res = await fetch('/api/make', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 404 || data.error === 'not-his') {
+        paint({ ok: false, error: 'not-his' });
+        return;
+      }
+      if (!res.ok && !data.stop) {
+        showErr('The maker could not open that.');
+        return;
+      }
+      paint(data);
+    }
+
+    function pressSeg(group, el) {
+      group.forEach((b) => b.setAttribute('aria-pressed', b === el ? 'true' : 'false'));
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = input.value.trim();
+      if (!v) return;
+      const looksRef = /\b(Matthew|Mark|Luke|John)\s+\d/i.test(v);
+      openMotif(looksRef ? { ref: v } : { text: v });
+    });
+    document.querySelectorAll('.chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const ref = btn.getAttribute('data-ref');
+        const ask = btn.getAttribute('data-ask');
+        input.value = ref || ask || '';
+        openMotif(ref ? { ref } : { text: ask });
+      });
+    });
+    playBtn.addEventListener('click', playAll);
+    stopBtn.addEventListener('click', stopSound);
+    tempo.addEventListener('input', () => { tempoRead.textContent = tempo.value; });
+
+    const regSit = document.getElementById('reg-sit');
+    const regMid = document.getElementById('reg-mid');
+    const regLift = document.getElementById('reg-lift');
+    const voiceOne = document.getElementById('voice-one');
+    const voiceTwo = document.getElementById('voice-two');
+    regSit.addEventListener('click', () => { register = 0.5; pressSeg([regSit, regMid, regLift], regSit); });
+    regMid.addEventListener('click', () => { register = 1; pressSeg([regSit, regMid, regLift], regMid); });
+    regLift.addEventListener('click', () => { register = 2; pressSeg([regSit, regMid, regLift], regLift); });
+    voiceOne.addEventListener('click', () => { fifth = false; pressSeg([voiceOne, voiceTwo], voiceOne); });
+    voiceTwo.addEventListener('click', () => { fifth = true; pressSeg([voiceOne, voiceTwo], voiceTwo); });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code !== 'Space' && e.key !== ' ') return;
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (!motif || staffBlock.classList.contains('hidden')) return;
+      e.preventDefault();
+      playAll();
+    });
+
+    const params = new URLSearchParams(location.search);
+    const start = params.get('ref') || params.get('text');
+    if (start) {
+      input.value = start;
+      openMotif(params.get('ref') ? { ref: start } : { text: start });
+    } else {
+      input.value = 'John 16:33';
+      openMotif({ ref: 'John 16:33' });
+    }
+  </script>
+</body>
+</html>
