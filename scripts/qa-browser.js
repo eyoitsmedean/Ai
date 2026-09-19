@@ -129,6 +129,20 @@ async function main() {
     assert(!gate, 'paywall gate must not exist');
   });
 
+  await check('the helpline is visible before anyone types', async () => {
+    await page.evaluate(() => { if (typeof closeSheets === 'function') closeSheets(); switchTab('advisor'); });
+    await page.waitForFunction(() => document.getElementById('advisor-page').classList.contains('active'), { timeout: 4000 });
+    const help = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { text: el.innerText, tel: !!el.querySelector('a[href="tel:988"]'), onScreen: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight };
+    });
+    assert(help, '#composer-help missing');
+    assert(help.tel && /findahelpline/.test(help.text), 'helpline line lacks 988 or findahelpline');
+    assert(help.onScreen, 'helpline line is not on screen: ' + JSON.stringify(help));
+  });
+
   await check('Advisor letter ends in Sit, blessing is a page', async () => {
     await page.click('#nav-advisor');
     await page.type('#chat-input', 'I feel shame');
@@ -136,12 +150,50 @@ async function main() {
     await page.waitForFunction(() => /John|Matthew/i.test(document.getElementById('chat-messages')?.innerText || ''), { timeout: 20000 });
     const sit = await page.$('#sit-from-letter');
     assert(sit, 'Sit with this missing');
+    const actions = await page.evaluate(() => {
+      const keep = [...document.querySelectorAll('.msg-save-btn')].map((b) => b.textContent.trim());
+      const row = document.querySelector('.letter-actions');
+      return { keep, hasRow: !!row, rowText: row ? row.innerText.replace(/\s+/g, ' ') : '' };
+    });
+    assert(actions.hasRow && /Keep in the journal/i.test(actions.rowText) && /Sit with this/i.test(actions.rowText), 'letter actions collided: ' + actions.rowText);
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+    await page.type('#chat-input', 'I still cannot lift my face');
+    await page.click('#send-btn');
+    await page.waitForFunction(() => !document.getElementById('last-leaf')?.hidden, { timeout: 20000 });
+    const closed = await page.evaluate(() => {
+      const el = document.getElementById('composer-help');
+      const composer = document.querySelector('#advisor-page .composer');
+      const r = el.getBoundingClientRect();
+      return {
+        leaf: /These are the words/i.test(document.getElementById('last-leaf').innerText),
+        composerHidden: !composer || getComputedStyle(composer).display === 'none',
+        helpOn: r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight,
+      };
+    });
+    assert(closed.leaf, 'last leaf missing close');
+    assert(closed.composerHidden && closed.helpOn, 'helpline must stay when the page closes: ' + JSON.stringify(closed));
     await page.click('#nav-today');
     await page.evaluate(() => { if (typeof blessingFromToday === 'function') blessingFromToday(); });
     await page.waitForSelector('#blessing-sheet.on', { timeout: 8000 });
     const url = await page.evaluate(() => blessingUrl());
     assert(/\/b\//.test(url), 'blessing is not a page');
     await page.evaluate(() => closeBlessing());
+  });
+
+  await check('Letters search puts a person before a verse', async () => {
+    await page.evaluate(() => { switchTab('seek'); setSeekMode('letters'); });
+    await page.waitForFunction(() => !document.getElementById('letters-pane').hidden, { timeout: 4000 });
+    await page.evaluate(() => { const q = document.getElementById('lib-q'); q.value = ''; q.dispatchEvent(new Event('input')); });
+    await page.type('#lib-q', 'I want to die');
+    await page.waitForFunction(() => !document.getElementById('lib-crisis').hidden, { timeout: 4000 });
+    const state = await page.evaluate(() => ({
+      crisis: document.getElementById('lib-crisis').innerText,
+      rows: document.querySelectorAll('#lib-list .saying, #lib-list .lib-row, #lib-list button').length,
+      tel: !!document.querySelector('#lib-crisis a[href="tel:988"]'),
+    }));
+    assert(/988/.test(state.crisis), 'letters crisis missing 988');
+    assert(state.tel, 'letters crisis missing tel:988');
+    assert(state.rows === 0, 'verse list shown on top of crisis');
   });
 
   await check('no page errors', async () => {
