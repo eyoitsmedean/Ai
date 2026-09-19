@@ -499,7 +499,7 @@ async function main() {
     await page.waitForFunction(() => {
       const q = document.getElementById('quote');
       const staff = document.getElementById('staff');
-      return q && /overcome the world/i.test(q.textContent) && staff && staff.querySelectorAll('.pad').length > 4;
+      return q && /overcome the world/i.test(q.textContent) && /you,/.test(q.textContent) && staff && staff.querySelectorAll('.pad').length > 4;
     }, { timeout: 15000 });
     const copy = await page.evaluate(() => document.body.innerText);
     assert(/will not play until you ask/i.test(copy), 'maker must not autoplay');
