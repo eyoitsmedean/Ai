@@ -493,6 +493,42 @@ async function main() {
     await page.waitForFunction(() => /Not His speech/i.test(document.getElementById('quote').textContent), { timeout: 15000 });
   });
 
+  await check('saying maker opens a sealed motif and will not play danger', async () => {
+    const res = await page.goto(BASE + '/make?ref=John%2016:33', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), '/make HTTP ' + (res && res.status()));
+    await page.waitForFunction(() => {
+      const q = document.getElementById('quote');
+      const staff = document.getElementById('staff');
+      return q && /overcome the world/i.test(q.textContent) && staff && staff.querySelectorAll('.pad').length > 4;
+    }, { timeout: 15000 });
+    const copy = await page.evaluate(() => document.body.innerText);
+    assert(/will not play until you ask/i.test(copy), 'maker must not autoplay');
+    assert(/the tune is not His/i.test(copy), 'maker must not claim the tune is His');
+    assert(/a comma is a breath/i.test(copy), 'maker must name the breath');
+    const beforePlay = await page.evaluate(() => ({
+      lit: document.querySelectorAll('.pad.on').length,
+      phrases: document.querySelectorAll('.phrase').length,
+      play: document.getElementById('play').textContent,
+    }));
+    assert(beforePlay.lit === 0, 'maker must not light a note before Play');
+    assert(beforePlay.phrases >= 2, 'John 16:33 should sit in more than one phrase');
+    assert(beforePlay.play === 'Play', 'Play must still say Play before a press');
+    await page.click('#play');
+    await page.waitForFunction(() => document.querySelector('.pad.on') || document.getElementById('play').textContent !== 'Play', { timeout: 8000 });
+    await page.click('#stop');
+    await page.evaluate(() => {
+      document.getElementById('make-input').value = 'I want to kill myself';
+    });
+    await page.click('#make-go');
+    await page.waitForFunction(() => !document.getElementById('handoff-block').classList.contains('hidden'), { timeout: 15000 });
+    const stop = await page.evaluate(() => ({
+      handoff: document.getElementById('handoff').innerText,
+      pads: document.getElementById('staff').querySelectorAll('.pad').length,
+    }));
+    assert(/988/.test(stop.handoff), 'maker crisis must name 988');
+    assert(stop.pads === 0, 'maker crisis must not keep a staff');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

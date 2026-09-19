@@ -2,6 +2,16 @@
 
 ---
 
+## Saying maker — 2026-09-19
+
+There was no music-maker codebase in this repo. Closest existing work: folio “Hear this office” (TTS) and Seek “small hymnal” (copy). Notion has AEVUM / Ableton notes; those stay parked.
+
+Built `/make`: His sealed words become a deterministic motif. Play is a press. Crisis/abuse stop with no notes. Linked from `/ask`. Household only.
+
+Second pass: punctuation is a rest, phrase-final words sit on E or A, the staff is a pitch field, Play follows the spoken word, Sit/Mid/Lift and One/Two (drone + optional fifth). Still not a hymn. Still not AEVUM. Still no autoplay. `/letter` now points at the same motif.
+
+---
+
 ## Folio stop — 2026-09-14
 
 Same first-ten read as the pass before this: Muse / approve; wow-quality deliverable; Build; FORGE; ATELIER (Jesus’s words, warmth, crisis handoff, no store); rebuild pipeline. Later amendment that still wins: name a human, **stop**.

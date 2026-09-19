@@ -34,7 +34,7 @@
     <p class="quote" id="quote">Looking…</p>
     <p class="cite" id="cite"></p>
     <p class="fine" id="colophon">His speech only · King James Version 1769 · United States public-domain wording · not a launch</p>
-    <p class="fine noprint">Print this page if you want paper. A verse that is not His (Luke 2:14, an angel) will not open. <a href="/ask">Ask</a> · <a href="/gate">Text gate</a></p>
+    <p class="fine noprint">Print this page if you want paper. A verse that is not His (Luke 2:14, an angel) will not open. <a href="/ask">Ask</a> · <a href="/gate">Text gate</a> · <a id="make-leaf" href="/make?ref=Matthew%2011:28">Hear it as a motif</a></p>
   </main>
   <script src="/data/advisor.js"></script>
   <script>
@@ -43,14 +43,17 @@
     document.getElementById('ref').value = ref;
 
     function paint(ok, citation, quote) {
+      const makeLeaf = document.getElementById('make-leaf');
       if (!ok) {
         document.getElementById('quote').textContent = quote || 'Not His speech, or not found.';
         document.getElementById('cite').textContent = '';
+        if (makeLeaf) makeLeaf.href = '/make';
         return;
       }
       document.getElementById('quote').textContent = '“' + quote + '”';
       document.getElementById('cite').textContent = citation + ' · KJV 1769';
       document.title = 'Red Letter — ' + citation;
+      if (makeLeaf) makeLeaf.href = '/make?ref=' + encodeURIComponent(citation);
     }
 
     function fromBundle(wanted) {

@@ -202,7 +202,7 @@
         <h2>The words</h2>
         <p class="quote" id="quote">“These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.”</p>
         <p class="cite" id="cite">John 16:33 · KJV 1769</p>
-        <p class="fine" id="print-row"><a id="print-leaf" href="/letter?ref=John%2016:33">Print this saying</a></p>
+        <p class="fine" id="print-row"><a id="print-leaf" href="/letter?ref=John%2016:33">Print this saying</a> · <a id="make-leaf" href="/make?ref=John%2016:33">Hear it as a motif</a></p>
         <p class="fine" id="web-note">The other locked text, opened 2026-09-11: “Come to me, all you who labor and are heavily burdened, and I will give you rest.” Matthew 11:28 · World English Bible · <a href="https://ebible.org/engwebp/MAT11.htm">eBible, Matthew 11</a>. Live answers stay sealed KJV until a public text is recorded.</p>
       </section>
       <section class="block" id="meaning-block">
@@ -224,7 +224,7 @@ If you are in danger, call 988 in the United States, or start at findahelpline.c
 
     <footer>
       <p>Crisis: <a href="tel:988">988</a> in the United States (call, text, or chat at <a href="https://988lifeline.org/">988lifeline.org</a>). Anywhere else: <a href="https://findahelpline.com/">findahelpline.com</a>.</p>
-      <p style="margin-top:0.45rem">The five-room folio is the atelier, not this product. Crisis letters there now stop the same way this page does. <a href="/">Open the atelier</a> · <a href="/gate">Text gate</a> · <a href="/letter">A letter</a></p>
+      <p style="margin-top:0.45rem">The five-room folio is the atelier, not this product. Crisis letters there now stop the same way this page does. <a href="/">Open the atelier</a> · <a href="/gate">Text gate</a> · <a href="/letter">A letter</a> · <a href="/make">Maker</a></p>
     </footer>
   </main>
   <script src="/data/advisor.js"></script>
@@ -262,10 +262,14 @@ If you are in danger, call 988 in the United States, or start at findahelpline.c
       const cite = document.getElementById('cite');
       const printRow = document.getElementById('print-row');
       const printLeaf = document.getElementById('print-leaf');
+      const makeLeaf = document.getElementById('make-leaf');
       quote.classList.toggle('hidden', stop || !data.quote);
       cite.classList.toggle('hidden', stop || !data.quote);
       printRow.classList.toggle('hidden', stop || !data.citation);
-      if (data.citation) printLeaf.href = '/letter?ref=' + encodeURIComponent(data.citation);
+      if (data.citation) {
+        printLeaf.href = '/letter?ref=' + encodeURIComponent(data.citation);
+        if (makeLeaf) makeLeaf.href = '/make?ref=' + encodeURIComponent(data.citation);
+      }
       document.getElementById('words-block').classList.toggle('hidden', stop);
       document.getElementById('meaning-block').classList.toggle('hidden', stop || !data.meaning);
       document.getElementById('handoff-block').classList.toggle('hidden', !stop);

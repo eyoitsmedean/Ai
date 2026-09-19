@@ -225,6 +225,7 @@ describe('one-screen routes', () => {
     assert.match(res.raw, /John 16:33/);
     assert.match(res.raw, /I have overcome the world/);
     assert.match(res.raw, /Print this saying/);
+    assert.match(res.raw, /Hear it as a motif/);
     const tired = composeAsk('I am so tired');
     assert.match(res.raw, new RegExp(tired.quote.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.doesNotMatch(res.raw, /id="sit-quote"/);

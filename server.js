@@ -10,6 +10,7 @@ const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/sche
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
 const { compose: composeLetter } = require('./lib/advise');
 const { composeAsk } = require('./lib/ask');
+const { motifFromRef, motifFromAsk } = require('./lib/music');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -466,6 +467,27 @@ app.get('/gate', (req, res) => {
 app.get('/letter', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'letter.html'));
+});
+
+app.get('/make', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'make.html'));
+});
+
+app.get('/api/make', (req, res) => {
+  const out = motifFromRef(String(req.query.ref || ''));
+  if (out.stop) return res.json(out);
+  if (!out.ok) return res.status(out.error === 'empty' ? 400 : 404).json(out);
+  res.json(out);
+});
+
+app.post('/api/make', (req, res) => {
+  const ref = String((req.body && req.body.ref) || '').trim();
+  const text = String((req.body && req.body.text) || '').trim();
+  const out = ref ? motifFromRef(ref) : motifFromAsk(text);
+  if (out.stop) return res.json(out);
+  if (!out.ok) return res.status(out.error === 'empty' ? 400 : 404).json(out);
+  res.json(out);
 });
 
 app.get('/api/letter', (req, res) => {

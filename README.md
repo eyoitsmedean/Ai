@@ -30,6 +30,7 @@ cp .env.example .env   # then set ANTHROPIC_API_KEY
 - **Ask (`/ask`)** — the intended product. One screen. Crisis stops. Not a launch.
 - **Text pad (`/gate`)** — household scratch pad for WEB vs KJV-US. Does not change live answers.
 - **A letter (`/letter`)** — one printable saying, His speech only.
+- **Maker (`/make`)** — a quiet motif from a sealed saying. The tune is not His. A comma is a breath. Nothing plays until you ask. Not a launch.
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn.
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves.
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence.
