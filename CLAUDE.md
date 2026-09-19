@@ -38,7 +38,7 @@ Mark each line when you run it. "Verified" means run in this repository and obse
 
 | Item | Status | How to verify |
 | --- | --- | --- |
-| Node suite (80 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, on-device composer + `/ask` composeAsk parity, `/ask` stop + routes + `/gate` `/letter`) | verified 2026-09-14 | `npm test` |
+| Node suite (85 tests: corpus verse counts, seal, Forty order, Advisor classification and letters, crisis-regex parity, on-device composer + `/ask` composeAsk parity, `/ask` stop + routes + `/gate` `/letter` `/make`) | verified 2026-09-19 | `npm test` |
 | Corpus whole: all 89 Gospel chapters at canonical verse counts, cross-checked against two independent KJV sources | verified 2026-09-06 | `npm test` (corpus integrity) |
 | Every quotation in every client data file (155) seals at ≥ 0.92 | verified 2026-09-06 | `npm test` |
 | Advisor evaluation set, curated path: 82/82 pass, 63 distinct letters (the 19 shared letters are the fixed crisis, refusal, and hello scripts); harness mutation-tested — sabotaging the composer fails 9 items | verified 2026-09-14 | `npm run eval` → `eval/RESULTS.md` |

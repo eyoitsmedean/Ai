@@ -76,10 +76,10 @@ describe('saying maker', () => {
   it('keeps the word-to-note map stable and breathes at a stop', () => {
     const notes = notesFromQuote('Peace I leave with you');
     const tones = tonesOf(notes);
-    assert.equal(tones.length, 6);
+    assert.equal(tones.length, 5);
     assert.equal(tones[0].word, 'Peace');
-    assert.equal(tones[5].word, 'you');
-    assert.equal(tones[5].hz, SCALE[0]);
+    assert.equal(tones[4].word, 'you');
+    assert.equal(tones[4].hz, SCALE[0]);
     assert.deepEqual(notes, notesFromQuote('Peace I leave with you'));
 
     const phrased = notesFromQuote('Peace I leave with you, my peace I give unto you.');
