@@ -14,6 +14,17 @@ const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
+// Model output budget. Adaptive thinking spends from the same max_tokens,
+// so a small cap truncates letters and JSON before the answer is written.
+const MAX_TOKENS = 16000;
+
+// Behind a reverse proxy every visitor shares the proxy's IP, which turns the
+// per-visitor rate limits into one site-wide limit. Set TRUST_PROXY to the
+// number of proxy hops (usually 1) so req.ip is the real client address.
+if (process.env.TRUST_PROXY) {
+  const hops = Number(process.env.TRUST_PROXY);
+  app.set('trust proxy', Number.isInteger(hops) ? hops : process.env.TRUST_PROXY);
+}
 
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -100,7 +111,7 @@ STRICT RULES:
 • Prefer well-known, clearly dominical sayings (Sermon on the Mount, Farewell Discourse, parables in Jesus' voice).
 • Never claim to be a person, a pastor, a clinician, or emergency care. If the writer is in danger, urge them toward human help first.`;
 
-const DAILY_SYSTEM = `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
+const dailySystem = () => `You are a spiritual content generator for "The Red Letter Advisor." Create today's fresh daily content drawn ONLY from the direct words of Jesus Christ (red-letter passages in Matthew, Mark, Luke, John).
 
 Return ONLY valid JSON (no markdown, no fences) with this exact structure:
 {
@@ -150,11 +161,11 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-async function generateStructured(system, user, schema, maxTokens) {
+async function generateStructured(system, user, schema) {
   try {
     return await client.messages.create({
       model: MODEL,
-      max_tokens: maxTokens,
+      max_tokens: MAX_TOKENS,
       system,
       messages: [{ role: 'user', content: user }],
       ...structuredFormat(schema),
@@ -163,7 +174,7 @@ async function generateStructured(system, user, schema, maxTokens) {
     console.error('Structured output fallback:', err.message);
     return client.messages.create({
       model: MODEL,
-      max_tokens: maxTokens,
+      max_tokens: MAX_TOKENS,
       thinking: { type: 'adaptive' },
       system,
       messages: [{ role: 'user', content: user }],
@@ -173,10 +184,9 @@ async function generateStructured(system, user, schema, maxTokens) {
 
 async function generateDailyFromModel() {
   const response = await generateStructured(
-    DAILY_SYSTEM,
+    dailySystem(),
     "Generate today's daily affirmation and word.",
-    DAILY_SCHEMA,
-    1400
+    DAILY_SCHEMA
   );
   const text = response.content.find((b) => b.type === 'text')?.text ?? '';
   return verifyJsonQuotes(parseModelJson(text));
@@ -282,8 +292,7 @@ app.post('/api/encouragement', async (req, res) => {
     const response = await generateStructured(
       ENCOURAGE_SYSTEM,
       `Generate encouragement for: ${theme}`,
-      ENCOURAGE_SCHEMA,
-      1600
+      ENCOURAGE_SCHEMA
     );
     const text = response.content.find((b) => b.type === 'text')?.text ?? '';
     const data = verifyJsonQuotes({ ...parseModelJson(text), theme });
@@ -348,17 +357,19 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = looksLikeCrisis(last.content);
+  let stream = null;
   const finish = (body) => {
+    if (res.writableEnded || res.destroyed) return;
     const verified = verifyAndSubstitute(body);
     streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };
 
-  req.on('close', () => {
-    if (!res.writableEnded) {
-      try { res.end(); } catch (_) {}
-    }
+  // res 'close' fires when the visitor leaves (req 'close' fires once the body
+  // is read). Abort the model call so an abandoned letter stops costing tokens.
+  res.on('close', () => {
+    if (stream) stream.abort();
   });
 
   if (!client) {
@@ -376,9 +387,9 @@ app.post('/api/chat', async (req, res) => {
       };
     });
 
-    const stream = client.messages.stream({
+    stream = client.messages.stream({
       model: MODEL,
-      max_tokens: 1400,
+      max_tokens: MAX_TOKENS,
       thinking: { type: 'adaptive' },
       system: ADVISOR_SYSTEM,
       messages: modelMessages,
@@ -389,7 +400,12 @@ app.post('/api/chat', async (req, res) => {
       raw += text;
     });
 
-    await stream.finalMessage();
+    const message = await stream.finalMessage();
+    // A refusal or a cut-off letter would leave the page half-written.
+    if (message.stop_reason !== 'end_turn' || !raw.trim()) {
+      console.error('Chat fallback, stop_reason:', message.stop_reason);
+      return finish(FALLBACK_LETTER);
+    }
     finish(raw);
   } catch (err) {
     console.error('Chat error:', err.message);

@@ -31,6 +31,7 @@ ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
 ANTHROPIC_MODEL=claude-opus-5
 PORT=3000
 API_ACCESS_KEY=        # optional gate for /api/*
+TRUST_PROXY=           # proxy hop count (usually 1) when behind a reverse proxy
 ```
 
 ```bash
