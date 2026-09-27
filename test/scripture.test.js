@@ -148,6 +148,27 @@ describe('looksLikeCrisis', () => {
     assert.equal(looksLikeCrisis('I have no reason to live'), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
   });
+
+  it('catches the words people most often use for suicidal thoughts', () => {
+    for (const text of [
+      'I feel suicidal',
+      'I keep thinking about suicide',
+      'I have been self-harming again',
+      'I want to end it all',
+      'i dont want to live anymore',
+      'I don’t want to be here anymore',
+      'I can’t go on',
+      'thinking of overdosing',
+    ]) {
+      assert.equal(looksLikeCrisis(text), true, text);
+    }
+  });
+
+  it('does not flag ordinary heaviness', () => {
+    for (const text of ['I am tired of work', 'I feel lonely tonight', 'my dad died last year']) {
+      assert.equal(looksLikeCrisis(text), false, text);
+    }
+  });
 });
 
 describe('parseModelJson', () => {

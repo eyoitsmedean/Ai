@@ -3882,7 +3882,7 @@ function closeCommandPalette() {
 }
 
 function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+  return /\b(suicid\w*|kill(?:ing)? myself|end(?:ing)? my (?:own )?life|end it all|take my (?:own )?life|want(?:ing)? to die|wanna die|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang(?:ing)? myself|overdos\w*|(?:don['’]?t|do not) want to (?:live|be alive|exist|be here anymore)|can['’]?t go on|better off dead|no reason to live)\b/i.test(String(text || ''));
 }
 function showCrisisModal() {
   return new Promise((resolve) => {
