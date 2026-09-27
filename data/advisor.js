@@ -1,7 +1,8 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  // Keep in sync with CRISIS_PATTERN in lib/scripture.js (a test enforces it).
+  const CRISIS = /\b(suicid\w*|unaliv\w*|kill(ing)? myself|end(ing)? (my life|it all)|take my (own )?life|(want|wanna|ready) to die|wish (i|I) (was|were) dead|better off dead|self[-\s]?harm\w*|hurt(ing)? myself|cut(ting)? myself|hang myself|overdos\w*|(don['’]?t|do not|dont) want to (live|be alive|be here|exist|wake up)|no (reason|point) (to|in) (live|living|going on)|can['’]?t go on)\b/i;
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },

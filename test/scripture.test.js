@@ -148,6 +148,40 @@ describe('looksLikeCrisis', () => {
     assert.equal(looksLikeCrisis('I have no reason to live'), true);
     assert.equal(looksLikeCrisis('I am grieving and feel overwhelmed'), false);
   });
+
+  it('catches the words people actually type', () => {
+    for (const s of [
+      'I feel suicidal',
+      'thinking about suicide',
+      'I want to end it all',
+      'I dont want to live anymore',
+      'I don’t want to be here anymore',
+      'I wish I was dead',
+      'I can’t go on',
+      'thinking of unaliving myself',
+      'no point in living',
+    ]) assert.equal(looksLikeCrisis(s), true, s);
+  });
+
+  it('leaves ordinary figures of speech alone', () => {
+    for (const s of [
+      'this workout will kill me',
+      'I am going to die of embarrassment',
+      'we are ending things, the relationship is over',
+      'I am anxious about work',
+    ]) assert.equal(looksLikeCrisis(s), false, s);
+  });
+
+  it('uses one pattern in the server, the page, and the offline Advisor', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const { CRISIS_PATTERN } = require('../lib/scripture');
+    const src = CRISIS_PATTERN.toString();
+    const root = path.join(__dirname, '..');
+    for (const f of ['public/index.html', 'public/data/advisor.js', 'data/advisor.js']) {
+      assert.ok(fs.readFileSync(path.join(root, f), 'utf8').includes(src), `${f} drifted from CRISIS_PATTERN`);
+    }
+  });
 });
 
 describe('parseModelJson', () => {

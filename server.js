@@ -361,7 +361,8 @@ app.post('/api/chat', async (req, res) => {
     }
   });
 
-  if (!client) {
+  // Crisis: name the human line, then only the fixed verified letter. No generated counsel.
+  if (!client || crisis) {
     return finish(FALLBACK_LETTER);
   }
 
