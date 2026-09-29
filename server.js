@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
@@ -14,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5';
 const ACCESS_KEY = process.env.API_ACCESS_KEY || '';
 const THEME_SET = new Set(themeNames());
+const WAITLIST_PATH = process.env.WAITLIST_PATH || path.join(__dirname, 'data', 'waitlist.jsonl');
+const WAITLIST_MAX = 100000;
+const KEY_COOKIE = 'rla_key';
 // Model output budget. Adaptive thinking spends from the same max_tokens,
 // so a small cap truncates letters and JSON before the answer is written.
 const MAX_TOKENS = 16000;
@@ -24,6 +28,49 @@ const MAX_TOKENS = 16000;
 if (process.env.TRUST_PROXY) {
   const hops = Number(process.env.TRUST_PROXY);
   app.set('trust proxy', Number.isInteger(hops) ? hops : process.env.TRUST_PROXY);
+}
+
+app.disable('x-powered-by');
+
+// The page renders model text; a policy keeps any escaping slip from running
+// script from elsewhere. Inline script/style and onclick are how the page is
+// written, so 'unsafe-inline' stays until they move to files.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: blob:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+].join('; ');
+
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', CSP);
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (req.secure) res.setHeader('Strict-Transport-Security', 'max-age=15552000');
+  next();
+});
+
+// API_ACCESS_KEY keeps a private deployment private. Scripts send it as
+// x-api-key; a person opens /?key=... once, which sets an HttpOnly cookie the
+// page then carries on every /api call without the key ever living in the page.
+// Registered before the static files, which would otherwise answer / first.
+if (ACCESS_KEY) {
+  app.get('/', (req, res, next) => {
+    if (typeof req.query.key !== 'string') return next();
+    if (!sameSecret(req.query.key, ACCESS_KEY)) return res.status(401).send('That key does not open this room.');
+    res.cookie(KEY_COOKIE, req.query.key, {
+      httpOnly: true, sameSite: 'strict', secure: req.secure, maxAge: 180 * 24 * 3600 * 1000,
+    });
+    res.redirect(302, '/');
+  });
 }
 
 app.use(express.json({ limit: '32kb' }));
@@ -78,11 +125,31 @@ function clientKey(req) {
   return req.ip || 'local';
 }
 
+function sameSecret(sent, expected) {
+  if (typeof sent !== 'string' || !sent) return false;
+  const a = crypto.createHash('sha256').update(sent).digest();
+  const b = crypto.createHash('sha256').update(expected).digest();
+  return crypto.timingSafeEqual(a, b);
+}
+
+function cookieValue(req, name) {
+  const header = req.get('cookie') || '';
+  for (const part of header.split(';')) {
+    const [k, ...v] = part.trim().split('=');
+    if (k === name) {
+      try { return decodeURIComponent(v.join('=')); } catch (_) { return ''; }
+    }
+  }
+  return '';
+}
+
+
 function gate(req, res, next) {
-  if (!ACCESS_KEY) return next();
-  const sent = req.get('x-api-key');
-  if (sent !== ACCESS_KEY) return res.status(401).json({ error: 'Unauthorized.' });
-  next();
+  if (!ACCESS_KEY || req.path === '/health') return next();
+  if (sameSecret(req.get('x-api-key'), ACCESS_KEY) || sameSecret(cookieValue(req, KEY_COOKIE), ACCESS_KEY)) {
+    return next();
+  }
+  res.status(401).json({ error: 'This room is private. Open the link you were given.' });
 }
 
 app.use('/api', gate);
@@ -156,9 +223,14 @@ Return ONLY valid JSON (no markdown fences) with this structure:
 Include 3–4 passages. Use only real, verifiable red-letter verses. Be emotionally generous — meet real pain with real comfort. The opening should make the reader feel profoundly understood.`;
 
 const dailyCache = new Map();
+// A failed generation serves the curated page for a few minutes, not all day.
+const DAILY_RETRY_MS = 10 * 60 * 1000;
 
-function todayKey() {
-  return new Date().toISOString().slice(0, 10);
+// Same local calendar day that dailyForDate uses, so the cache never serves
+// yesterday's page into the morning.
+function todayKey(date = new Date()) {
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 async function generateStructured(system, user, schema) {
@@ -171,6 +243,9 @@ async function generateStructured(system, user, schema) {
       ...structuredFormat(schema),
     });
   } catch (err) {
+    // Only a rejected request shape earns a second call; a 429 or an overload
+    // retried at once just doubles the bill.
+    if (err?.status !== 400) throw err;
     console.error('Structured output fallback:', err.message);
     return client.messages.create({
       model: MODEL,
@@ -192,26 +267,29 @@ async function generateDailyFromModel() {
   return verifyJsonQuotes(parseModelJson(text));
 }
 
-async function fetchDailyContent() {
+function fetchDailyContent() {
   const key = todayKey();
-  if (dailyCache.has(key)) return dailyCache.get(key);
+  const hit = dailyCache.get(key);
+  if (hit && (!hit.retryAt || Date.now() < hit.retryAt)) return hit.promise;
+
+  for (const k of dailyCache.keys()) if (k !== key) dailyCache.delete(k);
 
   if (!client) {
-    const curated = dailyForDate();
-    dailyCache.set(key, curated);
-    return curated;
+    const promise = Promise.resolve(dailyForDate());
+    dailyCache.set(key, { promise });
+    return promise;
   }
 
-  try {
-    const data = await generateDailyFromModel();
-    dailyCache.set(key, data);
-    return data;
-  } catch (err) {
+  // The promise is cached before it settles, so a morning rush makes one
+  // model call, not one per reader.
+  const entry = {};
+  entry.promise = generateDailyFromModel().catch((err) => {
     console.error('Daily model fallback:', err.message);
-    const curated = dailyForDate();
-    dailyCache.set(key, curated);
-    return curated;
-  }
+    entry.retryAt = Date.now() + DAILY_RETRY_MS;
+    return dailyForDate();
+  });
+  dailyCache.set(key, entry);
+  return entry.promise;
 }
 
 app.get('/api/health', (req, res) => {
@@ -403,7 +481,12 @@ app.post('/api/chat', async (req, res) => {
       raw += text;
     });
 
-    const message = await stream.finalMessage();
+    // Nothing is written until the letter is verified, so keep the
+    // connection visibly alive for proxies and the page's own timeout.
+    const heartbeat = setInterval(() => {
+      if (!res.writableEnded) res.write(': ping\n\n');
+    }, 15000);
+    const message = await stream.finalMessage().finally(() => clearInterval(heartbeat));
     // A refusal or a cut-off letter would leave the page half-written.
     if (message.stop_reason !== 'end_turn' || !raw.trim()) {
       console.error('Chat fallback, stop_reason:', message.stop_reason);
@@ -421,6 +504,24 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+const LEGACY_WAITLIST = path.join(__dirname, 'data', 'waitlist.json');
+
+function waitlistEmails() {
+  const emails = new Set();
+  // Signups from before the move to one-line-per-email still count.
+  try {
+    const rows = JSON.parse(fs.readFileSync(LEGACY_WAITLIST, 'utf8'));
+    if (Array.isArray(rows)) for (const r of rows) if (r?.email) emails.add(r.email);
+  } catch (_) {}
+  let text = '';
+  try { text = fs.readFileSync(WAITLIST_PATH, 'utf8'); } catch (_) { return emails; }
+  for (const line of text.split('\n')) {
+    // One bad line (a torn write) costs that line, never the whole list.
+    try { const row = JSON.parse(line); if (row?.email) emails.add(row.email); } catch (_) {}
+  }
+  return emails;
+}
+
 app.post('/api/waitlist', (req, res) => {
   const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
@@ -429,13 +530,10 @@ app.post('/api/waitlist', (req, res) => {
   if (!rateLimit(`wait:${clientKey(req)}`, 6, 60 * 60 * 1000)) {
     return res.status(429).json({ error: 'Please return later.' });
   }
-  const dest = path.join(__dirname, 'data', 'waitlist.json');
-  let rows = [];
-  try { rows = JSON.parse(fs.readFileSync(dest, 'utf8')); } catch (_) {}
-  if (!Array.isArray(rows)) rows = [];
-  if (!rows.some((r) => r.email === email)) {
-    rows.push({ email, at: new Date().toISOString() });
-    fs.writeFileSync(dest, JSON.stringify(rows, null, 2));
+  const emails = waitlistEmails();
+  if (!emails.has(email)) {
+    if (emails.size >= WAITLIST_MAX) return res.status(503).json({ error: 'The list is full for now.' });
+    fs.appendFileSync(WAITLIST_PATH, `${JSON.stringify({ email, at: new Date().toISOString() })}\n`);
   }
   res.json({ ok: true });
 });
@@ -456,10 +554,28 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
+
+// Bad JSON, an oversized body or a thrown handler: a short JSON error, never
+// a stack trace with server paths.
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  const status = err.status || err.statusCode || 500;
+  if (status >= 500) console.error('Unhandled:', err);
+  res.status(status).json({ error: status < 500 && err.expose ? err.message : 'Something went wrong.' });
+});
+
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`The Red Letter Advisor → http://localhost:${PORT}`);
   });
+  // On deploy, finish the letters already being written, then go.
+  const stop = () => {
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 10000).unref();
+  };
+  process.on('SIGTERM', stop);
+  process.on('SIGINT', stop);
 }
 
 module.exports = app;

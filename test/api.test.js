@@ -1,6 +1,14 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('http');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
+// Never write test signups into the real list.
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rla-test-'));
+process.env.WAITLIST_PATH = path.join(tmp, 'waitlist.jsonl');
+
 const app = require('../server');
 
 let server;
@@ -129,5 +137,47 @@ describe('smoke routes', () => {
     const data = JSON.parse(res.raw);
     assert.equal(res.status, 200);
     assert.ok(data.sayings.some((s) => /4:39/.test(s.citation)));
+  });
+});
+
+describe('hardening', () => {
+  it('sends security headers and hides the framework', async () => {
+    const res = await request('GET', '/api/health');
+    assert.match(res.headers['content-security-policy'], /frame-ancestors 'none'/);
+    assert.equal(res.headers['x-content-type-options'], 'nosniff');
+    assert.equal(res.headers['x-powered-by'], undefined);
+  });
+
+  it('answers unknown API routes and bad JSON with JSON, not a stack trace', async () => {
+    const missing = await request('GET', '/api/nope');
+    assert.equal(missing.status, 404);
+    assert.deepEqual(JSON.parse(missing.raw), { error: 'Not found.' });
+
+    const bad = await new Promise((resolve, reject) => {
+      const req = http.request(`${base}/api/verify`, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
+        let raw = '';
+        res.on('data', (c) => { raw += c; });
+        res.on('end', () => resolve({ status: res.statusCode, raw }));
+      });
+      req.on('error', reject);
+      req.end('{bad');
+    });
+    assert.equal(bad.status, 400);
+    assert.doesNotMatch(bad.raw, /node_modules|at JSON\.parse/);
+    assert.ok(JSON.parse(bad.raw).error);
+  });
+
+  it('keeps earlier signups when one line of the list is torn', async () => {
+    fs.writeFileSync(process.env.WAITLIST_PATH, '{"email":"a@example.com"}\n{"email":"b@exa');
+    const res = await request('POST', '/api/waitlist', { email: 'c@example.com' });
+    assert.equal(res.status, 200);
+    const text = fs.readFileSync(process.env.WAITLIST_PATH, 'utf8');
+    assert.match(text, /a@example\.com/);
+    assert.match(text, /c@example\.com/);
+  });
+
+  it('404s a missing file instead of sending the page', async () => {
+    assert.equal((await request('GET', '/data/missing.js')).status, 404);
+    assert.equal((await request('GET', '/deep/path')).status, 302);
   });
 });

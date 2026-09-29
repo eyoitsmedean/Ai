@@ -8,6 +8,16 @@ delete process.env.ANTHROPIC_AUTH_TOKEN;
 
 const calls = [];
 let script = null;
+const creates = [];
+let createImpl = async (params) => {
+  creates.push(params);
+  await new Promise((r) => setTimeout(r, 30));
+  const daily = {
+    affirmation: { text: 'You are known.', verse: 'Luke 12:7', quote: 'ye are of more value than many sparrows' },
+    word: { theme: 'Peace', title: 'Peace', passage: 'Peace I leave with you', verse: 'John 14:27', reflection: 'Rest.' },
+  };
+  return { stop_reason: 'end_turn', content: [{ type: 'text', text: JSON.stringify(daily) }] };
+};
 
 class FakeStream {
   constructor(params) {
@@ -33,7 +43,7 @@ class FakeAnthropic {
   constructor() {
     this.messages = {
       stream: (params) => new FakeStream(params),
-      create: async () => { throw new Error('not used here'); },
+      create: (params) => createImpl(params),
     };
   }
 }
@@ -134,5 +144,20 @@ describe('chat with a live model', () => {
       await new Promise((r) => setTimeout(r, 10));
     }
     assert.equal(calls[0].aborted, true);
+  });
+});
+
+describe('daily page with a live model', () => {
+  it('makes one model call for a morning rush', async () => {
+    const get = () => new Promise((resolve, reject) => {
+      http.get(`${base}/api/daily`, (res) => {
+        let raw = '';
+        res.on('data', (c) => { raw += c; });
+        res.on('end', () => resolve(JSON.parse(raw)));
+      }).on('error', reject);
+    });
+    const pages = await Promise.all(Array.from({ length: 20 }, get));
+    assert.equal(creates.length, 1);
+    assert.match(pages[19].word.passage, /Peace I leave with you/);
   });
 });
