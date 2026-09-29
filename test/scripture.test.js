@@ -248,3 +248,39 @@ describe('spoken corpus', () => {
     assert.ok(hit.sayings.some((s) => /fear not|be not afraid|troubled/i.test(s.text)));
   });
 });
+
+describe('reference edge cases', () => {
+  const { parseRef, lookup, fillPlaceholders } = require('../lib/scripture');
+  const cite = (r) => lookup(r)?.citation || null;
+
+  it('never reads 1 John, 1John or II John as the Gospel of John', () => {
+    for (const r of ['1 John 4:18', '1John 4:18', 'II John 1:5']) assert.equal(parseRef(r), null, r);
+    assert.equal(cite('John 4:18'), 'John 4:18');
+  });
+
+  it('accepts every dash a keyboard or model might produce', () => {
+    for (const d of ['-', '–', '—', '‒', '−', '‑']) assert.equal(cite(`John 15:9${d}11`), 'John 15:9–11', d);
+  });
+
+  it('stops a range at the end of its chapter', () => {
+    assert.equal(cite('John 14:27-15:2'), 'John 14:27–31');
+    assert.equal(cite('Mark 4:39–41'), 'Mark 4:39–40');
+    assert.equal(parseRef('John 15:2-14:27'), null);
+  });
+
+  it('drops a marker that names no saying, with its context line', () => {
+    const out = fillPlaceholders('Hi.\n\n{{1 John 4:18}}\nLove casts out fear.\n\n{{John 14:27}}\nPeace.');
+    assert.doesNotMatch(out, /casts out fear/);
+    assert.match(out, /\*\*John 14:27\*\*\n“Peace I leave with you/);
+  });
+});
+
+describe('guessThemes', () => {
+  const { guessThemes } = require('../lib/retrieve');
+  it('hears the ordinary forms of a word', () => {
+    assert.deepEqual(guessThemes('I keep worrying'), ['Anxiety & Worry']);
+    assert.deepEqual(guessThemes('so lonely since she abandoned me'), ['Loneliness']);
+    assert.deepEqual(guessThemes('I cannot forgive him'), ['Forgiveness']);
+    assert.deepEqual(guessThemes('still grieving'), ['Grief & Loss', 'Peace']);
+  });
+});

@@ -249,12 +249,15 @@ app.post('/api/verify', (req, res) => {
     const quote = typeof item?.quote === 'string' ? item.quote.slice(0, 2000) : '';
     if (!verse) return { ok: false, reason: 'missing-verse', verse: '', quote: '' };
     const verified = verifyQuote(verse, quote);
+    // A real citation with invented words is not a match: say so, and hand
+    // back the words actually spoken there.
+    const mismatch = verified.ok && quote && verified.score < 0.8;
     return {
-      ok: Boolean(verified.ok),
+      ok: Boolean(verified.ok) && !mismatch,
       verse: verified.citation || verse,
       quote: verified.quote || quote,
       score: verified.score || 0,
-      reason: verified.reason || (verified.ok ? 'quote-match' : 'unknown-ref'),
+      reason: verified.reason || (mismatch ? 'quote-mismatch' : quote ? 'quote-match' : 'citation'),
     };
   });
   res.json({

@@ -112,6 +112,13 @@ describe('smoke routes', () => {
     const data = JSON.parse(ok.raw);
     assert.equal(data.allVerified, true);
     assert.match(data.results[0].quote, /Peace I leave with you/);
+    const invented = await request('POST', '/api/verify', {
+      items: [{ verse: 'John 3:16', quote: 'the moon is made of cheese' }],
+    });
+    const row = JSON.parse(invented.raw).results[0];
+    assert.equal(row.ok, false);
+    assert.equal(row.reason, 'quote-mismatch');
+    assert.match(row.quote, /God so loved the world/);
     const missing = await request('POST', '/api/verify', { verse: '' });
     assert.equal(missing.status, 200);
     assert.equal(JSON.parse(missing.raw).allVerified, false);
