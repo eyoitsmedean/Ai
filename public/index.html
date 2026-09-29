@@ -929,12 +929,13 @@ textarea { font-family: var(--body); }
   background: var(--folio);
   z-index: 51;
   transform: translateX(100%);
-  transition: transform .35s var(--ease);
+  visibility: hidden;
+  transition: transform .35s var(--ease), visibility 0s linear .35s;
   padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
   border-left: 1px solid var(--rule);
 }
-.settings-sheet.on { transform: none; }
+.settings-sheet.on { transform: none; visibility: visible; transition: transform .35s var(--ease), visibility 0s; }
 .sheet-handle { display: none; }
 .sheet-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; }
@@ -1722,7 +1723,7 @@ html.sitting .sit-sheet {
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
         </div>
         <div class="composer">
-          <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
+          <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1" maxlength="2000"></textarea>
           <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
             <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
@@ -1833,7 +1834,7 @@ html.sitting .sit-sheet {
   <div class="setting-row">
     <div>
       <div class="setting-label">Morning reminder</div>
-      <div class="setting-sub">A quiet knock around 8:00, if this device allows it</div>
+      <div class="setting-sub">A quiet knock around 8:00 while Red Letter is open, if this device allows it</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
@@ -1984,7 +1985,11 @@ let sitEndsAt = 0;
 const SIT_SECONDS = 60;
 const SIT_RING = 2 * Math.PI * 52;
 let chatHistory = [];
+let chatDay = '';
 let isChatBusy = false;
+const CHAT_MAX_MESSAGES = 23;
+const CHAT_MAX_CHARS = 2000;
+const CHAT_TIMEOUT_MS = 90000;
 let curatedPacks = null;
 const encCache = {};
 let pendingShareType = null;
@@ -2116,6 +2121,7 @@ function startNewReader() {
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
+    document.getElementById('app').inert = true;
     return;
   }
   startApp();
@@ -2142,6 +2148,7 @@ function chooseNeed(kind) {
     ob.classList.add('hidden');
     ob.classList.remove('leaving');
     document.getElementById('app').removeAttribute('aria-hidden');
+    document.getElementById('app').inert = false;
     if (!kind) openFirstSit = true;
     startApp();
     if (kind === 'ask') switchTab('advisor');
@@ -2296,6 +2303,8 @@ function paintSeven() {
   const days = sevenDays();
   if (!days.length) {
     host.className = 'week-ribbon';
+    host.setAttribute('aria-hidden', 'true');
+    host.removeAttribute('role');
     host.innerHTML = '';
     const today = todayStr();
     const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -2319,6 +2328,8 @@ function paintSeven() {
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
   host.className = 'seven';
+  host.removeAttribute('aria-hidden');
+  host.setAttribute('role', 'group');
   host.setAttribute('aria-label', 'Seven Days with His words');
   host.innerHTML = days.map((day, i) => {
     const cls = done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future');
@@ -2882,9 +2893,13 @@ function anySheetOn() {
   return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
     .some((id) => document.getElementById(id)?.classList.contains('on'));
 }
+function isShown(el) {
+  if (typeof el.checkVisibility === 'function') return el.checkVisibility({ visibilityProperty: true });
+  return el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden';
+}
 function focusables(root) {
   return [...root.querySelectorAll('button, [href], input, select, textarea')]
-    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true' && isShown(el));
 }
 function openSheetChrome(id) {
   if (!sheetTrigger) sheetTrigger = document.activeElement;
@@ -2925,8 +2940,8 @@ chatInput.addEventListener('input', () => {
 });
 
 function chatsToday() {
-  const raw = JSON.parse(ls('rla-chats') || '{"d":"","n":0}');
-  if (raw.d !== todayStr()) return { d: todayStr(), n: 0 };
+  const raw = parseJSON(ls('rla-chats'), null);
+  if (!raw || raw.d !== todayStr() || typeof raw.n !== 'number') return { d: todayStr(), n: 0 };
   return raw;
 }
 function bumpChat() {
@@ -2942,6 +2957,7 @@ function restoreLetters() {
   const msgs = document.getElementById('chat-messages');
   if (!saved || !Array.isArray(saved.messages) || !saved.messages.length || !msgs) return;
   chatHistory = saved.messages.filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+  chatDay = todayStr();
   msgs.innerHTML = '';
   chatHistory.forEach((m) => {
     if (m.role === 'user') addBubble('user', m.content);
@@ -2965,12 +2981,18 @@ function useSuggestion(btn) {
   sendMsg();
 }
 
+function chatPayload() {
+  let msgs = chatHistory.slice(-CHAT_MAX_MESSAGES);
+  while (msgs.length && msgs[0].role !== 'user') msgs = msgs.slice(1);
+  return msgs.map((m) => ({ role: m.role, content: m.content.slice(0, 8000) }));
+}
+
 async function sendMsg(preset) {
-  const text = (preset || chatInput.value).trim();
+  const text = (preset || chatInput.value).trim().slice(0, CHAT_MAX_CHARS);
   if (!text || isChatBusy) return;
   if (looksLikeCrisisClient(text)) {
     const action = await showCrisisModal();
-    if (action !== 'continue') return;
+    if (action !== 'continue' || isChatBusy) return;
   }
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
@@ -2978,28 +3000,46 @@ async function sendMsg(preset) {
     setComposerEnabled(false);
     return;
   }
+  if (chatDay !== todayStr()) {
+    chatHistory = [];
+    chatDay = todayStr();
+  }
   chatInput.value = '';
   chatInput.style.height = 'auto';
   document.getElementById('suggestions').style.display = 'none';
   isChatBusy = true;
   document.getElementById('send-btn').disabled = true;
 
-  chatHistory.push({ role: 'user', content: text });
-  addBubble('user', text);
+  const userMsg = { role: 'user', content: text };
+  chatHistory.push(userMsg);
+  const userBubble = addBubble('user', text);
   document.getElementById('typing').classList.add('on');
   scrollChat();
   const aiBubble = createStreamBubble();
   let fullText = '';
   let opened = false;
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; if (ctrl) ctrl.abort(); }, CHAT_TIMEOUT_MS);
+  const retract = () => {
+    const i = chatHistory.lastIndexOf(userMsg);
+    if (i >= 0) chatHistory.splice(i, 1);
+  };
 
   try {
     const res = await fetch('api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory })
+      body: JSON.stringify({ messages: chatPayload() }),
+      signal: ctrl ? ctrl.signal : undefined
     });
-    if (res.status === 429) throw new Error('slow');
-    if (!res.ok && !res.body) throw new Error('fail');
+    if (!res.ok) {
+      let msg = '';
+      try { msg = (await res.json()).error || ''; } catch (_) {}
+      const e = new Error(msg || 'The Advisor could not answer just now. Please try again.');
+      e.server = true;
+      throw e;
+    }
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
@@ -3009,7 +3049,8 @@ async function sendMsg(preset) {
       buf += dec.decode(value, { stream: true });
       const lines = buf.split('\n');
       buf = lines.pop() ?? '';
-      for (const line of lines) {
+      for (const rawLine of lines) {
+        const line = rawLine.replace(/\r$/, '');
         if (!line.startsWith('data: ')) continue;
         const raw = line.slice(6).trim();
         if (raw === '[DONE]') break;
@@ -3044,23 +3085,30 @@ async function sendMsg(preset) {
     addSaveToChatBubble(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
-    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
-    const fallback = living || [
-      'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
-      '',
-      '**John 14:27**',
-      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-      'A troubled heart is the intended reader of this line.',
-      '',
-      '**Matthew 11:28**',
-      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-      'Rest is offered to the exhausted, not the already-composed.',
-    ].join('\n');
-    updateStreamBubble(aiBubble, fallback);
-    chatHistory.push({ role: 'assistant', content: fallback });
-    persistLetters();
-    addSaveToChatBubble(aiBubble, fallback, text);
+    retract();
+    if (timedOut || (err && err.server)) {
+      userBubble.remove();
+      aiBubble.wrap.remove();
+      if (!chatInput.value) chatInput.value = text;
+      showToast(timedOut ? 'The Advisor took too long to answer. Your words are back — try again.' : err.message);
+    } else {
+      const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+      const fallback = living || [
+        'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
+        '',
+        '**John 14:27**',
+        '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
+        'A troubled heart is the intended reader of this line.',
+        '',
+        '**Matthew 11:28**',
+        '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
+        'Rest is offered to the exhausted, not the already-composed.',
+      ].join('\n');
+      updateStreamBubble(aiBubble, fallback);
+      addSaveToChatBubble(aiBubble, fallback, text);
+    }
   } finally {
+    clearTimeout(timer);
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
     const gated = chatsToday().n >= FREE_CHATS;
@@ -3068,7 +3116,7 @@ async function sendMsg(preset) {
       document.getElementById('chat-gate').classList.add('on');
       setComposerEnabled(false);
     } else {
-      document.getElementById('send-btn').disabled = false;
+      setComposerEnabled(true);
     }
     scrollChat();
   }
@@ -3126,7 +3174,10 @@ function scrollChat() {
   setTimeout(() => { el.scrollTop = el.scrollHeight; }, 20);
 }
 
-function getJournal() { return JSON.parse(ls('rla-journal') || '[]'); }
+function getJournal() {
+  const items = parseJSON(ls('rla-journal'), []);
+  return Array.isArray(items) ? items.filter((i) => i && typeof i === 'object') : [];
+}
 function setJournal(items) { lsSet('rla-journal', JSON.stringify(items)); }
 function saveJournalItem(item) {
   const items = getJournal().filter(i => i.key !== item.key);
@@ -3335,6 +3386,7 @@ function closeSettings() {
   hideOverlayIfIdle();
 }
 document.addEventListener('keydown', e => {
+  if (!ls('rla-onboarded') || !document.getElementById('onboarding').classList.contains('hidden')) return;
   const meta = e.metaKey || e.ctrlKey;
   if (meta && e.key.toLowerCase() === 'k') {
     e.preventDefault();
@@ -3611,7 +3663,7 @@ function amenFromSit() {
 }
 
 function stopSitListen() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (sitSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
   sitSpeaking = false;
   const btn = document.getElementById('sit-listen');
   if (btn) {
@@ -3810,8 +3862,8 @@ function printSitting() {
   document.getElementById('print-cite').textContent = (p.verse || '') + '  ·  KJV';
   document.getElementById('print-foot').textContent = 'Red Letter · ' + (currentSeason.name || 'the Gospels');
   document.body.classList.add('printing');
+  window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
   window.print();
-  setTimeout(() => document.body.classList.remove('printing'), 500);
 }
 
 const COMMANDS = [
@@ -3884,17 +3936,43 @@ function closeCommandPalette() {
 function looksLikeCrisisClient(text) {
   return /\b(suicid\w*|kill(?:ing)? myself|end(?:ing)? my (?:own )?life|end it all|take my (?:own )?life|want(?:ing)? to die|wanna die|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang(?:ing)? myself|overdos\w*|(?:don['’]?t|do not) want to (?:live|be alive|exist|be here anymore)|can['’]?t go on|better off dead|no reason to live)\b/i.test(String(text || ''));
 }
+let crisisPending = null;
 function showCrisisModal() {
-  return new Promise((resolve) => {
+  if (crisisPending) return crisisPending;
+  crisisPending = new Promise((resolve) => {
     const el = document.getElementById('crisis-modal');
+    const app = document.getElementById('app');
+    const trigger = document.activeElement;
+    const wasInert = app ? app.inert : false;
+    if (app) app.inert = true;
     el.classList.add('on');
+    const call = el.querySelector('a[href^="tel:"]') || document.getElementById('crisis-continue');
+    setTimeout(() => call.focus(), 20);
+    const onKey = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); finish('close'); return; }
+      if (e.key !== 'Tab') return;
+      const list = focusables(el);
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     const finish = (action) => {
+      document.removeEventListener('keydown', onKey, true);
       el.classList.remove('on');
+      if (app) app.inert = wasInert;
+      crisisPending = null;
+      if (trigger && typeof trigger.focus === 'function' && document.contains(trigger)) {
+        try { trigger.focus(); } catch (_) {}
+      }
       resolve(action);
     };
+    document.addEventListener('keydown', onKey, true);
     document.getElementById('crisis-continue').onclick = () => finish('continue');
     document.getElementById('crisis-close').onclick = () => finish('close');
   });
+  return crisisPending;
 }
 
 async function sealLetter(bubble) {
@@ -3942,7 +4020,7 @@ async function toggleReminder(on) {
     return;
   }
   lsSet('rla-reminder', '1');
-  showToast('Morning reminder on · around 8:00');
+  showToast('Morning reminder on · around 8:00 while the room is open');
 }
 function checkMorningReminder() {
   if (ls('rla-reminder') !== '1') return;
@@ -3951,10 +4029,13 @@ function checkMorningReminder() {
   if (now.getHours() < 8 || now.getHours() > 10) return;
   const key = 'rla-reminded-' + todayStr();
   if (ls(key) === '1') return;
-  try {
-    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: 'icon-192.png', tag: 'rla-morning' });
-    lsSet(key, '1');
-  } catch (_) {}
+  const opts = { body: 'A quiet word is waiting for you today.', icon: 'icon-192.png', tag: 'rla-morning' };
+  const direct = () => { try { new Notification('Red Letter', opts); lsSet(key, '1'); } catch (_) {} };
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.ready
+      .then((r) => r.showNotification('Red Letter', opts))
+      .then(() => lsSet(key, '1'), direct);
+  } else direct();
 }
 
 function setOfflineBanner() {
