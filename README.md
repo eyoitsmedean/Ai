@@ -32,7 +32,7 @@ Without an API key the room still opens: Today and Seek use curated, corpus-veri
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
 ANTHROPIC_MODEL=claude-opus-5
 PORT=3000
-API_ACCESS_KEY=        # optional gate for /api/*
+API_ACCESS_KEY=        # optional: private deployment. Scripts send x-api-key; people open /?key=… once
 TRUST_PROXY=           # proxy hop count (usually 1) when behind a reverse proxy
 ```
 
