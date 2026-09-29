@@ -29,3 +29,9 @@ Between guests: Room settings → **Begin again**, or hit `/?fresh=1` again.
 ## After the room
 
 `npm test` (API) and `npm run qa` (first session).
+
+`npm run qa` needs the server still running, Node 22.12+, the dev dependencies (`npm ci`, which brings `puppeteer-core`), and Chrome. It looks for Chrome at `/usr/local/bin/google-chrome`; otherwise set `CHROME_PATH`:
+
+```bash
+CHROME_PATH="$(which google-chrome)" npm run qa
+```
