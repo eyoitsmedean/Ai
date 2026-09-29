@@ -18,9 +18,11 @@ This is not a person, and it is not therapy, medical care, or pastoral counselin
 
 ## Run it
 
+Needs Node 22.12 or newer.
+
 ```bash
 cp .env.example .env   # add ANTHROPIC_API_KEY if you want live generation
-npm install
+npm ci
 npm start              # http://localhost:3000
 ```
 
@@ -39,6 +41,19 @@ npm test
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 ```
 
+Two checks run against a live server (`npm start` first):
+
+```bash
+npm run smoke    # API smoke test; pass a base URL to aim elsewhere
+npm run qa       # first-session browser QA; pass a base URL to aim elsewhere
+```
+
+`npm run qa` drives a real Chrome through `puppeteer-core` (a dev dependency, so run `npm ci`, not `npm ci --omit=dev`). It looks for Chrome at `/usr/local/bin/google-chrome`; set `CHROME_PATH` if yours lives elsewhere:
+
+```bash
+CHROME_PATH="$(which google-chrome)" npm run qa http://127.0.0.1:3000
+```
+
 The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter-source.json`). `GET /api/library` searches grouped sayings; GitHub Pages falls back to `public/library.json`.
 
 ## Design
@@ -47,7 +62,7 @@ The interface is a folio, not a feed. Chrome whispers. The only loud color is th
 
 ## Deploy
 
-- **App (Node):** serve this repo with `npm start`.
-- **GitHub Pages:** the workflow publishes `public/`. Today and Seek work from `curated.json`. Advisor needs the API host.
+- **App (Node):** serve this repo with `npm start`. This is the full room: live generation, `/api/*`, and the `/welcome` landing page.
+- **GitHub Pages:** [eyoitsmedean.github.io/Ai](https://eyoitsmedean.github.io/Ai/). The workflow tests, then publishes `public/` on every push to the default branch. Today and Seek work from `curated.json`; The letters from `library.json`. With no API to reach, the Advisor still answers with a small verified letter. `/welcome` is a Node route and does not exist on Pages; `?fresh=1` works on both.
 
 KJV text is public domain. Attribution is printed beside citations.
