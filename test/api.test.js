@@ -181,3 +181,25 @@ describe('hardening', () => {
     assert.equal((await request('GET', '/deep/path')).status, 302);
   });
 });
+
+describe('crisis notices', () => {
+  const letter = async (content) => {
+    const res = await request('POST', '/api/chat', { messages: [{ role: 'user', content }] });
+    return res.raw.split('\n')
+      .filter((l) => l.startsWith('data: ') && !l.includes('[DONE]'))
+      .map((l) => JSON.parse(l.slice(6)).text)
+      .join('');
+  };
+
+  it('answers Spanish in Spanish, with 988', async () => {
+    const text = await letter('ya no quiero vivir');
+    assert.match(text, /^Si estás en peligro/);
+    assert.match(text, /988/);
+  });
+
+  it('points someone being hurt to 911 and the hotline, not 988', async () => {
+    const text = await letter('my husband hits me and I am scared');
+    assert.match(text, /1-800-799-7233/);
+    assert.match(text, /911/);
+  });
+});

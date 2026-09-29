@@ -4,7 +4,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, looksLikeCrisis, CRISIS_NOTICE } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, assessCrisis, crisisNotice } = require('./lib/scripture');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -437,12 +437,12 @@ app.post('/api/chat', async (req, res) => {
     }
   };
 
-  const crisis = looksLikeCrisis(last.content);
+  const crisis = assessCrisis(last.content);
   let stream = null;
   const finish = (body) => {
     if (res.writableEnded || res.destroyed) return;
     const verified = verifyAndSubstitute(body);
-    streamText(crisis ? `${CRISIS_NOTICE}${verified}` : verified);
+    streamText(crisis ? `${crisisNotice(crisis)}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
   };

@@ -1,7 +1,8 @@
 /* Living Advisor — retrieval over the red letters.
    Works with no API key. Passages come from RLA_CURATED when present. */
 (function () {
-  const CRISIS = /\b(suicid(?:e|al)|kill myself|end my life|want to die|self[- ]?harm|cut myself|no reason to live)\b/i;
+  // Shared with the server and the page: data/crisis.js.
+  const assessCrisis = (text) => (window.RLA_CRISIS ? window.RLA_CRISIS.assessCrisis(text) : null);
 
   const PACKS = [
     { theme: 'Anxiety & Worry', hear: 'I hear the spiral. Tomorrow has gotten too loud, and you are tired of carrying a day that has not arrived.', close: 'One day is enough to hold. His words meet you in the room with no windows.', keys: ['anxi', 'worry', 'worried', 'overwhelm', 'stress', 'panic', 'restless', 'racing', 'insomnia', 'can\'t sleep', 'cant sleep'] },
@@ -54,9 +55,11 @@
     const raw = String(text || '').trim();
     if (!raw) return formatPack(FALLBACK.hear, FALLBACK.passages, FALLBACK.close);
 
-    if (CRISIS.test(raw)) {
-      const crisis =
-        'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
+    const danger = assessCrisis(raw);
+    if (danger) {
+      const crisis = danger.kind === 'danger'
+        ? 'I am glad you told someone. No one has the right to hurt or threaten you. I am not a person who can keep you safe. If you are in immediate danger, call 911 or your local emergency number. In the US, the National Domestic Violence Hotline is 1-800-799-7233, or text START to 88788 — free and confidential.\n\n'
+        : 'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
       return crisis + formatPack(
         'While you reach a human who can help, here is a word he spoke to the heavy-laden.',
         passagesFor('Suffering & Pain'),
