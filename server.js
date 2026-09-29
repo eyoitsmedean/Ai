@@ -444,6 +444,11 @@ app.get('/welcome', (req, res) => {
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
+  // A missing file must 404, not come back as the page: a script tag that
+  // receives HTML fails silently.
+  if (path.extname(req.path)) return res.status(404).end();
+  // The page loads its files by relative path, so it only works from the root.
+  if (req.path.indexOf('/', 1) !== -1) return res.redirect(302, '/');
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
