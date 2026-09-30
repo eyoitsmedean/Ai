@@ -39,6 +39,7 @@ TRUST_PROXY=           # proxy hop count (usually 1) when behind a reverse proxy
 ```bash
 npm test
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
+npm run eval:crisis   # crisis detection vs 565 pooled phrasings (add -- --misses)
 ```
 
 Two checks run against a live server (`npm start` first):

@@ -57,7 +57,11 @@
 
     const danger = assessCrisis(raw);
     if (danger) {
-      const crisis = danger.kind === 'danger'
+      const crisis = danger.kind === 'assault'
+        ? 'I am so sorry. What happened to you was not your fault. I am not a person who can keep you safe. If you are in danger now, call 911. In the US, the National Sexual Assault Hotline (RAINN) is 1-800-656-4673, free and confidential, day or night.\n\n'
+        : danger.kind === 'other'
+        ? 'You are carrying fear for someone you love, and that is heavy. I am not a crisis counselor. If they are in immediate danger, call 911 and stay with them if you can. In the US, call or text 988 — they help people worried about someone else too.\n\n'
+        : danger.kind === 'danger'
         ? 'I am glad you told someone. No one has the right to hurt or threaten you. I am not a person who can keep you safe. If you are in immediate danger, call 911 or your local emergency number. In the US, the National Domestic Violence Hotline is 1-800-799-7233, or text START to 88788 — free and confidential.\n\n'
         : 'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
       return crisis + formatPack(

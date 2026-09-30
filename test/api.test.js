@@ -202,4 +202,16 @@ describe('crisis notices', () => {
     assert.match(text, /1-800-799-7233/);
     assert.match(text, /911/);
   });
+
+  it('names RAINN after a disclosure of sexual violence', async () => {
+    const text = await letter('he raped me last year and I never told anyone');
+    assert.match(text, /1-800-656-4673/);
+    assert.match(text, /not your fault/);
+  });
+
+  it('tells someone afraid for a loved one that 988 is for them too', async () => {
+    const text = await letter('my daughter keeps saying she wants to die');
+    assert.match(text, /worried about someone else/);
+  });
 });
+

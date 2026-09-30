@@ -111,3 +111,25 @@ describe('crisis language', () => {
     assert.equal(assessCrisis('I want to kill myself, no one cares about me').lang, 'en');
   });
 });
+
+describe('pooled crisis corpus (npm run eval:crisis)', () => {
+  const { rows } = require('./fixtures/crisis-corpus.json');
+  const visible = rows.filter((r) => !r.heldOut);
+  const rate = (list) => list.filter((r) => assessCrisis(r.text)).length / list.length;
+
+  // Floors, not targets: lowering one needs a reason in the commit.
+  it('reaches help for at least 95% of crisis and danger messages', () => {
+    assert.ok(rate(visible.filter((r) => r.expect === 'crisis')) >= 0.95);
+    assert.ok(rate(visible.filter((r) => r.expect === 'danger')) >= 0.95);
+  });
+
+  it('raises no alarm on ordinary messages, idioms and denials', () => {
+    const alarms = visible.filter((r) => r.expect === 'none' && assessCrisis(r.text)).map((r) => r.text);
+    assert.deepEqual(alarms, []);
+  });
+
+  it('sends sexual violence to RAINN and fear for someone else to 988', () => {
+    assert.equal(assessCrisis('I was raped in college and never told anyone').kind, 'assault');
+    assert.equal(assessCrisis('my son says he wants to die').kind, 'other');
+  });
+});
