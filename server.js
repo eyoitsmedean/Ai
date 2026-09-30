@@ -4,7 +4,8 @@ const Anthropic = require('@anthropic-ai/sdk');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, assessCrisis, crisisNotice } = require('./lib/scripture');
+const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, assessCrisis, assessConversation, crisisNotice, holdBackUnsafe } = require('./lib/scripture');
+const { unsafeSaying } = require('./public/data/crisis');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
@@ -438,10 +439,12 @@ app.post('/api/chat', async (req, res) => {
   };
 
   const crisis = assessCrisis(last.content);
+  // What was disclosed earlier still governs which sayings are safe to send.
+  const disclosed = crisis || assessConversation(messages.filter((m) => m.role === 'user').map((m) => m.content));
   let stream = null;
   const finish = (body) => {
     if (res.writableEnded || res.destroyed) return;
-    const verified = verifyAndSubstitute(body);
+    const verified = holdBackUnsafe(verifyAndSubstitute(body), disclosed && disclosed.kind);
     streamText(crisis ? `${crisisNotice(crisis)}${verified}` : verified);
     res.write('data: [DONE]\n\n');
     res.end();
@@ -459,12 +462,20 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const retrieved = retrieveSayings(last.content);
-    const allow = formatAllowList(retrieved.sayings);
+    let sayings = retrieved.sayings;
+    if (disclosed) {
+      sayings = sayings.filter((s) => !unsafeSaying(disclosed.kind, s.text));
+      if (sayings.length < 2) sayings = retrieveSayings('peace rest fear not').sayings.filter((s) => !unsafeSaying(disclosed.kind, s.text));
+    }
+    const allow = formatAllowList(sayings);
+    const care = !disclosed ? '' : disclosed.kind === 'self' || disclosed.kind === 'other'
+      ? '\n\nCARE: The writer may be at risk of ending a life. Urge real human help first (988 in the US). No sayings about death, dying, losing one\'s life, crosses or graves.'
+      : '\n\nCARE: The writer has disclosed abuse or violence. Their safety comes first. Do not counsel forgiving, reconciling, staying, submitting, or examining their own fault.';
     const modelMessages = messages.map((m, i) => {
       if (i !== messages.length - 1) return { role: m.role, content: m.content };
       return {
         role: 'user',
-        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}`,
+        content: `${m.content}\n\nALLOWED SAYINGS (cite only these, as {{Book Chapter:Verse}}):\n${allow}${care}`,
       };
     });
 

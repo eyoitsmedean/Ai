@@ -64,9 +64,13 @@
         : danger.kind === 'danger'
         ? 'I am glad you told someone. No one has the right to hurt or threaten you. I am not a person who can keep you safe. If you are in immediate danger, call 911 or your local emergency number. In the US, the National Domestic Violence Hotline is 1-800-799-7233, or text START to 88788 — free and confidential.\n\n'
         : 'I am glad you reached out — what you are carrying sounds unbearably heavy. I am not a crisis counselor. Please contact emergency services or call or text 988 (Suicide & Crisis Lifeline in the US) right away, and tell someone you trust.\n\n';
+      // Fixed, reviewed passages: no mourning verse to someone in crisis, no
+      // "forgive seventy times seven" to someone being hurt.
       return crisis + formatPack(
-        'While you reach a human who can help, here is a word he spoke to the heavy-laden.',
-        passagesFor('Suffering & Pain'),
+        danger.kind === 'self' || danger.kind === 'other'
+          ? 'While you reach a human who can help, here is a word he spoke to the heavy-laden.'
+          : 'Your safety comes first. Here is a word he spoke to people who were afraid.',
+        window.RLA_CRISIS.safePassages(danger.kind),
         'You are not alone in this hour. Please go toward help now.'
       );
     }
@@ -91,6 +95,6 @@
     { title: 'Love', theme: 'Love', verse: 'John 13:34', passage: 'A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.', reflection: 'The mark is not an argument. It is how you treat the person next to you today.' },
     { title: 'Forgive', theme: 'Forgiveness', verse: 'Matthew 18:21–22', passage: 'I say not unto thee, Until seven times: but, Until seventy times seven.', reflection: 'Mercy is a way of life, not a single heroic act. One name is enough for this day.' },
     { title: 'Abide', theme: 'Abide', verse: 'John 15:4–5', passage: 'Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me. I am the vine, ye are the branches.', reflection: 'Fruit comes from staying close, not from straining alone. Remain. That is the work.' },
-    { title: 'Go', theme: 'Presence', verse: 'Matthew 28:20', passage: 'Lo, I am with you always, even unto the end of the world.', reflection: 'The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.' }
+    { title: 'Go', theme: 'Presence', verse: 'Matthew 28:20', passage: 'Lo, I am with you alway, even unto the end of the world.', reflection: 'The last word of the seven is not goodbye. It is presence that does not expire. Go — he goes too.' }
   ];
 })();

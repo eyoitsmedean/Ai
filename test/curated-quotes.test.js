@@ -10,6 +10,8 @@ const { lookup, parseAllRefs } = require('../lib/scripture');
 global.window = global.window || {};
 require('../public/data/curated.js');
 require('../public/data/paths.js');
+window.RLA_CRISIS = require('../public/data/crisis');
+require('../public/data/advisor.js');
 
 const squash = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -27,6 +29,8 @@ const SOURCES = {
   'public/curated.json': JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'public', 'curated.json'), 'utf8')),
   'public/data/curated.js': window.RLA_CURATED,
   'public/data/paths.js': window.RLA_FORTY,
+  'public/data/advisor.js (Seven Days)': window.RLA_SEVEN,
+  'public/data/crisis.js (safe passages)': [...require('../public/data/crisis').safePassages('self'), ...require('../public/data/crisis').safePassages('danger')],
 };
 
 describe('curated quotes are exact KJV', () => {
@@ -44,3 +48,15 @@ describe('curated quotes are exact KJV', () => {
     });
   }
 });
+
+describe('offline letters after a disclosure', () => {
+  it('sends no mourning verse to someone in crisis and no "forgive" to someone being hurt', () => {
+    const crisisLetter = window.RLA_advise('I have the pills lined up');
+    assert.doesNotMatch(crisisLetter, /mourn|Matthew 5:4/);
+    assert.match(crisisLetter, /988/);
+    const abuseLetter = window.RLA_advise('my husband hits me, should I forgive him?');
+    assert.doesNotMatch(abuseLetter, /seventy times|enemies|other cheek/);
+    assert.match(abuseLetter, /1-800-799-7233/);
+  });
+});
+

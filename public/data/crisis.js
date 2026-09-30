@@ -263,7 +263,51 @@
     return assessCrisis(text) !== null;
   }
 
-  const api = { assessCrisis, looksLikeCrisis };
+  // A disclosure stays in force for the rest of the conversation: "How do I
+  // forgive him?" two turns after "he hits me" is the same conversation.
+  function assessConversation(texts) {
+    const list = Array.isArray(texts) ? texts : [texts];
+    for (let i = list.length - 1; i >= 0; i -= 1) {
+      const found = assessCrisis(list[i]);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  // --- which of his words to hold back after a disclosure --------------------
+
+  // To someone who may end their life: nothing about dying, losing one's life,
+  // crosses, graves, mourning, or cutting off a hand.
+  const UNSAFE_SELF = /\b(?:die|dieth|died|dying|death|dead|kill\w*|slay|slain|lose (?:his|her|your|their|my) life|loseth|hate(?:th)? (?:not )?(?:his|her) (?:own )?life|life also|cross|grave|graves|sepulchre|tomb|mourn\w*|perish\w*|cut (?:it|them|him) off|pluck (?:it|them) out|hell|millstone|drowned|gnashing|destroy\w*|blood|bury|buried|burial|body)\b/i;
+  // To someone being hurt: nothing that tells them to forgive, turn the other
+  // cheek, reconcile, stay married, or look at their own fault.
+  const UNSAFE_DANGER = /\b(?:enem(?:y|ies)|other (?:cheek|also)|resist not|seventy times|forgive|forgiveth|trespass\w*|his fault|beam|mote|adversary|asunder|put away (?:his|her) (?:wife|husband)|putteth away|joined together|despitefully|smite|smiteth|compel|cloke|judge not|reconciled|agree with|sin no more|condemn)\b/i;
+
+  function unsafeSaying(kind, text) {
+    if (!kind) return false;
+    const re = kind === 'self' || kind === 'other' ? UNSAFE_SELF : UNSAFE_DANGER;
+    return re.test(String(text || ''));
+  }
+
+  // Exact KJV; what a letter falls back on when the rest is held back.
+  const SAFE_PASSAGES = {
+    life: [
+      { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'The invitation is to the exhausted, exactly as you are tonight.' },
+      { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'Your life is counted, hair by hair. It is not too small to keep.' },
+      { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.', context: 'Peace is left with you as a gift; you do not have to manufacture it.' },
+    ],
+    danger: [
+      { verse: 'Luke 12:7', quote: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.', context: 'You are of great worth. No one has the right to treat you as less.' },
+      { verse: 'Matthew 14:27', quote: 'Be of good cheer; it is I; be not afraid.', context: 'He spoke this into a storm, to people who were afraid for their lives.' },
+      { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.', context: 'Rest, not endurance, is what he offers the heavy-laden.' },
+    ],
+  };
+
+  function safePassages(kind) {
+    return kind === 'self' || kind === 'other' ? SAFE_PASSAGES.life : SAFE_PASSAGES.danger;
+  }
+
+  const api = { assessCrisis, assessConversation, looksLikeCrisis, safePassages, unsafeSaying };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.RLA_CRISIS = api;
 })(typeof self !== 'undefined' ? self : this);

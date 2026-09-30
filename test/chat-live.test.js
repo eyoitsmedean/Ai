@@ -161,3 +161,50 @@ describe('daily page with a live model', () => {
     assert.match(pages[19].word.passage, /Peace I leave with you/);
   });
 });
+
+describe('letters after a disclosure', () => {
+  const converse = (messages) => new Promise((resolve, reject) => {
+    const payload = JSON.stringify({ messages });
+    const req = http.request(`${base}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+    }, (res) => {
+      let raw = '';
+      res.on('data', (c) => { raw += c; });
+      res.on('end', () => resolve(raw.split('\n')
+        .filter((l) => l.startsWith('data: ') && !l.includes('[DONE]'))
+        .map((l) => JSON.parse(l.slice(6)).text).join('')));
+    });
+    req.on('error', reject);
+    req.end(payload);
+  });
+
+  it('keeps "love your enemies" out of a letter to someone being hurt, turns later', async () => {
+    script = async (s) => {
+      s.handlers.text('I hear you.\n\n{{Matthew 5:44}}\nLove him anyway.\n\n{{Luke 12:7}}\nYou matter.');
+      return { stop_reason: 'end_turn' };
+    };
+    const text = await converse([
+      { role: 'user', content: 'my husband hits me when he drinks' },
+      { role: 'assistant', content: 'I am so sorry.' },
+      { role: 'user', content: 'How do I forgive him?' },
+    ]);
+    const sent = calls[calls.length - 1].params.messages.at(-1).content;
+    assert.match(sent, /CARE: The writer has disclosed abuse/);
+    assert.doesNotMatch(text, /Love your enemies/);
+    assert.match(text, /more value than many sparrows/);
+  });
+
+  it('never sends a death or mourning saying to someone in crisis', async () => {
+    script = async (s) => {
+      s.handlers.text('I am here.\n\n{{Matthew 5:4}}\nComfort.');
+      return { stop_reason: 'end_turn' };
+    };
+    const text = await converse([{ role: 'user', content: 'I have the pills lined up' }]);
+    assert.doesNotMatch(text, /mourn/);
+    assert.match(text, /heavy laden/);
+    const allow = calls[calls.length - 1].params.messages.at(-1).content.split('ALLOWED SAYINGS')[1];
+    assert.doesNotMatch(allow, /Matthew 16:25|John 12:25/);
+  });
+});
+
