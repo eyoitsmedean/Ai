@@ -114,7 +114,9 @@ describe('chat with a live model', () => {
   it('sends the fallback letter when the model refuses', async () => {
     script = async () => ({ stop_reason: 'refusal' });
     const text = await chat('I am anxious about tomorrow');
-    assert.match(text, /Come unto me/);
+    // The offline letter written for the question, not a canned one.
+    assert.match(text, /Tomorrow has gotten too loud/);
+    assert.match(text, /\*\*Matthew 6:33/);
   });
 
   it('sends the fallback letter instead of a cut-off one', async () => {
@@ -124,7 +126,9 @@ describe('chat with a live model', () => {
     };
     const text = await chat('I am anxious about tomorrow');
     assert.doesNotMatch(text, /I want to$/);
-    assert.match(text, /Come unto me/);
+    // The offline letter written for the question, not a canned one.
+    assert.match(text, /Tomorrow has gotten too loud/);
+    assert.match(text, /\*\*Matthew 6:33/);
   });
 
   it('puts 988 first when someone says they feel suicidal', async () => {

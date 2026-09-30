@@ -26,7 +26,7 @@ npm ci
 npm start              # http://localhost:3000
 ```
 
-Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor replies with a small verified letter.
+Without an API key the room still opens: Today and Seek use curated, corpus-verified pages; the Advisor writes a verified letter from the room that fits what was said (the same composer runs on the page and the server).
 
 ```
 ANTHROPIC_API_KEY=     # or ANTHROPIC_AUTH_TOKEN
@@ -40,6 +40,7 @@ TRUST_PROXY=           # proxy hop count (usually 1) when behind a reverse proxy
 npm test
 npm run spoken   # rebuild data/spoken-gospels.json and public/library.json
 npm run eval:crisis   # crisis detection vs 565 pooled phrasings (add -- --misses)
+npm run eval:advisor  # no-key Advisor: does the letter come from a fitting room?
 ```
 
 Two checks run against a live server (`npm start` first):

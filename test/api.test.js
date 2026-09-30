@@ -215,3 +215,21 @@ describe('crisis notices', () => {
   });
 });
 
+describe('Advisor without a key', () => {
+  const letter = async (content) => {
+    const res = await request('POST', '/api/chat', { messages: [{ role: 'user', content }] });
+    return res.raw.split('\n')
+      .filter((l) => l.startsWith('data: ') && !l.includes('[DONE]'))
+      .map((l) => JSON.parse(l.slice(6)).text)
+      .join('');
+  };
+
+  it('writes for the question instead of sending one letter to everyone', async () => {
+    const grief = await letter('My husband died three weeks ago');
+    const worry = await letter('I got laid off and rent is due');
+    assert.match(grief, /Grief is not a failure of faith/);
+    assert.match(worry, /Tomorrow has gotten too loud/);
+    assert.notEqual(grief, worry);
+  });
+});
+

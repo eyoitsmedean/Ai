@@ -5,11 +5,12 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { parseModelJson, verifyAndSubstitute, verifyJsonQuotes, verifyQuote, assessCrisis, assessConversation, crisisNotice, holdBackUnsafe } = require('./lib/scripture');
-const { unsafeSaying } = require('./public/data/crisis');
+const { safePassages, unsafeSaying } = require('./public/data/crisis');
 const { dailyForDate, encouragementFor, themeNames } = require('./lib/curated');
 const { searchLibrary } = require('./lib/library');
 const { DAILY_SCHEMA, ENCOURAGE_SCHEMA, structuredFormat } = require('./lib/schemas');
 const { retrieveSayings, formatAllowList } = require('./lib/retrieve');
+const offlineAdvisor = require('./lib/offline-advisor');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -450,6 +451,26 @@ app.post('/api/chat', async (req, res) => {
     res.end();
   };
 
+  // Without a live model (no key, a refusal, an error), the same letter the
+  // page composes offline: written for their words, from a fitting room. After
+  // a disclosure the notice is already on top, so the reviewed safe passages
+  // follow it instead of the composer's own crisis paragraph.
+  const offlineLetter = () => {
+    if (disclosed) {
+      const lead = disclosed.kind === 'self' || disclosed.kind === 'other'
+        ? 'I am here with you, and I will not rush past what you just said.'
+        : 'Your safety comes first. Here are words he spoke to people who were afraid.';
+      const safe = safePassages(disclosed.kind).map((p) => `**${p.verse}**\n“${p.quote}”\n${p.context}`).join('\n\n');
+      return `${lead}\n\n${safe}`;
+    }
+    try {
+      return offlineAdvisor.advise(last.content) || FALLBACK_LETTER;
+    } catch (err) {
+      console.error('Offline advisor:', err.message);
+      return FALLBACK_LETTER;
+    }
+  };
+
   // res 'close' fires when the visitor leaves (req 'close' fires once the body
   // is read). Abort the model call so an abandoned letter stops costing tokens.
   res.on('close', () => {
@@ -457,7 +478,7 @@ app.post('/api/chat', async (req, res) => {
   });
 
   if (!client) {
-    return finish(FALLBACK_LETTER);
+    return finish(offlineLetter());
   }
 
   try {
@@ -501,7 +522,7 @@ app.post('/api/chat', async (req, res) => {
     // A refusal or a cut-off letter would leave the page half-written.
     if (message.stop_reason !== 'end_turn' || !raw.trim()) {
       console.error('Chat fallback, stop_reason:', message.stop_reason);
-      return finish(FALLBACK_LETTER);
+      return finish(offlineLetter());
     }
     finish(raw);
   } catch (err) {
@@ -511,7 +532,7 @@ app.post('/api/chat', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
     }
-    finish(FALLBACK_LETTER);
+    finish(offlineLetter());
   }
 });
 

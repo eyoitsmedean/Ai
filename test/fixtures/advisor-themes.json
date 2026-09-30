@@ -1,0 +1,777 @@
+{
+ "about": "Everyday questions with the encouragement rooms a good letter may come from, pooled from the eval sets of PRs #45, #53 and #55. Crisis rows are excluded (they have their own corpus).",
+ "rows": [
+  {
+   "text": "I lost my job today and I'm scared about how I'll pay rent.",
+   "themes": [
+    "Anxiety & Worry",
+    "Fear"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "My mother died last week and I can't stop crying.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I cannot forgive my brother for what he did to our family.",
+   "themes": [
+    "Forgiveness"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "Everyone left me. I eat dinner alone every night and nobody calls.",
+   "themes": [
+    "Loneliness"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I'm terrified of the biopsy results coming on Monday.",
+   "themes": [
+    "Fear"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I don't know what I'm supposed to do with my life. I feel lost.",
+   "themes": [
+    "Purpose & Direction"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I used to believe and now I doubt everything. God feels far away.",
+   "themes": [
+    "Faith & Doubt"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I have cancer and the pain is constant.",
+   "themes": [
+    "Suffering & Pain"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I feel so much shame about my past that I can't look people in the eye.",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I'm so tired of everything. I just want some peace.",
+   "themes": [
+    "Peace"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "Is there any hope left for someone like me?",
+   "themes": [
+    "Hope"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I relapsed again last night after 90 days clean.",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "We are drowning in debt and I can't sleep.",
+   "themes": [
+    "Anxiety & Worry"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I miscarried in April and everyone has moved on but me.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I'm worried about my son who is deployed overseas.",
+   "themes": [
+    "Anxiety & Worry"
+   ],
+   "source": "#45"
+  },
+  {
+   "text": "I have a job interview tomorrow and I can't stop shaking. What if I blow it?",
+   "themes": [
+    "Anxiety & Worry",
+    "Fear",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My mother died three weeks ago and everyone has gone back to normal except me.",
+   "themes": [
+    "Grief & Loss",
+    "Loneliness",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My brother stole from our parents and I cannot forgive him. I don't even want to.",
+   "themes": [
+    "Forgiveness",
+    "Conflict & Relationships"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I moved to a new city for work and I have not had a real conversation in two months. I feel completely alone.",
+   "themes": [
+    "Loneliness",
+    "Peace",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My wife and I had the same fight again last night. We are both exhausted and I don't know how to stop it.",
+   "themes": [
+    "Conflict & Relationships",
+    "Forgiveness",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "The doctor found something on the scan and I have to wait nine days for the results. I am so afraid.",
+   "themes": [
+    "Fear",
+    "Anxiety & Worry",
+    "Peace",
+    "Suffering & Pain"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm forty and I still don't know what I'm for. Everyone else seems to have a direction.",
+   "themes": [
+    "Purpose & Direction",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "Honestly I'm not sure God is even there. I pray and it feels like talking to the ceiling.",
+   "themes": [
+    "Faith & Doubt",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I have been in pain every day for three years. I am tired of being brave.",
+   "themes": [
+    "Suffering & Pain",
+    "Peace",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I did something I can't undo and I feel filthy. I don't think I deserve to be forgiven.",
+   "themes": [
+    "Shame & Guilt",
+    "Forgiveness"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I can't sleep. My mind will not be still. I just want some peace.",
+   "themes": [
+    "Peace",
+    "Anxiety & Worry"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I've lost hope that anything in my life will ever change.",
+   "themes": [
+    "Hope",
+    "Peace",
+    "Purpose & Direction"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I got laid off Friday. Rent is due in twelve days and I'm the only income.",
+   "themes": [
+    "Anxiety & Worry",
+    "Fear",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "We have a newborn and I am so tired I cried in the shower. I feel like a bad father for wanting a break.",
+   "themes": [
+    "Anxiety & Worry",
+    "Peace",
+    "Shame & Guilt",
+    "Suffering & Pain"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My teenage daughter barely speaks to me anymore. I'm losing her and I don't know what I did.",
+   "themes": [
+    "Conflict & Relationships",
+    "Loneliness",
+    "Grief & Loss",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "A close friend told everyone something I said in confidence. I feel betrayed and stupid.",
+   "themes": [
+    "Forgiveness",
+    "Conflict & Relationships",
+    "Shame & Guilt"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I am caring for my dad in hospice. I want to be strong for him but I'm breaking.",
+   "themes": [
+    "Grief & Loss",
+    "Suffering & Pain",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm tempted to fudge numbers on my taxes. Everyone does it. Why shouldn't I?",
+   "themes": [
+    "Purpose & Direction",
+    "Faith & Doubt",
+    "Shame & Guilt"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm furious at my church. They protected the wrong person and I can't walk back in.",
+   "themes": [
+    "Forgiveness",
+    "Conflict & Relationships",
+    "Suffering & Pain"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I don't feel worthy of being loved by anyone, let alone God.",
+   "themes": [
+    "Shame & Guilt",
+    "Loneliness",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I had a miscarriage last week. We had already picked a name.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I relapsed after fourteen months sober. I drank the whole weekend and I hate myself.",
+   "themes": [
+    "Shame & Guilt",
+    "Forgiveness",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I found texts on my husband's phone. He has been cheating for a year.",
+   "themes": [
+    "Suffering & Pain",
+    "Peace",
+    "Grief & Loss"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I cheated on my wife. She doesn't know. Should I tell her?",
+   "themes": [
+    "Shame & Guilt",
+    "Forgiveness"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My newborn son is in the NICU and they don't know if he'll make it.",
+   "themes": [
+    "Fear",
+    "Grief & Loss",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm gay and I'm about to come out to my very religious parents. I'm terrified they'll disown me.",
+   "themes": [
+    "Fear",
+    "Loneliness",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I was a soldier. I killed people in Afghanistan and I can't stop seeing their faces.",
+   "themes": [
+    "Shame & Guilt",
+    "Suffering & Pain",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My mom has dementia and yesterday she didn't know who I was.",
+   "themes": [
+    "Grief & Loss",
+    "Suffering & Pain"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm 13 and I get bullied every single day at school. Nobody does anything.",
+   "themes": [
+    "Suffering & Pain",
+    "Loneliness",
+    "Fear"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm 82 and all my friends are dead. I'm just waiting.",
+   "themes": [
+    "Grief & Loss",
+    "Loneliness",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "We've done three rounds of IVF. I can't get pregnant and I can't go to another baby shower.",
+   "themes": [
+    "Grief & Loss",
+    "Suffering & Pain"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm a pastor and I am completely burnt out. I don't feel anything when I pray anymore.",
+   "themes": [
+    "Suffering & Pain",
+    "Faith & Doubt",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "We're undocumented and my kids are scared every time there's a knock at the door.",
+   "themes": [
+    "Fear",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I filed for bankruptcy today. Twenty years of work, gone.",
+   "themes": [
+    "Anxiety & Worry",
+    "Grief & Loss",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I drank the whole bottle of wine by myself last night and I feel ashamed.",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My best friend died of an overdose and I feel guilty I didn't stop him.",
+   "themes": [
+    "Grief & Loss",
+    "Shame & Guilt",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My wife has been having an affair for two years. I found out on Tuesday.",
+   "themes": [
+    "Suffering & Pain",
+    "Grief & Loss",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I lost my job and I have three kids and no savings.",
+   "themes": [
+    "Anxiety & Worry",
+    "Peace",
+    "Hope"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My 6 year old daughter has terminal cancer and the doctors say weeks.",
+   "themes": [
+    "Suffering & Pain",
+    "Grief & Loss",
+    "Fear",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "My husband died three weeks ago and I don't know how I'll pay the bills or face tomorrow.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm angry at God for taking my baby.",
+   "themes": [
+    "Grief & Loss",
+    "Faith & Doubt"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I have MS and I'm not getting better no matter how much faith I have.",
+   "themes": [
+    "Suffering & Pain",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "i'm a nurse and I lost a patient today, a child",
+   "themes": [
+    "Grief & Loss",
+    "Suffering & Pain",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm 82 and my wife of 60 years died last month. The house is so quiet.",
+   "themes": [
+    "Grief & Loss",
+    "Loneliness",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I'm scared of dying.",
+   "themes": [
+    "Fear",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I killed people in Afghanistan and I cannot sleep.",
+   "themes": [
+    "Shame & Guilt",
+    "Peace"
+   ],
+   "source": "#53"
+  },
+  {
+   "text": "I can't stop worrying about money. I lie awake doing math in my head.",
+   "themes": [
+    "Anxiety & Worry"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I have an exam tomorrow and I cannot sleep",
+   "themes": [
+    "Anxiety & Worry"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "Everything feels like too much right now. Work, kids, my mom's health. I'm so overwhelmed.",
+   "themes": [
+    "Anxiety & Worry",
+    "Suffering & Pain"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I am afraid of the future",
+   "themes": [
+    "Fear"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "My biopsy results come back Thursday and I am terrified.",
+   "themes": [
+    "Fear"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "My son James died last month and I cannot stop crying",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "It's been two years since my wife passed away and people think I should be over it.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "We had a miscarriage. Nobody knows what to say to us.",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "my friend Paul died and I am angry at God",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I moved to a new city for work and I have no one. I eat every meal alone.",
+   "themes": [
+    "Loneliness"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "nobody would notice if I disappeared for a week",
+   "themes": [
+    "Loneliness"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "My brother stole from our parents and now he wants to come to Christmas. I can't forgive him.",
+   "themes": [
+    "Forgiveness"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "How do I stop being bitter about my divorce?",
+   "themes": [
+    "Forgiveness",
+    "Conflict & Relationships"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I lied to my wife about money and now I feel disgusted with myself",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I relapsed again after 90 days clean. I'm such a failure.",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I've done things I can never tell anyone about. Is there a point where God stops forgiving?",
+   "themes": [
+    "Shame & Guilt"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I live with chronic pain every single day and I'm exhausted from pretending I'm fine.",
+   "themes": [
+    "Suffering & Pain"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "my dad has cancer and the treatment is not working",
+   "themes": [
+    "Suffering & Pain",
+    "Fear",
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "My husband and I fight about everything now. I don't know if I still love him.",
+   "themes": [
+    "Conflict & Relationships"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "My coworker keeps taking credit for my work and I am furious.",
+   "themes": [
+    "Conflict & Relationships"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I haven't spoken to my mother in three years. She's getting old. I'm estranged from her.",
+   "themes": [
+    "Conflict & Relationships",
+    "Forgiveness"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I'm 42 and I have no idea what my purpose is. I just go to work and come home.",
+   "themes": [
+    "Purpose & Direction"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I lost my job today. I don't know what to do next.",
+   "themes": [
+    "Purpose & Direction",
+    "Anxiety & Worry"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I've prayed for years and heard nothing. I'm starting to think there's no one listening.",
+   "themes": [
+    "Faith & Doubt"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "Why does God let children get cancer",
+   "themes": [
+    "Faith & Doubt"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I don't believe anymore and I'm scared to tell my family",
+   "themes": [
+    "Faith & Doubt",
+    "Fear"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I just want some peace. My mind never stops.",
+   "themes": [
+    "Peace",
+    "Anxiety & Worry"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I'm in a very dark place and I don't see it getting better. I'm not suicidal, just hopeless.",
+   "themes": [
+    "Hope"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I've been depressed for months. Does he say anything to people like me?",
+   "themes": [
+    "Hope"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "Give me a Psalm for anxiety",
+   "themes": [
+    "Anxiety & Worry"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "i am so tired. tired of everything. tired of being the strong one for everybody and nobody asking how i am. my marriage is fine i guess, my job is fine, my kids are fine, i am just so tired and i feel guilty for even saying that when other people have real problems",
+   "themes": [
+    "Suffering & Pain"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I'm not afraid of dying, I'm afraid of leaving my kids alone",
+   "themes": [
+    "Fear"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "my friend Sue died yesterday, should I go to the funeral",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "Thanks for nothing. my mom died and this app gave me a verse about birds",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "grieff my mom passd away",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "I want to kill him",
+   "themes": [
+    "Forgiveness"
+   ],
+   "source": "#55"
+  },
+  {
+   "text": "my grandmother always quoted John 1:1 to me and I miss her so much",
+   "themes": [
+    "Grief & Loss"
+   ],
+   "source": "#55"
+  }
+ ]
+}
