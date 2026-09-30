@@ -201,13 +201,13 @@ window.RLA_CURATED = {
   {
     "affirmation": {
       "text": "The storm is not the last word — he still speaks peace over weather.",
-      "quote": "Peace, be still. Why are ye so fearful? how is it that ye have no faith?",
+      "quote": "Peace, be still. … Why are ye so fearful? how is it that ye have no faith?",
       "verse": "Mark 4:39–40"
     },
     "word": {
       "theme": "Storm",
       "title": "Peace, Be Still",
-      "passage": "Peace, be still. Why are ye so fearful? how is it that ye have no faith?",
+      "passage": "Peace, be still. … Why are ye so fearful? how is it that ye have no faith?",
       "verse": "Mark 4:39–40",
       "reflection": "The disciples had Jesus in the boat and still panicked. He meets fear with a word to the wind, then a question to the heart."
     }
@@ -471,7 +471,7 @@ window.RLA_CURATED = {
     "passages": [
       {
         "verse": "Matthew 28:20",
-        "quote": "Lo, I am with you always, even unto the end of the world.",
+        "quote": "Lo, I am with you alway, even unto the end of the world.",
         "context": "His final Gospel promise is presence that does not expire."
       },
       {
@@ -545,7 +545,7 @@ window.RLA_CURATED = {
       },
       {
         "verse": "Matthew 5:14–16",
-        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid. Let your light so shine before men.",
+        "quote": "Ye are the light of the world. A city that is set on an hill cannot be hid. … Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.",
         "context": "Hope becomes visible when light is lived, not only felt."
       },
       {
@@ -665,7 +665,7 @@ window.RLA_CURATED = {
       },
       {
         "verse": "Luke 7:47–48",
-        "quote": "Her sins, which are many, are forgiven; for she loved much. Thy sins are forgiven.",
+        "quote": "Her sins, which are many, are forgiven; for she loved much … Thy sins are forgiven.",
         "context": "A public sinner is given a public pardon and a place at his feet."
       }
     ],

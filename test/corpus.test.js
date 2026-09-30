@@ -26,3 +26,40 @@ describe('KJV Gospel corpus', () => {
     assert.match(kjv.books.Matthew['26']['38'], /My soul is exceeding sorrowful/);
   });
 });
+
+describe('red-letter map', () => {
+  const { lookup, cleanKjv } = require('../lib/scripture');
+  const red = (cite) => {
+    const [book, cv] = cite.split(' ');
+    const [c, v] = cv.split(':');
+    return spoken.books[book]?.[c]?.[v] || null;
+  };
+
+  // Decisions from scripts/red-letter-corrections.js, checked against an
+  // independent red-letter KJV and the text itself.
+  it('does not put other voices or narration in red', () => {
+    for (const cite of ['Mark 9:7', 'Mark 16:6', 'Luke 13:14', 'John 7:20', 'John 11:35', 'Matthew 15:33']) {
+      assert.equal(red(cite), null, cite);
+    }
+    assert.equal(red('John 12:28'), 'Father, glorify thy name.');
+    assert.equal(red('Matthew 21:25'), 'The baptism of John, whence was it? from heaven, or of men?');
+  });
+
+  it('keeps sayings the map had missed', () => {
+    assert.match(red('Luke 2:49'), /about my Father's business/);
+    assert.equal(red('Matthew 8:3'), 'I will; be thou clean.');
+    assert.match(red('Luke 8:5'), /^A sower went out to sow his seed/);
+    assert.match(red('John 21:15'), /lovest thou me more than these\? … Feed my lambs\./);
+  });
+
+  it('keeps a parable whole instead of lifting a character’s line out of it', () => {
+    assert.match(red('Matthew 18:26'), /^The servant therefore fell down/);
+    assert.match(red('Luke 18:13'), /^And the publican, standing afar off/);
+  });
+
+  it('leaves the translators’ textual notes out of the verse', () => {
+    assert.doesNotMatch(lookup('Luke 17:36').text, /Greek copies/);
+    assert.doesNotMatch(cleanKjv(kjv.books.Luke['10']['22']), /ancient copies/);
+    assert.match(cleanKjv(kjv.books.Matthew['25']['14']), /the kingdom of heaven is/);
+  });
+});
