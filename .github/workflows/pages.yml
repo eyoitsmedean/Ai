@@ -3,7 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
       - claude/jesus-teachings-chatbot-bSBhF
   workflow_dispatch:
 
@@ -23,8 +22,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm install
+          node-version: 22
+          cache: npm
+      - run: npm ci
       - run: npm test
 
   deploy:
@@ -39,24 +39,12 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
-        continue-on-error: true
-        id: pages-setup
 
       - name: Upload artifact
-        if: steps.pages-setup.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'public'
 
       - name: Deploy to GitHub Pages
-        if: steps.pages-setup.outcome == 'success'
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Pages not enabled
-        if: steps.pages-setup.outcome != 'success'
-        run: |
-          echo "::notice::GitHub Pages is not enabled for this repo (Settings → Pages → GitHub Actions)."
-          echo "Skipping deploy. Feature branches do not require Pages."

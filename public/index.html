@@ -12,9 +12,9 @@
   <meta property="og:description" content="Not every verse — His words." />
   <meta property="og:type" content="website" />
   <title>Red Letter — The Advisor</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -929,12 +929,13 @@ textarea { font-family: var(--body); }
   background: var(--folio);
   z-index: 51;
   transform: translateX(100%);
-  transition: transform .35s var(--ease);
+  visibility: hidden;
+  transition: transform .35s var(--ease), visibility 0s linear .35s;
   padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
   border-left: 1px solid var(--rule);
 }
-.settings-sheet.on { transform: none; }
+.settings-sheet.on { transform: none; visibility: visible; transition: transform .35s var(--ease), visibility 0s; }
 .sheet-handle { display: none; }
 .sheet-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .sheet-title { font-family: var(--display); font-size: 28px; font-weight: 500; }
@@ -1722,7 +1723,7 @@ html.sitting .sit-sheet {
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
         </div>
         <div class="composer">
-          <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1"></textarea>
+          <textarea class="chat-input" id="chat-input" placeholder="Write what is on your heart…" rows="1" maxlength="2000"></textarea>
           <button class="send-btn" id="send-btn" onclick="sendMsg()" aria-label="Send">
             <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
@@ -1833,7 +1834,7 @@ html.sitting .sit-sheet {
   <div class="setting-row">
     <div>
       <div class="setting-label">Morning reminder</div>
-      <div class="setting-sub">A quiet knock around 8:00, if this device allows it</div>
+      <div class="setting-sub">A quiet knock around 8:00 while Red Letter is open, if this device allows it</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
@@ -1919,14 +1920,14 @@ html.sitting .sit-sheet {
 
 <div class="crisis-modal" id="crisis-modal" role="dialog" aria-modal="true" aria-labelledby="crisis-title">
   <div class="crisis-card">
-    <p class="eyebrow">You are not alone</p>
+    <p class="eyebrow" id="crisis-eyebrow">You are not alone</p>
     <h2 id="crisis-title">Please reach a person who can help right now</h2>
-    <p>If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
-    <div class="crisis-actions">
+    <p id="crisis-body">If you are in crisis or thinking about harming yourself, this room is not the right place for that moment. Real people are ready to help — free and confidential.</p>
+    <div class="crisis-actions" id="crisis-actions">
       <a href="tel:988">Call or text 988 (US)</a>
       <a href="https://findahelpline.com" target="_blank" rel="noreferrer">Find a helpline anywhere</a>
     </div>
-    <p>If you are in immediate danger, call your local emergency number. This page is not a person.</p>
+    <p id="crisis-foot">If you are in immediate danger, call your local emergency number. This page is not a person.</p>
     <div class="actions">
       <button class="cta cta-primary" type="button" id="crisis-continue">I am safe — continue carefully</button>
       <button class="ghost" type="button" id="crisis-close">Close</button>
@@ -1943,9 +1944,10 @@ html.sitting .sit-sheet {
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
 </article>
 
-<script src="/data/curated.js"></script>
-<script src="/data/advisor.js"></script>
-<script src="/data/paths.js"></script>
+<script src="data/crisis.js"></script>
+<script src="data/curated.js"></script>
+<script src="data/advisor.js"></script>
+<script src="data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -1984,7 +1986,11 @@ let sitEndsAt = 0;
 const SIT_SECONDS = 60;
 const SIT_RING = 2 * Math.PI * 52;
 let chatHistory = [];
+let chatDay = '';
 let isChatBusy = false;
+const CHAT_MAX_MESSAGES = 23;
+const CHAT_MAX_CHARS = 2000;
+const CHAT_TIMEOUT_MS = 90000;
 let curatedPacks = null;
 const encCache = {};
 let pendingShareType = null;
@@ -2098,7 +2104,7 @@ function clearReaderStorage() {
 function startNewReader() {
   if (!confirm('Start a new reader on this device? Words kept here will be cleared.')) return;
   clearReaderStorage();
-  location.href = '/';
+  location.href = './';
 }
 
 (function init() {
@@ -2106,7 +2112,7 @@ function startNewReader() {
     const q = new URLSearchParams(location.search);
     if (q.get('fresh') === '1' || q.get('demo') === '1') {
       clearReaderStorage();
-      history.replaceState({}, '', '/');
+      history.replaceState({}, '', location.pathname);
     }
   } catch (_) {}
   setWatch();
@@ -2116,6 +2122,7 @@ function startNewReader() {
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
+    document.getElementById('app').inert = true;
     return;
   }
   startApp();
@@ -2142,6 +2149,7 @@ function chooseNeed(kind) {
     ob.classList.add('hidden');
     ob.classList.remove('leaving');
     document.getElementById('app').removeAttribute('aria-hidden');
+    document.getElementById('app').inert = false;
     if (!kind) openFirstSit = true;
     startApp();
     if (kind === 'ask') switchTab('advisor');
@@ -2296,6 +2304,8 @@ function paintSeven() {
   const days = sevenDays();
   if (!days.length) {
     host.className = 'week-ribbon';
+    host.setAttribute('aria-hidden', 'true');
+    host.removeAttribute('role');
     host.innerHTML = '';
     const today = todayStr();
     const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -2319,6 +2329,8 @@ function paintSeven() {
   const done = new Set(state.done || []);
   const next = days.findIndex((_, i) => !done.has(i));
   host.className = 'seven';
+  host.removeAttribute('aria-hidden');
+  host.setAttribute('role', 'group');
   host.setAttribute('aria-label', 'Seven Days with His words');
   host.innerHTML = days.map((day, i) => {
     const cls = done.has(i) ? 'done' : (i === next || next < 0 ? 'today' : 'future');
@@ -2411,14 +2423,14 @@ function paintThemeIndex() {
 
 async function loadCurated() {
   if (curatedPacks) return curatedPacks;
-  const res = await fetch('/curated.json');
+  const res = await fetch('curated.json');
   curatedPacks = await res.json();
   return curatedPacks;
 }
 
 async function loadDailyContent() {
   try {
-    const res = await fetch('/api/daily');
+    const res = await fetch('api/daily');
     dailyData = await res.json();
     if (dailyData.error) throw new Error(dailyData.error);
   } catch (e) {
@@ -2467,7 +2479,7 @@ async function loadEnc(theme) {
   document.getElementById('enc-loading').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
   try {
-    const res = await fetch('/api/encouragement', {
+    const res = await fetch('api/encouragement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme })
@@ -2604,7 +2616,7 @@ function filterStaticLibrary({ book, q, theme, limit, offset }) {
 
 async function loadStaticLibrary() {
   if (staticLibrary) return staticLibrary;
-  const res = await fetch('/library.json');
+  const res = await fetch('library.json');
   if (!res.ok) throw new Error('library missing');
   staticLibrary = await res.json();
   return staticLibrary;
@@ -2618,7 +2630,7 @@ async function fetchLibraryPage({ book, q, theme, limit, offset }) {
     if (theme) params.set('theme', theme);
     params.set('limit', String(limit));
     params.set('offset', String(offset));
-    const res = await fetch('/api/library?' + params.toString());
+    const res = await fetch('api/library?' + params.toString());
     if (!res.ok) throw new Error('api');
     return await res.json();
   } catch (_) {
@@ -2882,9 +2894,13 @@ function anySheetOn() {
   return ['sit-sheet', 'settings-sheet', 'blessing-sheet', 'share-sheet']
     .some((id) => document.getElementById(id)?.classList.contains('on'));
 }
+function isShown(el) {
+  if (typeof el.checkVisibility === 'function') return el.checkVisibility({ visibilityProperty: true });
+  return el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden';
+}
 function focusables(root) {
   return [...root.querySelectorAll('button, [href], input, select, textarea')]
-    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true' && isShown(el));
 }
 function openSheetChrome(id) {
   if (!sheetTrigger) sheetTrigger = document.activeElement;
@@ -2925,8 +2941,8 @@ chatInput.addEventListener('input', () => {
 });
 
 function chatsToday() {
-  const raw = JSON.parse(ls('rla-chats') || '{"d":"","n":0}');
-  if (raw.d !== todayStr()) return { d: todayStr(), n: 0 };
+  const raw = parseJSON(ls('rla-chats'), null);
+  if (!raw || raw.d !== todayStr() || typeof raw.n !== 'number') return { d: todayStr(), n: 0 };
   return raw;
 }
 function bumpChat() {
@@ -2942,6 +2958,7 @@ function restoreLetters() {
   const msgs = document.getElementById('chat-messages');
   if (!saved || !Array.isArray(saved.messages) || !saved.messages.length || !msgs) return;
   chatHistory = saved.messages.filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+  chatDay = todayStr();
   msgs.innerHTML = '';
   chatHistory.forEach((m) => {
     if (m.role === 'user') addBubble('user', m.content);
@@ -2965,12 +2982,20 @@ function useSuggestion(btn) {
   sendMsg();
 }
 
+function chatPayload() {
+  let msgs = chatHistory.slice(-CHAT_MAX_MESSAGES);
+  while (msgs.length && msgs[0].role !== 'user') msgs = msgs.slice(1);
+  return msgs.map((m) => ({ role: m.role, content: m.content.slice(0, 8000) }));
+}
+
 async function sendMsg(preset) {
-  const text = (preset || chatInput.value).trim();
+  const text = (preset || chatInput.value).trim().slice(0, CHAT_MAX_CHARS);
   if (!text || isChatBusy) return;
-  if (looksLikeCrisisClient(text)) {
+  const crisis = assessCrisisClient(text);
+  if (crisis) {
+    setCrisisCopy(crisis);
     const action = await showCrisisModal();
-    if (action !== 'continue') return;
+    if (action !== 'continue' || isChatBusy) return;
   }
   if (chatsToday().n >= FREE_CHATS) {
     document.getElementById('chat-gate').classList.add('on');
@@ -2978,28 +3003,46 @@ async function sendMsg(preset) {
     setComposerEnabled(false);
     return;
   }
+  if (chatDay !== todayStr()) {
+    chatHistory = [];
+    chatDay = todayStr();
+  }
   chatInput.value = '';
   chatInput.style.height = 'auto';
   document.getElementById('suggestions').style.display = 'none';
   isChatBusy = true;
   document.getElementById('send-btn').disabled = true;
 
-  chatHistory.push({ role: 'user', content: text });
-  addBubble('user', text);
+  const userMsg = { role: 'user', content: text };
+  chatHistory.push(userMsg);
+  const userBubble = addBubble('user', text);
   document.getElementById('typing').classList.add('on');
   scrollChat();
   const aiBubble = createStreamBubble();
   let fullText = '';
   let opened = false;
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; if (ctrl) ctrl.abort(); }, CHAT_TIMEOUT_MS);
+  const retract = () => {
+    const i = chatHistory.lastIndexOf(userMsg);
+    if (i >= 0) chatHistory.splice(i, 1);
+  };
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory })
+      body: JSON.stringify({ messages: chatPayload() }),
+      signal: ctrl ? ctrl.signal : undefined
     });
-    if (res.status === 429) throw new Error('slow');
-    if (!res.ok && !res.body) throw new Error('fail');
+    if (!res.ok) {
+      let msg = '';
+      try { msg = (await res.json()).error || ''; } catch (_) {}
+      const e = new Error(msg || 'The Advisor could not answer just now. Please try again.');
+      e.server = true;
+      throw e;
+    }
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
@@ -3009,7 +3052,8 @@ async function sendMsg(preset) {
       buf += dec.decode(value, { stream: true });
       const lines = buf.split('\n');
       buf = lines.pop() ?? '';
-      for (const line of lines) {
+      for (const rawLine of lines) {
+        const line = rawLine.replace(/\r$/, '');
         if (!line.startsWith('data: ')) continue;
         const raw = line.slice(6).trim();
         if (raw === '[DONE]') break;
@@ -3044,23 +3088,30 @@ async function sendMsg(preset) {
     addSaveToChatBubble(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
   } catch (err) {
-    const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
-    const fallback = living || [
-      'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
-      '',
-      '**John 14:27**',
-      '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
-      'A troubled heart is the intended reader of this line.',
-      '',
-      '**Matthew 11:28**',
-      '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
-      'Rest is offered to the exhausted, not the already-composed.',
-    ].join('\n');
-    updateStreamBubble(aiBubble, fallback);
-    chatHistory.push({ role: 'assistant', content: fallback });
-    persistLetters();
-    addSaveToChatBubble(aiBubble, fallback, text);
+    retract();
+    if (timedOut || (err && err.server)) {
+      userBubble.remove();
+      aiBubble.wrap.remove();
+      if (!chatInput.value) chatInput.value = text;
+      showToast(timedOut ? 'The Advisor took too long to answer. Your words are back — try again.' : err.message);
+    } else {
+      const living = typeof window.RLA_advise === 'function' ? window.RLA_advise(text) : '';
+      const fallback = living || [
+        'I am still with what you wrote. Here are two sentences that do not ask you to be fine first.',
+        '',
+        '**John 14:27**',
+        '“Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.”',
+        'A troubled heart is the intended reader of this line.',
+        '',
+        '**Matthew 11:28**',
+        '“Come unto me, all ye that labour and are heavy laden, and I will give you rest.”',
+        'Rest is offered to the exhausted, not the already-composed.',
+      ].join('\n');
+      updateStreamBubble(aiBubble, fallback);
+      addSaveToChatBubble(aiBubble, fallback, text);
+    }
   } finally {
+    clearTimeout(timer);
     isChatBusy = false;
     document.getElementById('typing').classList.remove('on');
     const gated = chatsToday().n >= FREE_CHATS;
@@ -3068,7 +3119,7 @@ async function sendMsg(preset) {
       document.getElementById('chat-gate').classList.add('on');
       setComposerEnabled(false);
     } else {
-      document.getElementById('send-btn').disabled = false;
+      setComposerEnabled(true);
     }
     scrollChat();
   }
@@ -3126,7 +3177,10 @@ function scrollChat() {
   setTimeout(() => { el.scrollTop = el.scrollHeight; }, 20);
 }
 
-function getJournal() { return JSON.parse(ls('rla-journal') || '[]'); }
+function getJournal() {
+  const items = parseJSON(ls('rla-journal'), []);
+  return Array.isArray(items) ? items.filter((i) => i && typeof i === 'object') : [];
+}
 function setJournal(items) { lsSet('rla-journal', JSON.stringify(items)); }
 function saveJournalItem(item) {
   const items = getJournal().filter(i => i.key !== item.key);
@@ -3335,6 +3389,7 @@ function closeSettings() {
   hideOverlayIfIdle();
 }
 document.addEventListener('keydown', e => {
+  if (!ls('rla-onboarded') || !document.getElementById('onboarding').classList.contains('hidden')) return;
   const meta = e.metaKey || e.ctrlKey;
   if (meta && e.key.toLowerCase() === 'k') {
     e.preventDefault();
@@ -3611,7 +3666,7 @@ function amenFromSit() {
 }
 
 function stopSitListen() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (sitSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
   sitSpeaking = false;
   const btn = document.getElementById('sit-listen');
   if (btn) {
@@ -3732,14 +3787,14 @@ async function promptInstall() {
 
 async function blessingSeeds() {
   try {
-    const res = await fetch('/api/library?limit=24');
+    const res = await fetch('api/library?limit=24');
     const data = await res.json();
     if (data.sayings && data.sayings.length) {
       return data.sayings.map((s) => ({ verse: s.citation, quote: s.text }));
     }
   } catch (_) {}
   try {
-    const res = await fetch('/library.json');
+    const res = await fetch('library.json');
     const data = await res.json();
     return (data.sayings || []).slice(0, 24).map((s) => ({ verse: s.citation, quote: s.text }));
   } catch (_) {
@@ -3810,8 +3865,8 @@ function printSitting() {
   document.getElementById('print-cite').textContent = (p.verse || '') + '  ·  KJV';
   document.getElementById('print-foot').textContent = 'Red Letter · ' + (currentSeason.name || 'the Gospels');
   document.body.classList.add('printing');
+  window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
   window.print();
-  setTimeout(() => document.body.classList.remove('printing'), 500);
 }
 
 const COMMANDS = [
@@ -3881,20 +3936,119 @@ function closeCommandPalette() {
   root.setAttribute('aria-hidden', 'true');
 }
 
-function looksLikeCrisisClient(text) {
-  return /\b(suicid|kill myself|killing myself|end my life|take my life|want to die|wanna die|self[-\s]?harm|hurt myself|cut myself|hang myself|overdose|don't want to live|do not want to live|better off dead|no reason to live)\b/i.test(String(text || ''));
+// Crisis language lives in data/crisis.js, shared with the server. The line
+// below only answers if that file failed to load.
+function assessCrisisClient(text) {
+  if (window.RLA_CRISIS) return window.RLA_CRISIS.assessCrisis(text);
+  return /\b(suicid\w*|kill(?:ing)? myself|end(?:ing)? my (?:own )?life|end it all|take my (?:own )?life|want(?:ing)? to die|wanna die|self[-\s]?harm\w*|hurt(?:ing)? myself|cut(?:ting)? myself|hang(?:ing)? myself|overdos\w*|(?:don['’]?t|do not) want to (?:live|be alive|exist|be here anymore)|can['’]?t go on|better off dead|no reason to live)\b/i.test(String(text || ''))
+    ? { kind: 'self', lang: 'en' } : null;
 }
+
+const CRISIS_COPY = {
+  'self:en': null,
+  'danger:en': {
+    eyebrow: 'Your safety comes first',
+    title: 'If someone is hurting you, reach a person now',
+    body: 'No one has the right to hurt or threaten you. People who understand are ready to help — free and confidential.',
+    actions: [['tel:911', 'Emergency: call 911'], ['tel:18007997233', 'Call 1-800-799-7233'], ['sms:88788?&body=START', 'Text START to 88788']],
+    foot: 'National Domestic Violence Hotline (US). Anywhere else: findahelpline.com. This page is not a person.',
+  },
+  'other:en': {
+    eyebrow: 'You do not have to carry this alone',
+    title: 'If someone you love is in danger, reach help now',
+    body: 'If they may end their life, stay close if you can and bring in real people. Crisis counselors help people who are worried about someone else too.',
+    actions: [['tel:911', 'Immediate danger: call 911'], ['tel:988', 'Call or text 988 (US)'], ['https://findahelpline.com', 'Find a helpline anywhere']],
+    foot: 'This page is not a person, and it is not emergency care.',
+  },
+  'assault:en': {
+    eyebrow: 'It was not your fault',
+    title: 'You can talk to someone who knows how to help',
+    body: 'What happened to you matters. Trained, confidential people are ready to listen — whether it was last night or years ago.',
+    actions: [['tel:18006564673', 'RAINN: 1-800-656-4673'], ['https://hotline.rainn.org', 'Chat with RAINN online'], ['tel:911', 'In danger now: call 911']],
+    foot: 'National Sexual Assault Hotline (US). Anywhere else: findahelpline.com. This page is not a person.',
+  },
+  'assault:es': {
+    eyebrow: 'No fue tu culpa',
+    title: 'Puedes hablar con alguien que sabe ayudar',
+    body: 'Lo que te pasó importa. Hay personas capacitadas y confidenciales listas para escucharte, sea de anoche o de hace años.',
+    actions: [['tel:18006564673', 'RAINN: 1-800-656-4673'], ['tel:911', 'En peligro ahora: llama al 911']],
+    foot: 'Línea Nacional de Asalto Sexual (EE. UU.). En otros países: findahelpline.com. Esta página no es una persona.',
+  },
+  'self:es': {
+    eyebrow: 'Hay ayuda para ti',
+    title: 'Por favor, habla ahora con una persona que pueda ayudar',
+    body: 'Si estás en crisis o pensando en hacerte daño, este no es el lugar para ese momento. Hay personas listas para ayudarte, gratis y en confianza.',
+    actions: [['tel:988', 'Llama o escribe al 988 (EE. UU., en español)'], ['https://findahelpline.com', 'Buscar una línea de ayuda']],
+    foot: 'Si estás en peligro inmediato, llama al número de emergencias local. Esta página no es una persona.',
+  },
+  'danger:es': {
+    eyebrow: 'Tu seguridad es lo primero',
+    title: 'Si alguien te está lastimando, busca ayuda ahora',
+    body: 'Nadie tiene derecho a lastimarte ni a amenazarte. Hay personas listas para ayudarte, gratis y en confianza.',
+    actions: [['tel:911', 'Emergencia: llama al 911'], ['tel:18007997233', 'Línea contra la Violencia Doméstica: 1-800-799-7233']],
+    foot: 'Atención en español (EE. UU.). En otros países: findahelpline.com. Esta página no es una persona.',
+  },
+};
+let crisisDefaultCopy = null;
+
+function setCrisisCopy(assessment) {
+  const ids = ['crisis-eyebrow', 'crisis-title', 'crisis-body', 'crisis-actions', 'crisis-foot'];
+  if (!crisisDefaultCopy) crisisDefaultCopy = ids.map((id) => document.getElementById(id).innerHTML);
+  const copy = CRISIS_COPY[`${assessment.kind}:${assessment.lang}`];
+  if (!copy) {
+    ids.forEach((id, i) => { document.getElementById(id).innerHTML = crisisDefaultCopy[i]; });
+    return;
+  }
+  document.getElementById('crisis-eyebrow').textContent = copy.eyebrow;
+  document.getElementById('crisis-title').textContent = copy.title;
+  document.getElementById('crisis-body').textContent = copy.body;
+  document.getElementById('crisis-foot').textContent = copy.foot;
+  const actions = document.getElementById('crisis-actions');
+  actions.replaceChildren(...copy.actions.map(([href, label]) => {
+    const a = document.createElement('a');
+    a.href = href;
+    a.textContent = label;
+    if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noreferrer'; }
+    return a;
+  }));
+}
+let crisisPending = null;
 function showCrisisModal() {
-  return new Promise((resolve) => {
+  if (crisisPending) return crisisPending;
+  crisisPending = new Promise((resolve) => {
     const el = document.getElementById('crisis-modal');
+    const app = document.getElementById('app');
+    const trigger = document.activeElement;
+    const wasInert = app ? app.inert : false;
+    if (app) app.inert = true;
     el.classList.add('on');
+    const call = el.querySelector('a[href^="tel:"]') || document.getElementById('crisis-continue');
+    setTimeout(() => call.focus(), 20);
+    const onKey = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); finish('close'); return; }
+      if (e.key !== 'Tab') return;
+      const list = focusables(el);
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     const finish = (action) => {
+      document.removeEventListener('keydown', onKey, true);
       el.classList.remove('on');
+      if (app) app.inert = wasInert;
+      crisisPending = null;
+      if (trigger && typeof trigger.focus === 'function' && document.contains(trigger)) {
+        try { trigger.focus(); } catch (_) {}
+      }
       resolve(action);
     };
+    document.addEventListener('keydown', onKey, true);
     document.getElementById('crisis-continue').onclick = () => finish('continue');
     document.getElementById('crisis-close').onclick = () => finish('close');
   });
+  return crisisPending;
 }
 
 async function sealLetter(bubble) {
@@ -3906,7 +4060,7 @@ async function sealLetter(bubble) {
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
-    const res = await fetch('/api/verify', {
+    const res = await fetch('api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items }),
@@ -3942,7 +4096,7 @@ async function toggleReminder(on) {
     return;
   }
   lsSet('rla-reminder', '1');
-  showToast('Morning reminder on · around 8:00');
+  showToast('Morning reminder on · around 8:00 while the room is open');
 }
 function checkMorningReminder() {
   if (ls('rla-reminder') !== '1') return;
@@ -3951,10 +4105,13 @@ function checkMorningReminder() {
   if (now.getHours() < 8 || now.getHours() > 10) return;
   const key = 'rla-reminded-' + todayStr();
   if (ls(key) === '1') return;
-  try {
-    new Notification('Red Letter', { body: 'A quiet word is waiting for you today.', icon: '/icon-192.png', tag: 'rla-morning' });
-    lsSet(key, '1');
-  } catch (_) {}
+  const opts = { body: 'A quiet word is waiting for you today.', icon: 'icon-192.png', tag: 'rla-morning' };
+  const direct = () => { try { new Notification('Red Letter', opts); lsSet(key, '1'); } catch (_) {} };
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.ready
+      .then((r) => r.showNotification('Red Letter', opts))
+      .then(() => lsSet(key, '1'), direct);
+  } else direct();
 }
 
 function setOfflineBanner() {
@@ -4015,7 +4172,7 @@ function bindRituals() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
 </body>
