@@ -62,6 +62,10 @@ The spoken corpus is `data/spoken-gospels.json` (KJV Gospels × `data/red-letter
 
 The interface is a folio, not a feed. Chrome whispers. The only loud color is the red letter. Desktop uses a sidebar like a studio notebook; the phone keeps a thin mast and a dock. Share exports a printed card.
 
+## Live Advisor (no API key)
+
+`live/advisor.template.html` is a claude.ai artifact that writes Advisor letters on the viewer's own Claude account through the artifact `sample` capability, with no API key or server. It embeds the app's crisis rules, curated passages and offline composer. Claude may only cite markers from a candidate list the page picks; the page sets every quotation from the KJV and drops anything else. Rebuild after changing those files with `npm run build:live`, then republish `live/red-letter-advisor.html` to the same artifact.
+
 ## Deploy
 
 - **App (Node):** serve this repo with `npm start`. This is the full room: live generation, `/api/*`, and the `/welcome` landing page.

@@ -1,0 +1,387 @@
+<title>Red Letter Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single correspondence column; your words on the right margin, letters full width with his words set apart in red. */
+:root {
+  --paper: #eef0ee;
+  --ink: #1d2226;
+  --muted: #5f686d;
+  --rule: #d2d8d6;
+  --faint: #b9c1bf;
+  --red: #b3122e;
+  --red-soft: rgba(179, 18, 46, 0.1);
+  --slip: #f8f9f8;
+  --help: #fff4e8;
+  --help-edge: #c2570c;
+  --display: "IM Fell English", "Iowan Old Style", Georgia, serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111417; --ink: #e5e8e9; --muted: #929ba0; --rule: #283036; --faint: #3a434a;
+    --red: #ff5c73; --red-soft: rgba(255, 92, 115, 0.12); --slip: #181c20; --help: #2a1d12; --help-edge: #f59e5b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111417; --ink: #e5e8e9; --muted: #929ba0; --rule: #283036; --faint: #3a434a;
+  --red: #ff5c73; --red-soft: rgba(255, 92, 115, 0.12); --slip: #181c20; --help: #2a1d12; --help-edge: #f59e5b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 1rem/1.65 var(--body); padding-inline: clamp(16px, 4vw, 40px); padding-block: 0 48px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+header { display: grid; gap: 10px; padding-top: 40px; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 400 clamp(2.3rem, 6vw, 3.6rem)/1 var(--display); margin: 0; text-wrap: balance; }
+h1 em { color: var(--red); }
+.lede { margin: 0; color: var(--muted); max-width: 60ch; }
+.status { font: 400 0.78rem/1.5 var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.status b { font-weight: 500; color: var(--ink); }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); margin-right: 6px; vertical-align: 1px; }
+.dot.live { background: #2f9e5b; }
+
+.thread { display: grid; gap: 22px; }
+.you { justify-self: end; max-width: 85%; background: var(--slip); border: 1px solid var(--rule); padding: 10px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.letter { display: grid; gap: 12px; }
+.letter p { margin: 0; max-width: 62ch; }
+.letter .label { font: 500 0.7rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.saying { border-left: 3px solid var(--red); padding: 4px 0 4px 16px; display: grid; gap: 4px; }
+.saying .cite { font: 500 0.76rem/1 var(--mono); letter-spacing: 0.05em; color: var(--red); }
+.saying q { quotes: "\201C" "\201D"; font: 400 1.22rem/1.45 var(--display); color: var(--ink); }
+.thinking { color: var(--muted); font-style: italic; }
+.seal { font: 400 0.72rem/1.4 var(--mono); color: var(--muted); }
+.help { background: var(--help); border-left: 3px solid var(--help-edge); padding: 14px 16px; display: grid; gap: 6px; }
+.help p { margin: 0; }
+.help .lines { font: 500 0.95rem/1.5 var(--mono); }
+.example { position: relative; border: 1px dashed var(--rule); padding: 18px; display: grid; gap: 16px; }
+.example::before { content: "Example"; position: absolute; top: -9px; left: 12px; background: var(--paper); padding: 0 6px; font: 500 0.66rem/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+form { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--paper) 18px); padding-top: 18px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; }
+.box { display: flex; gap: 10px; align-items: flex-end; border: 1px solid var(--faint); background: var(--slip); padding: 8px 8px 8px 14px; }
+.box:focus-within { border-color: var(--red); }
+textarea { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: 400 1rem/1.5 var(--body); resize: none; outline: none; max-height: 40vh; }
+.send { border: 0; background: var(--red); color: var(--paper); font: 500 0.82rem var(--mono); padding: 9px 14px; cursor: pointer; letter-spacing: 0.04em; }
+.send[disabled] { opacity: 0.5; cursor: default; }
+.send.stop { background: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--rule); background: none; color: var(--muted); padding: 4px 10px; font: 400 0.85rem var(--body); cursor: pointer; }
+.chip:hover { color: var(--red); border-color: var(--red); }
+.foot { font: 400 0.72rem/1.5 var(--mono); color: var(--muted); }
+.new { border: 0; background: none; color: var(--muted); font: 400 0.72rem var(--mono); text-decoration: underline; cursor: pointer; padding: 0; }
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">The words of Jesus · King James Version</div>
+    <h1>Red Letter <em>Advisor</em></h1>
+    <p class="lede">Write what you are carrying. A short letter comes back, built only from things Jesus said in the four Gospels. Claude writes the letter around them; every quotation is set from the King James text by this page, never typed by the model.</p>
+    <div class="status" id="status"><span><span class="dot" id="dot"></span><b id="mode">Connecting to Claude…</b></span><span>Not a person, not therapy. In crisis: call or text 988 (US).</span></div>
+  </header>
+
+  <section class="thread" id="thread" aria-live="polite">
+    <div class="example" id="example">
+      <div class="you">I keep lying awake worrying about money and what happens next month.</div>
+      <div class="letter">
+        <p>Night is when the arithmetic gets loud. You are trying to carry next month in the dark, alone, and that is too heavy for one person at 3 a.m.</p>
+        <div class="saying"><span class="cite">Matthew 6:34</span><q>Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.</q></div>
+        <p>He does not pretend tomorrow is empty. He says it is tomorrow's, and that today has enough.</p>
+        <div class="saying"><span class="cite">Matthew 11:28</span><q>Come unto me, all ye that labour and are heavy laden, and I will give you rest.</q></div>
+        <p>The invitation is for the tired, exactly as you are tonight.</p>
+      </div>
+    </div>
+  </section>
+
+  <form id="form" autocomplete="off">
+    <div class="chips" id="chips">
+      <button type="button" class="chip">I can't forgive my brother</button>
+      <button type="button" class="chip">I feel so alone since the divorce</button>
+      <button type="button" class="chip">Is God even listening?</button>
+      <button type="button" class="chip">I'm ashamed of what I did</button>
+    </div>
+    <div class="box">
+      <label for="msg" class="eyebrow" style="position:absolute;left:-9999px">Your message</label>
+      <textarea id="msg" rows="2" maxlength="2000" placeholder="Write what is on your heart…"></textarea>
+      <button class="send" id="send" type="submit">Send</button>
+    </div>
+    <div class="foot">Each answer uses your own Claude account. Nothing you write is stored by this page. <button type="button" class="new" id="new">Begin a new letter</button></div>
+  </form>
+</div>
+
+<script>__CRISIS__</script>
+<script>__CURATED__</script>
+<script>__ADVISOR__</script>
+<script>
+const DATA = __DATA__;
+const C = window.RLA_CRISIS;
+const thread = document.getElementById('thread');
+const form = document.getElementById('form');
+const msg = document.getElementById('msg');
+const sendBtn = document.getElementById('send');
+const modeEl = document.getElementById('mode');
+const dot = document.getElementById('dot');
+
+let sample = null;
+let live = false;
+let busy = false;
+let ctl = null;
+let turns = []; // {role, content}: what Claude sees again (assistant turns keep their {{markers}})
+const userTexts = [];
+
+const norm = (c) => String(c).replace(/[-‐‑‒–—−]/g, '–').replace(/\s+/g, ' ').trim();
+
+// Candidates ----------------------------------------------------------------
+const STOP = new Set('the and for you your that this with from have not but are was were been being they them their what when where which who how why can will just about into over after before than then also very feel like dont cant know want need really get got its im ive myself even did does last week since still ever much way'.split(' '));
+const tokens = (t) => String(t || '').toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !STOP.has(w));
+
+// Sayings a letter of comfort should not offer anyone: judgment, woe, violence.
+const HARSH = /\b(?:hell|woe|damnation|fire|outer darkness|gnashing|not be forgiven|never forgiveness|millstone|perish\w*|condemn\w*|hypocrites?|serpents|vipers|devils?|cursed|destroy\w*|kill\w*|beat|beaten|stoned?|slay|slew|scourge\w*|sword|blood|dead|death|die)\b/i;
+
+function candidates(text, kind) {
+  const pool = new Map();
+  const add = (cite, quote) => {
+    const k = norm(cite);
+    if (!pool.has(k) && quote && !(kind && C.unsafeSaying(kind, quote))) pool.set(k, { cite: k, text: quote });
+  };
+  const theme = window.RLA_adviseTheme ? window.RLA_adviseTheme(text) : null;
+  const enc = theme && window.RLA_CURATED && window.RLA_CURATED.encouragement && window.RLA_CURATED.encouragement[theme];
+  // After a disclosure: only reviewed words. Word-matching is how "my husband
+  // hits me" found the parable of the husbandmen who beat the servants.
+  if (kind) {
+    for (const p of C.safePassages(kind)) add(p.verse, p.quote);
+    for (const p of (enc && enc.passages) || []) if (!HARSH.test(p.quote)) add(p.verse, p.quote);
+    return { theme, list: [...pool.values()].slice(0, 8) };
+  }
+  // 1. The hand-picked passages of the room this message belongs to.
+  for (const p of (enc && enc.passages) || []) add(p.verse, p.quote);
+  // 2. Sayings that share at least two words with the message, minus the harsh ones.
+  const q = [...new Set(tokens(text))];
+  const scored = [];
+  for (const [cite, quote, themes] of DATA.sayings) {
+    if (HARSH.test(quote)) continue;
+    const hay = quote.toLowerCase();
+    let hits = 0;
+    let score = 0;
+    for (const t of q) if (new RegExp(`\\b${t}`).test(hay)) { hits += 1; score += t.length > 5 ? 3 : 2; }
+    const inRoom = theme && themes.includes(DATA.themes.indexOf(theme));
+    if (inRoom) score += 6;
+    // Shared words alone are weak evidence ("mother" finds "forsaken... mother").
+    if ((inRoom && hits >= 1) || hits >= 3) scored.push([score, cite, quote]);
+  }
+  scored.sort((a, b) => b[0] - a[0]);
+  for (const [, cite, quote] of scored.slice(0, 5)) add(cite, quote);
+  // 3. When little fits, his plainest words of comfort.
+  if (pool.size < 4) {
+    for (const p of C.safePassages('self')) add(p.verse, p.quote);
+    for (const p of C.safePassages('danger')) add(p.verse, p.quote);
+  }
+  return { theme, list: [...pool.values()].slice(0, 12) };
+}
+
+// The letter ------------------------------------------------------------------
+const RULES = `You are writing as "The Red Letter Advisor": a warm, plain-spoken guide who helps people with real struggles using only the recorded words of Jesus from Matthew, Mark, Luke and John (King James Version).
+
+Write a short letter:
+1. Two or three sentences that meet the person where they are. Name what they are feeling, specifically, in everyday words. No theology yet.
+2. Two or three sayings. For each, put ONLY its marker on a line by itself, exactly as given, e.g.
+{{John 14:27}}
+then one sentence on why it speaks to this person. Never write out the words of a saying yourself: the page sets the exact text from the marker.
+3. One gentle closing line, no pressure, no sermon.
+
+Rules:
+- Use only markers from the ALLOWED SAYINGS list in the latest message, copied exactly.
+- Never quote, paraphrase or summarize scripture in your own sentences, and never cite Paul, the prophets or anyone but Jesus.
+- Keep it under 170 words. No headings, no bullet points, no "Dear", no signature.
+- Never claim to be a person, a pastor, a counselor or emergency help. If the writer may be in danger, urge real human help first.
+- Do not assume the reader's faith or denomination.`;
+
+function careLine(kind) {
+  if (!kind) return '';
+  return kind === 'self' || kind === 'other'
+    ? '\n\nCARE: The writer may be at risk of ending a life. Begin by urging real human help (988 in the US). Nothing about death, dying, losing one\'s life, crosses or graves.'
+    : '\n\nCARE: The writer has disclosed abuse or violence. Their safety comes first. Do not counsel forgiving, reconciling, staying, submitting, or examining their own fault.';
+}
+
+// Turn Claude's text into blocks; only markers from this turn's list survive.
+function toBlocks(raw, allowed, kind, finished) {
+  const byCite = new Map(allowed.map((s) => [s.cite, s]));
+  const blocks = [];
+  const lines = String(raw).split('\n');
+  let skipContext = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) { continue; }
+    const m = line.match(/^\{\{\s*([^{}]+?)\s*\}\}$/);
+    if (m) {
+      const s = byCite.get(norm(m[1]));
+      if (s && !(kind && C.unsafeSaying(kind, s.text))) { blocks.push({ type: 'saying', cite: s.cite, text: s.text }); skipContext = false; }
+      else skipContext = true; // an unknown or held-back marker takes its context sentence with it
+      continue;
+    }
+    if (/^\{\{/.test(line) && !finished && i === lines.length - 1) continue; // marker still arriving
+    if (skipContext) { skipContext = false; continue; }
+    // A line that quotes scripture itself, or a stray marker inside prose, never reaches the page.
+    if (/^[“"']/.test(line) || /\{\{/.test(line)) continue;
+    blocks.push({ type: 'p', text: line.replace(/\*\*/g, '') });
+  }
+  if (finished && kind && !blocks.some((b) => b.type === 'saying')) {
+    for (const p of C.safePassages(kind)) blocks.push({ type: 'saying', cite: p.verse, text: p.quote }, { type: 'p', text: p.context });
+  }
+  return blocks;
+}
+
+function renderBlocks(el, blocks) {
+  el.replaceChildren(...blocks.map((b) => {
+    if (b.type === 'p') { const p = document.createElement('p'); p.textContent = b.text; return p; }
+    const d = document.createElement('div');
+    d.className = 'saying';
+    const c = document.createElement('span'); c.className = 'cite'; c.textContent = b.cite;
+    const q = document.createElement('q'); q.textContent = b.text;
+    d.append(c, q);
+    return d;
+  }));
+}
+
+function helpCard(kind, lang) {
+  const text = DATA.notices[`${kind}:${lang}`] || DATA.notices[`${kind}:en`] || DATA.notices['self:en'];
+  const card = document.createElement('div');
+  card.className = 'help';
+  card.setAttribute('role', 'note');
+  const [first, ...rest] = text.split('\n');
+  const p1 = document.createElement('p'); p1.textContent = first;
+  const p2 = document.createElement('p'); p2.className = 'lines'; p2.textContent = rest.slice(0, -1).join(' ');
+  const p3 = document.createElement('p'); p3.textContent = rest[rest.length - 1] || '';
+  card.append(p1, p2, p3);
+  return card;
+}
+
+// Offline: the app's own composer, from the same reviewed passages.
+function offlineLetter(text, kind) {
+  if (kind) return C.safePassages(kind).flatMap((p) => [{ type: 'saying', cite: p.verse, text: p.quote }, { type: 'p', text: p.context }]);
+  const raw = window.RLA_advise ? window.RLA_advise(text) : '';
+  const blocks = [];
+  const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+  for (let i = 0; i < lines.length; i++) {
+    const cite = lines[i].match(/^\*\*(.+)\*\*$/);
+    if (cite && lines[i + 1]) { blocks.push({ type: 'saying', cite: cite[1], text: lines[i + 1].replace(/^["“]|["”]$/g, '') }); i += 1; }
+    else blocks.push({ type: 'p', text: lines[i] });
+  }
+  return blocks;
+}
+
+const COPY = {
+  not_granted: 'Claude was not allowed for this page, so this letter comes from the offline Advisor.',
+  sampling_disabled: 'Claude is not available on this account, so this letter comes from the offline Advisor.',
+  rate_limited: 'Claude is busy or your usage limit was reached. Try again in a little while.',
+  session_expired: 'Please sign in to claude.ai again, then send your message once more.',
+  refused: 'Claude would not write this letter. Here are his words from the offline Advisor instead.',
+  empty_completion: 'Claude returned nothing. Try rewording your message.',
+};
+
+function setBusy(on) {
+  busy = on;
+  sendBtn.textContent = on ? 'Stop' : 'Send';
+  sendBtn.classList.toggle('stop', on);
+  msg.disabled = on;
+}
+
+async function send(text) {
+  text = text.trim().slice(0, 2000);
+  if (!text || busy) return;
+  document.getElementById('example')?.remove();
+  document.getElementById('chips').hidden = true;
+  userTexts.push(text);
+  const now = C.assessCrisis(text);
+  const disclosed = now || C.assessConversation(userTexts);
+  const kind = disclosed && disclosed.kind;
+
+  const you = document.createElement('div'); you.className = 'you'; you.textContent = text;
+  const letter = document.createElement('div'); letter.className = 'letter';
+  const body = document.createElement('div'); body.className = 'letter'; body.style.gap = '12px';
+  const seal = document.createElement('div'); seal.className = 'seal';
+  if (now) letter.append(helpCard(now.kind, now.lang));
+  letter.append(body, seal);
+  thread.append(you, letter);
+  you.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+
+  const { list } = candidates(text, kind);
+  if (!live) {
+    renderBlocks(body, offlineLetter(text, kind));
+    seal.textContent = 'Offline Advisor · open this page in claude.ai for a letter written by Claude.';
+    return;
+  }
+
+  const allowLines = list.map((s) => `{{${s.cite}}} — ${s.text}`).join('\n');
+  const latest = `${text}\n\nALLOWED SAYINGS (cite only these markers, copied exactly):\n${allowLines}${careLine(kind)}`;
+  const history = turns.slice(-8);
+  const input = [{ role: 'user', content: RULES }, ...history, { role: 'user', content: latest }];
+  body.innerHTML = '<p class="thinking">Reading what you wrote…</p>';
+  setBusy(true);
+  ctl = new AbortController();
+  let last = '';
+  try {
+    const { text: raw, truncated } = await sample(input, {
+      cache: false,
+      signal: ctl.signal,
+      onText: ({ text: t }) => { last = t; renderBlocks(body, toBlocks(t, list, kind, false)); },
+    });
+    last = raw;
+    const blocks = toBlocks(raw, list, kind, true);
+    renderBlocks(body, blocks);
+    const n = blocks.filter((b) => b.type === 'saying').length;
+    seal.textContent = `${n} saying${n === 1 ? '' : 's'} set from the King James text by this page${truncated ? ' · the letter was cut short' : ''}.`;
+    turns.push({ role: 'user', content: text }, { role: 'assistant', content: raw });
+  } catch (e) {
+    const code = e && e.code;
+    if (code === 'cancelled') {
+      if (last) renderBlocks(body, toBlocks(last, list, kind, true)); else body.innerHTML = '';
+      seal.textContent = 'Stopped.';
+    } else if (code === 'not_granted' || code === 'sampling_disabled' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed' || code === 'refused') {
+      if (code !== 'refused') { live = false; showMode(); }
+      renderBlocks(body, offlineLetter(text, kind));
+      seal.textContent = COPY[code] || 'This letter comes from the offline Advisor.';
+    } else {
+      if (e && e.text) renderBlocks(body, toBlocks(e.text, list, kind, true));
+      else renderBlocks(body, offlineLetter(text, kind));
+      seal.textContent = COPY[code] || 'The connection to Claude broke off. Send again to retry; meanwhile, here are his words from the offline Advisor.';
+    }
+  } finally {
+    setBusy(false);
+    msg.focus();
+  }
+}
+
+function showMode() {
+  modeEl.textContent = live ? 'Live · letters written by Claude on your account' : 'Offline Advisor · open in claude.ai for live letters';
+  dot.classList.toggle('live', live);
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (busy) { ctl?.abort(); return; }
+  const t = msg.value;
+  msg.value = '';
+  send(t);
+});
+msg.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+msg.addEventListener('input', () => { msg.style.height = 'auto'; msg.style.height = Math.min(msg.scrollHeight, 320) + 'px'; });
+for (const chip of document.querySelectorAll('.chip')) chip.addEventListener('click', () => send(chip.textContent));
+document.getElementById('new').addEventListener('click', () => {
+  if (busy) ctl?.abort();
+  turns = []; userTexts.length = 0;
+  thread.replaceChildren();
+  document.getElementById('chips').hidden = false;
+  msg.focus();
+});
+
+modeEl.textContent = 'Connecting to Claude…';
+(async () => {
+  try {
+    sample = window.claude && typeof window.claude.use === 'function' ? await window.claude.use('sample') : null;
+  } catch (_) { sample = null; }
+  live = typeof sample === 'function';
+  showMode();
+})();
+</script>
