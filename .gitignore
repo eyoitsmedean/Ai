@@ -4,3 +4,4 @@ node_modules/
 .DS_Store
 data/waitlist.json
 data/waitlist.jsonl
+live/red-letter-advisor.html

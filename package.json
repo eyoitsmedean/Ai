@@ -15,7 +15,8 @@
     "smoke": "node scripts/smoke.js",
     "qa": "node scripts/qa-browser.js",
     "eval:crisis": "node scripts/eval-crisis.js",
-    "eval:advisor": "node scripts/eval-advisor.js"
+    "eval:advisor": "node scripts/eval-advisor.js",
+    "build:live": "node scripts/build-live-advisor.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.129.0",
