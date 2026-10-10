@@ -7,3 +7,7 @@ data/waitlist.jsonl
 live/red-letter-advisor.html
 products/forty-days/dist/*.html
 products/every-word/dist/*.html
+
+# Regenerable outputs
+products/wall-art/upload/
+products/hide-it/tests/screenshots/
