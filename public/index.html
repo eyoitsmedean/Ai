@@ -1077,6 +1077,18 @@ textarea { font-family: var(--body); }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
 
+/* Forty: the Lent path takes the ribbon's place from Ash Wednesday to Easter. */
+.forty { display: flex; flex-direction: column; gap: 10px; margin: 0 0 28px; }
+.forty-kicker { margin: 0; color: var(--ink-3); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.forty-kicker b { color: var(--crimson); font-weight: 600; }
+.forty-marks { display: flex; flex-wrap: wrap; gap: 4px; }
+.forty-marks i { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--rule-2); }
+.forty-marks i.sun { border-radius: 1px; transform: rotate(45deg) scale(.8); }
+.forty-marks i.past { background: var(--ink-3); border-color: var(--ink-3); opacity: .5; }
+.forty-marks i.now { background: var(--crimson); border-color: var(--crimson); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 14%, transparent); }
+.forty-open { align-self: flex-start; background: none; border: none; padding: 0; color: var(--ink); font-family: var(--display); font-size: 1.25rem; text-align: left; cursor: pointer; }
+.forty-open:hover, .forty-open:focus-visible { color: var(--crimson); }
+
 .epigraph {
   margin: 0 0 36px;
   padding: 0 0 0 16px;
@@ -1947,6 +1959,7 @@ html.sitting .sit-sheet {
 <script src="data/crisis.js"></script>
 <script src="data/curated.js"></script>
 <script src="data/advisor.js"></script>
+<script src="data/forty.js"></script>
 <script src="data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
@@ -2106,6 +2119,14 @@ function startNewReader() {
   clearReaderStorage();
   location.href = './';
 }
+
+// ?lent=2027-03-26 previews a day of Forty; read it before ?fresh=1 clears the query.
+const LENT_PEEK = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get('lent');
+    return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  } catch (_) { return null; }
+})();
 
 (function init() {
   try {
@@ -2298,9 +2319,58 @@ function pathState() {
   if (raw && Array.isArray(raw.done)) return raw;
   return { started: todayStr(), done: [] };
 }
+function fortyToday() {
+  if (typeof window.RLA_fortyFor !== 'function') return null;
+  const date = LENT_PEEK ? new Date(LENT_PEEK + 'T12:00:00') : new Date();
+  return window.RLA_fortyFor(date);
+}
+function paintForty(host, hit) {
+  const path = window.RLA_FORTY_PATH || [];
+  const e = hit.entry;
+  const label = e.kind === 'easter'
+    ? '<b>Easter</b> · the path is walked'
+    : e.kind === 'sunday'
+      ? '<b>Forty</b> · Sunday, not counted · ' + esc(e.week)
+      : '<b>Forty</b> · Day ' + hit.day + ' of 40 · ' + esc(e.week);
+  host.className = 'forty';
+  host.removeAttribute('aria-hidden');
+  host.setAttribute('role', 'group');
+  host.setAttribute('aria-label', 'Forty, the Lent path');
+  host.innerHTML = '<p class="forty-kicker">' + label + '</p>' +
+    '<div class="forty-marks" aria-hidden="true">' + path.map((p, i) =>
+      '<i class="' + (p.kind !== 'day' ? 'sun ' : '') + (i < hit.offset ? 'past' : i === hit.offset ? 'now' : '') + '"></i>').join('') + '</div>' +
+    '<button type="button" class="forty-open">Sit with \u201c' + esc(e.title) + '\u201d</button>';
+  host.querySelector('.forty-open').addEventListener('click', () => sitForty(hit));
+}
+function sitForty(hit) {
+  const e = hit.entry;
+  sitPayload = {
+    kicker: e.kind === 'day' ? 'Forty · Day ' + hit.day : e.kind === 'easter' ? 'Easter' : 'Forty · Sunday',
+    title: e.title,
+    quote: e.passage,
+    verse: e.verse,
+    reflection: e.reflection + (e.practice ? ' Today: ' + e.practice : ''),
+    pathIndex: null,
+  };
+  sitStep = 1;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  document.getElementById('sit-kicker').textContent = sitPayload.kicker;
+  document.getElementById('sit-quote').textContent = sitPayload.quote;
+  document.getElementById('sit-quote-rest').textContent = sitPayload.quote;
+  const reflectQ = document.getElementById('sit-quote-reflect');
+  if (reflectQ) reflectQ.textContent = sitPayload.quote;
+  const reflect = document.getElementById('sit-reflect');
+  if (reflect) reflect.textContent = sitPayload.reflection;
+  document.getElementById('sit-cite').textContent = sitPayload.verse + '  ·  KJV';
+  document.getElementById('sit-reply').value = '';
+  showSitStep(1);
+}
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
+  const lent = fortyToday();
+  if (lent) { paintForty(host, lent); return; }
   const days = sevenDays();
   if (!days.length) {
     host.className = 'week-ribbon';
