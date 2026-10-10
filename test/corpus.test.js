@@ -43,6 +43,8 @@ describe('red-letter map', () => {
     }
     assert.equal(red('John 12:28'), 'Father, glorify thy name.');
     assert.equal(red('Matthew 21:25'), 'The baptism of John, whence was it? from heaven, or of men?');
+    assert.equal(red('John 19:28'), 'I thirst.');
+    assert.equal(red('John 20:21'), 'Peace be unto you: as my Father hath sent me, even so send I you.');
   });
 
   it('keeps sayings the map had missed', () => {
