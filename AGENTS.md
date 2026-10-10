@@ -29,14 +29,16 @@ Red Letter is a quiet reading room for the words Jesus spoke. The owner is a new
 
 ## Crisis
 
-- `CRISIS_PATTERN` in `lib/scripture.js` is the one detector. The page and `data/advisor.js` carry copies; `npm test` fails if they drift. Change all three together.
-- On crisis input: name 988 and findahelpline.com, then stop generating counsel. The model is not called.
+- `public/data/crisis.js` is the one detector. The server requires it and the page loads it, so there is nothing to keep in sync. Change crisis language only there.
+- Misses cost more than false alarms. Measure any change with `npm run eval:crisis` against `test/fixtures/crisis-corpus.json`; never trade recall for fewer alarms.
+- On crisis input: the 988 / findahelpline.com notice goes first, and only sayings that pass `unsafeSaying` follow. No death verses after a self-harm disclosure; no "forgive, stay, turn the other cheek" after an abuse disclosure.
 - A crisis line on every screen stays. That is not optional.
 
 ## Before you push
 
 ```bash
 npm test
+npm run eval:crisis    # if you touched anything crisis-related
 npm start &            # then:
 npm run smoke          # API + shell
 CHROME_PATH=/opt/pw-browsers/chromium npm run qa   # first session in a real browser
