@@ -6,3 +6,4 @@ data/waitlist.json
 data/waitlist.jsonl
 live/red-letter-advisor.html
 products/forty-days/dist/*.html
+products/every-word/dist/*.html
