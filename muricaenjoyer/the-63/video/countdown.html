@@ -1,0 +1,310 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>The 63 Countdown</title>
+<style>
+@font-face{font-family:'Inter';font-weight:500;src:url('file:///usr/share/fonts/opentype/inter/Inter-Medium.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:600;src:url('file:///usr/share/fonts/opentype/inter/Inter-SemiBold.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:700;src:url('file:///usr/share/fonts/opentype/inter/Inter-Bold.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:800;src:url('file:///usr/share/fonts/opentype/inter/Inter-ExtraBold.otf') format('opentype');}
+@font-face{font-family:'Inter Display';font-weight:800;src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-ExtraBold.otf') format('opentype');}
+@font-face{font-family:'Inter Display';font-weight:900;src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');}
+html,body{margin:0;background:#121211}canvas{display:block}
+</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const PARKS = [{"rank": 1, "tier": "S", "name": "Grand Canyon National Park", "short": "Grand Canyon", "states": "Arizona", "visits2024": 4910000, "signature": "The mile-deep gorge cut by the Colorado River, seen from South Rim viewpoints like Mather Point", "take": "It is a mile deep and 277 river miles long, and it's still the only view in America that makes a busload of strangers go quiet at the same moment."}, {"rank": 2, "tier": "S", "name": "Yellowstone National Park", "short": "Yellowstone", "states": "Wyoming, Montana, Idaho", "visits2024": 4744353, "signature": "Old Faithful, in a park that holds roughly half of the world's active geysers", "take": "The world's first national park still out-performs everyone, with half the planet's active geysers, bison traffic jams and a hot spring the colors of a rainbow."}, {"rank": 3, "tier": "S", "name": "Bryce Canyon National Park", "short": "Bryce Canyon", "states": "Utah", "visits2024": 2498075, "signature": "The hoodoos of Bryce Amphitheater, seen from Sunrise, Sunset, and Inspiration Points", "take": "Thousands of orange hoodoos stand at attention like a stone color guard, and the mostly flat Rim Trail lets you review the troops without breaking a sweat."}, {"rank": 4, "tier": "S", "name": "Hawaii Volcanoes National Park", "short": "Hawaiʻi Volcanoes", "states": "Hawaii", "visits2024": 1433593, "signature": "Kilauea's Halemaumau crater, with episodic lava fountaining in recent years", "take": "It's the only park that keeps making more America, as Kilauea adds new real estate at no cost to the taxpayer."}, {"rank": 5, "tier": "S", "name": "White Sands National Park", "short": "White Sands", "states": "New Mexico", "visits2024": null, "signature": "The world's largest gypsum dunefield, about 275 square miles of white dunes you can sled down", "take": "Its 275 square miles of white gypsum stay cool enough to sled on in July, which is the closest any American gets to landing on another planet without NASA."}, {"rank": 6, "tier": "S", "name": "Crater Lake National Park", "short": "Crater Lake", "states": "Oregon", "visits2024": 504942, "signature": "Crater Lake, at 1,943 feet the deepest lake in the U.S., with Wizard Island rising inside the caldera", "take": "At 1,943 feet it's the deepest lake in the country, it's so blue it looks photoshopped, and it fills itself almost entirely with rain and snow."}, {"rank": 7, "tier": "A", "name": "North Cascades National Park", "short": "North Cascades", "states": "Washington", "visits2024": 16485, "signature": "More than 300 glaciers, the most of any U.S. park outside Alaska, above turquoise Diablo Lake", "take": "More than 300 glaciers, jagged peaks and a lake the color of a sports drink, and almost nobody shows up, which makes it the best-kept secret in the Lower 48."}, {"rank": 8, "tier": "A", "name": "Redwood National and State Parks", "short": "Redwood", "states": "California", "visits2024": null, "signature": "Old-growth coast redwoods, including Hyperion (about 380 ft), the tallest known living tree on Earth", "take": "These are the tallest trees on Earth, led by Hyperion, whose location is kept secret like a tree in witness protection."}, {"rank": 9, "tier": "A", "name": "Wrangell-St. Elias National Park and Preserve", "short": "Wrangell-St. Elias", "states": "Alaska", "visits2024": null, "signature": "Kennecott's red 14-story copper concentration mill, at the end of the 60-mile gravel McCarthy Road", "take": "Park and preserve together cover about 13.2 million acres, roughly Yellowstone, Yosemite and Switzerland combined, and the road in is 60 miles of gravel, so pack a spare tire and a sense of destiny."}, {"rank": 10, "tier": "A", "name": "Death Valley National Park", "short": "Death Valley", "states": "California and Nevada", "visits2024": 1440484, "signature": "Badwater Basin, 282 feet below sea level, the lowest point in North America", "take": "It sits 282 feet below sea level and holds the 134°F world heat record, so the hottest place on Earth is, naturally, American."}, {"rank": 11, "tier": "A", "name": "Haleakala National Park", "short": "Haleakalā", "states": "Hawaii", "visits2024": 732477, "signature": "Sunrise from the 10,023-ft summit above a sea of clouds (reservation required)", "take": "Drive to 10,023 feet, watch the sun come up over a sea of clouds, and your alarm clock finally earns its keep."}, {"rank": 12, "tier": "A", "name": "Olympic National Park", "short": "Olympic", "states": "Washington", "visits2024": 3720000, "signature": "The moss-draped Hall of Mosses in the Hoh Rain Forest", "take": "Rainforest, glaciers and wild Pacific beaches share one park: America ordered the sampler platter and got the whole buffet."}, {"rank": 13, "tier": "A", "name": "Gates of the Arctic National Park and Preserve", "short": "Gates of the Arctic", "states": "Alaska", "visits2024": 11907, "signature": "No roads, trails or campgrounds at all, entirely above the Arctic Circle; the granite spires of the Arrigetch Peaks", "take": "No roads, no trails and no gift shop, just you, a bush plane and more elbow room per American than anywhere else in the Union."}, {"rank": 14, "tier": "A", "name": "National Park of American Samoa", "short": "American Samoa", "states": "American Samoa (U.S. territory)", "visits2024": null, "signature": "Ofu Beach's coral reef lagoon, plus paleotropical rainforest with flying foxes (fruit bats) that have 3-foot wingspans", "take": "It's the only national park south of the equator, with the same Constitution, the seasons flipped and fruit bats that have three-foot wingspans."}, {"rank": 15, "tier": "A", "name": "Arches National Park", "short": "Arches", "states": "Utah", "visits2024": 1466528, "signature": "Delicate Arch, the free-standing arch on Utah's license plate", "take": "More than 2,000 natural stone arches prove that in America even the rocks know how to make a grand entrance."}, {"rank": 16, "tier": "A", "name": "Kenai Fjords National Park", "short": "Kenai Fjords", "states": "Alaska", "visits2024": 419468, "signature": "Exit Glacier, a road-accessible arm of the 700-square-mile Harding Icefield", "take": "Calving glaciers, humpbacks and puffins, and you can drive to the front door from Anchorage: Alaska's starter pack, deluxe edition."}, {"rank": 17, "tier": "A", "name": "Lake Clark National Park and Preserve", "short": "Lake Clark", "states": "Alaska", "visits2024": 18505, "signature": "Richard Proenneke's hand-built log cabin on Twin Lakes beneath volcanic peaks", "take": "Volcanoes, turquoise lakes, bears on the beach and Dick Proenneke's handmade cabin, all reachable only by small plane: the VIP section of the American frontier."}, {"rank": 18, "tier": "A", "name": "Denali National Park and Preserve", "short": "Denali", "states": "Alaska", "visits2024": null, "signature": "North America's tallest peak (20,310 ft), plus the only NPS sled-dog kennels with working ranger huskies", "take": "A 20,310-foot mountain so big it makes its own weather, plus the Park Service's only sled-dog kennel, because America does not do subtle."}, {"rank": 19, "tier": "A", "name": "Grand Teton National Park", "short": "Grand Teton", "states": "Wyoming", "visits2024": 3620000, "signature": "The Teton Range rising about 7,000 ft straight up from the Jackson Hole valley floor, with no foothills in the way", "take": "These mountains skipped the foothills and went straight to poster, and the Tetons have never had a bad angle."}, {"rank": 20, "tier": "A", "name": "Glacier National Park", "short": "Glacier", "states": "Montana", "visits2024": 3200000, "signature": "Going-to-the-Sun Road over Logan Pass at 6,646 ft", "take": "Going-to-the-Sun Road is a 50-mile argument that the best things in America are worth the reservation, so go while the namesake glaciers are still there."}, {"rank": 21, "tier": "A", "name": "Mount Rainier National Park", "short": "Mount Rainier", "states": "Washington", "visits2024": 1620006, "signature": "Paradise wildflower meadows beneath the 14,410-foot glacier-wrapped volcano", "take": "A 14,410-foot glacier-wrapped volcano hogs the whole horizon above the wildflower meadows: the national anthem in mountain form."}, {"rank": 22, "tier": "A", "name": "Black Canyon of the Gunnison National Park", "short": "Black Canyon of the Gunnison", "states": "Colorado", "visits2024": null, "signature": "The Painted Wall, Colorado's tallest cliff at about 2,250 feet, streaked with pink pegmatite", "take": "The walls are so steep and narrow that parts of the gorge get about 33 minutes of sun a day, and the Painted Wall dwarfs the Empire State Building."}, {"rank": 23, "tier": "A", "name": "Canyonlands National Park", "short": "Canyonlands", "states": "Utah", "visits2024": 818492, "signature": "Mesa Arch at sunrise in the Island in the Sky district", "take": "The Colorado and Green Rivers carved a whole country inside the country, and there's barely a line at the entrance."}, {"rank": 24, "tier": "A", "name": "Yosemite National Park", "short": "Yosemite", "states": "California", "visits2024": 4120000, "signature": "El Capitan, a sheer granite monolith about 3,000 ft tall above Yosemite Valley", "take": "El Capitan is a 3,000-foot granite wall that people climb for fun, and the rest of us salute it from a meadow with a sandwich and a few thousand new friends."}, {"rank": 25, "tier": "B", "name": "Great Sand Dunes National Park and Preserve", "short": "Great Sand Dunes", "states": "Colorado", "visits2024": 441836, "signature": "Star Dune, the tallest dune in North America (about 750 ft), with Medano Creek's seasonal surge flow at its base", "take": "Sahara-grade dunes parked in front of 13,000-foot peaks, plus a pop-up beach creek every spring: Colorado had extra and shared."}, {"rank": 26, "tier": "B", "name": "Petrified Forest National Park", "short": "Petrified Forest", "states": "Arizona", "visits2024": 559254, "signature": "Rainbow-hued petrified logs about 218 million years old at Crystal Forest and Blue Mesa", "take": "Logs turned to rainbow quartz over 200 million years, plus a stretch of Route 66, so you get your kicks and a geology lesson in one afternoon."}, {"rank": 27, "tier": "B", "name": "Katmai National Park and Preserve", "short": "Katmai", "states": "Alaska", "visits2024": 36230, "signature": "Brown bears snatching leaping sockeye salmon at Brooks Falls (home of Fat Bear Week)", "take": "Salmon jump straight into a bear's mouth at Brooks Falls, the most efficient drive-thru in America, reachable mainly by floatplane."}, {"rank": 28, "tier": "B", "name": "Mesa Verde National Park", "short": "Mesa Verde", "states": "Colorado", "visits2024": 480065, "signature": "Cliff Palace, the largest cliff dwelling in North America", "take": "Ancestral Puebloans built apartment complexes into cliffs some 800 years ago, with better views than most modern penthouses."}, {"rank": 29, "tier": "B", "name": "Dry Tortugas National Park", "short": "Dry Tortugas", "states": "Florida", "visits2024": null, "signature": "Fort Jefferson, the largest all-masonry fort in the Americas (about 16 million bricks), on a speck of island 70 miles west of Key West", "take": "Somebody looked at open sea 70 miles past Key West and decided it needed 16 million bricks, and that was the correct call."}, {"rank": 30, "tier": "B", "name": "Joshua Tree National Park", "short": "Joshua Tree", "states": "California", "visits2024": 2991874, "signature": "Spiky Joshua trees among giant stacked granite boulder piles at Hidden Valley", "take": "Trees drawn by Dr. Seuss, boulders stacked by a giant with free time, and a night sky that makes you want to salute the Milky Way."}, {"rank": 31, "tier": "B", "name": "Lassen Volcanic National Park", "short": "Lassen Volcanic", "states": "California", "visits2024": 357651, "signature": "Bumpass Hell, a boardwalk through boiling mud pots and steaming fumaroles", "take": "It has all four types of volcano plus boiling mud pots, as Yellowstone's understudy nailed the audition and kept the crowds away."}, {"rank": 32, "tier": "B", "name": "Sequoia National Park", "short": "Sequoia", "states": "California", "visits2024": null, "signature": "General Sherman Tree, the largest living tree on Earth by volume (about 52,500 cubic feet)", "take": "General Sherman is the largest tree on Earth by volume and has been standing at attention for about 2,200 years, so it outranks everybody."}, {"rank": 33, "tier": "B", "name": "Saguaro National Park", "short": "Saguaro", "states": "Arizona", "visits2024": null, "signature": "Forests of giant saguaro cacti, which grow naturally only in the Sonoran Desert and can top 40 ft", "take": "Saguaros usually don't grow their first arm until around age 50, so every cactus waving at you is a distinguished senior citizen, and you should wave back."}, {"rank": 34, "tier": "B", "name": "Zion National Park", "short": "Zion", "states": "Utah", "visits2024": 4946592, "signature": "The Narrows, a hike up the Virgin River between canyon walls up to about 1,000 ft high", "take": "In Utah's first national park the trail is literally a river, so bring water shoes, patriotic resolve and patience for the shuttle line."}, {"rank": 35, "tier": "B", "name": "Channel Islands National Park", "short": "Channel Islands", "states": "California", "visits2024": null, "signature": "Painted Cave on Santa Cruz Island, one of the world's largest sea caves, plus the endemic island fox", "take": "The Galapagos of North America is an hour's boat ride from Ventura, with a fox the size of a house cat and no resort fee."}, {"rank": 36, "tier": "B", "name": "Carlsbad Caverns National Park", "short": "Carlsbad Caverns", "states": "New Mexico", "visits2024": 460474, "signature": "The Big Room, an 8-acre cave chamber 750 feet underground (reached by elevator or the Natural Entrance trail)", "take": "An elevator drops you 750 feet into a room the size of six football fields, because America doesn't just go big, it goes big in the basement."}, {"rank": 37, "tier": "B", "name": "Glacier Bay National Park and Preserve", "short": "Glacier Bay", "states": "Alaska", "visits2024": 742840, "signature": "Tidewater glaciers such as Margerie Glacier calving house-sized chunks of ice into the bay", "take": "Skyscraper-sized ice falls into the sea on a loose schedule while you watch from a deck with coffee: freedom, served chilled."}, {"rank": 38, "tier": "B", "name": "Kings Canyon National Park", "short": "Kings Canyon", "states": "California", "visits2024": 699389, "signature": "The General Grant Tree, a giant sequoia designated the Nation's Christmas Tree", "take": "It's deeper than the Grand Canyon in spots and home to the official Nation's Christmas Tree, because of course America has one, and it stands 267 feet tall."}, {"rank": 39, "tier": "B", "name": "Big Bend National Park", "short": "Big Bend", "states": "Texas", "visits2024": 561458, "signature": "Santa Elena Canyon, with 1,500-foot limestone walls rising straight up from the Rio Grande", "take": "It's so far from everything that the stars outnumber the traffic lights about infinity to zero: Texas-sized, taken literally."}, {"rank": 40, "tier": "B", "name": "Rocky Mountain National Park", "short": "Rocky Mountain", "states": "Colorado", "visits2024": 4150000, "signature": "Trail Ridge Road, the highest continuous paved road in the U.S., topping out at 12,183 ft", "take": "Trail Ridge Road crests at 12,183 feet, so you can summit the continent without leaving the driver's seat, which is peak American efficiency."}, {"rank": 41, "tier": "C", "name": "Mammoth Cave National Park", "short": "Mammoth Cave", "states": "Kentucky", "visits2024": 747042, "signature": "The world's longest known cave system, with more than 400 miles mapped", "take": "It's the longest known cave system on Earth, at 400-plus miles and counting, so America doesn't just win, it wins underground."}, {"rank": 42, "tier": "C", "name": "Isle Royale National Park", "short": "Isle Royale", "states": "Michigan", "visits2024": 28806, "signature": "Roadless Lake Superior island home to the world's longest-running predator-prey study of wolves and moose (since 1958)", "take": "It's an island in a lake so big it has its own islands, where the moose outnumber you and the wolves keep the books."}, {"rank": 43, "tier": "C", "name": "Virgin Islands National Park", "short": "Virgin Islands", "states": "U.S. Virgin Islands (St. John)", "visits2024": null, "signature": "Trunk Bay's underwater snorkel trail, with signs on the seafloor", "take": "About 60 percent of St. John is national park, and the Trunk Bay snorkel trail has signs on the seafloor, making it America's most hydrated interpretive program."}, {"rank": 44, "tier": "C", "name": "Everglades National Park", "short": "Everglades", "states": "Florida", "visits2024": 741983, "signature": "Anhinga Trail boardwalk, where alligators sun themselves a few feet away; the only place on Earth where alligators and crocodiles live side by side", "take": "It's the only place on Earth where alligators and crocodiles share a zip code, and they have agreed to keep it civil."}, {"rank": 45, "tier": "C", "name": "Kobuk Valley National Park", "short": "Kobuk Valley", "states": "Alaska", "visits2024": 17233, "signature": "The Great Kobuk Sand Dunes, about 25 square miles of dunes above the Arctic Circle", "take": "Sahara-style sand dunes sit above the Arctic Circle with caribou strolling through, because America simply refused to pick one climate."}, {"rank": 46, "tier": "C", "name": "Capitol Reef National Park", "short": "Capitol Reef", "states": "Utah", "visits2024": 1422490, "signature": "The Waterpocket Fold, plus the Fruita orchards and fresh pies at the historic Gifford Homestead", "take": "Hike past 270-million-year-old rock, then finish with a fresh pie from the Gifford Homestead: life, liberty and the pursuit of cherry."}, {"rank": 47, "tier": "C", "name": "Acadia National Park", "short": "Acadia", "states": "Maine", "visits2024": 3961661, "signature": "Cadillac Mountain summit, the first place in the U.S. to see sunrise from early October to early March", "take": "Cadillac Mountain gets the nation's first sunrise for half the year, so Maine clocks in early for all 50 states."}, {"rank": 48, "tier": "C", "name": "Badlands National Park", "short": "Badlands", "states": "South Dakota", "visits2024": null, "signature": "The Badlands Wall: striped buttes and pinnacles along the Badlands Loop Road (SD-240)", "take": "Settlers on foot called them bad lands, but with a paved loop road and air conditioning they're a layer cake of freedom, and the prairie dogs are the welcome committee."}, {"rank": 49, "tier": "C", "name": "Wind Cave National Park", "short": "Wind Cave", "states": "South Dakota", "visits2024": null, "signature": "Boxwork, the honeycomb-like calcite formation; Wind Cave holds an estimated 95 percent of the world's known boxwork", "take": "The cave breathes with the barometric pressure while bison mow the prairie upstairs, which makes it a two-story national treasure."}, {"rank": 50, "tier": "C", "name": "New River Gorge National Park and Preserve", "short": "New River Gorge", "states": "West Virginia", "visits2024": 1811937, "signature": "New River Gorge Bridge, a 3,030-foot steel arch 876 feet above the river", "take": "The 'New' River is one of the oldest on the continent, a very American way to name things, and once a year you can legally parachute off the bridge."}, {"rank": 51, "tier": "C", "name": "Great Smoky Mountains National Park", "short": "Great Smoky Mountains", "states": "Tennessee, North Carolina", "visits2024": 12191834, "signature": "Mist-wrapped Appalachian ridgelines seen from Clingmans Dome, plus Cades Cove's historic homesteads and wildlife loop", "take": "There's no entrance fee (just a parking tag), there are misty ridges and it's the most biodiverse park in the system, so 12 million people a year can't be wrong, though they can all be at Cades Cove at once."}, {"rank": 52, "tier": "C", "name": "Congaree National Park", "short": "Congaree", "states": "South Carolina", "visits2024": null, "signature": "The 2.6-mile Boardwalk Loop through old-growth bottomland hardwood forest, with synchronous fireflies in May and June", "take": "Champion trees outgrow the Statue of Liberty minus her pedestal, and the fireflies blink in unison like they rehearsed for the Fourth."}, {"rank": 53, "tier": "C", "name": "Great Basin National Park", "short": "Great Basin", "states": "Nevada", "visits2024": 152068, "signature": "Ancient Great Basin bristlecone pines, some over 4,000 years old, plus the marble formations of Lehman Caves", "take": "The bristlecone pines were already ancient when the Founders were born, and the skies are dark enough to read the Milky Way's full resume."}, {"rank": 54, "tier": "D", "name": "Theodore Roosevelt National Park", "short": "Theodore Roosevelt", "states": "North Dakota", "visits2024": null, "signature": "Free-roaming wild horses and bison in the South Unit badlands near Medora", "take": "These are the badlands Teddy credited with making him President, with bison and wild horses at no extra charge: a D on our scale and an A-plus in spirit."}, {"rank": 55, "tier": "D", "name": "Gateway Arch National Park", "short": "Gateway Arch", "states": "Missouri", "visits2024": 2563052, "signature": "The 630-foot stainless-steel Gateway Arch, with a tram of tiny pods that rides up to the top", "take": "It's a really nice arch: 630 feet of stainless-steel 1960s confidence with a tiny egg-pod tram to the top, just more monument than park."}, {"rank": 56, "tier": "D", "name": "Voyageurs National Park", "short": "Voyageurs", "states": "Minnesota", "visits2024": null, "signature": "A boat-access park: about 40 percent water, spread across Rainy, Kabetogama, Namakan and Sand Point lakes and 500-plus islands", "take": "The main road is a lake and you bring the boat, which is wonderful if you own a canoe and a mystery if you don't."}, {"rank": 57, "tier": "D", "name": "Pinnacles National Park", "short": "Pinnacles", "states": "California", "visits2024": null, "signature": "Bear Gulch talus cave, a flashlight-required passage under fallen boulders, with California condors circling the volcanic spires above", "take": "A volcano slid about 195 miles up the San Andreas Fault and is now patrolled by condors, a great story told in a park you can see in a day."}, {"rank": 58, "tier": "D", "name": "Indiana Dunes National Park", "short": "Indiana Dunes", "states": "Indiana", "visits2024": 2705209, "signature": "Towering sand dunes on the Lake Michigan shoreline, best experienced on the 3 Dune Challenge at West Beach", "take": "Sand dunes, Lake Michigan surf and a cameo from the Chicago skyline: America put a beach in Indiana and dared the oceans to complain."}, {"rank": 59, "tier": "D", "name": "Shenandoah National Park", "short": "Shenandoah", "states": "Virginia", "visits2024": null, "signature": "Skyline Drive, 105 miles along the Blue Ridge with about 75 scenic overlooks", "take": "105 miles of Skyline Drive at a stately 35 mph make it the most relaxing traffic jam in America, best enjoyed in October."}, {"rank": 60, "tier": "D", "name": "Biscayne National Park", "short": "Biscayne", "states": "Florida", "visits2024": null, "signature": "The Maritime Heritage Trail, an underwater trail of shipwrecks, plus the Boca Chita Key lighthouse", "take": "The park is 95 percent water with a view of the Miami skyline, glorious if you have a boat and a snorkel and mostly a visitor center if you don't."}, {"rank": 61, "tier": "D", "name": "Guadalupe Mountains National Park", "short": "Guadalupe Mountains", "states": "Texas", "visits2024": 217720, "signature": "Guadalupe Peak (8,751 ft), the highest point in Texas, and the El Capitan cliff, part of a fossilized Permian reef", "take": "The rooftop of Texas is a 260-million-year-old fossil reef, and the climb up Guadalupe Peak is the best leg day in the Lone Star State."}, {"rank": 62, "tier": "D", "name": "Hot Springs National Park", "short": "Hot Springs", "states": "Arkansas", "visits2024": 2461812, "signature": "Bathhouse Row's historic bathhouses, fed by 143°F thermal spring water; Buckstaff Bathhouse has operated since 1912", "take": "Protected in 1832, forty years before Yellowstone, it's a historic spa street with a national park attached, and its bathhouses were doing self-care before anyone called it that."}, {"rank": 63, "tier": "D", "name": "Cuyahoga Valley National Park", "short": "Cuyahoga Valley", "states": "Ohio", "visits2024": null, "signature": "Brandywine Falls, a 65-foot waterfall, plus the Cuyahoga Valley Scenic Railroad along the Ohio & Erie Canal Towpath", "take": "A waterfall, a scenic railroad and a towpath half an hour from Cleveland: dead last on our board, but the most pleasant last place in the country."}];
+const W = 1080, H = 1920, X0 = 48, X1 = 1032;
+const C = { bg:"#121211", row:"#1d1d1b", chip:"#2c2c29", chipb:"#3a3a36", ink:"#f4f3ee", mute:"#a9a89f", dim:"#7d7c74", red:"#E0303F", blue:"#3C5BD6", dark:"#161614" };
+const TC = { S:"#FF7F7F", A:"#FFBF7F", B:"#FFDF7F", C:"#FFFF7F", D:"#BFFF7F" };
+const TCAP = { S:"PILGRIMAGE", A:"PLAN THE TRIP", B:"ROAD-TRIP IT", C:"IF NEARBY", D:"UNDERDOGS" };
+const DISP = '"Inter Display", "Inter", sans-serif', BODY = '"Inter", sans-serif';
+const ctx = document.getElementById("c").getContext("2d");
+const clamp = (v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const prog = (t,a,b)=>clamp((t-a)/(b-a));
+const eOut = p=>1-Math.pow(1-p,3);
+const eBack = p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const byRank = r => PARKS.find(p=>p.rank===r);
+const tierParks = k => PARKS.filter(p=>p.tier===k).sort((a,b)=>a.rank-b.rank);
+const F = (w,s,fam=BODY)=>`${w} ${s}px ${fam}`;
+
+// ---------- timeline ----------
+const HOOK_END = 2.5;
+const TIERS = [
+  { k:"D", a:2.5,  b:6.5,  head:"#63 to #54", sub:"Lovable underdogs.", cap:63, spicy:null },
+  { k:"C", a:6.5,  b:10.5, head:"#53 to #41", sub:"Great if you're in the neighborhood.", cap:51,
+    spicy:{ r:51, short:"Smokies", line:"Most-visited park in America: 12.19M visits in 2024." } },
+  { k:"B", a:10.5, b:14.5, head:"#40 to #25", sub:"Build a road trip around these.", cap:34,
+    spicy:{ r:34, short:"Zion", line:"4.95M visits in 2024. Still B tier." } },
+  { k:"A", a:14.5, b:19.5, head:"#24 to #7", sub:"Worth a dedicated vacation.", cap:24,
+    spicy:{ r:24, short:"Yosemite", line:"Last seat in A tier. 4.12M visits in 2024." } },
+];
+const S_START = 19.5;
+const SCARDS = [6,5,4,3,2,1].map((r,i)=>({ r, a: S_START + i*3.2, b: S_START + i*3.2 + (r===1?4.0:3.2) }));
+const END_A = SCARDS[5].b;             // 39.5
+const TOTAL = END_A + 8.0;             // 47.5
+
+// chip landing times per tier
+function landTimes(T){
+  const n = tierParks(T.k).length, L = Math.min(1.7, n*0.1);
+  return Array.from({length:n},(_,i)=> T.a + 0.35 + (n===1?0:i*L/(n-1)));
+}
+
+// ---------- text helpers ----------
+function wrap(text, font, maxW){
+  ctx.font = font; const words = text.split(" "); const lines=[]; let cur="";
+  for(const w of words){ const tryS = cur? cur+" "+w : w;
+    if(ctx.measureText(tryS).width <= maxW || !cur) cur = tryS; else { lines.push(cur); cur = w; } }
+  if(cur) lines.push(cur); return lines;
+}
+function rr(x,y,w,h,r){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); }
+function stripe(y,h=10,x0=X0,x1=X1){ const w=(x1-x0)/3; ctx.fillStyle=C.red; ctx.fillRect(x0,y,w,h); ctx.fillStyle=C.ink; ctx.fillRect(x0+w,y,w,h); ctx.fillStyle=C.blue; ctx.fillRect(x0+2*w,y,w+0.5,h); }
+function brandBar(alpha=1){
+  ctx.save(); ctx.globalAlpha=alpha; stripe(300,10);
+  ctx.textBaseline="alphabetic"; ctx.font=F(800,30,DISP); ctx.fillStyle=C.ink; ctx.textAlign="left";
+  ctx.fillText("THE 63", X0, 360); ctx.fillStyle=C.red;
+  ctx.font=F(700,26); ctx.fillStyle=C.mute; ctx.fillText("NATIONAL PARKS POWER RANKINGS", X0+118, 360);
+  ctx.textAlign="right"; ctx.font=F(800,28); ctx.fillStyle=C.ink; ctx.fillText("@Muricaenjoyer", X1, 360);
+  ctx.restore();
+}
+
+// ---------- chip layout ----------
+function chipW(p, fs){ ctx.font=F(800,fs*0.72); const rw=ctx.measureText(String(p.rank)).width; ctx.font=F(600,fs); return fs*0.40 + rw + fs*0.38 + ctx.measureText(p.short).width + fs*0.48; }
+function layoutChips(list, fs, x0, maxW, gap){
+  const h = Math.round(fs*1.12 + fs*0.58); const out=[]; let x=0, y=0;
+  for(const p of list){ const w=chipW(p,fs); if(x>0 && x+w>maxW){ x=0; y+=h+gap; } out.push({p,x:x0+x,y,w,h}); x+=w+gap; }
+  return { chips:out, height: y+h };
+}
+function drawChip(c, fs, dx, dy, tc, alpha, hi){
+  ctx.save(); ctx.globalAlpha=alpha; const x=c.x+dx, y=c.y+dy;
+  rr(x,y,c.w,c.h,fs*0.28); ctx.fillStyle=C.chip; ctx.fill(); ctx.lineWidth = hi? 4:1.5; ctx.strokeStyle = hi? C.red : C.chipb; ctx.stroke();
+  const base = y + c.h*0.5 + fs*0.36; ctx.textAlign="left"; ctx.textBaseline="alphabetic";
+  ctx.font=F(800,fs*0.72); ctx.fillStyle=tc; const rs=String(c.p.rank); ctx.fillText(rs, x+fs*0.40, base); const rw=ctx.measureText(rs).width;
+  ctx.font=F(600,fs); ctx.fillStyle=C.ink; ctx.fillText(c.p.short, x+fs*0.40+rw+fs*0.38, base);
+  ctx.restore();
+}
+function drawLabel(k, x, y, w, h, big, cap){
+  ctx.fillStyle=TC[k]; ctx.fillRect(x,y,w,h);
+  ctx.fillStyle=C.dark; ctx.textAlign="center"; ctx.textBaseline="alphabetic";
+  ctx.font=F(900,big,DISP); ctx.fillText(k, x+w/2, y+h/2+big*0.30);
+  if(cap){ ctx.font=F(800,cap); const ls=wrap(TCAP[k], F(800,cap), w-12); ls.forEach((l,i)=>ctx.fillText(l, x+w/2, y+h/2+big*0.30+cap*1.5+i*cap*1.1)); }
+}
+
+// ---------- precomputed layouts (after fonts) ----------
+let TL = {}, BOARD = null, SLAY = {};
+function prepare(){
+  for(const T of TIERS){
+    const list = tierParks(T.k); const fs = T.k==="A"? 32 : 40;
+    const lw = 160, x0 = X0+lw+16, maxW = X1-16-x0;
+    const L = layoutChips(list, fs, x0, maxW, 12);
+    TL[T.k] = { fs, lw, L, rowY: 490, rowH: L.height+32, lands: landTimes(T) };
+  }
+  // end board: fit
+  const top = 452, bottom = 1488;
+  for(let fs=30; fs>=16; fs-=0.5){
+    const rows=[]; let y=top, ok=true;
+    for(const k of ["S","A","B","C","D"]){
+      const lw=118, x0=X0+lw+10, maxW=X1-10-x0; const f = k==="S"? fs*1.15 : fs;
+      const L = layoutChips(tierParks(k), f, x0, maxW, 7); const rh = L.height+16;
+      rows.push({k, y, rh, L, f, lw}); y += rh + 7;
+    }
+    if(y-7 <= bottom){ BOARD = { rows, fs }; break; }
+  }
+  // S card layouts
+  for(const sc of SCARDS){
+    const p = byRank(sc.r);
+    let nfs=128; while(nfs>60){ ctx.font=F(900,nfs,DISP); const ls=wrap(p.short.toUpperCase(), ctx.font, X1-X0); if(ls.length<=1) break; nfs-=4; }
+    let tfs=46, tl, sl, sfs;
+    for(;tfs>=32;tfs-=2){ sfs = Math.round(tfs*0.74); tl = wrap(p.take, F(700,tfs), X1-X0-36); sl = wrap(p.signature, F(500,sfs), X1-X0);
+      const hgt = 760 + nfs + 70 + 80 + 40 + sl.length*sfs*1.3 + 60 + tl.length*tfs*1.28; if(hgt <= 1610) break; }
+    SLAY[sc.r] = { p, nfs, tfs, tl, sl, sfs };
+  }
+}
+function visitsStr(v){ if(v==null) return null; if(v % 10000 === 0) return "about " + (v/1e6).toFixed(2).replace(/0$/,"") + "M"; return v.toLocaleString("en-US"); }
+
+// ---------- scenes ----------
+function sceneHook(t){
+  const out = eOut(prog(t, 2.1, 2.5)); const dy = -60*out; const al = 1-out;
+  ctx.save(); ctx.globalAlpha = al; ctx.translate(0, dy);
+  brandBar();
+  ctx.textAlign="left"; ctx.textBaseline="alphabetic"; ctx.fillStyle=C.ink;
+  const fs=168, lh=fs*0.93; let y=560;
+  ctx.font=F(900,fs,DISP);
+  ctx.fillText("I ranked", X0-6, y); y+=lh;
+  ctx.fillText("all ", X0-6, y); const w1=ctx.measureText("all ").width; ctx.fillStyle=C.red; ctx.fillText("63", X0-6+w1, y); ctx.fillStyle=C.ink; y+=lh;
+  ctx.fillText("national", X0-6, y); y+=lh;
+  ctx.fillText("parks.", X0-6, y);
+  // Fight me sticker
+  const pulse = 1 + 0.025*Math.sin(t*6);
+  ctx.save(); ctx.translate(X0+300, 1250); ctx.rotate(-0.05); ctx.scale(pulse,pulse);
+  ctx.font=F(900,124,DISP); const fw=ctx.measureText("Fight me.").width;
+  rr(-fw/2-34,-86,fw+68,150,18); ctx.fillStyle=TC.S; ctx.fill();
+  ctx.fillStyle=C.dark; ctx.textAlign="center"; ctx.fillText("Fight me.", 0, 30);
+  ctx.restore();
+  // tier teaser strip
+  const ks=["S","A","B","C","D"], bw=(X1-X0-4*10)/5;
+  ks.forEach((k,i)=>{ const x=X0+i*(bw+10); ctx.fillStyle=TC[k]; ctx.fillRect(x,1420,bw,96);
+    ctx.fillStyle=C.dark; ctx.textAlign="center"; ctx.font=F(900,72,DISP); ctx.fillText(k, x+bw/2, 1494); });
+  ctx.textAlign="left"; ctx.font=F(600,34); ctx.fillStyle=C.mute; ctx.fillText("Worst to best. Every single one.", X0, 1590);
+  ctx.textAlign="right"; ctx.font=F(800,34); ctx.fillStyle=C.ink; ctx.fillText("@Muricaenjoyer", X1, 1590);
+  ctx.restore();
+}
+
+function sceneTier(T, t){
+  const lay = TL[T.k], list = tierParks(T.k), tc = TC[T.k];
+  const inP = eOut(prog(t, T.a, T.a+0.3)), outP = prog(t, T.b-0.22, T.b);
+  ctx.save(); ctx.globalAlpha = 1-outP; ctx.translate(0, -40*outP);
+  brandBar();
+  // header
+  ctx.save(); ctx.globalAlpha *= inP; ctx.translate(-40*(1-inP),0);
+  ctx.textAlign="left"; ctx.font=F(900,92,DISP); ctx.fillStyle=tc; ctx.fillText(T.k+" TIER", X0-3, 452);
+  const hw = ctx.measureText(T.k+" TIER").width;
+  ctx.font=F(800,40,DISP); ctx.fillStyle=C.ink; ctx.fillText(T.head, X0+hw+28, 420);
+  ctx.font=F(600,28); ctx.fillStyle=C.mute; ctx.fillText(T.sub, X0+hw+28, 454);
+  ctx.restore();
+  // row
+  const y0 = lay.rowY, rh = lay.rowH;
+  ctx.save(); ctx.globalAlpha *= inP;
+  rr(X0, y0, X1-X0, rh, 10); ctx.fillStyle=C.row; ctx.fill();
+  ctx.save(); rr(X0, y0, X1-X0, rh, 10); ctx.clip(); drawLabel(T.k, X0, y0, lay.lw*inP, rh, 120, 22); ctx.restore();
+  ctx.restore();
+  const yc = y0 + 16;
+  const spicyOn = T.spicy ? prog(t, lay.lands[lay.lands.length-1]+0.15, lay.lands[lay.lands.length-1]+0.4) : 0;
+  lay.L.chips.forEach((c,i)=>{
+    const tl = lay.lands[i]; const p = prog(t, tl-0.28, tl); if(p<=0) return;
+    const e = eOut(p); const dx = 260*(1-e), dy = 120*(1-e);
+    const hi = T.spicy && c.p.rank===T.spicy.r && spicyOn>0;
+    let sc = 1;
+    if(hi){ ctx.save(); const cx=c.x+c.w/2, cy=yc+c.y+c.h/2; const s=1+0.08*Math.sin(Math.PI*spicyOn); ctx.translate(cx,cy); ctx.scale(s,s); ctx.translate(-cx,-cy); }
+    drawChip(c, lay.fs, dx, yc+dy, tc, e, hi);
+    if(hi) ctx.restore();
+  });
+  // callout + caption
+  let y = y0 + rh + 40;
+  if(T.spicy){
+    const sp = eBack(prog(t, lay.lands[lay.lands.length-1]+0.15, lay.lands[lay.lands.length-1]+0.5));
+    if(sp>0){ ctx.save(); ctx.globalAlpha *= clamp(sp*1.5);
+      const cx = X0, cy = y; ctx.translate(cx, cy+60); ctx.rotate(-0.025*sp); ctx.translate(-cx,-(cy+60));
+      ctx.font=F(900,30,DISP); const tag="SPICY"; const tw=ctx.measureText(tag).width;
+      rr(X0, y, X1-X0, 120, 14); ctx.fillStyle="#2a1214"; ctx.fill(); ctx.lineWidth=3; ctx.strokeStyle=C.red; ctx.stroke();
+      rr(X0+20, y+20, tw+28, 44, 8); ctx.fillStyle=C.red; ctx.fill(); ctx.fillStyle=C.ink; ctx.textAlign="left"; ctx.fillText(tag, X0+34, y+53);
+      ctx.font=F(900,50,DISP); ctx.fillStyle=C.ink; ctx.fillText(T.spicy.short+" at #"+T.spicy.r, X0+tw+64, y+60);
+      ctx.font=F(600,28); ctx.fillStyle="#e6c9c9"; ctx.fillText(T.spicy.line, X0+20, y+101);
+      ctx.restore(); }
+    y += 150;
+  }
+  const capT = lay.lands[lay.lands.length-1] + (T.spicy? 0.45 : 0.2);
+  const cp = eOut(prog(t, capT, capT+0.35));
+  if(cp>0){
+    const p = byRank(T.cap);
+    ctx.save(); ctx.globalAlpha *= cp; ctx.translate(0, 30*(1-cp));
+    ctx.fillStyle=tc; ctx.fillRect(X0, y, 8, 10);
+    ctx.textAlign="left"; ctx.font=F(800,30); ctx.fillStyle=tc; ctx.fillText("#"+p.rank+" "+p.short.toUpperCase(), X0+28, y+30);
+    let fs = 40, ls; for(;fs>=28;fs-=1){ ls = wrap("“"+p.take+"”", F(600,fs), X1-X0-28); if(y+50+fs*0.3+ls.length*fs*1.3 <= 1615) break; }
+    ctx.font=F(600,fs); ctx.fillStyle=C.ink;
+    ls.forEach((l,i)=>ctx.fillText(l, X0+28, y+30+20+fs*1.0+i*fs*1.3));
+    const bh = 30+20+fs*0.3+ls.length*fs*1.3; ctx.fillStyle=tc; ctx.fillRect(X0, y, 8, bh);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+function sceneS(sc, t){
+  const L = SLAY[sc.r], p = L.p, tc = TC.S;
+  const lt = t - sc.a; const outP = prog(t, sc.b-0.18, sc.b);
+  ctx.save(); ctx.globalAlpha = 1-outP;
+  // background flash on reveal
+  const fl = 1 - prog(lt, 0, 0.35);
+  if(fl>0){ ctx.fillStyle = `rgba(255,127,127,${0.22*fl})`; ctx.fillRect(0,0,W,H); }
+  brandBar();
+  ctx.textAlign="left"; ctx.textBaseline="alphabetic";
+  // S tier label
+  const a0 = eOut(prog(lt, 0, 0.25));
+  ctx.save(); ctx.globalAlpha*=a0;
+  rr(X0, 400, 250, 60, 8); ctx.fillStyle=tc; ctx.fill(); ctx.fillStyle=C.dark; ctx.font=F(900,36,DISP); ctx.fillText("S TIER", X0+20, 443);
+  ctx.font=F(800,30); ctx.fillStyle=C.mute; ctx.fillText("PILGRIMAGE PARK", X0+278, 441);
+  ctx.restore();
+  // big rank
+  const rp = eBack(prog(lt, 0, 0.4)); const s = 0.6 + 0.4*rp;
+  ctx.save(); ctx.globalAlpha *= clamp(prog(lt,0,0.15)); ctx.translate(X0, 740); ctx.scale(s,s);
+  ctx.font=F(900,330,DISP); ctx.fillStyle=tc; ctx.fillText("#"+p.rank, -10, 0);
+  if(p.rank===1){ const rw=ctx.measureText("#1").width; ctx.font=F(900,64,DISP); ctx.fillStyle=C.ink; ctx.fillText("THE BEST", rw+30, -170); ctx.fillText("PARK IN", rw+30, -100); ctx.fillText("AMERICA", rw+30, -30); }
+  ctx.restore();
+  // name
+  let y = 760 + L.nfs;
+  const np = eOut(prog(lt, 0.1, 0.4));
+  ctx.save(); ctx.globalAlpha *= np; ctx.translate(60*(1-np),0);
+  ctx.font=F(900,L.nfs,DISP); ctx.fillStyle=C.ink; ctx.fillText(p.short.toUpperCase(), X0-4, y);
+  ctx.restore();
+  y += 66;
+  const sp = eOut(prog(lt, 0.25, 0.55));
+  ctx.save(); ctx.globalAlpha *= sp;
+  ctx.font=F(700,38); ctx.fillStyle=tc; const st = p.states; ctx.fillText(st, X0, y);
+  const v = visitsStr(p.visits2024);
+  if(v){ const sw=ctx.measureText(st).width; ctx.fillStyle=C.mute; ctx.font=F(600,38); ctx.fillText("  ·  " + v + " visits in 2024", X0+sw, y); }
+  ctx.restore();
+  y += 80;
+  const gp = eOut(prog(lt, 0.4, 0.7));
+  ctx.save(); ctx.globalAlpha *= gp;
+  ctx.font=F(800,24); ctx.fillStyle=C.dim; ctx.fillText("SIGNATURE", X0, y); y += 14;
+  ctx.font=F(500,L.sfs); ctx.fillStyle="#d6d5cd";
+  L.sl.forEach((l,i)=>ctx.fillText(l, X0, y + L.sfs*1.1 + i*L.sfs*1.3));
+  ctx.restore();
+  y += L.sfs*0.2 + L.sl.length*L.sfs*1.3 + 46;
+  const tp = eOut(prog(lt, 0.6, 0.95));
+  ctx.save(); ctx.globalAlpha *= tp; ctx.translate(0, 24*(1-tp));
+  const th = L.tl.length*L.tfs*1.28 + 10;
+  ctx.fillStyle=tc; ctx.fillRect(X0, y, 8, th);
+  ctx.font=F(700,L.tfs); ctx.fillStyle=C.ink;
+  L.tl.forEach((l,i)=>ctx.fillText(l, X0+30, y + L.tfs*0.98 + i*L.tfs*1.28));
+  ctx.restore();
+  // #1 stripe sweep
+  if(p.rank===1){ const sw = eOut(prog(lt, 0, 0.6)); stripe(1600, 14, X0, X0+(X1-X0)*sw); }
+  ctx.restore();
+}
+
+function sceneEnd(t){
+  const lt = t - END_A;
+  ctx.textAlign="left"; ctx.textBaseline="alphabetic";
+  const hp = eOut(prog(lt, 0, 0.35));
+  ctx.save(); ctx.globalAlpha = hp;
+  stripe(300, 10);
+  ctx.font=F(900,104,DISP); ctx.fillStyle=C.ink; ctx.fillText("THE ", X0-4, 404); const w=ctx.measureText("THE ").width; ctx.fillStyle=C.red; ctx.fillText("63", X0-4+w, 404);
+  const w2 = ctx.measureText("63").width; ctx.fillStyle=C.ink; ctx.fillText(":", X0-4+w+w2, 404);
+  ctx.font=F(900,38,DISP); ctx.fillText("NATIONAL PARKS", X0+410, 358); ctx.fillText("POWER RANKINGS", X0+410, 400);
+  ctx.restore();
+  BOARD.rows.forEach((R, ri)=>{
+    const rp = eOut(prog(lt, 0.15 + ri*0.12, 0.45 + ri*0.12)); if(rp<=0) return;
+    ctx.save(); ctx.globalAlpha = rp; ctx.translate(80*(1-rp), 0);
+    rr(X0, R.y, X1-X0, R.rh, 8); ctx.fillStyle=C.row; ctx.fill();
+    ctx.save(); rr(X0, R.y, X1-X0, R.rh, 8); ctx.clip(); drawLabel(R.k, X0, R.y, R.lw, R.rh, Math.min(78, R.rh*0.55), R.rh>100? 15 : 0); ctx.restore();
+    R.L.chips.forEach(c=>drawChip(c, R.f, 0, R.y+8, TC[R.k], 1, false));
+    ctx.restore();
+  });
+  const fp = eOut(prog(lt, 1.0, 1.4));
+  ctx.save(); ctx.globalAlpha = fp;
+  ctx.font=F(800,42); ctx.fillStyle=C.ink; ctx.fillText("Full rankings + method: @Muricaenjoyer", X0, 1556);
+  ctx.font=F(500,25); ctx.fillStyle=C.mute; ctx.fillText("Rankings are opinion. Data: NPS visitor-use statistics (2024).", X0, 1604);
+  ctx.restore();
+}
+
+function renderFrame(t){
+  ctx.setTransform(1,0,0,1,0,0); ctx.globalAlpha=1;
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H);
+  if(t < HOOK_END) sceneHook(t);
+  for(const T of TIERS) if(t >= T.a && t < T.b) sceneTier(T, t);
+  for(const sc of SCARDS) if(t >= sc.a && t < sc.b) sceneS(sc, t);
+  if(t >= END_A) sceneEnd(t);
+}
+window.renderFrame = renderFrame;
+window.TOTAL = TOTAL;
+window.beats = function(){
+  const cues = [];
+  TIERS.forEach((T,ti)=>{ TL[T.k].lands.forEach(x=>cues.push({t:+x.toFixed(3), k:"tick", tier:T.k})); if(T.spicy){ const l=TL[T.k].lands; cues.push({t:+(l[l.length-1]+0.15).toFixed(3), k:"spicy"}); } });
+  SCARDS.forEach(sc=>cues.push({t:+sc.a.toFixed(3), k: sc.r===1? "fanfare":"reveal", rank:sc.r}));
+  cues.push({t:+END_A.toFixed(3), k:"end"});
+  return cues;
+};
+window.ready = Promise.all([
+  document.fonts.load(`900 100px "Inter Display"`), document.fonts.load(`800 100px "Inter Display"`),
+  document.fonts.load(`800 30px "Inter"`), document.fonts.load(`700 30px "Inter"`), document.fonts.load(`600 30px "Inter"`), document.fonts.load(`500 30px "Inter"`)
+]).then(()=>{ prepare(); renderFrame(0); return true; });
+</script></body></html>

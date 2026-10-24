@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Freedom Units Card</title>
+<style>
+/* Local copies of the game's Google Fonts (from ../../test/fonts) so file:// rendering matches the game. */
+@font-face{font-family:"Big Shoulders Display";font-weight:700 900;src:url(../../test/fonts/s_bigshouldersdisplay_v24_fC1_PZJEZG-e9gHhdI4-NBbfd2ys3SjJCx1czNDu.woff2) format("woff2")}
+@font-face{font-family:"Libre Franklin";font-weight:400 700;src:url(../../test/fonts/s_librefranklin_v20_jizDREVItHgc8qDIbSTKq4XkRiUf2zc.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:400;src:url(../../test/fonts/s_ibmplexmono_v20_-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:500;src:url(../../test/fonts/s_ibmplexmono_v20_-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:600;src:url(../../test/fonts/s_ibmplexmono_v20_-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2) format("woff2")}
+:root{
+  --stage:#070C22; --sign:#0B1433; --sign-2:#18286A; --sign-fg:#F6F3EA; --sign-dim:#A8B3D6;
+  --red:#B4232F; --red-hi:#E0434E; --red-deep:#7C1520; --bulb:#FFD37A; --bulb-glow:rgba(255,196,84,.75);
+  --track:#27345F; --line:#2B3A6E;
+  --display:"Big Shoulders Display","Inter Display","Arial Narrow",Impact,sans-serif;
+  --body:"Libre Franklin","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:var(--stage)}
+body{color:var(--sign-fg);font-family:var(--body);-webkit-font-smoothing:antialiased}
+.card{position:relative;width:1080px;height:1350px;padding:30px;
+  background:radial-gradient(900px 520px at 50% -80px,rgba(95,128,240,.28),transparent 70%),var(--stage)}
+.sign{position:relative;height:100%;border-radius:34px;overflow:hidden;
+  background:radial-gradient(120% 70% at 50% 0%,var(--sign-2),var(--sign) 62%);
+  box-shadow:0 0 0 3px #1E2E6E inset, 0 20px 60px rgba(0,0,0,.5);
+  display:flex;flex-direction:column;padding:62px 70px 64px}
+.bulbs{position:absolute;inset:0;pointer-events:none;z-index:0}
+.bulbs i{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--bulb);box-shadow:0 0 12px 3px var(--bulb-glow)}
+.bulbs i.off{opacity:.3;box-shadow:none}
+.sign > *:not(.bulbs){position:relative;z-index:1}
+
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:24px}
+.wordmark{font-family:var(--display);font-weight:900;font-size:50px;line-height:1;letter-spacing:.05em;text-transform:uppercase}
+.wordmark b{color:var(--red-hi);font-weight:900}
+.eyebrow{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.16em;font-size:40px;color:var(--bulb);line-height:1}
+.rule{height:6px;margin:22px 0 0;border-top:3px solid var(--red-hi);border-bottom:3px solid #5D7EEE;opacity:.9}
+
+/* question */
+.qwrap{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:26px 0 18px}
+.q{font-family:var(--display);font-weight:800;line-height:1.02;letter-spacing:.005em;margin:0;text-wrap:pretty}
+.unit{margin-top:26px;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:36px;color:var(--sign-dim);line-height:1.1}
+.unit span{color:var(--bulb)}
+
+/* fake slider */
+.slider{padding:8px 0 30px}
+.readout{display:flex;justify-content:center;margin-bottom:22px}
+.readout div{font-family:var(--display);font-weight:900;font-size:92px;line-height:1;padding:6px 44px 10px;border-radius:18px;
+  background:#060B24;border:3px solid var(--line);color:var(--sign-fg);text-shadow:.045em .045em 0 var(--red);min-width:260px;text-align:center}
+.track{position:relative;height:22px;border-radius:11px;background:var(--track);margin:0 18px}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:11px;background:linear-gradient(90deg,var(--red-deep),var(--red-hi))}
+.thumb{position:absolute;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:var(--sign-fg);
+  border:8px solid var(--red-hi);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.ticks{position:relative;height:22px;margin:16px 18px 0}
+.ticks i{position:absolute;top:0;width:3px;height:16px;margin-left:-1.5px;background:var(--sign-dim);opacity:.55}
+.ends{display:flex;justify-content:space-between;margin:6px 0 0;font-family:var(--mono);font-weight:500;font-size:28px;color:var(--sign-dim)}
+.truth{position:absolute;top:50%;width:8px;height:84px;margin:-42px 0 0 -4px;background:var(--bulb);border-radius:4px;box-shadow:0 0 14px 2px var(--bulb-glow)}
+
+.foot{margin:26px 0 0;padding:22px 16px 24px;background:var(--red);border-radius:18px;box-shadow:0 7px 0 var(--red-deep);text-align:center;white-space:nowrap;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:50px;line-height:1}
+.foot span{color:var(--bulb);text-transform:none}
+
+/* answer card */
+.ans-title{margin-top:30px;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:42px;line-height:1.05;color:var(--sign-dim)}
+.big{font-family:var(--display);font-weight:900;line-height:.86;letter-spacing:.01em;color:var(--sign-fg);
+  text-shadow:.045em .045em 0 var(--red);margin:22px 0 0;white-space:nowrap}
+.big-unit{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:58px;line-height:1;color:var(--bulb);margin-top:42px}
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;gap:22px;justify-content:flex-start;padding:30px 0 30px}
+.panel > :first-child{margin-top:auto}
+.panel > :last-child{margin-bottom:auto}
+.math{font-family:var(--mono);font-weight:500;font-size:28px;line-height:1.42;background:#060B24;border:2px solid var(--line);border-left:8px solid var(--red-hi);
+  border-radius:14px;padding:20px 26px;color:#E4E8F5}
+.math b{display:block;font-family:var(--display);font-weight:800;letter-spacing:.18em;font-size:24px;color:var(--sign-dim);margin-bottom:6px}
+.reveal{font-family:var(--body);font-weight:600;font-size:38px;line-height:1.3;margin:0;text-wrap:pretty}
+.src{font-family:var(--body);font-weight:500;font-size:27px;line-height:1.4;color:var(--sign-dim)}
+.src b{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.16em;font-size:25px;color:var(--bulb);margin-right:8px}
+.mini .readout{display:none}
+.mini{padding:30px 0 4px}
+</style>
+<script src="data.js"></script>
+</head>
+<body>
+<div class="card"><div class="sign" id="sign"><div class="bulbs" id="bulbs"></div><div id="content" style="display:contents"></div></div></div>
+<script>
+const params = new URLSearchParams(location.search);
+const k = Math.max(1, Math.min(CARDS.length, +params.get('q') || 1));
+const mode = params.get('mode') === 'answer' ? 'answer' : 'question';
+const C = CARDS[k - 1];
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+// Integers 1,000+ get commas (as in the pool's math lines); decimals print exactly as stored.
+const fmt = (n) => Number.isInteger(n) && Math.abs(n) >= 1000 ? n.toLocaleString('en-US') : String(n);
+const logPos = (v) => (Math.log(v) - Math.log(C.sliderMin)) / (Math.log(C.sliderMax) - Math.log(C.sliderMin));
+
+function sliderHTML(withTruth) {
+  // Question card: thumb parked mid-scale, readout hidden. Answer card: gold marker at the true value.
+  const thumbAt = withTruth ? logPos(C.answer) : 0.5;
+  let ticks = '';
+  const lo = Math.ceil(Math.log10(C.sliderMin)), hi = Math.floor(Math.log10(C.sliderMax));
+  for (let e = lo; e <= hi; e++) ticks += '<i style="left:' + (logPos(Math.pow(10, e)) * 100).toFixed(2) + '%"></i>';
+  return '<div class="slider' + (withTruth ? ' mini' : '') + '">' +
+    '<div class="readout"><div>???</div></div>' +
+    '<div class="track"><div class="fill" style="width:' + (thumbAt * 100).toFixed(2) + '%"></div>' +
+    (withTruth ? '<div class="truth" style="left:' + (thumbAt * 100).toFixed(2) + '%"></div>' : '<div class="thumb" style="left:50%"></div>') +
+    '</div><div class="ticks">' + ticks + '</div>' +
+    '<div class="ends"><span>' + esc(fmt(C.sliderMin)) + '</span><span>' + esc(fmt(C.sliderMax)) + '</span></div></div>';
+}
+
+const header = (eyebrow) => '<div class="top"><div class="wordmark">Freedom <b>Units</b></div><div class="eyebrow">' + eyebrow + '</div></div><div class="rule"></div>';
+const content = document.getElementById('content');
+if (mode === 'question') {
+  content.innerHTML = header('Can you guess?') +
+    '<div class="qwrap" id="fitbox"><p class="q" id="fit">' + esc(C.prompt) + '</p>' +
+    '<div class="unit">Answer in <span>' + esc(C.unit) + '</span></div></div>' +
+    sliderHTML(false) +
+    '<div class="foot">Answer + daily game: <span>@Muricaenjoyer</span></div>';
+} else {
+  content.innerHTML = header('The answer') +
+    '<div class="ans-title">' + esc(C.title) + '</div>' +
+    '<div class="big" id="big">' + esc(fmt(C.answer)) + '</div>' +
+    '<div class="big-unit">' + esc(C.unit) + '</div>' +
+    '<div class="panel" id="fitbox">' +
+    sliderHTML(true) +
+    '<div class="math"><b>THE MATH</b>' + esc(C.math) + '</div>' +
+    '<p class="reveal" id="fit">' + esc(C.reveal) + '</p>' +
+    '<div class="src"><b>Sources</b>' + C.sourceNames.map(esc).join(' &middot; ') + '</div></div>' +
+    '<div class="foot">Play daily: <span>@Muricaenjoyer</span></div>';
+}
+
+// Marquee bulbs around the sign edge, alternating lit/dim like the game's chase.
+(function bulbs() {
+  const sign = document.getElementById('sign'), W = sign.clientWidth, H = sign.clientHeight, inset = 26, gap = 46;
+  const pts = [];
+  const nx = Math.round((W - 2 * inset) / gap), ny = Math.round((H - 2 * inset) / gap);
+  for (let i = 0; i <= nx; i++) { const x = inset + i * (W - 2 * inset) / nx; pts.push([x, inset]); }
+  for (let j = 1; j < ny; j++) { const y = inset + j * (H - 2 * inset) / ny; pts.push([W - inset, y]); }
+  for (let i = nx; i >= 0; i--) { const x = inset + i * (W - 2 * inset) / nx; pts.push([x, H - inset]); }
+  for (let j = ny - 1; j > 0; j--) { const y = inset + j * (H - 2 * inset) / ny; pts.push([inset, y]); }
+  document.getElementById('bulbs').innerHTML = pts.map((p, n) => '<i class="' + (n % 2 ? 'off' : '') + '" style="left:' + p[0] + 'px;top:' + p[1] + 'px"></i>').join('');
+})();
+
+// Fit: largest font size that keeps the box from overflowing.
+window.fitDone = document.fonts.ready.then(() => {
+  const box = document.getElementById('fitbox'), el = document.getElementById('fit');
+  if (mode === 'question') {
+    let s = 96;
+    el.style.fontSize = s + 'px';
+    while (s > 40 && box.scrollHeight > box.clientHeight + 1) { s -= 2; el.style.fontSize = s + 'px'; }
+    window.fitSize = s;
+  } else {
+    const big = document.getElementById('big');
+    let b = 280; big.style.fontSize = b + 'px';
+    while (b > 120 && big.scrollWidth > big.clientWidth) { b -= 4; big.style.fontSize = b + 'px'; }
+    let s = 38; el.style.fontSize = s + 'px';
+    const over = () => box.scrollHeight > box.clientHeight + 1;
+    while (s > 32 && over()) { s -= 1; el.style.fontSize = s + 'px'; }
+    while (b > 160 && over()) { b -= 6; big.style.fontSize = b + 'px'; }
+    while (s > 28 && over()) { s -= 1; el.style.fontSize = s + 'px'; }
+    window.fitSize = b + '/' + s;
+  }
+  return true;
+});
+</script>
+</body>
+</html>
