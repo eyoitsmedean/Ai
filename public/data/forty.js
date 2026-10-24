@@ -248,8 +248,9 @@
 
   function fortyFor(date) {
     const d = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(d.getTime())) return null;
     const offset = daysBetween(ashWednesday(d.getFullYear()), d);
-    if (offset < 0 || offset >= FORTY.length) return null;
+    if (!(offset >= 0 && offset < FORTY.length)) return null;
     const entry = FORTY[offset];
     let day = null;
     if (entry.kind === 'day') {

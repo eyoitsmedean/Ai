@@ -70,4 +70,9 @@ describe('spoken corpus', () => {
     }
     assert.deepEqual(bad, []);
   });
+
+  it('returns nothing for a date that does not exist, instead of throwing', () => {
+    assert.equal(fortyFor(new Date('2027-13-01T12:00:00')), null);
+    assert.equal(fortyFor('not a date'), null);
+  });
 });
