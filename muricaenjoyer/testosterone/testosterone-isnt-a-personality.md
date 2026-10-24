@@ -96,7 +96,7 @@ It also thickens your blood. Doctors are told to stop or cut the dose if your he
 
 So what does "low T" actually mean? The American Urological Association's answer is total testosterone under 300 ng/dL on two separate early-morning tests, plus symptoms. One low number at 4 p.m. isn't a diagnosis. Neither is feeling tired.
 
-That difference is the whole game. About 29% of American men have a "low" lab number on its own. Only about 5.6% of men 30 to 79 have symptomatic deficiency. The gap between those two numbers is where the money is.
+That difference is the whole game. About 24% of men 30 to 79 have a "low" lab number on its own. Only about 5.6% of men 30 to 79 have symptomatic deficiency. The gap between those two numbers is where the money is.
 
 [Image: chart-3-traverse-heart.png]
 
@@ -160,7 +160,7 @@ If this was useful, repost it so the next guy reads this before he reads an ad.
 - State of the Force transcript: war.gov (Sep 30, 2026)
 - Prescribing: Epic Research (Jul 29, 2026); IQVIA via CNBC (Jul 20, 2026)
 - Hims launch: Bloomberg (Sep 10, 2025)
-- Influencer study: Social Science & Medicine, 2026 (University of Sydney)
+- Influencer study: Social Science & Medicine, 2026
 - FDA labeling (Feb 28, 2025): fda.gov · HHS request (Jun 18, 2026): hhs.gov · DEA telemedicine rule: Federal Register
 - TRAVERSE: Lincoff et al., New England Journal of Medicine, 2023
 - Low-T definition: American Urological Association guideline · Prevalence: Araujo et al., JCEM 2007

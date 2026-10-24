@@ -1,0 +1,82 @@
+{
+  "rank": 49,
+  "tier": "C",
+  "name": "Chiricahua National Park",
+  "states": "Arizona",
+  "established": 2026,
+  "acres": 12000,
+  "visits2024": null,
+  "signature": "The \"Wonderland of Rocks\": rhyolite spires and hoodoos eroded from ash of the Turkey Creek caldera eruption, about 27 million years ago, seen from Massai Point and the Echo Canyon and Heart of Rocks trails",
+  "bestMonths": "March-May and September-November",
+  "take": "A volcano blew its top 27 million years ago and left a standing army of rhyolite hoodoos, still at attention for barely 70,000 visitors a year, so go return the salute.",
+  "kidFriendly": true,
+  "scores": {
+    "scenery": 7,
+    "uniqueness": 7,
+    "crowdToWow": 9,
+    "access": 5
+  },
+  "score": 70.0,
+  "override": 0,
+  "overrideReason": null,
+  "baseRank": 48,
+  "visitsNote": "No calendar-2024 figure retrieved. Latest available: 70,407 recreation visits in calendar 2025, as Chiricahua National Monument (NPS Visitation Summary 2025). Acres is approximate: sources give about 12,000; the act keeps the monument boundary unchanged.",
+  "scoreReasons": {
+    "scenery": "7: the hoodoo forest from Massai Point is genuinely gorgeous, a notch above Pinnacles (6), level with Great Basin and Badlands (7), nowhere near Bryce (10).",
+    "uniqueness": "7: a volcanic hoodoo forest on a sky island is rare, but Bryce owns the hoodoo brand and Pinnacles (7) does volcanic spires too.",
+    "crowdToWow": "9: about 70,000 visits a year, under half of Great Basin's (9), so the trails are nearly empty for what you get.",
+    "access": "5: paved road and a scenic drive, but roughly 2 hours from Tucson, between Pinnacles (6) and Guadalupe Mountains (4)."
+  },
+  "wouldRank": {
+    "rank": 49,
+    "of": 64,
+    "tier": "C",
+    "formulaRank": 48,
+    "between": [
+      "Badlands National Park (#48, 71.5)",
+      "Wind Cave National Park (#49 now, would be #50, 69.0)"
+    ],
+    "note": "By formula and tie-breakers with no override for Chiricahua, 70.0 is 48th of 64 (below Badlands 71.5, above Wind Cave 69.0). Keeping the 12 published overrides, Acadia (formula 68.0, +3) still sits above it, so it lands #49 of 64, directly below Badlands. #49 is in C (41-53)."
+  },
+  "sources": [
+    {
+      "fact": "Chiricahua National Park Act signed Oct 20, 2026; 64th national park; Arizona's 4th; Senate passed Sept 30, 2026; sponsor Rep. Juan Ciscomani",
+      "urls": [
+        "https://www.doi.gov/node/68121",
+        "https://www.azfamily.com/2026/10/20/chiricahuas-towering-spires-now-stand-arizonas-newest-national-park/",
+        "https://www.kold.com/2026/10/21/chiricahua-national-monument-officially-named-countrys-newest-national-park/?outputType=amp",
+        "https://www.abc15.com/news/state/chiricahua-national-part-act-signed-in-law-marking-4th-national-park-in-arizona"
+      ]
+    },
+    {
+      "fact": "About 12,000 acres; park boundary = monument boundary as of enactment (no boundary change); CBO: no change to ownership or management",
+      "urls": [
+        "https://www.congress.gov/119/bills/hr6380/BILLS-119hr6380ih.pdf",
+        "https://www.govinfo.gov/content/pkg/CRPT-118srpt66/html/CRPT-118srpt66.htm",
+        "https://www.azfamily.com/2026/10/20/chiricahuas-towering-spires-now-stand-arizonas-newest-national-park/"
+      ]
+    },
+    {
+      "fact": "70,407 recreation visits in calendar 2025 (as a national monument); 62,582 in 2023",
+      "urls": [
+        "https://in.nau.edu/wp-content/uploads/sites/212/NPS-Visitation-Summary-2025.pdf",
+        "https://www.nps.gov/chir/learn/management/statistics.htm"
+      ]
+    },
+    {
+      "fact": "Hoodoos eroded from the Rhyolite Canyon Tuff, erupted from the Turkey Creek caldera about 27 million years ago (NPS atlas: eruptions beginning ~26.9 Ma); caldera ~12 mi across; 'Wonderland of Rocks'",
+      "urls": [
+        "https://www.nps.gov/articles/nps-geodiversity-atlas-chiricahua-national-monument-arizona.htm",
+        "https://www.nps.gov/chir/learn/nature/geologicformations.htm",
+        "https://www.islands.com/1847064/arizona-wonderland-rocks-national-monument-scenic-hiking-trails-stargazing-spots"
+      ]
+    },
+    {
+      "fact": "Best months March-May and September-November; NPS says most visitors come in March-April and July-August is lowest; summer monsoon ~July to end of September",
+      "urls": [
+        "https://www.nps.gov/chir/learn/management/statistics.htm",
+        "https://livethatadventure.com/chiricahua-national-monument-how-to-spend-your-first-visit/"
+      ]
+    }
+  ]
+}
