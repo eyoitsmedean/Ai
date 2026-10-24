@@ -10,9 +10,18 @@
  */
 const { assessCrisis } = require('../public/data/crisis');
 const { rows } = require('../test/fixtures/crisis-corpus.json');
+const fresh = require('../test/fixtures/crisis-fresh.json').rows;
 
 const showMisses = process.argv.includes('--misses');
-const groups = { visible: rows.filter((r) => !r.heldOut), 'held-out': rows.filter((r) => r.heldOut) };
+// crisis-fresh.json was written blind in Oct 2026. Every third row is held
+// back: tune only on "fresh tuning" and read "fresh held-back" as the honest
+// number for phrasings the cues have never seen.
+const groups = {
+  visible: rows.filter((r) => !r.heldOut),
+  'held-out': rows.filter((r) => r.heldOut),
+  'fresh tuning': fresh.filter((_, i) => i % 3 !== 2),
+  'fresh held-back': fresh.filter((_, i) => i % 3 === 2),
+};
 
 function measure(list) {
   const r = { crisis: [0, 0], danger: [0, 0], door: [0, 0], none: [0, 0], misses: [], alarms: [] };
