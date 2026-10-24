@@ -44,6 +44,17 @@ method_reply = quoted(p63, "(252 chars with a link)")
 alt_text = quoted(p63, "## Image alt text")
 
 assets = {}
+ALT = {}
+_cards = json.loads((ROOT / "freedom-units/teasers/template/data.js").read_text().split("=", 1)[1].strip().rstrip(";"))
+for k, c in enumerate(_cards, 1):
+    ans = f"{c['answer']:,}" if isinstance(c["answer"], (int, float)) and c["answer"] >= 1000 else str(c["answer"])
+    ALT[f"q{k}-question.png"] = "Freedom Units question card: " + c["prompt"] + " Answer hidden."
+    ALT[f"q{k}-answer.png"] = f"Freedom Units answer card: {ans} {c['unit']}. {c['math']} {c.get('reveal', '')}".strip()
+_parks = json.loads((ROOT / "the-63/parks.json").read_text())["parks"]
+for pk in _parks:
+    if pk["rank"] <= 6:
+        ALT[f"s{pk['rank']}.png"] = f"The 63, S tier, #{pk['rank']} of 63: {pk['name']}, {pk['states']}. {pk['take']}"
+ALT["header-personality-1500x600.png"] = "Header art: TESTOSTERONE ISN'T A PERSONALITY over a heartbeat line. The Pentagon tests it. Apps sell it. The gym abuses it."
 
 
 def asset(rel, kind="img"):
@@ -63,6 +74,8 @@ if thread_md.exists():
     lines = thread_md.read_text().splitlines()
     receipt_texts = [lines[k + 1].lstrip("> ").strip() for k, ln in enumerate(lines)
                      if re.match(r"## \d+/\d+", ln) and k + 1 < len(lines) and lines[k + 1].strip()]
+for k, t in enumerate(receipt_texts, 1):
+    ALT[f"receipt-{k}.png"] = "Quote card. " + t
 s_cards = [asset(f"the-63/s-tier/s{k}.png") for k in range(6, 0, -1)]
 s_cards = [c for c in s_cards if c]
 
@@ -90,7 +103,7 @@ DAYS = [
     dict(date="Mon Nov 2", title="The testosterone video",
          post="The \"High-T Department of War\" put this in writing: testosterone \"is not a performance enhancer.\"\n\n52 seconds of receipts. Full article on my profile.",
          assets=[asset("testosterone/video/testosterone-video-4x5.mp4", "video")],
-         reply="Full article, with every source: [link to your article]", reply_note="Right after posting, then phone down."),
+         reply="Full article, with every source: [your X Article link]", reply_note="Right after posting, then phone down."),
     dict(date="Tue Nov 3", title="The Founders' Group Chat (Election Day)",
          post="Whoever you vote for today, remember they couldn't agree either.\n\nEvery message in this group chat is a real quote from a real letter. Receipts in the replies.",
          assets=[asset("founders/short/founders-short-4x5.mp4", "video")],
@@ -105,7 +118,7 @@ DAYS = [
          thread_assets=[s_cards[0:2], s_cards[2:3], s_cards[3:4], s_cards[4:5], s_cards[5:6]] if len(s_cards) == 6 else []),
     dict(date="Fri Nov 6", title="Freedom Units goes public",
          post=game_launch, assets=[],
-         note=f"Share the game publicly from its Share menu ({GAME}) and paste that link in place of [link]. Play once and post your real score from Copy result as the first reply."),
+         note="Share the game publicly from its Share menu first; its link is already in the post. Play once and post your real score from Copy result as the first reply."),
     dict(date="Sat Nov 7 – Sun Nov 8", off=True),
 ]
 BENCH = [dict(title=f"Teaser {q[1:]}", post=TEASERS[q][0], reply=TEASERS[q][1],
@@ -120,7 +133,10 @@ def media(a):
         return ""
     if a["kind"] == "video":
         return f'<figure class="m"><video src="{a["src"]}" controls playsinline preload="metadata"></video><figcaption>{E(a["name"])}</figcaption></figure>'
-    return f'<figure class="m"><img src="{a["src"]}" alt="{E(a["name"])}" loading="lazy"><figcaption>{E(a["name"])}</figcaption></figure>'
+    alt = ALT.get(a["name"], "")
+    drawer = (f'<details class="alt"><summary>Alt text</summary><div class="tb small"><div class="tbh"><span>Image description</span>'
+              f'<button class="copy" type="button">Copy</button></div><pre>{E(alt)}</pre></div></details>') if alt else ""
+    return f'<figure class="m"><img src="{a["src"]}" alt="{E(alt or a["name"])}" loading="lazy"><figcaption>{E(a["name"])}</figcaption>{drawer}</figure>'
 
 
 def textblock(label, text, cls=""):
@@ -155,6 +171,19 @@ def day_html(d, i):
     num = f"{i:02d}" if i else "Bench"
     return f'<li><div class="when"><span class="n">{num}</span><b>{E(d["date"])}</b></div><div class="body">{"".join(parts)}</div></li>'
 
+
+def fill(v):
+    if isinstance(v, str):
+        return v.replace("[link]", GAME)
+    return v
+
+
+for d in DAYS + BENCH:
+    for key in ("post", "reply"):
+        if key in d:
+            d[key] = fill(d[key])
+    if d.get("thread"):
+        d["thread"] = [fill(t) for t in d["thread"]]
 
 n = 0
 items = []
