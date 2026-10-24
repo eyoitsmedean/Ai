@@ -32,7 +32,7 @@ const SCENES = [
   { a: 10.6, b: 16.2, src: "Mean total testosterone, U.S. men aged 15–39 (NHANES 1999–2016). Lokeshwar et al., European Urology Focus 2021. Lab assays changed between survey cycles.", draw: s4 },
   { a: 16.2, b: 20.4, src: "RFK Jr. on Fox News, April 2025. U.S. data: Lokeshwar et al., European Urology Focus 2021.", draw: s5 },
   { a: 20.4, b: 25.8, src: "Share of U.S. men with a testosterone prescription. Epic Research, Jul 2026 (109M men; 2026 = Jan–Jun). Hims & Hers launch pricing, Sep 2025.", draw: s6 },
-  { a: 25.8, b: 30.4, src: "46 high-reach Instagram and TikTok testosterone posts. Social Science & Medicine, 2026 (University of Sydney).", draw: s7 },
+  { a: 25.8, b: 30.4, src: "46 high-reach Instagram and TikTok testosterone posts. Social Science & Medicine, 2026.", draw: s7 },
   { a: 30.4, b: 35.0, src: "WHO Task Force, The Lancet 1990: 271 healthy men, 200 mg testosterone enanthate weekly.", draw: s8 },
   { a: 35.0, b: 40.0, src: "20,286 male IFBB competitors, 2005–2020. Vecchiato et al., European Heart Journal 2025.", draw: s9 },
   { a: 40.0, b: 46.6, src: "Leproult & Van Cauter, JAMA 2011 · Corona et al., Eur J Endocrinology 2013 · American Urological Association guideline.", draw: s10 },
@@ -217,10 +217,10 @@ function s2(lt) {
   label("Defense Health Agency", X0 + 52, y + 78, C.muted, 24);
   label("Clinical guidance · Sep 17, 2026", X0 + 52, y + 114, C.dim, 22);
   // typewriter
-  const full = "Testosterone “is not a performance enhancer.”";
+  const full = "Testosterone is “not a performance enhancer.”";
   const n = Math.floor(full.length * clamp(prog(lt, 0.6, 2.2)));
   font(84, 900, DISP);
-  const lines = ["Testosterone", "“is not a", "performance", "enhancer.”"];
+  const lines = ["Testosterone is", "“not a", "performance", "enhancer.”"];
   let shown = n, yy = y + 260;
   lines.forEach((ln, i) => {
     const take = clamp(shown, 0, ln.length); shown -= ln.length + 1;
@@ -237,7 +237,7 @@ function s2(lt) {
   const hp = eInOut(prog(lt, 2.5, 3.2));
   if (hp > 0) {
     ctx.fillStyle = rgba(C.red, 0.85);
-    const ws = [ctx.measureText("“is not a").width, ctx.measureText("performance").width, ctx.measureText("enhancer.”").width];
+    const ws = [ctx.measureText("“not a").width, ctx.measureText("performance").width, ctx.measureText("enhancer.”").width];
     ws.forEach((w, i) => { const seg = clamp(hp * 3 - i); if (seg > 0) ctx.fillRect(X0 + 52, yy + (i + 1) * 100 + 14, w * seg, 10); });
   }
   fadeText("It says the evidence doesn't support using it to improve energy, vitality, physical function or cognition.", X0 + 52, y + 690 - 28, 30, C.muted, lt, 3.4, { maxW: 800, lh: 40 });

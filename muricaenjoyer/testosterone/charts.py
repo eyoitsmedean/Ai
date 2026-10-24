@@ -204,7 +204,7 @@ def chart_timeline():
     events = [
         ("JUL 15", "Hegseth posts\n\"The High-T\nDepartment of War\"", BLUE),
         ("SEP 2–3", "Military T guidance\nposted, then pulled\na day later", MUTED),
-        ("SEP 17", "Reissued, men only:\nT \"is not a\nperformance enhancer\"", MUTED),
+        ("SEP 17", "Reissued, men only:\nT is \"not a\nperformance enhancer\"", MUTED),
         ("SEP 30", "Quantico speech:\n\"testosterone\ntesting on top\"", BLUE),
         ("OCT 3", "Joey Swoll rushed\nto the hospital\nfor his heart", RED),
         ("OCT 5–7", "Hegseth workout\nclip goes viral:\n\"Low-T Pete\"", RED),

@@ -52,7 +52,7 @@ Then the rollout happened.
 
 About 2 million troops are 30 or older. No cost estimate was given, and no funding source was named. On Sept. 2 the Defense Health Agency posted the clinical guidance. On Sept. 3 it was gone, "temporarily rescinded." A Hegseth adviser said the draft had been posted "inadvertently."
 
-On Sept. 17 it came back, for men only. And here's the part almost nobody read. The Pentagon's own guidance says testosterone "is not a performance enhancer." It says the evidence doesn't support using it to improve energy, vitality, physical function or cognition.
+On Sept. 17 it came back, for men only. And here's the part almost nobody read. The Pentagon's own guidance says testosterone is "not a performance enhancer." It says the evidence doesn't support using it to improve energy, vitality, physical function or cognition.
 
 Read that again. The "High-T Department of War" published a document saying T isn't a performance drug.
 
@@ -96,7 +96,7 @@ It also thickens your blood. Doctors are told to stop or cut the dose if your he
 
 So what does "low T" actually mean? The American Urological Association's answer is total testosterone under 300 ng/dL on two separate early-morning tests, plus symptoms. One low number at 4 p.m. isn't a diagnosis. Neither is feeling tired.
 
-That difference is the whole game. About 24% of men 30 to 79 have a "low" lab number on its own. Only about 5.6% of men 30 to 79 have symptomatic deficiency. The gap between those two numbers is where the money is.
+That difference is the whole game. About 24% of men 30 to 79 have a "low" lab number on its own. Only about 5.6% have symptomatic deficiency. The gap between those two numbers is where the money is.
 
 [Image: chart-3-traverse-heart.png]
 
