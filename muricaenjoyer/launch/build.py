@@ -40,7 +40,7 @@ for m in re.finditer(r"## Day (\d+):.*?with `(q\d+)-question.png`\n\n> (.*?)\n\n
 
 game_launch = pfu.split("## Option 1: launch", 1)[1].split("## Option 2", 1)[0].strip()
 s_thread = [quoted(p63, f"### {k}/5") for k in range(1, 6)]
-method_reply = quoted(p63, "(252 chars with a link)")
+method_reply = quoted(p63, "(269 chars with a link)")
 alt_text = quoted(p63, "## Image alt text")
 
 assets = {}

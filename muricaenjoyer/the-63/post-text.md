@@ -6,37 +6,37 @@ Image: `the-63-tierlist.png` (1600x2000, 4:5) on the main post. `the-63-tierlist
 
 ### Option 1: Fight bait (176 chars)
 
-> I ranked all 63 U.S. national parks.
+> America just got its 64th national park. Before Chiricahua gets a vote, here's how I ranked the other 63.
 >
 > Yosemite is #24. Zion is #34. The Smokies, America's most-visited national park, are #51.
 >
 > I stand by every single one of these. Fight me.
 
-### Option 2: Receipts first (242 chars)
+### Option 2: Receipts first (260 chars)
 
-> The 63: every U.S. national park, ranked.
+> The 63: every U.S. national park before Chiricahua, ranked.
 >
 > Scored on scenery (40%), uniqueness (30%), crowd-to-wow (15%) and access (15%). Then I let myself move 12 parks, max 3 spots each, with a written reason for every move.
 >
 > Method + data in the replies.
 
-### Option 3: Most American (168 chars)
+### Option 3: Most American (205 chars)
 
-> America invented the national park in 1872. Then we made 62 more.
+> America invented the national park in 1872. Then we made 62 more (and as of last week, 63 more).
 >
-> Here are all 63, ranked. There are no bad ones, but there is a #63, and Ohio is not going to like it.
+> Here are the first 63, ranked. There are no bad ones, but there is a #63, and Ohio is not going to like it.
 
 ## Reply thread: the S tier, one by one
 
 Post these as replies under the main post, in order. The S tier has six parks and the thread has five posts, so #6 and #5 share the opener and #1 gets its own post at the end.
 
-### 1/5 (263 chars)
+### 1/5 (256 chars)
 
 > S tier, counted down.
 >
 > #6 Crater Lake (OR): 1,943 ft deep, the deepest lake in the U.S., filled almost entirely by rain and snow.
 >
-> #5 White Sands (NM): the world's largest gypsum dunefield, 275 square miles of white sand that stays cool enough to sled on in July.
+> #5 White Sands (NM): the world's largest gypsum dunefield (275 square miles), sand that stays cool to the touch even in July.
 
 ### 2/5 (207 chars)
 
@@ -62,9 +62,9 @@ Post these as replies under the main post, in order. The S tier has six parks an
 
 The image footer promises "method + data in the replies", so close the thread with this. Swap `[LINK]` for the data page; any URL counts as 23 characters.
 
-(252 chars with a link)
+(269 chars with a link)
 
-> How the list works: every park scored 1-10 on scenery (40%), uniqueness (30%), crowd-to-wow (15%) and access (15%), for a score out of 100. Ties go to better scenery. Then 12 editor's moves, max 3 spots each, all with written reasons. Full data: [LINK]
+> How the list works: every park scored 1-10 on scenery (40%), uniqueness (30%), crowd-to-wow (15%) and access (15%), out of 100. Ties go to better scenery, then uniqueness. Then 12 editor's moves, max 3 spots each, all with written reasons. Data: [LINK]
 
 ## Image alt text
 
