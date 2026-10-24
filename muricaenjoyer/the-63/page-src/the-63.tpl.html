@@ -1,0 +1,1018 @@
+<title>The 63</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Courier+Prime:wght@400;700&family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap">
+<style>
+/* Layout: a routed-wood trailhead sign over a topo sheet, then a tier signboard, an awards row, a single-column trail register of 63 entries, and a map-scale method key. */
+:root{
+  /* topo sheet */
+  --ground:#ECEFE5; --sheet:#FAFBF6; --sheet-2:#F0F2E9;
+  --ink:#1B231D; --ink-2:#465149; --ink-3:#5A655C;
+  --line:#D3D9CB; --line-2:#AEB6A6;
+  --contour:#A9733F; --contour-ink:#86552A; --water:#235E8B;
+  /* routed sign */
+  --wood-hi:#6E472B; --wood:#563521; --wood-lo:#3D2414; --routed:#F1D89E; --routed-dim:#CBAF77;
+  --bolt-hi:#9A8569; --bolt-lo:#22170E; --wood-ink:#F1D89E;
+  /* tiers: fill + paint for routed letters */
+  --t-s:#835E0C; --t-a:#2D5B34; --t-b:#215B87; --t-c:#7F4D28; --t-d:#535C55; --on-tier:#FAFBF6;
+  --p-s:#F3C95B; --p-a:#A9D69E; --p-b:#A0CDEC; --p-c:#E9B088; --p-d:#D8DED5;
+  --up:#2D5B34; --down:#8F3F22; --bar-empty:#D3D9CB;
+  --flash:#F3C95B;
+  --shade:rgba(27,35,29,.22);
+  --grain:linear-gradient(transparent,transparent);
+  --f-display:"Rokkitt","Roboto Slab",Rockwell,"Rockwell Nova",Georgia,serif;
+  --f-body:"Archivo","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"Courier Prime","Courier New",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111511; --sheet:#191E18; --sheet-2:#20271F;
+    --ink:#E7EADF; --ink-2:#B6BDAF; --ink-3:#9CA496;
+    --line:#2D352C; --line-2:#465045;
+    --contour:#B88A5D; --contour-ink:#DCAB7C; --water:#8FBEE3;
+    --wood-hi:#5C3B24; --wood:#482A19; --wood-lo:#2E1B0E; --routed:#EDD192; --routed-dim:#BDA169;
+    --bolt-hi:#8A775D; --bolt-lo:#140C06; --wood-ink:#EDD192;
+    --t-s:#E3BA52; --t-a:#93C78B; --t-b:#90C0E6; --t-c:#E0A77B; --t-d:#AFB7AD; --on-tier:#111511;
+    --up:#93C78B; --down:#E9937A; --bar-empty:#3B4439;
+    --flash:#E3BA52;
+    --shade:rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111511; --sheet:#191E18; --sheet-2:#20271F;
+  --ink:#E7EADF; --ink-2:#B6BDAF; --ink-3:#9CA496;
+  --line:#2D352C; --line-2:#465045;
+  --contour:#B88A5D; --contour-ink:#DCAB7C; --water:#8FBEE3;
+  --wood-hi:#5C3B24; --wood:#482A19; --wood-lo:#2E1B0E; --routed:#EDD192; --routed-dim:#BDA169;
+  --bolt-hi:#8A775D; --bolt-lo:#140C06; --wood-ink:#EDD192;
+  --t-s:#E3BA52; --t-a:#93C78B; --t-b:#90C0E6; --t-c:#E0A77B; --t-d:#AFB7AD; --on-tier:#111511;
+  --up:#93C78B; --down:#E9937A; --bar-empty:#3B4439;
+  --flash:#E3BA52;
+  --shade:rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--water);text-underline-offset:.15em}
+:focus-visible{outline:2px solid var(--water);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.08}
+p{text-wrap:pretty}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:16px}
+@media (min-width:720px){.wrap{padding-inline:32px}}
+.lbl{font-family:var(--f-body);font-stretch:78%;font-weight:650;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);line-height:1.3}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* tier color plumbing */
+[data-tier="S"]{--tc:var(--t-s);--paint:var(--p-s)}
+[data-tier="A"]{--tc:var(--t-a);--paint:var(--p-a)}
+[data-tier="B"]{--tc:var(--t-b);--paint:var(--p-b)}
+[data-tier="C"]{--tc:var(--t-c);--paint:var(--p-c)}
+[data-tier="D"]{--tc:var(--t-d);--paint:var(--p-d)}
+
+/* wood: CSS grain at rest, canvas grain layered on top once drawn */
+.wood{
+  background-color:var(--wood);
+  background-image:
+    var(--grain),
+    repeating-linear-gradient(177deg,transparent 0 5px,rgba(0,0,0,.10) 5px 6px,transparent 6px 13px),
+    repeating-linear-gradient(183deg,transparent 0 9px,rgba(255,220,170,.05) 9px 11px),
+    linear-gradient(180deg,var(--wood-hi),var(--wood) 45%,var(--wood-lo));
+  background-size:cover,auto,auto,100% 100%;
+  background-position:center;
+  color:var(--wood-ink);
+}
+.routed{text-shadow:0 -2px 1px rgba(0,0,0,.55),0 1px 0 rgba(255,236,196,.14)}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--ground);background:color-mix(in srgb,var(--ground) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:52px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);min-width:0}
+.brand .mk{display:grid;place-items:center;width:30px;height:30px;border-radius:4px;font-family:var(--f-display);font-weight:800;font-size:16px;line-height:1;flex:none}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:20px;white-space:nowrap}
+.brand .h{font-size:13px;color:var(--ink-3);font-weight:600;white-space:nowrap}
+@media (max-width:640px){.brand .h{display:none}}
+.nav{display:flex;gap:2px;min-width:0}
+.nav a{font-size:14px;font-weight:650;color:var(--ink-2);text-decoration:none;padding:6px 9px;border-radius:4px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--sheet-2)}
+@media (max-width:420px){.nav a{padding:6px 7px;font-size:13.5px}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.topo{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hero-in{position:relative;padding-block:clamp(28px,5vw,56px) clamp(30px,4.5vw,48px);display:grid;gap:clamp(24px,3.5vw,36px)}
+.sign{position:relative;border-radius:6px;padding:clamp(24px,4.5vw,46px) clamp(26px,7vw,76px) clamp(22px,4vw,40px);text-align:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,225,180,.08),inset 0 -8px 16px rgba(0,0,0,.28),0 26px 44px -26px var(--shade)}
+.sign::before{content:"";position:absolute;inset:clamp(8px,1.4vw,14px);border:2px solid var(--routed-dim);border-radius:4px;opacity:.55;pointer-events:none;box-shadow:0 -1px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(0,0,0,.4)}
+.bolt{position:absolute;top:50%;width:13px;height:13px;margin-top:-6.5px;border-radius:50%;background:radial-gradient(circle at 35% 32%,var(--bolt-hi),var(--bolt-lo) 70%);box-shadow:0 1px 0 rgba(255,236,196,.12),inset 0 0 0 1px rgba(0,0,0,.45)}
+.bolt.l{left:clamp(5px,1.8vw,26px)} .bolt.r{right:clamp(5px,1.8vw,26px)}
+.sign-k{font-family:var(--f-display);font-weight:700;font-size:clamp(12.5px,1.7vw,20px);letter-spacing:.24em;text-transform:uppercase;color:var(--routed)}
+.sign h1{font-weight:800;font-size:clamp(76px,19vw,224px);line-height:.8;letter-spacing:-.025em;margin-block:.1em .08em;color:var(--routed)}
+.sign-s{font-family:var(--f-display);font-weight:500;font-size:clamp(14px,1.9vw,21px);letter-spacing:.06em;color:var(--routed);text-wrap:balance}
+.hero-meta{display:grid;gap:22px 48px;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
+@media (max-width:780px){.hero-meta{grid-template-columns:minmax(0,1fr)}}
+.lede{margin:0;font-size:clamp(19px,2.3vw,25px);line-height:1.38;font-weight:520;max-width:34ch;text-wrap:balance}
+.lede b{font-weight:750}
+.collar{margin:0;border-top:2px solid var(--ink);display:grid}
+.collar div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+.collar dt{margin:0}
+.collar dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;min-width:0}
+.collar a{font-weight:700}
+
+/* sections */
+.sec{padding-block:clamp(48px,7vw,84px);scroll-margin-top:52px}
+.sec + .sec{border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 28px;margin-bottom:26px}
+.sec-head > div{min-width:0;max-width:64ch}
+.sec-head h2{font-size:clamp(32px,4.6vw,48px);font-weight:800;letter-spacing:-.012em;display:flex;align-items:center;gap:14px}
+.blaze{display:inline-block;width:11px;height:.62em;background:var(--contour);border-radius:1px;flex:none;transform:translateY(-.02em)}
+.sec-head p{margin:8px 0 0;color:var(--ink-2);font-size:16.5px}
+
+/* buttons */
+.btn{appearance:none;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--sheet);border:1px solid var(--line-2);border-radius:6px;padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;line-height:1.2}
+.btn:hover{border-color:var(--ink-2)}
+.btn.solid{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn.solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+.copy-wrap{display:grid;gap:8px;justify-items:end}
+.copy-status{font-size:13px;color:var(--ink-3);min-height:1.3em;margin:0}
+.copy-fallback{width:min(100%,360px);height:120px;font:13px/1.4 var(--f-mono);color:var(--ink);background:var(--sheet);border:1px solid var(--line-2);border-radius:6px;padding:8px}
+@media (max-width:640px){.copy-wrap{justify-items:start}}
+
+/* tier board */
+.board{border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--sheet)}
+.trow{display:grid;grid-template-columns:104px minmax(0,1fr)}
+.trow + .trow{border-top:1px solid var(--line)}
+.tblock{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:18px 6px 14px;box-shadow:inset -1px 0 0 rgba(0,0,0,.4)}
+.tblock .L{font-family:var(--f-display);font-weight:800;font-size:56px;line-height:.9;color:var(--paint)}
+.tblock .r{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--routed);font-stretch:80%;font-weight:650;white-space:nowrap}
+.tbody{padding:16px 18px 18px;min-width:0}
+.tmean{margin:0 0 12px;font-size:15px;color:var(--ink-2);max-width:70ch}
+.tmean b{color:var(--ink);font-weight:750}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.chip{display:inline-flex;align-items:baseline;gap:6px;padding:5px 10px 6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--ground);color:var(--ink);text-decoration:none;font-size:14px;font-weight:620;line-height:1.25;transition:border-color .15s,transform .15s,background-color .15s}
+.chip .n{font-family:var(--f-display);font-weight:800;font-size:15.5px;color:var(--tc);font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--tc);background:var(--sheet);transform:translateY(-1px)}
+@media (max-width:560px){
+  .trow{grid-template-columns:62px minmax(0,1fr)}
+  .tblock .L{font-size:40px}
+  .tblock .r{font-size:9.5px;letter-spacing:.06em}
+  .tbody{padding:12px 12px 14px}
+  .chip{font-size:13px;padding:4px 8px 5px 7px}
+  .chip .n{font-size:14px}
+}
+
+/* awards */
+.awards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.award{background-color:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.award.feature{background-color:var(--wood);grid-column:span 2;position:relative;padding:clamp(24px,3.4vw,36px);border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),0 22px 36px -26px var(--shade)}
+.award.feature::before{content:"";position:absolute;inset:10px;border:1.5px solid var(--routed-dim);border-radius:4px;opacity:.5;pointer-events:none}
+.aw{color:var(--contour-ink)}
+.award.feature .aw{color:var(--routed);opacity:.9}
+.award h3{font-size:25px;font-weight:800}
+.award.feature h3{font-size:clamp(30px,3.8vw,44px);color:var(--routed)}
+.award h3 a{color:inherit;text-decoration:none}
+.award h3 a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.ameta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13.5px;color:var(--ink-3)}
+.award.feature .ameta{color:var(--routed)}
+.award p{margin:0;font-size:15px;color:var(--ink-2)}
+.award.feature p{font-size:clamp(16px,1.6vw,18.5px);color:var(--wood-ink);max-width:62ch;line-height:1.5}
+.award.feature .afacts{font-family:var(--f-display);font-weight:650;font-size:clamp(17px,1.8vw,21px);letter-spacing:.04em;color:var(--routed);font-variant-numeric:tabular-nums}
+.award .ru{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line-2);font-size:13.5px;color:var(--ink-3)}
+.award.feature .ru{border-top-color:var(--routed-dim);color:var(--routed);opacity:.92}
+.award .ru b{color:var(--ink-2);font-weight:700}
+.award.feature .ru b{color:var(--routed)}
+@media (max-width:920px){.awards{grid-template-columns:repeat(2,minmax(0,1fr))}.award.feature{grid-column:1/-1}}
+@media (max-width:600px){.awards{grid-template-columns:minmax(0,1fr)}.award{padding:18px}}
+
+/* tier badge */
+.tb{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:4px;background:var(--tc);color:var(--on-tier);font-family:var(--f-display);font-weight:800;font-size:18px;line-height:1;flex:none}
+.award.feature .tb{background:var(--paint);color:var(--wood-lo)}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:flex-end;padding:16px 18px;background:var(--sheet);border:1px solid var(--line);border-radius:8px}
+.ctl{display:grid;gap:6px;min-width:0}
+.ctl.grow{flex:1 1 200px}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:var(--ground)}
+.seg button{appearance:none;border:0;border-left:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-family:var(--f-display);font-weight:800;font-size:16px;padding:6px 12px;min-width:42px;cursor:pointer;line-height:1.3}
+.seg button:first-child{border-left:0;font-family:var(--f-body);font-size:13.5px;font-weight:700}
+.seg button:hover{background:var(--sheet-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.seg button:focus-visible{outline-offset:-3px}
+.sel{position:relative;display:block}
+.sel::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.sel select{appearance:none;-webkit-appearance:none;width:100%;font:inherit;font-size:14px;font-weight:650;color:var(--ink);background:var(--ground);border:1px solid var(--line-2);border-radius:6px;padding:8px 36px 8px 12px;cursor:pointer;line-height:1.3}
+.check{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:650;padding:8px 0;cursor:pointer;white-space:nowrap}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--t-a)}
+.list-status{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:14px 2px 6px}
+.count{margin:0;font-size:14px;color:var(--ink-2)}
+.count b{color:var(--ink)}
+.linkbtn{appearance:none;background:none;border:0;padding:4px 0;font:inherit;font-size:14px;font-weight:700;color:var(--water);cursor:pointer;text-decoration:underline;text-underline-offset:.15em}
+
+/* list */
+.list{display:grid;gap:12px}
+.tdiv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;align-items:center;padding:26px 2px 6px}
+.tdiv:first-child{padding-top:8px}
+.tdiv .tb{width:48px;height:48px;font-size:30px;grid-row:span 2;border-radius:6px}
+.tdiv h3{font-size:24px;font-weight:800}
+.tdiv p{margin:0;color:var(--ink-2);font-size:15px}
+.park{display:grid;grid-template-columns:84px minmax(0,1fr) 264px;gap:8px 28px;padding:24px 26px;background:var(--sheet);border:1px solid var(--line);border-radius:8px;scroll-margin-top:72px}
+.park:focus{outline:none}
+.park:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+.park.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,25%{box-shadow:0 0 0 3px var(--flash)}100%{box-shadow:0 0 0 3px transparent}}
+.p-rank{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.rk{font-family:var(--f-display);font-weight:800;font-size:60px;line-height:.82;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.p-main{min-width:0}
+.p-name{font-size:clamp(23px,2.5vw,29px);font-weight:800;letter-spacing:-.005em}
+.p-where{margin:5px 0 0;color:var(--ink-2);font-size:15px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 30px;margin:16px 0 0}
+.p-facts div{min-width:0}
+.p-facts dd{margin:2px 0 0;font-weight:750;font-size:18px;font-variant-numeric:tabular-nums;line-height:1.25}
+.p-facts dd small{font-size:13px;font-weight:600;color:var(--ink-3)}
+.p-facts .na{font-size:14px;font-weight:600;color:var(--ink-3)}
+.list[data-sort="visits"] .f-visits dd,.list[data-sort="size"] .f-acres dd,.list[data-sort="oldest"] .f-est dd{box-shadow:inset 0 -.38em 0 color-mix(in srgb,var(--flash) 45%,transparent)}
+.p-sig{margin:16px 0 0;font-size:15.5px;color:var(--ink-2);max-width:66ch}
+.p-sig .lbl{margin-right:6px}
+.p-take{margin:12px 0 0;font-family:var(--f-display);font-style:italic;font-weight:480;font-size:20.5px;line-height:1.36;color:var(--ink);max-width:56ch}
+.p-best{margin:12px 0 0;font-size:14px;color:var(--ink-2)}
+.p-best .lbl{margin-right:6px}
+.p-move{margin:14px 0 0;font-size:14.5px;color:var(--ink-2);padding:10px 12px;background:var(--sheet-2);border-radius:5px;max-width:70ch}
+.p-move b{color:var(--ink)}
+.mv{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mv.up{color:var(--up)} .mv.down{color:var(--down)}
+.p-notes{margin-top:12px;font-size:13.5px;color:var(--ink-3)}
+.p-notes summary{cursor:pointer;font-weight:650;width:max-content;max-width:100%;border-radius:3px}
+.p-notes summary:hover{color:var(--ink-2)}
+.p-notes p{margin:8px 0 0;max-width:72ch}
+.p-score{display:grid;gap:14px;align-content:start;border-left:1px solid var(--line);padding-left:26px;min-width:0}
+.p-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.p-total{display:flex;align-items:baseline;gap:4px}
+.p-total .v{font-family:var(--f-display);font-weight:800;font-size:42px;line-height:.9;font-variant-numeric:tabular-nums}
+.p-total .of{color:var(--ink-3);font-size:14px;font-weight:600}
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.bars li{display:grid;grid-template-columns:92px minmax(0,1fr) 20px;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2)}
+.bars .bl{font-stretch:85%;font-weight:600;white-space:nowrap}
+.bar{height:9px;background:linear-gradient(90deg,var(--tc) calc(var(--v) * 10%),var(--bar-empty) 0);-webkit-mask:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);mask:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%)}
+.bars .bv{text-align:right;font-weight:750;color:var(--ink);font-variant-numeric:tabular-nums}
+.kid{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px 4px 8px;border-radius:999px;border:1px solid;line-height:1.2;white-space:nowrap}
+.kid svg{width:14px;height:14px;flex:none}
+.kid.yes{color:var(--t-a);border-color:var(--t-a);background:color-mix(in srgb,var(--t-a) 10%,transparent)}
+.kid.no{color:var(--ink-3);border-color:var(--line-2);font-weight:600}
+.empty{padding:40px 20px;text-align:center;background:var(--sheet);border:1px dashed var(--line-2);border-radius:8px;color:var(--ink-2)}
+@media (max-width:860px){
+  .park{grid-template-columns:52px minmax(0,1fr);gap:6px 14px;padding:18px 16px}
+  .rk{font-size:42px}
+  .p-rank{gap:8px}
+  .tb{width:26px;height:26px;font-size:17px}
+  .p-score{grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px;margin-top:8px}
+  .p-take{font-size:19px}
+  .p-facts{gap:8px 22px}
+  .p-facts dd{font-size:16.5px}
+}
+@media (max-width:420px){
+  .park{grid-template-columns:minmax(0,1fr)}
+  .p-rank{flex-direction:row;align-items:center;gap:10px}
+  .rk{font-size:40px}
+}
+
+/* method */
+.m-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px 56px;align-items:start}
+@media (max-width:900px){.m-grid{grid-template-columns:minmax(0,1fr)}}
+.prose{max-width:64ch}
+.prose p{margin:0 0 14px;font-size:16.5px;color:var(--ink-2)}
+.prose p:first-child{font-size:18px;color:var(--ink)}
+.prose h3,.sub-h{font-size:22px;font-weight:800;margin:26px 0 8px}
+.prose ol{margin:0;padding-left:22px;color:var(--ink-2)}
+.prose ol li{margin:2px 0}
+.keybox{background:var(--sheet);border:1px solid var(--line-2);border-radius:8px;padding:22px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0}
+.keybox > *{min-width:0}
+.scale-cap{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.scale{display:grid;gap:6px}
+.ticks,.sbar,.snames{display:grid;grid-template-columns:40fr 30fr 15fr 15fr}
+.ticks span{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink-2);transform:translateX(-50%);width:max-content}
+.ticks span:first-child{transform:none}
+.ticks{position:relative}
+.ticks .end{position:absolute;right:0;top:0;transform:none}
+.sbar{height:16px;border:1.5px solid var(--ink)}
+.sbar i{display:block;border-left:1.5px solid var(--ink)}
+.sbar i:first-child{border-left:0}
+.sbar i:nth-child(odd){background:var(--ink)}
+.sbar i:nth-child(even){background:var(--sheet)}
+.snames span{font-size:12px;font-weight:650;color:var(--ink-2);padding:2px 6px 0 0;line-height:1.25;overflow-wrap:anywhere;font-stretch:85%}
+.crit{display:grid;gap:12px;margin:0}
+.crit div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.crit div:last-child{border-bottom:0;padding-bottom:0}
+.crit dt{font-family:var(--f-display);font-weight:750;font-size:19px;line-height:1.2}
+.crit dd{margin:0;grid-column:1/-1;color:var(--ink-2);font-size:15px}
+.crit .w{grid-column:2;grid-row:1;font-weight:800;font-variant-numeric:tabular-nums;color:var(--contour-ink)}
+.worked{margin:0;font:14.5px/1.6 var(--f-mono);color:var(--ink);background:var(--sheet-2);border-radius:6px;padding:14px 16px;overflow-x:auto;white-space:pre-wrap}
+.calls{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--line-2)}
+.calls li{display:grid;grid-template-columns:62px minmax(0,220px) minmax(0,1fr);gap:4px 20px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.calls .mv{font-family:var(--f-display);font-size:22px}
+.calls .who{font-weight:750;min-width:0}
+.calls .who a{color:var(--ink);text-decoration:none}
+.calls .who a:hover{text-decoration:underline}
+.calls .who small{display:block;font-weight:600;color:var(--ink-3);font-size:13px}
+.calls .why{color:var(--ink-2);font-size:15px;min-width:0}
+@media (max-width:700px){.calls li{grid-template-columns:52px minmax(0,1fr)}.calls .why{grid-column:2}}
+
+/* reweight tool */
+.rw{margin-top:44px;background:var(--sheet);border:1px solid var(--line-2);border-radius:8px;padding:clamp(18px,3vw,30px)}
+.rw-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;margin-bottom:22px}
+.rw-head > div{min-width:0;max-width:62ch}
+.rw-head h3{font-size:clamp(26px,3vw,32px);font-weight:800}
+.rw-head p{margin:6px 0 0;color:var(--ink-2)}
+.rw-grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:28px 44px;align-items:start}
+@media (max-width:820px){.rw-grid{grid-template-columns:minmax(0,1fr)}}
+.sliders{display:grid;gap:16px}
+.sl{display:grid;gap:4px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:15px}
+.sl output{font-variant-numeric:tabular-nums;color:var(--contour-ink);font-weight:800}
+.sl input{width:100%;margin:4px 0 0;accent-color:var(--contour-ink);height:22px}
+.rw-top{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(5,auto);grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:0 28px;counter-reset:none}
+@media (max-width:640px){.rw-top{grid-auto-flow:row;grid-template-rows:none}}
+.rw-top li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+.rw-top .pos{font-family:var(--f-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.rw-top .nm{font-weight:700;min-width:0}
+.rw-top .sc{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-2);font-size:14px}
+.rw-top .vs{grid-column:2/-1;font-size:13px;color:var(--ink-3)}
+.rw-note{margin:18px 0 0;font-size:15px;color:var(--ink-2)}
+.rw-note b{color:var(--ink)}
+.notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px;max-width:80ch}
+.notes li{padding-left:18px;position:relative;color:var(--ink-2);font-size:15px}
+.notes li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border:1.5px solid var(--contour);border-radius:50%}
+.notes b{color:var(--ink)}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding-block:44px 56px;background:var(--sheet-2)}
+.foot .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px 28px;align-items:center}
+.foot .plank{padding:14px 22px;border-radius:5px;font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45);color:var(--routed);white-space:nowrap}
+.foot p{margin:0}
+.foot .handle{font-family:var(--f-display);font-weight:800;font-size:22px}
+.foot .handle a{color:var(--ink);text-decoration-color:var(--contour);text-decoration-thickness:2px}
+.foot .data{font-weight:650;color:var(--ink)}
+.foot .fine{font-size:13.5px;color:var(--ink-3);max-width:80ch;margin-top:6px}
+@media (max-width:600px){.foot .wrap{grid-template-columns:minmax(0,1fr)}.foot .plank{justify-self:start}}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .chip:hover{transform:none}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="The 63, back to top"><span class="mk wood routed" aria-hidden="true">63</span><b>The 63</b><span class="h">by @Muricaenjoyer</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#tiers">Tiers</a><a href="#awards">Awards</a><a href="#ranking">List</a><a href="#method">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="title">
+    <canvas class="topo" id="topo" aria-hidden="true"></canvas>
+    <div class="wrap hero-in">
+      <div class="sign wood">
+        <span class="bolt l" aria-hidden="true"></span><span class="bolt r" aria-hidden="true"></span>
+        <p class="sign-k routed" style="margin:0">National Parks Power Rankings</p>
+        <h1 id="title" class="routed">The 63</h1>
+        <p class="sign-s routed" style="margin:0">Grand Canyon to Cuyahoga Valley, best to last</p>
+      </div>
+      <div class="hero-meta">
+        <p class="lede">Every U.S. national park, scored 1 to 10 on <b>scenery</b> (40%), <b>uniqueness</b> (30%), <b>crowd-to-wow</b> (15%) and <b>access</b> (15%), then ranked.</p>
+        <dl class="collar" id="collar"></dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="tiers" aria-labelledby="tiers-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="tiers-h"><span class="blaze" aria-hidden="true"></span>The tier list</h2>
+          <p>Tiers are bands on the final order. Tap any park to jump to its entry.</p>
+        </div>
+        <div class="copy-wrap">
+          <button class="btn" id="copy-top" type="button">Copy top 10 for a post</button>
+          <p class="copy-status" id="copy-status" aria-live="polite"></p>
+          <textarea class="copy-fallback" id="copy-fallback" readonly hidden aria-label="Top 10 text to copy"></textarea>
+        </div>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="awards" aria-labelledby="awards-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="awards-h"><span class="blaze" aria-hidden="true"></span>Awards</h2>
+          <p>Five honors the score alone can't hand out.</p>
+        </div>
+      </div>
+      <div class="awards" id="awards-grid"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="ranking" aria-labelledby="ranking-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="ranking-h"><span class="blaze" aria-hidden="true"></span>All 63, ranked</h2>
+          <p>Score bars show each 1–10 input. Visit counts are 2024 recreation visits where a reliable figure exists.</p>
+        </div>
+      </div>
+      <div class="controls" role="group" aria-label="Filter and sort the list">
+        <div class="ctl">
+          <span class="lbl" id="tier-lbl">Tier</span>
+          <div class="seg" id="f-tier" role="group" aria-labelledby="tier-lbl">
+            <button type="button" data-v="all" aria-pressed="true">All</button>
+            <button type="button" data-v="S" aria-pressed="false" aria-label="S tier">S</button>
+            <button type="button" data-v="A" aria-pressed="false" aria-label="A tier">A</button>
+            <button type="button" data-v="B" aria-pressed="false" aria-label="B tier">B</button>
+            <button type="button" data-v="C" aria-pressed="false" aria-label="C tier">C</button>
+            <button type="button" data-v="D" aria-pressed="false" aria-label="D tier">D</button>
+          </div>
+        </div>
+        <div class="ctl grow">
+          <label class="lbl" for="f-where">Region or state</label>
+          <span class="sel"><select id="f-where"></select></span>
+        </div>
+        <div class="ctl">
+          <label class="lbl" for="f-sort">Sort by</label>
+          <span class="sel"><select id="f-sort">
+            <option value="rank">Our rank</option>
+            <option value="visits">Most 2024 visits</option>
+            <option value="size">Largest</option>
+            <option value="oldest">Oldest</option>
+          </select></span>
+        </div>
+        <div class="ctl">
+          <span class="lbl" aria-hidden="true">&nbsp;</span>
+          <label class="check" for="f-kids"><input type="checkbox" id="f-kids"> Kid-friendly only</label>
+        </div>
+      </div>
+      <div class="list-status">
+        <p class="count" id="count" aria-live="polite"></p>
+        <button class="linkbtn" id="clear" type="button" hidden>Clear filters</button>
+      </div>
+      <div class="list" id="list" data-sort="rank"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="method" aria-labelledby="method-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="method-h"><span class="blaze" aria-hidden="true"></span>How the list works</h2>
+          <p>Four scores, fixed weights, a short leash for the editor, and every move written down.</p>
+        </div>
+      </div>
+      <div class="m-grid">
+        <div class="prose" id="m-prose"></div>
+        <div class="keybox">
+          <div class="scale" role="img" aria-label="Weights: scenery 40 points, uniqueness 30, crowd-to-wow 15, access 15, out of 100">
+            <div class="scale-cap"><span class="lbl">Weights, in points of 100</span></div>
+            <div class="ticks" aria-hidden="true"><span>0</span><span>40</span><span>70</span><span>85</span><span class="end">100</span></div>
+            <div class="sbar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="snames" aria-hidden="true"><span>Scenery</span><span>Uniqueness</span><span>Crowd-to-wow</span><span>Access</span></div>
+          </div>
+          <dl class="crit" id="crit"></dl>
+          <div>
+            <div class="lbl" style="margin-bottom:8px">Worked example: No. 1</div>
+            <pre class="worked" id="worked"></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-h" style="margin-top:48px">The editor's 12 calls</h3>
+      <p class="prose" id="calls-intro" style="margin:0;color:var(--ink-2)"></p>
+      <ol class="calls" id="calls"></ol>
+
+      <div class="rw" id="reweight">
+        <div class="rw-head">
+          <div>
+            <h3>Re-rank it yourself</h3>
+            <p>Move the weights and all 63 parks re-score live. The editor's calls are left out, so at our default weights you get the raw formula order.</p>
+          </div>
+          <button class="btn" type="button" id="rw-reset">Reset to our weights</button>
+        </div>
+        <div class="rw-grid">
+          <div class="sliders" id="sliders"></div>
+          <div>
+            <div class="lbl" style="margin-bottom:4px">Your top 10</div>
+            <ol class="rw-top" id="rw-top"></ol>
+          </div>
+        </div>
+        <p class="rw-note" id="rw-note" aria-live="polite"></p>
+      </div>
+
+      <h3 class="sub-h" style="margin-top:48px">Data notes</h3>
+      <ul class="notes" id="notes"></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="plank wood routed" aria-hidden="true">The 63</div>
+    <div>
+      <p class="handle"><a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a></p>
+      <p class="data">Data: NPS visitor-use statistics (2024); rankings are opinion.</p>
+      <p class="fine">An independent fan ranking, not affiliated with or endorsed by the National Park Service. Some 2024 visit counts are rounded, fiscal-year or missing; each park's source notes say which.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var D = __DATA__;
+var P = D.parks.slice().sort(function(a,b){return a.rank-b.rank});
+var M = D.method;
+var TIERS = M.tiers;
+var TIER_INFO = {}; TIERS.forEach(function(t){TIER_INFO[t.tier]=t});
+var $ = function(s,r){return (r||document).querySelector(s)};
+var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmtInt(n){return Number(n).toLocaleString('en-US')}
+function fmtVisits(n){
+  if(n==null) return null;
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e5) return Math.round(n/1e3)+'K';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return String(n);
+}
+function fmtScore(n){return Number(n).toFixed(1)}
+function ranks(s){return String(s).replace('-','–')}
+var MONTHS='January|February|March|April|May|June|July|August|September|October|November|December';
+function dashMonths(s){return String(s).replace(new RegExp('('+MONTHS+')-','g'),'$1–')}
+function shortName(n){
+  if(/American Samoa/.test(n)) return 'American Samoa';
+  return n.replace(/ National (Park and Preserve|and State Parks|Park)$/,'');
+}
+function slug(p){return 'p-'+shortName(p.name).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function statesOf(s){return String(s).replace(/\s*\([^)]*\)/g,'').split(/,\s*|\s+and\s+/).map(function(x){return x.trim()}).filter(Boolean)}
+
+var REGION = {
+  'Alaska':'Alaska',
+  'California':'Pacific','Oregon':'Pacific','Washington':'Pacific','Hawaii':'Pacific','American Samoa':'Pacific',
+  'Arizona':'Southwest','New Mexico':'Southwest','Utah':'Southwest','Nevada':'Southwest','Texas':'Southwest',
+  'Colorado':'Rockies','Wyoming':'Rockies','Montana':'Rockies','Idaho':'Rockies',
+  'South Dakota':'Midwest & Plains','North Dakota':'Midwest & Plains','Minnesota':'Midwest & Plains','Missouri':'Midwest & Plains','Indiana':'Midwest & Plains','Ohio':'Midwest & Plains','Michigan':'Midwest & Plains',
+  'Maine':'East & South','Virginia':'East & South','West Virginia':'East & South','Tennessee':'East & South','North Carolina':'East & South','South Carolina':'East & South','Florida':'East & South','Kentucky':'East & South','Arkansas':'East & South','U.S. Virgin Islands':'East & South'
+};
+var REGION_ORDER = ['Alaska','Pacific','Southwest','Rockies','Midwest & Plains','East & South'];
+
+P.forEach(function(p){
+  p.short = shortName(p.name);
+  p.id = slug(p);
+  p.stateList = statesOf(p.states);
+  p.regions = [];
+  p.stateList.forEach(function(s){var r=REGION[s]; if(r && p.regions.indexOf(r)<0) p.regions.push(r)});
+});
+var byRank = {}; P.forEach(function(p){byRank[p.rank]=p});
+var byName = {}; P.forEach(function(p){byName[p.name]=p});
+
+/* ---------- hero collar ---------- */
+(function(){
+  var top = P[0];
+  var rows = [
+    ['Parks ranked', '63'],
+    ['Tiers', 'S, A, B, C, D'],
+    ['Editor’s calls', String(M.overridesUsed)],
+    ['No. 1', esc(top.short)+' · '+fmtScore(top.score)],
+    ['By', '<a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a>']
+  ];
+  $('#collar').innerHTML = rows.map(function(r){return '<div><dt class="lbl">'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('');
+})();
+
+/* ---------- tier board ---------- */
+(function(){
+  var html = TIERS.map(function(t){
+    var parks = P.filter(function(p){return p.tier===t.tier});
+    var chips = parks.map(function(p){
+      return '<li><a class="chip" href="#'+p.id+'" data-jump="'+p.id+'"><span class="n">'+p.rank+'</span>'+esc(p.short)+'</a></li>';
+    }).join('');
+    return '<div class="trow" data-tier="'+t.tier+'">'+
+      '<div class="tblock wood"><span class="L routed" aria-hidden="true">'+t.tier+'</span><span class="r">Ranks '+ranks(t.ranks)+'</span></div>'+
+      '<div class="tbody"><p class="tmean"><b>'+t.tier+' tier, '+parks.length+' parks.</b> '+esc(t.meaning)+'</p><ul class="chips" aria-label="'+t.tier+' tier parks">'+chips+'</ul></div>'+
+    '</div>';
+  }).join('');
+  $('#board').innerHTML = html;
+})();
+
+/* ---------- awards ---------- */
+(function(){
+  var order = ['Most American','Best for little kids','Most overrated (with love)','Most underrated','Best crowd-to-wow'];
+  var aw = D.awards.slice().sort(function(a,b){
+    var ia=order.indexOf(a.award), ib=order.indexOf(b.award);
+    return (ia<0?99:ia)-(ib<0?99:ib);
+  });
+  $('#awards-grid').innerHTML = aw.map(function(a,i){
+    var p = byName[a.park];
+    var tier = p ? p.tier : '';
+    var id = p ? p.id : '';
+    var feature = i===0;
+    var ru = a.runnerUp ? '<p class="ru"><b>Runner-up:</b> '+esc(a.runnerUp)+'</p>' : '';
+    return '<article class="award'+(feature?' feature wood':'')+'" data-tier="'+tier+'">'+
+      '<span class="lbl aw">'+esc(a.award)+'</span>'+
+      '<h3'+(feature?' class="routed"':'')+'><a href="#'+id+'" data-jump="'+id+'">'+esc(p?p.short:a.park)+'</a></h3>'+
+      '<div class="ameta"><span class="tb" aria-label="'+tier+' tier">'+tier+'</span><span>Ranked No. '+a.rank+(p?' · '+esc(p.states):'')+'</span></div>'+
+      '<p>'+esc(a.reason)+'</p>'+(feature && p ? '<p class="afacts">Est. '+p.established+' · '+fmtInt(p.acres)+' acres'+(p.visits2024!=null?' · '+fmtVisits(p.visits2024)+' visits in 2024':'')+'</p>' : '')+ru+
+    '</article>';
+  }).join('');
+})();
+
+/* ---------- park cards ---------- */
+var KID_YES = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var KID_NO = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 5v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11" r=".9" fill="currentColor"/></svg>';
+var CRIT = [['scenery','Scenery'],['uniqueness','Uniqueness'],['crowdToWow','Crowd-to-wow'],['access','Access']];
+
+function cardHTML(p){
+  var v = fmtVisits(p.visits2024);
+  var visits = v ? '<dd title="'+fmtInt(p.visits2024)+' visits in 2024">'+v+'</dd>' : '<dd class="na">No 2024 figure</dd>';
+  var move = '';
+  if(p.override){
+    var up = p.override>0;
+    move = '<p class="p-move"><span class="mv '+(up?'up':'down')+'">'+(up?'▲':'▼')+Math.abs(p.override)+'</span> <b>Editor’s call.</b> The formula had it No. '+p.baseRank+'. '+esc(p.overrideReason)+'</p>';
+  }
+  var notes = [];
+  if(p.visitsNote) notes.push('<p><b>Visits:</b> '+esc(p.visitsNote)+'</p>');
+  if(p.dataFix) notes.push('<p><b>Acreage:</b> '+esc(p.dataFix)+'</p>');
+  var bars = CRIT.map(function(c){
+    var val = p.scores[c[0]];
+    return '<li><span class="bl">'+c[1]+'</span><span class="bar" style="--v:'+val+'" role="img" aria-label="'+c[1]+' '+val+' of 10"></span><span class="bv">'+val+'</span></li>';
+  }).join('');
+  var kid = p.kidFriendly ? '<span class="kid yes">'+KID_YES+'Kid-friendly</span>' : '<span class="kid no">'+KID_NO+'Harder with little kids</span>';
+  return '<div class="p-rank"><span class="rk" aria-label="Rank '+p.rank+'">'+p.rank+'</span><span class="tb" title="'+p.tier+' tier" aria-label="'+p.tier+' tier">'+p.tier+'</span></div>'+
+    '<div class="p-main">'+
+      '<h3 class="p-name">'+esc(p.name)+'</h3>'+
+      '<p class="p-where">'+esc(p.states)+'</p>'+
+      '<dl class="p-facts">'+
+        '<div class="f-est"><dt class="lbl">Established</dt><dd>'+p.established+'</dd></div>'+
+        '<div class="f-acres"><dt class="lbl">Acres</dt><dd>'+fmtInt(p.acres)+'</dd></div>'+
+        '<div class="f-visits"><dt class="lbl">2024 visits</dt>'+visits+'</div>'+
+      '</dl>'+
+      '<p class="p-sig"><span class="lbl">Signature</span>'+esc(p.signature)+'</p>'+
+      '<p class="p-take">'+esc(p.take)+'</p>'+
+      '<p class="p-best"><span class="lbl">Best months</span>'+esc(dashMonths(p.bestMonths))+'</p>'+
+      move+
+      (notes.length?'<details class="p-notes"><summary>Source notes</summary>'+notes.join('')+'</details>':'')+
+    '</div>'+
+    '<div class="p-score">'+
+      '<div class="p-top"><div class="p-total" aria-label="Score '+fmtScore(p.score)+' out of 100"><span class="v">'+fmtScore(p.score)+'</span><span class="of">/100</span></div>'+kid+'</div>'+
+      '<ul class="bars" aria-label="Input scores">'+bars+'</ul>'+
+    '</div>';
+}
+
+var cardEl = {};
+P.forEach(function(p){
+  var a = document.createElement('article');
+  a.className = 'park';
+  a.id = p.id;
+  a.tabIndex = -1;
+  a.setAttribute('data-tier', p.tier);
+  a.setAttribute('aria-label', 'No. '+p.rank+', '+p.name);
+  a.innerHTML = cardHTML(p);
+  cardEl[p.rank] = a;
+});
+var tierDiv = {};
+TIERS.forEach(function(t){
+  var d = document.createElement('div');
+  d.className = 'tdiv';
+  d.setAttribute('data-tier', t.tier);
+  d.innerHTML = '<span class="tb" aria-hidden="true">'+t.tier+'</span><h3>'+t.tier+' tier · ranks '+ranks(t.ranks)+'</h3><p>'+esc(t.meaning)+'</p>';
+  tierDiv[t.tier] = d;
+});
+
+/* ---------- filters ---------- */
+(function(){
+  var sel = $('#f-where');
+  var regionCount = {}, stateCount = {};
+  P.forEach(function(p){
+    p.regions.forEach(function(r){regionCount[r]=(regionCount[r]||0)+1});
+    p.stateList.forEach(function(s){stateCount[s]=(stateCount[s]||0)+1});
+  });
+  var h = '<option value="all">Everywhere (63)</option><optgroup label="Regions">';
+  REGION_ORDER.forEach(function(r){ if(regionCount[r]) h += '<option value="r:'+esc(r)+'">'+esc(r)+' ('+regionCount[r]+')</option>' });
+  h += '</optgroup><optgroup label="States and territories">';
+  Object.keys(stateCount).sort().forEach(function(s){ h += '<option value="s:'+esc(s)+'">'+esc(s)+' ('+stateCount[s]+')</option>' });
+  h += '</optgroup>';
+  sel.innerHTML = h;
+})();
+
+var state = {tier:'all', where:'all', kids:false, sort:'rank'};
+function matches(p){
+  if(state.tier!=='all' && p.tier!==state.tier) return false;
+  if(state.kids && !p.kidFriendly) return false;
+  if(state.where!=='all'){
+    var kind = state.where.slice(0,2), val = state.where.slice(2);
+    if(kind==='r:' && p.regions.indexOf(val)<0) return false;
+    if(kind==='s:' && p.stateList.indexOf(val)<0) return false;
+  }
+  return true;
+}
+var SORTS = {
+  rank: function(a,b){return a.rank-b.rank},
+  visits: function(a,b){
+    var av=a.visits2024, bv=b.visits2024;
+    if(av==null && bv==null) return a.rank-b.rank;
+    if(av==null) return 1; if(bv==null) return -1;
+    return bv-av || a.rank-b.rank;
+  },
+  size: function(a,b){return b.acres-a.acres || a.rank-b.rank},
+  oldest: function(a,b){return a.established-b.established || a.rank-b.rank}
+};
+var SORT_WORD = {rank:'by our rank', visits:'by 2024 visits (no-figure parks last)', size:'largest first', oldest:'oldest first'};
+
+function isFiltered(){return state.tier!=='all' || state.where!=='all' || state.kids}
+function apply(){
+  var items = P.filter(matches).sort(SORTS[state.sort]);
+  var list = $('#list');
+  list.setAttribute('data-sort', state.sort);
+  var frag = document.createDocumentFragment();
+  var last = null;
+  items.forEach(function(p){
+    if(state.sort==='rank' && p.tier!==last){ frag.appendChild(tierDiv[p.tier]); last = p.tier; }
+    frag.appendChild(cardEl[p.rank]);
+  });
+  if(!items.length){
+    var e = document.createElement('div');
+    e.className = 'empty';
+    e.innerHTML = '<p style="margin:0 0 10px">No parks match those filters.</p><button class="btn" type="button" data-clear>Clear filters</button>';
+    frag.appendChild(e);
+  }
+  list.replaceChildren(frag);
+  var n = items.length;
+  $('#count').innerHTML = (isFiltered() ? 'Showing <b>'+n+'</b> of 63 parks, ' : 'Showing <b>all 63</b> parks, ') + SORT_WORD[state.sort] + '.';
+  $('#clear').hidden = !isFiltered();
+  Array.prototype.forEach.call(document.querySelectorAll('#f-tier button'), function(b){
+    b.setAttribute('aria-pressed', String(b.getAttribute('data-v')===state.tier));
+  });
+}
+function clearFilters(){
+  state.tier='all'; state.where='all'; state.kids=false;
+  $('#f-where').value='all'; $('#f-kids').checked=false;
+  apply();
+}
+$('#f-tier').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  state.tier = b.getAttribute('data-v'); apply();
+});
+$('#f-where').addEventListener('change', function(e){ state.where = e.target.value; apply(); });
+$('#f-sort').addEventListener('change', function(e){ state.sort = e.target.value; apply(); });
+$('#f-kids').addEventListener('change', function(e){ state.kids = e.target.checked; apply(); });
+$('#clear').addEventListener('click', clearFilters);
+$('#list').addEventListener('click', function(e){ if(e.target.closest('[data-clear]')) clearFilters(); });
+
+/* jump from chips, awards, calls */
+function jumpTo(id){
+  var el = document.getElementById(id);
+  if(!el || !el.isConnected || !$('#list').contains(el)){ clearFilters(); el = document.getElementById(id); }
+  if(!el) return;
+  el.scrollIntoView({behavior: reduceMotion?'auto':'smooth', block:'start'});
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  try{ el.focus({preventScroll:true}); }catch(_){}
+}
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a[data-jump]'); if(!a) return;
+  e.preventDefault(); jumpTo(a.getAttribute('data-jump'));
+});
+
+apply();
+
+/* ---------- copy top 10 ---------- */
+(function(){
+  var lines = ['The 63: National Parks Power Rankings, top 10'];
+  P.slice(0,10).forEach(function(p){ lines.push(p.rank+'. '+p.short) });
+  lines.push('', 'All 63 ranked by @Muricaenjoyer');
+  var text = lines.join('\n');
+  var btn = $('#copy-top'), status = $('#copy-status'), ta = $('#copy-fallback');
+  function fallback(){
+    ta.value = text; ta.hidden = false; ta.focus(); ta.select();
+    var ok = false; try{ ok = document.execCommand('copy'); }catch(_){}
+    if(ok){ ta.hidden = true; status.textContent = 'Copied. Paste it into your post.'; }
+    else { status.textContent = 'Text selected. Press Ctrl+C or Cmd+C to copy.'; }
+  }
+  btn.addEventListener('click', function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        status.textContent = 'Copied. Paste it into your post.'; ta.hidden = true;
+      }, fallback);
+    } else { fallback(); }
+  });
+})();
+
+/* ---------- method ---------- */
+(function(){
+  var W = M.weights;
+  var defs = {
+    scenery:['Scenery','Does it stop you cold?'],
+    uniqueness:['Uniqueness','Could you see this anywhere else?'],
+    crowdToWow:['Crowd-to-wow','How much awe you get per elbow.'],
+    access:['Access','How easy it is to actually get there.']
+  };
+  $('#crit').innerHTML = Object.keys(defs).map(function(k){
+    return '<div><dt>'+defs[k][0]+'</dt><span class="w">'+Math.round(W[k]*100)+'%</span><dd>'+defs[k][1]+'</dd></div>';
+  }).join('');
+
+  var g = P[0], s = g.scores;
+  var parts = [W.scenery*s.scenery, W.uniqueness*s.uniqueness, W.crowdToWow*s.crowdToWow, W.access*s.access];
+  $('#worked').textContent =
+    g.short+': scenery '+s.scenery+', uniqueness '+s.uniqueness+',\ncrowd-to-wow '+s.crowdToWow+', access '+s.access+'\n\n'+
+    '10 × (0.40×'+s.scenery+' + 0.30×'+s.uniqueness+' + 0.15×'+s.crowdToWow+' + 0.15×'+s.access+')\n'+
+    '= 10 × ('+parts.map(function(x){return x.toFixed(2)}).join(' + ')+')\n'+
+    '= '+fmtScore(10*parts.reduce(function(a,b){return a+b},0))+' out of 100';
+
+  $('#m-prose').innerHTML =
+    '<p>'+esc(D.intro)+'</p>'+
+    '<h3>Why these weights</h3><p>'+esc(M.whyTheseWeights)+'</p>'+
+    '<h3>Breaking ties</h3><p>Equal scores are split in this order:</p>'+
+    '<ol>'+M.tieBreakers.map(function(t){return '<li>'+esc(t.charAt(0).toUpperCase()+t.slice(1).replace('crowdToWow','crowd-to-wow'))+'</li>'}).join('')+'</ol>';
+
+  $('#calls-intro').textContent = 'A park can move at most three spots from its formula rank, and every move comes with a reason. A moved park lands exactly where the editor puts it; everyone else keeps their order and fills the open slots. '+M.overridesUsed+' parks moved.';
+  $('#calls').innerHTML = P.filter(function(p){return p.override}).map(function(p){
+    var up = p.override>0;
+    return '<li><span class="mv '+(up?'up':'down')+'" aria-label="'+(up?'Up ':'Down ')+Math.abs(p.override)+'">'+(up?'▲':'▼')+Math.abs(p.override)+'</span>'+
+      '<span class="who"><a href="#'+p.id+'" data-jump="'+p.id+'">'+esc(p.short)+'</a><small>Formula No. '+p.baseRank+' → final No. '+p.rank+'</small></span>'+
+      '<span class="why">'+esc(p.overrideReason)+'</span></li>';
+  }).join('');
+
+  var notes = M.dataFixes.map(function(f){
+    return '<li><b>'+esc(shortName(f.park))+' acreage:</b> '+fmtInt(f.from)+' → '+fmtInt(f.to)+' acres. '+esc(f.why)+'</li>';
+  });
+  var vc = String(M.visitsCaveat).replace(/^visits2024 is null where/, 'A park shows "No 2024 figure" where').replace(/\s*\(see each park's visitsNote\)/, '; each park\u2019s source notes say which');
+  notes.push('<li><b>Visit counts:</b> '+esc(vc)+'</li>');
+  notes.push('<li><b>Checks:</b> '+esc(M.dataChecksPassed)+'</li>');
+  notes.push('<li><b>Scores:</b> '+esc(M.scoresSource)+'</li>');
+  $('#notes').innerHTML = notes.join('');
+})();
+
+/* ---------- reweight tool ---------- */
+(function(){
+  var KEYS = [['scenery','Scenery','w-scenery'],['uniqueness','Uniqueness','w-unique'],['crowdToWow','Crowd-to-wow','w-crowd'],['access','Access','w-access']];
+  var DEF = {scenery:40, uniqueness:30, crowdToWow:15, access:15};
+  $('#sliders').innerHTML = KEYS.map(function(k){
+    return '<div class="sl"><label for="'+k[2]+'"><span>'+k[1]+'</span><output id="'+k[2]+'-o" for="'+k[2]+'">'+DEF[k[0]]+'%</output></label>'+
+      '<input type="range" id="'+k[2]+'" min="0" max="100" step="5" value="'+DEF[k[0]]+'" data-k="'+k[0]+'"></div>';
+  }).join('');
+  function read(){
+    var w = {}; KEYS.forEach(function(k){ w[k[0]] = Number(document.getElementById(k[2]).value) }); return w;
+  }
+  function rank(w){
+    var tot = w.scenery+w.uniqueness+w.crowdToWow+w.access;
+    var eq = tot===0;
+    var rows = P.map(function(p){
+      var s = p.scores, sc;
+      if(eq) sc = 10*(s.scenery+s.uniqueness+s.crowdToWow+s.access)/4;
+      else sc = 10*(w.scenery*s.scenery + w.uniqueness*s.uniqueness + w.crowdToWow*s.crowdToWow + w.access*s.access)/tot;
+      return {p:p, sc:Math.round(sc*1000)/1000};
+    });
+    rows.sort(function(a,b){
+      return (b.sc-a.sc) || (b.p.scores.scenery-a.p.scores.scenery) || (b.p.scores.uniqueness-a.p.scores.uniqueness) || (b.p.scores.crowdToWow-a.p.scores.crowdToWow) || a.p.name.localeCompare(b.p.name);
+    });
+    rows.forEach(function(r,i){ r.pos = i+1 });
+    return {rows:rows, eq:eq, tot:tot};
+  }
+  function render(){
+    var w = read();
+    var res = rank(w);
+    KEYS.forEach(function(k){
+      var pct = res.eq ? 25 : Math.round(w[k[0]]/res.tot*100);
+      document.getElementById(k[2]+'-o').textContent = pct+'%';
+    });
+    $('#rw-top').innerHTML = res.rows.slice(0,10).map(function(r){
+      var d = r.p.rank - r.pos, vs;
+      if(d>0) vs = '<span class="mv up">▲'+d+'</span> vs. our No. '+r.p.rank;
+      else if(d<0) vs = '<span class="mv down">▼'+(-d)+'</span> vs. our No. '+r.p.rank;
+      else vs = 'Same as our list';
+      return '<li data-tier="'+r.p.tier+'"><span class="pos">'+r.pos+'</span><span class="nm"><a href="#'+r.p.id+'" data-jump="'+r.p.id+'" style="color:inherit;text-decoration:none">'+esc(r.p.short)+'</a></span><span class="sc">'+fmtScore(r.sc)+'</span><span class="vs">'+vs+'</span></li>';
+    }).join('');
+    var rise = null, drop = null;
+    res.rows.forEach(function(r){
+      var d = r.p.rank - r.pos;
+      if(d>0 && (!rise || d>rise.d)) rise = {r:r,d:d};
+      if(d<0 && (!drop || d<drop.d)) drop = {r:r,d:d};
+    });
+    var bits = [];
+    if(res.eq) bits.push('All weights are at zero, so every input counts equally.');
+    bits.push(rise ? 'Biggest climb vs. our list: <b>'+esc(rise.r.p.short)+'</b>, No. '+rise.r.p.rank+' → No. '+rise.r.pos+'.' : 'Nobody climbs vs. our list.');
+    bits.push(drop ? 'Biggest drop: <b>'+esc(drop.r.p.short)+'</b>, No. '+drop.r.p.rank+' → No. '+drop.r.pos+'.' : 'Nobody drops.');
+    $('#rw-note').innerHTML = bits.join(' ');
+  }
+  $('#sliders').addEventListener('input', render);
+  $('#rw-reset').addEventListener('click', function(){
+    KEYS.forEach(function(k){ document.getElementById(k[2]).value = DEF[k[0]] }); render();
+  });
+  render();
+})();
+
+/* ---------- wood grain ---------- */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+(function(){
+  try{
+    var W=1100,H=360,c=document.createElement('canvas');c.width=W;c.height=H;
+    var g=c.getContext('2d'); if(!g) return;
+    var r=rng(1872);
+    var knots=[[W*0.18,H*0.66,30],[W*0.74,H*0.28,22],[W*0.5,H*0.9,16]];
+    for(var i=0;i<150;i++){
+      var y0=r()*H*1.1-H*0.05, a=1+r()*3.5, f=0.003+r()*0.006, ph=r()*6.283;
+      g.beginPath();
+      for(var x=-10;x<=W+10;x+=5){
+        var y=y0+a*Math.sin(x*f+ph)+1.1*Math.sin(x*0.027+ph*2.3);
+        for(var k=0;k<knots.length;k++){
+          var kx=knots[k][0],ky=knots[k][1],kr=knots[k][2];
+          var dx=x-kx,dy=y-ky,d=Math.sqrt(dx*dx+dy*dy*2.4),R=kr*3.2;
+          if(d<R){var push=(R-d)/R;y+=(dy>=0?1:-1)*push*push*kr*1.05}
+        }
+        if(x===-10) g.moveTo(x,y); else g.lineTo(x,y);
+      }
+      var dark=r()<0.72;
+      g.strokeStyle=dark?'rgba(22,11,4,'+(0.10+r()*0.24).toFixed(3)+')':'rgba(255,214,160,'+(0.035+r()*0.07).toFixed(3)+')';
+      g.lineWidth=0.5+r()*1.9;
+      g.stroke();
+    }
+    knots.forEach(function(kn){
+      for(var j=6;j>=1;j--){
+        g.beginPath();
+        g.ellipse(kn[0],kn[1],kn[2]*0.22*j,kn[2]*0.11*j,0,0,Math.PI*2);
+        g.strokeStyle='rgba(22,11,4,'+(0.12+0.05*(6-j)).toFixed(3)+')';
+        g.lineWidth=1+(6-j)*0.25;
+        g.stroke();
+      }
+      g.beginPath();g.ellipse(kn[0],kn[1],kn[2]*0.2,kn[2]*0.1,0,0,Math.PI*2);g.fillStyle='rgba(22,11,4,0.45)';g.fill();
+    });
+    var url=c.toDataURL('image/webp',0.82);
+    if(url.indexOf('data:image')!==0) url=c.toDataURL();
+    document.documentElement.style.setProperty('--grain','url("'+url+'")');
+  }catch(_){}
+})();
+
+/* ---------- topo contours behind the hero ---------- */
+(function(){
+  var cv = $('#topo'); if(!cv || !cv.getContext) return;
+  var hero = cv.parentElement;
+  var HILLS=[[0.08,0.2,0.2,1.0],[0.93,0.12,0.24,0.95],[0.78,0.95,0.2,0.75],[0.26,1.02,0.22,0.7],[0.52,0.5,0.34,0.45],[0.99,0.62,0.12,-0.35],[0.02,0.78,0.13,0.55],[0.62,0.05,0.12,0.4]];
+  function field(u,v,ar){
+    var z=0;
+    for(var i=0;i<HILLS.length;i++){
+      var h=HILLS[i], du=(u-h[0])*ar, dv=v-h[1];
+      z+=h[3]*Math.exp(-(du*du+dv*dv)/(2*h[2]*h[2]));
+    }
+    return z+0.07*Math.sin(u*ar*7.3+v*3.1)+0.05*Math.sin(v*11.2-u*ar*4.7)+0.03*Math.sin((u*ar+v)*17);
+  }
+  function draw(){
+    var w=hero.clientWidth, h=hero.clientHeight; if(!w||!h) return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+    var ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+    var col=getComputedStyle(document.documentElement).getPropertyValue('--contour').trim()||'#A9733F';
+    var cell=8, nx=Math.ceil(w/cell)+1, ny=Math.ceil(h/cell)+1, ar=w/h;
+    var Z=new Float32Array(nx*ny), lo=Infinity, hi=-Infinity;
+    for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var z=field(i*cell/w,j*cell/h,ar);Z[j*nx+i]=z;if(z<lo)lo=z;if(z>hi)hi=z}
+    var step=(hi-lo)/26;
+    ctx.strokeStyle=col; ctx.lineJoin='round'; ctx.lineCap='round';
+    for(var L=1;L<26;L++){
+      var lv=lo+L*step, idx=(L%5===0);
+      ctx.globalAlpha=idx?0.5:0.3; ctx.lineWidth=idx?1.35:0.7;
+      ctx.beginPath();
+      for(var y=0;y<ny-1;y++)for(var x=0;x<nx-1;x++){
+        var a=Z[y*nx+x],b=Z[y*nx+x+1],c2=Z[(y+1)*nx+x+1],d=Z[(y+1)*nx+x];
+        var cs=(a>lv?8:0)|(b>lv?4:0)|(c2>lv?2:0)|(d>lv?1:0);
+        if(cs===0||cs===15) continue;
+        var X=x*cell,Y=y*cell;
+        var T=[X+cell*(lv-a)/(b-a),Y], Rr=[X+cell,Y+cell*(lv-b)/(c2-b)], B=[X+cell*(lv-d)/(c2-d),Y+cell], Lf=[X,Y+cell*(lv-a)/(d-a)];
+        var segs;
+        switch(cs){
+          case 1:case 14:segs=[[Lf,B]];break;
+          case 2:case 13:segs=[[B,Rr]];break;
+          case 3:case 12:segs=[[Lf,Rr]];break;
+          case 4:case 11:segs=[[T,Rr]];break;
+          case 5:segs=[[Lf,T],[B,Rr]];break;
+          case 6:case 9:segs=[[T,B]];break;
+          case 7:case 8:segs=[[Lf,T]];break;
+          case 10:segs=[[T,Rr],[Lf,B]];break;
+        }
+        for(var s=0;s<segs.length;s++){ctx.moveTo(segs[s][0][0],segs[s][0][1]);ctx.lineTo(segs[s][1][0],segs[s][1][1])}
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+  var pending=false;
+  function schedule(){ if(pending) return; pending=true; requestAnimationFrame(function(){pending=false;draw()}) }
+  draw();
+  if(window.ResizeObserver) new ResizeObserver(schedule).observe(hero); else window.addEventListener('resize',schedule);
+  try{ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',schedule) }catch(_){}
+  try{ new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']}) }catch(_){}
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+})();
+
+})();
+</script>

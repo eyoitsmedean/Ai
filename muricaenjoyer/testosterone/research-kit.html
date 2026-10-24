@@ -1,0 +1,515 @@
+<title>High-T Nation Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a field-dossier column (max 880px) under a sticky chip nav; flag stripe echoes the chart set. */
+:root {
+  --bg: #F3F4F7;
+  --surface: #FFFFFF;
+  --ink: #0E1626;
+  --muted: #566074;
+  --line: #D6DCE6;
+  --red: #BF2F27;
+  --blue: #1F4FB8;
+  --chip: #E7EBF2;
+  --code-bg: #0E1626;
+  --code-fg: #E6EBF3;
+  --flag-white: #FFFFFF;
+  --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1018; --surface: #131A26; --ink: #EEF1F6; --muted: #9CA6B8; --line: #263044;
+    --red: #F0574D; --blue: #7FA9FF; --chip: #1A2332; --code-bg: #070A10; --code-fg: #E6EBF3;
+    --flag-white: #EEF1F6; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1018; --surface: #131A26; --ink: #EEF1F6; --muted: #9CA6B8; --line: #263044;
+  --red: #F0574D; --blue: #7FA9FF; --chip: #1A2332; --code-bg: #070A10; --code-fg: #E6EBF3;
+  --flag-white: #EEF1F6; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16.5px; line-height: 1.6; }
+a { color: var(--blue); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: 20px; }
+.stripe { height: 8px; background: linear-gradient(90deg, var(--red) 0 33.3%, var(--flag-white) 33.3% 66.6%, var(--blue) 66.6%); }
+
+header.top { padding-block: 40px 28px; }
+.eyebrow { font-family: var(--display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; color: var(--muted); }
+h1 { font-family: var(--display); font-stretch: 72%; font-weight: 900; font-size: clamp(48px, 11vw, 96px); line-height: .9; margin: 10px 0 14px; text-transform: uppercase; text-wrap: balance; }
+h1 span { color: var(--red); }
+.dek { font-size: 19px; max-width: 62ch; margin: 0; }
+.meta { margin-top: 14px; color: var(--muted); font-size: 14px; }
+
+nav.chips { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.chips .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 10px; scrollbar-width: thin; }
+nav.chips a { flex: none; font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; text-decoration: none; color: var(--ink); background: var(--chip); padding: 6px 12px; border-radius: 999px; }
+nav.chips a:hover { background: var(--line); }
+
+section { padding-block: 44px 8px; scroll-margin-top: 60px; }
+h2 { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: clamp(30px, 6vw, 44px); line-height: 1; text-transform: uppercase; margin: 0 0 6px; text-wrap: balance; }
+h2 small { display: block; font-family: var(--body); font-stretch: 100%; font-weight: 400; text-transform: none; font-size: 16px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+h3 { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: 21px; margin: 28px 0 8px; text-wrap: balance; }
+p { max-width: 68ch; }
+
+.verdict { background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--red); padding: 20px 22px; margin-top: 18px; }
+.verdict p { margin: 0 0 10px; }
+.verdict p:last-child { margin-bottom: 0; }
+.reasons { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 16px; }
+.reason { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; min-width: 0; }
+.reason b { font-family: var(--display); font-stretch: 85%; font-size: 17px; display: block; margin-bottom: 4px; }
+.reason p { margin: 0; font-size: 15px; color: var(--muted); }
+
+.list-plain { padding-left: 1.2em; }
+.list-plain li { margin-bottom: 6px; max-width: 68ch; }
+
+.copyrow { display: grid; gap: 10px; margin-top: 12px; }
+.copyitem { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; }
+.copyitem .txt { flex: 1; min-width: 0; white-space: pre-wrap; }
+.copyitem .tag { font-family: var(--display); font-stretch: 80%; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--red); display: block; margin-bottom: 2px; }
+button.copy { flex: none; font: 600 13px var(--body); background: var(--ink); color: var(--bg); border: 0; padding: 7px 12px; cursor: pointer; border-radius: 4px; }
+button.copy.done { background: var(--blue); color: #fff; }
+
+ol.beats { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 12px; counter-reset: beat; }
+ol.beats > li { counter-increment: beat; background: var(--surface); border: 1px solid var(--line); padding: 16px 18px 14px 64px; position: relative; min-width: 0; }
+ol.beats > li::before { content: counter(beat); position: absolute; left: 16px; top: 12px; font-family: var(--display); font-stretch: 70%; font-weight: 900; font-size: 34px; line-height: 1; color: var(--red); }
+.beat-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline; }
+.beat-head b { font-family: var(--display); font-stretch: 85%; font-size: 19px; }
+.beat-head span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+ol.beats p { margin: 6px 0 0; font-size: 15.5px; }
+.slot { display: inline-block; font-size: 12.5px; font-weight: 600; background: var(--chip); padding: 2px 8px; margin: 8px 6px 0 0; border-radius: 3px; }
+
+.receipts { display: grid; gap: 14px; margin-top: 10px; }
+.rgroup { background: var(--surface); border: 1px solid var(--line); padding: 4px 18px 10px; min-width: 0; }
+.rgroup h3 { margin-top: 14px; }
+.rgroup ul { padding-left: 1.1em; margin: 6px 0 4px; }
+.rgroup li { margin-bottom: 8px; font-size: 15.5px; }
+.rgroup li b { font-variant-numeric: tabular-nums; }
+.flag { font-size: 12px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: .05em; }
+
+blockquote { margin: 14px 0; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--blue); }
+blockquote p { margin: 0 0 6px; font-size: 18px; font-style: italic; }
+blockquote cite { font-style: normal; font-size: 14px; color: var(--muted); }
+
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 14px; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); min-width: 0; }
+figure img { display: block; width: 100%; height: auto; max-width: 100%; }
+figcaption { padding: 10px 14px 12px; font-size: 14px; }
+figcaption b { display: block; font-family: var(--display); font-stretch: 85%; font-size: 16px; }
+.wide { grid-column: 1 / -1; }
+
+.tablewrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14.5px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--display); font-stretch: 85%; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); background: var(--chip); }
+tr:last-child td { border-bottom: 0; }
+
+.prompt { margin-top: 18px; border: 1px solid var(--line); background: var(--surface); }
+.prompt-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.prompt-head b { font-family: var(--display); font-stretch: 85%; font-size: 17px; }
+.prompt-head p { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+.prompt pre { margin: 0; background: var(--code-bg); color: var(--code-fg); font: 13.5px/1.55 var(--mono); padding: 16px; white-space: pre-wrap; word-wrap: break-word; max-height: 420px; overflow: auto; }
+
+.dont { display: grid; gap: 10px; margin-top: 12px; }
+.dont div { background: var(--surface); border: 1px solid var(--line); padding: 12px 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.dont .no { color: var(--red); }
+.dont .no::before { content: "Don't say: "; font-weight: 700; }
+.dont .yes::before { content: "Say: "; font-weight: 700; color: var(--blue); }
+@media (max-width: 600px) { .dont div { grid-template-columns: 1fr; gap: 6px; } }
+
+footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="stripe" aria-hidden="true"></div>
+<header class="top wrap">
+  <div class="eyebrow">Article kit · @Muricaenjoyer · researched Oct 8, 2026</div>
+  <h1>High-T <span>Nation</span></h1>
+  <p class="dek">The Pentagon tests it, apps sell it, the gym abuses it. This is the topic, the receipts, the visuals and the prompts for a long-form X Article on America's testosterone panic.</p>
+  <p class="meta">Built from web research across dozens of news, journal and government sources. X itself couldn't be opened from the research environment, so trend signals come from news and trend trackers.</p>
+</header>
+
+<nav class="chips" aria-label="Sections">
+  <div class="wrap">
+    <a href="#pick">The pick</a>
+    <a href="#headlines">Headlines</a>
+    <a href="#outline">Outline</a>
+    <a href="#receipts">Receipts</a>
+    <a href="#quotes">Quotes</a>
+    <a href="#visuals">Charts</a>
+    <a href="#photos">Photos</a>
+    <a href="#prompts">Prompts</a>
+    <a href="#launch">Launch</a>
+    <a href="#guardrails">Guardrails</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="pick">
+  <h2>The pick<small>America's testosterone panic, told through the week it peaked.</small></h2>
+  <div class="verdict">
+    <p><b>The story:</b> In twelve weeks the Pentagon started screening male troops for low T. Its own doctors then wrote that testosterone "is not a performance enhancer." Hegseth bragged about "testosterone testing on top" at Quantico. Joey Swoll landed in the hospital with his third heart scare since 2023. This week a clip of Hegseth lagging in a Marine workout went viral, and the internet named him "Low-T Pete."</p>
+    <p><b>The angle:</b> Pro-man, anti-grift. The decline in T is real but smaller than the hype. The Pentagon, the telehealth apps and the gym are each selling a version of "more T." The evidence says real testosterone comes mostly from sleep, losing fat and lifting. TRT is a legitimate medical treatment with real trade-offs, not a performance drug. Roast every side equally, and the piece gets shared by every side.</p>
+  </div>
+  <div class="reasons">
+    <div class="reason"><b>Three live hooks</b><p>Swoll's hospital post (Oct 5), the "Low-T Pete" clip (this week) and the State of the Force speech (Sept 30) are all still in people's feeds.</p></div>
+    <div class="reason"><b>It's about the reader</b><p>Every man who clicks is quietly wondering about his own number. A political story can't do that.</p></div>
+    <div class="reason"><b>Cross-tribal clicks</b><p>Hegseth fans, Hegseth haters, gym bros, Huberman listeners and doctors all have a stake, so quote-posts come from all sides.</p></div>
+    <div class="reason"><b>Built-in visuals</b><p>Charts, public-domain Pentagon photos and embeddable viral posts. Six chart images are already made below.</p></div>
+  </div>
+  <h3>Runners-up I considered</h3>
+  <ul class="list-plain">
+    <li><b>AutoWarCom: America's robot army.</b> Hegseth's proposed 12th combatant command for drones and AI, with Elon Musk co-directing a future-warfare study. Very "Murica," but less personal to the reader.</li>
+    <li><b>The Hormuz gas bill.</b> Gas averages $4.36 and diesel is near record highs four weeks before the midterms. Strong outrage potential, but it's crowded and it splits the audience.</li>
+  </ul>
+</section>
+
+<section id="headlines">
+  <h2>Headlines &amp; hook posts<small>The title shows on the article card. The hook post is the tweet that carries it into the feed.</small></h2>
+  <h3>Headline options</h3>
+  <div class="copyrow">
+    <div class="copyitem"><div class="txt"><span class="tag">Recommended</span>High-T Nation: The Pentagon, the Gym, and America's Testosterone Gold Rush</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">Meme ride</span>Everyone's Laughing at "Low-T Pete." The Joke Is on American Men.</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">The twist</span>The Pentagon's Own Doctors Say Testosterone Isn't a Performance Enhancer</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">Data</span>Young Men Have 25% Less Testosterone Than in 1999. Here's Who's Cashing In.</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">Utility</span>Before You Get on TRT, Read This</div><button class="copy" type="button">Copy</button></div>
+  </div>
+  <h3>Hook posts</h3>
+  <div class="copyrow">
+    <div class="copyitem"><div class="txt"><span class="tag">Data punch</span>Young American men have ~25% less testosterone than in 1999.
+
+The Pentagon now screens male troops over 30.
+Apps sell low-T treatment from $99 a month.
+Pro bodybuilders face 5x the sudden-cardiac-death risk of amateurs.
+
+I went through the studies. Here's what's actually going on with American T 👇</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">The twist</span>Everyone's laughing at "Low-T Pete."
+
+Meanwhile the Pentagon's own clinical guidance says testosterone "is not a performance enhancer," and almost nobody noticed.
+
+I read the guidance, the trials and the death data. Here's the truth about American testosterone.</div><button class="copy" type="button">Copy</button></div>
+    <div class="copyitem"><div class="txt"><span class="tag">Warning label</span>Before you buy TRT from an app, read this.
+
+65% of healthy men on weekly testosterone shots had zero sperm within 6 months.
+
+That's not in the ad.</div><button class="copy" type="button">Copy</button></div>
+  </div>
+</section>
+
+<section id="outline">
+  <h2>Outline<small>About 2,200 words, eight sections. Each slot names the image or embed that goes there.</small></h2>
+  <ol class="beats">
+    <li><div class="beat-head"><b>Cold open: the week America talked about testosterone</b><span>~180 words</span></div>
+      <p>Open on the Low-T Pete clip, then Swoll's hospital-bed post, then "patriotic cowboys are in with testosterone testing on top." End the open with the question every reader has: is my T low, and should I care?</p>
+      <span class="slot">Header image</span><span class="slot">Chart 5: timeline</span></li>
+    <li><div class="beat-head"><b>The decline is real (and smaller than you've heard)</b><span>~300 words</span></div>
+      <p>NHANES: young men's mean T fell from 605 to 451 ng/dL, with normal-weight men falling too. Add the Finnish and Boston data. Then debunk RFK Jr.'s "teens have less T than 68-year-olds." That debunk is what makes the rest of the piece credible.</p>
+      <span class="slot">Chart 1: decline</span></li>
+    <li><div class="beat-head"><b>The Pentagon goes "High-T"</b><span>~350 words</span></div>
+      <p>The July 15 video and memo covered about 2 million troops aged 30+, with no cost estimate. The guidance was posted Sept 2, pulled Sept 3 as "inadvertently" posted, and reissued for men only on Sept 17. The twist: it says testosterone "is not a performance enhancer." Add the doctors' pushback and the Endocrine Society's false-positive warning. Stay fair: screening symptomatic men is reasonable.</p>
+      <span class="slot">Embed @SecWar High-T post</span><span class="slot">DVIDS Quantico photo</span></li>
+    <li><div class="beat-head"><b>The gold rush</b><span>~300 words</span></div>
+      <p>Prescribing is back above its 2013 peak. Prescriptions went from 7.3M to more than 11M. Hims launched low-T treatment (enclomiphene) at $99 to $199 a month. 72% of T-influencer accounts had money ties, and 0 of 46 posts cited evidence. HHS wants looser labels, and the online-prescribing rule expires Dec 31.</p>
+      <span class="slot">Chart 2: comeback</span><span class="slot">Pexels telehealth photo</span></li>
+    <li><div class="beat-head"><b>What TRT does and doesn't do</b><span>~300 words</span></div>
+      <p>TRAVERSE showed no excess heart attacks, but more atrial fibrillation. The FDA added a blood-pressure warning. Fertility gets shut down, and blood thickens. The real definition of low T is under 300 ng/dL plus symptoms, confirmed by two morning tests. A "low" number alone isn't a diagnosis.</p>
+      <span class="slot">Chart 3: TRAVERSE</span><span class="slot">Chart 6: fertility</span></li>
+    <li><div class="beat-head"><b>The gym's open secret: "TRT" that's really a blast</b><span>~350 words</span></div>
+      <p>Separate a medical replacement dose from enhanced use. Cover the bodybuilder mortality study (mean age at death 45, 38% sudden cardiac death) and the Danish data (2.8x deaths). Swoll, handled with care: wish him well, use his own "never claimed to be natural" words, and note that no cause has been disclosed.</p>
+      <span class="slot">Chart 4: steroid tax</span><span class="slot">Embed Swoll's post</span></li>
+    <li><div class="beat-head"><b>How to actually raise your T</b><span>~250 words</span></div>
+      <p>One week of 5-hour sleep cut daytime T by 10 to 15%. Dieting raised T by about 83 ng/dL on average, and bariatric surgery by about 250. Lift heavy. Get tested properly in the morning. If you're truly low with symptoms, TRT with a real doctor is legitimate.</p>
+      <span class="slot">DVIDS fitness-test photo</span></li>
+    <li><div class="beat-head"><b>Close: real American T</b><span>~150 words</span></div>
+      <p>High T isn't a vial. It's eight hours of sleep, a waistline and a barbell. Call back to Low-T Pete as a joke, not a diagnosis, then ask readers to follow and repost.</p>
+      <span class="slot">Sources list</span></li>
+  </ol>
+</section>
+
+<section id="receipts">
+  <h2>Receipts<small>Every number to use, with a source. Items flagged "verify" came from secondary summaries; check them before publishing.</small></h2>
+  <div class="receipts">
+    <div class="rgroup">
+      <h3>Is T actually falling?</h3>
+      <ul>
+        <li>U.S. men aged 15–39: mean total T <b>605 → 451 ng/dL</b> (1999–2000 to 2015–16), about −25%. Normal-BMI men fell too: <b>665 → 529</b>. The low point was 2011–12 (425), with a slight rebound after; lab assays changed between survey cycles. <a href="https://pubmed.ncbi.nlm.nih.gov/32081788/">Lokeshwar, Eur Urol Focus 2021</a> · <a href="https://www.urologytimes.com/view/testosterone-levels-show-steady-decrease-among-young-us-men">Urology Times</a></li>
+        <li>Boston men 45–79: about <b>1.2%/yr</b> population decline independent of age (1987–2004). <a href="https://pubmed.ncbi.nlm.nih.gov/17062768/">Travison, JCEM 2007</a> · <a href="https://www.healio.com/news/endocrinology/20120325/generational-decline-in-testosterone-levels-observed">Healio</a></li>
+        <li>Finnish men aged 60–69: those born 1913–22 had <b>21.9 nmol/L</b>, those born 1942–51 had <b>13.8</b>. <a href="https://pubmed.ncbi.nlm.nih.gov/23161753/">Perheentupa, EJE 2013</a></li>
+        <li>RFK Jr. (Apr 2025): "A teenager today … has less testosterone than a 68-year-old man," and T has "dropped 50 percent." The best U.S. data show about 25%, not 50%. <a href="https://www.nbcnews.com/health/mens-health/rfk-jrs-warnings-sperm-counts-fuel-doomsday-claims-male-fertility-rcna216062">NBC News</a> · <a href="https://www.latintimes.com/fox-news-host-laughs-rfk-jrs-claim-that-teens-have-less-testosterone-elderly-men-wait-wait-581678">Latin Times</a></li>
+      </ul>
+    </div>
+    <div class="rgroup">
+      <h3>The Pentagon's "High-T" program</h3>
+      <ul>
+        <li><b>Jul 15:</b> @SecWar posts "The High-T Department of War." The memo makes screening mandatory at the annual health assessment for troops aged 30+, optional under 30. Treatment stays optional. <a href="https://x.com/SecWar/status/2077425458430230838">X post</a> · <a href="https://www.nbcnews.com/politics/trump-administration/pete-hegseth-says-military-will-test-service-members-testosterone-leve-rcna587682">NBC</a> · <a href="https://www.militarytimes.com/news/your-military/2026/07/15/forged-by-the-t-pentagon-launches-testosterone-screening-program-for-troops/">Military Times</a></li>
+        <li>About <b>2 million</b> troops are 30+. There is <b>no cost estimate</b> and no named funding source. <a href="https://www.eurasiareview.com/20092026-testosterone-screening-for-2m-troops-comes-with-no-cost-estimate/">Center Square via Eurasia Review</a></li>
+        <li><b>Sep 2–3:</b> clinical guidance (including women) posted, then "temporarily rescinded." Adviser Tim Parlatore said it was posted "inadvertently." <a href="https://abcnews.com/Politics/pentagon-temporarily-rescinds-new-testosterone-guidelines/story?id=136205208">ABC</a> · <a href="https://www.militarytimes.com/news/pentagon-congress/2026/09/03/pentagon-temporarily-rescinds-guidance-on-testosterone-screening-for-us-troops/">Military Times</a> · <a href="https://www.cnn.com/2026/09/04/politics/video/cnn-sitroom-tim-parlatore-pete-hegseth-special-adviser-testosterone-guidance-rescinded-defense-secretary">CNN</a></li>
+        <li><b>Sep 17:</b> reissued for <b>men only</b>. It starts with a symptom questionnaire, then labs. The cutoff is 300 ng/dL, with blood drawn 0700–1000. It says testosterone "is not a performance enhancer." <a href="https://dha.mil/Reference-Library/d/h/a/DHA-Memo-and-Clinical-Practice-Guideline-for-Testosterone-Deficiency-in-the-Male-Service-Member">DHA</a> · <a href="https://federalnewsnetwork.com/defense-main/2026/09/military-releases-new-details-on-testosterone-screening-for-men/">Federal News Network</a> · <a href="https://www.thecentersquare.com/national/article_faed70e1-760d-4c3f-816f-816ad7739fb5.html">Center Square</a></li>
+        <li>4 of 6 doctors consulted by Military Times saw no solid evidence that universal screening improves readiness. The Endocrine Society warned of "a high number of false positives." <a href="https://www.militarytimes.com/news/your-military/2026/07/19/doctors-question-evidence-behind-pentagons-testosterone-screening-plan/">Military Times</a></li>
+        <li><b>Sep 30:</b> State of the Force at Quantico. <a href="https://www.war.gov/News/Speeches/Speech/Article/4616486/secretary-of-war-pete-hegseths-state-of-the-force-address-as-delivered/">Official transcript</a> · <a href="https://www.npr.org/2026/09/30/nx-s1-5986304/hegseth-troops-address">NPR</a></li>
+        <li><b>This week:</b> clips of Hegseth trailing Marines in a Miramar workout go viral, and "Low-T Pete" spreads. It's an online taunt, not a diagnosis. <span class="flag">Verify exact date</span> <a href="https://www.thedailybeast.com/pentagon-pete-hegseth-photo-op-brutally-backfires-as-he-cant-keep-up">Daily Beast</a> · <a href="https://www.ibtimes.co.uk/pete-hegseth-mocked-california-workout-footage-1824526">IBTimes</a> · <a href="https://www.rawstory.com/hegseth-2678021703/">Raw Story</a></li>
+      </ul>
+    </div>
+    <div class="rgroup">
+      <h3>The gold rush</h3>
+      <ul>
+        <li>Share of U.S. men prescribed T: <b>0.83%</b> (2013 peak) → <b>0.64%</b> (2021) → <b>0.93%</b> (2025) → <b>0.95%</b> (H1 2026). By age in 2025: 18–29 at 0.14%, 30–39 at 0.57%, 50–64 at 1.57%. <a href="https://www.epicresearch.org/articles/after-nearly-a-decade-long-decrease-testosterone-prescribing-rates-rising-again/">Epic Research, Jul 2026</a></li>
+        <li>U.S. testosterone prescriptions went from <b>7.3M (2019)</b> to <b>more than 11M (2024)</b>. <a href="https://www.cnbc.com/2026/07/20/what-to-know-about-testosterone-replacement-therapy.html">IQVIA via CNBC</a></li>
+        <li>Prescribing among adults 18–34 <b>more than doubled</b> from 2018 to 2026. <span class="flag">Company blog</span> <a href="https://www.truveta.com/blog/research/testosterone-rise-adults/">Truveta</a></li>
+        <li>Hims &amp; Hers launched low-T care on Sep 10, 2025, with compounded enclomiphene (not testosterone) at <b>$99 to $199 a month</b>. <a href="https://www.bloomberg.com/news/articles/2025-09-10/hims-to-launch-new-offerings-for-men-with-low-testosterone">Bloomberg</a> · <a href="https://www.hims.com/testosterone">Hims</a></li>
+        <li>Of 46 high-reach Instagram and TikTok T posts, <b>72%</b> of the accounts had financial ties, <b>0</b> posts cited evidence and 31% of influencers claimed to be MDs. <a href="https://www.sydney.edu.au/news-opinion/news/2026/02/03/influencers-on-social-media-promote-low-testosterone-to-young-men-study-finds.html">U. Sydney, Soc Sci Med 2026</a></li>
+        <li>FDA (Feb 28, 2025) removed the heart-outcome language from the boxed warning and added a blood-pressure warning. <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-issues-class-wide-labeling-changes-testosterone-products">FDA</a></li>
+        <li>HHS (Jun 18, 2026) asked makers to drop the age-related low-T limitation from labels. This is a request, not yet final. <a href="https://www.hhs.gov/press-room/fda-requests-updates-testosterone-therapy-labeling.html">HHS</a></li>
+        <li>The DEA rule letting apps prescribe controlled drugs, including T, without an in-person visit runs <b>through Dec 31, 2026</b>. The final rule is under White House review. <a href="https://www.federalregister.gov/documents/2025/12/31/2025-24123/fourth-temporary-extension-of-covid-19-telemedicine-flexibilities-for-prescription-of-controlled">Federal Register</a> · <a href="https://telehealth.org/news/dea-telemedicine-special-registration-rule-enters-final-review/">telehealth.org</a></li>
+      </ul>
+    </div>
+    <div class="rgroup">
+      <h3>What TRT does to your body</h3>
+      <ul>
+        <li>TRAVERSE (5,246 men aged 45–80): heart attack, stroke or cardiac death was <b>7.0% vs 7.3%</b> on placebo. Atrial fibrillation was <b>3.5% vs 2.4%</b> and acute kidney injury 2.3% vs 1.5%. <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2215025">NEJM 2023</a></li>
+        <li>Low T means total T under <b>300 ng/dL</b> on <b>two early-morning tests</b>, <b>plus</b> symptoms. <a href="https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline">AUA guideline</a></li>
+        <li>About <b>5.6%</b> of men aged 30–79 have symptomatic deficiency, while about <b>29%</b> of U.S. men have a "low" lab number alone. <a href="https://pubmed.ncbi.nlm.nih.gov/17698901">Araujo, JCEM 2007</a> · <a href="https://medicalresearch.com/low-testosterone-may-affect-more-than-25-of-us-males/">NHANES analysis</a></li>
+        <li><b>65%</b> of 271 healthy men on weekly T injections had zero sperm within 6 months. <a href="https://pubmed.ncbi.nlm.nih.gov/1977002/">WHO, Lancet 1990</a> After stopping, <b>67 / 90 / 96 / 100%</b> recovered to 20M/mL at 6 / 12 / 16 / 24 months. <a href="https://sciencedaily.com/releases/2006/04/060428151836.htm">Liu, Lancet 2006</a></li>
+        <li>Guidelines say to stop or reduce T if hematocrit tops <b>54%</b>. <a href="https://www.cmaj.ca/content/189/41/e1286">CMAJ</a></li>
+      </ul>
+    </div>
+    <div class="rgroup">
+      <h3>The gym and the heart</h3>
+      <ul>
+        <li>20,286 male IFBB competitors: <b>121 deaths</b>, mean age at death <b>45</b>, and <b>38%</b> of deaths were sudden cardiac death. Pros had <b>5.2x</b> the sudden-cardiac-death risk of amateurs. <a href="https://www.escardio.org/news/press/press-releases/male-bodybuilders-face-high-risk-of-sudden-cardiac-death-especially-those-who-compete-professionally/">ESC / Eur Heart J 2025</a></li>
+        <li>Danish men caught using steroids: <b>2.8%</b> died vs <b>1.0%</b> of controls over about 11 years, a hazard ratio of 2.8. Heart attack risk was about 3x and heart failure about 3.6x. <a href="https://jamanetwork.com/journals/jama/article-abstract/2816584">JAMA 2024</a> · <a href="https://www.medscape.com/viewarticle/anabolic-steroids-triple-heart-attack-risk-danish-study-2025a10004jy">Circulation 2025 via Medscape</a></li>
+        <li>Joey Swoll was hospitalized for his heart on Sat, Oct 3, and posted on Oct 5. No cause has been disclosed. He had "genetic irregularities" found in 2023, and an angiogram complication in 2024 turned into a roughly 6-hour procedure. He has said he has "never claimed to be natural." <a href="https://x.com/TheJoeySwoll/status/2107281456355819943">His post</a> · <a href="https://generationiron.com/joey-swoll-hospital-heart-issue/">Generation Iron</a> · <a href="https://fitnessvolt.com/kenny-ko-confronts-joey-swoll/">Fitness Volt</a></li>
+        <li>Deaths with causes as reported: Shawn Rhoden, 46 (heart attack, 2021). Illia "Golem" Yefimchyk, 36 (reported heart attack, 2024). Gabriel Ganley, 22 (hypertrophic cardiomyopathy on the death certificate, toxicology pending, May 2026). Einar Méndez, 48 ("fulminant heart attack" per his wife, Sep 2026). Jo Lindner, 30, died of an <b>aneurysm</b>, not a confirmed cardiac death. <a href="https://www.tmz.com/2026/05/26/gabriel-ganley-potential-cause-of-death/">TMZ</a> · <a href="https://www.tmz.com/2026/09/09/einar-mendez-dead/">TMZ</a></li>
+      </ul>
+    </div>
+    <div class="rgroup">
+      <h3>What raises T for free</h3>
+      <ul>
+        <li>One week of under 5 hours' sleep a night lowered daytime T by <b>10–15%</b> in healthy men averaging 24 years old. <a href="https://www.sciencedaily.com/releases/2011/05/110531162142.htm">Leproult &amp; Van Cauter, JAMA 2011</a></li>
+        <li>Losing weight raised total T by about <b>2.9 nmol/L (~83 ng/dL)</b> on a low-calorie diet (about 10% weight loss), and about <b>8.7 nmol/L (~250 ng/dL)</b> after bariatric surgery. More weight lost meant a bigger rise. <a href="https://pubmed.ncbi.nlm.nih.gov/23482592/">Corona, EJE 2013 meta-analysis</a></li>
+        <li>On lifting, use general claims only and no numbers. I didn't verify an effect size, so don't cite one.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <h2>Quotes<small>Verbatim as reported by the linked outlet. Check the two flagged ones against the original.</small></h2>
+  <blockquote><p>"Not about artificial enhancement; it's about restoring and optimizing your natural capabilities, protecting your longevity, and ensuring you have the biological foundation required to sustain the fight."</p><cite>Pete Hegseth, Jul 15, 2026 · <a href="https://www.nbcnews.com/politics/trump-administration/pete-hegseth-says-military-will-test-service-members-testosterone-leve-rcna587682">NBC</a> (some outlets render the ending "sustain and fight")</cite></blockquote>
+  <blockquote><p>"The ideological clowns are out. The patriotic cowboys are in with testosterone testing on top."</p><cite>Pete Hegseth, State of the Force, Sep 30, 2026 · <a href="https://www.war.gov/News/Speeches/Speech/Article/4616486/secretary-of-war-pete-hegseths-state-of-the-force-address-as-delivered/">war.gov transcript</a></cite></blockquote>
+  <blockquote><p>Testosterone "is not a performance enhancer."</p><cite>Defense Health Agency clinical guidance, Sep 17, 2026 · <a href="https://www.thecentersquare.com/national/article_faed70e1-760d-4c3f-816f-816ad7739fb5.html">Center Square</a></cite></blockquote>
+  <blockquote><p>"It's ridiculous to screen a population for a questionable condition which has a treatment with unproven benefits and proven risk."</p><cite>Adriane Fugh-Berman, Georgetown · <a href="https://thehill.com/policy/defense/5976381-hegseth-military-testosterone-screening-questions/">The Hill</a></cite></blockquote>
+  <blockquote><p>"It's been a rough few days, I'm still here, but doing much better."</p><cite>Joey Swoll, Oct 5, 2026 · <a href="https://x.com/TheJoeySwoll/status/2107281456355819943">his post</a> <span class="flag">Verify: some outlets drop "much"</span></cite></blockquote>
+  <blockquote><p>"A teenager today, an American teenager, has less testosterone than a 68-year-old man."</p><cite>RFK Jr., Fox News, Apr 2025 · <a href="https://www.latintimes.com/fox-news-host-laughs-rfk-jrs-claim-that-teens-have-less-testosterone-elderly-men-wait-wait-581678">Latin Times</a> <span class="flag">Use only to debunk</span></cite></blockquote>
+</section>
+
+<section id="visuals">
+  <h2>Charts I made for you<small>Sized for X (1600×900 inline, 1500×600 header). Each carries its source and your handle, so screenshots credit you. The PNG files are attached in the chat.</small></h2>
+  <div class="gallery">
+    <figure class="wide"><img src="img/header-1500x600.png" alt="Header image reading HIGH-T NATION with an ECG line that turns into a rising trend line" width="1500" height="600"><figcaption><b>Header (5:2)</b>Upload as the article cover. It's self-made, so there are no rights issues.</figcaption></figure>
+    <figure><img src="img/chart-5-timeline.png" alt="Timeline from Jul 15 to Oct 7, 2026" width="1600" height="900" loading="lazy"><figcaption><b>Chart 5: The 12-week timeline</b>Goes in the cold open. Also good as reply #1 under the hook post.</figcaption></figure>
+    <figure><img src="img/chart-1-young-men-decline.png" alt="Bar chart: mean testosterone in U.S. men 15 to 39 fell from 605 to 451 ng/dL" width="1600" height="900" loading="lazy"><figcaption><b>Chart 1: ~25% decline</b>Section 2. The most shareable chart in the set.</figcaption></figure>
+    <figure><img src="img/chart-2-prescribing-comeback.png" alt="Bar chart: share of U.S. men prescribed testosterone, 0.83% in 2013 to 0.95% in 2026" width="1600" height="900" loading="lazy"><figcaption><b>Chart 2: The comeback</b>Section 4, the gold rush.</figcaption></figure>
+    <figure><img src="img/chart-3-traverse-heart.png" alt="Grouped bars: TRAVERSE trial outcomes, testosterone vs placebo" width="1600" height="900" loading="lazy"><figcaption><b>Chart 3: TRT and your heart</b>Section 5. Shows both sides fairly.</figcaption></figure>
+    <figure><img src="img/chart-6-fertility.png" alt="65% of men on weekly testosterone had zero sperm within six months; recovery bars after stopping" width="1600" height="900" loading="lazy"><figcaption><b>Chart 6: Fertility</b>Section 5. Use it as the "warning label" post too.</figcaption></figure>
+    <figure><img src="img/chart-4-steroid-tax.png" alt="Risk multipliers for steroid users and pro bodybuilders, 2.8x to 5.2x" width="1600" height="900" loading="lazy"><figcaption><b>Chart 4: The steroid tax</b>Section 6. Rows compare different groups, as labeled.</figcaption></figure>
+  </div>
+</section>
+
+<section id="photos">
+  <h2>Photos &amp; embeds<small>U.S. government photos are public domain (credit the photographer, and don't imply endorsement). For anyone else's photo, embed the post rather than screenshotting it.</small></h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Asset</th><th>Use it for</th><th>License / credit</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://x.com/SecWar/status/2077425458430230838">@SecWar "The High-T Department of War" video</a></td><td>Section 3 embed, news peg #1</td><td>Embed only</td></tr>
+        <tr><td><a href="https://x.com/TheJoeySwoll/status/2107281456355819943">@TheJoeySwoll hospital update</a></td><td>Section 6 embed</td><td>Embed only. Never screenshot his hospital photo</td></tr>
+        <tr><td><a href="https://www.dvidshub.net/image/9978955/secwar-delivers-remarks-marine-corps-base-quantico">DVIDS: Hegseth on stage, State of the Force</a></td><td>Section 3 photo</td><td>Public domain. "U.S. Navy photo by PO1 Eric Brann"</td></tr>
+        <tr><td><a href="https://www.dvidshub.net/image/9978956/secwar-delivers-remarks-marine-corps-base-quantico">DVIDS: Quantico audience, wide</a></td><td>Alternate header (crops to 5:2)</td><td>Public domain. PO1 Eric Brann</td></tr>
+        <tr><td><a href="https://www.war.gov/Multimedia/Videos/videoid/1025037/">war.gov: full State of the Force video</a></td><td>Clip the "testosterone testing on top" line and upload it natively</td><td>Public domain video</td></tr>
+        <tr><td><a href="https://www.war.gov/Multimedia/Photos/igphoto/2003647488/">war.gov: "Pushups in the Snow"</a></td><td>Hegseth PT photo for the Low-T Pete beat</td><td>Public domain. PO1 Alexander C. Kubitza, DOD</td></tr>
+        <tr><td><a href="https://www.dvidshub.net/image/9820641/usarpac-best-squad-competition-2026-army-fitness-test">DVIDS: Army Fitness Test sprint-drag-carry</a></td><td>Section 7, "earn it"</td><td>Public domain</td></tr>
+        <tr><td><a href="https://www.dvidshub.net/image/5023859/bamc-lab">DVIDS: Army lab blood draw</a></td><td>Section 3 or 5, testing</td><td>Public domain</td></tr>
+        <tr><td><a href="https://commons.wikimedia.org/wiki/File:Testosterone-from-xtal-3D-balls.png">Commons: testosterone molecule (3D)</a></td><td>Explainer graphic</td><td>Public domain (Ben Mills)</td></tr>
+        <tr><td><a href="https://commons.wikimedia.org/wiki/File:Depo-testosterone_200_mg_ml.jpg">Commons: testosterone cypionate vial</a></td><td>Section 4 or 5</td><td>Likely public domain (DEA image). Confirm on the file page</td></tr>
+        <tr><td><a href="https://unsplash.com/photos/a-black-and-white-photo-of-a-barbell-in-a-gym-wcOGQeT1jIw">Unsplash: B&amp;W barbell, no people</a></td><td>Section 6 (no faces near steroid talk)</td><td>Unsplash License</td></tr>
+        <tr><td><a href="https://www.pexels.com/photo/male-doctor-doing-an-online-consultation-8376152/">Pexels: online doctor consult</a></td><td>Section 4, telehealth</td><td>Pexels License</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>Still to find on X:</b> the most-viewed "Low-T Pete" workout clip. Search <code>Hegseth workout Marines</code> and sort by Top, then quote-post it. DVIDS may also have official stills: search "Hegseth Miramar" on dvidshub.net.</p>
+</section>
+
+<section id="prompts">
+  <h2>Prompts<small>Paste the master prompt into Claude or Grok first, then use the follow-ups in the same chat. The master prompt contains the full fact sheet, so the model can't wander.</small></h2>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>1. Master prompt: full draft</b><p>Writes the whole article in your voice, with image slots and sources.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>You are ghostwriting a long-form X Article for @Muricaenjoyer ("Murica Enjoyer"), an American account with a confident, funny, gym-literate, pro-America voice. The audience is American men 18-45 who lift, follow fitness and politics on X, and hate being sold to.
+
+TITLE: High-T Nation: The Pentagon, the Gym, and America's Testosterone Gold Rush
+
+THESIS: America is in a testosterone panic. The decline in men's T is real but smaller than the hype. The Pentagon, telehealth apps and gym culture are each selling a version of "more T." The evidence says real testosterone comes mostly from sleep, losing fat and lifting, and TRT is a legitimate medical treatment with real trade-offs, not a performance drug. Pro-man, anti-grift. This is NOT a partisan hit piece: roast everyone fairly (Pentagon theater, app marketing, gym "TRT" that's really a blast) and give credit where due (screening symptomatic men is reasonable; TRT changes lives for men who are truly deficient).
+
+VOICE: Short paragraphs (1-3 sentences). Punchy, plain American English. Dry humor, no cringe. Talk to the reader as "you." Confident but never sloppy with facts. No hashtags, no emojis in the body, no "in today's world," no "let's dive in," no "it's important to note." Every number gets a short inline source in parentheses, e.g. "(NHANES via European Urology Focus)."
+
+STRUCTURE (about 2,200 words; use these as H2 headers, rewrite them punchier if you like):
+1. Cold open: the week America talked about testosterone (~180 words). The "Low-T Pete" workout clip, Joey Swoll's hospital-bed post, Hegseth's "testosterone testing on top." End on the reader's real question: is my T low, and should I care? [IMAGE: timeline chart]
+2. The decline is real, and smaller than you've heard (~300). [IMAGE: decline chart]
+3. The Pentagon goes "High-T" (~350). [EMBED: @SecWar High-T post] [IMAGE: Quantico photo]
+4. The gold rush (~300). [IMAGE: prescribing comeback chart]
+5. What TRT does and doesn't do (~300). [IMAGE: TRAVERSE chart] [IMAGE: fertility chart]
+6. The gym's open secret: "TRT" that's really a blast (~350). [IMAGE: steroid tax chart] [EMBED: Joey Swoll's post]
+7. How to actually raise your T (~250).
+8. Close: real American T (~150). End with a one-line call to follow and repost.
+Then a "Sources" list with every source used.
+
+FACTS YOU MAY USE (use only these; never invent or round differently):
+- NHANES, U.S. men 15-39: mean total T 605 ng/dL (1999-2000) to 451 (2015-16), about -25%. Normal-BMI men also fell, 665 to 529. Low point 2011-12 (425), slight rebound after. Lab assays changed between cycles. (Lokeshwar et al., European Urology Focus 2021)
+- Boston men 45-79: about 1.2% per year population decline independent of age, 1987-2004. (Travison et al., JCEM 2007)
+- Finland, men 60-69: born 1913-22 had 21.9 nmol/L, born 1942-51 had 13.8. (Perheentupa et al., Eur J Endocrinology 2013)
+- RFK Jr., Fox News, April 2025: "A teenager today, an American teenager, has less testosterone than a 68-year-old man," and T has "dropped 50 percent." Treat as an exaggeration: the best U.S. data show about 25%, and young men's averages remain far above 300 ng/dL.
+- July 15, 2026: Hegseth's X video "The High-T Department of War." Memo: testosterone-deficiency screening is mandatory in the annual Periodic Health Assessment for active-duty and reserve troops 30+, optional under 30. Treatment is optional. Quote: "not about artificial enhancement; it's about restoring and optimizing your natural capabilities, protecting your longevity, and ensuring you have the biological foundation required to sustain the fight."
+- About 2 million troops are 30+. No cost estimate or funding source has been named. The number screened is "not currently known."
+- Sept 2, 2026: clinical guidance (including women) posted. Sept 3: "temporarily rescinded." Hegseth adviser Tim Parlatore said the draft was posted "inadvertently."
+- Sept 17, 2026: Defense Health Agency reissued guidance for men only: symptom questionnaire first, labs only if positive, 300 ng/dL cutoff, blood drawn 0700-1000. It states testosterone "is not a performance enhancer" and that evidence does not support using it to improve energy, vitality, physical function or cognition. Guidance for women is still under review.
+- The Endocrine Society said screening men over 30 "is likely to result in a high number of false positives." 4 of 6 doctors Military Times consulted saw no solid evidence that universal screening improves readiness. Georgetown's Adriane Fugh-Berman: "It's ridiculous to screen a population for a questionable condition which has a treatment with unproven benefits and proven risk."
+- Sept 30, 2026, State of the Force at Quantico: "The ideological clowns are out. The patriotic cowboys are in with testosterone testing on top." Opinion outlets reported the line met silence.
+- This week: clips of Hegseth trailing Marines during a workout at Miramar went viral, and critics dubbed him "Low-T Pete." Treat it as a joke, not a diagnosis.
+- Share of U.S. men with a testosterone prescription: 0.83% (2013 peak), 0.64% (2021 low), 0.93% (2025), 0.95% (Jan-Jun 2026). Every age group 30+ is above its early-2010s peak. 2025 by age: 18-29 at 0.14%, 30-39 at 0.57%, 50-64 at 1.57%. (Epic Research, July 2026, 109M men)
+- U.S. testosterone prescriptions: 7.3 million (2019) to more than 11 million (2024). (IQVIA via CNBC)
+- Hims & Hers launched low-T care Sept 2025 with compounded enclomiphene (not testosterone) at $99-$199 a month.
+- Study of 46 high-reach Instagram/TikTok testosterone posts: 72% of accounts had financial ties to products, 0 posts cited scientific evidence, 31% of individual influencers claimed to be MDs. (Social Science & Medicine 2026, Univ. of Sydney)
+- FDA, Feb 2025: removed the cardiovascular-outcomes language from testosterone's boxed warning after the TRAVERSE trial, and added a class-wide warning that testosterone raises blood pressure.
+- HHS, June 18, 2026: asked manufacturers to remove the label limitation on age-related low T (a request, not final).
+- The DEA rule letting telehealth prescribe controlled substances, including testosterone, without an in-person visit runs through Dec 31, 2026; a final rule is under White House review. Testosterone is still Schedule III.
+- TRAVERSE trial (NEJM 2023), 5,246 men aged 45-80 with low T and heart risk: heart attack, stroke or cardiac death 7.0% on T vs 7.3% placebo. Atrial fibrillation 3.5% vs 2.4%. Acute kidney injury 2.3% vs 1.5%.
+- AUA definition of low T: total T under 300 ng/dL on two separate early-morning tests, plus symptoms. About 5.6% of men 30-79 have symptomatic deficiency (Araujo, JCEM 2007), while about 29% of U.S. men have a "low" lab number alone.
+- WHO trial (Lancet 1990): 65% of 271 healthy men on 200 mg testosterone enanthate weekly had zero sperm within 6 months. After stopping, 67% / 90% / 96% / 100% recovered to 20 million/mL at 6 / 12 / 16 / 24 months (Liu et al., Lancet 2006).
+- Guidelines: stop or reduce T if hematocrit exceeds 54%.
+- Male IFBB bodybuilders (European Heart Journal 2025, 20,286 athletes): 121 deaths, mean age at death 45, 38% sudden cardiac death; pros had 5.2x the sudden-cardiac-death risk of amateurs. Autopsies often showed enlarged hearts.
+- Danish men sanctioned for steroid use (JAMA 2024): 2.8% died vs 1.0% of controls over ~11 years (hazard ratio 2.8). Same cohort (Circulation 2025): heart attack risk ~3x, heart failure ~3.6x.
+- Joey Swoll, a fitness creator in his 40s with millions of followers, was rushed to the hospital for his heart on Saturday, Oct 3, 2026, and posted Oct 5: "It's been a rough few days, I'm still here, but doing much better." No cause has been disclosed. In 2023 he revealed "genetic irregularities" with his heart; in 2024 a routine angiogram became a roughly 6-hour emergency procedure after a tool fragment broke off. He has said he has "never claimed to be natural."
+- Bodybuilding deaths (cause as reported): Shawn Rhoden, 46, heart attack (2021). Illia "Golem" Yefimchyk, 36, reported heart attack (2024). Gabriel Ganley, 22, hypertrophic cardiomyopathy on death certificate, toxicology pending (May 2026). Einar Méndez, 48, "fulminant heart attack" per his wife (Sept 2026).
+- Sleep: one week of under 5 hours a night cut daytime T 10-15% in healthy men averaging 24 (Leproult & Van Cauter, JAMA 2011).
+- Weight loss (Corona et al., Eur J Endocrinology 2013 meta-analysis): low-calorie diet (~10% weight loss) raised total T ~2.9 nmol/L (~83 ng/dL); bariatric surgery raised it ~8.7 nmol/L (~250 ng/dL); more weight lost, bigger rise.
+
+HARD RULES:
+- Never state or imply that Joey Swoll's heart problems were caused by steroids. Wish him well. You may say no cause has been disclosed, quote his "never claimed to be natural," and note the speculation in replies without endorsing it.
+- "Low-T Pete" is a meme, not a diagnosis. Don't claim to know anyone's hormone levels.
+- Do not quote Hegseth's "no fatties, no [slur]..." line.
+- Don't call Jo Lindner's death cardiac; it was an aneurysm. Leave him out unless needed.
+- Don't say the FDA "removed the boxed warning"; it removed the cardiovascular-outcomes language.
+- No medical advice beyond: get tested properly (two morning tests plus symptoms) and see a real doctor.
+- No numbers on resistance training's effect on T; describe it qualitatively.
+
+OUTPUT: Title, a one-sentence dek, then the article in Markdown with H2 headers and the [IMAGE]/[EMBED] placeholders where listed, then "Sources." After the article, list the three sentences you're least sure about and why.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>2. Section rewrite</b><p>Use when one section is flat. Swap in the section number.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Rewrite section [NUMBER] only. Keep every fact and source exactly as in the fact sheet. Make the first line a hook someone would screenshot. Cut 15% of the words. Add one line of dry humor that punches up, not down. End the section on a line that pulls the reader into the next one. Show me two versions.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>3. Cold open, 5 ways</b><p>The first 3 lines decide whether people expand the article.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Write 5 alternative cold opens (max 120 words each) for this article, each with a different entry point:
+1) the "Low-T Pete" clip, 2) Joey Swoll's hospital-bed post (respectful), 3) the Pentagon guidance that says T "is not a performance enhancer," 4) a $99/month app checkout screen, 5) a second-person scene: "You're 31, tired, and your feed is full of TRT ads."
+Each must end on the question: is my T actually low, and should I care? Rank them by likely click-through and explain the ranking in one line each.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>4. Hook posts and headlines</b><p>For the tweet that carries the article.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Write 10 posts (each under 280 characters, no hashtags, max one emoji) to share this X Article. Mix these formats: stat stack (3-4 stacked facts), contrarian twist, warning label, question to the reader, meme callback ("Low-T Pete"). Every number must come from the fact sheet. Then write 8 alternative article titles under 70 characters. Mark your top 2 posts and top 2 titles and say why in one line each.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>5. Community Notes stress test</b><p>Run before publishing. A Community Note kills reach.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Act as a hostile, meticulous fact-checker writing a Community Note against this article. Go sentence by sentence. Flag:
+(a) any number not exactly matching the fact sheet,
+(b) any claim stronger than its source (e.g. correlation stated as cause, "removed the boxed warning," "testosterone has halved"),
+(c) anything that implies a real person uses steroids or has low T,
+(d) missing context a note-writer would add (assay changes in NHANES, TRAVERSE being in men 45-80, the HHS label change being only a request).
+Output a table: quote, problem, fix. Then give the corrected full text.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>6. Reply arsenal</b><p>Pre-written answers for the first hour of comments.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Write short, confident, funny-but-civil replies (under 200 characters each, 2 per item) to these likely comments on the article:
+1. "You just hate Hegseth."
+2. "TRT changed my life, you're fearmongering."
+3. "NHANES changed lab assays, the decline is fake."
+4. "Joey Swoll is natty, delete this."
+5. "Just lift and sleep bro is cope, my levels were 250."
+6. "So the Pentagon shouldn't test anyone?"
+7. "Source??"
+8. "Microplastics/seed oils are the real cause."
+Use only the fact sheet. Where the commenter has a fair point, concede it first.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>7. Thread version</b><p>Repurpose for reach two days after the article posts.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Turn the article into a 10-post X thread. Post 1 is a standalone hook under 280 characters. Posts 2-9 each carry one surprising fact plus one line of take, and tell me which chart image to attach to which post (timeline, decline, comeback, TRAVERSE, fertility, steroid tax). Post 10 links back to the full article and asks for a follow. No hashtags.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><div><b>8. AI header art (optional)</b><p>If you want an alternate cover. Shows no real people, so there's no likeness risk.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>Cinematic wide 5:2 editorial still life: an amber glass medication vial and a capped syringe resting on a black iron barbell plate in a dark empty gym, a thin glowing red ECG line crossing the frame, dramatic rim lighting, muted olive-drab and charcoal palette, photorealistic, no people, no text, no logos, generous empty space on the left for a headline.</pre>
+  </div>
+</section>
+
+<section id="launch">
+  <h2>Launch plan<small>One post, then the phone goes down. Built around your own X rule.</small></h2>
+  <ol class="list-plain">
+    <li><b>Post within a few days</b>, while Swoll and "Low-T Pete" are still in people's feeds. Aim for 8–10am ET on a weekday.</li>
+    <li><b>Cover:</b> upload the header image. <b>Length:</b> keep it over 1,000 words; X has judged past cash prizes for Articles on that length plus verified impressions.</li>
+    <li><b>One hook post</b> with the article attached. Pin it to your profile.</li>
+    <li><b>Phone down.</b> The article does the work. If you want, take one look that evening and answer the best two comments. That's the launch.</li>
+    <li><b>Later, optional:</b> one chart per day as its own post linking back. Each one is one post, one sit.</li>
+    <li><b>Be classy about Swoll.</b> Don't tag him in a way that reads as a dunk. Wishing him well in the article helps the piece's credibility and protects you from a pile-on.</li>
+  </ol>
+</section>
+
+<section id="guardrails">
+  <h2>Guardrails<small>Each of these is a likely Community Note or a legal headache.</small></h2>
+  <div class="dont">
+    <div><span class="no">Joey Swoll's steroids gave him heart problems.</span><span class="yes">No cause has been disclosed. He's cited genetic heart irregularities before, and he's said he never claimed to be natural.</span></div>
+    <div><span class="no">Hegseth has low T.</span><span class="yes">The internet calls him "Low-T Pete." It's a joke, not a diagnosis.</span></div>
+    <div><span class="no">Testosterone has halved. Teens have less than grandpas.</span><span class="yes">Young men's average fell about 25% from 1999 to 2016, with assay caveats. Most are still well above 300.</span></div>
+    <div><span class="no">The FDA removed the black-box warning.</span><span class="yes">The FDA removed the heart-risk language from the boxed warning and added a blood-pressure warning.</span></div>
+    <div><span class="no">The Pentagon blood-tests every soldier over 30.</span><span class="yes">Men 30+ get screened. The current guidance starts with a symptom questionnaire, and labs follow if it's positive.</span></div>
+    <div><span class="no">Steroid users are 3x likelier to die.</span><span class="yes">2.8x in the Danish data (2.8% vs 1.0% over about 11 years).</span></div>
+    <div><span class="no">Jo Lindner died of a heart attack.</span><span class="yes">He died of an aneurysm. Leave him out of the cardiac list.</span></div>
+    <div><span class="no">Hegseth's full "no fatties, no …" line.</span><span class="yes">It contains a slur. Paraphrase or skip it.</span></div>
+  </div>
+</section>
+
+</main>
+<footer class="wrap">Research compiled Oct 8, 2026. Recheck anything time-sensitive (the DEA rule, Swoll's condition, the Pentagon guidance) on the day you publish. This is not medical advice.</footer>
+
+<script>
+document.querySelectorAll("button.copy").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var host = btn.closest(".copyitem") || btn.closest(".prompt");
+    var src = host.querySelector("pre") || host.querySelector(".txt");
+    var text = src.innerText;
+    var tag = src.querySelector && src.querySelector(".tag");
+    if (tag && text.indexOf(tag.innerText) === 0) text = text.slice(tag.innerText.length).replace(/^\s+/, "");
+    function ok() { btn.textContent = "Copied"; btn.classList.add("done"); setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1600); }
+    function fallback() {
+      var range = document.createRange(); range.selectNodeContents(src);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      btn.textContent = "Selected. Press Ctrl/Cmd+C";
+    }
+    try {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } catch (e) { fallback(); }
+  });
+});
+</script>

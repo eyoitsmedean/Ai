@@ -1,0 +1,624 @@
+{
+  "video": [
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "March 31, 1776",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "I desire you would Remember the Ladies…",
+      "date": "Mar 31, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241"
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "…we are determined to foment a Rebelion",
+      "date": "Mar 31, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241",
+      "tag": "Read"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "As to your extraordinary Code of Laws, I cannot but laugh.",
+      "date": "Apr 14, 1776",
+      "source": "John Adams to Abigail Adams, Philadelphia (reply to 'Remember the Ladies'), 14 April 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0248"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "July 4, 1776",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Thomas Jefferson named the conversation “The United States of America”",
+      "date": "Jul 4, 1776",
+      "source": "Interface gag for the Declaration of Independence, adopted by Congress 4 July 1776 (Jefferson drafted it)",
+      "url": "https://www.archives.gov/founding-docs/declaration-transcript"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "The benefits arising from moderate use of strong Liquor … are not to be disputed.",
+      "date": "Aug 16, 1777",
+      "source": "George Washington to John Hancock, Neshaminy Camp (proposing public distilleries), 16 August 1777",
+      "url": "https://founders.archives.gov/documents/Washington/03-10-02-0622"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "…a constant proof that God loves us, and loves to see us happy.",
+      "date": "1779",
+      "source": "Benjamin Franklin to the Abbé André Morellet (on wine), 1779",
+      "url": "https://barrypopik.com/blog/beer_is_proof_that_god_loves_us_and_wants_us_to_be_happy",
+      "tag": "on wine"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "He is vain, irritable … This is all the ill which can possibly be said of him.",
+      "date": "Jan 30, 1787",
+      "source": "Thomas Jefferson to James Madison, Paris (about John Adams), 30 January 1787",
+      "url": "https://founders.archives.gov/documents/Madison/01-09-02-0126",
+      "tag": "about John Adams"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "…feelings not unlike those of a culprit who is going to the place of his execution",
+      "date": "Apr 1, 1789",
+      "source": "George Washington to Henry Knox, Mount Vernon (before taking office as President), 1 April 1789",
+      "url": "https://founders.archives.gov/documents/Washington/05-02-02-0003",
+      "tag": "on becoming President"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "…in this world nothing can be said to be certain, except death and taxes.",
+      "date": "Nov 13, 1789",
+      "source": "Benjamin Franklin to Jean-Baptiste Le Roy, 13 November 1789",
+      "url": "https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo"
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "My real crime is an amorous connection with his wife…",
+      "date": "Aug 1797",
+      "source": "Observations on Certain Documents... (the 'Reynolds Pamphlet'), Philadelphia, p. 9, late August 1797",
+      "url": "https://en.wikipedia.org/wiki/Hamilton%E2%80%93Reynolds_affair"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "…I did consider his last appointments to office as personally unkind.",
+      "date": "Jun 13, 1804",
+      "source": "Thomas Jefferson to Abigail Adams, 13 June 1804",
+      "url": "https://founders.archives.gov/documents/Adams/04-15-02-0219",
+      "tag": "to Abigail, about John"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "The Declaration of Independence I always considered as a Theatrical Show. Jefferson ran away with … all the Glory of it.",
+      "date": "Jun 21, 1811",
+      "source": "John Adams to Benjamin Rush, 21 June 1811",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5649"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "I always loved Jefferson, and still love him.",
+      "date": "Summer 1811",
+      "source": "Remark made aloud to Edward and John Coles at Quincy; relayed in Jefferson to Rush (5 Dec 1811) and copied by Rush to Adams (16 Dec 1811), summer 1811",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5725",
+      "tag": "as reported"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "\"I always loved Jefferson, and still love him.\"—this is enough for me.",
+      "date": "Dec 5, 1811",
+      "source": "Thomas Jefferson to Benjamin Rush, 5 December 1811",
+      "url": "https://founders.archives.gov/documents/Jefferson/03-04-02-0248"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "You and I ought not to die, before We have explained ourselves to each other.",
+      "date": "Jul 15, 1813",
+      "source": "John Adams to Thomas Jefferson, 15 July 1813",
+      "url": "https://founders.archives.gov/documents/Adams/99-03-02-2334"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "Is it the Fourth?",
+      "date": "Jul 3, 1826 · night",
+      "source": "Deathbed account recorded by Dr. Robley Dunglison (variants by Nicholas Trist and Thomas Jefferson Randolph), night of 3 July 1826",
+      "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words",
+      "tag": "as recorded by his doctor"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "July 4, 1826 · 50 years to the day",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Thomas Jefferson left the chat",
+      "date": "Jul 4, 1826 · around noon",
+      "source": "Jefferson died at Monticello around noon, 4 July 1826",
+      "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words"
+    },
+    {
+      "type": "typing",
+      "speaker": "John Adams",
+      "text": "",
+      "date": "Jul 4, 1826",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "Thomas Jefferson survives.",
+      "date": "Jul 4, 1826",
+      "source": "Reported deathbed words at Quincy (family accounts and contemporary reports; discussed around John Quincy Adams's July 1826 diary), 4 July 1826",
+      "url": "https://www.historynewsnetwork.org/article/jefferson-still-survives",
+      "tag": "as reported"
+    },
+    {
+      "type": "system",
+      "speaker": "@Muricaenjoyer",
+      "text": "Every message is a real quote. Sources in the replies.",
+      "date": "",
+      "source": "",
+      "url": "",
+      "tag": "endcard"
+    }
+  ],
+  "web": [
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "March 31, 1776",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "I desire you would Remember the Ladies, and be more generous and favourable to them than your ancestors.",
+      "date": "Mar 31, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241"
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "Remember all Men would be tyrants if they could.",
+      "date": "Mar 31, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241"
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "If perticuliar care and attention is not paid to the Laidies we are determined to foment a Rebelion",
+      "date": "Mar 31, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241",
+      "tag": "Read"
+    },
+    {
+      "type": "typing",
+      "speaker": "John Adams",
+      "text": "",
+      "date": "Apr 14, 1776",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "As to your extraordinary Code of Laws, I cannot but laugh.",
+      "date": "Apr 14, 1776",
+      "source": "John Adams to Abigail Adams, Philadelphia (reply to 'Remember the Ladies'), 14 April 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0248"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "Depend upon it, We know better than to repeal our Masculine systems.",
+      "date": "Apr 14, 1776",
+      "source": "John Adams to Abigail Adams, Philadelphia, 14 April 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0248"
+    },
+    {
+      "type": "msg",
+      "speaker": "Abigail Adams",
+      "text": "for whilst you are proclaiming peace and good will to Men, Emancipating all Nations, you insist upon retaining an absolute power over Wives.",
+      "date": "May 7, 1776",
+      "source": "Abigail Adams to John Adams, Braintree, 7 May 1776",
+      "url": "https://founders.archives.gov/documents/Adams/04-01-02-0259"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "July 4, 1776",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Thomas Jefferson named the conversation “The United States of America”",
+      "date": "Jul 4, 1776",
+      "source": "Interface gag for the Declaration of Independence, adopted by Congress 4 July 1776 (Jefferson drafted it)",
+      "url": "https://www.archives.gov/founding-docs/declaration-transcript"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "The benefits arising from moderate use of strong Liquor, have been experienced in All Armies, and are not to be disputed.",
+      "date": "Aug 16, 1777",
+      "source": "George Washington to John Hancock, Neshaminy Camp (proposing public distilleries), 16 August 1777",
+      "url": "https://founders.archives.gov/documents/Washington/03-10-02-0622",
+      "tag": "proposing public distilleries"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "…a constant proof that God loves us, and loves to see us happy.",
+      "date": "1779",
+      "source": "Benjamin Franklin to the Abbé André Morellet (on wine), 1779",
+      "url": "https://barrypopik.com/blog/beer_is_proof_that_god_loves_us_and_wants_us_to_be_happy",
+      "tag": "on wine"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "It is universally well known, That in digesting our common Food, there is created or produced in the Bowels of human Creatures, a great Quantity of Wind.",
+      "date": "1780",
+      "source": "Benjamin Franklin, 'To the Royal Academy of Brussels' (satirical essay), after 19 May 1780 (often misdated 1781)",
+      "url": "https://founders.archives.gov/documents/Franklin/01-32-02-0281",
+      "tag": "to the Royal Academy of Brussels"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "I heard Bulletts whistle and believe me there was something charming in the sound.",
+      "date": "May 31, 1754",
+      "source": "George Washington to John Augustine Washington, Great Meadows camp, 31 May 1754",
+      "url": "https://encyclopediavirginia.org/primary-documents/letter-from-george-washington-to-john-augustine-washington-may-31-1754/",
+      "tag": "Forwarded · 1754"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "He is a Bird of bad moral Character.",
+      "date": "Jan 26, 1784",
+      "source": "Benjamin Franklin to Sarah Bache (on the Society of the Cincinnati and the bald eagle), 26 January 1784",
+      "url": "https://annotation.blogs.archives.gov/2020/11/25/talking-turkey",
+      "tag": "on the bald eagle"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "I am become a private citizen on the banks of the Potomac, & under the shadow of my own Vine & my own Fig-tree",
+      "date": "Feb 1, 1784",
+      "source": "George Washington to the Marquis de Lafayette, Mount Vernon, 1 February 1784",
+      "url": "https://founders.archives.gov/documents/Washington/04-01-02-0064",
+      "tag": "retiring after the war"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "Fish and Visitors stink in 3 days.",
+      "date": "1736",
+      "source": "Poor Richard, 1736 (Poor Richard's Almanack), 1735 (almanac for the year 1736)",
+      "url": "https://founders.archives.gov/documents/Franklin/01-02-02-0019",
+      "tag": "Forwarded · Poor Richard, 1736"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "He is vain, irritable and a bad calculator of the force and probable effect of the motives which govern men. This is all the ill which can possibly be said of him.",
+      "date": "Jan 30, 1787",
+      "source": "Thomas Jefferson to James Madison, Paris (about John Adams), 30 January 1787",
+      "url": "https://founders.archives.gov/documents/Madison/01-09-02-0126",
+      "tag": "about John Adams"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "Three may keep a Secret, if two of them are dead.",
+      "date": "1735",
+      "source": "Poor Richard, 1735 (Poor Richard's Almanack), July 1734 (almanac for the year 1735)",
+      "url": "https://founders.archives.gov/documents/Franklin/01-02-02-0001",
+      "tag": "Forwarded · Poor Richard, 1735"
+    },
+    {
+      "type": "msg",
+      "speaker": "James Madison",
+      "text": "If men were angels, no government would be necessary.",
+      "date": "Feb 6, 1788",
+      "source": "The Federalist No. 51 (Madison writing as Publius), 6 February 1788",
+      "url": "https://teachingamericanhistory.org/document/federalist-no-51/",
+      "tag": "as Publius"
+    },
+    {
+      "type": "msg",
+      "speaker": "James Madison",
+      "text": "Ambition must be made to counteract ambition.",
+      "date": "Feb 6, 1788",
+      "source": "The Federalist No. 51 (Madison writing as Publius), 6 February 1788",
+      "url": "https://billofrightsinstitute.org/founding-documents/primary-source-documents/the-federalist-papers/federalist-papers-no-51/",
+      "tag": "as Publius"
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "Ned, my Ambition is prevalent that I contemn the grov'ling and condition of a Clerk or the like, to which my Fortune &c. condemns me",
+      "date": "Nov 11, 1769",
+      "source": "Alexander Hamilton to Edward Stevens, St. Croix (Hamilton was in his early teens), 11 November 1769",
+      "url": "https://founders.archives.gov/documents/Hamilton/01-01-02-0002",
+      "tag": "Forwarded · 1769, age ~14"
+    },
+    {
+      "type": "msg",
+      "speaker": "George Washington",
+      "text": "my movements to the chair of Government will be accompanied with feelings not unlike those of a culprit who is going to the place of his execution",
+      "date": "Apr 1, 1789",
+      "source": "George Washington to Henry Knox, Mount Vernon (before taking office as President), 1 April 1789",
+      "url": "https://founders.archives.gov/documents/Washington/05-02-02-0003",
+      "tag": "on becoming President"
+    },
+    {
+      "type": "msg",
+      "speaker": "Benjamin Franklin",
+      "text": "Our new Constitution is now established, and has an appearance that promises permanency; but in this world nothing can be said to be certain, except death and taxes.",
+      "date": "Nov 13, 1789",
+      "source": "Benjamin Franklin to Jean-Baptiste Le Roy, 13 November 1789",
+      "url": "https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo"
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Benjamin Franklin left the chat",
+      "date": "Apr 17, 1790",
+      "source": "Franklin died in Philadelphia, 17 April 1790",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "In a word, if we have an embryo-Cæsar in the United States 'tis Burr.",
+      "date": "Sep 26, 1792",
+      "source": "Alexander Hamilton to an unidentified correspondent, 26 September 1792",
+      "url": "https://founders.archives.gov/documents/Hamilton/01-12-02-0334",
+      "tag": "about Aaron Burr"
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "My real crime is an amorous connection with his wife, for a considerable time with his privity and connivance",
+      "date": "Aug 1797",
+      "source": "Observations on Certain Documents... (the 'Reynolds Pamphlet'), Philadelphia, p. 9, late August 1797",
+      "url": "https://en.wikipedia.org/wiki/Hamilton%E2%80%93Reynolds_affair"
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "George Washington left the chat",
+      "date": "Dec 14, 1799",
+      "source": "Washington died at Mount Vernon, 14 December 1799",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "there are great and intrinsic defects in his character",
+      "date": "Oct 24, 1800",
+      "source": "Letter from Alexander Hamilton, Concerning the Public Conduct and Character of John Adams, Esq. President of the United States, [24 October 1800]",
+      "url": "https://founders.archives.gov/documents/Hamilton/01-25-02-0110-0002",
+      "tag": "about John Adams"
+    },
+    {
+      "type": "msg",
+      "speaker": "Alexander Hamilton",
+      "text": "the most unfit and most dangerous man of the Community",
+      "date": "Jan 4, 1801",
+      "source": "Alexander Hamilton to John Rutledge, Jr. (about Aaron Burr), 4 January 1801",
+      "url": "https://founders.archives.gov/documents/Hamilton/01-25-02-0156-0001",
+      "tag": "about Aaron Burr"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "I can say with truth that one act of Mr. Adams's life, and one only, ever gave me a moment's personal displeasure. I did consider his last appointments to office as personally unkind.",
+      "date": "Jun 13, 1804",
+      "source": "Thomas Jefferson to Abigail Adams, 13 June 1804",
+      "url": "https://founders.archives.gov/documents/Adams/04-15-02-0219",
+      "tag": "to Abigail, about John"
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Alexander Hamilton left the chat",
+      "date": "Jul 12, 1804",
+      "source": "Hamilton died 12 July 1804, the day after his duel with Aaron Burr",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "A DREAM AGAIN! … I have no other objection to your dream but that it is not history. It may be prophecy.",
+      "date": "Oct 1809",
+      "source": "John Adams to Benjamin Rush (reply to Rush's dream of an Adams-Jefferson reconciliation), October 1809 (likely 25 Oct 1809)",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5450",
+      "tag": "to Benjamin Rush, who dreamed they would reconcile"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "The Declaration of Independence I always considered as a Theatrical Show. Jefferson ran away with all the Stage Effect of that; i.e. all the Glory of it.",
+      "date": "Jun 21, 1811",
+      "source": "John Adams to Benjamin Rush, 21 June 1811",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5649"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "I always loved Jefferson, and still love him.",
+      "date": "Summer 1811",
+      "source": "Remark made aloud to Edward and John Coles at Quincy; relayed in Jefferson to Rush (5 Dec 1811) and copied by Rush to Adams (16 Dec 1811), summer 1811",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5725",
+      "tag": "as reported by Edward Coles"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "\"I always loved Jefferson, and still love him.\"—this is enough for me.",
+      "date": "Dec 5, 1811",
+      "source": "Thomas Jefferson to Benjamin Rush, 5 December 1811",
+      "url": "https://founders.archives.gov/documents/Jefferson/03-04-02-0248"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "January 1, 1812",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "I take the Liberty of sending you by the Post a Packett containing two Pieces of Homespun lately produced in this quarter",
+      "date": "Jan 1, 1812",
+      "source": "John Adams to Thomas Jefferson (first letter of the reconciliation), 1 January 1812",
+      "url": "https://founders.archives.gov/documents/Adams/99-02-02-5735",
+      "tag": "it was his son's 2-volume book"
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "I think little of them and say less. I have given up newspapers in exchange for Tacitus and Thucydides, for Newton and Euclid, and I find myself much the happier.",
+      "date": "Jan 21, 1812",
+      "source": "Thomas Jefferson to John Adams, 21 January 1812",
+      "url": "https://tjrs.monticello.org/node/280",
+      "tag": "on politics"
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "You and I ought not to die, before We have explained ourselves to each other.",
+      "date": "Jul 15, 1813",
+      "source": "John Adams to Thomas Jefferson, 15 July 1813",
+      "url": "https://founders.archives.gov/documents/Adams/99-03-02-2334"
+    },
+    {
+      "type": "typing",
+      "speaker": "Thomas Jefferson",
+      "text": "",
+      "date": "Jul 5, 1814",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "our machines have now been running for 70. or 80. years, and we must expect that, worn as they are, here a pivot, there a wheel, now a pinion, next a spring, will be giving way",
+      "date": "Jul 5, 1814",
+      "source": "Thomas Jefferson to John Adams, 5 July 1814",
+      "url": "https://tjrs.monticello.org/node/1591"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "July 3, 1826",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "Thomas Jefferson",
+      "text": "Is it the Fourth?",
+      "date": "Jul 3, 1826 · night",
+      "source": "Deathbed account recorded by Dr. Robley Dunglison (variants by Nicholas Trist and Thomas Jefferson Randolph), night of 3 July 1826",
+      "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words",
+      "tag": "as recorded by his doctor"
+    },
+    {
+      "type": "divider",
+      "speaker": "",
+      "text": "July 4, 1826 · 50 years to the day",
+      "date": "",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "Thomas Jefferson left the chat",
+      "date": "Jul 4, 1826 · around noon",
+      "source": "Jefferson died at Monticello around noon, 4 July 1826",
+      "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words"
+    },
+    {
+      "type": "typing",
+      "speaker": "John Adams",
+      "text": "",
+      "date": "Jul 4, 1826",
+      "source": "",
+      "url": ""
+    },
+    {
+      "type": "msg",
+      "speaker": "John Adams",
+      "text": "Thomas Jefferson survives.",
+      "date": "Jul 4, 1826",
+      "source": "Reported deathbed words at Quincy (family accounts and contemporary reports; discussed around John Quincy Adams's July 1826 diary), 4 July 1826",
+      "url": "https://www.historynewsnetwork.org/article/jefferson-still-survives",
+      "tag": "as reported"
+    },
+    {
+      "type": "system",
+      "speaker": "",
+      "text": "John Adams left the chat",
+      "date": "Jul 4, 1826 · evening",
+      "source": "Adams died at Quincy later the same day, 4 July 1826",
+      "url": "https://www.historynewsnetwork.org/article/jefferson-still-survives"
+    },
+    {
+      "type": "system",
+      "speaker": "@Muricaenjoyer",
+      "text": "Every message is a real quote. Sources in the replies.",
+      "date": "",
+      "source": "",
+      "url": "",
+      "tag": "endcard"
+    }
+  ]
+}

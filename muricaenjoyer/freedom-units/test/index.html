@@ -1,0 +1,1198 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Freedom Units</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centered game-show stage column. Dark marquee signs carry the big moments (title, live guess, final score); plain panels carry the reading. */
+:root{
+  --stage:#EDF0F7;
+  --spot:rgba(255,206,110,.30);
+  --panel:#FFFFFF;
+  --ink:#101A3A;
+  --ink-2:#4A5577;
+  --line:#D2D8E7;
+  --track:#D6DCEA;
+  --red:#B4232F;
+  --red-deep:#7C1520;
+  --red-ink:#FFFFFF;
+  --blue:#22398F;
+  --blue-ink:#FFFFFF;
+  --sign:#0B1433;
+  --sign-2:#18286A;
+  --sign-fg:#F6F3EA;
+  --sign-dim:#A8B3D6;
+  --bulb:#FFD37A;
+  --bulb-glow:rgba(255,196,84,.75);
+  --focus:#2F6BFF;
+  --shadow:rgba(10,18,48,.18);
+  --scrim:rgba(6,10,28,.55);
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --body:"Libre Franklin","Franklin Gothic Medium","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --thumb:30px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --stage:#070C22; --spot:rgba(95,128,240,.20); --panel:#0F1939; --ink:#EEF1FA; --ink-2:#A2ADCE;
+    --line:#243159; --track:#27345F; --red:#E0434E; --red-deep:#8E1E27; --red-ink:#FFFFFF;
+    --blue:#5D7EEE; --blue-ink:#FFFFFF; --sign:#0C1640; --sign-2:#1B2C78; --sign-fg:#F6F3EA; --sign-dim:#A8B3D6;
+    --bulb:#FFD37A; --bulb-glow:rgba(255,196,84,.75); --focus:#8FB0FF; --shadow:rgba(0,0,0,.45); --scrim:rgba(2,4,14,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --stage:#070C22; --spot:rgba(95,128,240,.20); --panel:#0F1939; --ink:#EEF1FA; --ink-2:#A2ADCE;
+  --line:#243159; --track:#27345F; --red:#E0434E; --red-deep:#8E1E27; --red-ink:#FFFFFF;
+  --blue:#5D7EEE; --blue-ink:#FFFFFF; --sign:#0C1640; --sign-2:#1B2C78; --sign-fg:#F6F3EA; --sign-dim:#A8B3D6;
+  --bulb:#FFD37A; --bulb-glow:rgba(255,196,84,.75); --focus:#8FB0FF; --shadow:rgba(0,0,0,.45); --scrim:rgba(2,4,14,.7);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background-color:var(--stage); color:var(--ink);
+  background-image:radial-gradient(90% 420px at 50% -60px,var(--spot),transparent 70%);
+  background-repeat:no-repeat;
+  font-family:var(--body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+h1,h2,h3,p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.app{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:0 40px}
+@media (min-width:700px){.app{padding-inline:24px}}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px 14px;flex-wrap:wrap;padding-block:14px 18px;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:linear-gradient(var(--red) 0 2px,transparent 2px 4px,var(--blue) 4px 6px)}
+.wordmark{font-family:var(--display);font-weight:900;font-size:26px;line-height:1;letter-spacing:.05em;text-transform:uppercase;min-width:0}
+.wordmark b{color:var(--red);font-weight:900}
+.top-right{display:flex;align-items:center;gap:12px;min-width:0}
+.handle{color:var(--ink-2);font-weight:600;font-size:14px;text-decoration:none}
+.handle:hover{color:var(--ink);text-decoration:underline}
+.ghost{font-weight:600;font-size:14px;background:transparent;border:1.5px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.ghost:hover{border-color:var(--ink-2)}
+@media (max-width:480px){.wordmark{font-size:22px}.top-right{gap:10px}.handle{font-size:13px}.top .ghost{padding:5px 12px}}
+
+main{padding-block:22px 0}
+.screen{display:grid;gap:18px}
+.screen > *{min-width:0}
+
+/* buttons */
+.btn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.07em;font-size:20px;line-height:1;
+  padding:13px 22px;border-radius:10px;border:2px solid var(--ink);background:var(--panel);color:var(--ink);cursor:pointer;min-height:50px;
+  touch-action:manipulation;transition:transform .08s ease,box-shadow .08s ease}
+.btn:hover{background:var(--stage)}
+.btn.primary{background:var(--red);border-color:var(--red);color:var(--red-ink);box-shadow:0 4px 0 var(--red-deep)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-deep)}
+.btn.big{font-size:28px;padding:16px 34px;min-height:62px}
+.btn.wide{width:100%}
+
+/* marquee sign */
+.sign{position:relative;isolation:isolate;border-radius:18px;text-align:center;color:var(--sign-fg);
+  background:radial-gradient(120% 100% at 50% 0%,var(--sign-2),var(--sign) 72%);
+  box-shadow:0 10px 30px var(--shadow)}
+.sign > *:not(.bulbs){position:relative;z-index:1}
+.bulbs{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bulbs i{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--bulb);
+  box-shadow:0 0 7px 1px var(--bulb-glow);animation:chase 1.4s linear infinite}
+.bulbs i.b1{animation-delay:-.7s}
+.sign.hot .bulbs i{animation-duration:.42s}
+.sign.hot .bulbs i.b1{animation-delay:-.21s}
+@keyframes chase{0%,49.9%{opacity:1}50%,100%{opacity:.28}}
+.eyebrow{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.2em;font-size:15px;color:var(--bulb)}
+
+/* start */
+.hero{padding:46px 28px 42px}
+.title{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:.015em;
+  font-size:clamp(72px,20vw,156px);margin:14px 0 18px;color:var(--sign-fg);text-shadow:.045em .045em 0 var(--red);text-wrap:balance}
+.tagline{font-weight:600;font-size:clamp(18px,4.6vw,22px);color:var(--sign-fg)}
+.lede{font-size:18px;line-height:1.55;max-width:60ch;text-wrap:pretty}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:s}
+@media (min-width:640px){.steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
+.steps li{counter-increment:s;display:grid;grid-template-columns:24px minmax(0,1fr);grid-template-rows:auto 1fr;gap:4px 12px;align-items:start;padding-top:12px;border-top:2px solid var(--ink)}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:900;font-size:34px;line-height:.9;color:var(--red);grid-row:span 2}
+.steps b{font-family:var(--display);font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
+.steps span{color:var(--ink-2);font-size:15px;line-height:1.45}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.cta-row .btn.big{flex:1 1 220px}
+.played{color:var(--ink-2);font-size:15px}
+.played b{color:var(--ink)}
+
+/* round */
+.status{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;align-items:baseline}
+.round-no{font-family:var(--display);font-weight:900;font-size:26px;text-transform:uppercase;letter-spacing:.04em;line-height:1}
+.round-no span{color:var(--ink-2);font-weight:800}
+.run{font-family:var(--display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.run b{color:var(--ink);font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.pips{grid-column:1/-1;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+.pips li{height:10px;border-radius:3px;background:var(--track)}
+.pips li.cur{background:var(--ink)}
+.pips li.hi{background:var(--red)}
+.pips li.mid{background:var(--blue)}
+.pips li.lo{background:transparent;box-shadow:inset 0 0 0 2px var(--ink-2)}
+.qcard{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:20px 22px}
+.prompt{font-size:clamp(18px,4.7vw,21px);line-height:1.45;font-weight:500;text-wrap:pretty}
+.board{padding:26px 22px 24px}
+.board-label{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.2em;font-size:14px;color:var(--sign-dim)}
+.readout{display:block;font-family:var(--display);font-weight:900;font-size:clamp(66px,19vw,124px);line-height:.95;margin:6px 0 8px;
+  color:var(--bulb);text-shadow:0 0 22px var(--bulb-glow);font-variant-numeric:tabular-nums;white-space:nowrap}
+.board-unit{font-weight:600;font-size:17px;line-height:1.35;color:var(--sign-fg);max-width:32ch;margin-inline:auto;text-wrap:balance}
+
+.slider-row{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:10px;align-items:start}
+.step{width:48px;height:48px;margin-top:-2px;border-radius:50%;font-family:var(--display);font-weight:900;font-size:28px;line-height:1;
+  border:2px solid var(--ink);background:var(--panel);color:var(--ink);cursor:pointer;touch-action:manipulation;display:grid;place-items:center;padding:0}
+.step:hover:not(:disabled){background:var(--stage)}
+.step:disabled{opacity:.35;cursor:default}
+.track-wrap{min-width:0;position:relative}
+.range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;margin:0;background:transparent;cursor:pointer;--p:.5}
+.range:focus{outline:none}
+.range::-webkit-slider-runnable-track{height:12px;border-radius:999px;
+  background:linear-gradient(to right,var(--blue) 0 calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--p)),var(--track) 0)}
+.range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:var(--thumb);height:var(--thumb);border-radius:50%;
+  background:var(--panel);border:5px solid var(--blue);margin-top:calc((12px - var(--thumb)) / 2);box-shadow:0 2px 6px var(--shadow)}
+.range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--stage),0 0 0 6px var(--focus)}
+.range::-moz-range-track{height:12px;border-radius:999px;background:var(--track)}
+.range::-moz-range-progress{height:12px;border-radius:999px;background:var(--blue)}
+.range::-moz-range-thumb{box-sizing:border-box;width:var(--thumb);height:var(--thumb);border-radius:50%;background:var(--panel);border:5px solid var(--blue);box-shadow:0 2px 6px var(--shadow)}
+.range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px var(--stage),0 0 0 6px var(--focus)}
+.range:disabled{cursor:default;opacity:1}
+.ruler{position:relative;height:36px;margin-inline:calc(var(--thumb) / 2)}
+.tk{position:absolute;top:0;width:1.5px;height:6px;margin-left:-.75px;background:var(--ink-2);opacity:.7}
+.tk.mid{height:9px}
+.tk.maj{height:12px;width:2px;margin-left:-1px;background:var(--ink);opacity:1}
+.lb{position:absolute;top:15px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink-2);white-space:nowrap;line-height:1.2}
+.truth-mk{position:absolute;top:-28px;width:3px;height:40px;margin-left:-1.5px;background:var(--red);border-radius:2px;z-index:2;pointer-events:none}
+.truth-mk b{position:absolute;top:40px;white-space:nowrap;background:var(--red);color:var(--red-ink);font-family:var(--mono);font-weight:600;font-size:12px;line-height:1;padding:4px 7px;border-radius:4px}
+.scale-note{text-align:center;font-size:13px;color:var(--ink-2)}
+
+.actions{display:grid;gap:10px}
+.hint{text-align:center;font-size:14px;color:var(--ink-2)}
+.hint-touch{display:none}
+@media (hover:none) and (pointer:coarse){.hint-keys{display:none}.hint-touch{display:inline}}
+kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 5px;background:var(--panel);color:var(--ink)}
+
+.reveal{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:20px 22px;display:grid;gap:16px}
+.verdict-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+.verdict{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(32px,8.5vw,46px);line-height:.95;letter-spacing:.01em;min-width:0}
+.verdict.hi{color:var(--red)}
+.pts{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:17px;color:var(--ink-2);white-space:nowrap}
+.pts b{font-size:44px;font-weight:900;color:var(--ink);letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.bars{display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:12px;align-items:center}
+.bar-label{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:15px}
+.bar{height:28px;min-width:0}
+.bar i{display:block;height:100%;width:1.2%;border-radius:3px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.you .bar i{background:var(--blue)}
+.truth .bar i{background:var(--red);transition-delay:.25s}
+.bar-val{font-family:var(--mono);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;text-align:right;min-width:0}
+.bar-unit{font-size:14px;color:var(--ink-2);margin-top:-4px}
+.math{font-family:var(--mono);font-size:14px;line-height:1.55;color:var(--ink);background:var(--stage);border-radius:8px;padding:10px 12px;overflow-wrap:anywhere}
+.math::before{content:"The math";display:block;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink-2);margin-bottom:2px}
+.reveal-text{font-size:19px;line-height:1.45;font-weight:600;text-wrap:pretty}
+.qsources{font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.qsources a{color:var(--ink-2)}
+.qsources a:hover{color:var(--ink)}
+
+/* final */
+.scoreboard{padding:40px 24px 38px}
+.fs-label{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.24em;font-size:18px;color:var(--sign-dim);margin-top:14px}
+.fs{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 .1em;font-family:var(--display);font-weight:900;line-height:.9;font-size:clamp(84px,24vw,190px);color:var(--bulb);text-shadow:0 0 30px var(--bulb-glow);font-variant-numeric:tabular-nums;margin:6px 0 18px}
+.fs-of{font-size:.28em;color:var(--sign-dim);text-shadow:none;letter-spacing:.02em}
+.rank{display:inline-block;background:var(--red);color:var(--red-ink);font-family:var(--display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(30px,8.6vw,48px);line-height:1;letter-spacing:.05em;padding:10px 20px 9px;border-radius:6px}
+.rank-line{margin-top:14px;font-weight:600;font-size:17px;color:var(--sign-fg);text-wrap:balance}
+.grid-wrap{display:grid;gap:12px;justify-items:center}
+.grid{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:420px}
+.grid li{aspect-ratio:1;max-width:100%;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:clamp(16px,4.6vw,22px);font-variant-numeric:tabular-nums}
+.grid li.hi{background:var(--red);color:var(--red-ink)}
+.grid li.mid{background:var(--blue);color:var(--blue-ink)}
+.grid li.lo{background:transparent;box-shadow:inset 0 0 0 3px var(--ink-2);color:var(--ink-2)}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:14px;color:var(--ink-2)}
+.legend li{display:flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;flex:none}
+.sw.hi{background:var(--red)} .sw.mid{background:var(--blue)} .sw.lo{box-shadow:inset 0 0 0 2px var(--ink-2)}
+.share{display:grid;gap:20px;align-items:start}
+@media (min-width:720px){.share{grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:28px}}
+.card-fig{margin:0;display:grid;gap:8px;justify-items:center}
+.card-fig img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:1080/1350;border-radius:12px;background:var(--sign);box-shadow:0 10px 30px var(--shadow)}
+.card-fig figcaption{font-size:14px;color:var(--ink-2);text-align:center}
+.share-actions{display:grid;gap:12px;align-content:start;min-width:0}
+.share-actions h2,.recap h2{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:28px;line-height:1}
+.share-actions p.sub{color:var(--ink-2);font-size:15px}
+.copy-status{min-height:1.5em;font-size:14px;font-weight:600;color:var(--ink)}
+.copy-text{margin:0;padding:12px 14px;border:1.5px dashed var(--line);border-radius:8px;background:var(--panel);font-family:var(--mono);font-size:15px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;user-select:all}
+.countdown{font-size:15px;color:var(--ink-2)}
+.countdown b{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.again{display:flex;flex-wrap:wrap;gap:10px}
+.again .btn{flex:1 1 180px;font-size:18px}
+.recap{display:grid;gap:10px}
+.recap ol{list-style:none;padding:0;margin:0}
+.rc{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.rc:last-child{border-bottom:1px solid var(--line)}
+.rc-t{font-weight:600;font-size:15px;line-height:1.35}
+.rc-n{font-family:var(--mono);font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.rc-pts{font-family:var(--display);font-weight:900;font-size:24px;font-variant-numeric:tabular-nums}
+
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2);max-width:65ch}
+.foot a{color:var(--ink-2)}
+
+/* sources drawer */
+dialog.drawer{margin:0 0 0 auto;height:100%;max-height:100%;width:min(480px,100%);max-width:100%;border:0;
+  padding:calc(18px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));
+  background:var(--panel);color:var(--ink);box-shadow:-20px 0 60px var(--shadow);overflow-y:auto}
+dialog.drawer[open]{animation:slidein .22s ease-out}
+dialog.drawer::backdrop{background:var(--scrim)}
+@keyframes slidein{from{transform:translateX(40px);opacity:.6}to{transform:none;opacity:1}}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.drawer-head h2{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:30px;line-height:1}
+.drawer-note{font-size:14px;color:var(--ink-2);margin:12px 0 6px}
+.src-list{margin:0;padding:0 0 0 1.6em;display:grid;gap:0}
+.src-list li{padding:12px 0;border-bottom:1px solid var(--line)}
+.src-list li::marker{font-family:var(--display);font-weight:800;color:var(--red)}
+.src-list h3{font-size:15px;font-weight:700;line-height:1.35;margin-bottom:4px}
+.src-list ul{margin:0;padding:0;list-style:none;display:grid;gap:3px}
+.src-list ul li{padding:0;border:0;font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.src-list a{color:var(--ink-2)}
+.src-list a:hover{color:var(--ink)}
+
+@media (prefers-reduced-motion: reduce){
+  .bulbs i,.sign.hot .bulbs i{animation:none;opacity:1}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <p class="wordmark">Freedom <b>Units</b></p>
+    <div class="top-right">
+      <button type="button" id="srcBtn" class="ghost" aria-haspopup="dialog">Sources</button>
+      <a class="handle" href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="scr-start" class="screen" aria-labelledby="gameTitle">
+      <div class="sign hero">
+        <div class="bulbs" aria-hidden="true"></div>
+        <p class="eyebrow" id="dailyLabel">Daily game</p>
+        <h1 class="title" id="gameTitle">Freedom Units</h1>
+        <p class="tagline">Measure America in America.</p>
+      </div>
+      <p class="lede">Ten questions. Every answer comes in American units: Washington Monuments, Liberty Bells, F-150s, gallons of milk. Same ten for everyone today.</p>
+      <ol class="steps">
+        <li><b>Read the setup</b><span>Real measurements from the people who keep them.</span></li>
+        <li><b>Slide to guess</b><span>The scale is logarithmic. 1 to 10 takes the same room as 10 to 100.</span></li>
+        <li><b>Lock it in</b><span>Within 5% scores 1,000. Ten times off scores zero.</span></li>
+      </ol>
+      <div class="cta-row">
+        <button type="button" id="playBtn" class="btn primary big">Play</button>
+        <button type="button" id="resultBtn" class="btn big" hidden>See today's result</button>
+      </div>
+      <p class="played" id="playedNote" hidden></p>
+    </section>
+
+    <section id="scr-round" class="screen" hidden aria-labelledby="roundNo">
+      <div class="status">
+        <h2 class="round-no" id="roundNo">Round 1 <span>of 10</span></h2>
+        <p class="run">Score <b id="runTotal">0</b></p>
+        <ol class="pips" id="pips" aria-hidden="true"></ol>
+      </div>
+      <article class="qcard">
+        <p class="prompt" id="prompt"></p>
+      </article>
+      <div class="sign board" id="board">
+        <div class="bulbs" aria-hidden="true"></div>
+        <p class="board-label">Your guess</p>
+        <output id="readout" class="readout" for="slider" aria-live="off">0</output>
+        <p class="board-unit" id="unit"></p>
+      </div>
+      <div class="dial">
+        <div class="slider-row">
+          <button type="button" id="minus" class="step" aria-label="Nudge guess down">&minus;</button>
+          <div class="track-wrap">
+            <input type="range" id="slider" class="range" min="0" max="1000" step="1" value="500" aria-label="Your guess, log scale">
+            <div class="ruler" id="ruler" aria-hidden="true"></div>
+          </div>
+          <button type="button" id="plus" class="step" aria-label="Nudge guess up">+</button>
+        </div>
+      </div>
+      <div class="actions" id="guessActions">
+        <button type="button" id="lockBtn" class="btn primary big wide">Lock it in</button>
+        <p class="hint"><span class="hint-keys"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> nudge &middot; <kbd>Shift</kbd> + arrow jumps &middot; <kbd>Enter</kbd> locks in</span><span class="hint-touch">Drag to guess. Tap &minus; or + to fine-tune.</span></p>
+      </div>
+      <div class="reveal" id="reveal" hidden aria-live="polite">
+        <div class="verdict-row">
+          <p class="verdict" id="verdict"></p>
+          <p class="pts">+<b id="roundPts">0</b> pts</p>
+        </div>
+        <div class="bars">
+          <div class="bar-row you"><span class="bar-label">You</span><div class="bar"><i id="barYou"></i></div><span class="bar-val" id="valYou"></span></div>
+          <div class="bar-row truth"><span class="bar-label">Actual</span><div class="bar"><i id="barTruth"></i></div><span class="bar-val" id="valTruth"></span></div>
+        </div>
+        <p class="bar-unit" id="barUnit"></p>
+        <p class="math" id="math"></p>
+        <p class="reveal-text" id="revealText"></p>
+        <p class="qsources" id="qSources"></p>
+        <button type="button" id="nextBtn" class="btn primary big wide">Next round</button>
+      </div>
+    </section>
+
+    <section id="scr-final" class="screen" hidden aria-labelledby="fsLabel">
+      <div class="sign scoreboard hot" id="scoreboard">
+        <div class="bulbs" aria-hidden="true"></div>
+        <p class="eyebrow" id="finalLabel">Daily game</p>
+        <h2 class="fs-label" id="fsLabel">Freedom Score</h2>
+        <p class="fs"><span id="fsNum">0</span><span class="fs-of">/10,000</span></p>
+        <p class="rank" id="rankTitle">Tourist</p>
+        <p class="rank-line" id="rankLine"></p>
+      </div>
+      <div class="grid-wrap">
+        <ol class="grid" id="grid" aria-label="Points by round"></ol>
+        <ul class="legend">
+          <li><span class="sw hi"></span>800 or more</li>
+          <li><span class="sw mid"></span>400 to 799</li>
+          <li><span class="sw lo"></span>Under 400</li>
+        </ul>
+      </div>
+      <div class="share">
+        <figure class="card-fig">
+          <img id="cardImg" width="1080" height="1350" alt="Freedom Units result card">
+          <figcaption>Screenshot or long-press the card to share it.</figcaption>
+        </figure>
+        <div class="share-actions">
+          <h2>Brag about it</h2>
+          <p class="sub">Copies your score and a block grid. No spoilers.</p>
+          <button type="button" id="copyBtn" class="btn primary">Copy result</button>
+          <p class="copy-status" id="copyStatus" role="status"></p>
+          <pre class="copy-text" id="copyText" hidden></pre>
+          <p class="countdown" id="countdownRow">Next daily game in <b id="countdown">--:--:--</b></p>
+          <div class="again">
+            <button type="button" id="replayBtn" class="btn">Replay today</button>
+            <button type="button" id="randomBtn" class="btn">Play a random 10</button>
+          </div>
+        </div>
+      </div>
+      <section class="recap" aria-labelledby="recapTitle">
+        <h2 id="recapTitle">Your rounds</h2>
+        <ol id="recap"></ol>
+      </section>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Freedom Units is a fan-made trivia game by <a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a>. Every figure comes from a public source listed under Sources. Not affiliated with any agency, landmark or brand.</p>
+  </footer>
+</div>
+
+<dialog id="srcDlg" class="drawer" aria-labelledby="srcTitle">
+  <div class="drawer-head">
+    <h2 id="srcTitle">Sources</h2>
+    <button type="button" id="srcClose" class="ghost">Close</button>
+  </div>
+  <p class="drawer-note">Every question in the pool and where its numbers come from. The math for each answer shows after you lock in.</p>
+  <ol class="src-list" id="srcList"></ol>
+</dialog>
+
+<script>
+(() => {
+'use strict';
+
+const POOL = [{"prompt":"How many Washington Monuments (555 ft 5 1/8 in tall, by the 1885 survey) stacked tip to base would reach from the Colorado River to the rim at the Grand Canyon's deepest point (6,000 vertical feet)?","unit":"Washington Monuments","answer":10.8,"sliderMin":0.5,"sliderMax":200,"math":"Washington Monument = 555 ft + 5.125 in = 555.43 ft. 6,000 ft / 555.43 ft = 10.80","reveal":"You'd need almost 11 obelisks stacked up just to peek over the rim.","sources":["https://nps.gov/grca/faqs.htm","https://www.ngs.noaa.gov/surveys/ngs/wm2013/explanation.shtml"]},{"prompt":"Lady Liberty's index finger is 8 ft long. How many of her index fingers stacked up would equal the copper statue itself, measured from heel to the top of the torch (151 ft 1 in)?","unit":"Statue of Liberty index fingers","answer":18.9,"sliderMin":1,"sliderMax":400,"math":"151 ft 1 in = 151.08 ft. 151.08 ft / 8 ft = 18.89","reveal":"She's only about 19 fingers tall. Her pointer alone is longer than most people are tall.","sources":["https://www.nps.gov/stli/historyculture/statue-statistics.htm","https://home.nps.gov/stli/learn/historyculture/statue-statistics.htm"]},{"prompt":"George Washington's nose on Mount Rushmore is 21 ft long. The Statue of Liberty's nose is 4 ft 6 in long. How many Lady Liberty noses would it take to match Washington's one nose?","unit":"Statue of Liberty noses","answer":4.67,"sliderMin":0.25,"sliderMax":100,"math":"21 ft / 4.5 ft = 4.67","reveal":"Washington wins the nose contest by more than four Liberty noses.","sources":["https://www.nps.gov/moru/learn/kidsyouth/how-big-are-the-heads.htm","https://www.nps.gov/stli/historyculture/statue-statistics.htm"]},{"prompt":"George Washington's carved head on Mount Rushmore is 60 ft tall. How many of those heads stacked chin to crown would match Hoover Dam's maximum height (726.4 ft, from the lowest foundation rock to the crest)?","unit":"Rushmore Washington heads","answer":12.1,"sliderMin":0.5,"sliderMax":250,"math":"726.4 ft / 60 ft = 12.11","reveal":"It would take a dozen giant Washingtons to see over the dam.","sources":["https://www.nps.gov/moru/learn/kidsyouth/how-big-are-the-heads.htm","https://npgallery.nps.gov/GetAsset/ac1d9578-a98b-4bd3-96b5-58f26f42e2a0"]},{"prompt":"The Gateway Arch's legs stand 630 ft apart at the base. How many Gateway Arches placed leg to leg would span the Golden Gate Bridge's main span (4,200 ft between the towers)?","unit":"Gateway Arches","answer":6.67,"sliderMin":0.3,"sliderMax":150,"math":"4,200 ft / 630 ft = 6.67","reveal":"About six and two-thirds steel rainbows would bridge the Golden Gate.","sources":["https://www.nps.gov/jeff/planyourvisit/arch-height.htm","https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats"]},{"prompt":"The Golden Gate Bridge's two main cables hold a combined 80,000 miles of galvanized steel wire. The Grand Canyon is 277 river miles long (Lees Ferry to the Grand Wash Cliffs). How many times could that wire run the full length of the canyon?","unit":"Grand Canyon lengths","answer":289,"sliderMin":10,"sliderMax":6000,"math":"80,000 mi / 277 mi = 288.8","reveal":"The bridge's wire could run the whole canyon nearly 290 times.","sources":["https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats","https://nps.gov/grca/faqs.htm"]},{"prompt":"The Golden Gate Bridge is 8,981 ft long from abutment to abutment, including the approaches. How many NFL football fields (360 ft each, end zones included) would fit end to end along it?","unit":"football fields","answer":24.9,"sliderMin":1,"sliderMax":500,"math":"NFL field = 120 yd = 360 ft. 8,981 ft / 360 ft = 24.95","reveal":"Almost exactly 25 fields. That's a long walk to the 50-yard line.","sources":["https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats","https://operations.nfl.com/the-rules/nfl-rulebook/"]},{"prompt":"The Liberty Bell is 46.5 inches across at its lip. How many Liberty Bells lined up rim to rim would stretch across Hoover Dam's crest (1,244 ft long)?","unit":"Liberty Bells","answer":321,"sliderMin":15,"sliderMax":6500,"math":"1,244 ft x 12 = 14,928 in. 14,928 in / 46.5 in = 321.0","reveal":"About 321 bells, which would total roughly 668,000 lb of cracked bronze on the dam.","sources":["https://www.nps.gov/articles/000/bell-and-clock-facts.htm","https://npgallery.nps.gov/GetAsset/ac1d9578-a98b-4bd3-96b5-58f26f42e2a0"]},{"prompt":"Each letter of the Hollywood Sign is 45 ft tall. How many letters stacked on top of each other would match the Space Needle's height (605 ft)?","unit":"Hollywood Sign letters","answer":13.4,"sliderMin":0.5,"sliderMax":300,"math":"605 ft / 45 ft = 13.44","reveal":"About 13 and a half letters, so you could stack all nine letters of H-O-L-L-Y-W-O-O-D and still be short.","sources":["https://spaceneedle.com/facts-1","https://abc7.com/archive/5981728","https://en.wikipedia.org/wiki/Hollywood_Sign"]},{"prompt":"The Space Needle's elevators climb at 800 ft per minute. At that speed, how many minutes would it take to rise from the Colorado River to the rim at the Grand Canyon's deepest point (6,000 vertical feet)?","unit":"minutes","answer":7.5,"sliderMin":0.3,"sliderMax":150,"math":"6,000 ft / 800 ft per min = 7.5 min","reveal":"7.5 minutes. Hikers usually take a full day to climb out.","sources":["https://spaceneedle.com/facts-1","https://nps.gov/grca/faqs.htm"]},{"prompt":"Hoover Dam holds 3.25 million cubic yards of concrete. If you poured all of it onto an NFL football field (360 ft x 160 ft, end zones included) as one straight-sided block, how many Washington Monuments (555 ft 5 1/8 in) tall would it be?","unit":"Washington Monuments","answer":2.74,"sliderMin":0.1,"sliderMax":60,"math":"3,250,000 yd3 x 27 = 87,750,000 ft3. Field = 360 x 160 = 57,600 ft2. 87,750,000 / 57,600 = 1,523.4 ft tall. 1,523.4 / 555.43 = 2.74","reveal":"A 1,523-ft concrete block, taller than the Empire State Building's 1,250-ft roof.","sources":["https://npgallery.nps.gov/GetAsset/ac1d9578-a98b-4bd3-96b5-58f26f42e2a0","https://operations.nfl.com/the-rules/nfl-rulebook/","https://www.ngs.noaa.gov/surveys/ngs/wm2013/explanation.shtml"]},{"prompt":"The Golden Gate Bridge's towers rise 746 ft above the water. How many Statues of Liberty, each measured from ground level at the pedestal's foundation to the tip of the torch (305 ft 1 in), would it take to match one tower?","unit":"Statues of Liberty","answer":2.45,"sliderMin":0.1,"sliderMax":50,"math":"305 ft 1 in = 305.08 ft. 746 ft / 305.08 ft = 2.45","reveal":"Each tower is about two and a half Lady Liberties tall, pedestals included.","sources":["https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats","https://www.nps.gov/stli/historyculture/statue-statistics.htm"]},{"prompt":"The Liberty Bell measures 3 ft from lip to crown. How many Liberty Bells stacked up would reach the Empire State Building's roof (1,250 ft)?","unit":"Liberty Bells","answer":417,"sliderMin":20,"sliderMax":8500,"math":"1,250 ft / 3 ft = 416.7","reveal":"About 417 bells, weighing roughly 867,000 lb at 2,080 lb each.","sources":["https://ushistory.org/libertybell/facts.html","https://www.nsf.gov/news/special_reports/liberty/01_history_04.jsp","https://www.nps.gov/articles/000/bell-and-clock-facts.htm"]},{"prompt":"George Washington's nose on Mount Rushmore is 21 ft long. How many of those noses stacked up would match the Gateway Arch's height (630 ft)?","unit":"Rushmore Washington noses","answer":30,"sliderMin":1.5,"sliderMax":600,"math":"630 ft / 21 ft = 30","reveal":"Exactly 30 presidential noses tall.","sources":["https://www.nps.gov/moru/learn/kidsyouth/how-big-are-the-heads.htm","https://www.nps.gov/jeff/planyourvisit/arch-height.htm"]},{"prompt":"The Wright brothers' first powered flight on Dec. 17, 1903 covered 120 feet. How many 2023 Ford F-150 SuperCrew pickups with the 5.5-ft box (231.7 inches long each), parked bumper to bumper, would match that distance?","unit":"F-150 SuperCrews","answer":6.2,"sliderMin":0.3,"sliderMax":125,"math":"120 ft x 12 = 1,440 in; 1,440 in / 231.7 in per F-150 = 6.21","reveal":"Orville's 12-second hop was shorter than six pickups parked in a row, and shorter than a Boeing 747's wingspan.","sources":["National Park Service, Wright Brothers National Memorial: The First Flight (120 ft in 12 seconds), nps.gov/wrbr","https://www.autopadre.com/headroom/ford-f-150/2023-xlt-supercrew-5-5-box-51309"]},{"prompt":"Central Park covers 843 acres. An NFL field including both end zones is 120 yards by 53 1/3 yards (360 ft x 160 ft = 57,600 sq ft). How many full football fields, end zones included, would fit in Central Park's area?","unit":"football fields (120 yd incl. end zones)","answer":637.5,"sliderMin":30,"sliderMax":13000,"math":"843 acres x 43,560 sq ft/acre = 36,721,080 sq ft; 36,721,080 / 57,600 sq ft per field = 637.5","reveal":"Manhattan's backyard could host about 640 NFL games at once, end zones and all.","sources":["Central Park Conservancy: Central Park is 843 acres, centralparknyc.org","NFL Rulebook, Rule 1: field is 360 ft x 160 ft including end zones"]},{"prompt":"The General Sherman Tree in Sequoia National Park has a trunk volume of 52,508 cubic feet, per the NPS. How many US gallon jugs of milk (1 gallon = 231 cubic inches; 1 cubic foot = 7.48052 gallons) would it take to fill that volume?","unit":"gallons of milk","answer":392787,"sliderMin":19000,"sliderMax":8000000,"math":"52,508 cu ft x 7.48052 gal/cu ft = 392,787 gallons","reveal":"Fill the world's largest tree by volume with milk and you'd empty nearly 400,000 fridge jugs.","sources":["NPS Sequoia & Kings Canyon National Parks: The General Sherman Tree, trunk volume 52,508 cubic feet, nps.gov/seki","NIST Handbook 44: US gallon = 231 cubic inches"]},{"prompt":"The galvanized steel wire inside the Golden Gate Bridge's two main cables totals 80,000 miles, per the bridge district. Historic Route 66 ran 2,448 miles from Chicago to Santa Monica. How many complete Route 66 trips is that wire?","unit":"Route 66s","answer":32.7,"sliderMin":1.5,"sliderMax":650,"math":"80,000 mi / 2,448 mi per Route 66 = 32.68","reveal":"Unspooled, the bridge's cable wire could drive the Mother Road end to end about 33 times.","sources":["https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats","https://route66roadtrip.com/route-66-facts-faqs.htm"]},{"prompt":"FHWA puts the Interstate Highway System at 48,830 miles (excluding Puerto Rico). The Mississippi River is 2,350 miles from Lake Itasca to the Gulf, the figure NPS's Mississippi National River and Recreation Area uses. How many Mississippi Rivers long is the Interstate System?","unit":"Mississippi Rivers","answer":20.8,"sliderMin":1,"sliderMax":420,"math":"48,830 mi / 2,350 mi = 20.78","reveal":"To drive every Interstate mile, you'd cover the Mississippi's full length nearly 21 times.","sources":["https://www.fhwa.dot.gov/policyinformation/pubs/our_nations_highways_2026/roads.cfm","https://www.nps.gov/miss/riverfacts.htm"]},{"prompt":"The Mississippi River is 2,350 miles long from Lake Itasca to the Gulf of Mexico (NPS Mississippi National River and Recreation Area figure). How many football fields, measured 100 yards goal line to goal line, would it take to cover that length?","unit":"football fields (100 yd)","answer":41360,"sliderMin":2000,"sliderMax":830000,"math":"2,350 mi x 1,760 yd/mi = 4,136,000 yd; 4,136,000 / 100 yd = 41,360","reveal":"Water leaving Lake Itasca takes about three months (per NPS) to cross all 41,000-plus of those fields to the Gulf.","sources":["https://www.nps.gov/miss/riverfacts.htm"]},{"prompt":"The National Hot Dog and Sausage Council estimates Americans eat 150 million hot dogs on the Fourth of July. Assume each is a standard 6-inch frank. Laid end to end, how many times would they run historic Route 66 (2,448 miles, Chicago to Santa Monica)?","unit":"Route 66s","answer":5.8,"sliderMin":0.3,"sliderMax":116,"math":"150,000,000 x 6 in = 900,000,000 in; / 63,360 in/mi = 14,204.5 mi; / 2,448 mi = 5.80","reveal":"The NHDSC's own version: enough franks to stretch from D.C. to L.A. more than five times.","sources":["https://www.foodmarket.com/News/A/1202596/NHDSC-Says-Americans-Will-Eat-150-Million-Hot-Dogs-on-July-Fourth-A-Look-at-Favorite-Hot-Dog-Styles","https://route66roadtrip.com/route-66-facts-faqs.htm"]},{"prompt":"NPS says the Mississippi River's average flow at New Orleans is 600,000 cubic feet per second. How many US gallon jugs of milk would that fill every second (1 cubic foot = 7.48052 gallons)?","unit":"gallons per second","answer":4488312,"sliderMin":220000,"sliderMax":90000000,"math":"600,000 cu ft/s x 7.48052 gal/cu ft = 4,488,312 gal/s","reveal":"The river only moves about 3 mph past New Orleans, but that's still about 4.5 million gallon jugs' worth every second.","sources":["https://www.nps.gov/miss/riverfacts.htm","NIST Handbook 44: US gallon = 231 cubic inches"]},{"prompt":"The Liberty Bell weighs 2,080 pounds, per the National Park Service. USDA's standard conversion says a gallon of milk weighs 8.6 pounds. How many gallons of milk weigh as much as the Liberty Bell?","unit":"gallons of milk","answer":241.9,"sliderMin":12,"sliderMax":4800,"math":"2,080 lb / 8.6 lb per gallon = 241.9","reveal":"Lift 242 gallon jugs and you're hoisting a Liberty Bell's worth of weight, crack not included.","sources":["NPS Independence National Historical Park: The Liberty Bell weighs 2,080 lb, nps.gov/inde","USDA ERS Agricultural Handbook 697, Weights, Measures, and Conversion Factors: milk = 8.6 lb per gallon"]},{"prompt":"Each presidential face on Mount Rushmore is 60 feet tall (NPS). A bald eagle's wingspan is 80.3 inches (Cornell Lab, All About Birds). How many bald eagles, wingtip to wingtip, would span one face from chin to the top of the head?","unit":"bald eagles","answer":9,"sliderMin":0.45,"sliderMax":180,"math":"60 ft x 12 = 720 in; 720 in / 80.3 in per eagle = 8.97","reveal":"Just nine bald eagles wingtip to wingtip would span a 60-foot face, about the height of a six-story building.","sources":["NPS Mount Rushmore National Memorial: the faces are 60 feet tall, nps.gov/moru","https://www.allaboutbirds.org/guide/bald_eagle/id"]},{"prompt":"NASA's Saturn V moon rocket stood 363 feet tall. Laid on its side, how many football fields long would it be, measuring a field as 100 yards (300 ft) goal line to goal line?","unit":"football fields (100 yd)","answer":1.21,"sliderMin":0.06,"sliderMax":25,"math":"363 ft / 300 ft = 1.21","reveal":"Laid down at one goal line, a Saturn V would stick 63 feet past the other one, deep into the end zone.","sources":["NASA: the Saturn V rocket stood 363 feet tall, nasa.gov"]},{"prompt":"The Washington Monument is 555 feet 5 1/8 inches tall (NPS). A 2023 Ford F-150 SuperCrew with the 5.5-ft box is 231.7 inches long. How many F-150s, each balanced on its tailgate and stacked, would reach the top?","unit":"F-150 SuperCrews","answer":28.8,"sliderMin":1.4,"sliderMax":580,"math":"555 ft x 12 + 5.125 in = 6,665.125 in; / 231.7 in per F-150 = 28.77","reveal":"About 29 full-size pickups stacked on their tailgates would top out at the Monument's aluminum tip.","sources":["NPS Washington Monument: height 555 ft 5-1/8 in, nps.gov/wamo","https://www.autopadre.com/headroom/ford-f-150/2023-xlt-supercrew-5-5-box-51309"]}];
+
+/* Short names for the recap, the share card and the Sources drawer (same order as POOL). */
+const TITLES = [
+  "Grand Canyon depth in Washington Monuments",
+  "Statue of Liberty in her own index fingers",
+  "Washington's nose in Liberty noses",
+  "Hoover Dam in Rushmore heads",
+  "Golden Gate main span in Gateway Arches",
+  "Golden Gate cable wire in Grand Canyons",
+  "Golden Gate Bridge in football fields",
+  "Hoover Dam crest in Liberty Bells",
+  "Space Needle in Hollywood Sign letters",
+  "Grand Canyon by Space Needle elevator",
+  "Hoover Dam concrete as a Monument stack",
+  "Golden Gate tower in Statues of Liberty",
+  "Empire State Building in Liberty Bells",
+  "Gateway Arch in Rushmore noses",
+  "First flight in F-150s",
+  "Central Park in football fields",
+  "General Sherman Tree in milk jugs",
+  "Golden Gate cable wire in Route 66s",
+  "Interstates in Mississippi Rivers",
+  "Mississippi River in football fields",
+  "July 4th hot dogs in Route 66s",
+  "Mississippi flow in milk jugs",
+  "Liberty Bell in gallons of milk",
+  "Rushmore face in bald eagles",
+  "Saturn V in football fields",
+  "Washington Monument in F-150s"
+];
+
+const ROUNDS = 10, STEPS = 1000;
+const EPOCH_UTC = Date.UTC(2026, 9, 10); /* Daily game #1 */
+const HANDLE = '@Muricaenjoyer';
+const RANKS = [
+  [8500, 'Bald Eagle', 'Apex predator of American measurement.'],
+  [7000, 'Founding Father', 'You think in monuments. The Republic thanks you.'],
+  [5000, 'Patriot', 'You know a football field when you see one.'],
+  [2500, 'Road Tripper', 'You got there. Took a few wrong exits on the way.'],
+  [0, 'Tourist', 'Welcome to America. We measure in Liberty Bells here.']
+];
+
+const $ = (s) => document.querySelector(s);
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+const slider = $('#slider'), ruler = $('#ruler'), minus = $('#minus'), plus = $('#plus');
+const dlg = $('#srcDlg');
+
+const store = {
+  get(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ } }
+};
+
+/* ---------- seeded randomness ---------- */
+function hashStr(str) {
+  let h1 = 1779033703 ^ str.length, h2 = 3144134277 ^ str.length;
+  for (let i = 0; i < str.length; i++) {
+    const k = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ k, 597399067);
+    h2 = Math.imul(h2 ^ k, 2869860233);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  return h1 >>> 0;
+}
+function mulberry32(a) {
+  return function () {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ---------- dates ---------- */
+function todayKey(d = new Date()) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function keyDate(key) { const [y, m, d] = key.split('-').map(Number); return new Date(y, m - 1, d); }
+function gameNo(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  return Math.max(1, Math.round((Date.UTC(y, m - 1, d) - EPOCH_UTC) / 864e5) + 1);
+}
+
+/* ---------- numbers ---------- */
+const clean = (v) => +v.toPrecision(6);
+const MANT = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8];
+function niceFloor(x) {
+  const b = Math.pow(10, Math.floor(Math.log10(x))), m = x / b;
+  let best = 1; for (const c of MANT) if (c <= m + 1e-9) best = c;
+  return clean(best * b);
+}
+function niceCeil(x) {
+  const b = Math.pow(10, Math.floor(Math.log10(x))), m = x / b;
+  for (const c of MANT) if (c >= m - 1e-9) return clean(c * b);
+  return clean(10 * b);
+}
+/* The supplied slider ranges all put the answer near the geometric middle. Keep each range's
+   width but slide the window (seeded) so the answer lands 12-32% from one end, then round the
+   ends to friendly numbers. The answer always stays inside. */
+function makeWindow(q, rnd) {
+  const span = Math.log(q.sliderMax / q.sliderMin);
+  let p = 0.12 + rnd() * 0.2;
+  if (rnd() < 0.5) p = 1 - p;
+  const lo = q.answer / Math.exp(p * span);
+  return { lo: niceFloor(lo), hi: niceCeil(lo * Math.exp(span)) };
+}
+const roundSig = (v) => +v.toPrecision(3);
+function fmtNum(v) {
+  if (Math.abs(v) >= 1000) return Math.round(v).toLocaleString('en-US');
+  return v.toLocaleString('en-US', { maximumFractionDigits: 3 });
+}
+const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
+const fmtTick = (v) => (v >= 10000 ? compact.format(v) : fmtNum(clean(v)));
+const fmtInt = (v) => Math.round(v).toLocaleString('en-US');
+
+function scoreFor(g, a) {
+  const e = Math.abs(Math.log10(g / a));
+  const e0 = Math.log10(1.05);
+  if (e <= e0) return 1000;
+  if (e >= 1) return 0;
+  const t = (e - e0) / (1 - e0);
+  return Math.round(1000 * Math.pow(1 - t, 1.6));
+}
+const tier = (s) => (s >= 800 ? 'hi' : s >= 400 ? 'mid' : 'lo');
+const tierChar = (s) => (s >= 800 ? '■' : s >= 400 ? '▣' : '□');
+const rankFor = (t) => RANKS.find((r) => t >= r[0]);
+function verdictText(g, a) {
+  const r = g / a;
+  if (Math.abs(Math.log10(r)) <= Math.log10(1.05)) return 'Dead on';
+  const fx = (x) => (x < 10 ? x.toFixed(1) : String(Math.round(x)));
+  if (r > 1) return r < 2 ? Math.round((r - 1) * 100) + '% too high' : fx(r) + 'x too high';
+  const ir = 1 / r;
+  return ir < 2 ? Math.round((1 - r) * 100) + '% too low' : fx(ir) + 'x too low';
+}
+
+/* ---------- state ---------- */
+let G = null;        /* current game */
+let view = 'start';
+let lastAct = 0;
+const now = () => (window.performance ? performance.now() : Date.now());
+
+function buildGame(mode) {
+  const key = todayKey();
+  const seed = mode === 'daily' ? 'freedom-units|' + key : 'practice|' + Date.now() + '|' + Math.random();
+  const rnd = mulberry32(hashStr(seed));
+  const idx = POOL.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  const order = idx.slice(0, ROUNDS);
+  return {
+    v: 1, mode, key, no: gameNo(key), order,
+    windows: order.map((i) => makeWindow(POOL[i], rnd)),
+    round: 0, phase: 'guess', pos: STEPS / 2, guesses: [], scores: []
+  };
+}
+function validGame(g) {
+  try {
+    return !!g && g.v === 1 && Array.isArray(g.order) && g.order.length === ROUNDS &&
+      g.order.every((i) => Number.isInteger(i) && i >= 0 && i < POOL.length) &&
+      Array.isArray(g.windows) && g.windows.length === ROUNDS &&
+      g.windows.every((w, k) => w && w.lo > 0 && w.hi > w.lo && POOL[g.order[k]].answer >= w.lo && POOL[g.order[k]].answer <= w.hi) &&
+      Array.isArray(g.scores) && Array.isArray(g.guesses) &&
+      Number.isInteger(g.round) && g.round >= 0 && g.round < ROUNDS &&
+      ['guess', 'reveal', 'final'].includes(g.phase) && typeof g.pos === 'number' &&
+      (g.phase !== 'final' || g.scores.length === ROUNDS);
+  } catch (e) { return false; }
+}
+const curQ = () => POOL[G.order[G.round]];
+const curW = () => G.windows[G.round];
+const valueAt = (pos) => { const { lo, hi } = curW(); return lo * Math.pow(hi / lo, pos / STEPS); };
+const total = () => G.scores.reduce((a, b) => a + (b || 0), 0);
+function save() { if (G && G.mode === 'daily' && G.phase !== 'final') store.set('fu:prog:' + G.key, G); }
+
+/* ---------- marquee bulbs ---------- */
+function bulbify(sign) {
+  const layer = sign.querySelector(':scope > .bulbs');
+  if (!layer) return;
+  const w = sign.clientWidth, h = sign.clientHeight;
+  if (!w || !h) return;
+  const inset = 12, gap = 24;
+  const W = w - inset * 2, H = h - inset * 2;
+  const nx = Math.max(2, Math.round(W / gap)), ny = Math.max(2, Math.round(H / gap));
+  const pts = [];
+  for (let i = 0; i < nx; i++) pts.push([inset + (W * i) / nx, inset]);
+  for (let i = 0; i < ny; i++) pts.push([inset + W, inset + (H * i) / ny]);
+  for (let i = 0; i < nx; i++) pts.push([inset + W - (W * i) / nx, inset + H]);
+  for (let i = 0; i < ny; i++) pts.push([inset, inset + H - (H * i) / ny]);
+  layer.innerHTML = pts.map((p, i) => '<i class="b' + (i % 2) + '" style="left:' + p[0].toFixed(1) + 'px;top:' + p[1].toFixed(1) + 'px"></i>').join('');
+}
+
+/* ---------- views ---------- */
+function showView(name) {
+  view = name;
+  for (const s of ['start', 'round', 'final']) $('#scr-' + s).hidden = s !== name;
+  if (name !== 'final') stopCountdown();
+  document.querySelectorAll('.sign').forEach((s) => { if (s.offsetParent) bulbify(s); });
+}
+
+function renderStart() {
+  const key = todayKey();
+  const no = gameNo(key);
+  $('#dailyLabel').textContent = 'Daily game #' + no + ' · ' + keyDate(key).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  const done = store.get('fu:done:' + key);
+  const prog = G && G.mode === 'daily' && G.key === key && G.phase !== 'final' ? G : null;
+  const playBtn = $('#playBtn');
+  if (prog && (prog.round > 0 || prog.phase === 'reveal')) playBtn.textContent = 'Resume round ' + (prog.round + 1);
+  else playBtn.textContent = done ? 'Replay' : 'Play';
+  const hasDone = validGame(done) && done.phase === 'final';
+  $('#resultBtn').hidden = !hasDone;
+  const note = $('#playedNote');
+  note.hidden = !hasDone;
+  if (hasDone) {
+    const t = done.scores.reduce((a, b) => a + b, 0);
+    note.innerHTML = 'You scored <b>' + fmtInt(t) + '</b> today. That makes you a ' + rankFor(t)[1] + '.';
+  }
+}
+
+function renderPips() {
+  let html = '';
+  for (let i = 0; i < ROUNDS; i++) {
+    const s = G.scores[i];
+    const cls = s != null ? tier(s) : i === G.round ? 'cur' : '';
+    html += '<li class="' + cls + '"></li>';
+  }
+  $('#pips').innerHTML = html;
+  $('#runTotal').textContent = fmtInt(total());
+}
+
+function updateReadout() {
+  const v = roundSig(valueAt(G.pos));
+  const txt = fmtNum(v);
+  $('#readout').textContent = txt;
+  slider.setAttribute('aria-valuetext', txt + ' ' + curQ().unit);
+  slider.style.setProperty('--p', String(G.pos / STEPS));
+}
+
+/* Size the big readout once per round so the longest value in the window fits on one line. */
+function fitReadout() {
+  if (!G || view !== 'round') return;
+  const el = $('#readout');
+  el.style.fontSize = '';
+  const { lo, hi } = curW();
+  const a = fmtNum(roundSig(lo * 1.0123)), b = fmtNum(roundSig(hi * 0.9987));
+  const sample = (a.length > b.length ? a : b).replace(/\d/g, '0');
+  const keep = el.textContent;
+  el.textContent = sample;
+  const avail = el.clientWidth, need = el.scrollWidth;
+  if (avail > 0 && need > avail) el.style.fontSize = Math.floor(parseFloat(getComputedStyle(el).fontSize) * avail / need * 0.97) + 'px';
+  el.textContent = keep;
+}
+
+function drawRuler() {
+  if (!G || view !== 'round') return;
+  const W = ruler.clientWidth;
+  if (!W) return;
+  const { lo, hi } = curW();
+  const L = Math.log(hi / lo);
+  const px = (v) => (W * Math.log(v / lo)) / L;
+  let html = '';
+  const k0 = Math.floor(Math.log10(lo)), k1 = Math.ceil(Math.log10(hi));
+  for (let k = k0; k <= k1; k++) {
+    for (let m = 1; m <= 9; m++) {
+      const v = clean(m * Math.pow(10, k));
+      if (v < lo * 0.999 || v > hi * 1.001) continue;
+      html += '<i class="tk' + (m === 1 ? ' maj' : m === 5 ? ' mid' : '') + '" style="left:' + px(v).toFixed(1) + 'px"></i>';
+    }
+  }
+  ruler.innerHTML = html;
+  const cands = [lo, hi];
+  for (const m of [1, 5, 2, 3]) for (let k = k0; k <= k1; k++) {
+    const v = clean(m * Math.pow(10, k));
+    if (v > lo * 1.001 && v < hi * 0.999) cands.push(v);
+  }
+  const T = parseFloat(getComputedStyle(ruler).marginLeft) || 15;
+  const placed = [];
+  for (const v of cands) {
+    const s = document.createElement('span');
+    s.className = 'lb';
+    s.textContent = fmtTick(v);
+    ruler.appendChild(s);
+    const w = s.offsetWidth;
+    let x = px(v) - w / 2;
+    x = Math.max(-T, Math.min(W + T - w, x));
+    const box = [x - 7, x + w + 7];
+    if (placed.some((b) => box[0] < b[1] && box[1] > b[0])) { s.remove(); continue; }
+    placed.push(box);
+    s.style.left = x.toFixed(1) + 'px';
+  }
+  if (G.phase === 'reveal') addTruthMark();
+}
+
+function addTruthMark() {
+  const old = ruler.querySelector('.truth-mk');
+  if (old) old.remove();
+  const W = ruler.clientWidth;
+  if (!W) return;
+  const { lo, hi } = curW();
+  const a = curQ().answer;
+  const x = (W * Math.log(a / lo)) / Math.log(hi / lo);
+  const mk = document.createElement('span');
+  mk.className = 'truth-mk';
+  mk.style.left = x.toFixed(1) + 'px';
+  const pill = document.createElement('b');
+  pill.textContent = 'Actual ' + fmtNum(a);
+  mk.appendChild(pill);
+  ruler.appendChild(mk);
+  const T = parseFloat(getComputedStyle(ruler).marginLeft) || 15;
+  const pw = pill.offsetWidth;
+  const off = Math.max(-x - T, Math.min(W + T - x - pw, -pw / 2));
+  pill.style.left = off.toFixed(1) + 'px';
+  const p0 = x + off - 6, p1 = x + off + pw + 6;
+  ruler.querySelectorAll('.lb').forEach((l) => {
+    const L = parseFloat(l.style.left) || 0, R = L + l.offsetWidth;
+    l.style.visibility = L < p1 && R > p0 ? 'hidden' : '';
+  });
+}
+
+function sourcesHTML(list) {
+  return list.map((s) => {
+    if (/^https?:\/\//i.test(s)) {
+      let label = s;
+      try { const u = new URL(s); label = u.hostname.replace(/^www\./, '') + (u.pathname.length > 1 ? u.pathname : ''); } catch (e) { /* keep raw */ }
+      if (label.length > 52) label = label.slice(0, 50) + '…';
+      return '<a href="' + escAttr(s) + '" target="_blank" rel="noopener">' + esc(label) + '</a>';
+    }
+    return esc(s);
+  });
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+const escAttr = esc;
+
+function renderRound() {
+  const Q = curQ();
+  $('#roundNo').innerHTML = 'Round ' + (G.round + 1) + ' <span>of ' + ROUNDS + '</span>';
+  renderPips();
+  $('#prompt').textContent = Q.prompt;
+  $('#unit').textContent = Q.unit;
+  slider.value = String(G.pos);
+  const guessing = G.phase === 'guess';
+  slider.disabled = minus.disabled = plus.disabled = !guessing;
+  updateReadout();
+  $('#guessActions').hidden = !guessing;
+  $('#reveal').hidden = guessing;
+  $('#board').classList.toggle('hot', !guessing);
+  fitReadout();
+  bulbify($('#board'));
+  drawRuler();
+  if (!guessing) renderReveal(false);
+}
+
+function setBar(elm, frac, animate) {
+  const pct = Math.max(frac * 100, 1.2).toFixed(2) + '%';
+  elm.style.transition = 'none';
+  elm.style.width = animate && !reduce.matches ? '1.2%' : pct;
+  void elm.offsetWidth;
+  elm.style.transition = '';
+  if (animate && !reduce.matches) requestAnimationFrame(() => { elm.style.width = pct; });
+}
+
+function countUp(node, target, dur) {
+  if (!dur || reduce.matches) { node.textContent = fmtInt(target); return; }
+  const t0 = now();
+  const step = () => {
+    const k = Math.min(1, (now() - t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    node.textContent = fmtInt(target * e);
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function renderReveal(animate) {
+  const Q = curQ();
+  const g = G.guesses[G.round], s = G.scores[G.round], a = Q.answer;
+  const vd = $('#verdict');
+  vd.textContent = verdictText(g, a);
+  vd.className = 'verdict ' + tier(s);
+  const mx = Math.max(g, a);
+  setBar($('#barYou'), g / mx, animate);
+  setBar($('#barTruth'), a / mx, animate);
+  $('#valYou').textContent = fmtNum(g);
+  $('#valTruth').textContent = fmtNum(a);
+  $('#barUnit').textContent = 'Measured in ' + Q.unit + '.';
+  $('#math').textContent = Q.math;
+  $('#revealText').textContent = Q.reveal;
+  $('#qSources').innerHTML = 'Sources: ' + sourcesHTML(Q.sources).join(' · ');
+  $('#nextBtn').textContent = G.round < ROUNDS - 1 ? 'Next round' : 'See my Freedom Score';
+  countUp($('#roundPts'), s, animate ? 900 : 0);
+  addTruthMark();
+}
+
+function nudge(d) {
+  if (!G || G.phase !== 'guess' || view !== 'round') return;
+  G.pos = Math.max(0, Math.min(STEPS, G.pos + d));
+  slider.value = String(G.pos);
+  updateReadout();
+}
+
+function lockIn() {
+  if (!G || G.phase !== 'guess' || view !== 'round') return;
+  if (now() - lastAct < 300) return;
+  lastAct = now();
+  const g = roundSig(valueAt(G.pos));
+  const s = scoreFor(g, curQ().answer);
+  G.guesses[G.round] = g;
+  G.scores[G.round] = s;
+  G.phase = 'reveal';
+  save();
+  slider.disabled = minus.disabled = plus.disabled = true;
+  $('#guessActions').hidden = true;
+  $('#reveal').hidden = false;
+  $('#board').classList.add('hot');
+  renderPips();
+  renderReveal(true);
+  const nb = $('#nextBtn');
+  nb.focus({ preventScroll: true });
+  $('#reveal').scrollIntoView({ block: 'nearest', behavior: reduce.matches ? 'auto' : 'smooth' });
+}
+
+function next() {
+  if (!G || G.phase !== 'reveal' || view !== 'round') return;
+  if (now() - lastAct < 400) return;
+  lastAct = now();
+  if (G.round < ROUNDS - 1) {
+    G.round += 1;
+    G.pos = STEPS / 2;
+    G.phase = 'guess';
+    save();
+    renderRound();
+    window.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+    slider.focus({ preventScroll: true });
+  } else {
+    G.phase = 'final';
+    finish();
+  }
+}
+
+function finish() {
+  if (G.mode === 'daily') {
+    const k = 'fu:done:' + G.key;
+    const prev = store.get(k);
+    if (!(validGame(prev) && prev.phase === 'final')) store.set(k, G);
+    store.del('fu:prog:' + G.key);
+  }
+  showView('final');
+  renderFinal(true);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  $('#copyBtn').focus({ preventScroll: true });
+}
+
+/* ---------- final ---------- */
+function renderFinal(animate) {
+  const t = total();
+  const rk = rankFor(t);
+  $('#finalLabel').textContent = G.mode === 'daily' ? 'Daily game #' + G.no : 'Practice game';
+  countUp($('#fsNum'), t, animate ? 1400 : 0);
+  $('#rankTitle').textContent = rk[1];
+  $('#rankLine').textContent = rk[2];
+  $('#grid').innerHTML = G.scores.map((s, i) => '<li class="' + tier(s) + '" aria-label="Round ' + (i + 1) + ': ' + s + ' points">' + s + '</li>').join('');
+  $('#recap').innerHTML = G.order.map((qi, i) => {
+    const Q = POOL[qi], s = G.scores[i];
+    return '<li class="rc"><span class="sw ' + tier(s) + '"></span><div style="min-width:0"><p class="rc-t">' + (i + 1) + '. ' + esc(TITLES[qi]) + '</p>' +
+      '<p class="rc-n">You ' + esc(fmtNum(G.guesses[i])) + ' · Actual ' + esc(fmtNum(Q.answer)) + ' ' + esc(Q.unit) + '</p></div>' +
+      '<b class="rc-pts">' + s + '</b></li>';
+  }).join('');
+  $('#copyStatus').textContent = '';
+  $('#copyText').hidden = true;
+  $('#countdownRow').hidden = false;
+  $('#cardImg').alt = 'Freedom Units result card: ' + fmtInt(t) + ' out of 10,000, rank ' + rk[1] + '.';
+  bulbify($('#scoreboard'));
+  drawCard();
+  startCountdown();
+}
+
+function shareText() {
+  const t = total();
+  const head = G.mode === 'daily' ? 'Freedom Units #' + G.no + ': ' + fmtInt(t) + '/10,000' : 'Freedom Units (practice): ' + fmtInt(t) + '/10,000';
+  const r1 = G.scores.slice(0, 5).map(tierChar).join('');
+  const r2 = G.scores.slice(5, 10).map(tierChar).join('');
+  return [head, rankFor(t)[1], r1, r2, HANDLE].join('\n');
+}
+
+let cdTimer = null;
+function startCountdown() {
+  stopCountdown();
+  const node = $('#countdown');
+  const tick = () => {
+    const n = new Date();
+    const mid = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1);
+    const s = Math.max(0, Math.floor((mid - n) / 1000));
+    node.textContent = [Math.floor(s / 3600), Math.floor((s % 3600) / 60), s % 60].map((x) => String(x).padStart(2, '0')).join(':');
+  };
+  tick();
+  cdTimer = setInterval(tick, 1000);
+}
+function stopCountdown() { if (cdTimer) { clearInterval(cdTimer); cdTimer = null; } }
+
+/* ---------- share card (1080 x 1350) ---------- */
+let cardToken = 0;
+async function drawCard() {
+  const token = ++cardToken;
+  const img = $('#cardImg');
+  try {
+    if (document.fonts && document.fonts.load) {
+      await Promise.race([
+        Promise.all([
+          document.fonts.load('900 120px "Big Shoulders Display"'),
+          document.fonts.load('800 60px "Big Shoulders Display"'),
+          document.fonts.load('700 34px "Libre Franklin"'),
+          document.fonts.load('600 30px "Libre Franklin"')
+        ]),
+        new Promise((r) => setTimeout(r, 1800))
+      ]);
+    }
+  } catch (e) { /* fall back to system faces */ }
+  if (token !== cardToken || !G) return;
+  const C = { bg0: '#1B2C78', bg1: '#070C24', fg: '#F6F3EA', dim: '#A8B3D6', bulb: '#FFD37A', glow: 'rgba(255,196,84,.8)', red: '#E0434E', blue: '#5D7EEE' };
+  const DISP = '"Big Shoulders Display", "Arial Narrow", Impact, sans-serif';
+  const BODY = '"Libre Franklin", "Helvetica Neue", Arial, sans-serif';
+  const c = document.createElement('canvas');
+  c.width = 1080; c.height = 1350;
+  const x = c.getContext('2d');
+  const grd = x.createRadialGradient(540, 120, 40, 540, 520, 1150);
+  grd.addColorStop(0, C.bg0); grd.addColorStop(1, C.bg1);
+  x.fillStyle = grd; x.fillRect(0, 0, 1080, 1350);
+
+  /* marquee frame */
+  const inset = 58, Wd = 1080 - inset * 2, Hd = 1350 - inset * 2, gap = 38;
+  const nx = Math.round(Wd / gap), ny = Math.round(Hd / gap);
+  const pts = [];
+  for (let i = 0; i < nx; i++) pts.push([inset + (Wd * i) / nx, inset]);
+  for (let i = 0; i < ny; i++) pts.push([inset + Wd, inset + (Hd * i) / ny]);
+  for (let i = 0; i < nx; i++) pts.push([inset + Wd - (Wd * i) / nx, inset + Hd]);
+  for (let i = 0; i < ny; i++) pts.push([inset, inset + Hd - (Hd * i) / ny]);
+  x.save();
+  x.shadowColor = C.glow; x.shadowBlur = 16;
+  pts.forEach((p, i) => {
+    x.globalAlpha = i % 2 ? 0.55 : 1;
+    x.fillStyle = C.bulb;
+    x.beginPath(); x.arc(p[0], p[1], 8, 0, Math.PI * 2); x.fill();
+  });
+  x.restore();
+  x.globalAlpha = 1;
+
+  const fit = (txt, weight, size, fam, maxW) => {
+    let s = size;
+    do { x.font = weight + ' ' + s + 'px ' + fam; if (x.measureText(txt).width <= maxW) break; s -= 2; } while (s > 12);
+    return s;
+  };
+  const spaced = (px) => { if ('letterSpacing' in x) x.letterSpacing = px + 'px'; };
+  x.textAlign = 'center';
+  x.textBaseline = 'alphabetic';
+
+  /* eyebrow */
+  const t = total(), rk = rankFor(t);
+  const dateTxt = keyDate(G.key).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+  const eyebrow = G.mode === 'daily' ? 'DAILY GAME #' + G.no + ' · ' + dateTxt : 'PRACTICE GAME · ' + dateTxt;
+  spaced(6);
+  x.fillStyle = C.bulb;
+  fit(eyebrow, 700, 32, BODY, 820);
+  x.fillText(eyebrow, 540, 168);
+
+  /* title with offset red shadow */
+  spaced(3);
+  fit('FREEDOM UNITS', 900, 150, DISP, 840);
+  x.fillStyle = C.red; x.fillText('FREEDOM UNITS', 547, 307);
+  x.fillStyle = C.fg; x.fillText('FREEDOM UNITS', 540, 300);
+
+  /* rule */
+  x.fillStyle = C.red; x.fillRect(480, 338, 120, 6);
+
+  /* score */
+  spaced(9);
+  x.fillStyle = C.dim;
+  x.font = '700 32px ' + BODY;
+  x.fillText('FREEDOM SCORE', 540, 418);
+  spaced(0);
+  const sTxt = fmtInt(t), oTxt = '/10,000';
+  x.font = '900 250px ' + DISP; const sw = x.measureText(sTxt).width;
+  x.font = '800 70px ' + DISP; const ow = x.measureText(oTxt).width;
+  const sx = 540 - (sw + 14 + ow) / 2;
+  x.textAlign = 'left';
+  x.save();
+  x.shadowColor = C.glow; x.shadowBlur = 36;
+  x.fillStyle = C.bulb; x.font = '900 250px ' + DISP; x.fillText(sTxt, sx, 640);
+  x.restore();
+  x.fillStyle = C.dim; x.font = '800 70px ' + DISP; x.fillText(oTxt, sx + sw + 14, 640);
+  x.textAlign = 'center';
+
+  /* rank band */
+  spaced(4);
+  const rTxt = rk[1].toUpperCase();
+  const rs = fit(rTxt, 900, 84, DISP, 760);
+  const rw = x.measureText(rTxt).width;
+  x.fillStyle = C.red;
+  roundRect(x, 540 - rw / 2 - 40, 684, rw + 80, rs + 28, 10); x.fill();
+  x.fillStyle = '#FFFFFF';
+  x.fillText(rTxt, 540, 684 + 14 + rs * 0.84);
+
+  /* best round */
+  let bi = 0; G.scores.forEach((s, i) => { if (s > G.scores[bi]) bi = i; });
+  spaced(0);
+  const best = 'Best round: ' + TITLES[G.order[bi]] + ' (' + G.scores[bi] + ')';
+  x.fillStyle = C.dim;
+  fit(best, 600, 30, BODY, 860);
+  x.fillText(best, 540, 850);
+
+  /* grid */
+  const cell = 132, g = 18, gx = 540 - (cell * 5 + g * 4) / 2, gy = 890;
+  G.scores.forEach((s, i) => {
+    const cx = gx + (i % 5) * (cell + g), cy = gy + Math.floor(i / 5) * (cell + g);
+    const tr = tier(s);
+    if (tr === 'lo') {
+      x.strokeStyle = C.dim; x.lineWidth = 5;
+      roundRect(x, cx + 2.5, cy + 2.5, cell - 5, cell - 5, 12); x.stroke();
+      x.fillStyle = C.dim;
+    } else {
+      x.fillStyle = tr === 'hi' ? C.red : C.blue;
+      roundRect(x, cx, cy, cell, cell, 12); x.fill();
+      x.fillStyle = '#FFFFFF';
+    }
+    x.font = '800 50px ' + DISP;
+    x.fillText(String(s), cx + cell / 2, cy + cell / 2 + 18);
+  });
+
+  /* footer brand */
+  spaced(5);
+  x.fillStyle = C.fg;
+  fit('FREEDOM UNITS · ' + HANDLE, 700, 34, BODY, 860);
+  x.fillText('FREEDOM UNITS · ' + HANDLE, 540, 1252);
+  spaced(0);
+
+  try { img.src = c.toDataURL('image/png'); } catch (e) { /* canvas export blocked */ }
+}
+function roundRect(x, X, Y, w, h, r) {
+  x.beginPath();
+  x.moveTo(X + r, Y);
+  x.arcTo(X + w, Y, X + w, Y + h, r);
+  x.arcTo(X + w, Y + h, X, Y + h, r);
+  x.arcTo(X, Y + h, X, Y, r);
+  x.arcTo(X, Y, X + w, Y, r);
+  x.closePath();
+}
+
+/* ---------- sources drawer ---------- */
+function buildSources() {
+  $('#srcList').innerHTML = POOL.map((q, i) =>
+    '<li><h3>' + esc(TITLES[i]) + '</h3><ul>' + sourcesHTML(q.sources).map((h) => '<li>' + h + '</li>').join('') + '</ul></li>'
+  ).join('');
+}
+function openSources() {
+  try { dlg.showModal(); } catch (e) { dlg.setAttribute('open', ''); }
+  $('#srcClose').focus();
+}
+function closeSources() { try { dlg.close(); } catch (e) { dlg.removeAttribute('open'); } }
+
+/* ---------- start / actions ---------- */
+function startGame(mode) {
+  G = buildGame(mode);
+  save();
+  showView('round');
+  renderRound();
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  slider.focus({ preventScroll: true });
+  lastAct = now();
+}
+
+function bindStep(btn, d) {
+  let t1 = null, t2 = null;
+  const stop = () => { clearTimeout(t1); clearInterval(t2); t1 = t2 = null; };
+  btn.addEventListener('pointerdown', (e) => {
+    if (btn.disabled || e.button !== 0) return;
+    nudge(d); stop();
+    t1 = setTimeout(() => { t2 = setInterval(() => nudge(d), 45); }, 380);
+  });
+  ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach((ev) => btn.addEventListener(ev, stop));
+  btn.addEventListener('click', (e) => { if (e.detail === 0) nudge(e.shiftKey ? d * 10 : d); });
+  btn.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
+function bind() {
+  $('#playBtn').addEventListener('click', () => {
+    const key = todayKey();
+    if (G && G.mode === 'daily' && G.key === key && G.phase !== 'final' && (G.round > 0 || G.phase === 'reveal')) {
+      showView('round'); renderRound(); slider.focus({ preventScroll: true }); lastAct = now();
+    } else startGame('daily');
+  });
+  $('#resultBtn').addEventListener('click', () => {
+    const done = store.get('fu:done:' + todayKey());
+    if (!(validGame(done) && done.phase === 'final')) return;
+    G = done; showView('final'); renderFinal(false); window.scrollTo({ top: 0, behavior: 'auto' });
+  });
+  $('#lockBtn').addEventListener('click', lockIn);
+  $('#nextBtn').addEventListener('click', next);
+  $('#replayBtn').addEventListener('click', () => startGame('daily'));
+  $('#randomBtn').addEventListener('click', () => startGame('practice'));
+  $('#srcBtn').addEventListener('click', openSources);
+  $('#srcClose').addEventListener('click', closeSources);
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) closeSources(); });
+  slider.addEventListener('input', () => {
+    if (!G || G.phase !== 'guess') return;
+    G.pos = +slider.value;
+    updateReadout();
+  });
+  slider.addEventListener('change', save);
+  bindStep(minus, -1);
+  bindStep(plus, 1);
+
+  $('#copyBtn').addEventListener('click', () => {
+    if (!G) return;
+    const text = shareText();
+    const status = $('#copyStatus'), pre = $('#copyText');
+    const ok = () => { status.textContent = 'Copied. Paste it anywhere.'; pre.hidden = true; };
+    const fail = () => {
+      pre.textContent = text;
+      pre.hidden = false;
+      try {
+        const r = document.createRange(); r.selectNodeContents(pre);
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      } catch (e) { /* manual select */ }
+      status.textContent = 'Your result is selected below. Press Ctrl+C, or long-press and copy.';
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fail);
+      else fail();
+    } catch (e) { fail(); }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (dlg.open || view !== 'round' || !G) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const t = e.target, tag = t && t.tagName;
+    const interactive = tag === 'BUTTON' || tag === 'A' || tag === 'SUMMARY';
+    if (G.phase === 'guess') {
+      const dir = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[e.key];
+      if (dir && (t === slider ? e.shiftKey : true)) {
+        e.preventDefault();
+        nudge(dir * (e.shiftKey ? 10 : 1));
+        if (t === slider) save();
+        return;
+      }
+      if (e.key === 'Enter' && !e.repeat && !interactive) { e.preventDefault(); lockIn(); }
+    } else if (G.phase === 'reveal') {
+      if (e.key === 'Enter' && !e.repeat && !interactive) { e.preventDefault(); next(); }
+    }
+  });
+
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver((entries) => {
+      for (const en of entries) {
+        if (en.target === ruler) { drawRuler(); fitReadout(); }
+        else bulbify(en.target);
+      }
+    });
+    document.querySelectorAll('.sign').forEach((s) => ro.observe(s));
+    ro.observe(ruler);
+  } else {
+    window.addEventListener('resize', () => { document.querySelectorAll('.sign').forEach(bulbify); drawRuler(); });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawRuler(); fitReadout(); document.querySelectorAll('.sign').forEach((s) => { if (s.offsetParent) bulbify(s); }); });
+}
+
+function route(v) {
+  if (v === 'round' && G && G.phase !== 'final') { showView('round'); renderRound(); }
+  else if (v === 'final' && G && G.phase === 'final') { showView('final'); renderFinal(false); }
+  else { showView('start'); renderStart(); }
+}
+
+function start(data) {
+  buildSources();
+  bind();
+  const restored = data && data.G && validGame(data.G) ? data.G : null;
+  if (restored) {
+    G = restored;
+    route(data.view);
+  } else {
+    const p = store.get('fu:prog:' + todayKey());
+    if (validGame(p) && p.phase !== 'final' && p.mode === 'daily') G = p;
+    route('start');
+  }
+}
+
+window.__fuAnswer = () => G && G.phase === 'guess' ? ({ answer: curQ().answer, lo: curW().lo, hi: curW().hi }) : null;
+const hot = window.claude && window.claude.hot;
+if (hot && typeof hot.snapshot === 'function') {
+  try { hot.snapshot(() => ({ view, G })); } catch (e) { /* not available */ }
+}
+if (hot && typeof hot.ready === 'function') hot.ready(start);
+else start((hot && hot.data) || {});
+})();
+</script>
+</body></html>

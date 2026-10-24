@@ -1,0 +1,438 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>T video renderer</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Deterministic renderer: renderFrame(t) draws the frame at time t (seconds).
+const W = 1080, H = 1920;
+const SAFE_TOP = 285, SAFE_BOT = 1635;           // 4:5 crop band (1080x1350)
+const X0 = 84, X1 = 996;                          // content margins
+const C = {
+  bg: "#0C1018", fg: "#F3F5F8", muted: "#8E98AA", dim: "#5B6577", red: "#E8443A",
+  blue: "#4D8DFF", grid: "#131A26", panel: "#141A25", line: "#232B3A", white: "#FFFFFF"
+};
+const DISP = '"Inter Display", "Inter", sans-serif';
+const BODY = '"Inter", sans-serif';
+const TOTAL = 52.5;
+
+const ctx = document.getElementById("c").getContext("2d");
+
+// ---------- easing / timing ----------
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = p => 1 - Math.pow(1 - p, 3);
+const eInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const eBack = p => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+
+// ---------- scenes ----------
+const SCENES = [
+  { a: 0.0,  b: 3.2,  src: "Hegseth's X video, Jul 15, 2026 · Defense Health Agency clinical guidance, Sep 17, 2026", draw: s1 },
+  { a: 3.2,  b: 8.6,  src: "Defense Health Agency clinical guidance for male service members, Sep 17, 2026 (as reported by Center Square)", draw: s2 },
+  { a: 8.6,  b: 10.6, src: "", draw: s3 },
+  { a: 10.6, b: 16.2, src: "Mean total testosterone, U.S. men aged 15–39 (NHANES 1999–2016). Lokeshwar et al., European Urology Focus 2021. Lab assays changed between survey cycles.", draw: s4 },
+  { a: 16.2, b: 20.4, src: "RFK Jr. on Fox News, April 2025. U.S. data: Lokeshwar et al., European Urology Focus 2021.", draw: s5 },
+  { a: 20.4, b: 25.8, src: "Share of U.S. men with a testosterone prescription. Epic Research, Jul 2026 (109M men; 2026 = Jan–Jun). Hims & Hers launch pricing, Sep 2025.", draw: s6 },
+  { a: 25.8, b: 30.4, src: "46 high-reach Instagram and TikTok testosterone posts. Social Science & Medicine, 2026 (University of Sydney).", draw: s7 },
+  { a: 30.4, b: 35.0, src: "WHO Task Force, The Lancet 1990: 271 healthy men, 200 mg testosterone enanthate weekly.", draw: s8 },
+  { a: 35.0, b: 40.0, src: "20,286 male IFBB competitors, 2005–2020. Vecchiato et al., European Heart Journal 2025.", draw: s9 },
+  { a: 40.0, b: 46.6, src: "Leproult & Van Cauter, JAMA 2011 · Corona et al., Eur J Endocrinology 2013 · American Urological Association guideline.", draw: s10 },
+  { a: 46.6, b: TOTAL, src: "Sources for every number are in the full article. Not medical advice.", draw: s11 },
+];
+
+// ---------- ECG ----------
+const BEAT = 0.85;           // seconds per beat (~70 bpm)
+function amp(t) {            // heart amplitude envelope; flatline in scene 9
+  if (t < 36.3) return 1;
+  if (t < 36.8) return 1 - eInOut(prog(t, 36.3, 36.8));
+  if (t < 38.7) return 0;
+  return eInOut(prog(t, 38.7, 39.3));
+}
+function ecg(time) {
+  if (time < 0) return 0;
+  const ph = (time % BEAT) / BEAT;
+  const g = (c, w) => Math.exp(-Math.pow((ph - c) / w, 2));
+  const v = 0.12 * g(0.18, 0.035) + 1.0 * g(0.36, 0.012) - 0.32 * g(0.385, 0.012) - 0.12 * g(0.335, 0.01) + 0.22 * g(0.6, 0.06);
+  return v * amp(time);
+}
+function drawECG(t) {
+  const top = 1452, h = 96, base = top + h * 0.72;
+  const left = X0, right = X1, span = right - left;
+  const sweep = 3.4;                               // seconds per sweep across
+  const cur = left + ((t % sweep) / sweep) * span; // cursor x
+  ctx.save();
+  ctx.lineJoin = "round"; ctx.lineCap = "round";
+  // baseline guide
+  ctx.strokeStyle = C.line; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(left, base); ctx.lineTo(right, base); ctx.stroke();
+  const pts = [];
+  for (let x = left; x <= right; x += 2) {
+    let dt;
+    if (x <= cur) dt = (cur - x) / span * sweep;
+    else dt = sweep - (x - cur) / span * sweep;
+    if (x > cur && x < cur + 34) { pts.push(null); continue; } // erase gap ahead of cursor
+    const time = t - dt;
+    pts.push([x, base - ecg(time) * h * 0.9, dt]);
+  }
+  for (const pass of [{ w: 14, a: 0.13 }, { w: 4.5, a: 1 }]) {
+    ctx.lineWidth = pass.w;
+    let drawing = false;
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      if (!p) { if (drawing) { ctx.stroke(); drawing = false; } continue; }
+      const fade = 1 - clamp(p[2] / sweep) * 0.65;
+      if (!drawing) { ctx.beginPath(); ctx.moveTo(p[0], p[1]); drawing = true; }
+      else ctx.lineTo(p[0], p[1]);
+      if (i % 24 === 0) { ctx.strokeStyle = rgba(C.red, pass.a * fade); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p[0], p[1]); }
+    }
+    if (drawing) { ctx.strokeStyle = rgba(C.red, pass.a); ctx.stroke(); }
+  }
+  // cursor dot
+  const cy = base - ecg(t) * h * 0.9;
+  ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(cur, cy, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = rgba(C.red, 0.35); ctx.beginPath(); ctx.arc(cur, cy, 16, 0, Math.PI * 2); ctx.fill();
+  // bpm readout
+  const a = amp(t);
+  ctx.font = `700 22px ${BODY}`; ctx.textAlign = "right"; ctx.fillStyle = a > 0.05 ? C.muted : C.red;
+  ctx.fillText(a > 0.05 ? "HR 70" : "HR --", right, top + 6);
+  ctx.textAlign = "left";
+  ctx.restore();
+}
+function rgba(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`;
+}
+
+// ---------- text helpers ----------
+function font(size, weight = 900, fam = DISP) { ctx.font = `${weight} ${size}px ${fam}`; }
+// lines: array of lines; each line: array of [text, color]. Words reveal one by one.
+function words(lines, x, y, size, lh, t0, lt, opts = {}) {
+  const stagger = opts.stagger ?? 0.07, dur = opts.dur ?? 0.38, weight = opts.weight ?? 900, fam = opts.fam ?? DISP;
+  const align = opts.align ?? "left";
+  font(size, weight, fam);
+  ctx.textBaseline = "alphabetic";
+  let k = 0;
+  lines.forEach((line, li) => {
+    const toks = [];
+    line.forEach(([txt, col]) => txt.split(" ").forEach((w, i, arr) => { if (w) toks.push([w, col, i < arr.length - 1 || true]); }));
+    const spaceW = ctx.measureText(" ").width;
+    const widths = toks.map(tk => ctx.measureText(tk[0]).width);
+    const total = widths.reduce((s, w) => s + w, 0) + spaceW * (toks.length - 1);
+    let cx = align === "center" ? (W - total) / 2 : x;
+    toks.forEach((tk, i) => {
+      const p = eOut(prog(lt, t0 + k * stagger, t0 + k * stagger + dur));
+      if (p > 0) {
+        ctx.globalAlpha = sceneAlpha * p;
+        ctx.fillStyle = tk[1];
+        ctx.fillText(tk[0], cx, y + li * lh + (1 - p) * 34);
+      }
+      cx += widths[i] + spaceW;
+      k++;
+    });
+  });
+  ctx.globalAlpha = sceneAlpha;
+  return k;
+}
+function wrapPlain(text, maxW) {
+  const out = []; let line = "";
+  text.split(" ").forEach(w => {
+    const test = line ? line + " " + w : w;
+    if (ctx.measureText(test).width > maxW && line) { out.push(line); line = w; } else line = test;
+  });
+  if (line) out.push(line);
+  return out;
+}
+function fadeText(text, x, y, size, color, lt, t0, opts = {}) {
+  const p = eOut(prog(lt, t0, t0 + (opts.dur ?? 0.45)));
+  if (p <= 0) return;
+  font(size, opts.weight ?? 500, opts.fam ?? BODY);
+  ctx.fillStyle = color; ctx.globalAlpha = sceneAlpha * p;
+  ctx.textAlign = opts.align ?? "left";
+  const lines = opts.maxW ? wrapPlain(text, opts.maxW) : [text];
+  lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * (opts.lh ?? size * 1.3) + (1 - p) * 20));
+  ctx.textAlign = "left"; ctx.globalAlpha = sceneAlpha;
+}
+function label(text, x, y, color = C.muted, size = 26) {
+  font(size, 800, BODY);
+  ctx.save(); ctx.letterSpacing = "4px"; ctx.fillStyle = color; ctx.fillText(text.toUpperCase(), x, y); ctx.restore();
+}
+let sceneAlpha = 1;
+
+// ---------- chrome ----------
+function drawBackground() {
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let x = 0; x <= W; x += 40) { ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); }
+  for (let y = 0; y <= H; y += 40) { ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); }
+  ctx.stroke();
+  // flag stripe
+  ctx.fillStyle = C.red; ctx.fillRect(0, 0, 12, H);
+  ctx.fillStyle = C.white; ctx.fillRect(12, 0, 7, H);
+  ctx.fillStyle = C.blue; ctx.fillRect(19, 0, 7, H);
+}
+function drawChrome(t, idx) {
+  // outside the 4:5 band (9:16 only)
+  font(30, 900, DISP); ctx.fillStyle = C.dim; ctx.save(); ctx.letterSpacing = "6px";
+  ctx.fillText("TESTOSTERONE ISN'T A PERSONALITY", X0, 190); ctx.restore();
+  font(30, 700, BODY); ctx.fillStyle = C.dim; ctx.fillText("Full article on X · @Muricaenjoyer", X0, 1760);
+  // progress bar
+  const py = 318;
+  ctx.fillStyle = C.line; ctx.fillRect(X0, py, X1 - X0, 6);
+  ctx.fillStyle = C.red; ctx.fillRect(X0, py, (X1 - X0) * clamp(t / TOTAL), 6);
+  // label row
+  label("Testosterone, fact-checked", X0, 378);
+  font(26, 800, BODY); ctx.textAlign = "right"; ctx.fillStyle = C.muted;
+  ctx.fillText(`${String(idx + 1).padStart(2, "0")} / ${SCENES.length}`, X1, 378); ctx.textAlign = "left";
+  // footer: source + handle
+  const s = SCENES[idx];
+  const fp = eOut(prog(t - s.a, 0.15, 0.6));
+  if (s.src) {
+    font(22, 500, BODY); ctx.fillStyle = C.muted; ctx.globalAlpha = fp;
+    const lines = wrapPlain(s.src, 640);
+    lines.slice(0, 3).forEach((ln, i) => ctx.fillText(ln, X0, 1572 + i * 29));
+    ctx.globalAlpha = 1;
+  }
+  font(28, 800, BODY); ctx.textAlign = "right"; ctx.fillStyle = C.fg;
+  ctx.fillText("@Muricaenjoyer", X1, 1600); ctx.textAlign = "left";
+}
+
+// ---------- scene 1: hook ----------
+function s1(lt) {
+  label("The Pentagon's", X0, 560, C.muted, 34);
+  words([[["“HIGH-T", C.red]], [["DEPARTMENT", C.fg]], [["OF WAR”", C.fg]]], X0 - 4, 700, 124, 132, 0.15, lt, { stagger: 0.18 });
+  words([[["just put this in writing:", C.fg]]], X0, 1110, 58, 70, 1.35, lt, { weight: 700, fam: BODY, stagger: 0.06 });
+  const up = eOut(prog(lt, 1.9, 2.5));
+  ctx.fillStyle = C.red; ctx.fillRect(X0, 1142, 640 * up, 8);
+}
+
+// ---------- scene 2: the quote ----------
+function s2(lt) {
+  const y = 470, h = 760;
+  const p = eOut(prog(lt, 0, 0.5));
+  ctx.globalAlpha = sceneAlpha * p;
+  ctx.fillStyle = C.panel; ctx.fillRect(X0, y + (1 - p) * 30, X1 - X0, h);
+  ctx.strokeStyle = C.line; ctx.lineWidth = 2; ctx.strokeRect(X0 + 1, y + 1 + (1 - p) * 30, X1 - X0 - 2, h - 2);
+  ctx.fillStyle = C.red; ctx.fillRect(X0, y + (1 - p) * 30, 10, h);
+  ctx.globalAlpha = sceneAlpha;
+  label("Defense Health Agency", X0 + 52, y + 78, C.muted, 24);
+  label("Clinical guidance · Sep 17, 2026", X0 + 52, y + 114, C.dim, 22);
+  // typewriter
+  const full = "Testosterone “is not a performance enhancer.”";
+  const n = Math.floor(full.length * clamp(prog(lt, 0.6, 2.2)));
+  font(84, 900, DISP);
+  const lines = ["Testosterone", "“is not a", "performance", "enhancer.”"];
+  let shown = n, yy = y + 260;
+  lines.forEach((ln, i) => {
+    const take = clamp(shown, 0, ln.length); shown -= ln.length + 1;
+    if (take <= 0) return;
+    ctx.fillStyle = i === 0 ? C.fg : C.fg;
+    ctx.fillText(ln.slice(0, take), X0 + 52, yy + i * 100);
+  });
+  // caret
+  if (lt < 2.4 && Math.floor(lt * 3) % 2 === 0) {
+    const li = Math.min(lines.length - 1, (() => { let c = n, i = 0; while (i < lines.length - 1 && c > lines[i].length) { c -= lines[i].length + 1; i++; } return i; })());
+    ctx.fillStyle = C.red; ctx.fillRect(X0 + 52 + ctx.measureText(lines[li].slice(0, Math.max(0, n - lines.slice(0, li).reduce((s, l) => s + l.length + 1, 0)))).width + 6, yy + li * 100 - 66, 8, 76);
+  }
+  // highlight sweep under "not a performance enhancer"
+  const hp = eInOut(prog(lt, 2.5, 3.2));
+  if (hp > 0) {
+    ctx.fillStyle = rgba(C.red, 0.85);
+    const ws = [ctx.measureText("“is not a").width, ctx.measureText("performance").width, ctx.measureText("enhancer.”").width];
+    ws.forEach((w, i) => { const seg = clamp(hp * 3 - i); if (seg > 0) ctx.fillRect(X0 + 52, yy + (i + 1) * 100 + 14, w * seg, 10); });
+  }
+  fadeText("It says the evidence doesn't support using it to improve energy, vitality, physical function or cognition.", X0 + 52, y + 690 - 28, 30, C.muted, lt, 3.4, { maxW: 800, lh: 40 });
+}
+
+// ---------- scene 3: pivot ----------
+function s3(lt) {
+  words([[["So what's", C.fg]], [["actually", C.fg]], [["true?", C.red]]], X0 - 4, 760, 160, 160, 0.1, lt, { stagger: 0.14 });
+}
+
+// ---------- scene 4: decline bars ----------
+function s4(lt) {
+  label("Young American men", X0, 500, C.muted, 30);
+  const cp = eOut(prog(lt, 0.2, 1.6));
+  font(230, 900, DISP); ctx.fillStyle = C.red;
+  ctx.fillText(`−${Math.round(25 * cp)}%`, X0 - 8, 720);
+  fadeText("less testosterone than in 1999", X0, 790, 44, C.fg, lt, 0.5, { weight: 700 });
+  // bars
+  const vals = [605, 567, 425, 432, 451], labs = ["1999", "2003", "2011", "2013", "2015"];
+  const top = 880, base = 1380, maxV = 700;
+  const bw = 112, gap = (X1 - 170 - X0 - bw * 5) / 4;
+  const ys = v => base - (v / maxV) * (base - top);
+  // 300 line
+  ctx.strokeStyle = C.muted; ctx.setLineDash([10, 10]); ctx.lineWidth = 2;
+  const lp = eOut(prog(lt, 2.6, 3.2));
+  ctx.globalAlpha = sceneAlpha * lp;
+  ctx.beginPath(); ctx.moveTo(X0, ys(300)); ctx.lineTo(X1 - 150, ys(300)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.globalAlpha = sceneAlpha;
+  vals.forEach((v, i) => {
+    const p = eOut(prog(lt, 0.9 + i * 0.22, 1.6 + i * 0.22));
+    const x = X0 + i * (bw + gap);
+    const hgt = (base - ys(v)) * p;
+    ctx.fillStyle = i < 2 ? C.blue : C.red;
+    ctx.fillRect(x, base - hgt, bw, hgt);
+    if (p > 0.05) {
+      font(40, 800, BODY); ctx.fillStyle = C.fg; ctx.textAlign = "center"; ctx.globalAlpha = sceneAlpha * p;
+      ctx.fillText(String(Math.round(v * p)), x + bw / 2, base - hgt - 16);
+      font(26, 600, BODY); ctx.fillStyle = C.muted; ctx.fillText(labs[i], x + bw / 2, base + 40);
+      ctx.textAlign = "left"; ctx.globalAlpha = sceneAlpha;
+    }
+  });
+  if (lp > 0) {
+    ctx.globalAlpha = sceneAlpha * lp;
+    font(24, 700, BODY); ctx.fillStyle = C.fg;
+    ctx.fillText("300 ng/dL", X1 - 132, ys(300) - 6); ctx.fillStyle = C.muted; ctx.fillText("\"low T\" line", X1 - 132, ys(300) + 26);
+    ctx.globalAlpha = sceneAlpha;
+  }
+}
+
+// ---------- scene 5: myth-bust ----------
+function s5(lt) {
+  words([[["RFK Jr. said", C.fg]], [["it \"dropped", C.fg]], [["50 percent.\"", C.fg]]], X0 - 2, 600, 96, 104, 0.05, lt, { stagger: 0.07 });
+  const y = 900;
+  font(200, 900, DISP);
+  const p50 = eOut(prog(lt, 0.9, 1.3));
+  ctx.globalAlpha = sceneAlpha * p50; ctx.fillStyle = C.muted; ctx.fillText("50%", X0 - 8, y + 130);
+  const w50 = ctx.measureText("50%").width;
+  const sp = eInOut(prog(lt, 1.5, 1.9));
+  ctx.globalAlpha = sceneAlpha; ctx.strokeStyle = C.red; ctx.lineWidth = 18; ctx.lineCap = "round";
+  if (sp > 0) { ctx.beginPath(); ctx.moveTo(X0, y + 70); ctx.lineTo(X0 + (w50 + 10) * sp, y + 70 - 30 * sp); ctx.stroke(); }
+  const p25 = eBack(clamp(prog(lt, 2.0, 2.5)));
+  if (lt > 2.0) {
+    ctx.save(); ctx.translate(X0 - 8, y + 350); ctx.scale(p25, p25);
+    font(200, 900, DISP); ctx.fillStyle = C.red; ctx.fillText("~25%", 0, 0); ctx.restore();
+    fadeText("what the best U.S. data shows", X0, y + 410, 36, C.muted, lt, 2.3, { weight: 600 });
+  }
+  fadeText("Real decline. Not a reason to panic-buy a vial.", X0, y + 500, 40, C.fg, lt, 2.8, { weight: 700 });
+}
+
+// ---------- scene 6: comeback ----------
+function s6(lt) {
+  words([[["Prescriptions are back", C.fg]], [["above the 2013 peak.", C.red]]], X0, 560, 72, 84, 0.05, lt, { stagger: 0.07 });
+  const vals = [0.83, 0.64, 0.93, 0.95], labs = ["2013", "2021", "2025", "2026"];
+  const top = 790, base = 1190, maxV = 1.05, bw = 170, gap = (X1 - X0 - bw * 4) / 3;
+  vals.forEach((v, i) => {
+    const p = eOut(prog(lt, 0.6 + i * 0.25, 1.3 + i * 0.25));
+    const x = X0 + i * (bw + gap), hgt = (v / maxV) * (base - top) * p;
+    ctx.fillStyle = i < 2 ? C.dim : C.red; ctx.fillRect(x, base - hgt, bw, hgt);
+    if (p > 0.05) {
+      ctx.globalAlpha = sceneAlpha * p; ctx.textAlign = "center";
+      font(46, 800, BODY); ctx.fillStyle = C.fg; ctx.fillText((v * p).toFixed(2) + "%", x + bw / 2, base - hgt - 18);
+      font(26, 600, BODY); ctx.fillStyle = C.muted; ctx.fillText(labs[i], x + bw / 2, base + 40);
+      ctx.textAlign = "left"; ctx.globalAlpha = sceneAlpha;
+    }
+  });
+  fadeText("of U.S. men with a testosterone prescription", X0, base + 88, 30, C.muted, lt, 1.2);
+  const tp = eBack(clamp(prog(lt, 2.6, 3.1)));
+  if (lt > 2.6) {
+    ctx.save(); ctx.translate(X1 - 10, 1384); ctx.rotate(-0.05); ctx.scale(tp, tp);
+    font(44, 900, DISP); const txt = "APPS: FROM $99/MONTH"; const tw = ctx.measureText(txt).width;
+    ctx.fillStyle = C.fg; ctx.fillRect(-tw - 40, -52, tw + 40, 72);
+    ctx.fillStyle = C.bg; ctx.fillText(txt, -tw - 20, 0); ctx.restore();
+  }
+}
+
+// ---------- scene 7: 0/46 ----------
+function s7(lt) {
+  words([[["The people selling", C.fg]], [["it to you:", C.fg]]], X0, 540, 72, 84, 0.05, lt);
+  const cols = 10, r = 26, gx = (X1 - X0 - r * 2) / (cols - 1), top = 720;
+  for (let i = 0; i < 46; i++) {
+    const p = eOut(prog(lt, 0.4 + i * 0.018, 0.7 + i * 0.018));
+    const cx = X0 + r + (i % cols) * gx, cy = top + Math.floor(i / cols) * 80;
+    ctx.globalAlpha = sceneAlpha * p;
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx, cy, r * p, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.globalAlpha = sceneAlpha;
+  fadeText("46 high-reach testosterone posts.", X0, 1150, 36, C.muted, lt, 1.2, { weight: 600 });
+  fadeText("Posts that cited any evidence:", X0, 1205, 36, C.fg, lt, 1.6, { weight: 700 });
+  const zp = eBack(clamp(prog(lt, 2.1, 2.6)));
+  if (lt > 2.1) { ctx.save(); ctx.translate(X0, 1390); ctx.scale(zp, zp); font(190, 900, DISP); ctx.fillStyle = C.red; ctx.fillText("0", 0, 0); ctx.restore(); }
+  fadeText("72% of the accounts had a", X0 + 170, 1325, 36, C.fg, lt, 2.8, { weight: 700 });
+  fadeText("financial tie to the product.", X0 + 170, 1372, 36, C.fg, lt, 2.8, { weight: 700 });
+}
+
+// ---------- scene 8: fertility ----------
+function s8(lt) {
+  const cp = eOut(prog(lt, 0.1, 1.2));
+  font(330, 900, DISP); ctx.fillStyle = C.red; ctx.fillText(`${Math.round(65 * cp)}%`, X0 - 12, 820);
+  words([[["of healthy men on weekly", C.fg]], [["testosterone shots had", C.fg]]], X0, 930, 56, 68, 0.6, lt, { weight: 700, fam: BODY, stagger: 0.05 });
+  const zp = eOut(prog(lt, 1.6, 2.1));
+  ctx.globalAlpha = sceneAlpha * zp; font(130, 900, DISP); ctx.fillStyle = C.fg;
+  ctx.fillText("ZERO SPERM", X0 - 4, 1170 + (1 - zp) * 30); ctx.globalAlpha = sceneAlpha;
+  fadeText("within 6 months. It was tested as birth control.", X0, 1260, 40, C.muted, lt, 2.4, { weight: 600 });
+}
+
+// ---------- scene 9: bodybuilders ----------
+function s9(lt) {
+  label("Pro bodybuilders", X0, 520, C.muted, 32);
+  const cp = eOut(prog(lt, 0.2, 1.3));
+  font(330, 900, DISP); ctx.fillStyle = C.red; ctx.fillText(`${(5.2 * cp).toFixed(1)}×`, X0 - 12, 820);
+  words([[["the sudden-cardiac-death", C.fg]], [["risk of amateurs", C.fg]]], X0, 930, 60, 72, 0.7, lt, { weight: 700, fam: BODY, stagger: 0.05 });
+  fadeText("Average age at death:", X0, 1170, 44, C.muted, lt, 1.6, { weight: 600 });
+  const ap = eOut(prog(lt, 1.9, 2.3));
+  ctx.globalAlpha = sceneAlpha * ap; font(150, 900, DISP); ctx.fillStyle = C.fg; ctx.fillText("45", X0 - 6, 1330); ctx.globalAlpha = sceneAlpha;
+}
+
+// ---------- scene 10: what works ----------
+function s10(lt) {
+  words([[["What actually", C.fg]], [["works:", C.red]]], X0, 560, 110, 116, 0.05, lt, { stagger: 0.1 });
+  const rows = [
+    ["SLEEP", "One week of 5-hour nights cut T by 10–15%."],
+    ["LOSE THE GUT", "A diet with ~10% weight loss: about +83 ng/dL."],
+    ["LIFT", "Heavy. Consistent. No vial required."],
+    ["TEST RIGHT", "Two morning blood draws + real symptoms."],
+  ];
+  rows.forEach((r, i) => {
+    const t0 = 0.7 + i * 0.95, p = eOut(prog(lt, t0, t0 + 0.45));
+    if (p <= 0) return;
+    const y = 790 + i * 160;
+    ctx.globalAlpha = sceneAlpha * p;
+    ctx.fillStyle = C.red; ctx.fillRect(X0, y - 40 + (1 - p) * 20, 8, 112);
+    font(52, 900, DISP); ctx.fillStyle = C.fg; ctx.fillText(r[0], X0 + 36 - (1 - p) * 30, y + 10);
+    font(34, 500, BODY); ctx.fillStyle = C.muted; ctx.fillText(r[1], X0 + 36 - (1 - p) * 30, y + 60);
+    ctx.globalAlpha = sceneAlpha;
+  });
+}
+
+// ---------- scene 11: close ----------
+function s11(lt) {
+  const a1 = eOut(prog(lt, 0.0, 0.5)) * (1 - eOut(prog(lt, 1.9, 2.3)));
+  ctx.globalAlpha = a1; font(84, 900, DISP); ctx.fillStyle = C.fg;
+  ctx.fillText("Strong was never", X0, 820); ctx.fillText("a lab value.", X0, 920);
+  ctx.globalAlpha = 1;
+  if (lt > 2.2) {
+    words([[["TESTOSTERONE", C.fg]], [["ISN'T A", C.red]], [["PERSONALITY", C.red]]], X0 - 6, 720, 106, 118, 2.3, lt, { stagger: 0.16 });
+    fadeText("Full article on my profile.", X0, 1080, 46, C.fg, lt, 3.1, { weight: 700 });
+    fadeText("@Muricaenjoyer", X0, 1150, 46, C.red, lt, 3.3, { weight: 800 });
+  }
+}
+
+// ---------- frame ----------
+function renderFrame(t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  drawBackground();
+  const idx = Math.max(0, SCENES.findIndex(s => t >= s.a && t < s.b) === -1 ? SCENES.length - 1 : SCENES.findIndex(s => t >= s.a && t < s.b));
+  const s = SCENES[idx], lt = t - s.a, d = s.b - s.a;
+  drawChrome(t, idx);
+  const last = idx === SCENES.length - 1;
+  const fadeIn = idx === 0 ? 1 : eOut(prog(lt, 0, 0.22));       // first frame doubles as the thumbnail
+  sceneAlpha = Math.min(fadeIn, last ? 1 : 1 - eOut(prog(lt, d - 0.25, d)));
+  ctx.globalAlpha = sceneAlpha;
+  s.draw(idx === 0 ? lt + 1.2 : lt);
+  ctx.globalAlpha = 1;
+  drawECG(t);
+}
+window.renderFrame = renderFrame;
+window.TOTAL = TOTAL;
+window.beats = function () {                       // times of each heartbeat spike (for audio)
+  const out = []; for (let k = 0; k * BEAT < TOTAL; k++) { const t = k * BEAT + 0.36 * BEAT; if (amp(t) > 0.5) out.push(+t.toFixed(4)); } return out;
+};
+window.ready = Promise.all([
+  document.fonts.load(`900 100px "Inter Display"`), document.fonts.load(`800 30px "Inter"`),
+  document.fonts.load(`700 30px "Inter"`), document.fonts.load(`600 30px "Inter"`), document.fonts.load(`500 30px "Inter"`)
+]).then(() => { renderFrame(0); return true; });
+</script>
+</body></html>

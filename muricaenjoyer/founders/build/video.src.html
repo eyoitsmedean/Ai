@@ -1,0 +1,532 @@
+<title>Founders' Group Chat</title>
+<style>
+@font-face { font-family: "Fell"; font-style: italic; font-weight: 400; src: url(data:font/woff2;base64,__FELL_ITALIC__) format("woff2"); }
+@font-face { font-family: "Fell"; font-style: normal; font-weight: 400; src: url(data:font/woff2;base64,__FELL_REGULAR__) format("woff2"); }
+:root {
+  --bg: #f3f1ec; --fg: #17171b; --muted: #5a5a63; --line: #d8d4cb; --panel: #ffffff;
+  --accent: #1f5fd6; --btn: #17171b; --btn-fg: #ffffff; --focus: #1f5fd6; --stage: #09090b;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0b0d; --fg: #f2f2f5; --muted: #9b9ba4; --line: #26262c; --panel: #141418;
+    --accent: #7aa7ff; --btn: #f2f2f5; --btn-fg: #0b0b0d; --focus: #7aa7ff; --stage: #09090b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0b0d; --fg: #f2f2f5; --muted: #9b9ba4; --line: #26262c; --panel: #141418;
+  --accent: #7aa7ff; --btn: #f2f2f5; --btn-fg: #0b0b0d; --focus: #7aa7ff; --stage: #09090b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
+.wrap { max-width: 480px; margin: 0 auto; padding: 28px 16px 56px; }
+.kicker { margin: 0; font-family: Fell, Georgia, serif; font-style: italic; color: var(--muted); font-size: 18px; }
+h1 { margin: 2px 0 6px; font-size: 30px; line-height: 1.15; letter-spacing: -0.01em; }
+.lede { margin: 0 0 18px; color: var(--muted); font-size: 15px; }
+.lede strong { color: var(--fg); font-weight: 600; }
+.stage { background: var(--stage); border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+#c { display: block; width: 100%; height: auto; }
+.controls { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.controls button { flex: none; font: 600 14px/1 Inter, system-ui, sans-serif; padding: 10px 16px; border-radius: 999px; border: 0; background: var(--btn); color: var(--btn-fg); cursor: pointer; min-width: 84px; }
+.controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.controls output { flex: none; font: 500 13px/1 Inter, system-ui, sans-serif; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 72px; text-align: right; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+details { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; }
+summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+ol { padding-left: 22px; margin: 12px 0 0; }
+li { margin: 0 0 12px; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+li q { quotes: none; }
+li .who { font-weight: 600; }
+li .src { display: block; color: var(--muted); font-size: 13px; }
+li a { color: var(--accent); }
+.foot { margin-top: 18px; font-size: 13px; color: var(--muted); }
+.foot strong { color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+<main class="wrap">
+  <p class="kicker">1776 – 1826</p>
+  <h1>The Founders' Group Chat</h1>
+  <p class="lede">Fifty years of the Founders, told as a group chat. <strong>Every message is a real quote</strong>, original spelling kept. By <strong>@Muricaenjoyer</strong>.</p>
+  <div class="stage"><canvas id="c" width="1080" height="1920" role="img" aria-label="Animated group chat between Abigail Adams, John Adams, George Washington, Benjamin Franklin, Thomas Jefferson and Alexander Hamilton, from 1776 to July 4, 1826. The full transcript is below."></canvas></div>
+  <div class="controls">
+    <button id="play" type="button">Play</button>
+    <input id="scrub" type="range" min="0" max="100" step="0.01" value="0" aria-label="Position in the video">
+    <output id="clock" for="scrub">0:00</output>
+  </div>
+  <details>
+    <summary>Read the chat, with sources</summary>
+    <ol id="transcript"></ol>
+  </details>
+  <p class="foot">Lines like "left the chat" are interface captions, not quotes. Made by <strong>@Muricaenjoyer</strong>.</p>
+</main>
+<script>
+// ===== The Founders' Group Chat: deterministic canvas renderer =====
+// renderFrame(t) draws the frame at time t (seconds). No clocks, no randomness.
+const W = 1080, H = 1920;
+const BAND_T = 285, BAND_B = 1635;         // 4:5 crop band (1080x1350)
+const HEAD_B = 505;                        // header: 285..505
+const VIEW_T = HEAD_B, VIEW_B = 1526;      // thread viewport
+const PAD_T = 30, PAD_B = 26;
+const C = {
+  bg: "#09090B", head: "#131317", headLine: "#25252B", fg: "#F4F4F6", muted: "#8E8E97", dim: "#5F5F68",
+  grey: "#26262C", blue: "#2F6FEA", comp: "#0E0E11", pill: "#17171C", pillLine: "#2E2E36",
+  parchBg: "#1E1A14", parchLine: "#4A3F2C", parch: "#E9D6AA", parchDim: "#B9A47D", sys: "#A6A6AF",
+  sysBg: "#16161A", white: "#FFFFFF", leftGrey: "#3A3A41"
+};
+const SANS = 'Inter, "Helvetica Neue", Arial, sans-serif';
+const DISP = '"Inter Display", Inter, "Helvetica Neue", Arial, sans-serif';
+const SERIF = 'Fell, Georgia, "Times New Roman", serif';
+const P = {
+  AA: { name: "Abigail Adams", ini: "AA", col: "#C2577A", light: "#F29BB8" },
+  JA: { name: "John Adams", ini: "JA", col: "#2F6FEA", light: "#9CC0FF" },
+  GW: { name: "George Washington", ini: "GW", col: "#3B8A5A", light: "#86D3A3" },
+  BF: { name: "Benjamin Franklin", ini: "BF", col: "#BD7A22", light: "#F2BA6A" },
+  TJ: { name: "Thomas Jefferson", ini: "TJ", col: "#7A58CC", light: "#C2A8FF" },
+  AH: { name: "Alexander Hamilton", ini: "AH", col: "#BF4545", light: "#F59393" },
+};
+const ORDER = ["AA", "JA", "GW", "BF", "TJ", "AH"];
+
+const ITEMS = [
+  { k: "card", title: "Every message is a real quote.", body: "Original spelling kept. The source is under each bubble." },
+  { k: "div", text: "March 31, 1776" },
+  { k: "msg", who: "AA", text: "I desire you would Remember the Ladies…", src: "Letter to John Adams · 31 Mar 1776", url: "https://founders.archives.gov/documents/Adams/04-01-02-0241" },
+  { k: "msg", who: "AA", text: "…we are determined to foment a Rebelion", src: "Letter to John Adams · 31 Mar 1776", url: "https://founders.archives.gov/documents/Adams/04-01-02-0241", receipt: "Read by John Adams" },
+  { k: "msg", who: "JA", text: "As to your extraordinary Code of Laws, I cannot but laugh.", src: "Letter to Abigail Adams · 14 Apr 1776", url: "https://founders.archives.gov/documents/Adams/04-01-02-0248" },
+  { k: "div", text: "July 4, 1776" },
+  { k: "sys", text: "Thomas Jefferson named the conversation “The United States of America”", rename: "The United States of America" },
+  { k: "msg", who: "GW", text: "The benefits arising from moderate use of strong Liquor … are not to be disputed.", src: "Letter to John Hancock · 16 Aug 1777", url: "https://founders.archives.gov/documents/Washington/03-10-02-0622" },
+  { k: "msg", who: "BF", text: "…a constant proof that God loves us, and loves to see us happy.", src: "Letter to the Abbé Morellet, on wine · 1779", url: "https://barrypopik.com/blog/beer_is_proof_that_god_loves_us_and_wants_us_to_be_happy" },
+  { k: "msg", who: "TJ", text: "He is vain, irritable … This is all the ill which can possibly be said of him.", src: "Letter to James Madison, about John Adams · 30 Jan 1787", url: "https://founders.archives.gov/documents/Madison/01-09-02-0126" },
+  { k: "msg", who: "GW", text: "…feelings not unlike those of a culprit who is going to the place of his execution", src: "Letter to Henry Knox, on becoming President · 1 Apr 1789", url: "https://founders.archives.gov/documents/Washington/05-02-02-0003" },
+  { k: "msg", who: "BF", text: "…in this world nothing can be said to be certain, except death and taxes.", src: "Letter to Jean-Baptiste Le Roy · 13 Nov 1789", url: "https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo" },
+  { k: "msg", who: "AH", text: "My real crime is an amorous connection with his wife…", src: "The “Reynolds Pamphlet” · Aug 1797", url: "https://en.wikipedia.org/wiki/Hamilton%E2%80%93Reynolds_affair" },
+  { k: "msg", who: "TJ", text: "…I did consider his last appointments to office as personally unkind.", src: "Letter to Abigail Adams, about John · 13 Jun 1804", url: "https://founders.archives.gov/documents/Adams/04-15-02-0219" },
+  { k: "msg", who: "JA", text: "The Declaration of Independence I always considered as a Theatrical Show. Jefferson ran away with … all the Glory of it.", src: "Letter to Benjamin Rush · 21 Jun 1811", url: "https://founders.archives.gov/documents/Adams/99-02-02-5649" },
+  { k: "msg", who: "JA", text: "I always loved Jefferson, and still love him.", src: "Said aloud at Quincy, as reported · 1811", url: "https://founders.archives.gov/documents/Adams/99-02-02-5725" },
+  { k: "msg", who: "TJ", text: "“I always loved Jefferson, and still love him.”—this is enough for me.", src: "Letter to Benjamin Rush · 5 Dec 1811", url: "https://founders.archives.gov/documents/Jefferson/03-04-02-0248" },
+  { k: "msg", who: "JA", text: "You and I ought not to die, before We have explained ourselves to each other.", src: "Letter to Thomas Jefferson · 15 Jul 1813", url: "https://founders.archives.gov/documents/Adams/99-03-02-2334" },
+  { k: "msg", who: "TJ", text: "Is it the Fourth?", src: "On his deathbed, as recorded by his doctor · night of 3 Jul 1826", url: "https://www.monticello.org/encyclopedia/jeffersons-last-words", slow: true },
+  { k: "div", text: "July 4, 1826", sub: "50 years to the day", big: true },
+  { k: "sys", text: "Thomas Jefferson left the chat", sub: "around noon", leave: "TJ" },
+  { k: "msg", who: "JA", text: "Thomas Jefferson survives.", src: "Last words at Quincy, as reported · 4 Jul 1826", url: "https://www.historynewsnetwork.org/article/jefferson-still-survives", final: true },
+  { k: "sys", text: "John Adams left the chat", sub: "that evening", leave: "JA", quiet: true },
+];
+
+// ---------- timeline (independent of fonts) ----------
+const len = s => Array.from(s).length;
+const readTime = s => 0.9 + 0.055 * len(s);
+let T_END = 0, T_RENAME = 1e9;
+const LEAVE = {};
+(function buildTimeline() {
+  ITEMS[0].tIn = ITEMS[1].tIn = ITEMS[2].tIn = ITEMS[3].tIn = -10;   // first frame = thumbnail
+  ITEMS[3].receiptAt = 2.0;
+  let T = 4.9;                                         // both opening lines take ~6s to read
+  for (let i = 4; i < ITEMS.length; i++) {
+    const it = ITEMS[i], prev = ITEMS[i - 1];
+    if (it.k === "msg") {
+      const same = prev.k === "msg" && prev.who === it.who;
+      let typ;
+      if (it.who === "JA") {
+        if (it.final) { typ = 4.2; it.segs = [[0.35, 1.55, 0, 16], [2.75, 3.55, 16, 26]]; }
+        else { typ = Math.min(1.5, 0.5 + 0.011 * len(it.text)); it.segs = [[0.1, typ - 0.22, 0, len(it.text)]]; }
+      } else typ = it.slow ? 2.2 : (same ? 0.5 : 0.7);
+      if (it.slow) T += 0.9;                               // the ending starts to slow down
+      it.typStart = T; it.tIn = T + typ;
+      T = it.tIn + readTime(it.text);
+      if (it.slow) T += 1.3;
+      if (it.final) T += 2.7;                              // a beat of silence
+      if (it.receipt) it.receiptAt = it.tIn + 1.35;
+    } else if (it.k === "div") {
+      it.tIn = T + (it.big ? 0.4 : 0); T = it.tIn + (it.big ? 2.5 : 1.1);
+    } else if (it.k === "sys") {
+      it.tIn = T;
+      T += it.leave ? (it.quiet ? 2.7 : 3.0) : 0.9 + 0.035 * len(it.text);
+      if (it.rename) T_RENAME = it.tIn + 0.35;
+      if (it.leave) LEAVE[it.leave] = it.tIn;
+    }
+  }
+  T_END = T;
+})();
+const TOTAL = +(T_END + 4.8).toFixed(2);
+
+// ---------- helpers ----------
+const ctx = document.getElementById("c").getContext("2d");
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+const eOut = p => 1 - Math.pow(1 - p, 3);
+const eInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const eBack = p => { const c1 = 1.6, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+function font(weight, size, fam = SANS, style = "") { ctx.font = `${style ? style + " " : ""}${weight} ${size}px ${fam}`; }
+function wrap(text, maxW) {
+  const out = []; let line = "";
+  for (const w of text.split(" ")) {
+    const test = line ? line + " " + w : w;
+    if (line && ctx.measureText(test).width > maxW) { out.push(line); line = w; } else line = test;
+  }
+  if (line) out.push(line);
+  return out;
+}
+function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; }
+function text(s, x, y, color, align = "left") { ctx.fillStyle = color; ctx.textAlign = align; ctx.fillText(s, x, y); ctx.textAlign = "left"; }
+
+// ---------- message metrics ----------
+const AV_R = 30, AV_X = 68, BL = 120, BR = 1034, BMAX = 800, PADX = 32, PADY = 18;
+const FS = 44, LH = 58, NAME_H = 32, NAME_GAP = 8, SRC_FS = 24, SRC_LH = 31, SRC_GAP = 12;
+const TYP_W = 132, TYP_H = 84;
+
+function measure() {
+  for (const it of ITEMS) {
+    if (it.k === "msg") {
+      font(400, FS);
+      it.lines = wrap(it.text, BMAX - PADX * 2);
+      it.bw = Math.max(...it.lines.map(l => ctx.measureText(l).width)) + PADX * 2;
+      it.bh = it.lines.length * LH + PADY * 2;
+      font(400, SRC_FS);
+      it.srcLines = wrap(it.src, 860);
+      it.h = NAME_H + NAME_GAP + it.bh + SRC_GAP + it.srcLines.length * SRC_LH + (it.receipt ? SRC_LH + 2 : 0) - 6;
+      it.hTyp = NAME_H + NAME_GAP + TYP_H;
+    } else if (it.k === "div") {
+      it.h = it.big ? 168 : 92;
+    } else if (it.k === "sys") {
+      font(500, 28);
+      it.lines = wrap(it.text, 760);
+      it.bw = Math.max(...it.lines.map(l => ctx.measureText(l).width)) + 64;
+      it.bh = it.lines.length * 38 + (it.sub ? 34 : 0) + 30;
+      it.h = it.bh;
+    } else if (it.k === "card") {
+      font(400, 27);
+      it.bodyLines = wrap(it.body, 760);
+      it.h = 28 + 40 + 10 + it.bodyLines.length * 36 + 24;
+    }
+  }
+}
+function gapBetween(a, b) {
+  if (a.k === "msg" && b.k === "msg" && a.who === b.who) return 24;
+  if (a.k === "card") return 26;
+  return 34;
+}
+
+// layout at time t: content-space y for each visible item (+ typing slot)
+function layoutAt(t) {
+  let y = 0, prev = null; const list = [];
+  for (const it of ITEMS) {
+    const vis = it.tIn <= t;
+    const typing = !vis && it.k === "msg" && it.who !== "JA" && t >= it.typStart;
+    if (!vis && !typing) break;
+    if (prev) y += gapBetween(prev, it);
+    const h = vis ? it.h : it.hTyp;
+    list.push({ it, y, h, typing });
+    y += h; prev = it;
+    if (!vis) break;
+  }
+  return { list, total: y };
+}
+let SCROLL = [];   // [{t, d}] scroll target deltas
+function buildScroll() {
+  const viewH = VIEW_B - VIEW_T - PAD_T - PAD_B;
+  const target = t => Math.max(0, layoutAt(t).total - viewH);
+  const times = [];
+  for (const it of ITEMS) { if (it.tIn > 0) times.push(it.tIn); if (it.typStart !== undefined && it.who !== "JA") times.push(it.typStart); }
+  times.sort((a, b) => a - b);
+  let last = target(0); SCROLL = [{ t: -1, d: last }];
+  for (const tm of times) { const v = target(tm + 1e-4); if (v !== last) { SCROLL.push({ t: tm, d: v - last }); last = v; } }
+}
+function scrollAt(t) {
+  let s = 0;
+  for (const c of SCROLL) s += c.t < 0 ? c.d : c.d * eInOut(prog(t, c.t, c.t + 0.5));
+  return s;
+}
+
+// ---------- avatars ----------
+function avatar(k, cx, cy, r, gone = 0, ring = null) {
+  const p = P[k];
+  if (ring) { ctx.fillStyle = ring; ctx.beginPath(); ctx.arc(cx, cy, r + 5, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = p.col; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  if (gone > 0) { ctx.fillStyle = rgba(C.leftGrey, gone); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); }
+  font(700, Math.round(r * 0.74));
+  ctx.textBaseline = "middle"; text(p.ini, cx, cy + 1, gone > 0 ? rgba("#FFFFFF", 1 - 0.55 * gone) : C.white, "center"); ctx.textBaseline = "alphabetic";
+}
+
+// ---------- thread items ----------
+function popScale(t, t0) { return t0 < 0 ? 1 : lerp(0.55, 1, eBack(prog(t, t0, t0 + 0.38))); }
+function fadeIn(t, t0, d = 0.2) { return t0 < 0 ? 1 : eOut(prog(t, t0, t0 + d)); }
+
+function drawMsg(it, y, t, typing) {
+  const out = it.who === "JA", p = P[it.who];
+  const t0 = typing ? it.typStart : it.tIn;
+  const a = fadeIn(t, t0, 0.18), s = popScale(t, t0);
+  const bw = typing ? TYP_W : it.bw, bh = typing ? TYP_H : it.bh;
+  const bx = out ? BR - bw : BL, by = y + NAME_H + NAME_GAP, bb = by + bh;
+  // sender name
+  ctx.globalAlpha = typing ? a : fadeIn(t, it.typStart !== undefined && it.who !== "JA" ? it.typStart : t0, 0.2);
+  font(600, 26); text(p.name, out ? BR - 4 : BL + 4, y + 25, p.light, out ? "right" : "left");
+  // avatar
+  if (!out) avatar(it.who, AV_X, bb - AV_R, AV_R);
+  // bubble (pops from its bottom corner)
+  ctx.save();
+  ctx.globalAlpha = a;
+  const ox = out ? BR : BL;
+  ctx.translate(ox, bb); ctx.scale(s, s); ctx.translate(-ox, -bb);
+  ctx.fillStyle = out ? C.blue : C.grey;
+  ctx.beginPath();
+  ctx.roundRect(bx, by, bw, bh, out ? [34, 34, 10, 34] : [34, 34, 34, 10]);
+  ctx.fill();
+  if (typing) {
+    for (let i = 0; i < 3; i++) {
+      const ph = (t - it.typStart) * 1.9 - i * 0.2;
+      const b = Math.max(0, Math.sin(ph * Math.PI * 2));
+      ctx.fillStyle = rgba("#D6D6DC", 0.4 + 0.6 * b);
+      ctx.beginPath(); ctx.arc(bx + 40 + i * 26, by + bh / 2 - 6 * b, 8.5, 0, Math.PI * 2); ctx.fill();
+    }
+  } else {
+    font(400, FS);
+    it.lines.forEach((ln, i) => text(ln, bx + PADX, by + PADY + 44 + i * LH, C.white));
+  }
+  ctx.restore();
+  if (!typing) {
+    ctx.globalAlpha = fadeIn(t, it.tIn < 0 ? -1 : it.tIn + 0.15, 0.35);
+    font(400, SRC_FS);
+    it.srcLines.forEach((ln, i) => text(ln, out ? BR - 4 : BL + 4, bb + SRC_GAP + 23 + i * SRC_LH, C.muted, out ? "right" : "left"));
+    if (it.receipt) {
+      ctx.globalAlpha = eOut(prog(t, it.receiptAt, it.receiptAt + 0.35));
+      font(600, 22);
+      text(it.receipt, BL + 4, bb + SRC_GAP + 23 + it.srcLines.length * SRC_LH + 2, C.dim);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+function drawDiv(it, y, t) {
+  const a = fadeIn(t, it.tIn, 0.5), r = it.tIn < 0 ? 1 : eOut(prog(t, it.tIn, it.tIn + 0.7));
+  const cy = y + (it.big ? 70 : 54);
+  const fs = it.big ? 54 : 38;
+  font(400, fs, SERIF, "italic");
+  const tw = ctx.measureText(it.text).width;
+  ctx.globalAlpha = a;
+  text(it.text, W / 2, cy, C.parch, "center");
+  // rules with lozenge ends
+  const gap = 34, len0 = it.big ? 150 : 190;
+  ctx.fillStyle = C.parchLine;
+  for (const dir of [-1, 1]) {
+    const x0 = W / 2 + dir * (tw / 2 + gap), x1 = x0 + dir * len0 * r;
+    const ly = cy - fs * 0.28;
+    ctx.fillRect(Math.min(x0, x1), ly - 1, Math.abs(x1 - x0), 2);
+    ctx.save(); ctx.translate(x0, ly); ctx.rotate(Math.PI / 4); ctx.fillStyle = C.parchDim; ctx.fillRect(-5, -5, 10, 10); ctx.restore();
+  }
+  if (it.sub) {
+    ctx.globalAlpha = it.tIn < 0 ? 1 : eOut(prog(t, it.tIn + 0.7, it.tIn + 1.3));
+    font(400, 32, SERIF, "italic"); text(it.sub, W / 2, cy + 56, C.parchDim, "center");
+  }
+  ctx.globalAlpha = 1;
+}
+function drawSys(it, y, t) {
+  const a = fadeIn(t, it.tIn, it.quiet ? 0.9 : 0.35);
+  ctx.globalAlpha = a;
+  const bx = (W - it.bw) / 2;
+  ctx.fillStyle = C.sysBg; ctx.beginPath(); ctx.roundRect(bx, y, it.bw, it.bh, 26); ctx.fill();
+  font(500, 28);
+  it.lines.forEach((ln, i) => text(ln, W / 2, y + 15 + 29 + i * 38, C.sys, "center"));
+  if (it.sub) { font(400, 23); text(it.sub, W / 2, y + 15 + 29 + it.lines.length * 38 - 4, C.dim, "center"); }
+  ctx.globalAlpha = 1;
+}
+function drawCard(it, y) {
+  const x = 100, w = W - 200;
+  ctx.fillStyle = C.parchBg; ctx.beginPath(); ctx.roundRect(x, y, w, it.h, 26); ctx.fill();
+  ctx.strokeStyle = C.parchLine; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(x + 1, y + 1, w - 2, it.h - 2, 25); ctx.stroke();
+  font(700, 34); text(it.title, W / 2, y + 28 + 34, C.parch, "center");
+  font(400, 27); it.bodyLines.forEach((ln, i) => text(ln, W / 2, y + 28 + 40 + 10 + 27 + i * 36, C.parchDim, "center"));
+}
+function drawThread(t) {
+  const { list } = layoutAt(t);
+  const s = scrollAt(t);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, VIEW_T, W, VIEW_B - VIEW_T); ctx.clip();
+  for (const e of list) {
+    const y = VIEW_T + PAD_T + e.y - s;
+    if (y + e.h < VIEW_T - 40 || y > VIEW_B + 40) continue;
+    if (e.it.k === "msg") drawMsg(e.it, y, t, e.typing);
+    else if (e.it.k === "div") drawDiv(e.it, y, t);
+    else if (e.it.k === "sys") drawSys(e.it, y, t);
+    else if (e.it.k === "card") drawCard(e.it, y);
+  }
+  ctx.restore();
+  // soft edges under the header and above the composer
+  let g = ctx.createLinearGradient(0, VIEW_T, 0, VIEW_T + 40);
+  g.addColorStop(0, rgba(C.bg, 1)); g.addColorStop(1, rgba(C.bg, 0));
+  ctx.fillStyle = g; ctx.fillRect(0, VIEW_T, W, 40);
+  g = ctx.createLinearGradient(0, VIEW_B - 26, 0, VIEW_B);
+  g.addColorStop(0, rgba(C.bg, 0)); g.addColorStop(1, rgba(C.bg, 1));
+  ctx.fillStyle = g; ctx.fillRect(0, VIEW_B - 26, W, 26);
+}
+
+// ---------- header ----------
+function drawHeader(t) {
+  ctx.fillStyle = C.head; ctx.fillRect(0, BAND_T, W, HEAD_B - BAND_T);
+  ctx.fillStyle = C.headLine; ctx.fillRect(0, HEAD_B - 2, W, 2);
+  // back chevron
+  ctx.strokeStyle = "#5B93FF"; ctx.lineWidth = 6; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.beginPath(); ctx.moveTo(66, 368); ctx.lineTo(44, 394); ctx.lineTo(66, 420); ctx.stroke();
+  // avatar cluster
+  const r = 35, step = 66, x0 = W / 2 - step * 2.5, cy = 352;
+  ORDER.forEach((k, i) => {
+    const gone = LEAVE[k] !== undefined ? 0.85 * eOut(prog(t, LEAVE[k] + 0.2, LEAVE[k] + 1.2)) : 0;
+    avatar(k, x0 + i * step, cy, r, gone, C.head);
+  });
+  // group name (renamed on July 4, 1776)
+  const r1 = eInOut(prog(t, T_RENAME, T_RENAME + 0.3)), r2 = eOut(prog(t, T_RENAME + 0.3, T_RENAME + 0.75));
+  font(700, 40);
+  if (r1 < 1) { ctx.globalAlpha = 1 - r1; text("The Founders", W / 2, 442 - r1 * 16, C.fg, "center"); }
+  if (r2 > 0) { ctx.globalAlpha = r2; text("The United States of America", W / 2, 442 + (1 - r2) * 16, C.fg, "center"); }
+  ctx.globalAlpha = 1;
+  // member count
+  let n = 6; for (const k in LEAVE) if (t >= LEAVE[k] + 0.2) n--;
+  font(400, 24); text(`${n} members`, W / 2, 478, C.muted, "center");
+  // handle
+  font(600, 24); text("@Muricaenjoyer", W - 44, 360, C.muted, "right");
+}
+
+// ---------- composer ----------
+function composeText(t) {
+  for (const it of ITEMS) {
+    if (it.k !== "msg" || it.who !== "JA" || it.typStart === undefined) continue;
+    if (t < it.typStart || t >= it.tIn) continue;
+    const lt = t - it.typStart; let n = 0, active = false;
+    for (const [a, b, c0, c1] of it.segs) {
+      if (lt >= a) n = Math.round(lerp(c0, c1, prog(lt, a, b)));
+      if (lt >= a && lt < b) active = true;
+    }
+    return { s: Array.from(it.text).slice(0, n).join(""), active };
+  }
+  return null;
+}
+function drawComposer(t) {
+  ctx.fillStyle = C.comp; ctx.fillRect(0, VIEW_B, W, BAND_B - VIEW_B);
+  ctx.fillStyle = C.headLine; ctx.fillRect(0, VIEW_B, W, 2);
+  const cy = 1581;
+  // plus button
+  ctx.fillStyle = "#1F1F25"; ctx.beginPath(); ctx.arc(72, cy, 30, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = C.muted; ctx.lineWidth = 4; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(60, cy); ctx.lineTo(84, cy); ctx.moveTo(72, cy - 12); ctx.lineTo(72, cy + 12); ctx.stroke();
+  // pill
+  const px = 122, pw = 818, ph = 66, py = cy - ph / 2;
+  ctx.fillStyle = C.pill; ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 33); ctx.fill();
+  ctx.strokeStyle = C.pillLine; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(px + 1, py + 1, pw - 2, ph - 2, 32); ctx.stroke();
+  const ct = composeText(t);
+  font(400, 32);
+  ctx.save(); ctx.beginPath(); ctx.rect(px + 24, py, pw - 48, ph); ctx.clip();
+  let caretX = px + 30;
+  if (ct && ct.s.length) {
+    const tw = ctx.measureText(ct.s).width, room = pw - 66;
+    const x = tw > room ? px + 30 + room - tw : px + 30;
+    text(ct.s, x, cy + 11, C.fg); caretX = x + tw + 3;
+  } else {
+    text("Write a letter…", px + 30, cy + 11, C.dim);
+  }
+  if (ct && (ct.active || Math.floor(t * 2.4) % 2 === 0)) { ctx.fillStyle = "#5B93FF"; ctx.fillRect(caretX, cy - 20, 3, 40); }
+  ctx.restore();
+  // send button
+  const has = ct && ct.s.length > 0;
+  ctx.fillStyle = has ? C.blue : "#24242A"; ctx.beginPath(); ctx.arc(1004, cy, 30, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = has ? C.white : C.dim; ctx.lineWidth = 4.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.beginPath(); ctx.moveTo(1004, cy + 13); ctx.lineTo(1004, cy - 13); ctx.moveTo(993, cy - 2); ctx.lineTo(1004, cy - 13); ctx.lineTo(1015, cy - 2); ctx.stroke();
+}
+
+// ---------- outside the 4:5 band (9:16 only) ----------
+function drawOuter() {
+  font(400, 38, SERIF, "italic"); text("1776 – 1826", W / 2, 122, C.parchDim, "center");
+  let fs = 72; font(800, fs, DISP);
+  while (ctx.measureText("The Founders’ Group Chat").width > 960) { fs -= 2; font(800, fs, DISP); }
+  text("The Founders’ Group Chat", W / 2, 212, C.fg, "center");
+  font(500, 30); text("Every message is a real quote. Sources in the replies.", W / 2, 1738, C.muted, "center");
+  font(700, 36); text("@Muricaenjoyer", W / 2, 1796, C.fg, "center");
+}
+
+// ---------- end card ----------
+function drawEnd(t) {
+  const a = eOut(prog(t, T_END, T_END + 1.0));
+  if (a <= 0) return;
+  ctx.globalAlpha = a; ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+  const f = (d, dur = 0.6) => eOut(prog(t, T_END + d, T_END + d + dur));
+  const r = 40, step = 62, x0 = W / 2 - step * 2.5;
+  ctx.globalAlpha = f(0.3);
+  ORDER.forEach((k, i) => avatar(k, x0 + i * step, 640, r, 0, C.bg));
+  ctx.globalAlpha = f(0.6); font(800, 88, DISP);
+  text("Every message", W / 2, 818 + (1 - f(0.6)) * 20, C.fg, "center");
+  text("is a real quote.", W / 2, 916 + (1 - f(0.6)) * 20, C.fg, "center");
+  ctx.globalAlpha = f(1.1); font(500, 36);
+  text("Original spelling. Sources in the replies.", W / 2, 1012, C.muted, "center");
+  ctx.globalAlpha = f(1.5); font(700, 52); text("@Muricaenjoyer", W / 2, 1130, "#9CC0FF", "center");
+  ctx.globalAlpha = f(1.9); font(400, 40, SERIF, "italic"); text("1776 – 1826", W / 2, 1222, C.parchDim, "center");
+  ctx.globalAlpha = 1;
+}
+
+// ---------- frame ----------
+let READY = false;
+function renderFrame(t) {
+  if (!READY) return;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+  drawOuter();
+  drawThread(t);
+  drawHeader(t);
+  drawComposer(t);
+  drawEnd(t);
+}
+window.renderFrame = renderFrame;
+window.TOTAL = TOTAL;
+// sound cues for the audio track: [{t, kind}]
+window.beats = function () {
+  const out = [];
+  for (const it of ITEMS) {
+    if (it.tIn < 0) continue;
+    if (it.k === "msg") out.push({ t: +it.tIn.toFixed(3), kind: it.who === "JA" ? "out" : "in", final: !!it.final });
+    if (it.k === "sys" && !it.quiet) out.push({ t: +it.tIn.toFixed(3), kind: "sys" });
+  }
+  out.push({ t: +T_END.toFixed(3), kind: "end", total: TOTAL });
+  return out;
+};
+window.ready = Promise.all([
+  document.fonts.load('italic 400 40px Fell'), document.fonts.load('400 40px Fell'),
+  document.fonts.load('400 40px Inter'), document.fonts.load('500 30px Inter'), document.fonts.load('600 30px Inter'),
+  document.fonts.load('700 30px Inter'), document.fonts.load('800 80px "Inter Display"')
+]).then(() => { measure(); buildScroll(); READY = true; renderFrame(0); return true; });
+
+// ---------- page player (skipped when a renderer drives the page) ----------
+(function player() {
+  const btn = document.getElementById("play"), scrub = document.getElementById("scrub"), clock = document.getElementById("clock");
+  const list = document.getElementById("transcript");
+  for (const it of ITEMS) {
+    if (it.k !== "msg") continue;
+    const li = document.createElement("li");
+    const who = document.createElement("span"); who.className = "who"; who.textContent = P[it.who].name + ": ";
+    const q = document.createElement("q"); q.textContent = it.text;
+    const src = document.createElement("span"); src.className = "src";
+    const a = document.createElement("a"); a.href = it.url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = it.src;
+    src.appendChild(a); li.append(who, q, src); list.appendChild(li);
+  }
+  scrub.max = TOTAL;
+  const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  let playing = false, cur = 0, base = 0, startAt = 0;
+  const show = () => { renderFrame(cur); scrub.value = cur; clock.textContent = `${fmt(cur)} / ${fmt(TOTAL)}`; };
+  const loop = now => {
+    if (!playing) return;
+    cur = Math.min(TOTAL, base + (now - startAt) / 1000);
+    show();
+    if (cur >= TOTAL) { playing = false; btn.textContent = "Replay"; return; }
+    requestAnimationFrame(loop);
+  };
+  const play = () => { if (cur >= TOTAL) cur = 0; playing = true; base = cur; startAt = performance.now(); btn.textContent = "Pause"; requestAnimationFrame(loop); };
+  const pause = () => { playing = false; btn.textContent = cur >= TOTAL ? "Replay" : "Play"; };
+  btn.addEventListener("click", () => (playing ? pause() : play()));
+  scrub.addEventListener("input", () => { pause(); cur = +scrub.value; show(); });
+  window.ready.then(() => {
+    show();
+    if (navigator.webdriver) return;                     // frame renderer in control
+    let reduce = false;
+    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    if (!reduce) play();
+  });
+})();
+</script>

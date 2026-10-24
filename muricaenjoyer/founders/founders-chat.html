@@ -1,0 +1,667 @@
+<title>The Founders’ Group Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one chat column (max 680px) under a sticky group header, with a group-info rail on wide screens.
+   Receipts unfold under each bubble as small paper slips set in Caslon, the face of the 1776 broadsides. */
+:root {
+  --bg: #ECEFF4;
+  --header: rgba(236, 239, 244, 0.9);
+  --surface: #FFFFFF;
+  --surface-line: #DAE0E8;
+  --ink: #141B26;
+  --muted: #566073;
+  --rule: #C6CEDA;
+  --me: #1E3A66;
+  --me-ink: #FFFFFF;
+  --me-muted: #BCC9E0;
+  --me-ring: #8AA9DC;
+  --paper: #FBF8F1;
+  --paper-line: #DDD3BC;
+  --paper-ink: #2A2418;
+  --paper-muted: #6A604B;
+  --paper-hover: #F1EBDD;
+  --link: #1F4FA0;
+  --focus: #1F5FD6;
+  --flag: #A3202C;
+  --switch-off: #B8C1CF;
+  --knob: #FFFFFF;
+  --avatar-ink: #FFFFFF;
+  --shadow: 0 1px 2px rgba(20, 27, 38, 0.07);
+  --shadow-hover: 0 3px 10px rgba(20, 27, 38, 0.10);
+  --m-aa: #9A2A6C;
+  --m-ja: #1E3A66;
+  --m-tj: #2C6A3A;
+  --m-gw: #5A45A6;
+  --m-bf: #855700;
+  --m-ah: #B0441A;
+  --m-jm: #0B6C75;
+
+  --f-display: "Libre Caslon Text", "Big Caslon", "Iowan Old Style", Georgia, serif;
+  --f-body: "Libre Franklin", "Franklin Gothic Book", -apple-system, "Segoe UI", system-ui, sans-serif;
+
+  --page: 712px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E131C;
+    --header: rgba(14, 19, 28, 0.9);
+    --surface: #18202C;
+    --surface-line: #263040;
+    --ink: #E8ECF2;
+    --muted: #9CA6B7;
+    --rule: #2E394A;
+    --me: #2B5291;
+    --me-ink: #F4F7FC;
+    --me-muted: #C2D0EA;
+    --me-ring: #8FB2F2;
+    --paper: #1F1D18;
+    --paper-line: #3E382B;
+    --paper-ink: #EDE6D5;
+    --paper-muted: #B4AA90;
+    --paper-hover: #2A2720;
+    --link: #93B8FF;
+    --focus: #8DB0FF;
+    --flag: #F27C86;
+    --switch-off: #3A4558;
+    --knob: #F4F7FC;
+    --avatar-ink: #0E131C;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 3px 12px rgba(0, 0, 0, 0.45);
+    --m-aa: #EE8CC6;
+    --m-ja: #8FB2F2;
+    --m-tj: #86CF93;
+    --m-gw: #B5A7F6;
+    --m-bf: #E3BE5C;
+    --m-ah: #F29A70;
+    --m-jm: #6FCFD8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E131C;
+  --header: rgba(14, 19, 28, 0.9);
+  --surface: #18202C;
+  --surface-line: #263040;
+  --ink: #E8ECF2;
+  --muted: #9CA6B7;
+  --rule: #2E394A;
+  --me: #2B5291;
+  --me-ink: #F4F7FC;
+  --me-muted: #C2D0EA;
+  --me-ring: #8FB2F2;
+  --paper: #1F1D18;
+  --paper-line: #3E382B;
+  --paper-ink: #EDE6D5;
+  --paper-muted: #B4AA90;
+  --paper-hover: #2A2720;
+  --link: #93B8FF;
+  --focus: #8DB0FF;
+  --flag: #F27C86;
+  --switch-off: #3A4558;
+  --knob: #F4F7FC;
+  --avatar-ink: #0E131C;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 3px 12px rgba(0, 0, 0, 0.45);
+  --m-aa: #EE8CC6;
+  --m-ja: #8FB2F2;
+  --m-tj: #86CF93;
+  --m-gw: #B5A7F6;
+  --m-bf: #E3BE5C;
+  --m-ah: #F29A70;
+  --m-jm: #6FCFD8;
+  color-scheme: dark;
+}
+@media (min-width: 1100px) { :root { --page: 1020px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: var(--link); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- avatars ---------- */
+.av {
+  display: inline-grid; place-items: center; flex: none;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--m); color: var(--avatar-ink);
+  font: 700 12px/1 var(--f-display); letter-spacing: 0.03em;
+}
+.av--aa { --m: var(--m-aa); } .av--ja { --m: var(--m-ja); } .av--tj { --m: var(--m-tj); }
+.av--gw { --m: var(--m-gw); } .av--bf { --m: var(--m-bf); } .av--ah { --m: var(--m-ah); }
+.av--jm { --m: var(--m-jm); }
+
+/* ---------- header ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--header);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--surface-line);
+}
+.top__inner {
+  max-width: var(--page); margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.stack { display: flex; flex: none; }
+.stack .av { width: 30px; height: 30px; font-size: 11px; box-shadow: 0 0 0 2px var(--bg); }
+.stack .av + .av { margin-left: -2px; }
+.top__title { flex: 1; min-width: 0; }
+.top__title h1 {
+  margin: 0; font: 700 20px/1.15 var(--f-display); letter-spacing: -0.005em;
+}
+.top__title p {
+  margin: 2px 0 0; font-size: 12.5px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.top__handle {
+  flex: none; font-size: 13px; font-weight: 600; color: var(--muted);
+  text-decoration: none; padding: 6px 2px;
+}
+.top__handle:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- page grid ---------- */
+.page {
+  max-width: var(--page); margin: 0 auto;
+  padding-inline: 16px; padding-block: 0 56px;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px;
+}
+.chat { min-width: 0; }
+.info { display: none; }
+@media (min-width: 1100px) {
+  .page { grid-template-columns: minmax(0, 680px) 260px; justify-content: center; }
+  .info {
+    display: block; position: sticky; align-self: start;
+    top: calc(env(safe-area-inset-top, 0px) + 72px); margin-top: 26px;
+  }
+}
+
+/* ---------- intro ---------- */
+.intro { padding-block: 22px 10px; display: grid; gap: 14px; }
+.intro__lede { margin: 0; font-size: 16px; line-height: 1.5; max-width: 54ch; text-wrap: pretty; }
+.intro__row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 10px 16px;
+}
+.intro__meta { margin: 0; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.intro__meta a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.intro__meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.switch {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 14px 6px 7px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--surface-line); box-shadow: var(--shadow);
+  font: 600 14px/1.2 var(--f-body); color: var(--ink); cursor: pointer;
+}
+.switch:hover { border-color: var(--rule); }
+.switch__track {
+  position: relative; flex: none; width: 34px; height: 20px; border-radius: 999px;
+  background: var(--switch-off); transition: background-color 0.2s ease;
+}
+.switch__track::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--knob); box-shadow: var(--shadow); transition: transform 0.2s ease;
+}
+.switch[aria-checked="true"] .switch__track { background: var(--me); }
+.switch[aria-checked="true"] .switch__track::after { transform: translateX(14px); }
+
+/* ---------- thread ---------- */
+.thread { display: flex; flex-direction: column; gap: 14px; padding-block: 6px 8px; }
+
+.divider {
+  display: flex; align-items: center; gap: 14px;
+  margin: 18px 0 4px;
+  font: italic 400 15px/1.3 var(--f-display); color: var(--muted); text-align: center;
+}
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.divider > span { min-width: 0; }
+.divider__sub {
+  display: block; margin-top: 3px;
+  font: 600 10.5px/1.3 var(--f-body); font-style: normal;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.divider--finale { color: var(--flag); font-size: 20px; margin-top: 26px; }
+.divider--finale::before, .divider--finale::after { background: var(--flag); opacity: 0.45; }
+
+.run { display: flex; gap: 10px; align-items: flex-start; }
+.run--right { justify-content: flex-end; }
+.run__av { flex: none; padding-top: 22px; }
+.run__body {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 5px;
+  width: min(84%, 540px); min-width: 0;
+}
+.run--right .run__body { align-items: flex-end; }
+.run__name {
+  margin: 0 0 1px; padding-inline: 12px;
+  font-size: 13px; font-weight: 700; color: var(--m); letter-spacing: 0.005em;
+}
+
+.msg { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; width: 100%; min-width: 0; }
+.run--right .msg { align-items: flex-end; }
+
+.bubble {
+  display: block; max-width: 100%; margin: 0;
+  padding: 9px 14px 7px;
+  font: inherit; color: var(--ink); text-align: left;
+  background: var(--surface); border: 1px solid var(--surface-line); border-radius: 18px;
+  box-shadow: var(--shadow); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.run--left .bubble.is-first { border-top-left-radius: 6px; }
+.run--right .bubble.is-first { border-top-right-radius: 6px; }
+.run--right .bubble { background: var(--me); border-color: var(--me); color: var(--me-ink); }
+button.bubble:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+.msg.is-open .bubble { box-shadow: 0 0 0 2px var(--m), var(--shadow-hover); }
+.run--right .msg.is-open .bubble { box-shadow: 0 0 0 2px var(--me-ring), var(--shadow-hover); }
+.bubble__text {
+  display: block; font-size: 16px; line-height: 1.45; overflow-wrap: break-word; text-wrap: pretty;
+}
+.bubble__time {
+  display: block; margin-top: 3px; text-align: right;
+  font-size: 11.5px; line-height: 1.3; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+.run--right .bubble__time { color: var(--me-muted); }
+.fwd {
+  display: flex; align-items: center; gap: 5px; margin-bottom: 3px;
+  font: italic 400 13.5px/1.3 var(--f-display); color: var(--muted);
+}
+.fwd__icon { width: 14px; height: 14px; flex: none; }
+.caption {
+  margin: 0; padding-inline: 12px;
+  font: italic 400 14px/1.35 var(--f-display); color: var(--muted);
+}
+.read {
+  margin: -1px 0 0; padding-inline: 12px;
+  font-size: 11.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.02em;
+}
+
+.bubble--typing {
+  display: inline-flex; align-items: center; gap: 5px; padding: 13px 15px; cursor: default;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--muted); opacity: 0.55;
+  animation: typing 1.3s ease-in-out infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.18s; }
+.dot:nth-child(3) { animation-delay: 0.36s; }
+.run--right .dot { background: var(--me-muted); }
+@keyframes typing { 0%, 70%, 100% { opacity: 0.35; transform: none; } 35% { opacity: 1; transform: translateY(-2px); } }
+
+/* system lines */
+.sys { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sys__btn {
+  max-width: 100%; margin: 0; padding: 5px 12px;
+  font: 400 13px/1.45 var(--f-body); color: var(--muted); text-align: center;
+  background: transparent; border: 1px solid transparent; border-radius: 999px; cursor: pointer;
+}
+.sys__btn:hover, .sys.is-open .sys__btn { background: var(--surface); border-color: var(--surface-line); }
+.sys__btn strong { color: var(--ink); font-weight: 600; }
+.sys__date { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sys__date::before { content: "·"; margin-right: 5px; }
+.sys .receipt { width: min(460px, 100%); }
+
+/* ---------- receipts ---------- */
+.receipt {
+  width: 100%; margin: 1px 0 4px; padding: 11px 14px 12px;
+  background: var(--paper); color: var(--paper-ink);
+  border: 1px solid var(--paper-line); border-radius: 3px;
+  box-shadow: var(--shadow);
+  animation: slip 0.22s ease-out;
+}
+@keyframes slip { from { transform: translateY(-4px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+.receipt__head {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  margin: 0 0 9px; padding-bottom: 8px; border-bottom: 1px dashed var(--paper-line);
+  font: 700 10.5px/1.3 var(--f-body); letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.receipt__no { font-variant-numeric: tabular-nums; }
+.receipt dl { margin: 0; display: grid; gap: 7px; }
+.receipt dl > div { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.receipt dt {
+  font: 600 10.5px/1.3 var(--f-body); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.receipt dd { margin: 0; min-width: 0; font-size: 13.5px; line-height: 1.45; overflow-wrap: anywhere; }
+.doc { font: italic 400 15px/1.35 var(--f-display); }
+.receipt a {
+  color: var(--link); text-decoration: underline; text-decoration-thickness: 1px;
+  text-underline-offset: 2px; overflow-wrap: anywhere;
+}
+.ext { width: 12px; height: 12px; margin-left: 3px; vertical-align: -1px; }
+.receipt__actions {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px;
+  margin-top: 11px; padding-top: 10px; border-top: 1px dashed var(--paper-line);
+}
+.copy {
+  display: inline-flex; align-items: center; gap: 6px; margin: 0;
+  padding: 6px 13px 6px 11px; border-radius: 999px;
+  font: 600 13px/1.2 var(--f-body); color: var(--paper-ink);
+  background: transparent; border: 1px solid var(--paper-muted); cursor: pointer;
+}
+.copy:hover { background: var(--paper-hover); }
+.copy svg { width: 14px; height: 14px; flex: none; }
+.copy__status { font-size: 12.5px; color: var(--paper-muted); }
+.copy__fallback {
+  display: block; width: 100%; margin-top: 8px; padding: 8px 10px; resize: vertical; min-height: 64px;
+  font: 13px/1.45 var(--f-body); color: var(--paper-ink);
+  background: var(--paper-hover); border: 1px solid var(--paper-line); border-radius: 3px;
+}
+
+/* ---------- end card ---------- */
+.end {
+  position: relative; margin-top: 30px; padding: 34px 24px 26px;
+  display: grid; justify-items: center; gap: 12px; text-align: center;
+  background: var(--paper); color: var(--paper-ink);
+  border: 1px solid var(--paper-line); border-radius: 3px; box-shadow: var(--shadow);
+}
+.end::before {
+  content: ""; position: absolute; left: 14px; right: 14px; top: 12px;
+  border-top: 1.5px dashed var(--paper-line);
+}
+.end__eyebrow {
+  margin: 0; font: 700 10.5px/1.3 var(--f-body); letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.end__handle {
+  font: 700 clamp(28px, 7vw, 40px)/1.1 var(--f-display); color: var(--paper-ink);
+  text-decoration: none; letter-spacing: -0.01em; overflow-wrap: anywhere;
+}
+.end__handle:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.end__lede { margin: 0; max-width: 40ch; font-size: 16px; line-height: 1.5; text-wrap: balance; }
+.end__stats {
+  margin: 2px 0 6px; font: italic 400 15px/1.4 var(--f-display); color: var(--paper-muted);
+  font-variant-numeric: tabular-nums;
+}
+.end__rules {
+  width: 100%; max-width: 50ch; margin: 0; padding: 14px 0 0; list-style: none;
+  border-top: 1px dashed var(--paper-line);
+  display: grid; gap: 8px; text-align: left; font-size: 13.5px; line-height: 1.5; color: var(--paper-ink);
+}
+.end__rules li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 6px; }
+.end__rules li::before { content: "–"; color: var(--paper-muted); }
+.end__rules-title {
+  margin: 6px 0 0; font: 700 10.5px/1.3 var(--f-body); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.end__follow {
+  margin-top: 8px; display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 999px;
+  background: var(--me); color: var(--me-ink); text-decoration: none;
+  font: 600 14px/1.2 var(--f-body);
+}
+.end__follow:hover { filter: brightness(1.08); }
+
+/* ---------- group info rail ---------- */
+.info h2 { margin: 0; font: 700 17px/1.2 var(--f-display); }
+.info__sub { margin: 3px 0 16px; font-size: 12.5px; color: var(--muted); }
+.info ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 13px; }
+.info li { display: flex; align-items: center; gap: 11px; }
+.member__txt { display: grid; min-width: 0; }
+.member__name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.member__meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.info__note {
+  margin: 20px 0 0; padding-top: 14px; border-top: 1px solid var(--surface-line);
+  font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.info__note a { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 560px) {
+  .top__handle { display: none; }
+  .stack .av { width: 25px; height: 25px; font-size: 9.5px; letter-spacing: 0; }
+  .stack .av + .av { margin-left: -2px; }
+  .top__title h1 { font-size: 18px; }
+  .run { gap: 8px; }
+  .run__av .av { width: 28px; height: 28px; font-size: 10.5px; }
+  .run__body { width: min(88%, 540px); }
+  .bubble__text { font-size: 15.5px; }
+  .end { padding-inline: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  button.bubble:hover { transform: none; }
+}
+</style>
+
+<header class="top">
+  <div class="top__inner">
+    <div class="stack" aria-hidden="true"><span class="av av--aa" title="Abigail Adams">AA</span><span class="av av--ja" title="John Adams">JA</span><span class="av av--tj" title="Thomas Jefferson">TJ</span><span class="av av--gw" title="George Washington">GW</span><span class="av av--bf" title="Benjamin Franklin">BF</span><span class="av av--jm" title="James Madison">JM</span><span class="av av--ah" title="Alexander Hamilton">AH</span></div>
+    <div class="top__title">
+      <h1>The Founders</h1>
+      <p>7 members · Abigail, John, Thomas, George, Benjamin, James, Alexander</p>
+    </div>
+    <a class="top__handle" href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener noreferrer">@Muricaenjoyer</a>
+  </div>
+</header>
+
+<div class="page">
+  <main class="chat">
+    <section class="intro" aria-label="About this chat">
+      <p class="intro__lede">Every message below is a real quote from a real letter or document. Tap any bubble for the receipt.</p>
+      <div class="intro__row">
+        <button id="show-all" class="switch" type="button" role="switch" aria-checked="false">
+          <span class="switch__track" aria-hidden="true"></span>
+          <span>Show all receipts</span>
+        </button>
+        <p class="intro__meta">35 quotes · 7 founders · by <a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener noreferrer">@Muricaenjoyer</a></p>
+      </div>
+    </section>
+
+    <section class="thread" aria-label="Chat thread">
+<h2 class="divider"><span>March 31, 1776</span></h2>
+<div class="run run--left" style="--m: var(--m-aa)"><div class="run__av"><span class="av av--aa" aria-hidden="true">AA</span></div><div class="run__body"><p class="run__name">Abigail Adams</p>
+<div class="msg" id="q1"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q1"><span class="bubble__text">I desire you would Remember the Ladies, and be more generous and favourable to them than your ancestors.</span><span class="bubble__time">Mar 31, 1776</span></button><div class="receipt" id="r-q1" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 1 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Abigail Adams to John Adams, Braintree</span></dd></div><div><dt>Date</dt><dd>31 March 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0241" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0241<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I desire you would Remember the Ladies, and be more generous and favourable to them than your ancestors.” — Abigail Adams, letter to John Adams, Braintree, 31 March 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q2"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q2"><span class="bubble__text">Remember all Men would be tyrants if they could.</span><span class="bubble__time">Mar 31, 1776</span></button><div class="receipt" id="r-q2" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 2 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Abigail Adams to John Adams, Braintree</span></dd></div><div><dt>Date</dt><dd>31 March 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0241" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0241<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Remember all Men would be tyrants if they could.” — Abigail Adams, letter to John Adams, Braintree, 31 March 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q3"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q3"><span class="bubble__text">If perticuliar care and attention is not paid to the Laidies we are determined to foment a Rebelion</span><span class="bubble__time">Mar 31, 1776</span></button><p class="read">Read</p><div class="receipt" id="r-q3" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 3 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Abigail Adams to John Adams, Braintree</span></dd></div><div><dt>Date</dt><dd>31 March 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0241" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0241<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Original spelling kept (‘perticuliar’, ‘Laidies’, ‘Rebelion’).</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“If perticuliar care and attention is not paid to the Laidies we are determined to foment a Rebelion” — Abigail Adams, letter to John Adams, Braintree, 31 March 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--right" style="--m: var(--m-ja)"><div class="run__body"><p class="run__name">John Adams</p>
+<div class="msg msg--typing"><span class="bubble bubble--typing is-first"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="sr">John Adams is typing</span></span></div>
+<div class="msg" id="q4"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q4"><span class="bubble__text">As to your extraordinary Code of Laws, I cannot but laugh.</span><span class="bubble__time">Apr 14, 1776</span></button><div class="receipt" id="r-q4" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 4 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Abigail Adams, Philadelphia (reply to ‘Remember the Ladies’)</span></dd></div><div><dt>Date</dt><dd>14 April 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0248" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0248<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“As to your extraordinary Code of Laws, I cannot but laugh.” — John Adams, letter to Abigail Adams, Philadelphia (reply to ‘Remember the Ladies’), 14 April 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q5"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q5"><span class="bubble__text">Depend upon it, We know better than to repeal our Masculine systems.</span><span class="bubble__time">Apr 14, 1776</span></button><div class="receipt" id="r-q5" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 5 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Abigail Adams, Philadelphia</span></dd></div><div><dt>Date</dt><dd>14 April 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0248" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0248<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Depend upon it, We know better than to repeal our Masculine systems.” — John Adams, letter to Abigail Adams, Philadelphia, 14 April 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-aa)"><div class="run__av"><span class="av av--aa" aria-hidden="true">AA</span></div><div class="run__body"><p class="run__name">Abigail Adams</p>
+<div class="msg" id="q6"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q6"><span class="bubble__text">for whilst you are proclaiming peace and good will to Men, Emancipating all Nations, you insist upon retaining an absolute power over Wives.</span><span class="bubble__time">May 7, 1776</span></button><div class="receipt" id="r-q6" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 6 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Abigail Adams to John Adams, Braintree</span></dd></div><div><dt>Date</dt><dd>7 May 1776</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-01-02-0259" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-01-02-0259<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“for whilst you are proclaiming peace and good will to Men, Emancipating all Nations, you insist upon retaining an absolute power over Wives.” — Abigail Adams, letter to John Adams, Braintree, 7 May 1776"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<h2 class="divider"><span>July 4, 1776</span></h2>
+<div class="sys" id="s1"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s1"><span class="sys__text"><strong>Thomas Jefferson</strong> named the conversation “The United States of America”</span> <span class="sys__date">Jul 4, 1776</span></button><div class="receipt receipt--sys" id="r-s1" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Jul 4, 1776</dd></div><div><dt>Fact</dt><dd>Interface gag for the Declaration of Independence, adopted by Congress 4 July 1776 (Jefferson drafted it)</dd></div><div><dt>Source</dt><dd><a href="https://www.archives.gov/founding-docs/declaration-transcript" target="_blank" rel="noopener noreferrer">archives.gov/founding-docs/declaration-transcript<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl></div></div>
+<div class="run run--left" style="--m: var(--m-gw)"><div class="run__av"><span class="av av--gw" aria-hidden="true">GW</span></div><div class="run__body"><p class="run__name">George Washington</p>
+<div class="msg" id="q7"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q7"><span class="bubble__text">The benefits arising from moderate use of strong Liquor, have been experienced in All Armies, and are not to be disputed.</span><span class="bubble__time">Aug 16, 1777</span></button><p class="caption">proposing public distilleries</p><div class="receipt" id="r-q7" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 7 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">George Washington to John Hancock, Neshaminy Camp (proposing public distilleries)</span></dd></div><div><dt>Date</dt><dd>16 August 1777</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Washington/03-10-02-0622" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Washington/03-10-02-0622<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“The benefits arising from moderate use of strong Liquor, have been experienced in All Armies, and are not to be disputed.” — George Washington, letter to John Hancock, Neshaminy Camp (proposing public distilleries), 16 August 1777"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-bf)"><div class="run__av"><span class="av av--bf" aria-hidden="true">BF</span></div><div class="run__body"><p class="run__name">Benjamin Franklin</p>
+<div class="msg" id="q8"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q8"><span class="bubble__text">…a constant proof that God loves us, and loves to see us happy.</span><span class="bubble__time">1779</span></button><p class="caption">on wine</p><div class="receipt" id="r-q8" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 8 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Benjamin Franklin to the Abbé André Morellet (on wine)</span></dd></div><div><dt>Date</dt><dd>1779</dd></div><div><dt>Source</dt><dd><a href="https://barrypopik.com/blog/beer_is_proof_that_god_loves_us_and_wants_us_to_be_happy" target="_blank" rel="noopener noreferrer">barrypopik.com/blog/beer_is_proof_that_god_loves_us_and_wants_us_to_be_happy<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>About WINE. The ‘beer is proof that God loves us’ version is a 1990s internet fake.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“…a constant proof that God loves us, and loves to see us happy.” — Benjamin Franklin, letter to the Abbé André Morellet (on wine), 1779"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q9"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q9"><span class="bubble__text">It is universally well known, That in digesting our common Food, there is created or produced in the Bowels of human Creatures, a great Quantity of Wind.</span><span class="bubble__time">1780</span></button><p class="caption">to the Royal Academy of Brussels</p><div class="receipt" id="r-q9" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 9 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Benjamin Franklin, ‘To the Royal Academy of Brussels’ (satirical essay)</span></dd></div><div><dt>Date</dt><dd>after 19 May 1780 (often misdated 1781)</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Franklin/01-32-02-0281" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Franklin/01-32-02-0281<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>‘Fart Proudly’ is a 1990 anthology title, not Franklin’s phrase.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“It is universally well known, That in digesting our common Food, there is created or produced in the Bowels of human Creatures, a great Quantity of Wind.” — Benjamin Franklin, ‘To the Royal Academy of Brussels’ (satirical essay), after 19 May 1780 (often misdated 1781)"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-gw)"><div class="run__av"><span class="av av--gw" aria-hidden="true">GW</span></div><div class="run__body"><p class="run__name">George Washington</p>
+<div class="msg" id="q10"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q10"><span class="fwd"><svg class="fwd__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 13 7l-3.5 3.5M13 7H6.5A3.5 3.5 0 0 0 3 10.5V13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Forwarded · 1754</span><span class="bubble__text">I heard Bulletts whistle and believe me there was something charming in the sound.</span><span class="bubble__time">May 31, 1754</span></button><div class="receipt" id="r-q10" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 10 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">George Washington to John Augustine Washington, Great Meadows camp</span></dd></div><div><dt>Date</dt><dd>31 May 1754</dd></div><div><dt>Source</dt><dd><a href="https://encyclopediavirginia.org/primary-documents/letter-from-george-washington-to-john-augustine-washington-may-31-1754/" target="_blank" rel="noopener noreferrer">encyclopediavirginia.org/primary-documents/letter-from-george-washington-to-john-augustine-washington-may-31-1754<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Shown as a ‘forwarded’ message: it predates the chat. It is about his first battle, not about Franklin’s essay; the pairing is a joke made by placement.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I heard Bulletts whistle and believe me there was something charming in the sound.” — George Washington, letter to John Augustine Washington, Great Meadows camp, 31 May 1754"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-bf)"><div class="run__av"><span class="av av--bf" aria-hidden="true">BF</span></div><div class="run__body"><p class="run__name">Benjamin Franklin</p>
+<div class="msg" id="q11"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q11"><span class="bubble__text">He is a Bird of bad moral Character.</span><span class="bubble__time">Jan 26, 1784</span></button><p class="caption">on the bald eagle</p><div class="receipt" id="r-q11" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 11 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Benjamin Franklin to Sarah Bache (on the Society of the Cincinnati and the bald eagle)</span></dd></div><div><dt>Date</dt><dd>26 January 1784</dd></div><div><dt>Source</dt><dd><a href="https://annotation.blogs.archives.gov/2020/11/25/talking-turkey" target="_blank" rel="noopener noreferrer">annotation.blogs.archives.gov/2020/11/25/talking-turkey<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“He is a Bird of bad moral Character.” — Benjamin Franklin, letter to Sarah Bache (on the Society of the Cincinnati and the bald eagle), 26 January 1784"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-gw)"><div class="run__av"><span class="av av--gw" aria-hidden="true">GW</span></div><div class="run__body"><p class="run__name">George Washington</p>
+<div class="msg" id="q12"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q12"><span class="bubble__text">I am become a private citizen on the banks of the Potomac, &amp; under the shadow of my own Vine &amp; my own Fig-tree</span><span class="bubble__time">Feb 1, 1784</span></button><p class="caption">retiring after the war</p><div class="receipt" id="r-q12" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 12 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">George Washington to the Marquis de Lafayette, Mount Vernon</span></dd></div><div><dt>Date</dt><dd>1 February 1784</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Washington/04-01-02-0064" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Washington/04-01-02-0064<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I am become a private citizen on the banks of the Potomac, &amp; under the shadow of my own Vine &amp; my own Fig-tree” — George Washington, letter to the Marquis de Lafayette, Mount Vernon, 1 February 1784"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-bf)"><div class="run__av"><span class="av av--bf" aria-hidden="true">BF</span></div><div class="run__body"><p class="run__name">Benjamin Franklin</p>
+<div class="msg" id="q13"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q13"><span class="fwd"><svg class="fwd__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 13 7l-3.5 3.5M13 7H6.5A3.5 3.5 0 0 0 3 10.5V13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Forwarded · Poor Richard, 1736</span><span class="bubble__text">Fish and Visitors stink in 3 days.</span><span class="bubble__time">1736</span></button><div class="receipt" id="r-q13" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 13 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Poor Richard, 1736 (Poor Richard’s Almanack)</span></dd></div><div><dt>Date</dt><dd>1735 (almanac for the year 1736)</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Franklin/01-02-02-0019" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Franklin/01-02-02-0019<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Shown as a ‘forwarded’ message from the almanac; placement after Washington’s retirement is the joke.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Fish and Visitors stink in 3 days.” — Benjamin Franklin, Poor Richard, 1736 (Poor Richard’s Almanack), 1735 (almanac for the year 1736)"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg" id="q14"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q14"><span class="bubble__text">He is vain, irritable and a bad calculator of the force and probable effect of the motives which govern men. This is all the ill which can possibly be said of him.</span><span class="bubble__time">Jan 30, 1787</span></button><p class="caption">about John Adams</p><div class="receipt" id="r-q14" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 14 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Thomas Jefferson to James Madison, Paris (about John Adams)</span></dd></div><div><dt>Date</dt><dd>30 January 1787</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Madison/01-09-02-0126" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Madison/01-09-02-0126<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“He is vain, irritable and a bad calculator of the force and probable effect of the motives which govern men. This is all the ill which can possibly be said of him.” — Thomas Jefferson, letter to James Madison, Paris (about John Adams), 30 January 1787"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-bf)"><div class="run__av"><span class="av av--bf" aria-hidden="true">BF</span></div><div class="run__body"><p class="run__name">Benjamin Franklin</p>
+<div class="msg" id="q15"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q15"><span class="fwd"><svg class="fwd__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 13 7l-3.5 3.5M13 7H6.5A3.5 3.5 0 0 0 3 10.5V13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Forwarded · Poor Richard, 1735</span><span class="bubble__text">Three may keep a Secret, if two of them are dead.</span><span class="bubble__time">1735</span></button><div class="receipt" id="r-q15" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 15 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Poor Richard, 1735 (Poor Richard’s Almanack)</span></dd></div><div><dt>Date</dt><dd>July 1734 (almanac for the year 1735)</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Franklin/01-02-02-0001" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Franklin/01-02-02-0001<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Shown as a ‘forwarded’ message from the almanac; placement after Jefferson’s private letter is the joke.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Three may keep a Secret, if two of them are dead.” — Benjamin Franklin, Poor Richard, 1735 (Poor Richard’s Almanack), July 1734 (almanac for the year 1735)"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-jm)"><div class="run__av"><span class="av av--jm" aria-hidden="true">JM</span></div><div class="run__body"><p class="run__name">James Madison</p>
+<div class="msg" id="q16"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q16"><span class="bubble__text">If men were angels, no government would be necessary.</span><span class="bubble__time">Feb 6, 1788</span></button><div class="receipt" id="r-q16" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 16 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">The Federalist No. 51 (Madison writing as Publius)</span></dd></div><div><dt>Date</dt><dd>6 February 1788</dd></div><div><dt>Source</dt><dd><a href="https://teachingamericanhistory.org/document/federalist-no-51/" target="_blank" rel="noopener noreferrer">teachingamericanhistory.org/document/federalist-no-51<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“If men were angels, no government would be necessary.” — James Madison, The Federalist No. 51 (Madison writing as Publius), 6 February 1788"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q17"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q17"><span class="bubble__text">Ambition must be made to counteract ambition.</span><span class="bubble__time">Feb 6, 1788</span></button><p class="caption">as Publius</p><div class="receipt" id="r-q17" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 17 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">The Federalist No. 51 (Madison writing as Publius)</span></dd></div><div><dt>Date</dt><dd>6 February 1788</dd></div><div><dt>Source</dt><dd><a href="https://billofrightsinstitute.org/founding-documents/primary-source-documents/the-federalist-papers/federalist-papers-no-51/" target="_blank" rel="noopener noreferrer">billofrightsinstitute.org/founding-documents/primary-source-documents/the-federalist-papers/federalist-papers-no-51<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Ambition must be made to counteract ambition.” — James Madison, The Federalist No. 51 (Madison writing as Publius), 6 February 1788"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-ah)"><div class="run__av"><span class="av av--ah" aria-hidden="true">AH</span></div><div class="run__body"><p class="run__name">Alexander Hamilton</p>
+<div class="msg" id="q18"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q18"><span class="fwd"><svg class="fwd__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 13 7l-3.5 3.5M13 7H6.5A3.5 3.5 0 0 0 3 10.5V13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Forwarded · 1769, age ~14</span><span class="bubble__text">Ned, my Ambition is prevalent that I contemn the grov’ling and condition of a Clerk or the like, to which my Fortune &amp;c. condemns me</span><span class="bubble__time">Nov 11, 1769</span></button><div class="receipt" id="r-q18" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 18 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Alexander Hamilton to Edward Stevens, St. Croix (Hamilton was in his early teens)</span></dd></div><div><dt>Date</dt><dd>11 November 1769</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Hamilton/01-01-02-0002" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Hamilton/01-01-02-0002<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Shown as a ‘forwarded’ message: it predates the chat.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Ned, my Ambition is prevalent that I contemn the grov’ling and condition of a Clerk or the like, to which my Fortune &amp;c. condemns me” — Alexander Hamilton, letter to Edward Stevens, St. Croix (Hamilton was in his early teens), 11 November 1769"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-gw)"><div class="run__av"><span class="av av--gw" aria-hidden="true">GW</span></div><div class="run__body"><p class="run__name">George Washington</p>
+<div class="msg" id="q19"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q19"><span class="bubble__text">my movements to the chair of Government will be accompanied with feelings not unlike those of a culprit who is going to the place of his execution</span><span class="bubble__time">Apr 1, 1789</span></button><p class="caption">on becoming President</p><div class="receipt" id="r-q19" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 19 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">George Washington to Henry Knox, Mount Vernon (before taking office as President)</span></dd></div><div><dt>Date</dt><dd>1 April 1789</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Washington/05-02-02-0003" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Washington/05-02-02-0003<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“my movements to the chair of Government will be accompanied with feelings not unlike those of a culprit who is going to the place of his execution” — George Washington, letter to Henry Knox, Mount Vernon (before taking office as President), 1 April 1789"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-bf)"><div class="run__av"><span class="av av--bf" aria-hidden="true">BF</span></div><div class="run__body"><p class="run__name">Benjamin Franklin</p>
+<div class="msg" id="q20"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q20"><span class="bubble__text">Our new Constitution is now established, and has an appearance that promises permanency; but in this world nothing can be said to be certain, except death and taxes.</span><span class="bubble__time">Nov 13, 1789</span></button><div class="receipt" id="r-q20" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 20 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Benjamin Franklin to Jean-Baptiste Le Roy</span></dd></div><div><dt>Date</dt><dd>13 November 1789</dd></div><div><dt>Source</dt><dd><a href="https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo" target="_blank" rel="noopener noreferrer">politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Our new Constitution is now established, and has an appearance that promises permanency; but in this world nothing can be said to be certain, except death and taxes.” — Benjamin Franklin, letter to Jean-Baptiste Le Roy, 13 November 1789"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="sys sys--leave" id="s2"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s2"><span class="sys__text"><strong>Benjamin Franklin</strong> left the chat</span> <span class="sys__date">Apr 17, 1790</span></button><div class="receipt receipt--sys" id="r-s2" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Apr 17, 1790</dd></div><div><dt>Fact</dt><dd>Franklin died in Philadelphia, 17 April 1790</dd></div></dl></div></div>
+<div class="run run--left" style="--m: var(--m-ah)"><div class="run__av"><span class="av av--ah" aria-hidden="true">AH</span></div><div class="run__body"><p class="run__name">Alexander Hamilton</p>
+<div class="msg" id="q21"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q21"><span class="bubble__text">In a word, if we have an embryo-Cæsar in the United States ’tis Burr.</span><span class="bubble__time">Sep 26, 1792</span></button><p class="caption">about Aaron Burr</p><div class="receipt" id="r-q21" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 21 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Alexander Hamilton to an unidentified correspondent</span></dd></div><div><dt>Date</dt><dd>26 September 1792</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Hamilton/01-12-02-0334" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Hamilton/01-12-02-0334<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“In a word, if we have an embryo-Cæsar in the United States ’tis Burr.” — Alexander Hamilton, letter to an unidentified correspondent, 26 September 1792"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q22"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q22"><span class="bubble__text">My real crime is an amorous connection with his wife, for a considerable time with his privity and connivance</span><span class="bubble__time">Aug 1797</span></button><div class="receipt" id="r-q22" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 22 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Observations on Certain Documents... (the ‘Reynolds Pamphlet’), Philadelphia, p. 9</span></dd></div><div><dt>Date</dt><dd>late August 1797</dd></div><div><dt>Source</dt><dd><a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Reynolds_affair" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/Hamilton%E2%80%93Reynolds_affair<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Published by Hamilton himself to refute a charge of financial corruption.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“My real crime is an amorous connection with his wife, for a considerable time with his privity and connivance” — Alexander Hamilton, Observations on Certain Documents... (the ‘Reynolds Pamphlet’), Philadelphia, p. 9, late August 1797"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="sys sys--leave" id="s3"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s3"><span class="sys__text"><strong>George Washington</strong> left the chat</span> <span class="sys__date">Dec 14, 1799</span></button><div class="receipt receipt--sys" id="r-s3" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Dec 14, 1799</dd></div><div><dt>Fact</dt><dd>Washington died at Mount Vernon, 14 December 1799</dd></div></dl></div></div>
+<div class="run run--left" style="--m: var(--m-ah)"><div class="run__av"><span class="av av--ah" aria-hidden="true">AH</span></div><div class="run__body"><p class="run__name">Alexander Hamilton</p>
+<div class="msg" id="q23"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q23"><span class="bubble__text">there are great and intrinsic defects in his character</span><span class="bubble__time">Oct 24, 1800</span></button><p class="caption">about John Adams</p><div class="receipt" id="r-q23" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 23 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Letter from Alexander Hamilton, Concerning the Public Conduct and Character of John Adams, Esq. President of the United States</span></dd></div><div><dt>Date</dt><dd>[24 October 1800]</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Hamilton/01-25-02-0110-0002" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Hamilton/01-25-02-0110-0002<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“there are great and intrinsic defects in his character” — Alexander Hamilton, Letter from Alexander Hamilton, Concerning the Public Conduct and Character of John Adams, Esq. President of the United States, [24 October 1800]"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q24"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q24"><span class="bubble__text">the most unfit and most dangerous man of the Community</span><span class="bubble__time">Jan 4, 1801</span></button><p class="caption">about Aaron Burr</p><div class="receipt" id="r-q24" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 24 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Alexander Hamilton to John Rutledge, Jr. (about Aaron Burr)</span></dd></div><div><dt>Date</dt><dd>4 January 1801</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Hamilton/01-25-02-0156-0001" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Hamilton/01-25-02-0156-0001<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“the most unfit and most dangerous man of the Community” — Alexander Hamilton, letter to John Rutledge, Jr. (about Aaron Burr), 4 January 1801"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg" id="q25"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q25"><span class="bubble__text">I can say with truth that one act of Mr. Adams’s life, and one only, ever gave me a moment’s personal displeasure. I did consider his last appointments to office as personally unkind.</span><span class="bubble__time">Jun 13, 1804</span></button><p class="caption">to Abigail, about John</p><div class="receipt" id="r-q25" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 25 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Thomas Jefferson to Abigail Adams</span></dd></div><div><dt>Date</dt><dd>13 June 1804</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/04-15-02-0219" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/04-15-02-0219<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Refers to Adams’s last-minute (‘midnight’) appointments of 1801.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I can say with truth that one act of Mr. Adams’s life, and one only, ever gave me a moment’s personal displeasure. I did consider his last appointments to office as personally unkind.” — Thomas Jefferson, letter to Abigail Adams, 13 June 1804"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="sys sys--leave" id="s4"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s4"><span class="sys__text"><strong>Alexander Hamilton</strong> left the chat</span> <span class="sys__date">Jul 12, 1804</span></button><div class="receipt receipt--sys" id="r-s4" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Jul 12, 1804</dd></div><div><dt>Fact</dt><dd>Hamilton died 12 July 1804, the day after his duel with Aaron Burr</dd></div></dl></div></div>
+<div class="run run--right" style="--m: var(--m-ja)"><div class="run__body"><p class="run__name">John Adams</p>
+<div class="msg" id="q26"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q26"><span class="bubble__text">A DREAM AGAIN! … I have no other objection to your dream but that it is not history. It may be prophecy.</span><span class="bubble__time">Oct 1809</span></button><p class="caption">to Benjamin Rush, who dreamed they would reconcile</p><div class="receipt" id="r-q26" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 26 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Benjamin Rush (reply to Rush’s dream of an Adams-Jefferson reconciliation)</span></dd></div><div><dt>Date</dt><dd>October 1809 (likely 25 Oct 1809)</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/99-02-02-5450" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/99-02-02-5450<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Rush, not Jefferson, was the recipient.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“A DREAM AGAIN! … I have no other objection to your dream but that it is not history. It may be prophecy.” — John Adams, letter to Benjamin Rush (reply to Rush’s dream of an Adams-Jefferson reconciliation), October 1809 (likely 25 Oct 1809)"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q27"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q27"><span class="bubble__text">The Declaration of Independence I always considered as a Theatrical Show. Jefferson ran away with all the Stage Effect of that; i.e. all the Glory of it.</span><span class="bubble__time">Jun 21, 1811</span></button><div class="receipt" id="r-q27" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 27 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Benjamin Rush</span></dd></div><div><dt>Date</dt><dd>21 June 1811</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/99-02-02-5649" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/99-02-02-5649<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Written to Rush, not Jefferson.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“The Declaration of Independence I always considered as a Theatrical Show. Jefferson ran away with all the Stage Effect of that; i.e. all the Glory of it.” — John Adams, letter to Benjamin Rush, 21 June 1811"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+<div class="msg" id="q28"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q28"><span class="bubble__text">I always loved Jefferson, and still love him.</span><span class="bubble__time">Summer 1811</span></button><p class="caption">as reported by Edward Coles</p><div class="receipt" id="r-q28" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 28 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Remark made aloud to Edward and John Coles at Quincy; relayed in Jefferson to Rush (5 Dec 1811) and copied by Rush to Adams (16 Dec 1811)</span></dd></div><div><dt>Date</dt><dd>summer 1811</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/99-02-02-5725" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/99-02-02-5725<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>REPORTED SPEECH: said aloud to the Coles brothers, reached Jefferson secondhand. Labeled ‘as reported’.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I always loved Jefferson, and still love him.” — John Adams, remark made aloud to Edward and John Coles at Quincy; relayed in Jefferson to Rush (5 Dec 1811) and copied by Rush to Adams (16 Dec 1811), summer 1811"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg" id="q29"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q29"><span class="bubble__text">“I always loved Jefferson, and still love him.”—this is enough for me.</span><span class="bubble__time">Dec 5, 1811</span></button><div class="receipt" id="r-q29" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 29 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Thomas Jefferson to Benjamin Rush</span></dd></div><div><dt>Date</dt><dd>5 December 1811</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Jefferson/03-04-02-0248" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Jefferson/03-04-02-0248<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“‘I always loved Jefferson, and still love him.’—this is enough for me.” — Thomas Jefferson, letter to Benjamin Rush, 5 December 1811"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<h2 class="divider"><span>January 1, 1812</span></h2>
+<div class="run run--right" style="--m: var(--m-ja)"><div class="run__body"><p class="run__name">John Adams</p>
+<div class="msg" id="q30"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q30"><span class="bubble__text">I take the Liberty of sending you by the Post a Packett containing two Pieces of Homespun lately produced in this quarter</span><span class="bubble__time">Jan 1, 1812</span></button><p class="caption">it was his son’s 2-volume book</p><div class="receipt" id="r-q30" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 30 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Thomas Jefferson (first letter of the reconciliation)</span></dd></div><div><dt>Date</dt><dd>1 January 1812</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/99-02-02-5735" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/99-02-02-5735<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>The ‘Homespun’ was John Quincy Adams’s two-volume Lectures on Rhetoric and Oratory, not cloth.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I take the Liberty of sending you by the Post a Packett containing two Pieces of Homespun lately produced in this quarter” — John Adams, letter to Thomas Jefferson (first letter of the reconciliation), 1 January 1812"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg" id="q31"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q31"><span class="bubble__text">I think little of them and say less. I have given up newspapers in exchange for Tacitus and Thucydides, for Newton and Euclid, and I find myself much the happier.</span><span class="bubble__time">Jan 21, 1812</span></button><p class="caption">on politics</p><div class="receipt" id="r-q31" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 31 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Thomas Jefferson to John Adams</span></dd></div><div><dt>Date</dt><dd>21 January 1812</dd></div><div><dt>Source</dt><dd><a href="https://tjrs.monticello.org/node/280" target="_blank" rel="noopener noreferrer">tjrs.monticello.org/node/280<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>‘them’ = politics.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“I think little of them and say less. I have given up newspapers in exchange for Tacitus and Thucydides, for Newton and Euclid, and I find myself much the happier.” — Thomas Jefferson, letter to John Adams, 21 January 1812"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--right" style="--m: var(--m-ja)"><div class="run__body"><p class="run__name">John Adams</p>
+<div class="msg" id="q32"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q32"><span class="bubble__text">You and I ought not to die, before We have explained ourselves to each other.</span><span class="bubble__time">Jul 15, 1813</span></button><div class="receipt" id="r-q32" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 32 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">John Adams to Thomas Jefferson</span></dd></div><div><dt>Date</dt><dd>15 July 1813</dd></div><div><dt>Source</dt><dd><a href="https://founders.archives.gov/documents/Adams/99-03-02-2334" target="_blank" rel="noopener noreferrer">founders.archives.gov/documents/Adams/99-03-02-2334<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Adams to Jefferson, 15 July 1813; often misdated to 1812 or credited to Jefferson.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“You and I ought not to die, before We have explained ourselves to each other.” — John Adams, letter to Thomas Jefferson, 15 July 1813"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg msg--typing"><span class="bubble bubble--typing is-first"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="sr">Thomas Jefferson is typing</span></span></div>
+<div class="msg" id="q33"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q33"><span class="bubble__text">our machines have now been running for 70. or 80. years, and we must expect that, worn as they are, here a pivot, there a wheel, now a pinion, next a spring, will be giving way</span><span class="bubble__time">Jul 5, 1814</span></button><div class="receipt" id="r-q33" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 33 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Thomas Jefferson to John Adams</span></dd></div><div><dt>Date</dt><dd>5 July 1814</dd></div><div><dt>Source</dt><dd><a href="https://tjrs.monticello.org/node/1591" target="_blank" rel="noopener noreferrer">tjrs.monticello.org/node/1591<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>Often misdated to 1 June 1822.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“our machines have now been running for 70. or 80. years, and we must expect that, worn as they are, here a pivot, there a wheel, now a pinion, next a spring, will be giving way” — Thomas Jefferson, letter to John Adams, 5 July 1814"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<h2 class="divider"><span>July 3, 1826</span></h2>
+<div class="run run--left" style="--m: var(--m-tj)"><div class="run__av"><span class="av av--tj" aria-hidden="true">TJ</span></div><div class="run__body"><p class="run__name">Thomas Jefferson</p>
+<div class="msg" id="q34"><button class="bubble is-first" type="button" aria-expanded="false" aria-controls="r-q34"><span class="bubble__text">Is it the Fourth?</span><span class="bubble__time">Jul 3, 1826 · night</span></button><p class="caption">as recorded by his doctor</p><div class="receipt" id="r-q34" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 34 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Deathbed account recorded by Dr. Robley Dunglison (variants by Nicholas Trist and Thomas Jefferson Randolph)</span></dd></div><div><dt>Date</dt><dd>night of 3 July 1826</dd></div><div><dt>Source</dt><dd><a href="https://www.monticello.org/encyclopedia/jeffersons-last-words" target="_blank" rel="noopener noreferrer">monticello.org/encyclopedia/jeffersons-last-words<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>REPORTED: recorded by his physician. Monticello says his true last words cannot be determined.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Is it the Fourth?” — Thomas Jefferson, deathbed account recorded by Dr. Robley Dunglison (variants by Nicholas Trist and Thomas Jefferson Randolph), night of 3 July 1826"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<h2 class="divider divider--finale"><span>July 4, 1826 <span class="divider__sub">50 years to the day</span></span></h2>
+<div class="sys sys--leave" id="s5"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s5"><span class="sys__text"><strong>Thomas Jefferson</strong> left the chat</span> <span class="sys__date">Jul 4, 1826 · around noon</span></button><div class="receipt receipt--sys" id="r-s5" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Jul 4, 1826 · around noon</dd></div><div><dt>Fact</dt><dd>Jefferson died at Monticello around noon, 4 July 1826</dd></div><div><dt>Source</dt><dd><a href="https://www.monticello.org/encyclopedia/jeffersons-last-words" target="_blank" rel="noopener noreferrer">monticello.org/encyclopedia/jeffersons-last-words<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl></div></div>
+<div class="run run--right" style="--m: var(--m-ja)"><div class="run__body"><p class="run__name">John Adams</p>
+<div class="msg msg--typing"><span class="bubble bubble--typing is-first"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="sr">John Adams is typing</span></span></div>
+<div class="msg" id="q35"><button class="bubble" type="button" aria-expanded="false" aria-controls="r-q35"><span class="bubble__text">Thomas Jefferson survives.</span><span class="bubble__time">Jul 4, 1826</span></button><p class="caption">as reported</p><div class="receipt" id="r-q35" hidden><p class="receipt__head"><span>Receipt</span><span class="receipt__no">No. 35 of 35</span></p><dl><div><dt>Document</dt><dd><span class="doc">Reported deathbed words at Quincy (family accounts and contemporary reports; discussed around John Quincy Adams’s July 1826 diary)</span></dd></div><div><dt>Date</dt><dd>4 July 1826</dd></div><div><dt>Source</dt><dd><a href="https://www.historynewsnetwork.org/article/jefferson-still-survives" target="_blank" rel="noopener noreferrer">historynewsnetwork.org/article/jefferson-still-survives<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div><div><dt>Note</dt><dd>REPORTED: rests on family reports of indistinct speech. ‘Jefferson still lives’ / ‘still survives’ are later polished variants. Adams did not know Jefferson had died hours earlier; the news traveled by post days later.</dd></div></dl><div class="receipt__actions"><button class="copy" type="button" data-copy="“Thomas Jefferson survives.” — John Adams, reported deathbed words at Quincy (family accounts and contemporary reports; discussed around John Quincy Adams’s July 1826 diary), 4 July 1826"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="5" y="5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="copy__label">Copy quote</span></button><span class="copy__status" role="status"></span></div><textarea class="copy__fallback" aria-label="Quote with citation" readonly hidden></textarea></div></div>
+</div></div>
+<div class="sys sys--leave" id="s6"><button class="sys__btn" type="button" aria-expanded="false" aria-controls="r-s6"><span class="sys__text"><strong>John Adams</strong> left the chat</span> <span class="sys__date">Jul 4, 1826 · evening</span></button><div class="receipt receipt--sys" id="r-s6" hidden><p class="receipt__head"><span>Receipt</span><span>Interface line, not a quote</span></p><dl><div><dt>Date</dt><dd>Jul 4, 1826 · evening</dd></div><div><dt>Fact</dt><dd>Adams died at Quincy later the same day, 4 July 1826</dd></div><div><dt>Source</dt><dd><a href="https://www.historynewsnetwork.org/article/jefferson-still-survives" target="_blank" rel="noopener noreferrer">historynewsnetwork.org/article/jefferson-still-survives<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5H3.5v9h9V10M9 3.5h3.5V7M12.5 3.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">(opens in a new tab)</span></a></dd></div></dl></div></div>
+    </section>
+
+    <footer class="end" aria-label="End of thread">
+      <p class="end__eyebrow">End of thread</p>
+      <a class="end__handle" href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener noreferrer">@Muricaenjoyer</a>
+      <p class="end__lede">Every message above is a real quote from a real letter or document.</p>
+      <p class="end__stats">35 quotes · 7 founders · 0 made up</p>
+      <p class="end__rules-title">House rules</p>
+      <ul class="end__rules">
+        <li>“…” marks a trim. Words were removed, never changed or added.</li>
+        <li>Spelling is theirs. “Rebelion,” “Laidies” and “Bulletts” are in the originals.</li>
+        <li>Captions under bubbles, “Read,” typing dots, “left the chat” lines and the renamed conversation are interface jokes, not quotes.</li>
+        <li>“Forwarded” marks a quote older than the chat, placed out of order for the joke. Its real date is on the bubble.</li>
+        <li>“As reported” and “as recorded” mean words said aloud and written down by someone else.</li>
+      </ul>
+      <a class="end__follow" href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener noreferrer">Follow @Muricaenjoyer on X</a>
+    </footer>
+  </main>
+
+  <aside class="info" aria-label="Group info">
+    <h2>Group info</h2>
+    <p class="info__sub">7 members · founded by letter</p>
+    <ul><li><span class="av av--aa" aria-hidden="true">AA</span><span class="member__txt"><span class="member__name">Abigail Adams</span><span class="member__meta">1744–1818 · 4 messages</span></span></li><li><span class="av av--ja" aria-hidden="true">JA</span><span class="member__txt"><span class="member__name">John Adams</span><span class="member__meta">1735–1826 · 8 messages</span></span></li><li><span class="av av--tj" aria-hidden="true">TJ</span><span class="member__txt"><span class="member__name">Thomas Jefferson</span><span class="member__meta">1743–1826 · 6 messages</span></span></li><li><span class="av av--gw" aria-hidden="true">GW</span><span class="member__txt"><span class="member__name">George Washington</span><span class="member__meta">1732–1799 · 4 messages</span></span></li><li><span class="av av--bf" aria-hidden="true">BF</span><span class="member__txt"><span class="member__name">Benjamin Franklin</span><span class="member__meta">1706–1790 · 6 messages</span></span></li><li><span class="av av--jm" aria-hidden="true">JM</span><span class="member__txt"><span class="member__name">James Madison</span><span class="member__meta">1751–1836 · 2 messages</span></span></li><li><span class="av av--ah" aria-hidden="true">AH</span><span class="member__txt"><span class="member__name">Alexander Hamilton</span><span class="member__meta">1755/57–1804 · 5 messages</span></span></li></ul>
+    <p class="info__note">John Adams’s messages sit on the right. Tap any bubble or gray line for its receipt. Made by <a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener noreferrer">@Muricaenjoyer</a>.</p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  var sw = document.getElementById('show-all');
+  var toggles = Array.prototype.slice.call(document.querySelectorAll('.thread [aria-controls^="r-"]'));
+
+  function setOpen(btn, open) {
+    var r = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!r) return;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    r.hidden = !open;
+    btn.parentElement.classList.toggle('is-open', open);
+  }
+  function syncSwitch() {
+    var all = toggles.every(function (b) { return b.getAttribute('aria-expanded') === 'true'; });
+    sw.setAttribute('aria-checked', all ? 'true' : 'false');
+  }
+  toggles.forEach(function (b) {
+    b.addEventListener('click', function () {
+      setOpen(b, b.getAttribute('aria-expanded') !== 'true');
+      syncSwitch();
+    });
+  });
+  sw.addEventListener('click', function () {
+    var on = sw.getAttribute('aria-checked') !== 'true';
+    toggles.forEach(function (b) { setOpen(b, on); });
+    sw.setAttribute('aria-checked', on ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.copy') : null;
+    if (!btn) return;
+    var text = btn.getAttribute('data-copy');
+    var receipt = btn.closest('.receipt');
+    var label = btn.querySelector('.copy__label');
+    var status = receipt.querySelector('.copy__status');
+    var area = receipt.querySelector('.copy__fallback');
+
+    function copied() {
+      if (!area.hidden) { area.hidden = true; btn.focus(); }
+      label.textContent = 'Copied';
+      status.textContent = 'Quote and citation copied.';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function () { label.textContent = 'Copy quote'; status.textContent = ''; }, 2200);
+    }
+    function fallback() {
+      area.value = text;
+      area.hidden = false;
+      area.focus();
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+      if (ok) { copied(); }
+      else { status.textContent = 'Press Ctrl+C or Cmd+C to copy the selected text.'; }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(copied, fallback);
+      } else {
+        fallback();
+      }
+    } catch (err) { fallback(); }
+  });
+
+  function openFromHash() {
+    var id = (location.hash || '').slice(1);
+    if (!/^[qs]\d+$/.test(id)) return;
+    var host = document.getElementById(id);
+    var t = host && host.querySelector('[aria-controls]');
+    if (t) { setOpen(t, true); syncSwitch(); host.scrollIntoView({ block: 'center' }); }
+  }
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+})();
+</script>

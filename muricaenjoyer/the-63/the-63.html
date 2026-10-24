@@ -1,0 +1,1018 @@
+<title>The 63</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Courier+Prime:wght@400;700&family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap">
+<style>
+/* Layout: a routed-wood trailhead sign over a topo sheet, then a tier signboard, an awards row, a single-column trail register of 63 entries, and a map-scale method key. */
+:root{
+  /* topo sheet */
+  --ground:#ECEFE5; --sheet:#FAFBF6; --sheet-2:#F0F2E9;
+  --ink:#1B231D; --ink-2:#465149; --ink-3:#5A655C;
+  --line:#D3D9CB; --line-2:#AEB6A6;
+  --contour:#A9733F; --contour-ink:#86552A; --water:#235E8B;
+  /* routed sign */
+  --wood-hi:#6E472B; --wood:#563521; --wood-lo:#3D2414; --routed:#F1D89E; --routed-dim:#CBAF77;
+  --bolt-hi:#9A8569; --bolt-lo:#22170E; --wood-ink:#F1D89E;
+  /* tiers: fill + paint for routed letters */
+  --t-s:#835E0C; --t-a:#2D5B34; --t-b:#215B87; --t-c:#7F4D28; --t-d:#535C55; --on-tier:#FAFBF6;
+  --p-s:#F3C95B; --p-a:#A9D69E; --p-b:#A0CDEC; --p-c:#E9B088; --p-d:#D8DED5;
+  --up:#2D5B34; --down:#8F3F22; --bar-empty:#D3D9CB;
+  --flash:#F3C95B;
+  --shade:rgba(27,35,29,.22);
+  --grain:linear-gradient(transparent,transparent);
+  --f-display:"Rokkitt","Roboto Slab",Rockwell,"Rockwell Nova",Georgia,serif;
+  --f-body:"Archivo","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"Courier Prime","Courier New",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111511; --sheet:#191E18; --sheet-2:#20271F;
+    --ink:#E7EADF; --ink-2:#B6BDAF; --ink-3:#9CA496;
+    --line:#2D352C; --line-2:#465045;
+    --contour:#B88A5D; --contour-ink:#DCAB7C; --water:#8FBEE3;
+    --wood-hi:#5C3B24; --wood:#482A19; --wood-lo:#2E1B0E; --routed:#EDD192; --routed-dim:#BDA169;
+    --bolt-hi:#8A775D; --bolt-lo:#140C06; --wood-ink:#EDD192;
+    --t-s:#E3BA52; --t-a:#93C78B; --t-b:#90C0E6; --t-c:#E0A77B; --t-d:#AFB7AD; --on-tier:#111511;
+    --up:#93C78B; --down:#E9937A; --bar-empty:#3B4439;
+    --flash:#E3BA52;
+    --shade:rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111511; --sheet:#191E18; --sheet-2:#20271F;
+  --ink:#E7EADF; --ink-2:#B6BDAF; --ink-3:#9CA496;
+  --line:#2D352C; --line-2:#465045;
+  --contour:#B88A5D; --contour-ink:#DCAB7C; --water:#8FBEE3;
+  --wood-hi:#5C3B24; --wood:#482A19; --wood-lo:#2E1B0E; --routed:#EDD192; --routed-dim:#BDA169;
+  --bolt-hi:#8A775D; --bolt-lo:#140C06; --wood-ink:#EDD192;
+  --t-s:#E3BA52; --t-a:#93C78B; --t-b:#90C0E6; --t-c:#E0A77B; --t-d:#AFB7AD; --on-tier:#111511;
+  --up:#93C78B; --down:#E9937A; --bar-empty:#3B4439;
+  --flash:#E3BA52;
+  --shade:rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--water);text-underline-offset:.15em}
+:focus-visible{outline:2px solid var(--water);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.08}
+p{text-wrap:pretty}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:16px}
+@media (min-width:720px){.wrap{padding-inline:32px}}
+.lbl{font-family:var(--f-body);font-stretch:78%;font-weight:650;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);line-height:1.3}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* tier color plumbing */
+[data-tier="S"]{--tc:var(--t-s);--paint:var(--p-s)}
+[data-tier="A"]{--tc:var(--t-a);--paint:var(--p-a)}
+[data-tier="B"]{--tc:var(--t-b);--paint:var(--p-b)}
+[data-tier="C"]{--tc:var(--t-c);--paint:var(--p-c)}
+[data-tier="D"]{--tc:var(--t-d);--paint:var(--p-d)}
+
+/* wood: CSS grain at rest, canvas grain layered on top once drawn */
+.wood{
+  background-color:var(--wood);
+  background-image:
+    var(--grain),
+    repeating-linear-gradient(177deg,transparent 0 5px,rgba(0,0,0,.10) 5px 6px,transparent 6px 13px),
+    repeating-linear-gradient(183deg,transparent 0 9px,rgba(255,220,170,.05) 9px 11px),
+    linear-gradient(180deg,var(--wood-hi),var(--wood) 45%,var(--wood-lo));
+  background-size:cover,auto,auto,100% 100%;
+  background-position:center;
+  color:var(--wood-ink);
+}
+.routed{text-shadow:0 -2px 1px rgba(0,0,0,.55),0 1px 0 rgba(255,236,196,.14)}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--ground);background:color-mix(in srgb,var(--ground) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:52px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);min-width:0}
+.brand .mk{display:grid;place-items:center;width:30px;height:30px;border-radius:4px;font-family:var(--f-display);font-weight:800;font-size:16px;line-height:1;flex:none}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:20px;white-space:nowrap}
+.brand .h{font-size:13px;color:var(--ink-3);font-weight:600;white-space:nowrap}
+@media (max-width:640px){.brand .h{display:none}}
+.nav{display:flex;gap:2px;min-width:0}
+.nav a{font-size:14px;font-weight:650;color:var(--ink-2);text-decoration:none;padding:6px 9px;border-radius:4px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--sheet-2)}
+@media (max-width:420px){.nav a{padding:6px 7px;font-size:13.5px}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.topo{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hero-in{position:relative;padding-block:clamp(28px,5vw,56px) clamp(30px,4.5vw,48px);display:grid;gap:clamp(24px,3.5vw,36px)}
+.sign{position:relative;border-radius:6px;padding:clamp(24px,4.5vw,46px) clamp(26px,7vw,76px) clamp(22px,4vw,40px);text-align:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,225,180,.08),inset 0 -8px 16px rgba(0,0,0,.28),0 26px 44px -26px var(--shade)}
+.sign::before{content:"";position:absolute;inset:clamp(8px,1.4vw,14px);border:2px solid var(--routed-dim);border-radius:4px;opacity:.55;pointer-events:none;box-shadow:0 -1px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(0,0,0,.4)}
+.bolt{position:absolute;top:50%;width:13px;height:13px;margin-top:-6.5px;border-radius:50%;background:radial-gradient(circle at 35% 32%,var(--bolt-hi),var(--bolt-lo) 70%);box-shadow:0 1px 0 rgba(255,236,196,.12),inset 0 0 0 1px rgba(0,0,0,.45)}
+.bolt.l{left:clamp(5px,1.8vw,26px)} .bolt.r{right:clamp(5px,1.8vw,26px)}
+.sign-k{font-family:var(--f-display);font-weight:700;font-size:clamp(12.5px,1.7vw,20px);letter-spacing:.24em;text-transform:uppercase;color:var(--routed)}
+.sign h1{font-weight:800;font-size:clamp(76px,19vw,224px);line-height:.8;letter-spacing:-.025em;margin-block:.1em .08em;color:var(--routed)}
+.sign-s{font-family:var(--f-display);font-weight:500;font-size:clamp(14px,1.9vw,21px);letter-spacing:.06em;color:var(--routed);text-wrap:balance}
+.hero-meta{display:grid;gap:22px 48px;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
+@media (max-width:780px){.hero-meta{grid-template-columns:minmax(0,1fr)}}
+.lede{margin:0;font-size:clamp(19px,2.3vw,25px);line-height:1.38;font-weight:520;max-width:34ch;text-wrap:balance}
+.lede b{font-weight:750}
+.collar{margin:0;border-top:2px solid var(--ink);display:grid}
+.collar div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+.collar dt{margin:0}
+.collar dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;min-width:0}
+.collar a{font-weight:700}
+
+/* sections */
+.sec{padding-block:clamp(48px,7vw,84px);scroll-margin-top:52px}
+.sec + .sec{border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 28px;margin-bottom:26px}
+.sec-head > div{min-width:0;max-width:64ch}
+.sec-head h2{font-size:clamp(32px,4.6vw,48px);font-weight:800;letter-spacing:-.012em;display:flex;align-items:center;gap:14px}
+.blaze{display:inline-block;width:11px;height:.62em;background:var(--contour);border-radius:1px;flex:none;transform:translateY(-.02em)}
+.sec-head p{margin:8px 0 0;color:var(--ink-2);font-size:16.5px}
+
+/* buttons */
+.btn{appearance:none;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--sheet);border:1px solid var(--line-2);border-radius:6px;padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;line-height:1.2}
+.btn:hover{border-color:var(--ink-2)}
+.btn.solid{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn.solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+.copy-wrap{display:grid;gap:8px;justify-items:end}
+.copy-status{font-size:13px;color:var(--ink-3);min-height:1.3em;margin:0}
+.copy-fallback{width:min(100%,360px);height:120px;font:13px/1.4 var(--f-mono);color:var(--ink);background:var(--sheet);border:1px solid var(--line-2);border-radius:6px;padding:8px}
+@media (max-width:640px){.copy-wrap{justify-items:start}}
+
+/* tier board */
+.board{border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--sheet)}
+.trow{display:grid;grid-template-columns:104px minmax(0,1fr)}
+.trow + .trow{border-top:1px solid var(--line)}
+.tblock{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:18px 6px 14px;box-shadow:inset -1px 0 0 rgba(0,0,0,.4)}
+.tblock .L{font-family:var(--f-display);font-weight:800;font-size:56px;line-height:.9;color:var(--paint)}
+.tblock .r{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--routed);font-stretch:80%;font-weight:650;white-space:nowrap}
+.tbody{padding:16px 18px 18px;min-width:0}
+.tmean{margin:0 0 12px;font-size:15px;color:var(--ink-2);max-width:70ch}
+.tmean b{color:var(--ink);font-weight:750}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.chip{display:inline-flex;align-items:baseline;gap:6px;padding:5px 10px 6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--ground);color:var(--ink);text-decoration:none;font-size:14px;font-weight:620;line-height:1.25;transition:border-color .15s,transform .15s,background-color .15s}
+.chip .n{font-family:var(--f-display);font-weight:800;font-size:15.5px;color:var(--tc);font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--tc);background:var(--sheet);transform:translateY(-1px)}
+@media (max-width:560px){
+  .trow{grid-template-columns:62px minmax(0,1fr)}
+  .tblock .L{font-size:40px}
+  .tblock .r{font-size:9.5px;letter-spacing:.06em}
+  .tbody{padding:12px 12px 14px}
+  .chip{font-size:13px;padding:4px 8px 5px 7px}
+  .chip .n{font-size:14px}
+}
+
+/* awards */
+.awards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.award{background-color:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.award.feature{background-color:var(--wood);grid-column:span 2;position:relative;padding:clamp(24px,3.4vw,36px);border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45),0 22px 36px -26px var(--shade)}
+.award.feature::before{content:"";position:absolute;inset:10px;border:1.5px solid var(--routed-dim);border-radius:4px;opacity:.5;pointer-events:none}
+.aw{color:var(--contour-ink)}
+.award.feature .aw{color:var(--routed);opacity:.9}
+.award h3{font-size:25px;font-weight:800}
+.award.feature h3{font-size:clamp(30px,3.8vw,44px);color:var(--routed)}
+.award h3 a{color:inherit;text-decoration:none}
+.award h3 a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.ameta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13.5px;color:var(--ink-3)}
+.award.feature .ameta{color:var(--routed)}
+.award p{margin:0;font-size:15px;color:var(--ink-2)}
+.award.feature p{font-size:clamp(16px,1.6vw,18.5px);color:var(--wood-ink);max-width:62ch;line-height:1.5}
+.award.feature .afacts{font-family:var(--f-display);font-weight:650;font-size:clamp(17px,1.8vw,21px);letter-spacing:.04em;color:var(--routed);font-variant-numeric:tabular-nums}
+.award .ru{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line-2);font-size:13.5px;color:var(--ink-3)}
+.award.feature .ru{border-top-color:var(--routed-dim);color:var(--routed);opacity:.92}
+.award .ru b{color:var(--ink-2);font-weight:700}
+.award.feature .ru b{color:var(--routed)}
+@media (max-width:920px){.awards{grid-template-columns:repeat(2,minmax(0,1fr))}.award.feature{grid-column:1/-1}}
+@media (max-width:600px){.awards{grid-template-columns:minmax(0,1fr)}.award{padding:18px}}
+
+/* tier badge */
+.tb{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:4px;background:var(--tc);color:var(--on-tier);font-family:var(--f-display);font-weight:800;font-size:18px;line-height:1;flex:none}
+.award.feature .tb{background:var(--paint);color:var(--wood-lo)}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:flex-end;padding:16px 18px;background:var(--sheet);border:1px solid var(--line);border-radius:8px}
+.ctl{display:grid;gap:6px;min-width:0}
+.ctl.grow{flex:1 1 200px}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:var(--ground)}
+.seg button{appearance:none;border:0;border-left:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-family:var(--f-display);font-weight:800;font-size:16px;padding:6px 12px;min-width:42px;cursor:pointer;line-height:1.3}
+.seg button:first-child{border-left:0;font-family:var(--f-body);font-size:13.5px;font-weight:700}
+.seg button:hover{background:var(--sheet-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.seg button:focus-visible{outline-offset:-3px}
+.sel{position:relative;display:block}
+.sel::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.sel select{appearance:none;-webkit-appearance:none;width:100%;font:inherit;font-size:14px;font-weight:650;color:var(--ink);background:var(--ground);border:1px solid var(--line-2);border-radius:6px;padding:8px 36px 8px 12px;cursor:pointer;line-height:1.3}
+.check{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:650;padding:8px 0;cursor:pointer;white-space:nowrap}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--t-a)}
+.list-status{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:14px 2px 6px}
+.count{margin:0;font-size:14px;color:var(--ink-2)}
+.count b{color:var(--ink)}
+.linkbtn{appearance:none;background:none;border:0;padding:4px 0;font:inherit;font-size:14px;font-weight:700;color:var(--water);cursor:pointer;text-decoration:underline;text-underline-offset:.15em}
+
+/* list */
+.list{display:grid;gap:12px}
+.tdiv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;align-items:center;padding:26px 2px 6px}
+.tdiv:first-child{padding-top:8px}
+.tdiv .tb{width:48px;height:48px;font-size:30px;grid-row:span 2;border-radius:6px}
+.tdiv h3{font-size:24px;font-weight:800}
+.tdiv p{margin:0;color:var(--ink-2);font-size:15px}
+.park{display:grid;grid-template-columns:84px minmax(0,1fr) 264px;gap:8px 28px;padding:24px 26px;background:var(--sheet);border:1px solid var(--line);border-radius:8px;scroll-margin-top:72px}
+.park:focus{outline:none}
+.park:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+.park.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,25%{box-shadow:0 0 0 3px var(--flash)}100%{box-shadow:0 0 0 3px transparent}}
+.p-rank{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.rk{font-family:var(--f-display);font-weight:800;font-size:60px;line-height:.82;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.p-main{min-width:0}
+.p-name{font-size:clamp(23px,2.5vw,29px);font-weight:800;letter-spacing:-.005em}
+.p-where{margin:5px 0 0;color:var(--ink-2);font-size:15px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 30px;margin:16px 0 0}
+.p-facts div{min-width:0}
+.p-facts dd{margin:2px 0 0;font-weight:750;font-size:18px;font-variant-numeric:tabular-nums;line-height:1.25}
+.p-facts dd small{font-size:13px;font-weight:600;color:var(--ink-3)}
+.p-facts .na{font-size:14px;font-weight:600;color:var(--ink-3)}
+.list[data-sort="visits"] .f-visits dd,.list[data-sort="size"] .f-acres dd,.list[data-sort="oldest"] .f-est dd{box-shadow:inset 0 -.38em 0 color-mix(in srgb,var(--flash) 45%,transparent)}
+.p-sig{margin:16px 0 0;font-size:15.5px;color:var(--ink-2);max-width:66ch}
+.p-sig .lbl{margin-right:6px}
+.p-take{margin:12px 0 0;font-family:var(--f-display);font-style:italic;font-weight:480;font-size:20.5px;line-height:1.36;color:var(--ink);max-width:56ch}
+.p-best{margin:12px 0 0;font-size:14px;color:var(--ink-2)}
+.p-best .lbl{margin-right:6px}
+.p-move{margin:14px 0 0;font-size:14.5px;color:var(--ink-2);padding:10px 12px;background:var(--sheet-2);border-radius:5px;max-width:70ch}
+.p-move b{color:var(--ink)}
+.mv{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mv.up{color:var(--up)} .mv.down{color:var(--down)}
+.p-notes{margin-top:12px;font-size:13.5px;color:var(--ink-3)}
+.p-notes summary{cursor:pointer;font-weight:650;width:max-content;max-width:100%;border-radius:3px}
+.p-notes summary:hover{color:var(--ink-2)}
+.p-notes p{margin:8px 0 0;max-width:72ch}
+.p-score{display:grid;gap:14px;align-content:start;border-left:1px solid var(--line);padding-left:26px;min-width:0}
+.p-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.p-total{display:flex;align-items:baseline;gap:4px}
+.p-total .v{font-family:var(--f-display);font-weight:800;font-size:42px;line-height:.9;font-variant-numeric:tabular-nums}
+.p-total .of{color:var(--ink-3);font-size:14px;font-weight:600}
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.bars li{display:grid;grid-template-columns:92px minmax(0,1fr) 20px;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2)}
+.bars .bl{font-stretch:85%;font-weight:600;white-space:nowrap}
+.bar{height:9px;background:linear-gradient(90deg,var(--tc) calc(var(--v) * 10%),var(--bar-empty) 0);-webkit-mask:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%);mask:repeating-linear-gradient(90deg,#000 0 calc(10% - 2px),transparent calc(10% - 2px) 10%)}
+.bars .bv{text-align:right;font-weight:750;color:var(--ink);font-variant-numeric:tabular-nums}
+.kid{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px 4px 8px;border-radius:999px;border:1px solid;line-height:1.2;white-space:nowrap}
+.kid svg{width:14px;height:14px;flex:none}
+.kid.yes{color:var(--t-a);border-color:var(--t-a);background:color-mix(in srgb,var(--t-a) 10%,transparent)}
+.kid.no{color:var(--ink-3);border-color:var(--line-2);font-weight:600}
+.empty{padding:40px 20px;text-align:center;background:var(--sheet);border:1px dashed var(--line-2);border-radius:8px;color:var(--ink-2)}
+@media (max-width:860px){
+  .park{grid-template-columns:52px minmax(0,1fr);gap:6px 14px;padding:18px 16px}
+  .rk{font-size:42px}
+  .p-rank{gap:8px}
+  .tb{width:26px;height:26px;font-size:17px}
+  .p-score{grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px;margin-top:8px}
+  .p-take{font-size:19px}
+  .p-facts{gap:8px 22px}
+  .p-facts dd{font-size:16.5px}
+}
+@media (max-width:420px){
+  .park{grid-template-columns:minmax(0,1fr)}
+  .p-rank{flex-direction:row;align-items:center;gap:10px}
+  .rk{font-size:40px}
+}
+
+/* method */
+.m-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px 56px;align-items:start}
+@media (max-width:900px){.m-grid{grid-template-columns:minmax(0,1fr)}}
+.prose{max-width:64ch}
+.prose p{margin:0 0 14px;font-size:16.5px;color:var(--ink-2)}
+.prose p:first-child{font-size:18px;color:var(--ink)}
+.prose h3,.sub-h{font-size:22px;font-weight:800;margin:26px 0 8px}
+.prose ol{margin:0;padding-left:22px;color:var(--ink-2)}
+.prose ol li{margin:2px 0}
+.keybox{background:var(--sheet);border:1px solid var(--line-2);border-radius:8px;padding:22px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0}
+.keybox > *{min-width:0}
+.scale-cap{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.scale{display:grid;gap:6px}
+.ticks,.sbar,.snames{display:grid;grid-template-columns:40fr 30fr 15fr 15fr}
+.ticks span{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink-2);transform:translateX(-50%);width:max-content}
+.ticks span:first-child{transform:none}
+.ticks{position:relative}
+.ticks .end{position:absolute;right:0;top:0;transform:none}
+.sbar{height:16px;border:1.5px solid var(--ink)}
+.sbar i{display:block;border-left:1.5px solid var(--ink)}
+.sbar i:first-child{border-left:0}
+.sbar i:nth-child(odd){background:var(--ink)}
+.sbar i:nth-child(even){background:var(--sheet)}
+.snames span{font-size:12px;font-weight:650;color:var(--ink-2);padding:2px 6px 0 0;line-height:1.25;overflow-wrap:anywhere;font-stretch:85%}
+.crit{display:grid;gap:12px;margin:0}
+.crit div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.crit div:last-child{border-bottom:0;padding-bottom:0}
+.crit dt{font-family:var(--f-display);font-weight:750;font-size:19px;line-height:1.2}
+.crit dd{margin:0;grid-column:1/-1;color:var(--ink-2);font-size:15px}
+.crit .w{grid-column:2;grid-row:1;font-weight:800;font-variant-numeric:tabular-nums;color:var(--contour-ink)}
+.worked{margin:0;font:14.5px/1.6 var(--f-mono);color:var(--ink);background:var(--sheet-2);border-radius:6px;padding:14px 16px;overflow-x:auto;white-space:pre-wrap}
+.calls{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--line-2)}
+.calls li{display:grid;grid-template-columns:62px minmax(0,220px) minmax(0,1fr);gap:4px 20px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.calls .mv{font-family:var(--f-display);font-size:22px}
+.calls .who{font-weight:750;min-width:0}
+.calls .who a{color:var(--ink);text-decoration:none}
+.calls .who a:hover{text-decoration:underline}
+.calls .who small{display:block;font-weight:600;color:var(--ink-3);font-size:13px}
+.calls .why{color:var(--ink-2);font-size:15px;min-width:0}
+@media (max-width:700px){.calls li{grid-template-columns:52px minmax(0,1fr)}.calls .why{grid-column:2}}
+
+/* reweight tool */
+.rw{margin-top:44px;background:var(--sheet);border:1px solid var(--line-2);border-radius:8px;padding:clamp(18px,3vw,30px)}
+.rw-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;margin-bottom:22px}
+.rw-head > div{min-width:0;max-width:62ch}
+.rw-head h3{font-size:clamp(26px,3vw,32px);font-weight:800}
+.rw-head p{margin:6px 0 0;color:var(--ink-2)}
+.rw-grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:28px 44px;align-items:start}
+@media (max-width:820px){.rw-grid{grid-template-columns:minmax(0,1fr)}}
+.sliders{display:grid;gap:16px}
+.sl{display:grid;gap:4px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:15px}
+.sl output{font-variant-numeric:tabular-nums;color:var(--contour-ink);font-weight:800}
+.sl input{width:100%;margin:4px 0 0;accent-color:var(--contour-ink);height:22px}
+.rw-top{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(5,auto);grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:0 28px;counter-reset:none}
+@media (max-width:640px){.rw-top{grid-auto-flow:row;grid-template-rows:none}}
+.rw-top li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+.rw-top .pos{font-family:var(--f-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.rw-top .nm{font-weight:700;min-width:0}
+.rw-top .sc{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-2);font-size:14px}
+.rw-top .vs{grid-column:2/-1;font-size:13px;color:var(--ink-3)}
+.rw-note{margin:18px 0 0;font-size:15px;color:var(--ink-2)}
+.rw-note b{color:var(--ink)}
+.notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px;max-width:80ch}
+.notes li{padding-left:18px;position:relative;color:var(--ink-2);font-size:15px}
+.notes li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border:1.5px solid var(--contour);border-radius:50%}
+.notes b{color:var(--ink)}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding-block:44px 56px;background:var(--sheet-2)}
+.foot .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px 28px;align-items:center}
+.foot .plank{padding:14px 22px;border-radius:5px;font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.45);color:var(--routed);white-space:nowrap}
+.foot p{margin:0}
+.foot .handle{font-family:var(--f-display);font-weight:800;font-size:22px}
+.foot .handle a{color:var(--ink);text-decoration-color:var(--contour);text-decoration-thickness:2px}
+.foot .data{font-weight:650;color:var(--ink)}
+.foot .fine{font-size:13.5px;color:var(--ink-3);max-width:80ch;margin-top:6px}
+@media (max-width:600px){.foot .wrap{grid-template-columns:minmax(0,1fr)}.foot .plank{justify-self:start}}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .chip:hover{transform:none}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="The 63, back to top"><span class="mk wood routed" aria-hidden="true">63</span><b>The 63</b><span class="h">by @Muricaenjoyer</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#tiers">Tiers</a><a href="#awards">Awards</a><a href="#ranking">List</a><a href="#method">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="title">
+    <canvas class="topo" id="topo" aria-hidden="true"></canvas>
+    <div class="wrap hero-in">
+      <div class="sign wood">
+        <span class="bolt l" aria-hidden="true"></span><span class="bolt r" aria-hidden="true"></span>
+        <p class="sign-k routed" style="margin:0">National Parks Power Rankings</p>
+        <h1 id="title" class="routed">The 63</h1>
+        <p class="sign-s routed" style="margin:0">Grand Canyon to Cuyahoga Valley, best to last</p>
+      </div>
+      <div class="hero-meta">
+        <p class="lede">Every U.S. national park, scored 1 to 10 on <b>scenery</b> (40%), <b>uniqueness</b> (30%), <b>crowd-to-wow</b> (15%) and <b>access</b> (15%), then ranked.</p>
+        <dl class="collar" id="collar"></dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="tiers" aria-labelledby="tiers-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="tiers-h"><span class="blaze" aria-hidden="true"></span>The tier list</h2>
+          <p>Tiers are bands on the final order. Tap any park to jump to its entry.</p>
+        </div>
+        <div class="copy-wrap">
+          <button class="btn" id="copy-top" type="button">Copy top 10 for a post</button>
+          <p class="copy-status" id="copy-status" aria-live="polite"></p>
+          <textarea class="copy-fallback" id="copy-fallback" readonly hidden aria-label="Top 10 text to copy"></textarea>
+        </div>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="awards" aria-labelledby="awards-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="awards-h"><span class="blaze" aria-hidden="true"></span>Awards</h2>
+          <p>Five honors the score alone can't hand out.</p>
+        </div>
+      </div>
+      <div class="awards" id="awards-grid"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="ranking" aria-labelledby="ranking-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="ranking-h"><span class="blaze" aria-hidden="true"></span>All 63, ranked</h2>
+          <p>Score bars show each 1–10 input. Visit counts are 2024 recreation visits where a reliable figure exists.</p>
+        </div>
+      </div>
+      <div class="controls" role="group" aria-label="Filter and sort the list">
+        <div class="ctl">
+          <span class="lbl" id="tier-lbl">Tier</span>
+          <div class="seg" id="f-tier" role="group" aria-labelledby="tier-lbl">
+            <button type="button" data-v="all" aria-pressed="true">All</button>
+            <button type="button" data-v="S" aria-pressed="false" aria-label="S tier">S</button>
+            <button type="button" data-v="A" aria-pressed="false" aria-label="A tier">A</button>
+            <button type="button" data-v="B" aria-pressed="false" aria-label="B tier">B</button>
+            <button type="button" data-v="C" aria-pressed="false" aria-label="C tier">C</button>
+            <button type="button" data-v="D" aria-pressed="false" aria-label="D tier">D</button>
+          </div>
+        </div>
+        <div class="ctl grow">
+          <label class="lbl" for="f-where">Region or state</label>
+          <span class="sel"><select id="f-where"></select></span>
+        </div>
+        <div class="ctl">
+          <label class="lbl" for="f-sort">Sort by</label>
+          <span class="sel"><select id="f-sort">
+            <option value="rank">Our rank</option>
+            <option value="visits">Most 2024 visits</option>
+            <option value="size">Largest</option>
+            <option value="oldest">Oldest</option>
+          </select></span>
+        </div>
+        <div class="ctl">
+          <span class="lbl" aria-hidden="true">&nbsp;</span>
+          <label class="check" for="f-kids"><input type="checkbox" id="f-kids"> Kid-friendly only</label>
+        </div>
+      </div>
+      <div class="list-status">
+        <p class="count" id="count" aria-live="polite"></p>
+        <button class="linkbtn" id="clear" type="button" hidden>Clear filters</button>
+      </div>
+      <div class="list" id="list" data-sort="rank"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="method" aria-labelledby="method-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 id="method-h"><span class="blaze" aria-hidden="true"></span>How the list works</h2>
+          <p>Four scores, fixed weights, a short leash for the editor, and every move written down.</p>
+        </div>
+      </div>
+      <div class="m-grid">
+        <div class="prose" id="m-prose"></div>
+        <div class="keybox">
+          <div class="scale" role="img" aria-label="Weights: scenery 40 points, uniqueness 30, crowd-to-wow 15, access 15, out of 100">
+            <div class="scale-cap"><span class="lbl">Weights, in points of 100</span></div>
+            <div class="ticks" aria-hidden="true"><span>0</span><span>40</span><span>70</span><span>85</span><span class="end">100</span></div>
+            <div class="sbar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="snames" aria-hidden="true"><span>Scenery</span><span>Uniqueness</span><span>Crowd-to-wow</span><span>Access</span></div>
+          </div>
+          <dl class="crit" id="crit"></dl>
+          <div>
+            <div class="lbl" style="margin-bottom:8px">Worked example: No. 1</div>
+            <pre class="worked" id="worked"></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-h" style="margin-top:48px">The editor's 12 calls</h3>
+      <p class="prose" id="calls-intro" style="margin:0;color:var(--ink-2)"></p>
+      <ol class="calls" id="calls"></ol>
+
+      <div class="rw" id="reweight">
+        <div class="rw-head">
+          <div>
+            <h3>Re-rank it yourself</h3>
+            <p>Move the weights and all 63 parks re-score live. The editor's calls are left out, so at our default weights you get the raw formula order.</p>
+          </div>
+          <button class="btn" type="button" id="rw-reset">Reset to our weights</button>
+        </div>
+        <div class="rw-grid">
+          <div class="sliders" id="sliders"></div>
+          <div>
+            <div class="lbl" style="margin-bottom:4px">Your top 10</div>
+            <ol class="rw-top" id="rw-top"></ol>
+          </div>
+        </div>
+        <p class="rw-note" id="rw-note" aria-live="polite"></p>
+      </div>
+
+      <h3 class="sub-h" style="margin-top:48px">Data notes</h3>
+      <ul class="notes" id="notes"></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="plank wood routed" aria-hidden="true">The 63</div>
+    <div>
+      <p class="handle"><a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a></p>
+      <p class="data">Data: NPS visitor-use statistics (2024); rankings are opinion.</p>
+      <p class="fine">An independent fan ranking, not affiliated with or endorsed by the National Park Service. Some 2024 visit counts are rounded, fiscal-year or missing; each park's source notes say which.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var D = {"title":"The 63: National Parks Power Rankings","byline":"@Muricaenjoyer","method":{"formula":"score = 10 x (0.40*scenery + 0.30*uniqueness + 0.15*crowdToWow + 0.15*access), on a 0-100 scale; each input is scored 1-10","weights":{"scenery":0.4,"uniqueness":0.3,"crowdToWow":0.15,"access":0.15},"whyTheseWeights":"Scenery and uniqueness decide whether a park is worth the trip. Crowd-to-wow and access get equal, smaller weights because they pull in opposite directions (remote parks are quiet, easy parks are busy), so neither one dominates.","tieBreakers":["higher scenery","higher uniqueness","higher crowdToWow","alphabetical"],"editorsOverride":"Up to +/-3 positions per park (positive = moved up), each with a stated reason. An overridden park is placed exactly at baseRank - override, and every other park keeps its order and fills the remaining slots. No park ends up more than 3 positions from its formula rank.","overridesUsed":12,"tiers":[{"tier":"S","ranks":"1-6","count":6,"meaning":"Pilgrimage parks. Rearrange your life to see these."},{"tier":"A","ranks":"7-24","count":18,"meaning":"Plan the trip. Worth a dedicated vacation."},{"tier":"B","ranks":"25-40","count":16,"meaning":"Absolutely worth it. Build a road trip around these."},{"tier":"C","ranks":"41-53","count":13,"meaning":"Great if you're in the neighborhood, and some are better than the number says."},{"tier":"D","ranks":"54-63","count":10,"meaning":"Lovable underdogs. America doesn't make a bad national park; these just show off less."}],"dataFixes":[{"park":"Katmai National Park and Preserve","field":"acres","from":4093077,"to":3674530,"why":"Input used park + preserve (about 4.09M acres). Changed to the national park portion (about 3.67M acres) to match how Denali, Gates of the Arctic, Glacier Bay, Wrangell-St. Elias and Great Sand Dunes are listed."},{"park":"Lake Clark National Park and Preserve","field":"acres","from":4030006,"to":2619816,"why":"Input used park + preserve (about 4.03M acres). Changed to the national park portion (about 2.62M acres) for consistency with the other park-and-preserve units."},{"park":"New River Gorge National Park and Preserve","field":"acres","from":72808,"to":7021,"why":"Input used park + preserve (about 72,800 acres). The national park portion is only about 7,021 acres; the rest is preserve. Changed for consistency."}],"dataChecksPassed":"All 63 establishment years and the remaining acreages were checked against known NPS and Wikipedia values. Everything else is within rounding (for example, Yosemite's 761,748 is NPS gross acreage). Establishment years mean national park status, so Everglades (authorized 1934), Guadalupe Mountains (authorized 1966) and Isle Royale (authorized 1931) use their formal establishment dates. That rule is applied consistently and left as is.","visitsCaveat":"visits2024 is null where no reliable calendar-2024 figure was found. Some values are rounded, fiscal-year, or from secondary lists (see each park's visitsNote). Gateway Arch's 2.56M conflicts with a lower Wikipedia figure, so treat it with caution. Visit counts are not part of the score; they are used only for the Most overrated award.","scoresSource":"Scenery, uniqueness, crowd-to-wow and access scores come from the research pass and were not changed. All judgment calls go through the visible overrides."},"intro":"Sixty-three national parks, one honest list. We scored every park from 1 to 10 on four things: scenery (does it stop you cold), uniqueness (could you see this anywhere else), crowd-to-wow (how much awe you get per elbow) and access (how easy it is to actually get there). Scenery counts 40 percent, uniqueness 30, crowd-to-wow 15 and access 15, for a score out of 100, and ties go to the better scenery. Then the editor got a short leash: a park can move at most three spots, every move comes with a written reason, and twelve parks moved. The tiers are bands on the final order. The bottom ten aren't bad parks, because America doesn't make a bad one. They just show off less.","awards":[{"award":"Best for little kids","park":"White Sands National Park","rank":5,"reason":"Sledding down soft white gypsum dunes (the park store sells saucers and wax), sand that stays cool in summer, a short Interdune Boardwalk and a paved scenic drive. It's an S-tier park that a five-year-old enjoys as much as you do.","runnerUp":"Great Sand Dunes National Park and Preserve (Medano Creek turns into a pop-up beach in late spring)"},{"award":"Best crowd-to-wow","park":"North Cascades National Park","rank":7,"reason":"It's the highest-ranked park with a perfect 10 crowd-to-wow: more than 300 glaciers and turquoise Diablo Lake, with just 16,485 recorded visits in 2024, one of the lowest counts of any national park. State Route 20 through the surrounding park complex puts the Diablo Lake overlook steps from your car, so you don't even need a bush plane.","runnerUp":"Wrangell-St. Elias National Park and Preserve"},{"award":"Most underrated","park":"Black Canyon of the Gunnison National Park","rank":22,"reason":"Its raw score (81.0) beats Glacier, Yosemite and Zion. The 2,000-foot-plus walls and the Painted Wall are a top-tier sight, yet it typically draws only around 300,000 visits a year (approximate), while Rocky Mountain, a few hours east, logged about 4.15 million in 2024.","runnerUp":"Lassen Volcanic National Park (Yellowstone-style mud pots and fumaroles with about 357,651 visits in 2024)"},{"award":"Most overrated (with love)","park":"Great Smoky Mountains National Park","rank":51,"reason":"It was #1 in 2024 visits (about 12.19 million, roughly 2.5 times second-place Zion) but is #51 on our board, the widest gap between popularity and score of any park with 2024 data. To be fair, it's free to enter (you just need a parking tag), it's the most biodiverse park in the system and it's within a day's drive of a huge share of Americans. Its fame comes from where it is and what it costs more than from views you can't find anywhere else.","runnerUp":"Hot Springs National Park (roughly 2.46 million visits, #62 on our board)"},{"award":"Most American","park":"Yellowstone National Park","rank":2,"reason":"In 1872 the United States set aside Yellowstone and invented the national park, an idea more than 100 countries have since copied. It has bison, cowboys and geysers that go off on schedule, and Old Faithful is the receipt.","runnerUp":"Theodore Roosevelt National Park (named for the conservation president, in the badlands he said made him President)"}],"parks":[{"rank":1,"tier":"S","name":"Grand Canyon National Park","states":"Arizona","established":1919,"acres":1201647,"visits2024":4910000,"signature":"The mile-deep gorge cut by the Colorado River, seen from South Rim viewpoints like Mather Point","bestMonths":"March-May and September-November","take":"It is a mile deep and 277 river miles long, and it's still the only view in America that makes a busload of strangers go quiet at the same moment.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":10,"crowdToWow":7,"access":8},"score":92.5,"override":0,"overrideReason":null,"baseRank":1,"visitsNote":"Rounded: reported as about 4.91M (3rd most-visited national park in 2024). The exact figure was not retrieved."},{"rank":2,"tier":"S","name":"Yellowstone National Park","states":"Wyoming, Montana, Idaho","established":1872,"acres":2219791,"visits2024":4744353,"signature":"Old Faithful, in a park that holds roughly half of the world's active geysers","bestMonths":"May-June and September","take":"The world's first national park still out-performs everyone, with half the planet's active geysers, bison traffic jams and a hot spring the colors of a rainbow.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":10,"crowdToWow":6,"access":6},"score":88.0,"override":2,"overrideReason":"No other park does as many things at a world-class level: geysers, Grand Prismatic, the Grand Canyon of the Yellowstone, and the best wildlife watching in the Lower 48. Its 2.2 million acres also spread crowds out better than the crowd score assumes.","baseRank":4,"visitsNote":"Coverage of NPS 2024 data confirms about 4.7 million (4th among national parks). The exact count matches Yellowstone's reported 2024 total but was recalled, not directly verified in search."},{"rank":3,"tier":"S","name":"Bryce Canyon National Park","states":"Utah","established":1928,"acres":35835,"visits2024":2498075,"signature":"The hoodoos of Bryce Amphitheater, seen from Sunrise, Sunset, and Inspiration Points","bestMonths":"May to June and September to October","take":"Thousands of orange hoodoos stand at attention like a stone color guard, and the mostly flat Rim Trail lets you review the troops without breaking a sweat.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":10,"crowdToWow":6,"access":6},"score":88.0,"override":0,"overrideReason":null,"baseRank":3,"visitsNote":"From a secondary 2024 list (explorewithalec, which also shows 2023 at 2,461,269, up 1.5%). It matches the LendingTree 2024 NPS table."},{"rank":4,"tier":"S","name":"Hawaii Volcanoes National Park","states":"Hawaii","established":1916,"acres":325605,"visits2024":1433593,"signature":"Kilauea's Halemaumau crater, with episodic lava fountaining in recent years","bestMonths":"Year-round","take":"It's the only park that keeps making more America, as Kilauea adds new real estate at no cost to the taxpayer.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":10,"crowdToWow":8,"access":6},"score":87.0,"override":0,"overrideReason":null,"baseRank":5,"visitsNote":"NPS Annual Park Ranking Report for 2024 (rank 62 among NPS units). The FY2024 interagency figure is 1,420,751."},{"rank":5,"tier":"S","name":"White Sands National Park","states":"New Mexico","established":2019,"acres":146344,"visits2024":null,"signature":"The world's largest gypsum dunefield, about 275 square miles of white dunes you can sled down","bestMonths":"October-November and March-April","take":"Its 275 square miles of white gypsum stay cool enough to sled on in July, which is the closest any American gets to landing on another planet without NASA.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":10,"crowdToWow":9,"access":6},"score":88.5,"override":-3,"overrideReason":"It really is one of a kind, but most visits are a half-day of sledding and a scenic drive. It doesn't have the depth of the parks it would otherwise outrank, though it stays in S tier.","baseRank":2,"visitsNote":"2024 figure not verified. NPS 2023 annual ranking listed 729,096; one secondary listing shows 659,742, but its year is unclear."},{"rank":6,"tier":"S","name":"Crater Lake National Park","states":"Oregon","established":1902,"acres":183224,"visits2024":504942,"signature":"Crater Lake, at 1,943 feet the deepest lake in the U.S., with Wizard Island rising inside the caldera","bestMonths":"July to September (Rim Drive fully open; snow often lingers into June)","take":"At 1,943 feet it's the deepest lake in the country, it's so blue it looks photoshopped, and it fills itself almost entirely with rain and snow.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":9,"crowdToWow":8,"access":5},"score":86.5,"override":0,"overrideReason":null,"baseRank":6,"visitsNote":"From a secondary 2024 list (explorewithalec). Another list (camperchamp) shows 632,242, probably a different year. Check against NPS stats."},{"rank":7,"tier":"A","name":"North Cascades National Park","states":"Washington","established":1968,"acres":504781,"visits2024":16485,"signature":"More than 300 glaciers, the most of any U.S. park outside Alaska, above turquoise Diablo Lake","bestMonths":"July-September","take":"More than 300 glaciers, jagged peaks and a lake the color of a sports drink, and almost nobody shows up, which makes it the best-kept secret in the Lower 48.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":7,"crowdToWow":10,"access":6},"score":85.0,"override":0,"overrideReason":null,"baseRank":7,"visitsNote":"2024 recreation visits per Smithsonian/CNN rankings of NPS 2024 data (second-least-visited park). Count covers the national park unit only, not the adjacent Ross Lake and Lake Chelan recreation areas."},{"rank":8,"tier":"A","name":"Redwood National and State Parks","states":"California","established":1968,"acres":138999,"visits2024":null,"signature":"Old-growth coast redwoods, including Hyperion (about 380 ft), the tallest known living tree on Earth","bestMonths":"May-October","take":"These are the tallest trees on Earth, led by Hyperion, whose location is kept secret like a tree in witness protection.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":9,"crowdToWow":9,"access":5},"score":84.0,"override":0,"overrideReason":null,"baseRank":8,"visitsNote":"2024 figure not found in available searches. NPS counts cover the jointly managed national and state park lands."},{"rank":9,"tier":"A","name":"Wrangell-St. Elias National Park and Preserve","states":"Alaska","established":1980,"acres":8323146,"visits2024":null,"signature":"Kennecott's red 14-story copper concentration mill, at the end of the 60-mile gravel McCarthy Road","bestMonths":"Mid-June-August","take":"Park and preserve together cover about 13.2 million acres, roughly Yellowstone, Yosemite and Switzerland combined, and the road in is 60 miles of gravel, so pack a spare tire and a sense of destiny.","kidFriendly":false,"scores":{"scenery":10,"uniqueness":9,"crowdToWow":10,"access":1},"score":83.5,"override":0,"overrideReason":null,"baseRank":9,"visitsNote":"2024 recreation visits not found in available searches. The acreage counts the national park only; with the preserve the total is about 13.2 million acres."},{"rank":10,"tier":"A","name":"Death Valley National Park","states":"California and Nevada","established":1994,"acres":3408406,"visits2024":1440484,"signature":"Badwater Basin, 282 feet below sea level, the lowest point in North America","bestMonths":"November to March","take":"It sits 282 feet below sea level and holds the 134°F world heat record, so the hottest place on Earth is, naturally, American.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":9,"crowdToWow":8,"access":5},"score":82.5,"override":0,"overrideReason":null,"baseRank":12,"visitsNote":"From a secondary 2024 list (explorewithalec) that draws on NPS stats. It was not checked directly against irma.nps.gov."},{"rank":11,"tier":"A","name":"Haleakala National Park","states":"Hawaii","established":1961,"acres":33265,"visits2024":732477,"signature":"Sunrise from the 10,023-ft summit above a sea of clouds (reservation required)","bestMonths":"Year-round; April-May and September-October are best","take":"Drive to 10,023 feet, watch the sun come up over a sea of clouds, and your alarm clock finally earns its keep.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":9,"crowdToWow":7,"access":6},"score":82.5,"override":0,"overrideReason":null,"baseRank":13,"visitsNote":"NPS Annual Park Ranking Report for 2024 (rank 100 among NPS units), matching the NPS Haleakala news release. Part of Hawaii National Park from 1916; a separate park since 1961."},{"rank":12,"tier":"A","name":"Olympic National Park","states":"Washington","established":1938,"acres":922649,"visits2024":3720000,"signature":"The moss-draped Hall of Mosses in the Hoh Rain Forest","bestMonths":"July-September","take":"Rainforest, glaciers and wild Pacific beaches share one park: America ordered the sampler platter and got the whole buffet.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":9,"crowdToWow":6,"access":7},"score":82.5,"override":0,"overrideReason":null,"baseRank":14,"visitsNote":"Rounded: 2024 rankings report about 3.72 million recreation visits (8th most visited), up roughly 27% from about 2.9 million in 2023. Exact count not confirmed."},{"rank":13,"tier":"A","name":"Gates of the Arctic National Park and Preserve","states":"Alaska","established":1980,"acres":7523897,"visits2024":11907,"signature":"No roads, trails or campgrounds at all, entirely above the Arctic Circle; the granite spires of the Arrigetch Peaks","bestMonths":"Mid-June to mid-August","take":"No roads, no trails and no gift shop, just you, a bush plane and more elbow room per American than anywhere else in the Union.","kidFriendly":false,"scores":{"scenery":9,"uniqueness":10,"crowdToWow":10,"access":1},"score":82.5,"override":-3,"overrideReason":"Spectacular, but with no roads, trails or facilities it is realistically a park for expedition backpackers and fly-in trips. The 15% access weight doesn't fully capture that.","baseRank":10,"visitsNote":"Least-visited national park in 2024 (NPS data via CNN). Acreage is the park portion only; park plus preserve is about 8.47M acres."},{"rank":14,"tier":"A","name":"National Park of American Samoa","states":"American Samoa (U.S. territory)","established":1988,"acres":8257,"visits2024":null,"signature":"Ofu Beach's coral reef lagoon, plus paleotropical rainforest with flying foxes (fruit bats) that have 3-foot wingspans","bestMonths":"June to September (drier season)","take":"It's the only national park south of the equator, with the same Constitution, the seasons flipped and fruit bats that have three-foot wingspans.","kidFriendly":false,"scores":{"scenery":9,"uniqueness":10,"crowdToWow":10,"access":1},"score":82.5,"override":-3,"overrideReason":"Gorgeous and singular, but it takes a long trip through Honolulu on a few flights a week, and visitor services are minimal, so most readers will never get there.","baseRank":11,"visitsNote":"No 2024 figure turned up within the search budget. It is consistently one of the least-visited national parks, typically well under 20,000 a year (approximate, unverified)."},{"rank":15,"tier":"A","name":"Arches National Park","states":"Utah","established":1971,"acres":76679,"visits2024":1466528,"signature":"Delicate Arch, the free-standing arch on Utah's license plate","bestMonths":"March to May and September to October","take":"More than 2,000 natural stone arches prove that in America even the rocks know how to make a grand entrance.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":9,"crowdToWow":5,"access":8},"score":82.5,"override":0,"overrideReason":null,"baseRank":15,"visitsNote":"From a secondary 2024 ranking list (explorewithalec) that draws on NPS stats. It was not checked directly against irma.nps.gov."},{"rank":16,"tier":"A","name":"Kenai Fjords National Park","states":"Alaska","established":1980,"acres":669650,"visits2024":419468,"signature":"Exit Glacier, a road-accessible arm of the 700-square-mile Harding Icefield","bestMonths":"June-August","take":"Calving glaciers, humpbacks and puffins, and you can drive to the front door from Anchorage: Alaska's starter pack, deluxe edition.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":8,"access":7},"score":82.5,"override":0,"overrideReason":null,"baseRank":16,"visitsNote":"Calendar-year 2024 recreation visits per an NPS-sourced 2024 ranking list; not confirmed in a second source."},{"rank":17,"tier":"A","name":"Lake Clark National Park and Preserve","states":"Alaska","established":1980,"acres":2619816,"visits2024":18505,"signature":"Richard Proenneke's hand-built log cabin on Twin Lakes beneath volcanic peaks","bestMonths":"June-September","take":"Volcanoes, turquoise lakes, bears on the beach and Dick Proenneke's handmade cabin, all reachable only by small plane: the VIP section of the American frontier.","kidFriendly":false,"scores":{"scenery":10,"uniqueness":8,"crowdToWow":10,"access":2},"score":82.0,"override":0,"overrideReason":null,"baseRank":17,"visitsNote":"2024 recreation visits per Smithsonian's ranking of NPS 2024 data; Outdoors.com reports 19,395, so treat as approximate.","dataFix":"Input used park + preserve (about 4.03M acres). Changed to the national park portion (about 2.62M acres) for consistency with the other park-and-preserve units."},{"rank":18,"tier":"A","name":"Denali National Park and Preserve","states":"Alaska","established":1917,"acres":4740911,"visits2024":null,"signature":"North America's tallest peak (20,310 ft), plus the only NPS sled-dog kennels with working ranger huskies","bestMonths":"June-August (buses run late May to mid-September)","take":"A 20,310-foot mountain so big it makes its own weather, plus the Park Service's only sled-dog kennel, because America does not do subtle.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":8,"crowdToWow":8,"access":4},"score":82.0,"override":0,"overrideReason":null,"baseRank":18,"visitsNote":"Calendar-2024 figure not found within the search budget. A third-party aggregator of NPS Stats reports about 543,300 visits in calendar 2025. Acreage is the national park portion only; park plus preserve is about 6.05M acres."},{"rank":19,"tier":"A","name":"Grand Teton National Park","states":"Wyoming","established":1929,"acres":310044,"visits2024":3620000,"signature":"The Teton Range rising about 7,000 ft straight up from the Jackson Hole valley floor, with no foothills in the way","bestMonths":"June-September","take":"These mountains skipped the foothills and went straight to poster, and the Tetons have never had a bad angle.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":7,"crowdToWow":7,"access":7},"score":82.0,"override":0,"overrideReason":null,"baseRank":19,"visitsNote":"Rounded: reported as about 3.62M (9th most-visited national park in 2024). The exact figure was not retrieved."},{"rank":20,"tier":"A","name":"Glacier National Park","states":"Montana","established":1910,"acres":1013126,"visits2024":3200000,"signature":"Going-to-the-Sun Road over Logan Pass at 6,646 ft","bestMonths":"July-September","take":"Going-to-the-Sun Road is a 50-mile argument that the best things in America are worth the reservation, so go while the namesake glaciers are still there.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":8,"crowdToWow":6,"access":5},"score":80.5,"override":3,"overrideReason":"Going-to-the-Sun Road is arguably the finest drive in the country. The park's glaciers are also shrinking fast, from about 150 in 1850 to 26 in the most recent USGS count, so seeing them is a now-or-never trip.","baseRank":23,"visitsNote":"Rounded: reported as about 3.20M (10th most-visited national park in 2024, up about 9% on 2023). The exact figure was not retrieved."},{"rank":21,"tier":"A","name":"Mount Rainier National Park","states":"Washington","established":1899,"acres":236382,"visits2024":1620006,"signature":"Paradise wildflower meadows beneath the 14,410-foot glacier-wrapped volcano","bestMonths":"July-September (late July-August for wildflowers)","take":"A 14,410-foot glacier-wrapped volcano hogs the whole horizon above the wildflower meadows: the national anthem in mountain form.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":7,"crowdToWow":6,"access":8},"score":82.0,"override":0,"overrideReason":null,"baseRank":20,"visitsNote":"Calendar-year 2024 recreation visits per NPS-sourced 2024 ranking lists."},{"rank":22,"tier":"A","name":"Black Canyon of the Gunnison National Park","states":"Colorado","established":1999,"acres":30780,"visits2024":null,"signature":"The Painted Wall, Colorado's tallest cliff at about 2,250 feet, streaked with pink pegmatite","bestMonths":"May to October (the North Rim and most of the South Rim road close in winter)","take":"The walls are so steep and narrow that parts of the gorge get about 33 minutes of sun a day, and the Painted Wall dwarfs the Empire State Building.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":9,"access":5},"score":81.0,"override":0,"overrideReason":null,"baseRank":21,"visitsNote":"No 2024 figure turned up within the search budget. Usually roughly 300,000 to 350,000 a year (approximate, unverified)."},{"rank":23,"tier":"A","name":"Canyonlands National Park","states":"Utah","established":1964,"acres":337598,"visits2024":818492,"signature":"Mesa Arch at sunrise in the Island in the Sky district","bestMonths":"April to May and September to October","take":"The Colorado and Green Rivers carved a whole country inside the country, and there's barely a line at the entrance.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":8,"access":6},"score":81.0,"override":0,"overrideReason":null,"baseRank":22,"visitsNote":"From a secondary 2024 list (explorewithalec) that draws on NPS stats. It was not checked directly against irma.nps.gov."},{"rank":24,"tier":"A","name":"Yosemite National Park","states":"California","established":1890,"acres":761748,"visits2024":4120000,"signature":"El Capitan, a sheer granite monolith about 3,000 ft tall above Yosemite Valley","bestMonths":"May-June (peak waterfalls); September-October","take":"El Capitan is a 3,000-foot granite wall that people climb for fun, and the rest of us salute it from a meadow with a sandwich and a few thousand new friends.","kidFriendly":true,"scores":{"scenery":10,"uniqueness":8,"crowdToWow":4,"access":6},"score":79.0,"override":3,"overrideReason":"The formula hits Yosemite twice for crowds (low crowd-to-wow, middling access). Yosemite Valley is still the most iconic single landscape in the system, and the Tuolumne high country absorbs plenty of people.","baseRank":27,"visitsNote":"About 4.12 million (rounded), per National Parks Traveler citing NPS 2024 data; 20th among all NPS units and 6th among national parks."},{"rank":25,"tier":"B","name":"Great Sand Dunes National Park and Preserve","states":"Colorado","established":2004,"acres":107342,"visits2024":441836,"signature":"Star Dune, the tallest dune in North America (about 750 ft), with Medano Creek's seasonal surge flow at its base","bestMonths":"Late May-June (Medano Creek) and September","take":"Sahara-grade dunes parked in front of 13,000-foot peaks, plus a pop-up beach creek every spring: Colorado had extra and shared.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":9,"crowdToWow":8,"access":6},"score":80.0,"override":0,"overrideReason":null,"baseRank":25,"visitsNote":"Fiscal-year 2024 figure (October 2023 to September 2024) from the Federal Interagency recreation visitation report; the calendar-2024 figure was not retrieved. Acreage is the park portion; park plus preserve is about 149,000 acres."},{"rank":26,"tier":"B","name":"Petrified Forest National Park","states":"Arizona","established":1962,"acres":221390,"visits2024":559254,"signature":"Rainbow-hued petrified logs about 218 million years old at Crystal Forest and Blue Mesa","bestMonths":"March-May and September-November","take":"Logs turned to rainbow quartz over 200 million years, plus a stretch of Route 66, so you get your kicks and a geology lesson in one afternoon.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":9,"crowdToWow":8,"access":9},"score":80.5,"override":-2,"overrideReason":"A great road-trip stop with easy access, but most visits last two to three hours, and its high access and uniqueness scores overstate it as a destination.","baseRank":24,"visitsNote":"Calendar-year 2024 figure from an NPS-sourced ranking list; FY2024 interagency report lists 554,160."},{"rank":27,"tier":"B","name":"Katmai National Park and Preserve","states":"Alaska","established":1980,"acres":3674530,"visits2024":36230,"signature":"Brown bears snatching leaping sockeye salmon at Brooks Falls (home of Fat Bear Week)","bestMonths":"July and September","take":"Salmon jump straight into a bear's mouth at Brooks Falls, the most efficient drive-thru in America, reachable mainly by floatplane.","kidFriendly":false,"scores":{"scenery":9,"uniqueness":10,"crowdToWow":7,"access":2},"score":79.5,"override":0,"overrideReason":null,"baseRank":26,"visitsNote":"2024 recreation visits per Smithsonian's ranking of NPS 2024 data.","dataFix":"Input used park + preserve (about 4.09M acres). Changed to the national park portion (about 3.67M acres) to match how Denali, Gates of the Arctic, Glacier Bay, Wrangell-St. Elias and Great Sand Dunes are listed."},{"rank":28,"tier":"B","name":"Mesa Verde National Park","states":"Colorado","established":1906,"acres":52485,"visits2024":480065,"signature":"Cliff Palace, the largest cliff dwelling in North America","bestMonths":"May-October","take":"Ancestral Puebloans built apartment complexes into cliffs some 800 years ago, with better views than most modern penthouses.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":10,"crowdToWow":8,"access":6},"score":79.0,"override":0,"overrideReason":null,"baseRank":28,"visitsNote":"Calendar-year 2024 figure from an NPS-sourced ranking list; FY2024 interagency report lists 488,311."},{"rank":29,"tier":"B","name":"Dry Tortugas National Park","states":"Florida","established":1992,"acres":64701,"visits2024":null,"signature":"Fort Jefferson, the largest all-masonry fort in the Americas (about 16 million bricks), on a speck of island 70 miles west of Key West","bestMonths":"November-April","take":"Somebody looked at open sea 70 miles past Key West and decided it needed 16 million bricks, and that was the correct call.","kidFriendly":false,"scores":{"scenery":8,"uniqueness":10,"crowdToWow":9,"access":2},"score":78.5,"override":0,"overrideReason":null,"baseRank":29,"visitsNote":"Calendar-2024 figure not found within the search budget. A third-party aggregator of NPS Stats reports about 89,355 visits in calendar 2025. Reachable only by ferry or seaplane."},{"rank":30,"tier":"B","name":"Joshua Tree National Park","states":"California","established":1994,"acres":795156,"visits2024":2991874,"signature":"Spiky Joshua trees among giant stacked granite boulder piles at Hidden Valley","bestMonths":"October-April (March-April for wildflowers)","take":"Trees drawn by Dr. Seuss, boulders stacked by a giant with free time, and a night sky that makes you want to salute the Milky Way.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":9,"crowdToWow":5,"access":8},"score":78.5,"override":0,"overrideReason":null,"baseRank":30,"visitsNote":"Calendar-year 2024 recreation visits per NPS-sourced 2024 ranking lists (just under 3 million)."},{"rank":31,"tier":"B","name":"Lassen Volcanic National Park","states":"California","established":1916,"acres":106589,"visits2024":357651,"signature":"Bumpass Hell, a boardwalk through boiling mud pots and steaming fumaroles","bestMonths":"July-September","take":"It has all four types of volcano plus boiling mud pots, as Yellowstone's understudy nailed the audition and kept the crowds away.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":8,"crowdToWow":9,"access":6},"score":78.5,"override":0,"overrideReason":null,"baseRank":31,"visitsNote":"Calendar-year 2024 figure from an NPS-sourced ranking list; the federal FY2024 interagency report lists 362,638 (fiscal year)."},{"rank":32,"tier":"B","name":"Sequoia National Park","states":"California","established":1890,"acres":404063,"visits2024":null,"signature":"General Sherman Tree, the largest living tree on Earth by volume (about 52,500 cubic feet)","bestMonths":"May-October","take":"General Sherman is the largest tree on Earth by volume and has been standing at attention for about 2,200 years, so it outranks everybody.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":7,"access":5},"score":78.0,"override":0,"overrideReason":null,"baseRank":32,"visitsNote":"2024 figure not verified. NPS 2023 annual ranking listed 980,567; one secondary listing shows 1,378,337, but its year is unclear."},{"rank":33,"tier":"B","name":"Saguaro National Park","states":"Arizona","established":1994,"acres":92867,"visits2024":null,"signature":"Forests of giant saguaro cacti, which grow naturally only in the Sonoran Desert and can top 40 ft","bestMonths":"November-March (saguaro blooms May-June)","take":"Saguaros usually don't grow their first arm until around age 50, so every cactus waving at you is a distinguished senior citizen, and you should wave back.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":8,"crowdToWow":8,"access":9},"score":77.5,"override":0,"overrideReason":null,"baseRank":33,"visitsNote":"2024 figure not verified. NPS 2023 annual ranking listed 1,010,906; one secondary listing shows 847,749, but its year is unclear."},{"rank":34,"tier":"B","name":"Zion National Park","states":"Utah","established":1919,"acres":147243,"visits2024":4946592,"signature":"The Narrows, a hike up the Virgin River between canyon walls up to about 1,000 ft high","bestMonths":"March-May and September-November","take":"In Utah's first national park the trail is literally a river, so bring water shoes, patriotic resolve and patience for the shuttle line.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":4,"access":7},"score":76.5,"override":3,"overrideReason":"The Narrows and Angels Landing are bucket-list hikes, and the canyon shuttle keeps the crowds orderly. The crowd penalty is real but overstated.","baseRank":37,"visitsNote":"4,946,592 recreation visits per Smithsonian citing NPS; the 2nd most-visited national park in 2024."},{"rank":35,"tier":"B","name":"Channel Islands National Park","states":"California","established":1980,"acres":249561,"visits2024":null,"signature":"Painted Cave on Santa Cruz Island, one of the world's largest sea caves, plus the endemic island fox","bestMonths":"March to May (wildflowers, gray whales) and September to October (calm, clear water)","take":"The Galapagos of North America is an hour's boat ride from Ventura, with a fox the size of a house cat and no resort fee.","kidFriendly":false,"scores":{"scenery":8,"uniqueness":9,"crowdToWow":9,"access":3},"score":77.0,"override":0,"overrideReason":null,"baseRank":34,"visitsNote":"No 2024 figure turned up within the search budget. Usually roughly 300,000 a year, much of it counted at the mainland visitor center (approximate, unverified)."},{"rank":36,"tier":"B","name":"Carlsbad Caverns National Park","states":"New Mexico","established":1930,"acres":46766,"visits2024":460474,"signature":"The Big Room, an 8-acre cave chamber 750 feet underground (reached by elevator or the Natural Entrance trail)","bestMonths":"May to October for the evening bat flights (peak in late summer); the cave is a steady 56°F all year","take":"An elevator drops you 750 feet into a room the size of six football fields, because America doesn't just go big, it goes big in the basement.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":9,"crowdToWow":8,"access":4},"score":77.0,"override":0,"overrideReason":null,"baseRank":35,"visitsNote":"Only one secondary 2024 list (explorewithalec) gave this figure. Not checked against NPS directly."},{"rank":37,"tier":"B","name":"Glacier Bay National Park and Preserve","states":"Alaska","established":1980,"acres":3223384,"visits2024":742840,"signature":"Tidewater glaciers such as Margerie Glacier calving house-sized chunks of ice into the bay","bestMonths":"Late May to early September","take":"Skyscraper-sized ice falls into the sea on a loose schedule while you watch from a deck with coffee: freedom, served chilled.","kidFriendly":false,"scores":{"scenery":9,"uniqueness":8,"crowdToWow":8,"access":3},"score":76.5,"override":0,"overrideReason":null,"baseRank":36,"visitsNote":"Fiscal-year 2024 figure (October 2023 to September 2024) from the Federal Interagency recreation visitation report; the calendar-2024 figure was not retrieved. Most visitors arrive by cruise ship. Acreage is the park portion."},{"rank":38,"tier":"B","name":"Kings Canyon National Park","states":"California","established":1940,"acres":461901,"visits2024":699389,"signature":"The General Grant Tree, a giant sequoia designated the Nation's Christmas Tree","bestMonths":"June-September","take":"It's deeper than the Grand Canyon in spots and home to the official Nation's Christmas Tree, because of course America has one, and it stands 267 feet tall.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":6,"crowdToWow":8,"access":6},"score":75.0,"override":0,"overrideReason":null,"baseRank":38,"visitsNote":"Calendar-year 2024 recreation visits per an NPS-sourced 2024 ranking list; not confirmed in a second source."},{"rank":39,"tier":"B","name":"Big Bend National Park","states":"Texas","established":1944,"acres":801163,"visits2024":561458,"signature":"Santa Elena Canyon, with 1,500-foot limestone walls rising straight up from the Rio Grande","bestMonths":"November to April (best in February to April)","take":"It's so far from everything that the stars outnumber the traffic lights about infinity to zero: Texas-sized, taken literally.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":8,"crowdToWow":9,"access":3},"score":74.0,"override":2,"overrideReason":"Its low access score reflects distance, not difficulty. Once you arrive the roads are paved, and the hot springs on the Rio Grande and some of the darkest skies in the Lower 48 repay the drive.","baseRank":41,"visitsNote":"From a secondary 2024 list (explorewithalec). The Daily Texan reported more than 560,000 visits in 2024, the park's second-highest year. Another list shows 568,104."},{"rank":40,"tier":"B","name":"Rocky Mountain National Park","states":"Colorado","established":1915,"acres":265807,"visits2024":4150000,"signature":"Trail Ridge Road, the highest continuous paved road in the U.S., topping out at 12,183 ft","bestMonths":"Late June-September (Trail Ridge Road open); September-early October for elk rut and aspens","take":"Trail Ridge Road crests at 12,183 feet, so you can summit the continent without leaving the driver's seat, which is peak American efficiency.","kidFriendly":true,"scores":{"scenery":9,"uniqueness":6,"crowdToWow":5,"access":8},"score":73.5,"override":3,"overrideReason":"Elk in the meadows and alpine tundra you can drive to make it one of the best wildlife-and-summit days in the country. A uniqueness score of 6 sells that short.","baseRank":43,"visitsNote":"About 4.15 million (rounded), per National Parks Traveler citing NPS 2024 data; 18th among all NPS units and 5th among national parks."},{"rank":41,"tier":"C","name":"Mammoth Cave National Park","states":"Kentucky","established":1941,"acres":54012,"visits2024":747042,"signature":"The world's longest known cave system, with more than 400 miles mapped","bestMonths":"Year-round (April-May and September-October are best)","take":"It's the longest known cave system on Earth, at 400-plus miles and counting, so America doesn't just win, it wins underground.","kidFriendly":true,"scores":{"scenery":6,"uniqueness":9,"crowdToWow":7,"access":9},"score":75.0,"override":0,"overrideReason":null,"baseRank":39,"visitsNote":"Calendar-year 2024 recreation visits per ranking list and Wikipedia; FY2024 interagency report lists 739,006."},{"rank":42,"tier":"C","name":"Isle Royale National Park","states":"Michigan","established":1940,"acres":571790,"visits2024":28806,"signature":"Roadless Lake Superior island home to the world's longest-running predator-prey study of wolves and moose (since 1958)","bestMonths":"July-August","take":"It's an island in a lake so big it has its own islands, where the moose outnumber you and the wolves keep the books.","kidFriendly":false,"scores":{"scenery":8,"uniqueness":8,"crowdToWow":10,"access":2},"score":74.0,"override":0,"overrideReason":null,"baseRank":40,"visitsNote":"2024 recreation visits per Smithsonian's ranking of NPS 2024 data."},{"rank":43,"tier":"C","name":"Virgin Islands National Park","states":"U.S. Virgin Islands (St. John)","established":1956,"acres":15052,"visits2024":null,"signature":"Trunk Bay's underwater snorkel trail, with signs on the seafloor","bestMonths":"December-April (dry season; hurricane season runs June-November)","take":"About 60 percent of St. John is national park, and the Trunk Bay snorkel trail has signs on the seafloor, making it America's most hydrated interpretive program.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":8,"crowdToWow":7,"access":5},"score":74.0,"override":0,"overrideReason":null,"baseRank":42,"visitsNote":"2024 figure not verified. NPS 2023 annual ranking listed 343,685; one secondary listing shows 471,074, but its year is unclear."},{"rank":44,"tier":"C","name":"Everglades National Park","states":"Florida","established":1947,"acres":1508939,"visits2024":741983,"signature":"Anhinga Trail boardwalk, where alligators sun themselves a few feet away; the only place on Earth where alligators and crocodiles live side by side","bestMonths":"December-April (dry season)","take":"It's the only place on Earth where alligators and crocodiles share a zip code, and they have agreed to keep it civil.","kidFriendly":true,"scores":{"scenery":6,"uniqueness":9,"crowdToWow":7,"access":8},"score":73.5,"override":0,"overrideReason":null,"baseRank":44,"visitsNote":"NPS Annual Park Ranking Report for 2024 (rank 96 among all NPS units). The FY2024 interagency report gives 743,303. Authorized in 1934 and formally established and dedicated in 1947."},{"rank":45,"tier":"C","name":"Kobuk Valley National Park","states":"Alaska","established":1980,"acres":1750716,"visits2024":17233,"signature":"The Great Kobuk Sand Dunes, about 25 square miles of dunes above the Arctic Circle","bestMonths":"July-September (late August-September for caribou migration)","take":"Sahara-style sand dunes sit above the Arctic Circle with caribou strolling through, because America simply refused to pick one climate.","kidFriendly":false,"scores":{"scenery":7,"uniqueness":10,"crowdToWow":9,"access":1},"score":73.0,"override":0,"overrideReason":null,"baseRank":45,"visitsNote":"2024 recreation visits per Smithsonian/CNN rankings of NPS 2024 data (third-least-visited park)."},{"rank":46,"tier":"C","name":"Capitol Reef National Park","states":"Utah","established":1971,"acres":241904,"visits2024":1422490,"signature":"The Waterpocket Fold, plus the Fruita orchards and fresh pies at the historic Gifford Homestead","bestMonths":"April to June and September to October (orchard harvest season)","take":"Hike past 270-million-year-old rock, then finish with a fresh pie from the Gifford Homestead: life, liberty and the pursuit of cherry.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":7,"crowdToWow":8,"access":5},"score":72.5,"override":0,"overrideReason":null,"baseRank":46,"visitsNote":"From a secondary 2024 list (explorewithalec) that draws on NPS stats. It was not checked directly against irma.nps.gov."},{"rank":47,"tier":"C","name":"Acadia National Park","states":"Maine","established":1919,"acres":49071,"visits2024":3961661,"signature":"Cadillac Mountain summit, the first place in the U.S. to see sunrise from early October to early March","bestMonths":"June and September to mid-October (fall foliage)","take":"Cadillac Mountain gets the nation's first sunrise for half the year, so Maine clocks in early for all 50 states.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":6,"crowdToWow":4,"access":8},"score":68.0,"override":3,"overrideReason":"Ocean cliffs, granite summits and 45 miles of carriage roads fit into one compact island park. Few places pack more variety into a single day.","baseRank":50,"visitsNote":"NPS 2024 figure as reported by Smithsonian (ranked 7th among national parks). One secondary list shows 4,079,318, which is probably a different year."},{"rank":48,"tier":"C","name":"Badlands National Park","states":"South Dakota","established":1978,"acres":242756,"visits2024":null,"signature":"The Badlands Wall: striped buttes and pinnacles along the Badlands Loop Road (SD-240)","bestMonths":"May to June and September to October","take":"Settlers on foot called them bad lands, but with a paved loop road and air conditioning they're a layer cake of freedom, and the prairie dogs are the welcome committee.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":7,"crowdToWow":8,"access":7},"score":71.5,"override":0,"overrideReason":null,"baseRank":47,"visitsNote":"No confirmed 2024 NPS figure. One secondary list (camperchamp, updated 2026) shows 1,139,361, but its year looks inconsistent (its Acadia number does not match NPS 2024). About 1.0 million in 2023 (approximate)."},{"rank":49,"tier":"C","name":"Wind Cave National Park","states":"South Dakota","established":1903,"acres":33971,"visits2024":null,"signature":"Boxwork, the honeycomb-like calcite formation; Wind Cave holds an estimated 95 percent of the world's known boxwork","bestMonths":"May-October above ground; cave tours run year-round at a steady 54F","take":"The cave breathes with the barometric pressure while bison mow the prairie upstairs, which makes it a two-story national treasure.","kidFriendly":true,"scores":{"scenery":6,"uniqueness":8,"crowdToWow":8,"access":6},"score":69.0,"override":0,"overrideReason":null,"baseRank":48,"visitsNote":"2024 recreation visits not found in available searches."},{"rank":50,"tier":"C","name":"New River Gorge National Park and Preserve","states":"West Virginia","established":2020,"acres":7021,"visits2024":1811937,"signature":"New River Gorge Bridge, a 3,030-foot steel arch 876 feet above the river","bestMonths":"May-October (mid-October for foliage and Bridge Day)","take":"The 'New' River is one of the oldest on the continent, a very American way to name things, and once a year you can legally parachute off the bridge.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":6,"crowdToWow":7,"access":8},"score":68.5,"override":0,"overrideReason":null,"baseRank":49,"visitsNote":"Record 2024 recreation visits, up 6.31% from 1,707,223 in 2023, per NPS data reported by WVVA and WCHS.","dataFix":"Input used park + preserve (about 72,800 acres). The national park portion is only about 7,021 acres; the rest is preserve. Changed for consistency."},{"rank":51,"tier":"C","name":"Great Smoky Mountains National Park","states":"Tennessee, North Carolina","established":1934,"acres":522427,"visits2024":12191834,"signature":"Mist-wrapped Appalachian ridgelines seen from Clingmans Dome, plus Cades Cove's historic homesteads and wildlife loop","bestMonths":"April-May and October","take":"There's no entrance fee (just a parking tag), there are misty ridges and it's the most biodiverse park in the system, so 12 million people a year can't be wrong, though they can all be at Cades Cove at once.","kidFriendly":true,"scores":{"scenery":8,"uniqueness":5,"crowdToWow":4,"access":10},"score":68.0,"override":0,"overrideReason":null,"baseRank":51,"visitsNote":"Most-visited national park in 2024, reported as 12.19M (about twice second-place Zion). The exact count is from recalled NPS Stats data, matched to that 12.19M figure."},{"rank":52,"tier":"C","name":"Congaree National Park","states":"South Carolina","established":2003,"acres":26693,"visits2024":null,"signature":"The 2.6-mile Boardwalk Loop through old-growth bottomland hardwood forest, with synchronous fireflies in May and June","bestMonths":"March to May, mid-May to mid-June (fireflies), and October to November","take":"Champion trees outgrow the Statue of Liberty minus her pedestal, and the fireflies blink in unison like they rehearsed for the Fourth.","kidFriendly":true,"scores":{"scenery":6,"uniqueness":7,"crowdToWow":7,"access":8},"score":67.5,"override":0,"overrideReason":null,"baseRank":53,"visitsNote":"No 2024 figure turned up within the search budget. Usually roughly 200,000 to 250,000 a year (approximate, unverified)."},{"rank":53,"tier":"C","name":"Great Basin National Park","states":"Nevada","established":1986,"acres":77180,"visits2024":152068,"signature":"Ancient Great Basin bristlecone pines, some over 4,000 years old, plus the marble formations of Lehman Caves","bestMonths":"June-September","take":"The bristlecone pines were already ancient when the Founders were born, and the skies are dark enough to read the Milky Way's full resume.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":7,"crowdToWow":9,"access":3},"score":67.0,"override":0,"overrideReason":null,"baseRank":54,"visitsNote":"Secondary source: a travel blog citing NPS 2024 data, not confirmed against NPS directly."},{"rank":54,"tier":"D","name":"Theodore Roosevelt National Park","states":"North Dakota","established":1978,"acres":70447,"visits2024":null,"signature":"Free-roaming wild horses and bison in the South Unit badlands near Medora","bestMonths":"May-September (June for wildflowers and bison calves)","take":"These are the badlands Teddy credited with making him President, with bison and wild horses at no extra charge: a D on our scale and an A-plus in spirit.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":6,"crowdToWow":8,"access":6},"score":67.0,"override":0,"overrideReason":null,"baseRank":55,"visitsNote":"2024 figure not verified. NPS 2023 annual ranking listed 746,862; one secondary listing shows 729,893, possibly 2024 but unconfirmed."},{"rank":55,"tier":"D","name":"Gateway Arch National Park","states":"Missouri","established":2018,"acres":193,"visits2024":2563052,"signature":"The 630-foot stainless-steel Gateway Arch, with a tram of tiny pods that rides up to the top","bestMonths":"April-May and September-October","take":"It's a really nice arch: 630 feet of stainless-steel 1960s confidence with a tiny egg-pod tram to the top, just more monument than park.","kidFriendly":true,"scores":{"scenery":5,"uniqueness":8,"crowdToWow":6,"access":10},"score":68.0,"override":-3,"overrideReason":"A superb monument, but at 193 acres it is a memorial with a museum and a tram, not a park you spend a day exploring.","baseRank":52,"visitsNote":"NPS Annual Park Ranking Report for 2024 (rank 38 among all NPS units). Statista also reports about 2.6M. A Wikipedia figure of about 1.16M conflicts with both. Founded as Jefferson National Expansion Memorial in 1935."},{"rank":56,"tier":"D","name":"Voyageurs National Park","states":"Minnesota","established":1975,"acres":218222,"visits2024":null,"signature":"A boat-access park: about 40 percent water, spread across Rainy, Kabetogama, Namakan and Sand Point lakes and 500-plus islands","bestMonths":"June-September (January-March for ice roads)","take":"The main road is a lake and you bring the boat, which is wonderful if you own a canoe and a mystery if you don't.","kidFriendly":false,"scores":{"scenery":7,"uniqueness":7,"crowdToWow":8,"access":3},"score":65.5,"override":0,"overrideReason":null,"baseRank":56,"visitsNote":"2024 recreation visits not found in available searches."},{"rank":57,"tier":"D","name":"Pinnacles National Park","states":"California","established":2013,"acres":26686,"visits2024":null,"signature":"Bear Gulch talus cave, a flashlight-required passage under fallen boulders, with California condors circling the volcanic spires above","bestMonths":"March-May (wildflowers); October-November","take":"A volcano slid about 195 miles up the San Andreas Fault and is now patrolled by condors, a great story told in a park you can see in a day.","kidFriendly":false,"scores":{"scenery":6,"uniqueness":7,"crowdToWow":7,"access":6},"score":64.5,"override":0,"overrideReason":null,"baseRank":57,"visitsNote":"2024 recreation visits not found in available searches."},{"rank":58,"tier":"D","name":"Indiana Dunes National Park","states":"Indiana","established":2019,"acres":15349,"visits2024":2705209,"signature":"Towering sand dunes on the Lake Michigan shoreline, best experienced on the 3 Dune Challenge at West Beach","bestMonths":"June-September","take":"Sand dunes, Lake Michigan surf and a cameo from the Chicago skyline: America put a beach in Indiana and dared the oceans to complain.","kidFriendly":true,"scores":{"scenery":6,"uniqueness":6,"crowdToWow":5,"access":10},"score":64.5,"override":0,"overrideReason":null,"baseRank":58,"visitsNote":"Calendar-year 2024 recreation visits per NPS IRMA figures reproduced in 2024 ranking lists; some sites mislabel a lower 2025 figure (2,629,497) as 2024."},{"rank":59,"tier":"D","name":"Shenandoah National Park","states":"Virginia","established":1935,"acres":199224,"visits2024":null,"signature":"Skyline Drive, 105 miles along the Blue Ridge with about 75 scenic overlooks","bestMonths":"Mid-to-late October (foliage); May (wildflowers)","take":"105 miles of Skyline Drive at a stately 35 mph make it the most relaxing traffic jam in America, best enjoyed in October.","kidFriendly":true,"scores":{"scenery":7,"uniqueness":4,"crowdToWow":6,"access":9},"score":62.5,"override":0,"overrideReason":null,"baseRank":59,"visitsNote":"2024 figure not found in available searches; recent years typically run around 1.4-1.6 million recreation visits."},{"rank":60,"tier":"D","name":"Biscayne National Park","states":"Florida","established":1980,"acres":172971,"visits2024":null,"signature":"The Maritime Heritage Trail, an underwater trail of shipwrecks, plus the Boca Chita Key lighthouse","bestMonths":"November to April (dry season, fewer mosquitoes); May to September for calmer snorkeling water","take":"The park is 95 percent water with a view of the Miami skyline, glorious if you have a boat and a snorkel and mostly a visitor center if you don't.","kidFriendly":false,"scores":{"scenery":6,"uniqueness":7,"crowdToWow":6,"access":4},"score":60.0,"override":0,"overrideReason":null,"baseRank":60,"visitsNote":"No 2024 figure turned up within the search budget. Usually roughly 0.5 to 0.7 million a year (approximate, unverified)."},{"rank":61,"tier":"D","name":"Guadalupe Mountains National Park","states":"Texas","established":1972,"acres":86367,"visits2024":217720,"signature":"Guadalupe Peak (8,751 ft), the highest point in Texas, and the El Capitan cliff, part of a fossilized Permian reef","bestMonths":"October-November and March-April","take":"The rooftop of Texas is a 260-million-year-old fossil reef, and the climb up Guadalupe Peak is the best leg day in the Lone Star State.","kidFriendly":false,"scores":{"scenery":6,"uniqueness":6,"crowdToWow":8,"access":4},"score":60.0,"override":0,"overrideReason":null,"baseRank":61,"visitsNote":"Fiscal-year 2024 figure (October 2023 to September 2024) from the Federal Interagency recreation visitation report; the calendar-2024 figure was not retrieved. Authorized in 1966 and established in 1972."},{"rank":62,"tier":"D","name":"Hot Springs National Park","states":"Arkansas","established":1921,"acres":5554,"visits2024":2461812,"signature":"Bathhouse Row's historic bathhouses, fed by 143°F thermal spring water; Buckstaff Bathhouse has operated since 1912","bestMonths":"March-May and October-November","take":"Protected in 1832, forty years before Yellowstone, it's a historic spa street with a national park attached, and its bathhouses were doing self-care before anyone called it that.","kidFriendly":true,"scores":{"scenery":4,"uniqueness":7,"crowdToWow":5,"access":9},"score":58.0,"override":0,"overrideReason":null,"baseRank":62,"visitsNote":"NPS Annual Park Ranking Report for 2024 (rank 42 among NPS units). Hot Springs Reservation dates to 1832; it became a national park in 1921."},{"rank":63,"tier":"D","name":"Cuyahoga Valley National Park","states":"Ohio","established":2000,"acres":32572,"visits2024":null,"signature":"Brandywine Falls, a 65-foot waterfall, plus the Cuyahoga Valley Scenic Railroad along the Ohio & Erie Canal Towpath","bestMonths":"September to October (fall color) and May to June","take":"A waterfall, a scenic railroad and a towpath half an hour from Cleveland: dead last on our board, but the most pleasant last place in the country.","kidFriendly":true,"scores":{"scenery":5,"uniqueness":4,"crowdToWow":4,"access":10},"score":53.0,"override":0,"overrideReason":null,"baseRank":63,"visitsNote":"No confirmed 2024 NPS figure. One secondary list (camperchamp, updated 2026) shows 3,025,325, but its year looks inconsistent. Usually roughly 2.6 to 3 million a year (approximate)."}]};
+var P = D.parks.slice().sort(function(a,b){return a.rank-b.rank});
+var M = D.method;
+var TIERS = M.tiers;
+var TIER_INFO = {}; TIERS.forEach(function(t){TIER_INFO[t.tier]=t});
+var $ = function(s,r){return (r||document).querySelector(s)};
+var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmtInt(n){return Number(n).toLocaleString('en-US')}
+function fmtVisits(n){
+  if(n==null) return null;
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e5) return Math.round(n/1e3)+'K';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return String(n);
+}
+function fmtScore(n){return Number(n).toFixed(1)}
+function ranks(s){return String(s).replace('-','–')}
+var MONTHS='January|February|March|April|May|June|July|August|September|October|November|December';
+function dashMonths(s){return String(s).replace(new RegExp('('+MONTHS+')-','g'),'$1–')}
+function shortName(n){
+  if(/American Samoa/.test(n)) return 'American Samoa';
+  return n.replace(/ National (Park and Preserve|and State Parks|Park)$/,'');
+}
+function slug(p){return 'p-'+shortName(p.name).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function statesOf(s){return String(s).replace(/\s*\([^)]*\)/g,'').split(/,\s*|\s+and\s+/).map(function(x){return x.trim()}).filter(Boolean)}
+
+var REGION = {
+  'Alaska':'Alaska',
+  'California':'Pacific','Oregon':'Pacific','Washington':'Pacific','Hawaii':'Pacific','American Samoa':'Pacific',
+  'Arizona':'Southwest','New Mexico':'Southwest','Utah':'Southwest','Nevada':'Southwest','Texas':'Southwest',
+  'Colorado':'Rockies','Wyoming':'Rockies','Montana':'Rockies','Idaho':'Rockies',
+  'South Dakota':'Midwest & Plains','North Dakota':'Midwest & Plains','Minnesota':'Midwest & Plains','Missouri':'Midwest & Plains','Indiana':'Midwest & Plains','Ohio':'Midwest & Plains','Michigan':'Midwest & Plains',
+  'Maine':'East & South','Virginia':'East & South','West Virginia':'East & South','Tennessee':'East & South','North Carolina':'East & South','South Carolina':'East & South','Florida':'East & South','Kentucky':'East & South','Arkansas':'East & South','U.S. Virgin Islands':'East & South'
+};
+var REGION_ORDER = ['Alaska','Pacific','Southwest','Rockies','Midwest & Plains','East & South'];
+
+P.forEach(function(p){
+  p.short = shortName(p.name);
+  p.id = slug(p);
+  p.stateList = statesOf(p.states);
+  p.regions = [];
+  p.stateList.forEach(function(s){var r=REGION[s]; if(r && p.regions.indexOf(r)<0) p.regions.push(r)});
+});
+var byRank = {}; P.forEach(function(p){byRank[p.rank]=p});
+var byName = {}; P.forEach(function(p){byName[p.name]=p});
+
+/* ---------- hero collar ---------- */
+(function(){
+  var top = P[0];
+  var rows = [
+    ['Parks ranked', '63'],
+    ['Tiers', 'S, A, B, C, D'],
+    ['Editor’s calls', String(M.overridesUsed)],
+    ['No. 1', esc(top.short)+' · '+fmtScore(top.score)],
+    ['By', '<a href="https://x.com/Muricaenjoyer" target="_blank" rel="noopener">@Muricaenjoyer</a>']
+  ];
+  $('#collar').innerHTML = rows.map(function(r){return '<div><dt class="lbl">'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('');
+})();
+
+/* ---------- tier board ---------- */
+(function(){
+  var html = TIERS.map(function(t){
+    var parks = P.filter(function(p){return p.tier===t.tier});
+    var chips = parks.map(function(p){
+      return '<li><a class="chip" href="#'+p.id+'" data-jump="'+p.id+'"><span class="n">'+p.rank+'</span>'+esc(p.short)+'</a></li>';
+    }).join('');
+    return '<div class="trow" data-tier="'+t.tier+'">'+
+      '<div class="tblock wood"><span class="L routed" aria-hidden="true">'+t.tier+'</span><span class="r">Ranks '+ranks(t.ranks)+'</span></div>'+
+      '<div class="tbody"><p class="tmean"><b>'+t.tier+' tier, '+parks.length+' parks.</b> '+esc(t.meaning)+'</p><ul class="chips" aria-label="'+t.tier+' tier parks">'+chips+'</ul></div>'+
+    '</div>';
+  }).join('');
+  $('#board').innerHTML = html;
+})();
+
+/* ---------- awards ---------- */
+(function(){
+  var order = ['Most American','Best for little kids','Most overrated (with love)','Most underrated','Best crowd-to-wow'];
+  var aw = D.awards.slice().sort(function(a,b){
+    var ia=order.indexOf(a.award), ib=order.indexOf(b.award);
+    return (ia<0?99:ia)-(ib<0?99:ib);
+  });
+  $('#awards-grid').innerHTML = aw.map(function(a,i){
+    var p = byName[a.park];
+    var tier = p ? p.tier : '';
+    var id = p ? p.id : '';
+    var feature = i===0;
+    var ru = a.runnerUp ? '<p class="ru"><b>Runner-up:</b> '+esc(a.runnerUp)+'</p>' : '';
+    return '<article class="award'+(feature?' feature wood':'')+'" data-tier="'+tier+'">'+
+      '<span class="lbl aw">'+esc(a.award)+'</span>'+
+      '<h3'+(feature?' class="routed"':'')+'><a href="#'+id+'" data-jump="'+id+'">'+esc(p?p.short:a.park)+'</a></h3>'+
+      '<div class="ameta"><span class="tb" aria-label="'+tier+' tier">'+tier+'</span><span>Ranked No. '+a.rank+(p?' · '+esc(p.states):'')+'</span></div>'+
+      '<p>'+esc(a.reason)+'</p>'+(feature && p ? '<p class="afacts">Est. '+p.established+' · '+fmtInt(p.acres)+' acres'+(p.visits2024!=null?' · '+fmtVisits(p.visits2024)+' visits in 2024':'')+'</p>' : '')+ru+
+    '</article>';
+  }).join('');
+})();
+
+/* ---------- park cards ---------- */
+var KID_YES = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var KID_NO = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 5v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11" r=".9" fill="currentColor"/></svg>';
+var CRIT = [['scenery','Scenery'],['uniqueness','Uniqueness'],['crowdToWow','Crowd-to-wow'],['access','Access']];
+
+function cardHTML(p){
+  var v = fmtVisits(p.visits2024);
+  var visits = v ? '<dd title="'+fmtInt(p.visits2024)+' visits in 2024">'+v+'</dd>' : '<dd class="na">No 2024 figure</dd>';
+  var move = '';
+  if(p.override){
+    var up = p.override>0;
+    move = '<p class="p-move"><span class="mv '+(up?'up':'down')+'">'+(up?'▲':'▼')+Math.abs(p.override)+'</span> <b>Editor’s call.</b> The formula had it No. '+p.baseRank+'. '+esc(p.overrideReason)+'</p>';
+  }
+  var notes = [];
+  if(p.visitsNote) notes.push('<p><b>Visits:</b> '+esc(p.visitsNote)+'</p>');
+  if(p.dataFix) notes.push('<p><b>Acreage:</b> '+esc(p.dataFix)+'</p>');
+  var bars = CRIT.map(function(c){
+    var val = p.scores[c[0]];
+    return '<li><span class="bl">'+c[1]+'</span><span class="bar" style="--v:'+val+'" role="img" aria-label="'+c[1]+' '+val+' of 10"></span><span class="bv">'+val+'</span></li>';
+  }).join('');
+  var kid = p.kidFriendly ? '<span class="kid yes">'+KID_YES+'Kid-friendly</span>' : '<span class="kid no">'+KID_NO+'Harder with little kids</span>';
+  return '<div class="p-rank"><span class="rk" aria-label="Rank '+p.rank+'">'+p.rank+'</span><span class="tb" title="'+p.tier+' tier" aria-label="'+p.tier+' tier">'+p.tier+'</span></div>'+
+    '<div class="p-main">'+
+      '<h3 class="p-name">'+esc(p.name)+'</h3>'+
+      '<p class="p-where">'+esc(p.states)+'</p>'+
+      '<dl class="p-facts">'+
+        '<div class="f-est"><dt class="lbl">Established</dt><dd>'+p.established+'</dd></div>'+
+        '<div class="f-acres"><dt class="lbl">Acres</dt><dd>'+fmtInt(p.acres)+'</dd></div>'+
+        '<div class="f-visits"><dt class="lbl">2024 visits</dt>'+visits+'</div>'+
+      '</dl>'+
+      '<p class="p-sig"><span class="lbl">Signature</span>'+esc(p.signature)+'</p>'+
+      '<p class="p-take">'+esc(p.take)+'</p>'+
+      '<p class="p-best"><span class="lbl">Best months</span>'+esc(dashMonths(p.bestMonths))+'</p>'+
+      move+
+      (notes.length?'<details class="p-notes"><summary>Source notes</summary>'+notes.join('')+'</details>':'')+
+    '</div>'+
+    '<div class="p-score">'+
+      '<div class="p-top"><div class="p-total" aria-label="Score '+fmtScore(p.score)+' out of 100"><span class="v">'+fmtScore(p.score)+'</span><span class="of">/100</span></div>'+kid+'</div>'+
+      '<ul class="bars" aria-label="Input scores">'+bars+'</ul>'+
+    '</div>';
+}
+
+var cardEl = {};
+P.forEach(function(p){
+  var a = document.createElement('article');
+  a.className = 'park';
+  a.id = p.id;
+  a.tabIndex = -1;
+  a.setAttribute('data-tier', p.tier);
+  a.setAttribute('aria-label', 'No. '+p.rank+', '+p.name);
+  a.innerHTML = cardHTML(p);
+  cardEl[p.rank] = a;
+});
+var tierDiv = {};
+TIERS.forEach(function(t){
+  var d = document.createElement('div');
+  d.className = 'tdiv';
+  d.setAttribute('data-tier', t.tier);
+  d.innerHTML = '<span class="tb" aria-hidden="true">'+t.tier+'</span><h3>'+t.tier+' tier · ranks '+ranks(t.ranks)+'</h3><p>'+esc(t.meaning)+'</p>';
+  tierDiv[t.tier] = d;
+});
+
+/* ---------- filters ---------- */
+(function(){
+  var sel = $('#f-where');
+  var regionCount = {}, stateCount = {};
+  P.forEach(function(p){
+    p.regions.forEach(function(r){regionCount[r]=(regionCount[r]||0)+1});
+    p.stateList.forEach(function(s){stateCount[s]=(stateCount[s]||0)+1});
+  });
+  var h = '<option value="all">Everywhere (63)</option><optgroup label="Regions">';
+  REGION_ORDER.forEach(function(r){ if(regionCount[r]) h += '<option value="r:'+esc(r)+'">'+esc(r)+' ('+regionCount[r]+')</option>' });
+  h += '</optgroup><optgroup label="States and territories">';
+  Object.keys(stateCount).sort().forEach(function(s){ h += '<option value="s:'+esc(s)+'">'+esc(s)+' ('+stateCount[s]+')</option>' });
+  h += '</optgroup>';
+  sel.innerHTML = h;
+})();
+
+var state = {tier:'all', where:'all', kids:false, sort:'rank'};
+function matches(p){
+  if(state.tier!=='all' && p.tier!==state.tier) return false;
+  if(state.kids && !p.kidFriendly) return false;
+  if(state.where!=='all'){
+    var kind = state.where.slice(0,2), val = state.where.slice(2);
+    if(kind==='r:' && p.regions.indexOf(val)<0) return false;
+    if(kind==='s:' && p.stateList.indexOf(val)<0) return false;
+  }
+  return true;
+}
+var SORTS = {
+  rank: function(a,b){return a.rank-b.rank},
+  visits: function(a,b){
+    var av=a.visits2024, bv=b.visits2024;
+    if(av==null && bv==null) return a.rank-b.rank;
+    if(av==null) return 1; if(bv==null) return -1;
+    return bv-av || a.rank-b.rank;
+  },
+  size: function(a,b){return b.acres-a.acres || a.rank-b.rank},
+  oldest: function(a,b){return a.established-b.established || a.rank-b.rank}
+};
+var SORT_WORD = {rank:'by our rank', visits:'by 2024 visits (no-figure parks last)', size:'largest first', oldest:'oldest first'};
+
+function isFiltered(){return state.tier!=='all' || state.where!=='all' || state.kids}
+function apply(){
+  var items = P.filter(matches).sort(SORTS[state.sort]);
+  var list = $('#list');
+  list.setAttribute('data-sort', state.sort);
+  var frag = document.createDocumentFragment();
+  var last = null;
+  items.forEach(function(p){
+    if(state.sort==='rank' && p.tier!==last){ frag.appendChild(tierDiv[p.tier]); last = p.tier; }
+    frag.appendChild(cardEl[p.rank]);
+  });
+  if(!items.length){
+    var e = document.createElement('div');
+    e.className = 'empty';
+    e.innerHTML = '<p style="margin:0 0 10px">No parks match those filters.</p><button class="btn" type="button" data-clear>Clear filters</button>';
+    frag.appendChild(e);
+  }
+  list.replaceChildren(frag);
+  var n = items.length;
+  $('#count').innerHTML = (isFiltered() ? 'Showing <b>'+n+'</b> of 63 parks, ' : 'Showing <b>all 63</b> parks, ') + SORT_WORD[state.sort] + '.';
+  $('#clear').hidden = !isFiltered();
+  Array.prototype.forEach.call(document.querySelectorAll('#f-tier button'), function(b){
+    b.setAttribute('aria-pressed', String(b.getAttribute('data-v')===state.tier));
+  });
+}
+function clearFilters(){
+  state.tier='all'; state.where='all'; state.kids=false;
+  $('#f-where').value='all'; $('#f-kids').checked=false;
+  apply();
+}
+$('#f-tier').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  state.tier = b.getAttribute('data-v'); apply();
+});
+$('#f-where').addEventListener('change', function(e){ state.where = e.target.value; apply(); });
+$('#f-sort').addEventListener('change', function(e){ state.sort = e.target.value; apply(); });
+$('#f-kids').addEventListener('change', function(e){ state.kids = e.target.checked; apply(); });
+$('#clear').addEventListener('click', clearFilters);
+$('#list').addEventListener('click', function(e){ if(e.target.closest('[data-clear]')) clearFilters(); });
+
+/* jump from chips, awards, calls */
+function jumpTo(id){
+  var el = document.getElementById(id);
+  if(!el || !el.isConnected || !$('#list').contains(el)){ clearFilters(); el = document.getElementById(id); }
+  if(!el) return;
+  el.scrollIntoView({behavior: reduceMotion?'auto':'smooth', block:'start'});
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  try{ el.focus({preventScroll:true}); }catch(_){}
+}
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a[data-jump]'); if(!a) return;
+  e.preventDefault(); jumpTo(a.getAttribute('data-jump'));
+});
+
+apply();
+
+/* ---------- copy top 10 ---------- */
+(function(){
+  var lines = ['The 63: National Parks Power Rankings, top 10'];
+  P.slice(0,10).forEach(function(p){ lines.push(p.rank+'. '+p.short) });
+  lines.push('', 'All 63 ranked by @Muricaenjoyer');
+  var text = lines.join('\n');
+  var btn = $('#copy-top'), status = $('#copy-status'), ta = $('#copy-fallback');
+  function fallback(){
+    ta.value = text; ta.hidden = false; ta.focus(); ta.select();
+    var ok = false; try{ ok = document.execCommand('copy'); }catch(_){}
+    if(ok){ ta.hidden = true; status.textContent = 'Copied. Paste it into your post.'; }
+    else { status.textContent = 'Text selected. Press Ctrl+C or Cmd+C to copy.'; }
+  }
+  btn.addEventListener('click', function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        status.textContent = 'Copied. Paste it into your post.'; ta.hidden = true;
+      }, fallback);
+    } else { fallback(); }
+  });
+})();
+
+/* ---------- method ---------- */
+(function(){
+  var W = M.weights;
+  var defs = {
+    scenery:['Scenery','Does it stop you cold?'],
+    uniqueness:['Uniqueness','Could you see this anywhere else?'],
+    crowdToWow:['Crowd-to-wow','How much awe you get per elbow.'],
+    access:['Access','How easy it is to actually get there.']
+  };
+  $('#crit').innerHTML = Object.keys(defs).map(function(k){
+    return '<div><dt>'+defs[k][0]+'</dt><span class="w">'+Math.round(W[k]*100)+'%</span><dd>'+defs[k][1]+'</dd></div>';
+  }).join('');
+
+  var g = P[0], s = g.scores;
+  var parts = [W.scenery*s.scenery, W.uniqueness*s.uniqueness, W.crowdToWow*s.crowdToWow, W.access*s.access];
+  $('#worked').textContent =
+    g.short+': scenery '+s.scenery+', uniqueness '+s.uniqueness+',\ncrowd-to-wow '+s.crowdToWow+', access '+s.access+'\n\n'+
+    '10 × (0.40×'+s.scenery+' + 0.30×'+s.uniqueness+' + 0.15×'+s.crowdToWow+' + 0.15×'+s.access+')\n'+
+    '= 10 × ('+parts.map(function(x){return x.toFixed(2)}).join(' + ')+')\n'+
+    '= '+fmtScore(10*parts.reduce(function(a,b){return a+b},0))+' out of 100';
+
+  $('#m-prose').innerHTML =
+    '<p>'+esc(D.intro)+'</p>'+
+    '<h3>Why these weights</h3><p>'+esc(M.whyTheseWeights)+'</p>'+
+    '<h3>Breaking ties</h3><p>Equal scores are split in this order:</p>'+
+    '<ol>'+M.tieBreakers.map(function(t){return '<li>'+esc(t.charAt(0).toUpperCase()+t.slice(1).replace('crowdToWow','crowd-to-wow'))+'</li>'}).join('')+'</ol>';
+
+  $('#calls-intro').textContent = 'A park can move at most three spots from its formula rank, and every move comes with a reason. A moved park lands exactly where the editor puts it; everyone else keeps their order and fills the open slots. '+M.overridesUsed+' parks moved.';
+  $('#calls').innerHTML = P.filter(function(p){return p.override}).map(function(p){
+    var up = p.override>0;
+    return '<li><span class="mv '+(up?'up':'down')+'" aria-label="'+(up?'Up ':'Down ')+Math.abs(p.override)+'">'+(up?'▲':'▼')+Math.abs(p.override)+'</span>'+
+      '<span class="who"><a href="#'+p.id+'" data-jump="'+p.id+'">'+esc(p.short)+'</a><small>Formula No. '+p.baseRank+' → final No. '+p.rank+'</small></span>'+
+      '<span class="why">'+esc(p.overrideReason)+'</span></li>';
+  }).join('');
+
+  var notes = M.dataFixes.map(function(f){
+    return '<li><b>'+esc(shortName(f.park))+' acreage:</b> '+fmtInt(f.from)+' → '+fmtInt(f.to)+' acres. '+esc(f.why)+'</li>';
+  });
+  var vc = String(M.visitsCaveat).replace(/^visits2024 is null where/, 'A park shows "No 2024 figure" where').replace(/\s*\(see each park's visitsNote\)/, '; each park\u2019s source notes say which');
+  notes.push('<li><b>Visit counts:</b> '+esc(vc)+'</li>');
+  notes.push('<li><b>Checks:</b> '+esc(M.dataChecksPassed)+'</li>');
+  notes.push('<li><b>Scores:</b> '+esc(M.scoresSource)+'</li>');
+  $('#notes').innerHTML = notes.join('');
+})();
+
+/* ---------- reweight tool ---------- */
+(function(){
+  var KEYS = [['scenery','Scenery','w-scenery'],['uniqueness','Uniqueness','w-unique'],['crowdToWow','Crowd-to-wow','w-crowd'],['access','Access','w-access']];
+  var DEF = {scenery:40, uniqueness:30, crowdToWow:15, access:15};
+  $('#sliders').innerHTML = KEYS.map(function(k){
+    return '<div class="sl"><label for="'+k[2]+'"><span>'+k[1]+'</span><output id="'+k[2]+'-o" for="'+k[2]+'">'+DEF[k[0]]+'%</output></label>'+
+      '<input type="range" id="'+k[2]+'" min="0" max="100" step="5" value="'+DEF[k[0]]+'" data-k="'+k[0]+'"></div>';
+  }).join('');
+  function read(){
+    var w = {}; KEYS.forEach(function(k){ w[k[0]] = Number(document.getElementById(k[2]).value) }); return w;
+  }
+  function rank(w){
+    var tot = w.scenery+w.uniqueness+w.crowdToWow+w.access;
+    var eq = tot===0;
+    var rows = P.map(function(p){
+      var s = p.scores, sc;
+      if(eq) sc = 10*(s.scenery+s.uniqueness+s.crowdToWow+s.access)/4;
+      else sc = 10*(w.scenery*s.scenery + w.uniqueness*s.uniqueness + w.crowdToWow*s.crowdToWow + w.access*s.access)/tot;
+      return {p:p, sc:Math.round(sc*1000)/1000};
+    });
+    rows.sort(function(a,b){
+      return (b.sc-a.sc) || (b.p.scores.scenery-a.p.scores.scenery) || (b.p.scores.uniqueness-a.p.scores.uniqueness) || (b.p.scores.crowdToWow-a.p.scores.crowdToWow) || a.p.name.localeCompare(b.p.name);
+    });
+    rows.forEach(function(r,i){ r.pos = i+1 });
+    return {rows:rows, eq:eq, tot:tot};
+  }
+  function render(){
+    var w = read();
+    var res = rank(w);
+    KEYS.forEach(function(k){
+      var pct = res.eq ? 25 : Math.round(w[k[0]]/res.tot*100);
+      document.getElementById(k[2]+'-o').textContent = pct+'%';
+    });
+    $('#rw-top').innerHTML = res.rows.slice(0,10).map(function(r){
+      var d = r.p.rank - r.pos, vs;
+      if(d>0) vs = '<span class="mv up">▲'+d+'</span> vs. our No. '+r.p.rank;
+      else if(d<0) vs = '<span class="mv down">▼'+(-d)+'</span> vs. our No. '+r.p.rank;
+      else vs = 'Same as our list';
+      return '<li data-tier="'+r.p.tier+'"><span class="pos">'+r.pos+'</span><span class="nm"><a href="#'+r.p.id+'" data-jump="'+r.p.id+'" style="color:inherit;text-decoration:none">'+esc(r.p.short)+'</a></span><span class="sc">'+fmtScore(r.sc)+'</span><span class="vs">'+vs+'</span></li>';
+    }).join('');
+    var rise = null, drop = null;
+    res.rows.forEach(function(r){
+      var d = r.p.rank - r.pos;
+      if(d>0 && (!rise || d>rise.d)) rise = {r:r,d:d};
+      if(d<0 && (!drop || d<drop.d)) drop = {r:r,d:d};
+    });
+    var bits = [];
+    if(res.eq) bits.push('All weights are at zero, so every input counts equally.');
+    bits.push(rise ? 'Biggest climb vs. our list: <b>'+esc(rise.r.p.short)+'</b>, No. '+rise.r.p.rank+' → No. '+rise.r.pos+'.' : 'Nobody climbs vs. our list.');
+    bits.push(drop ? 'Biggest drop: <b>'+esc(drop.r.p.short)+'</b>, No. '+drop.r.p.rank+' → No. '+drop.r.pos+'.' : 'Nobody drops.');
+    $('#rw-note').innerHTML = bits.join(' ');
+  }
+  $('#sliders').addEventListener('input', render);
+  $('#rw-reset').addEventListener('click', function(){
+    KEYS.forEach(function(k){ document.getElementById(k[2]).value = DEF[k[0]] }); render();
+  });
+  render();
+})();
+
+/* ---------- wood grain ---------- */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+(function(){
+  try{
+    var W=1100,H=360,c=document.createElement('canvas');c.width=W;c.height=H;
+    var g=c.getContext('2d'); if(!g) return;
+    var r=rng(1872);
+    var knots=[[W*0.18,H*0.66,30],[W*0.74,H*0.28,22],[W*0.5,H*0.9,16]];
+    for(var i=0;i<150;i++){
+      var y0=r()*H*1.1-H*0.05, a=1+r()*3.5, f=0.003+r()*0.006, ph=r()*6.283;
+      g.beginPath();
+      for(var x=-10;x<=W+10;x+=5){
+        var y=y0+a*Math.sin(x*f+ph)+1.1*Math.sin(x*0.027+ph*2.3);
+        for(var k=0;k<knots.length;k++){
+          var kx=knots[k][0],ky=knots[k][1],kr=knots[k][2];
+          var dx=x-kx,dy=y-ky,d=Math.sqrt(dx*dx+dy*dy*2.4),R=kr*3.2;
+          if(d<R){var push=(R-d)/R;y+=(dy>=0?1:-1)*push*push*kr*1.05}
+        }
+        if(x===-10) g.moveTo(x,y); else g.lineTo(x,y);
+      }
+      var dark=r()<0.72;
+      g.strokeStyle=dark?'rgba(22,11,4,'+(0.10+r()*0.24).toFixed(3)+')':'rgba(255,214,160,'+(0.035+r()*0.07).toFixed(3)+')';
+      g.lineWidth=0.5+r()*1.9;
+      g.stroke();
+    }
+    knots.forEach(function(kn){
+      for(var j=6;j>=1;j--){
+        g.beginPath();
+        g.ellipse(kn[0],kn[1],kn[2]*0.22*j,kn[2]*0.11*j,0,0,Math.PI*2);
+        g.strokeStyle='rgba(22,11,4,'+(0.12+0.05*(6-j)).toFixed(3)+')';
+        g.lineWidth=1+(6-j)*0.25;
+        g.stroke();
+      }
+      g.beginPath();g.ellipse(kn[0],kn[1],kn[2]*0.2,kn[2]*0.1,0,0,Math.PI*2);g.fillStyle='rgba(22,11,4,0.45)';g.fill();
+    });
+    var url=c.toDataURL('image/webp',0.82);
+    if(url.indexOf('data:image')!==0) url=c.toDataURL();
+    document.documentElement.style.setProperty('--grain','url("'+url+'")');
+  }catch(_){}
+})();
+
+/* ---------- topo contours behind the hero ---------- */
+(function(){
+  var cv = $('#topo'); if(!cv || !cv.getContext) return;
+  var hero = cv.parentElement;
+  var HILLS=[[0.08,0.2,0.2,1.0],[0.93,0.12,0.24,0.95],[0.78,0.95,0.2,0.75],[0.26,1.02,0.22,0.7],[0.52,0.5,0.34,0.45],[0.99,0.62,0.12,-0.35],[0.02,0.78,0.13,0.55],[0.62,0.05,0.12,0.4]];
+  function field(u,v,ar){
+    var z=0;
+    for(var i=0;i<HILLS.length;i++){
+      var h=HILLS[i], du=(u-h[0])*ar, dv=v-h[1];
+      z+=h[3]*Math.exp(-(du*du+dv*dv)/(2*h[2]*h[2]));
+    }
+    return z+0.07*Math.sin(u*ar*7.3+v*3.1)+0.05*Math.sin(v*11.2-u*ar*4.7)+0.03*Math.sin((u*ar+v)*17);
+  }
+  function draw(){
+    var w=hero.clientWidth, h=hero.clientHeight; if(!w||!h) return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+    var ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+    var col=getComputedStyle(document.documentElement).getPropertyValue('--contour').trim()||'#A9733F';
+    var cell=8, nx=Math.ceil(w/cell)+1, ny=Math.ceil(h/cell)+1, ar=w/h;
+    var Z=new Float32Array(nx*ny), lo=Infinity, hi=-Infinity;
+    for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var z=field(i*cell/w,j*cell/h,ar);Z[j*nx+i]=z;if(z<lo)lo=z;if(z>hi)hi=z}
+    var step=(hi-lo)/26;
+    ctx.strokeStyle=col; ctx.lineJoin='round'; ctx.lineCap='round';
+    for(var L=1;L<26;L++){
+      var lv=lo+L*step, idx=(L%5===0);
+      ctx.globalAlpha=idx?0.5:0.3; ctx.lineWidth=idx?1.35:0.7;
+      ctx.beginPath();
+      for(var y=0;y<ny-1;y++)for(var x=0;x<nx-1;x++){
+        var a=Z[y*nx+x],b=Z[y*nx+x+1],c2=Z[(y+1)*nx+x+1],d=Z[(y+1)*nx+x];
+        var cs=(a>lv?8:0)|(b>lv?4:0)|(c2>lv?2:0)|(d>lv?1:0);
+        if(cs===0||cs===15) continue;
+        var X=x*cell,Y=y*cell;
+        var T=[X+cell*(lv-a)/(b-a),Y], Rr=[X+cell,Y+cell*(lv-b)/(c2-b)], B=[X+cell*(lv-d)/(c2-d),Y+cell], Lf=[X,Y+cell*(lv-a)/(d-a)];
+        var segs;
+        switch(cs){
+          case 1:case 14:segs=[[Lf,B]];break;
+          case 2:case 13:segs=[[B,Rr]];break;
+          case 3:case 12:segs=[[Lf,Rr]];break;
+          case 4:case 11:segs=[[T,Rr]];break;
+          case 5:segs=[[Lf,T],[B,Rr]];break;
+          case 6:case 9:segs=[[T,B]];break;
+          case 7:case 8:segs=[[Lf,T]];break;
+          case 10:segs=[[T,Rr],[Lf,B]];break;
+        }
+        for(var s=0;s<segs.length;s++){ctx.moveTo(segs[s][0][0],segs[s][0][1]);ctx.lineTo(segs[s][1][0],segs[s][1][1])}
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+  var pending=false;
+  function schedule(){ if(pending) return; pending=true; requestAnimationFrame(function(){pending=false;draw()}) }
+  draw();
+  if(window.ResizeObserver) new ResizeObserver(schedule).observe(hero); else window.addEventListener('resize',schedule);
+  try{ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',schedule) }catch(_){}
+  try{ new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']}) }catch(_){}
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+})();
+
+})();
+</script>
