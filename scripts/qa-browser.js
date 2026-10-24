@@ -126,6 +126,24 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('a crisis line on every screen', async () => {
+    for (const tab of ['today', 'seek', 'advisor', 'journal']) {
+      const shown = await page.evaluate((t) => {
+        switchTab(t);
+        const pg = document.getElementById(t + '-page');
+        const a = pg && pg.querySelector('a[href="tel:988"]');
+        if (!a) return false;
+        a.scrollIntoView({ block: 'center' });
+        const r = a.getBoundingClientRect();
+        return pg.classList.contains('active') && r.width > 0 && r.height > 0;
+      }, tab);
+      assert(shown, tab + ' has no visible 988 line');
+    }
+    const gate = await page.$eval('#chat-gate', (el) => el.textContent);
+    assert(!/plus|coming soon|unlimited/i.test(gate), 'the gate is selling something');
+    await page.evaluate(() => switchTab('today'));
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
