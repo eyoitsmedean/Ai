@@ -9,7 +9,7 @@ Everything built for the @Muricaenjoyer X account, kept apart from the Red Lette
 | `the-63/` | The 63: every U.S. national park ranked into S–D tiers, with filters, awards, method and live re-weighting, plus tier-list images, post text and a 47-second countdown video in `video/` | [The 63](https://claude.ai/artifact/Js5RFzV6pZZ1xuC5Gasrfe) |
 | `freedom-units/` | Freedom Units: a daily estimation game that measures America in American units, with sourced answers and a shareable score card, plus ten question/answer teaser cards and a teaser schedule in `teasers/` | [Game](https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm) |
 
-The live pages are private until shared from each page's Share menu. The two-week posting plan is in `LAUNCH.md`.
+The live pages are private until shared from each page's Share menu. The two-week posting plan is in `LAUNCH.md`, and the [Launch Desk](https://claude.ai/artifact/XJi51SMkLHxvaQ412Q4eY2) (built by `launch/build.py`) lays out every post with copy buttons and its image or video, for scheduling in one sitting.
 
 ## Rebuilding
 

@@ -1,0 +1,89 @@
+<!doctype html><html><head><meta charset="utf-8"><title>The 63 S tier</title>
+<style>
+@font-face{font-family:'Inter';font-weight:500;src:url('file:///usr/share/fonts/opentype/inter/Inter-Medium.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:600;src:url('file:///usr/share/fonts/opentype/inter/Inter-SemiBold.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:700;src:url('file:///usr/share/fonts/opentype/inter/Inter-Bold.otf') format('opentype');}
+@font-face{font-family:'Inter';font-weight:800;src:url('file:///usr/share/fonts/opentype/inter/Inter-ExtraBold.otf') format('opentype');}
+@font-face{font-family:'Inter Display';font-weight:800;src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-ExtraBold.otf') format('opentype');}
+@font-face{font-family:'Inter Display';font-weight:900;src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#121211;--row:#1d1d1b;--chip:#2c2c29;--chipb:#3a3a36;--ink:#f4f3ee;--mute:#a9a89f;--red:#E0303F;--blue:#3C5BD6;--S:#FF7F7F}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:'Inter',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.stripe{position:absolute;left:0;right:0;top:0;height:12px;display:flex}
+.stripe i{flex:1}.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:#f4f3ee}.stripe i:nth-child(3){background:var(--blue)}
+.card{position:absolute;left:0;right:0;top:12px;bottom:0;padding:44px 60px 44px;display:flex;flex-direction:column}
+.head{display:flex;align-items:stretch;gap:22px}
+.tierlab{flex:0 0 150px;background:var(--S);color:#161614;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px}
+.tierlab .L{font-family:'Inter Display';font-weight:900;font-size:110px;line-height:.9;letter-spacing:-.02em}
+.tierlab .cap{font-weight:800;font-size:19px;letter-spacing:-.01em;margin-top:8px}
+.rankbox{flex:1;min-width:0;background:var(--row);border-radius:12px;display:flex;align-items:center;padding:14px 28px 14px 30px;gap:26px}
+.rk{font-family:'Inter Display';font-weight:900;color:var(--S);font-size:200px;line-height:.8;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.rk .h{font-size:.5em;vertical-align:.62em;margin-right:4px;letter-spacing:0}
+.rmeta{min-width:0}
+.rmeta .t{font-weight:800;font-size:26px;letter-spacing:.08em;color:var(--S);text-transform:uppercase}
+.rmeta .of{font-weight:600;font-size:26px;color:var(--mute);margin-top:6px}
+.name{font-family:'Inter Display';font-weight:900;text-transform:uppercase;letter-spacing:-.012em;line-height:.95;margin-top:34px}
+.state{font-weight:600;font-size:34px;color:#d6d5cd;margin-top:12px;letter-spacing:-.005em}
+.state b{color:var(--mute);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.chip{background:var(--chip);border:1px solid var(--chipb);border-radius:10px;padding:10px 18px 11px;font-size:28px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.chip span{color:var(--S);font-weight:800;font-size:20px;letter-spacing:.08em;margin-right:10px;vertical-align:.12em}
+.sig{margin-top:26px}
+.lab{font-weight:800;font-size:20px;letter-spacing:.12em;color:var(--S);text-transform:uppercase}
+.sig p{font-size:33px;line-height:1.28;font-weight:600;margin-top:8px;color:#e8e7e1;letter-spacing:-.01em}
+.take{margin-top:28px;background:var(--row);border-left:8px solid var(--S);border-radius:4px 12px 12px 4px;padding:22px 28px 24px}
+.take p{font-size:37px;line-height:1.26;font-weight:700;margin-top:8px;letter-spacing:-.014em}
+.grow{flex:1;min-height:24px}
+.scores{display:flex;gap:18px;align-items:stretch}
+.barsp{flex:1;background:var(--row);border-radius:12px;padding:24px 28px;display:flex}
+.bars{flex:1;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.bar{display:grid;grid-template-columns:206px 1fr 78px;align-items:center;gap:16px}
+.bar .bl{font-weight:700;font-size:26px;color:#d6d5cd;white-space:nowrap}
+.bar .tr{height:26px;background:var(--chip);border:1px solid var(--chipb);border-radius:6px;overflow:hidden}
+.bar .fl{height:100%;background:var(--S);border-radius:5px}
+.bar .v{font-family:'Inter Display';font-weight:900;font-size:33px;text-align:right;font-variant-numeric:tabular-nums}
+.bar .v small{font-size:.6em;color:var(--mute);font-weight:800}
+.total{flex:0 0 236px;background:var(--S);color:#161614;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px}
+.total .tl{font-weight:800;font-size:19px;letter-spacing:.1em}
+.total .tv{font-family:'Inter Display';font-weight:900;font-size:90px;line-height:.95;letter-spacing:-.03em;margin-top:6px}
+.total .ts{font-weight:700;font-size:19px;margin-top:4px}
+.foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:26px;font-weight:600;color:var(--mute);font-size:26px}
+.foot b{color:var(--ink);font-weight:800}
+</style></head><body>
+<div class="stripe"><i></i><i></i><i></i></div>
+<div class="card" id="card"></div>
+<script>
+const DATA = [{"rank": 1, "name": "Grand Canyon National Park", "states": "Arizona", "established": 1919, "acres": 1201647, "visits2024": 4910000, "signature": "The mile-deep gorge cut by the Colorado River, seen from South Rim viewpoints like Mather Point", "take": "It is a mile deep and 277 river miles long, and it's still the only view in America that makes a busload of strangers go quiet at the same moment.", "scores": {"scenery": 10, "uniqueness": 10, "crowdToWow": 7, "access": 8}, "score": 92.5}, {"rank": 2, "name": "Yellowstone National Park", "states": "Wyoming, Montana, Idaho", "established": 1872, "acres": 2219791, "visits2024": 4744353, "signature": "Old Faithful, in a park that holds roughly half of the world's active geysers", "take": "The world's first national park still out-performs everyone, with half the planet's active geysers, bison traffic jams and a hot spring the colors of a rainbow.", "scores": {"scenery": 10, "uniqueness": 10, "crowdToWow": 6, "access": 6}, "score": 88.0}, {"rank": 3, "name": "Bryce Canyon National Park", "states": "Utah", "established": 1928, "acres": 35835, "visits2024": 2498075, "signature": "The hoodoos of Bryce Amphitheater, seen from Sunrise, Sunset, and Inspiration Points", "take": "Thousands of orange hoodoos stand at attention like a stone color guard, and the mostly flat Rim Trail lets you review the troops without breaking a sweat.", "scores": {"scenery": 10, "uniqueness": 10, "crowdToWow": 6, "access": 6}, "score": 88.0}, {"rank": 4, "name": "Hawaii Volcanoes National Park", "states": "Hawaii", "established": 1916, "acres": 325605, "visits2024": 1433593, "signature": "Kilauea's Halemaumau crater, with episodic lava fountaining in recent years", "take": "It's the only park that keeps making more America, as Kilauea adds new real estate at no cost to the taxpayer.", "scores": {"scenery": 9, "uniqueness": 10, "crowdToWow": 8, "access": 6}, "score": 87.0}, {"rank": 5, "name": "White Sands National Park", "states": "New Mexico", "established": 2019, "acres": 146344, "visits2024": null, "signature": "The world's largest gypsum dunefield, about 275 square miles of white dunes you can sled down", "take": "Its 275 square miles of white gypsum stay cool enough to sled on in July, which is the closest any American gets to landing on another planet without NASA.", "scores": {"scenery": 9, "uniqueness": 10, "crowdToWow": 9, "access": 6}, "score": 88.5}, {"rank": 6, "name": "Crater Lake National Park", "states": "Oregon", "established": 1902, "acres": 183224, "visits2024": 504942, "signature": "Crater Lake, at 1,943 feet the deepest lake in the U.S., with Wizard Island rising inside the caldera", "take": "At 1,943 feet it's the deepest lake in the country, it's so blue it looks photoshopped, and it fills itself almost entirely with rain and snow.", "scores": {"scenery": 10, "uniqueness": 9, "crowdToWow": 8, "access": 5}, "score": 86.5}];
+const DISPLAY = {"Hawaii Volcanoes National Park":["Hawaiʻi Volcanoes","Hawaiʻi"]};
+const i = +(new URLSearchParams(location.search).get("i") || 1);
+const p = DATA.find(x => x.rank === i);
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nm = DISPLAY[p.name] ? DISPLAY[p.name][0] : p.name.replace(/ National Park$/,"");
+const st = DISPLAY[p.name] ? DISPLAY[p.name][1] : p.states;
+const fmtVisits = v => v >= 1e6 ? (v/1e6).toFixed(2) + "M" : Math.round(v/1000) + "K";
+const chips = [];
+if (p.established != null) chips.push(`<div class="chip"><span>EST.</span>${p.established}</div>`);
+if (p.acres != null) chips.push(`<div class="chip"><span>ACRES</span>${p.acres.toLocaleString("en-US")}</div>`);
+if (p.visits2024 != null) chips.push(`<div class="chip"><span>2024 VISITS</span>${fmtVisits(p.visits2024)}</div>`);
+const S = p.scores;
+const bars = [["Scenery",S.scenery],["Uniqueness",S.uniqueness],["Crowd-to-wow",S.crowdToWow],["Access",S.access]];
+const nfs = nm.length > 14 ? 92 : 112;
+document.getElementById("card").innerHTML = `
+  <div class="head">
+    <div class="tierlab"><div class="L">S</div><div class="cap">PILGRIMAGE</div></div>
+    <div class="rankbox"><div class="rk"><span class="h">#</span>${p.rank}</div>
+      <div class="rmeta"><div class="t">S tier</div><div class="of">${p.rank} of 63 national parks</div></div></div>
+  </div>
+  <div class="name" style="font-size:${nfs}px">${esc(nm)}</div>
+  <div class="state">${esc(st)} <b>· National Park</b></div>
+  <div class="chips">${chips.join("")}</div>
+  <div class="sig"><div class="lab">Signature</div><p>${esc(p.signature)}</p></div>
+  <div class="take"><div class="lab">The take</div><p>${esc(p.take)}</p></div>
+  <div class="grow"></div>
+  <div class="scores">
+    <div class="barsp"><div class="bars">${bars.map(([l,v]) => `<div class="bar"><div class="bl">${l}</div><div class="tr"><div class="fl" style="width:${v*10}%"></div></div><div class="v">${v}<small>/10</small></div></div>`).join("")}</div></div>
+    <div class="total"><div class="tl">SCORE</div><div class="tv">${p.score.toFixed(1)}</div><div class="ts">out of 100</div></div>
+  </div>
+  <div class="foot"><span><b>@Muricaenjoyer</b> · The 63</span><span>S tier · ${p.rank}/6</span></div>`;
+</script></body></html>

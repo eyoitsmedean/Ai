@@ -11,9 +11,9 @@ Built around the rule: one post is one sit, then the phone goes down. Schedule a
 | Fri Oct 30 | Freedom Units teaser 2 | `teasers/q2-question.png` | Evening: `q2-answer.png` |
 | Sat Oct 31 – Sun Nov 1 | Off | | |
 | Mon Nov 2 | Testosterone video: "The 'High-T Department of War' put this in writing…" | `testosterone/video/testosterone-video-4x5.mp4` | Article link |
-| Tue Nov 3 (Election Day) | The Founders' Group Chat, short cut: "Whoever you vote for today, remember they couldn't agree either. Every message is a real quote." | `founders/short/founders-short-4x5.mp4` | Evening: 3–4 receipts from `founders/sources.md` |
+| Tue Nov 3 (Election Day) | The Founders' Group Chat, short cut: "Whoever you vote for today, remember they couldn't agree either. Every message is a real quote." | `founders/short/founders-short-4x5.mp4` | Evening: the four receipt cards in `founders/receipts/` with `thread.md` |
 | Wed Nov 4 | Freedom Units teaser 3 | `teasers/q3-question.png` | Evening: `q3-answer.png` |
-| Thu Nov 5 | The 63 S-tier thread, one park per reply | `the-63/post-text.md` | Part of the thread |
+| Thu Nov 5 | The 63 S-tier thread, one park per reply | `the-63/post-text.md`, cards in `the-63/s-tier/` | Part of the thread |
 | Fri Nov 6 | Freedom Units launch: share the game link publicly, with a real score from "Copy result" | Game page (share it publicly first) | None |
 | Sat Nov 7 – Sun Nov 8 | Off | | |
 
