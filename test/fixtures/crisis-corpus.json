@@ -1,5 +1,5 @@
 {
- "about": "Crisis / danger / ordinary phrasings pooled from the eval sets of PRs #27, #28, #45, #52, #53 and #55 (each written by a different agent pass). expect: crisis (self or someone they love), danger (abuse, assault, or harm by the writer), none, or either (needs the earlier turn, or both answers are acceptable). heldOut rows were written blind by a separate pass and are reported, not asserted.",
+ "about": "Crisis / danger / ordinary phrasings pooled from the eval sets of PRs #27, #28, #45, #52, #53 and #55 (each written by a different agent pass). expect: crisis (self or someone they love), danger (abuse, assault, or harm by the writer), none, or either (needs the earlier turn, or both answers are acceptable). heldOut rows were written blind by a separate pass and are reported, not asserted. Rows marked \"blind 2026-10\" were written by a pass that never saw the detector: before tuning it reached help on 15/55 of them (27%); half A was then used for tuning (7/28 -> 28/28) and half B was measured unseen (8/27 -> 10/27) before its misses were fixed too, so neither half is blind any more. A new blind pass is the only honest measure of recall on oblique messages.",
  "rows": [
   {
    "text": "I have the pills lined up",
@@ -2860,6 +2860,551 @@
    "text": "my grandmother always quoted John 1:1 to me and I miss her so much",
    "expect": "none",
    "source": "#55"
+  },
+  {
+   "text": "hope i just dont wake up tomorrow honestly",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "everyone would be better off without me dragging them down all the time",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "stopped my lithium last week and im not going back on it. dont see the point of any of it anymore",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "been saving my sleeping pills for a couple months now, got about 60. i just need to know God will forgive me",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "is it a sin if i go home to the Lord early on purpose",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "will God take me home early if i ask him every night",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "gave my dog to my brother today and my guitar to my nephew. feels good to have everything settled",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "picked out the bridge. saturday i think. just want to read something first",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "im 78, my wife is gone 3 yrs, im nothing but a burden on my daughter. figure i have enough of my heart pills to go quiet",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "baby wont stop crying and i keep thinking she'd be better off with a different mom. i keep picturing walking into the lake",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "farm is going under and the bank calls every day. the insurance would pay more than the land is worth if something happened to me",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "two deployments and im done. cleaned my sidearm tonight and loaded it, just sitting here with it",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "22 a day. might be 23 tonight",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "thinking about suicide again. how do i even pray when i dont want to be here",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "whats the verse about rest. i want the forever kind",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "wrote letters to my mom and my sister and put them in my desk drawer. just one more thing to take care of",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "im 16 and nobody at school would notice if i was gone. maybe theyd finally say something nice at my funeral",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "cut again tonight, deeper than before. i dont know how to stop",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "11 years of fibro pain every single day and the doctors have done nothing. im ready to stop fighting for good",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "how many tylenol would it take to not wake up",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "if i went off the road on the curve by the river it would look like an accident right",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "tired of existing. not sad exactly, i just want it all to be over",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "i keep looking at the rope in the barn",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "made my peace and said goodbye to everybody without them knowing it. tonight's the night",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "do people who end their own life still go to heaven? i need to know before",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "i just want to disappear permanently. sleep forever, no more mornings",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "ya no quiero vivir. estoy cansada de todo",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "le pido a Dios que me lleve esta noche, ya no aguanto mas",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "going to take every pill in the cabinet tonight and be done",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "updated the life insurance beneficiary and cleaned out my desk at work. pretty sure this is my last week",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "im planning to end my life on my birthday",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "wife left, kids dont call, cant work since the injury. whats the point of sticking around",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my son gave away his xbox and all his games and said he wont be needing them. hes 15. should i be worried",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my husband keeps saying we'd be better off with his life insurance than with him. hes drinking and sleeping in the truck",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my best friend texted 'thank you for everything, love you, take care of my cat' and now shes not answering",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "dad hasnt eaten in days since mom died and he bought a gun last week. he doesnt hunt",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "found a note in my daughter's journal that just says 'soon' and she's been cutting again",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "im scared my wife is going to kill herself. she keeps saying she wants to go be with the baby we lost",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "mi hijo dice que quiere morirse y se encierra en su cuarto. no se que hacer",
+   "expect": "crisis",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my roommate has been stockpiling his meds and told me he has a plan for friday",
+   "expect": "crisis",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "he checks my phone every night and if i dont answer within 5 minutes he shows up at my work",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my husband took my car keys and my debit card and says i dont need them anymore",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "she says if i ever try to leave she'll take the kids and i'll never see them again",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "he put his hands around my neck last night but he was drunk and said sorry. is it wrong that i stayed",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "hes stopped letting me see my family or go to church without him",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my ex keeps showing up outside my apartment and today i saw his truck at my kids school",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "he told me if i ever left he would kill me and then himself",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my boyfriend punches the wall right next to my head and says next time it wont be the wall",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my pastor says to submit to my husband but he hits me when dinner is late",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "mi esposo me pega y dice que me va a quitar a los ninos si llamo a la policia",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my uncle comes in my room at night and touches me and says its our secret",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "i said no and he didnt stop. i keep wondering if it was my fault because i went to his place",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "woke up at a party with my clothes off and i dont remember anything. i feel so dirty",
+   "expect": "danger",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my husband forces himself on me when i dont want to and says its his right as my husband",
+   "expect": "danger",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "this commute is killing me, any verse for patience",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "im dead tired after the night shift, want something short to read",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "all my tomato plants died this week lol",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "i could just die of embarrassment, i called my pastor by the wrong name",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "how do i set up a will so my kids are cared for if something happens to me",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my mom died last spring and i still miss her. what did Jesus say about grief",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my doctor told me to stop my blood thinner 5 days before surgery. any verse for peace before an operation",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my dad is in hospice and im caring for him at home. what did Jesus say to people who are weary",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "what did Jesus mean by take up your cross",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "what does it mean to die to self",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "whoever loses his life for my sake will find it - what does that mean",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "is suicide mentioned anywhere in the Bible? writing a paper for my seminary ethics class",
+   "expect": "either",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "deer season opens saturday and i cleaned my rifle tonight. any verses about creation",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "keep getting killed by the final boss, been at it for 3 hours",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "cutting my sons hair tonight for the first time, wish me luck",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "chopping onions and crying lol",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "im so done with this job. thinking about giving my notice friday",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "preparing a sermon on Lazarus being raised from the dead",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "feeling a little down today, rainy and gray out",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "kind of lonely since we moved to a new city. what did Jesus say about friendship",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my wife and i had a fight about money and were not talking tonight. verses about reconciliation?",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my grandfather passed peacefully at 94 and im giving the eulogy saturday",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "giving away all my old baby clothes to a friend whos expecting",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "updating my life insurance beneficiary now that our second kid is born",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my phone died and i lost all my notes",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "this heat is going to be the death of me",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "how did Judas die according to Matthew",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "what did Jesus say to the thief on the cross about paradise",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "tired of my roommate leaving dishes everywhere, how do i talk to him kindly",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my husband checks the weather app like 20 times a day, its kind of funny",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my ex and i share custody and the handoff was awkward today but fine",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my friend took my car keys because i had two beers, glad he did",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "helped my parents pick out their cemetery plots, theyre planning ahead and at peace about it",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my doctor and i are tapering me off my antidepressant slowly, ive been doing well for two years",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "i just want to rest. long week. what did Jesus say about rest",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "our dog had to be put down yesterday, she was 15 and had a good life",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "im a nurse and lost a patient tonight. how do i not carry it home with me",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "what does Jesus mean that its better to cut off your hand than to sin",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "my kids are killing me with all these soccer practices",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "when Jesus said 'it is finished' what was finished",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "bored to death in this waiting room",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my teenager slammed his door and said im ruining his life. typical 15 lol",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "were selling the farm and retiring near the grandkids",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "its veterans day, any verse i can send to the guys from my old unit",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "the stock market is killing my retirement account",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "goodbye for now, ill read more tomorrow",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "counting the pills in grandmas weekly organizer to make sure she took them all",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "nuestro abuelo murio el ano pasado, que dijo Jesus sobre la resurreccion",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "estoy muerta de cansancio, algo corto para leer antes de dormir",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "bombed my exam today, im so dead when my parents see it",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "how do i forgive my brother for skipping my wedding",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "is it a sin to be cremated",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "jumped off the high dive at the pool with my daughter for the first time today",
+   "expect": "none",
+   "source": "blind 2026-10 B"
+  },
+  {
+   "text": "my sister is a hospice chaplain and wants verses for patients who are dying",
+   "expect": "none",
+   "source": "blind 2026-10 A"
+  },
+  {
+   "text": "what did Jesus say about the Fathers house having many rooms",
+   "expect": "none",
+   "source": "blind 2026-10 B"
   }
  ]
 }

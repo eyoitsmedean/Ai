@@ -132,4 +132,38 @@ describe('pooled crisis corpus (npm run eval:crisis)', () => {
     assert.equal(assessCrisis('I was raped in college and never told anyone').kind, 'assault');
     assert.equal(assessCrisis('my son says he wants to die').kind, 'other');
   });
+
+  it('hears what people write when they never use the word', () => {
+    for (const text of [
+      'going to take every pill in the cabinet tonight and be done',
+      'stopped my lithium last week and im not going back on it',
+      'is it a sin if i go home to the Lord early on purpose',
+      'the insurance would pay more than the farm is worth if something happened to me',
+      'cleaned my sidearm tonight and loaded it, just sitting here with it',
+      'if i went off the road on the curve it would look like an accident right',
+    ]) assert.equal(assessCrisis(text)?.kind, 'self', text);
+    assert.equal(assessCrisis('he told me if i ever left he would kill me and then himself')?.kind, 'danger');
+    assert.equal(assessCrisis('i said no and he didnt stop')?.kind, 'assault');
+    assert.deepEqual(assessCrisis('mi hijo dice que quiere morirse y se encierra en su cuarto'), { kind: 'other', lang: 'es' });
+  });
+
+  it('stays quiet on the look-alikes those cues sit next to', () => {
+    for (const text of [
+      'deer season opens saturday and i cleaned my rifle tonight',
+      'my friend took my car keys because i had two beers, glad he did',
+      'we picked the spot by the river for the baptism next sunday',
+      'I hope the virus test comes back negative',
+      'when im gone to the store can you feed the dog',
+      'if im honest it was not your fault he left',
+    ]) assert.equal(assessCrisis(text), null, text);
+  });
+});
+
+describe('crisis notice copy', () => {
+  it('answers a Spanish-speaking parent in Spanish, with 988', () => {
+    const { crisisNotice } = require('../lib/scripture');
+    const text = crisisNotice({ kind: 'other', lang: 'es' });
+    assert.match(text, /alguien que amas/);
+    assert.match(text, /988/);
+  });
 });
