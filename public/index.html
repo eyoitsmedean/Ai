@@ -1165,6 +1165,16 @@ textarea { font-family: var(--body); }
   font-style: italic;
   color: var(--crimson);
 }
+.helpline {
+  margin: 48px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-4);
+}
+.colophon + .helpline { margin-top: 10px; padding-top: 0; border-top: 0; }
+.helpline a { color: var(--crimson); }
 
 .quire {
   display: flex;
@@ -1638,6 +1648,7 @@ html.sitting .sit-sheet {
           <span id="folio-colophon">Set in the Gospels. Not a person.</span>
           <span class="colophon-catch" id="folio-catch"></span>
         </div>
+        <p class="helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
       </div>
 
       <div class="page" id="seek-page">
@@ -1711,6 +1722,7 @@ html.sitting .sit-sheet {
             </div>
           </div>
         </div>
+        <p class="helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
       </div>
 
       <div class="page" id="advisor-page">
@@ -1729,7 +1741,7 @@ html.sitting .sit-sheet {
           </div>
           <div class="gate" id="chat-gate">
             <h3>Five letters for today</h3>
-            <p>You have used today’s free counsel. Plus coming soon — unlimited counsel. Until then the room is still open: sit with Today, or return in the morning.</p>
+            <p>The Advisor rests until morning. The room is still open: sit with Today, find a word in Seek, or read what you have kept.</p>
           </div>
           <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
           <div class="typing-indicator" id="typing"><div class="ink-wait">The page is being set</div></div>
@@ -1747,6 +1759,7 @@ html.sitting .sit-sheet {
         <h1 class="display">Your <em>journal</em></h1>
         <div class="quire" id="quire" hidden></div>
         <div id="journal-list"></div>
+        <p class="helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
       </div>
     </div>
 
