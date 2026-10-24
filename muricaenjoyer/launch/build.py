@@ -81,7 +81,7 @@ s_cards = [c for c in s_cards if c]
 
 DAYS = [
     dict(date="Mon Oct 26", title="The 63 tier list", pin=True,
-         post=quoted(p63, "### Option 1: Fight bait (176 chars)"),
+         post=quoted(p63, "### Option 1: Fight bait (245 chars)"),
          assets=[asset("the-63/the-63-tierlist.png")],
          alt=alt_text,
          reply=method_reply.replace("[LINK]", THE63), reply_note="Evening, optional. Share The 63 page publicly first."),

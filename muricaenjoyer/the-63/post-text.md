@@ -4,7 +4,7 @@ Image: `the-63-tierlist.png` (1600x2000, 4:5) on the main post. `the-63-tierlist
 
 ## Main post: pick one
 
-### Option 1: Fight bait (176 chars)
+### Option 1: Fight bait (245 chars)
 
 > America just got its 64th national park. Before Chiricahua gets a vote, here's how I ranked the other 63.
 >
