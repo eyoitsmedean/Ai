@@ -27,7 +27,7 @@ Ten cards, one per day, no reruns. This is the standalone teaser run. The main p
 
 **9:00 AM ET post** with `q1-question.png`
 
-> Lady Liberty's index finger is 8 ft long. How many of her fingers tall is she? Drop your guess below. Answer tonight.
+> Lady Liberty's index finger is 8 ft long. How many of her fingers is it from her base to her torch? Drop your guess below. Answer tonight.
 
 **7:00 PM ET reply** with `q1-answer.png`
 
@@ -47,7 +47,7 @@ Ten cards, one per day, no reruns. This is the standalone teaser run. The main p
 
 **9:00 AM ET post** with `q3-question.png`
 
-> 150 million Fourth of July hot dogs laid end to end on Route 66. How many full trips? Closest guess in the replies wins bragging rights.
+> 150 million Fourth of July hot dogs laid end to end on Route 66. How many trips? Closest guess in the replies wins bragging rights.
 
 **7:00 PM ET reply** with `q3-answer.png`
 
@@ -57,7 +57,7 @@ Ten cards, one per day, no reruns. This is the standalone teaser run. The main p
 
 **9:00 AM ET post** with `q4-question.png`
 
-> Pour every yard of Hoover Dam's concrete onto one football field. How many Washington Monuments tall is the block? Reply with your number.
+> Pour the 3.25 million cubic yards of concrete in Hoover Dam itself onto one football field. How many Washington Monuments tall is the block? Reply with your number.
 
 **7:00 PM ET reply** with `q4-answer.png`
 

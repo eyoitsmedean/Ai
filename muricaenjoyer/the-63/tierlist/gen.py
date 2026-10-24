@@ -114,14 +114,14 @@ COUNTS = "63 parks · S 6 · A 18 · B 16 · C 13 · D 10"
 
 portrait_body = f"""{STRIPE}<div class="page">
 <div class="head"><h1 class="title"><span class="l1">The <span class="n">63</span>:</span><span class="l2" data-fitw="1">National Parks Power Rankings</span></h1>
-<p class="sub">Every U.S. national park, ranked. Fight me.</p></div>
+<p class="sub">The 63 parks before Chiricahua joined. Ranked. Fight me.</p></div>
 <div class="board" id="board">{rows_html()}</div>
 <div class="foot"><span>{FOOT_L}</span><span class="r">{COUNTS}</span></div>
 </div>"""
 
 wide_body = f"""{STRIPE}<div class="page">
 <h1 class="title" data-fitw="1">The <span class="n">63</span>: National Parks Power Rankings</h1>
-<p class="sub">Every U.S. national park, ranked. Fight me.</p>
+<p class="sub">The 63 parks before Chiricahua joined. Ranked. Fight me.</p>
 <div class="board" id="board">{rows_html()}</div>
 <div class="foot"><span>{FOOT_L}</span><span class="r">{COUNTS}</span></div>
 </div>"""

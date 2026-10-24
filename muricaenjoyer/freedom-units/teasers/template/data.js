@@ -5,13 +5,13 @@ window.CARDS = [
   "sourceNames": [
    "National Park Service: Statue of Liberty statistics"
   ],
-  "prompt": "Lady Liberty's index finger is 8 ft long. How many of her index fingers stacked up would equal the copper statue itself, measured from heel to the top of the torch (151 ft 1 in)?",
+  "prompt": "Lady Liberty's index finger is 8 ft long. How many of her index fingers stacked up would equal the copper statue itself, measured from the top of her base to the tip of the torch (151 ft 1 in)?",
   "unit": "Statue of Liberty index fingers",
   "answer": 18.9,
   "sliderMin": 1,
   "sliderMax": 400,
   "math": "151 ft 1 in = 151.08 ft. 151.08 ft / 8 ft = 18.89",
-  "reveal": "She's only about 19 fingers tall. Her pointer alone is longer than most people are tall.",
+  "reveal": "From her base to the tip of her torch, she measures only about 19 fingers. Her pointer alone is longer than most people are tall.",
   "sources": [
    "https://www.nps.gov/stli/historyculture/statue-statistics.htm",
    "https://home.nps.gov/stli/learn/historyculture/statue-statistics.htm"
@@ -30,7 +30,7 @@ window.CARDS = [
   "sliderMin": 0.3,
   "sliderMax": 125,
   "math": "120 ft x 12 = 1,440 in; 1,440 in / 231.7 in per F-150 = 6.21",
-  "reveal": "Orville's 12-second hop was shorter than six pickups parked in a row, and shorter than a Boeing 747's wingspan.",
+  "reveal": "Orville's 12-second hop was barely longer than six pickups parked in a row, and shorter than a Boeing 747's wingspan.",
   "sources": [
    "National Park Service, Wright Brothers National Memorial: The First Flight (120 ft in 12 seconds), nps.gov/wrbr",
    "https://www.autopadre.com/headroom/ford-f-150/2023-xlt-supercrew-5-5-box-51309"
@@ -63,7 +63,7 @@ window.CARDS = [
    "NFL Rulebook",
    "NOAA National Geodetic Survey"
   ],
-  "prompt": "Hoover Dam holds 3.25 million cubic yards of concrete. If you poured all of it onto an NFL football field (360 ft x 160 ft, end zones included) as one straight-sided block, how many Washington Monuments (555 ft 5 1/8 in) tall would it be?",
+  "prompt": "Pour the 3.25 million cubic yards of concrete in Hoover Dam itself onto an NFL football field (360 ft x 160 ft, end zones included) as one straight-sided block. How many Washington Monuments (555 ft 5 1/8 in) tall would it be?",
   "unit": "Washington Monuments",
   "answer": 2.74,
   "sliderMin": 0.1,
@@ -145,7 +145,7 @@ window.CARDS = [
   "sliderMin": 0.06,
   "sliderMax": 25,
   "math": "363 ft / 300 ft = 1.21",
-  "reveal": "Laid down at one goal line, a Saturn V would stick 63 feet past the other one, deep into the end zone.",
+  "reveal": "Laid down at one goal line, a Saturn V would run clean through the far end zone and 33 feet past the end line.",
   "sources": [
    "NASA: the Saturn V rocket stood 363 feet tall, nasa.gov"
   ]

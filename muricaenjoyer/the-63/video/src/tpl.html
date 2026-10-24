@@ -129,9 +129,12 @@ function sceneHook(t){
   const fs=168, lh=fs*0.93; let y=560;
   ctx.font=F(900,fs,DISP);
   ctx.fillText("I ranked", X0-6, y); y+=lh;
-  ctx.fillText("all ", X0-6, y); const w1=ctx.measureText("all ").width; ctx.fillStyle=C.red; ctx.fillText("63", X0-6+w1, y); ctx.fillStyle=C.ink; y+=lh;
+  ctx.fillStyle=C.red; ctx.fillText("63", X0-6, y); ctx.fillStyle=C.ink; y+=lh;
   ctx.fillText("national", X0-6, y); y+=lh;
   ctx.fillText("parks.", X0-6, y);
+  { const note="(Chiricahua became #64 last week. Its verdict comes later.)"; let nfs=36;
+    for(;nfs>22;nfs--){ ctx.font=F(600,nfs); if(ctx.measureText(note).width<=X1-X0) break; }
+    ctx.fillStyle=C.mute; ctx.fillText(note, X0, y+78); ctx.fillStyle=C.ink; }
   // Fight me sticker
   const pulse = 1 + 0.025*Math.sin(t*6);
   ctx.save(); ctx.translate(X0+300, 1250); ctx.rotate(-0.05); ctx.scale(pulse,pulse);
