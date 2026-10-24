@@ -6,7 +6,7 @@
   "established": 2026,
   "acres": 12000,
   "visits2024": null,
-  "signature": "The \"Wonderland of Rocks\": rhyolite spires and hoodoos eroded from ash of the Turkey Creek caldera eruption, about 27 million years ago, seen from Massai Point and the Echo Canyon and Heart of Rocks trails",
+  "signature": "The \"Wonderland of Rocks\": rhyolite spires and hoodoos eroded from the ash of the Turkey Creek caldera eruption, about 27 million years ago",
   "bestMonths": "March-May and September-November",
   "take": "A volcano blew its top 27 million years ago and left a standing army of rhyolite hoodoos, still at attention for barely 70,000 visitors a year, so go return the salute.",
   "kidFriendly": true,
@@ -21,12 +21,6 @@
   "overrideReason": null,
   "baseRank": 48,
   "visitsNote": "No calendar-2024 figure retrieved. Latest available: 70,407 recreation visits in calendar 2025, as Chiricahua National Monument (NPS Visitation Summary 2025). Acres is approximate: sources give about 12,000; the act keeps the monument boundary unchanged.",
-  "scoreReasons": {
-    "scenery": "7: the hoodoo forest from Massai Point is genuinely gorgeous, a notch above Pinnacles (6), level with Great Basin and Badlands (7), nowhere near Bryce (10).",
-    "uniqueness": "7: a volcanic hoodoo forest on a sky island is rare, but Bryce owns the hoodoo brand and Pinnacles (7) does volcanic spires too.",
-    "crowdToWow": "9: about 70,000 visits a year, under half of Great Basin's (9), so the trails are nearly empty for what you get.",
-    "access": "5: paved road and a scenic drive, but roughly 2 hours from Tucson, between Pinnacles (6) and Guadalupe Mountains (4)."
-  },
   "wouldRank": {
     "rank": 49,
     "of": 64,
@@ -36,7 +30,13 @@
       "Badlands National Park (#48, 71.5)",
       "Wind Cave National Park (#49 now, would be #50, 69.0)"
     ],
-    "note": "By formula and tie-breakers with no override for Chiricahua, 70.0 is 48th of 64 (below Badlands 71.5, above Wind Cave 69.0). Keeping the 12 published overrides, Acadia (formula 68.0, +3) still sits above it, so it lands #49 of 64, directly below Badlands. #49 is in C (41-53)."
+    "note": "By formula and tie-breakers, with no override for Chiricahua, 70.0 is 48th of 64 (below Badlands 71.5, above Wind Cave 69.0). In the published list, Acadia (68.0) sits at #47 on a +3 override and stays there, so Chiricahua lands #49 of 64: directly below Badlands (#48), with Wind Cave sliding from #49 to #50. #49 is C tier (41-53).",
+    "scoreReasons": {
+      "scenery": "7: a whole forest of rock spires is genuinely gorgeous, a notch above Pinnacles (6), level with Great Basin and Badlands (7), nowhere near Bryce (10).",
+      "uniqueness": "7: a volcanic hoodoo forest is rare, but Bryce owns the hoodoo brand and Pinnacles (7) already does volcanic spires.",
+      "crowdToWow": "9: about 70,000 visits in 2025, under half of Great Basin's 152,068 (9), so you get the wow nearly alone.",
+      "access": "5: open year-round on paved roads, but tucked in a remote corner of southeastern Arizona near Willcox; between Pinnacles (6) and Guadalupe Mountains (4)."
+    }
   },
   "sources": [
     {

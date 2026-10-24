@@ -32,6 +32,7 @@ def quoted(md, heading):
 
 
 p63 = (ROOT / "the-63/post-text.md").read_text()
+pchir = (ROOT / "the-63/chiricahua/post.md").read_text()
 pfu = (ROOT / "freedom-units/post-text.md").read_text()
 teasers_md = (ROOT / "freedom-units/teasers/posts.md").read_text()
 TEASERS = {}
@@ -54,6 +55,7 @@ _parks = json.loads((ROOT / "the-63/parks.json").read_text())["parks"]
 for pk in _parks:
     if pk["rank"] <= 6:
         ALT[f"s{pk['rank']}.png"] = f"The 63, S tier, #{pk['rank']} of 63: {pk['name']}, {pk['states']}. {pk['take']}"
+ALT["chiricahua-verdict.png"] = "The 63 verdict card: Chiricahua, America's 64th national park, would rank #49 of 64, C tier, score 70.0 out of 100. Scenery 7, uniqueness 7, crowd-to-wow 9, access 5. About 12,000 acres, about 70,000 visits in 2025."
 ALT["header-personality-1500x600.png"] = "Header art: TESTOSTERONE ISN'T A PERSONALITY over a heartbeat line. The Pentagon tests it. Apps sell it. The gym abuses it."
 
 
@@ -120,6 +122,10 @@ DAYS = [
          post=game_launch, assets=[],
          note="Share the game publicly from its Share menu first; its link is already in the post. Play once and post your real score from Copy result as the first reply."),
     dict(date="Sat Nov 7 – Sun Nov 8", off=True),
+    dict(date="Mon Nov 9", title="Chiricahua's verdict",
+         post=quoted(pchir, "## Main post"),
+         assets=[asset("the-63/chiricahua/chiricahua-verdict.png")],
+         reply=quoted(pchir, "## Reply (method)"), reply_note="Right after posting, optional."),
 ]
 BENCH = [dict(title=f"Teaser {q[1:]}", post=TEASERS[q][0], reply=TEASERS[q][1],
               assets=[asset(f"freedom-units/teasers/{q}-question.png")],
