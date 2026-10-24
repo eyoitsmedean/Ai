@@ -42,6 +42,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
 .act.ghost { background: transparent; color: var(--ink); }
 a.act.jump { text-decoration: none; display: inline-block; }
 button.act.done { background: var(--blue); border-color: var(--blue); color: #fff; }
+ul.checks li.done { color: var(--muted); }
+ul.checks li.done::before { content: "\2713"; border-color: var(--blue); color: var(--blue); font-size: 11px; font-weight: 700; line-height: 14px; text-align: center; }
 
 .intro { padding-block: 28px 8px; }
 .eyebrow { font-family: var(--display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; color: var(--muted); }
@@ -116,11 +118,11 @@ footer { padding-block: 40px 60px; color: var(--muted); font-size: 14px; }
     <h1>Testosterone Isn't a Personality</h1>
     <p class="dek">The Pentagon tests it. Apps sell it. The gym abuses it. Here's what's actually true.</p>
 
-    <p>A few days ago the Secretary of War did a workout with Marines at Miramar, and the internet clipped the part where he couldn't keep up. Soon people were calling him "Low-T Pete."</p>
+    <p>Earlier this month the Secretary of War did a workout with Marines at Miramar, and the internet clipped the part where he couldn't keep up. Soon people were calling him "Low-T Pete."</p>
     <p>That's a joke, not a diagnosis. Nobody on X has seen the man's bloodwork.</p>
     <p>But the joke landed because of everything around it. In July, Pete Hegseth posted a video called "The High-T Department of War" and ordered testosterone screening for troops 30 and older. On Sept. 30, in front of about 600 troops at Quantico, he said this:</p>
     <blockquote><p>"The ideological clowns are out. The patriotic cowboys are in with testosterone testing on top."</p></blockquote>
-    <p>Three days later, Joey Swoll, the gym-etiquette guy with millions of followers, was rushed to the hospital for his heart. It was his third heart scare since 2023. His replies turned into a steroid trial.</p>
+    <p>Three days later, Joey Swoll, the gym-etiquette guy with millions of followers, was rushed to the hospital for his heart. It was his third heart scare since 2023. His replies turned into a steroid trial. On Oct. 13 he told his followers he'd been discharged and cleared for light workouts.</p>
     <p>And if you scroll long enough, the ads find you. Tired? Low drive? Your T might be low. $99 a month. Shipped to your door.</p>
     <p>So here's the question every guy reading this is quietly asking. Is my testosterone actually low? And should I care?</p>
     <p>I went through the studies, the Pentagon's own guidance and the death data. Here's what's real.</p>
@@ -178,8 +180,8 @@ footer { padding-block: 40px 60px; color: var(--muted); font-size: 14px; }
     <p>In Denmark, men caught using steroids at gyms died at a rate of 2.8% over about 11 years, against 1.0% for men who didn't. Their heart-attack risk was about three times higher. Heart failure, about 3.6 times.</p>
     <p>The names keep coming. Former Mr. Olympia Shawn Rhoden died of a heart attack at 46. Illia "Golem" Yefimchyk died at 36 after what his wife described as a heart attack. Mexican bodybuilder Einar Méndez collapsed at a gym last month at 48.</p>
     <p>Which brings us back to Joey Swoll.</p>
-    <p>First: I hope he's okay. Whatever you think of his videos, he's a man with a heart problem, and nobody should be cheering in his replies.</p>
-    <p>Second: no cause has been disclosed. He's said before that doctors found genetic irregularities in his heart, and a 2024 angiogram turned into a six-hour emergency procedure after part of a tool broke off inside. He's also said he's "never claimed to be natural." We don't know what's driving this, and neither do the people diagnosing him in the comments.</p>
+    <p>First: I'm glad he's out of the hospital, and I hope it sticks. Whatever you think of his videos, he's a man with a heart problem, and nobody should be cheering in his replies.</p>
+    <p>Second: no cause has been disclosed, and he doesn't owe anyone one. He's said before that doctors found genetic irregularities in his heart, and a 2024 angiogram turned into a six-hour emergency procedure after part of a tool broke off inside. He's also said he's "never claimed to be natural." We don't know what's driving this, and neither do the people diagnosing him in the comments.</p>
     <p>What we do know is the pattern in the big studies. It doesn't care how many followers you have.</p>
     <figure><img src="img/chart-4-steroid-tax.png" alt="Risk multipliers for steroid users and pro bodybuilders, 2.8 to 5.2 times" width="1600" height="900" loading="lazy" data-file="chart-4-steroid-tax.png"><figcaption>Upload: chart-4-steroid-tax.png</figcaption></figure>
 
@@ -219,7 +221,7 @@ footer { padding-block: 40px 60px; color: var(--muted); font-size: 14px; }
       <li>Low-T definition: American Urological Association guideline · Prevalence: Araujo et al., JCEM 2007</li>
       <li>Fertility: WHO Task Force, The Lancet, 1990; Liu et al., The Lancet, 2006 · Hematocrit: CMAJ</li>
       <li>Bodybuilder mortality: Vecchiato et al., European Heart Journal, 2025 · Danish steroid users: JAMA 2024; Circulation 2025</li>
-      <li>Joey Swoll: his Oct 5 post; Generation Iron; Fitness Volt</li>
+      <li>Joey Swoll: his Oct 5 post; his Oct 13 discharge update via Generation Iron — generationiron.com/joey-swoll-returns-to-gym; Generation Iron; Fitness Volt</li>
       <li>Sleep: Leproult &amp; Van Cauter, JAMA, 2011 · Weight loss: Corona et al., Eur J Endocrinology, 2013</li>
     </ul>
   </div>
@@ -261,12 +263,13 @@ I read the guidance, the trials and the death data. Testosterone isn't a persona
 </section>
 
 <section class="side" id="check">
-  <h2 class="sec">Before you publish<small>Five quick checks. Each is something I couldn't confirm from here.</small></h2>
+  <h2 class="sec">Before you publish<small>Refreshed Oct 24. Five open checks, each something I couldn't confirm from here, plus one resolved.</small></h2>
   <ul class="checks">
     <li>Open the @SecWar link and confirm it's the "High-T Department of War" video.</li>
-    <li>Confirm the Miramar workout clip date. The opening says "a few days ago," so adjust it if you post later in October.</li>
+    <li>The opening now says "Earlier this month." I still couldn't pin the clip's exact date, and one outlet (Hot 100.9) ties a "struggles to keep up" clip to the USS Abraham Lincoln, not Miramar. Open the viral clip and confirm where it was shot. If it wasn't Miramar, fix the place in the first line. Post before November, or "this month" goes stale.</li>
     <li>The sleep figure (10–15% in one week) is from the study's coverage. If you can, check the JAMA letter.</li>
-    <li>Joey Swoll's condition may have changed. Re-read his latest post before publishing so the "I hope he's okay" line still fits.</li>
+    <li class="done"><b>Resolved Oct 24.</b> Swoll was discharged Oct 13 and cleared for light workouts. The opening and the Swoll section now say so, and "I hope he's okay" became "I'm glad he's out of the hospital." Glance at his latest post once more on publish day.</li>
+    <li>The Dec. 31 DEA line still stands: as of Oct 24 I found no further extension and no final special-registration rule. Search the Federal Register for a new DEA telemedicine notice the day you publish. If one has landed, change "runs out Dec. 31."</li>
     <li>Decide on the optional Marine line. It's the only personal detail in the piece. Cut it if you'd rather keep that off X.</li>
   </ul>
 </section>
@@ -277,7 +280,7 @@ I read the guidance, the trials and the death data. Testosterone isn't a persona
     <div><span class="when">Jan 5, 2026</span><p>The Poke's roundup of the "alpha" who wouldn't help a neighbor carry heavy things includes your post. Coverage describes it as pushing back on him. That decency-over-fake-alpha thread is why the article closes on the couch.</p></div>
     <div><span class="when">Jun 6, 2026</span><p>Your reply calling the White House's press "enemies" page authoritarian nonsense made The Poke's roundup. You don't flinch at power, which is why the Pentagon section roasts the theater and keeps the medicine.</p></div>
     <div><span class="when">Aug 29, 2026</span><p>The cove-as-office week, 20× agents, and "once you get the message, put the phone down." That's the launch plan above.</p></div>
-    <div><span class="when">Oct 2026</span><p>You showed up among the replies to Joey Swoll's hospital post. That's why the Swoll section starts with "I hope he's okay."</p></div>
+    <div><span class="when">Oct 2026</span><p>You showed up among the replies to Joey Swoll's hospital post. That's why the Swoll section starts with good wishes, not a diagnosis.</p></div>
   </div>
   <div class="card">
     <p><b>To review everything:</b> on X, open Settings → Your account → Download an archive of your data. X emails a zip, usually within a day or two. Drop it in Google Drive and tell me. The file <code>data/tweets.js</code> holds every post and reply with its likes and reposts, so I can find which topics and phrasings actually perform for you.</p>

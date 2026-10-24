@@ -4,7 +4,7 @@
 
 _The Pentagon tests it. Apps sell it. The gym abuses it. Here's what's actually true._
 
-A few days ago the Secretary of War did a workout with Marines at Miramar, and the internet clipped the part where he couldn't keep up. Soon people were calling him "Low-T Pete."
+Earlier this month the Secretary of War did a workout with Marines at Miramar, and the internet clipped the part where he couldn't keep up. Soon people were calling him "Low-T Pete."
 
 That's a joke, not a diagnosis. Nobody on X has seen the man's bloodwork.
 
@@ -12,7 +12,7 @@ But the joke landed because of everything around it. In July, Pete Hegseth poste
 
 > "The ideological clowns are out. The patriotic cowboys are in with testosterone testing on top."
 
-Three days later, Joey Swoll, the gym-etiquette guy with millions of followers, was rushed to the hospital for his heart. It was his third heart scare since 2023. His replies turned into a steroid trial.
+Three days later, Joey Swoll, the gym-etiquette guy with millions of followers, was rushed to the hospital for his heart. It was his third heart scare since 2023. His replies turned into a steroid trial. On Oct. 13 he told his followers he'd been discharged and cleared for light workouts.
 
 And if you scroll long enough, the ads find you. Tired? Low drive? Your T might be low. $99 a month. Shipped to your door.
 
@@ -118,9 +118,9 @@ The names keep coming. Former Mr. Olympia Shawn Rhoden died of a heart attack at
 
 Which brings us back to Joey Swoll.
 
-First: I hope he's okay. Whatever you think of his videos, he's a man with a heart problem, and nobody should be cheering in his replies.
+First: I'm glad he's out of the hospital, and I hope it sticks. Whatever you think of his videos, he's a man with a heart problem, and nobody should be cheering in his replies.
 
-Second: no cause has been disclosed. He's said before that doctors found genetic irregularities in his heart, and a 2024 angiogram turned into a six-hour emergency procedure after part of a tool broke off inside. He's also said he's "never claimed to be natural." We don't know what's driving this, and neither do the people diagnosing him in the comments.
+Second: no cause has been disclosed, and he doesn't owe anyone one. He's said before that doctors found genetic irregularities in his heart, and a 2024 angiogram turned into a six-hour emergency procedure after part of a tool broke off inside. He's also said he's "never claimed to be natural." We don't know what's driving this, and neither do the people diagnosing him in the comments.
 
 What we do know is the pattern in the big studies. It doesn't care how many followers you have.
 
@@ -166,5 +166,5 @@ If this was useful, repost it so the next guy reads this before he reads an ad.
 - Low-T definition: American Urological Association guideline · Prevalence: Araujo et al., JCEM 2007
 - Fertility: WHO Task Force, The Lancet, 1990; Liu et al., The Lancet, 2006 · Hematocrit: CMAJ
 - Bodybuilder mortality: Vecchiato et al., European Heart Journal, 2025 · Danish steroid users: JAMA 2024; Circulation 2025
-- Joey Swoll: his Oct 5 post; Generation Iron; Fitness Volt
+- Joey Swoll: his Oct 5 post; his Oct 13 discharge update via Generation Iron — generationiron.com/joey-swoll-returns-to-gym; Generation Iron; Fitness Volt
 - Sleep: Leproult & Van Cauter, JAMA, 2011 · Weight loss: Corona et al., Eur J Endocrinology, 2013
