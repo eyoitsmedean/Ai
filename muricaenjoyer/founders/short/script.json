@@ -19,7 +19,7 @@
   {
    "type": "msg",
    "speaker": "Abigail Adams",
-   "text": "…we are determined to foment a Rebelion",
+   "text": "…not paid to the Laidies we are determined to foment a Rebelion",
    "date": "Mar 31, 1776",
    "source": "Abigail Adams to John Adams, Braintree, 31 March 1776",
    "url": "https://founders.archives.gov/documents/Adams/04-01-02-0241",
@@ -64,7 +64,8 @@
    "text": "…in this world nothing can be said to be certain, except death and taxes.",
    "date": "Nov 13, 1789",
    "source": "Benjamin Franklin to Jean-Baptiste Le Roy, 13 November 1789",
-   "url": "https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo"
+   "url": "https://www.politifact.com/factchecks/2011/jan/21/jay-hottinger/rep-jay-hottingers-assessment-founding-father-unfo",
+   "tag": "translated from French"
   },
   {
    "type": "msg",
@@ -95,7 +96,7 @@
    "type": "msg",
    "speaker": "Thomas Jefferson",
    "text": "Is it the Fourth?",
-   "date": "Jul 3, 1826 · night",
+   "date": "Jul 3, 1826 · evening",
    "source": "Deathbed account recorded by Dr. Robley Dunglison (variants by Nicholas Trist and Thomas Jefferson Randolph), night of 3 July 1826",
    "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words",
    "tag": "as recorded by his doctor"
@@ -112,7 +113,7 @@
    "type": "system",
    "speaker": "",
    "text": "Thomas Jefferson left the chat",
-   "date": "Jul 4, 1826 · around noon",
+   "date": "Jul 4, 1826 · early afternoon",
    "source": "Jefferson died at Monticello around noon, 4 July 1826",
    "url": "https://www.monticello.org/encyclopedia/jeffersons-last-words"
   },

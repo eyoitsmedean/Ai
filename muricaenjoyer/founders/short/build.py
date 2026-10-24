@@ -44,6 +44,15 @@ def sub(old, new):
     assert src.count(old) == 1, old
     src = src.replace(old, new)
 
+# fact-check fixes for the short (the long cut's source is left as is)
+sub('text: "…we are determined to foment a Rebelion"',
+    'text: "…not paid to the Laidies we are determined to foment a Rebelion"')  # keep her "If ... not paid" condition (exact excerpt)
+sub('src: "Letter to Jean-Baptiste Le Roy · 13 Nov 1789"',
+    'src: "Letter to Jean-Baptiste Le Roy, in French · 13 Nov 1789"')  # the letter was in French; the line is a translation
+sub("as recorded by his doctor · night of 3 Jul 1826", "as recorded by his doctor · evening of 3 Jul 1826")
+sub('text: "Thomas Jefferson left the chat", sub: "around noon"',
+    'text: "Thomas Jefferson left the chat", sub: "early afternoon"')
+
 # pacing: ~0.75s + 0.05s per character (ending keeps the original slow read)
 sub("const readTime = s => 0.9 + 0.055 * len(s);",
     "const readTime = s => 0.75 + 0.05 * len(s);\nconst slowRead = s => 0.9 + 0.055 * len(s);")
