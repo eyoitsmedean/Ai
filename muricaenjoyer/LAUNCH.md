@@ -4,7 +4,7 @@ Built around the rule: one post is one sit, then the phone goes down. Schedule a
 
 | Day | Post | Assets | Reply |
 |---|---|---|---|
-| Mon Oct 26 | The 63 tier list: "I ranked all 63 U.S. national parks. Yosemite is #24. Zion is #34. The Smokies are #51. Fight me." Pin it. | `the-63/the-63-tierlist.png` | Evening: method + data (from `the-63/post-text.md`) |
+| Mon Oct 26 | The 63 tier list: "America just got its 64th national park. Before Chiricahua gets a vote, here's how I ranked the other 63." Then Yosemite #24, Zion #34, Smokies #51. Fight me. Pin it. | `the-63/the-63-tierlist.png` | Evening: method + data (from `the-63/post-text.md`) |
 | Tue Oct 27 | Freedom Units teaser 1 | `freedom-units/teasers/q1-question.png` | Evening: `q1-answer.png` |
 | Wed Oct 28 | The article: "Testosterone Isn't a Personality" with the hook post. Pin it in place of the tier list. | `testosterone/article-page.html` (copy button), header + six charts | None. Phone down. |
 | Thu Oct 29 | The 63 countdown video, quote-posting Monday's tier list | `the-63/video/the-63-countdown-4x5.mp4` | None |
@@ -16,6 +16,7 @@ Built around the rule: one post is one sit, then the phone goes down. Schedule a
 | Thu Nov 5 | The 63 S-tier thread, one park per reply | `the-63/post-text.md`, cards in `the-63/s-tier/` | Part of the thread |
 | Fri Nov 6 | Freedom Units launch: share the game link publicly, with a real score from "Copy result" | Game page (share it publicly first) | None |
 | Sat Nov 7 – Sun Nov 8 | Off | | |
+| Mon Nov 9 | Chiricahua's verdict: where America's 64th park would land in The 63 | `the-63/chiricahua/chiricahua-verdict.png`, text in `the-63/chiricahua/post.md` | Method line |
 
 ## Before scheduling
 
