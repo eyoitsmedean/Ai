@@ -128,6 +128,25 @@ describe('pooled crisis corpus (npm run eval:crisis)', () => {
     assert.deepEqual(alarms, []);
   });
 
+  it('holds its gains on the blind fresh set (tuning rows asserted, held-back floored)', () => {
+    const fresh = require('./fixtures/crisis-fresh.json').rows;
+    const tuning = fresh.filter((_, i) => i % 3 !== 2);
+    const held = fresh.filter((_, i) => i % 3 === 2);
+    assert.ok(rate(tuning.filter((r) => r.expect === 'crisis')) >= 0.95);
+    assert.ok(rate(tuning.filter((r) => r.expect === 'danger')) >= 0.95);
+    assert.deepEqual(tuning.filter((r) => r.expect === 'none' && assessCrisis(r.text)).map((r) => r.text), []);
+    // Held-back rows are the honest number; floor them so they cannot slip.
+    assert.ok(rate(held.filter((r) => r.expect === 'crisis')) >= 0.45);
+    assert.ok(held.filter((r) => r.expect === 'none' && assessCrisis(r.text)).length <= 1);
+  });
+
+  it('lets a recovery testimony stand, but not a relapse told the same way', () => {
+    assert.equal(assessCrisis('ten years ago i tried to end my life. today i got baptized'), null);
+    assert.ok(assessCrisis('ten years ago i tried to end my life and tonight i want to again'));
+    assert.equal(assessCrisis('lol this homework is killing me kms'), null);
+    assert.ok(assessCrisis('kms fr i cant do this'));
+  });
+
   it('sends sexual violence to RAINN and fear for someone else to 988', () => {
     assert.equal(assessCrisis('I was raped in college and never told anyone').kind, 'assault');
     assert.equal(assessCrisis('my son says he wants to die').kind, 'other');

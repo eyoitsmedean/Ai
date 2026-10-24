@@ -240,22 +240,173 @@
     /\babuso sexual\b/,
   ];
 
+  // --- second pass: families found by a blind corpus (Oct 2026) -------------
+  // The first lists matched exact phrasings; these catch the ways people
+  // actually say the same things: passive wishes, means and rehearsal,
+  // goodbyes and timelines, understatement, and parents afraid of their hands.
+
+  const P2 = '(?:pills?|meds|medication|tylenol|seroquel|xanax|klonopin|ambien|trazodone|zoloft|lexapro|prozac|lithium|oxycodone|percocet|vicodin|hydrocodone|gabapentin|sleeping pills|insulin|heart pills)';
+  const PLACE = '(?:bridge|overpass|parking garage|roof|rooftop|tracks|train tracks|edge|cliff|dam)';
+  const GUN = '(?:gun|pistol|revolver|service revolver|service pistol|rifle|shotgun|glock|45|9mm)';
+
+  const SELF_EN2 = [
+    // asking God to end it, or to be with him now
+    /\b(?:pray|praying|prayed|ask|asking|beg|begging|keep praying|keep asking)(?: that)? (?:god|the lord|jesus|him)(?: to)? (?:just )?(?:doesnt let me wake up|not let me wake up|take me|takes me|let me die|let me go|end it)\b/,
+    /\b(?:lord|god|jesus|father) (?:please )?(?:just )?take me (?:home|now|tonight|in my sleep|away)\b/,
+    /\b(?:is it (?:wrong|a sin|bad)) to (?:ask|pray|want) (?:god|jesus|the lord)? ?(?:to )?(?:let me die|take me|for death)\b/,
+    /\b(?:just )?want to (?:go )?be with (?:you|jesus|the lord|god|him|her|them) (?:now|already|tonight)\b|\bplease dont make me stay\b/,
+    /\bheaven (?:sounds|has to be|must be|is|seems) (?:so )?(?:much )?better than (?:here|this|living)\b.*\b(?:go now|wait|sooner|now|early|tonight)\b/,
+    /\b(?:go|going) (?:to )?see (?:her|him|them|mom|dad|my \w+) sooner than\b/,
+    /\b(?:just )?want to go now\b/,
+    // passive wishes
+    /\b(?:tired of|stop|stopped|done) existing\b|\b(?:dont|do not|no longer) want to exist\b|\bnot exist anymore\b/,
+    /\bstop being here\b/,
+    /\b(?:disappointed|sad|upset|angry) (?:that )?i (?:woke|wake) up\b|\bwake up disappointed\b/,
+    /\bwouldnt be (?:so )?bad if (?:a|the|some) (?:truck|car|bus|train|drunk driver) (?:just )?hit me\b|\bwouldnt be (?:so )?bad if i (?:just )?(?:didnt wake up|died|crashed|never woke up)\b/,
+    /\bdisappear\b.{0,40}\b(?:forever|for good|permanently)\b(?! (?:on|to|at|in|for|with))/,
+    /\bnobody would have to deal with me\b/,
+    /\b(?:cant|cannot|dont) (?:see|picture|imagine) (?:any|a|my) future\b|\bcant picture myself (?:next year|in a year|older|getting older)\b/,
+    /\bif i (?:just )?(?:disappeared|was gone|were gone|died|stopped existing|wasnt here)\b.{0,30}\b(?:no ?one|nobody|noone|no body) would (?:even )?(?:notice|miss|care)\b/,
+    /\b(?:no ?one|nobody|noone) would (?:even )?(?:notice|miss me|care) if i (?:just )?(?:stopped existing|disappeared|was gone|were gone|died|wasnt here)\b(?! for (?:a|the|\d|one|two|an))|\bno one would miss me\b|\bnobody would miss (?:me|an old man|an old woman)\b/,
+    /\b(?:everyone|my family|my kids|my wife|my husband|they|he|she) (?:would|d|will) (?:all )?be better off\b(?! (?:at|in|with|going|moving|if we|financially|than))/,
+    /\b(?:doing|do) (?:everyone|them|my family|the world) a favor\b/,
+    /\bwont be (?:a burden|here|around) (?:anymore|much longer|to see it|for)\b|\bi wont be here to see\b|\bthis time tomorrow i wont\b/,
+    /\b(?:wont|will not) be (?:a burden|in the way) anymore\b/,
+    /\bjust waiting (?:to die|for it to be over)\b/,
+    /\bshould (?:of|have|ve) died (?:over there|with (?:my|them|the|him|her))\b/,
+    /\bwhy i (?:havent|have not) (?:yet|done it|done the same)\b|\b22 a day\b/,
+    /\bnot sure ill be around much longer\b/,
+    // means, rehearsal, and timeline
+    new RegExp(`\\b(?:saving|stockpiling|hoarding|collecting|saving up|been saving|been stockpiling) (?:up )?(?:my |all my )?(?:\\w+ )?${P2}`),
+    new RegExp(`\\b(?:looking|staring|stare|look) at (?:the|my|that|his|her) (?:\\w+ )?(?:${P2}|pill bottle|bottle|${GUN}|${PLACE}|rope|razor|noose)\\b.*\\b(?:thinking|think|how easy|about it|ready)\\b`),
+    new RegExp(`\\bkeep (?:looking|staring) at (?:the|my|that) (?:\\w+ )?(?:${P2}|pill bottle|${GUN}|${PLACE}|rope|razor|noose)\\b`),
+    /\b(?:would|will|could) get (?:the |my )?(?:sgli|life insurance|insurance money|insurance payout|policy money)\b/,
+    /\bwould raise (?:them|my kids|him|her) better\b/,
+    /\b(?:forgive|into heaven|go to heaven)\b.*\b(?:takes? (?:himself|herself|themselves) out|takes? (?:his|her|their|my) (?:own )?life|kill(?:s|ed)? (?:himself|herself|myself))\b.*\b(?:asking for me|for me|before|if i)\b/,
+    /\bwant to go be with (?:him|her|them|my \w+) (?:and (?:jesus|god|the lord)|in heaven|again)\b/,
+    new RegExp(`\\bcounting (?:them|the ${P2}|my ${P2}|the pills|out)\\b`),
+    new RegExp(`\\bhow (?:much|many) (?:of )?(?:my |the |\\w+ )?${P2} (?:does it take|it takes|it would take|would it take|is too (?:much|many))\\b`),
+    /\b(?:hurts the least|least painful|painless way|quickest way to go|fastest way to go)\b/,
+    /\b(?:already|just) (?:took|swallowed|taken) (?:them|it all|all of them|all of it|the (?:whole )?(?:bottle|pills))\b|\btook them (?:like )?\d+ minutes ago\b/,
+    new RegExp(`\\b(?:drove|drive|went|walked|sat|sitting|standing|stand|im|i am|parked) (?:to|at|on|by|near) the ${PLACE}\\b`),
+    new RegExp(`\\b(?:drive|driving|drove|jump|jumping) (?:the truck |the car |my car |my truck )?off (?:the|an|a) ${PLACE}\\b`),
+    new RegExp(`\\blooked up the (?:tallest|highest) (?:\\w+ )?${PLACE}\\b`),
+    /\bmake it look like an accident\b/,
+    new RegExp(`\\b(?:bought|got|have|loaded|load|cleaning|cleaned) (?:a|my|the|one) (?:${GUN}|round|bullet)\\b.*\\b(?:not for (?:protection|hunting|the range)|sat with it|in my mouth|till sunrise|tonight|looking at it)\\b`),
+    new RegExp(`\\bloaded (?:the|my|one) (?:${GUN}|round)\\b`),
+    /\b(?:one|single) trigger pull\b|\bpull the trigger\b(?! on)|\beat(?:ing)? my gun\b/,
+    /\b(?:got|have|bought|tied) (?:the|a) (?:rope|noose)\b(?! for)/,
+    /\b(?:razor|blade) (?:is )?(?:next to|beside|with|in front of) me\b/,
+    /\bdont need (?:it|them|that|anything|my \w+) where im going\b/,
+    /\b(?:i have|ive got|got) it (?:all )?(?:planned|figured) out\b.*\b(?:when|after|before|so|while|everyone|nobody|no one)\b/,
+    /\bfigured out (?:the|how|the way) (?:i want to|im going to|to) go\b/,
+    /\btake (?:myself|me) out\b(?! (?:for|to|of))/,
+    /\btonights the night\b/,
+    /\bforgive me for what im (?:about to|going to) do\b/,
+    /\bthis is my last (?:night|day)\b(?! (?:in|at|here|of|before|with|on))/,
+    // letters and goodbyes
+    /\b(?:wrote|written|writing|left) (?:a )?letters? (?:to|for) (?:my|each of my|both|everyone|all)\b.*\b(?:just in case|find them|so they know|couldnt stay|after i|before i|when im gone|for after|i loved|goodbye|before)\b/,
+    /\btell my (?:\w+ )?(?:and my \w+ )?(?:that )?i loved (?:them|her|him|you)\b/,
+    /\b(?:say|saying|said|posted|texted me) (?:goodbye|bye forever)\b(?! to (?:my|the|our) (?:old )?(?:house|home|job|apartment|city|church|team|class|car))/,
+    /\bnot scared anymore\b.*\bgoodbye\b|\bgoodbye\b.*\bnot scared anymore\b/,
+    // self harm
+    /\bcut myself\b(?! (?:shaving|cooking|chopping|on|with|while|by accident|accidentally|off))/,
+    /\b(?:still|i|been|started|stopped) sh\b(?! (?:sh|sh sh))/,
+  ];
+
+  const OTHER_EN2 = [
+    /\b(?:he|she|they|my \w+)(?:s| is| keeps| has been| keeps saying (?:hes|shes)) (?:saying )?(?:hes |shes |theyre )?ready to (?:go be with|meet the lord|go home|die|be with)\b/,
+    /\bstopped taking (?:his|her|their) (?:\w+ )?(?:pills|meds|medication|insulin)\b/,
+    /\b(?:giving|gave|gives) away (?:his|her|their) (?:stuff|things|tools|belongings)\b/,
+    /\b(?:he|she|they) (?:has|have|had) a (?:rope|gun|pistol)\b.*\b(?:point|burden|figured out|truck|tonight)\b/,
+    /\bdoesnt (?:see (?:the|any) point|want to be a burden)\b/,
+    /\b(?:posted|texted|sent) (?:me )?(?:a )?(?:goodbye|bye forever)\b/,
+    /\b(?:wrote|written) a letter to each of (?:her|his|their) kids\b|\bgave (?:them|it|the letters) to me just in case\b/,
+  ];
+
+  const ASSAULT_EN2 = [
+    /\bforced (?:himself|herself) on me\b/,
+    /\bcomes? (?:in|into) my room at night\b/,
+    /\basked (?:her|him|me|my \w+) to send (?:him |her )?(?:pictures|pics|photos|nudes)\b/,
+  ];
+
+  const DANGER_EN2 = [
+    /\b(?:keeps showing up|showed up|shows up|keeps driving by|driving by|drives by|parked outside)\b.*\b(?:my (?:house|job|work|school|window)|outside)\b|\bfollows me\b|\bfollowing me (?:home|everywhere|around)\b/,
+    /\b(?:kill|hurt) me and (?:the kids|them|my kids|the baby)\b/,
+    /\bshowed me (?:the|a) (?:knife|gun)\b/,
+    /\b(?:never|nobody would (?:ever )?|no one would (?:ever )?)find my body\b|\bnext time it wont be\b|\bgoes after me\b/,
+    /\bbroke my (?:nose|arm|ribs?|jaw|wrist|finger)\b/,
+    /\bslapping (?:the kids|me|us|them) around\b/,
+    /\bgrabbed (?:me|my \w+|her|him) by the (?:throat|neck|hair)\b/,
+    // the writer fears what they might do
+    /\b(?:thoughts|thinking|think) (?:about|of) (?:hurting|dropping|smothering|drowning|shaking|stabbing|killing) (?:her|him|my \w+|the baby)\b/,
+    /\b(?:scared|afraid|terrified) to be alone with (?:her|him|the baby|my baby|my son|my daughter)\b/,
+    /\b(?:im|i am|i think im|i keep thinking im|scared im|afraid im) (?:going to|gonna) (?:kill|stab|hurt) (?:somebody|someone|him|her)\b/,
+    /\bfeel like im (?:going to|gonna) (?:stab|kill|hurt)\b/,
+    /\bshook (?:him|her|the baby|my baby)\b/,
+  ];
+
+  const SELF_ES2 = [
+    /\bquitar(?:me)? la vida\b/,
+    /\bsi me mato\b|\bme voy a (?:tirar|aventar) (?:del|de la|al)\b|\bestoy en el puente\b/,
+    /\bojala no (?:despertara|despierte|amanezca)\b/,
+    /\bpastillas\b.*\b(?:todas|tomarmelas|tomarlas)\b/,
+    /\bcarta\b.*\bdespues de que me vaya\b/,
+    /\bsoy una carga\b/,
+    /\bno quiero existir\b|\bdesaparecer para siempre\b/,
+  ];
+
+  const OTHER_ES2 = [/\bse quiere (?:matar|morir)\b/];
+
+  const DANGER_ES2 = [
+    /\bme sigue a todos lados\b/,
+    /\bme ahorco\b|\bme estrangulo\b/,
+    /\b(?:lastimar|pegarle|hacerle dano) a mi (?:bebe|hijo|hija)\b/,
+    /\bganas de matar a\b|\ble hago algo\b/,
+  ];
+
+  // Past and recovered: a testimony is not a crisis unless something is
+  // happening now. Present-tense markers keep a real disclosure live.
+  const RECOVERED = /\b(?:\w+ (?:years?|months?) ago|years? back|used to|in (?:high school|\d+th grade|college)|been clean|im (?:doing )?(?:better|in a good place) now|doing better now|got baptized|testimony|found me in time|god (?:kept|brought|pulled) me|thank god|wanna thank god|want to thank god)\b/;
+  const PRESENT = /\b(?:tonight|right now|rn|again|anymore|these days|lately|this week|keep (?:looking|thinking|counting)|about to|going to|gonna|still (?:want|do|think|cut)|next time)\b/;
+  // Talking about someone who died by suicide, or a song, is not a disclosure.
+  const ABOUT_OTHERS = /\b(?:died|passed) (?:by suicide|that way)\b|\b(?:dad|mom|father|mother|uncle|aunt|friend|brother|sister|cousin|son|daughter|grandpa|grandma)\b.*\b(?:died by|took (?:his|her|their) (?:own )?life|killed (?:himself|herself))\b/;
+  const FIRST_PERSON_RISK = /\b(?:for me|i want|i just want|i wanna|i keep|im going|myself|my own life|me too)\b/;
+  const SONG = /\b(?:song|lyrics?|humming|album|singing along)\b/;
+  const JOKING = /\b(?:lol|lmao|lmfao|haha\w*|jk|rofl)\b/;
+  const SINCERE = /\b(?:fr|for real|not joking|srsly|seriously|no joke)\b/;
+  const ILLNESS = /\b(?:cancer|hospice|terminal|chemo|diagnos\w*|doctor says|stage \d|tumou?r)\b/;
+
+  function guarded(t) {
+    if (RECOVERED.test(t) && !PRESENT.test(t)) return true;
+    if (ABOUT_OTHERS.test(t) && !FIRST_PERSON_RISK.test(t)) return true;
+    if (SONG.test(t) && !PRESENT.test(t)) return true;
+    return false;
+  }
+
   // --- assess ----------------------------------------------------------------
 
   function assessCrisis(text) {
     let t = normalize(text);
     if (!t.trim()) return null;
     for (const re of IDIOMS) t = t.replace(re, ' ');
+    // Context that turns a cue into a figure of speech.
+    if (JOKING.test(t) && !SINCERE.test(t)) t = t.replace(/\bkms\b/g, ' ');
+    t = t.replace(/\b(?:mom|dad|mother|father|parents|wife|husband|boss|teacher|coach)(?: is| are)? (?:gonna|going to) kill me when (?:she|he|they) (?:sees?|finds? out|hears?)\b/g, ' ');
+    t = t.replace(/\bstarv\w* myself of\b/g, ' ');
+    if (ILLNESS.test(t)) t = t.replace(/\b(?:might|may|wont|will not) (?:not )?be (?:around|here) (?:much longer|for long)\b/g, ' ');
     const hit = (list) => list.some((re) => re.test(t));
+    const past = guarded(t);
     // The writer's own life first, then sexual violence, then someone else's
     // life, then other danger. Language follows the words that matched.
-    if (hit(SELF_ES)) return { kind: 'self', lang: 'es' };
-    if (hit(SELF_EN)) return { kind: 'self', lang: 'en' };
+    if (!past && (hit(SELF_ES) || hit(SELF_ES2))) return { kind: 'self', lang: 'es' };
+    if (!past && (hit(SELF_EN) || hit(SELF_EN2))) return { kind: 'self', lang: 'en' };
     if (hit(ASSAULT_ES)) return { kind: 'assault', lang: 'es' };
-    if (hit(ASSAULT_EN)) return { kind: 'assault', lang: 'en' };
-    if (hit(OTHER_EN)) return { kind: 'other', lang: 'en' };
-    if (hit(DANGER_ES)) return { kind: 'danger', lang: 'es' };
-    if (hit(DANGER_EN)) return { kind: 'danger', lang: 'en' };
+    if (hit(ASSAULT_EN) || hit(ASSAULT_EN2)) return { kind: 'assault', lang: 'en' };
+    if (!past && hit(OTHER_ES2)) return { kind: 'other', lang: 'es' };
+    if (!past && (hit(OTHER_EN) || hit(OTHER_EN2))) return { kind: 'other', lang: 'en' };
+    if (hit(DANGER_ES) || hit(DANGER_ES2)) return { kind: 'danger', lang: 'es' };
+    if (hit(DANGER_EN) || hit(DANGER_EN2)) return { kind: 'danger', lang: 'en' };
     return null;
   }
 
