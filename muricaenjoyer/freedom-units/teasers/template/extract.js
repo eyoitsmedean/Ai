@@ -9,7 +9,12 @@ const PICKS = [
   { i: 14, sources: ['National Park Service: Wright Brothers National Memorial', 'AutoPadre: 2023 Ford F-150 SuperCrew specs'] },
   { i: 20, sources: ['National Hot Dog and Sausage Council (via Foodmarket.com)', 'Route66RoadTrip.com'] },
   { i: 10, sources: ['NPS NPGallery: Hoover Dam record', 'NFL Rulebook', 'NOAA National Geodetic Survey'] },
-  { i: 21, sources: ['National Park Service: Mississippi River facts', 'NIST Handbook 44'] }
+  { i: 21, sources: ['National Park Service: Mississippi River facts', 'NIST Handbook 44'] },
+  { i: 22, sources: ['National Park Service: The Liberty Bell', 'USDA ERS Agricultural Handbook 697'] },
+  { i: 23, sources: ['National Park Service: Mount Rushmore', 'Cornell Lab of Ornithology: All About Birds'] },
+  { i: 24, sources: ['NASA: Saturn V'] },
+  { i: 5,  sources: ['Golden Gate Bridge District: construction stats', 'National Park Service: Grand Canyon FAQ'] },
+  { i: 18, sources: ['FHWA: Our Nation\'s Highways', 'National Park Service: Mississippi River facts'] }
 ];
 const tStart = html.indexOf('const TITLES = [');
 const TITLES = JSON.parse(html.slice(tStart + 15, html.indexOf('];', tStart) + 1));

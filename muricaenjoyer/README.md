@@ -5,9 +5,9 @@ Everything built for the @Muricaenjoyer X account, kept apart from the Red Lette
 | Project | What it is | Live page |
 |---|---|---|
 | `testosterone/` | "Testosterone Isn't a Personality": the finished X Article, research kit, six sourced charts, header art, and a 52-second captioned video with an original heartbeat track | [Article](https://claude.ai/artifact/E6nnge8UAMGReGFRixKkqb) · [Research kit](https://claude.ai/artifact/9n25cmafMpUqu82moZWCKd) |
-| `founders/` | The Founders' Group Chat: America's founders in a text thread, 1776–1826, every bubble a real sourced quote. Video in 4:5, 4:5 fast and 9:16, plus a web version with a receipt behind every bubble | [Web chat](https://claude.ai/artifact/QNebUAYTf8zPBpwhrmjBSD) |
-| `the-63/` | The 63: every U.S. national park ranked into S–D tiers, with filters, awards, method and live re-weighting, plus tier-list images and post text | [The 63](https://claude.ai/artifact/Js5RFzV6pZZ1xuC5Gasrfe) |
-| `freedom-units/` | Freedom Units: a daily estimation game that measures America in American units, with sourced answers and a shareable score card | [Game](https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm) |
+| `founders/` | The Founders' Group Chat: America's founders in a text thread, 1776–1826, every bubble a real sourced quote. Video in 4:5, 4:5 fast and 9:16, a 62-second short cut in `short/`, plus a web version with a receipt behind every bubble | [Web chat](https://claude.ai/artifact/QNebUAYTf8zPBpwhrmjBSD) |
+| `the-63/` | The 63: every U.S. national park ranked into S–D tiers, with filters, awards, method and live re-weighting, plus tier-list images, post text and a 47-second countdown video in `video/` | [The 63](https://claude.ai/artifact/Js5RFzV6pZZ1xuC5Gasrfe) |
+| `freedom-units/` | Freedom Units: a daily estimation game that measures America in American units, with sourced answers and a shareable score card, plus ten question/answer teaser cards and a teaser schedule in `teasers/` | [Game](https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm) |
 
 The live pages are private until shared from each page's Share menu. The two-week posting plan is in `LAUNCH.md`.
 

@@ -1,11 +1,12 @@
-// Renders q1..q5 question + answer cards at exactly 1080x1350.  Usage: node render.js
+// Renders every card in data.js (question + answer) at exactly 1080x1350.  Usage: node render.js
 const { chromium } = require('/usr/local/lib/node_modules/playwright');
 const path = require('path');
 const OUT = path.join(__dirname, '..');
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1350 }, deviceScaleFactor: 1 });
-  for (let q = 1; q <= 5; q++) {
+  const N = (require("fs").readFileSync(path.join(__dirname, "data.js"), "utf8").match(/"poolIndex"/g) || []).length;
+  for (let q = 1; q <= N; q++) {
     for (const mode of ['question', 'answer']) {
       await p.goto('file://' + path.join(__dirname, 'card.html') + '?q=' + q + '&mode=' + mode);
       await p.evaluate(() => window.fitDone);

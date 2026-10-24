@@ -94,5 +94,98 @@ window.CARDS = [
    "https://www.nps.gov/miss/riverfacts.htm",
    "NIST Handbook 44: US gallon = 231 cubic inches"
   ]
+ },
+ {
+  "poolIndex": 22,
+  "title": "Liberty Bell in gallons of milk",
+  "sourceNames": [
+   "National Park Service: The Liberty Bell",
+   "USDA ERS Agricultural Handbook 697"
+  ],
+  "prompt": "The Liberty Bell weighs 2,080 pounds, per the National Park Service. USDA's standard conversion says a gallon of milk weighs 8.6 pounds. How many gallons of milk weigh as much as the Liberty Bell?",
+  "unit": "gallons of milk",
+  "answer": 241.9,
+  "sliderMin": 12,
+  "sliderMax": 4800,
+  "math": "2,080 lb / 8.6 lb per gallon = 241.9",
+  "reveal": "Lift 242 gallon jugs and you're hoisting a Liberty Bell's worth of weight, crack not included.",
+  "sources": [
+   "NPS Independence National Historical Park: The Liberty Bell weighs 2,080 lb, nps.gov/inde",
+   "USDA ERS Agricultural Handbook 697, Weights, Measures, and Conversion Factors: milk = 8.6 lb per gallon"
+  ]
+ },
+ {
+  "poolIndex": 23,
+  "title": "Rushmore face in bald eagles",
+  "sourceNames": [
+   "National Park Service: Mount Rushmore",
+   "Cornell Lab of Ornithology: All About Birds"
+  ],
+  "prompt": "Each presidential face on Mount Rushmore is 60 feet tall (NPS). A bald eagle's wingspan is 80.3 inches (Cornell Lab, All About Birds). How many bald eagles, wingtip to wingtip, would span one face from chin to the top of the head?",
+  "unit": "bald eagles",
+  "answer": 9,
+  "sliderMin": 0.45,
+  "sliderMax": 180,
+  "math": "60 ft x 12 = 720 in; 720 in / 80.3 in per eagle = 8.97",
+  "reveal": "Just nine bald eagles wingtip to wingtip would span a 60-foot face, about the height of a six-story building.",
+  "sources": [
+   "NPS Mount Rushmore National Memorial: the faces are 60 feet tall, nps.gov/moru",
+   "https://www.allaboutbirds.org/guide/bald_eagle/id"
+  ]
+ },
+ {
+  "poolIndex": 24,
+  "title": "Saturn V in football fields",
+  "sourceNames": [
+   "NASA: Saturn V"
+  ],
+  "prompt": "NASA's Saturn V moon rocket stood 363 feet tall. Laid on its side, how many football fields long would it be, measuring a field as 100 yards (300 ft) goal line to goal line?",
+  "unit": "football fields (100 yd)",
+  "answer": 1.21,
+  "sliderMin": 0.06,
+  "sliderMax": 25,
+  "math": "363 ft / 300 ft = 1.21",
+  "reveal": "Laid down at one goal line, a Saturn V would stick 63 feet past the other one, deep into the end zone.",
+  "sources": [
+   "NASA: the Saturn V rocket stood 363 feet tall, nasa.gov"
+  ]
+ },
+ {
+  "poolIndex": 5,
+  "title": "Golden Gate cable wire in Grand Canyons",
+  "sourceNames": [
+   "Golden Gate Bridge District: construction stats",
+   "National Park Service: Grand Canyon FAQ"
+  ],
+  "prompt": "The Golden Gate Bridge's two main cables hold a combined 80,000 miles of galvanized steel wire. The Grand Canyon is 277 river miles long (Lees Ferry to the Grand Wash Cliffs). How many times could that wire run the full length of the canyon?",
+  "unit": "Grand Canyon lengths",
+  "answer": 289,
+  "sliderMin": 10,
+  "sliderMax": 6000,
+  "math": "80,000 mi / 277 mi = 288.8",
+  "reveal": "The bridge's wire could run the whole canyon nearly 290 times.",
+  "sources": [
+   "https://goldengate.org/bridge/history-research/statistics-data/design-construction-stats",
+   "https://nps.gov/grca/faqs.htm"
+  ]
+ },
+ {
+  "poolIndex": 18,
+  "title": "Interstates in Mississippi Rivers",
+  "sourceNames": [
+   "FHWA: Our Nation's Highways",
+   "National Park Service: Mississippi River facts"
+  ],
+  "prompt": "FHWA puts the Interstate Highway System at 48,830 miles (excluding Puerto Rico). The Mississippi River is 2,350 miles from Lake Itasca to the Gulf, the figure NPS's Mississippi National River and Recreation Area uses. How many Mississippi Rivers long is the Interstate System?",
+  "unit": "Mississippi Rivers",
+  "answer": 20.8,
+  "sliderMin": 1,
+  "sliderMax": 420,
+  "math": "48,830 mi / 2,350 mi = 20.78",
+  "reveal": "To drive every Interstate mile, you'd cover the Mississippi's full length nearly 21 times.",
+  "sources": [
+   "https://www.fhwa.dot.gov/policyinformation/pubs/our_nations_highways_2026/roads.cfm",
+   "https://www.nps.gov/miss/riverfacts.htm"
+  ]
  }
 ];
