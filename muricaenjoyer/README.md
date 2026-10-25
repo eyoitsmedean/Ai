@@ -17,4 +17,5 @@ The live pages are private until shared from each page's Share menu. The two-wee
 - Videos are canvas pages rendered frame by frame: `node testosterone/video/render.js <playwright-path> <page.html> <frames-dir> 30`, then encode the frames with ffmpeg (libx264, yuv420p, +faststart). `testosterone/video/audio.py` builds the heartbeat track from the beat times the render writes.
 - The 63: edit `the-63/page-src/the-63.tpl.html` and run `the-63/page-src/build.py` to re-inline `parks.json`. `the-63/build.py` rebuilds the rankings from `input.json`.
 - Founders: `founders/script-build/build.py` rebuilds and re-checks `script.json` against the verified quotes; `founders/sources.md` lists every quote's document, date and link.
-- Freedom Units: `freedom-units/qa/qa.js` plays full games and recomputes every score.
+- Freedom Units: `freedom-units/qa-units/qa.js` and `freedom-units/test/play.js` play full games against the shipping page and recompute every score.
+- Launch check: `python3 launch/build.py && python3 launch/preflight.py` checks every post against X limits (weighted length, media per post, image size, video length and codecs, alt text).

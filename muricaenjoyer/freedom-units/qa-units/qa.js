@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const QA = __dirname;
-const SRC = path.resolve(QA, '../swarm/units/freedom-units.html');
-const FONTS = path.resolve(QA, '../swarm/units/test');
+const SRC = path.resolve(QA, '../freedom-units.html');
+const FONTS = path.resolve(QA, '../test');
 const OUT = path.join(QA, 'out');
 fs.mkdirSync(OUT, { recursive: true });
 

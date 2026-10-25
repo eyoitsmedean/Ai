@@ -55,6 +55,7 @@ _parks = json.loads((ROOT / "the-63/parks.json").read_text())["parks"]
 for pk in _parks:
     if pk["rank"] <= 6:
         ALT[f"s{pk['rank']}.png"] = f"The 63, S tier, #{pk['rank']} of 63: {pk['name']}, {pk['states']}. {pk['take']}"
+ALT["the-63-tierlist.png"] = alt_text
 ALT["chiricahua-verdict.png"] = "The 63 verdict card: Chiricahua, America's 64th national park, would rank #49 of 64, C tier, score 70.0 out of 100. Scenery 7, uniqueness 7, crowd-to-wow 9, access 5. About 12,000 acres, about 70,000 visits in 2025."
 ALT["header-personality-1500x600.png"] = "Header art: TESTOSTERONE ISN'T A PERSONALITY over a heartbeat line. The Pentagon tests it. Apps sell it. The gym abuses it."
 
@@ -85,7 +86,6 @@ DAYS = [
     dict(date="Mon Oct 26", title="The 63 tier list", pin=True,
          post=quoted(p63, "### Option 1: Fight bait (245 chars)"),
          assets=[asset("the-63/the-63-tierlist.png")],
-         alt=alt_text,
          reply=method_reply.replace("[LINK]", THE63), reply_note="Evening, optional. Share The 63 page publicly first."),
     dict(date="Tue Oct 27", title="Freedom Units teaser 1",
          post=TEASERS["q1"][0], assets=[asset("freedom-units/teasers/q1-question.png")],
@@ -205,4 +205,17 @@ PAGE = (OUT / "template.html").read_text()
 PAGE = PAGE.replace("{{DAYS}}", "".join(items)).replace("{{BENCH}}", bench).replace("{{COUNT}}", str(n))
 (OUT / "launch-desk.html").write_text(PAGE)
 (OUT / "publish.json").write_text(json.dumps(assets, indent=1))
+POSTS = []
+for d in DAYS + [dict(b, date="Bench") for b in BENCH]:
+    if d.get("off"):
+        continue
+    names = lambda xs: [a["name"] for a in xs if a and not isinstance(a, list)] + [g["name"] for x in xs if isinstance(x, list) for g in x if g]
+    for key in ("post", "reply"):
+        if d.get(key):
+            POSTS.append(dict(date=d["date"], title=d["title"], part=key, text=d[key],
+                              assets=names(d.get("assets" if key == "post" else "reply_assets", []))))
+    for k, t in enumerate(d.get("thread", []), 1):
+        ta = (d.get("thread_assets") or [])[k - 1:k]
+        POSTS.append(dict(date=d["date"], title=d["title"], part=f"thread {k}", text=t, assets=names(ta)))
+(OUT / "posts.json").write_text(json.dumps(dict(posts=POSTS, alt=ALT), indent=1, ensure_ascii=False))
 print("posts", n, "assets", len(assets), "receipts", len(receipts), "s-cards", len(s_cards))

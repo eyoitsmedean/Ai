@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+freedom-units/qa-units/out/
+freedom-units/test/shots/
