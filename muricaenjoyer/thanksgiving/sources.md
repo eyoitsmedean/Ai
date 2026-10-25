@@ -1,6 +1,6 @@
 # The Thanksgiving Group Chat: sources
 
-Every chat bubble is a verbatim excerpt (original spelling and capitalization kept). '…' marks a trim: words were removed, never changed or added. Dividers, labels under bubbles ('Forwarded · 1784', 'Read by Abraham Lincoln'), and lines like 'muted the conversation' or the renamed conversation are interface captions, not quotes. 'Forwarded' marks a quote older than the moment it appears in, placed out of order for a joke; its real date is shown.
+Every chat bubble is a verbatim excerpt (original spelling and capitalization kept). '…' marks a trim: words were removed, never changed or added. Dividers, labels under bubbles ('Forwarded · 1784', 'Read by Abraham Lincoln'), and lines like 'muted the conversation' or the renamed conversation are interface captions, not quotes. 'Forwarded' marks a quote older than the moment it appears in, placed out of order for a joke (only Franklin's last line); its real date is shown.
 
 Checked Oct 25, 2026 through search results from the primary-source sites below (direct page fetches were blocked from the build machine). Where editions differ in spelling, the bubble was trimmed to words every edition agrees on; see the notes.
 
@@ -13,7 +13,7 @@ Checked Oct 25, 2026 through search results from the primary-source sites below 
 - **Date:** 3 October 1789
 - **URL:** https://founders.archives.gov/documents/Washington/05-04-02-0091 (manuscript: https://www.loc.gov/resource/mgw8a.124/)
 - **Bubble:** …I do recommend and assign Thursday the 26th day of November next…
-- **Note:** Issued at Congress's request for a one-time day, not a permanent holiday. 26 November 1789 was a Thursday, and so is 26 November 2026.
+- **Note:** Issued at Congress's request for a one-time day, not a permanent holiday. It was the first thanksgiving proclaimed by a U.S. president; the Continental Congress had proclaimed thanksgivings from 1777 to 1784, which is why the post says "a U.S. president" rather than "national". 26 November 1789 was a Thursday, and so is 26 November 2026.
 
 ### 2–3, 8. Benjamin Franklin
 > He is a Bird of bad moral Character.
@@ -46,6 +46,7 @@ Checked Oct 25, 2026 through search results from the primary-source sites below 
 - **Date:** 28 September 1863
 - **URL:** https://www.loc.gov/resource/mal.2669900/ (transcription: https://www.loc.gov/static/classroom-materials/thanksgiving/documents/sarah_hale.pdf)
 - **Bubbles:** the first sentence in full; "…For the last fifteen years I have set forth this idea…"
+- **Caption:** "Delivered": the letter is in Lincoln's papers at the Library of Congress. Whether he read it himself, or whether it was what moved him, isn't documented; she also wrote to Seward, who drafted the proclamation.
 - **Note:** Transcriptions differ on the quotation marks around Lady's Book, so the bubble stops before it.
 
 ### 7. Abraham Lincoln
@@ -64,7 +65,7 @@ Checked Oct 25, 2026 through search results from the primary-source sites below 
 - **Date:** 31 October 1939 (the change was announced 14 August 1939)
 - **URL:** https://www.presidency.ucsb.edu/documents/proclamation-2373-thanksgiving-day
 - **Bubble:** …do hereby designate Thursday, the twenty-third of November, 1939, as a day of general thanksgiving.
-- **Captions:** "Critics renamed the conversation 'Franksgiving'" (the nickname was widely used; who coined it is disputed, so no name is given). "Texas, Colorado and Mississippi celebrated both" per the National Archives: https://www.archives.gov/publications/prologue/fdr-thanksgiving-experiment
+- **Captions:** "Critics renamed the conversation 'Franksgiving'" (the nickname was widely used; who coined it is disputed, so no name is given). "Texas and Colorado celebrated both" (Mississippi is sometimes added, but the record there is unclear, so it's left out): https://www.archives.gov/publications/prologue/fdr-thanksgiving-experiment
 
 ### 10. Congress
 > That the fourth Thursday of November in each year after the year 1941 be known as Thanksgiving Day, and is hereby made a legal public holiday to all intents and purposes…

@@ -4,7 +4,7 @@ Post Wednesday, Nov 25 at 9:00 a.m. ET (14:00 UTC) with `thanksgiving-4x5.mp4`, 
 
 ## Main post
 
-> The first national Thanksgiving was Thursday, November 26, 1789.
+> The first Thanksgiving a U.S. president ever proclaimed was Thursday, November 26, 1789.
 >
 > Tomorrow is Thursday, November 26.
 >

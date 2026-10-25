@@ -76,20 +76,13 @@
   },
   {
    "k": "div",
-   "text": "October 3, 1789"
-  },
-  {
-   "k": "msg",
-   "who": "GW",
-   "text": "…I do recommend and assign Thursday the 26th day of November next…",
-   "src": "Thanksgiving Proclamation · 3 Oct 1789",
-   "url": "https://founders.archives.gov/documents/Washington/05-04-02-0091"
+   "text": "January 26, 1784"
   },
   {
    "k": "msg",
    "who": "BF",
    "text": "He is a Bird of bad moral Character.",
-   "src": "Forwarded · 1784 · Letter to his daughter, on the bald eagle",
+   "src": "Letter to his daughter, on the bald eagle · 26 Jan 1784",
    "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327"
   },
   {
@@ -98,6 +91,17 @@
    "text": "…a much more respectable Bird, and withal a true original Native of America.",
    "src": "Same letter, on the turkey · 26 Jan 1784",
    "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327"
+  },
+  {
+   "k": "div",
+   "text": "October 3, 1789"
+  },
+  {
+   "k": "msg",
+   "who": "GW",
+   "text": "…I do recommend and assign Thursday the 26th day of November next…",
+   "src": "Thanksgiving Proclamation · 3 Oct 1789",
+   "url": "https://founders.archives.gov/documents/Washington/05-04-02-0091"
   },
   {
    "k": "div",
@@ -131,7 +135,7 @@
    "text": "…For the last fifteen years I have set forth this idea…",
    "src": "Same letter · 28 Sep 1863",
    "url": "https://www.loc.gov/resource/mal.2669900/",
-   "receipt": "Read by Abraham Lincoln"
+   "receipt": "Delivered"
   },
   {
    "k": "div",
@@ -163,7 +167,7 @@
   },
   {
    "k": "sys",
-   "text": "Texas, Colorado and Mississippi celebrated both"
+   "text": "Texas and Colorado celebrated both"
   },
   {
    "k": "div",

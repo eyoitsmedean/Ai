@@ -21,7 +21,7 @@ Built around the rule: one post is one sit, then the phone goes down. Schedule a
 | Thu Nov 12 | Freedom Units teaser 4 | `teasers/q4-question.png` | Evening: `q4-answer.png` |
 | Tue Nov 17 | Freedom Units teaser 5 | `teasers/q5-question.png` | Evening: `q5-answer.png` |
 | Thu Nov 19 | Freedom Units teaser 6 | `teasers/q6-question.png` | Evening: `q6-answer.png` |
-| Wed Nov 25 | The Thanksgiving Group Chat: "The first national Thanksgiving was Thursday, November 26, 1789. Tomorrow is Thursday, November 26." Pin it through the weekend. | `thanksgiving/thanksgiving-4x5.mp4` | The three receipt cards in `thanksgiving/receipts/`, then the chat link, text in `thanksgiving/post.md` |
+| Wed Nov 25 | The Thanksgiving Group Chat: "The first Thanksgiving a U.S. president ever proclaimed was Thursday, November 26, 1789. Tomorrow is Thursday, November 26." Pin it through the weekend. | `thanksgiving/thanksgiving-4x5.mp4` | The three receipt cards in `thanksgiving/receipts/`, then the chat link, text in `thanksgiving/post.md` |
 | Thu Nov 26 | Thanksgiving. Off. | | |
 
 ## Before scheduling
