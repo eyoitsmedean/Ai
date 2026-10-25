@@ -462,9 +462,11 @@ textarea { font-family: var(--body); }
   padding: 28px 22px calc(var(--dock) + 28px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .28s var(--ease);
+  /* Hidden pages leave the tab order and the reading order once they fade. */
+  visibility: hidden;
+  transition: opacity .28s var(--ease), visibility 0s linear .28s;
 }
-.page.active { opacity: 1; pointer-events: all; }
+.page.active { opacity: 1; pointer-events: all; visibility: visible; transition: opacity .28s var(--ease); }
 .page::-webkit-scrollbar { width: 6px; }
 .page::-webkit-scrollbar-thumb { background: var(--rule-2); }
 
@@ -952,6 +954,7 @@ textarea { font-family: var(--body); }
   transition: transform .2s var(--ease);
 }
 .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+.toggle input:focus-visible + .toggle-track { outline: 2px solid var(--crimson); outline-offset: 3px; }
 .fs-control { display: flex; gap: 6px; }
 .fs-btn { width: 36px; height: 36px; border: 1px solid var(--rule); background: none; }
 .fs-btn.active { border-color: var(--crimson); color: var(--crimson); }
@@ -1667,7 +1670,7 @@ html.sitting .sit-sheet {
           </div>
           <div class="enc-result" id="enc-result">
             <button class="back-btn" onclick="showThemeGrid()">All rooms</button>
-            <h2 class="enc-headline" id="enc-headline"></h2>
+            <h2 class="enc-headline" id="enc-headline" tabindex="-1"></h2>
             <p class="enc-opening" id="enc-opening"></p>
             <div id="enc-passages"></div>
             <div class="practice">
@@ -1709,7 +1712,7 @@ html.sitting .sit-sheet {
             <button class="back-btn" onclick="closeLibFolio()">All sayings</button>
             <p class="eyebrow" id="lib-folio-book"></p>
             <p class="cite" id="lib-folio-cite" style="margin:8px 0 22px"></p>
-            <p class="lib-folio-quote" id="lib-folio-quote"></p>
+            <p class="lib-folio-quote" id="lib-folio-quote" tabindex="-1"></p>
             <div class="actions">
               <button class="ghost" id="lib-save-btn" onclick="toggleSave('lib')"><span id="lib-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('lib')">Share card</button>
@@ -1852,7 +1855,7 @@ html.sitting .sit-sheet {
       <div class="setting-sub">A darker paper for night</div>
     </div>
     <label class="toggle">
-      <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
+      <input type="checkbox" id="dark-toggle" aria-label="Lamp: a darker paper for night" onchange="toggleDark(this.checked)" />
       <div class="toggle-track"></div>
     </label>
   </div>
@@ -1862,7 +1865,7 @@ html.sitting .sit-sheet {
       <div class="setting-sub">A quiet knock around 8:00 while Red Letter is open, if this device allows it</div>
     </div>
     <label class="toggle">
-      <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this.checked)" />
+      <input type="checkbox" id="reminder-toggle" aria-label="Morning reminder" onchange="toggleReminder(this.checked)" />
       <div class="toggle-track"></div>
     </label>
   </div>
@@ -2173,6 +2176,7 @@ function showNeedStep() {
   document.getElementById('ob-ack-block').style.display = 'none';
   document.querySelector('.tp-trust').style.display = 'none';
   document.getElementById('ob-need').classList.add('on');
+  document.querySelector('#ob-need .tp-need-btn')?.focus({ preventScroll: true });
 }
 
 function chooseNeed(kind) {
@@ -2608,6 +2612,13 @@ function showEnc(data, theme) {
   setSaveBtnState('enc', isSaved('enc-' + slugify(theme)));
   document.getElementById('enc-result').classList.add('on');
   document.getElementById('seek-page').scrollTop = 0;
+  // The row that opened the room is gone; carry keyboard focus to the room.
+  if (seekHoldsFocus()) document.getElementById('enc-headline').focus({ preventScroll: true });
+}
+
+function seekHoldsFocus() {
+  const a = document.activeElement;
+  return !a || a === document.body || document.getElementById('seek-page').contains(a);
 }
 
 function showThemeGrid() {
@@ -2615,6 +2626,11 @@ function showThemeGrid() {
   document.getElementById('enc-loading').style.display = 'none';
   document.getElementById('theme-grid').style.display = 'block';
   document.getElementById('seek-page').scrollTop = 0;
+  if (seekHoldsFocus()) {
+    const rows = [...document.querySelectorAll('#theme-grid .index-row')];
+    const back = rows.find((r) => r.querySelector('.index-name')?.textContent === currentEncTheme) || rows[0];
+    if (back) back.focus({ preventScroll: true });
+  }
 }
 
 function setSeekMode(mode) {
@@ -2769,6 +2785,7 @@ function appendSayings(sayings, hasMore) {
     btn.className = 'saying-row';
     btn.type = 'button';
     btn.innerHTML = '<span class="saying-cite">' + esc(s.citation) + '</span><span class="saying-text">' + esc(excerptSaying(s.text)) + '</span>';
+    btn.dataset.cite = s.citation;
     btn.addEventListener('click', () => openLibFolio(s));
     list.appendChild(btn);
   });
@@ -2793,6 +2810,11 @@ function openLibFolio(saying) {
   document.getElementById('lib-folio').classList.add('on');
   document.getElementById('seek-page').scrollTop = 0;
   syncLibTurn();
+  // Turning leaves focus on the turn button; opening (or a turn that just
+  // disabled it) carries focus to the saying.
+  const a = document.activeElement;
+  const kept = a && a.closest('#lib-folio') && !a.disabled && a.checkVisibility?.();
+  if (seekHoldsFocus() && !kept) document.getElementById('lib-folio-quote').focus({ preventScroll: true });
 }
 
 function turnLibFolio(dir) {
@@ -2811,10 +2833,16 @@ function syncLibTurn() {
 }
 
 function closeLibFolio() {
+  const was = currentSaying;
   currentSaying = null;
   document.getElementById('lib-folio').classList.remove('on');
   document.getElementById('lib-tools').style.display = 'block';
   document.getElementById('lib-list').style.display = 'block';
+  if (seekHoldsFocus()) {
+    const rows = [...document.querySelectorAll('#lib-list .saying-row')];
+    const back = (was && rows.find((r) => r.dataset.cite === was.citation)) || rows[0];
+    if (back) back.focus({ preventScroll: true });
+  }
 }
 
 function askAboutSaying() {
@@ -3004,6 +3032,12 @@ function hideOverlayIfIdle() {
     try { sheetTrigger.focus(); } catch (_) {}
   }
   sheetTrigger = null;
+  // A sheet the page opened by itself has no button to return to.
+  const a = document.activeElement;
+  if (!a || a === document.body || !a.checkVisibility?.()) {
+    const page = document.querySelector('.page.active');
+    if (page) { page.setAttribute('tabindex', '-1'); page.focus({ preventScroll: true }); }
+  }
 }
 function closeSheets() {
   closeSit();
@@ -4001,22 +4035,33 @@ function syncCmdActive() {
 }
 function runCmd(index) {
   const item = cmdFiltered[index];
-  closeCommandPalette();
+  closeCommandPalette(false);
   if (item && typeof item.run === 'function') item.run();
+  // If the command left focus nowhere, put it on the page it opened.
+  const a = document.activeElement;
+  if (!a || a === document.body || !a.checkVisibility?.()) {
+    const page = document.querySelector('.page.active');
+    if (page) { page.setAttribute('tabindex', '-1'); page.focus({ preventScroll: true }); }
+  }
 }
+let cmdOpener = null;
 function openCommandPalette() {
   const root = document.getElementById('cmdk');
   const input = document.getElementById('cmdk-input');
+  cmdOpener = document.activeElement;
   root.classList.add('on');
   root.setAttribute('aria-hidden', 'false');
   renderCmdList('');
   if (input) { input.value = ''; setTimeout(() => input.focus(), 20); }
 }
-function closeCommandPalette() {
+function closeCommandPalette(restore = true) {
   const root = document.getElementById('cmdk');
   if (!root) return;
+  const wasOpen = root.classList.contains('on');
   root.classList.remove('on');
   root.setAttribute('aria-hidden', 'true');
+  if (restore && wasOpen && cmdOpener && cmdOpener.isConnected && cmdOpener !== document.body) cmdOpener.focus({ preventScroll: true });
+  cmdOpener = null;
 }
 
 // Crisis language lives in data/crisis.js, shared with the server. The line
