@@ -56,7 +56,7 @@ html { -webkit-text-size-adjust: 100%; }
   --ink: #F3EBDD;
   --ink-2: #C9BDAA;
   --ink-3: #8E8272;
-  --ink-4: #6A5F52;
+  --ink-4: #8C8070;
   --rule: rgba(243, 235, 221, 0.10);
   --rule-2: rgba(243, 235, 221, 0.16);
   --crimson: #D15A54;
@@ -609,6 +609,7 @@ textarea { font-family: var(--body); }
   text-transform: uppercase;
 }
 .cta-primary { background: var(--crimson); color: #FBF7EE; }
+:root[data-theme="dark"] .cta-primary { color: var(--paper); }
 .cta-ghost { background: transparent; border: 1px solid var(--rule-2); color: var(--ink); }
 .cta:hover { transform: translateY(-1px); }
 
@@ -1174,6 +1175,7 @@ textarea { font-family: var(--body); }
   color: var(--ink-4);
 }
 .colophon + .helpline { margin-top: 10px; padding-top: 0; border-top: 0; }
+.sheet-helpline { margin-top: 24px; }
 .helpline a { color: var(--crimson); }
 
 .quire {
@@ -1427,7 +1429,15 @@ html.sitting .sit-sheet {
 }
 .crisis-card p { font-family: var(--body); color: var(--ink-2); line-height: 1.6; margin-bottom: 12px; }
 .crisis-actions { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
-.crisis-actions a { color: var(--crimson); }
+.crisis-actions a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--rule-2);
+  border-radius: 10px;
+  color: var(--crimson);
+}
 
 .cmd-hint { display: none; }
 @media (min-width: 880px) {
@@ -1839,6 +1849,7 @@ html.sitting .sit-sheet {
       <button class="ghost" type="button" onclick="closeSit()">Leave it on the page</button>
     </div>
   </div>
+  <p class="helpline sheet-helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
 </aside>
 <aside class="settings-sheet" id="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
   <div class="sheet-handle"></div>
@@ -1914,6 +1925,7 @@ html.sitting .sit-sheet {
     <button class="ghost" type="button" onclick="sendBlessing('dawn')">Dawn</button>
     <button class="ghost" type="button" onclick="sendBlessing('void')">Night</button>
   </div>
+  <p class="helpline sheet-helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
 </aside>
 
 <aside class="settings-sheet" id="share-sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
@@ -1925,6 +1937,7 @@ html.sitting .sit-sheet {
   <button class="share-style" type="button" onclick="shareWithStyle('parchment')"><span class="share-style-kicker">Default</span>Parchment</button>
   <button class="share-style" type="button" onclick="shareWithStyle('dawn')"><span class="share-style-kicker">Warm</span>Dawn</button>
   <button class="share-style" type="button" onclick="shareWithStyle('void')"><span class="share-style-kicker">Lamp out</span>Night</button>
+  <p class="helpline sheet-helpline">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
 </aside>
 
 <div class="cmdk" id="cmdk" aria-hidden="true" role="dialog" aria-label="Find a word">
@@ -2171,7 +2184,8 @@ function setWatch() {
 function showNeedStep() {
   if (!document.getElementById('ob-ack').checked) return;
   document.getElementById('ob-ack-block').style.display = 'none';
-  document.querySelector('.tp-trust').style.display = 'none';
+  // Keep the crisis line in view; only the checkbox has done its job.
+  document.getElementById('ob-ack').hidden = true;
   document.getElementById('ob-need').classList.add('on');
 }
 
