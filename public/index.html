@@ -3192,6 +3192,9 @@ async function sendMsg(preset) {
       ].join('\n');
       updateStreamBubble(aiBubble, fallback);
       addSaveToChatBubble(aiBubble, fallback, text);
+      // A letter written here is still a letter: keep it with today's.
+      chatHistory.push(userMsg, { role: 'assistant', content: fallback });
+      persistLetters();
     }
   } finally {
     clearTimeout(timer);
