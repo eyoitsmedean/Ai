@@ -2141,7 +2141,10 @@ const LENT_PEEK = (() => {
   } catch (_) { return null; }
 })();
 
-(function init() {
+// Called once at the foot of this script, after every top-level const exists.
+// Running it mid-script let a returning reader hit "before initialization"
+// errors (chatInput, STOP_WORDS) and lose the rest of start-up.
+function init() {
   try {
     const q = new URLSearchParams(location.search);
     if (q.get('fresh') === '1' || q.get('demo') === '1') {
@@ -2160,7 +2163,7 @@ const LENT_PEEK = (() => {
     return;
   }
   startApp();
-})();
+}
 
 function setWatch() {
   const h = new Date().getHours();
@@ -4260,6 +4263,8 @@ function bindRituals() {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
+
+init();
 </script>
 </body>
 </html>
