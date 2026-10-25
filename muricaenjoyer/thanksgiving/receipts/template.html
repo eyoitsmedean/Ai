@@ -1,0 +1,57 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Thanksgiving receipts</title>
+<link rel="stylesheet" href="../../founders/receipts/fell.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f1115;--panel:#16181d;--line:#262830;--fg:#F4F4F6;--muted:#9a9aa3;--dim:#6c6c75;--bubble:#26262C;
+  --parch:#E9D6AA;--parchDim:#B9A47D;--parchBg:#1E1A14;--parchLine:#4A3F2C}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:Inter,sans-serif;color:var(--fg);-webkit-font-smoothing:antialiased}
+.card{position:absolute;inset:0;padding:64px 72px 60px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center}
+.tag{font-weight:800;font-size:28px;letter-spacing:.14em;color:var(--parch);background:var(--parchBg);border:2px solid var(--parchLine);border-radius:999px;padding:12px 26px 12px 28px}
+.handle{font-weight:700;font-size:30px;color:var(--fg);letter-spacing:-.01em}
+.who{display:flex;align-items:center;gap:28px;margin-top:64px}
+.av{width:116px;height:116px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Display',Inter,sans-serif;font-weight:700;font-size:46px;color:#fff;letter-spacing:.01em;flex:none}
+.name{font-family:'Inter Display',Inter,sans-serif;font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.015em}
+.date{font-family:Fell,Georgia,serif;font-style:italic;font-size:40px;color:var(--parch);margin-top:6px;line-height:1.1}
+.date .rep{color:var(--parchDim)}
+.qwrap{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.bubble{align-self:flex-start;background:var(--bubble);border-radius:44px 44px 44px 14px;padding:48px 56px 52px;position:relative}
+.q{font-weight:600;letter-spacing:-.018em;line-height:1.2}
+.q .mk{font-family:Fell,Georgia,serif;font-style:normal;color:var(--parch)}
+.note{margin-top:30px;border-left:6px solid var(--parch);padding:6px 0 6px 26px;font-size:34px;line-height:1.3;font-weight:600;color:var(--fg)}
+.note em{font-family:Fell,Georgia,serif;font-weight:400;color:var(--parch);font-size:38px}
+.src{border-top:2px solid var(--line);padding-top:30px}
+.lab{font-weight:800;font-size:22px;letter-spacing:.14em;color:var(--parchDim);text-transform:uppercase}
+.doc{font-size:33px;line-height:1.28;font-weight:600;margin-top:10px;color:#e6e6ea}
+.ddate{font-family:Fell,Georgia,serif;font-style:italic;font-size:34px;color:var(--parch);margin-top:6px}
+.url{font-size:23px;color:var(--muted);margin-top:16px;font-weight:500;word-break:break-all}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:28px;font-size:24px;color:var(--dim);font-weight:600}
+.foot b{color:var(--fg);font-weight:800}
+</style></head><body>
+<div class="card" id="card"></div>
+<script>
+const P = {"BF": {"name": "Benjamin Franklin", "ini": "BF", "col": "#BD7A22"}, "SH": {"name": "Sarah Josepha Hale", "ini": "SH", "col": "#2F6FEA"}, "CG": {"name": "Congress", "ini": "US", "col": "#6A6A78"}};
+const R = [{"who": "SH", "date": "September 28, 1863", "fs": 64, "q": "This subject is to have the day of our annual Thanksgiving made a National and fixed Union Festival.", "note": "Lincoln proclaimed a national Thanksgiving five days later.", "doc": "Sarah Josepha Hale, editor of Godey’s Lady’s Book, to Abraham Lincoln", "ddate": "28 September 1863", "urlLab": "Library of Congress", "url": "https://www.loc.gov/resource/mal.2669900/"}, {"who": "BF", "date": "January 26, 1784", "fs": 80, "ctx": "on the bald eagle", "q": "He is a Bird of bad moral Character.", "note": "He liked the turkey better. He never proposed it as the national bird.", "doc": "Benjamin Franklin to his daughter Sarah Bache, Passy", "ddate": "26 January 1784", "urlLab": "Founders Online", "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327"}, {"who": "CG", "date": "December 26, 1941", "fs": 58, "q": "…the fourth Thursday of November in each year after the year 1941 be known as Thanksgiving Day…", "note": "Roosevelt had moved the holiday up a week in 1939. Congress fixed the date for good.", "doc": "Joint resolution H.J. Res. 41 (Public Law 77-379), approved by Franklin D. Roosevelt", "ddate": "26 December 1941", "urlLab": "GovInfo", "url": "https://www.govinfo.gov/content/pkg/STATUTE-55/pdf/STATUTE-55-Pg862.pdf"}];
+const i = +(new URLSearchParams(location.search).get("i") || 1);
+const r = R[i-1], p = P[r.who];
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+document.getElementById("card").innerHTML = `
+  <div class="top"><div class="tag">RECEIPT ${i}/${R.length}</div><div class="handle">@Muricaenjoyer</div></div>
+  <div class="who">
+    <div class="av" style="background:${p.col}">${p.ini}</div>
+    <div><div class="name">${p.name}</div>
+    <div class="date">${r.date}${r.rep?` <span class="rep">· ${r.rep}</span>`:""}${r.ctx?` <span class="rep">· ${r.ctx}</span>`:""}</div></div>
+  </div>
+  <div class="qwrap">
+    <div class="bubble"><div class="q" id="q" style="font-size:${r.fs}px"><span class="mk">“</span>${esc(r.q)}<span class="mk">”</span></div></div>
+    ${r.note?`<div class="note">${esc(r.note)}</div>`:""}
+  </div>
+  <div class="src">
+    <div class="lab">The receipt</div>
+    <div class="doc">${esc(r.doc)}</div>
+    <div class="ddate">${r.ddate}</div>
+    <div class="url">${r.urlLab}: ${r.url}</div>
+  </div>
+  <div class="foot"><span><b>@Muricaenjoyer</b> · The Thanksgiving Group Chat</span><span>Original spelling kept</span></div>`;
+</script></body></html>

@@ -233,8 +233,8 @@
    "assets": []
   },
   {
-   "date": "Bench",
-   "title": "Teaser 4",
+   "date": "Thu Nov 12",
+   "title": "Freedom Units teaser 4",
    "part": "post",
    "text": "Pour the 3.25 million cubic yards of concrete in Hoover Dam itself onto one football field. How many Washington Monuments tall is the block? Reply with your number.",
    "assets": [
@@ -242,8 +242,8 @@
    ]
   },
   {
-   "date": "Bench",
-   "title": "Teaser 4",
+   "date": "Thu Nov 12",
+   "title": "Freedom Units teaser 4",
    "part": "reply",
    "text": "2.74 Washington Monuments. That's 1,523 ft of concrete, taller than the Empire State Building's roof. Daily game: https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm",
    "assets": [
@@ -251,8 +251,8 @@
    ]
   },
   {
-   "date": "Bench",
-   "title": "Teaser 5",
+   "date": "Tue Nov 17",
+   "title": "Freedom Units teaser 5",
    "part": "post",
    "text": "How many gallon jugs of milk does the Mississippi push past New Orleans every second? Wild guesses welcome. Answer tonight.",
    "assets": [
@@ -260,8 +260,8 @@
    ]
   },
   {
-   "date": "Bench",
-   "title": "Teaser 5",
+   "date": "Tue Nov 17",
+   "title": "Freedom Units teaser 5",
    "part": "reply",
    "text": "4,488,312 gallons. Every second. Play Freedom Units: https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm",
    "assets": [
@@ -269,8 +269,8 @@
    ]
   },
   {
-   "date": "Bench",
-   "title": "Teaser 6",
+   "date": "Thu Nov 19",
+   "title": "Freedom Units teaser 6",
    "part": "post",
    "text": "The Liberty Bell weighs 2,080 pounds. How many gallons of milk is that? Guess below.",
    "assets": [
@@ -278,13 +278,56 @@
    ]
   },
   {
-   "date": "Bench",
-   "title": "Teaser 6",
+   "date": "Thu Nov 19",
+   "title": "Freedom Units teaser 6",
    "part": "reply",
    "text": "241.9 gallons. Crack not included. Today's game: https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm",
    "assets": [
     "q6-answer.png"
    ]
+  },
+  {
+   "date": "Wed Nov 25",
+   "title": "The Thanksgiving Group Chat",
+   "part": "post",
+   "text": "The first national Thanksgiving was Thursday, November 26, 1789.\n\nTomorrow is Thursday, November 26.\n\nHere's everything in between, as a group chat. Every message is a real quote. Receipts in the replies.",
+   "assets": [
+    "thanksgiving-4x5.mp4"
+   ]
+  },
+  {
+   "date": "Wed Nov 25",
+   "title": "The Thanksgiving Group Chat",
+   "part": "thread 1",
+   "text": "Receipt 1/3: Sarah Josepha Hale to Abraham Lincoln, 28 Sept 1863. By her own count she'd been pushing a national Thanksgiving for fifteen years. Lincoln proclaimed one five days later.",
+   "assets": [
+    "tg-receipt-1.png"
+   ]
+  },
+  {
+   "date": "Wed Nov 25",
+   "title": "The Thanksgiving Group Chat",
+   "part": "thread 2",
+   "text": "Receipt 2/3: Franklin to his daughter, 26 Jan 1784, on the bald eagle. He did like the turkey better, but he never actually proposed it as the national bird.",
+   "assets": [
+    "tg-receipt-2.png"
+   ]
+  },
+  {
+   "date": "Wed Nov 25",
+   "title": "The Thanksgiving Group Chat",
+   "part": "thread 3",
+   "text": "Receipt 3/3: FDR moved Thanksgiving up a week in 1939 to stretch the shopping season. Critics called it \"Franksgiving.\" In 1941 Congress fixed it to the fourth Thursday of November for good.",
+   "assets": [
+    "tg-receipt-3.png"
+   ]
+  },
+  {
+   "date": "Wed Nov 25",
+   "title": "The Thanksgiving Group Chat",
+   "part": "thread 4",
+   "text": "Every line in the video, with its document, date and link: https://claude.ai/artifact/4khMniAp2m8NPFWV92UA49",
+   "assets": []
   },
   {
    "date": "Bench",
@@ -393,6 +436,9 @@
   "receipt-2.png": "Quote card. Receipt 2/4: Jefferson to Madison, 30 Jan 1787, on John Adams. \"Vain, irritable\" and then \"all the ill which can possibly be said of him.\"",
   "receipt-3.png": "Quote card. Receipt 3/4: John Adams to Thomas Jefferson, 15 July 1813, a year and a half into the letters they restarted in 1812. The capital W is in the original.",
   "receipt-4.png": "Quote card. Receipt 4/4: Adams's reported words on 4 July 1826, first made public in Edward Everett's eulogy. Jefferson died at Monticello that same afternoon. Adams never knew.",
-  "receipt-5.png": "Quote card. Every line in the video, with its letter, date and link: https://claude.ai/artifact/QNebUAYTf8zPBpwhrmjBSD"
+  "receipt-5.png": "Quote card. Every line in the video, with its letter, date and link: https://claude.ai/artifact/QNebUAYTf8zPBpwhrmjBSD",
+  "tg-receipt-1.png": "Quote card. Receipt 1/3: Sarah Josepha Hale to Abraham Lincoln, 28 Sept 1863. By her own count she'd been pushing a national Thanksgiving for fifteen years. Lincoln proclaimed one five days later.",
+  "tg-receipt-2.png": "Quote card. Receipt 2/3: Franklin to his daughter, 26 Jan 1784, on the bald eagle. He did like the turkey better, but he never actually proposed it as the national bird.",
+  "tg-receipt-3.png": "Quote card. Receipt 3/3: FDR moved Thanksgiving up a week in 1939 to stretch the shopping season. Critics called it \"Franksgiving.\" In 1941 Congress fixed it to the fourth Thursday of November for good."
  }
 }

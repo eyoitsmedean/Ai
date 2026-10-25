@@ -29,15 +29,17 @@ sub("<h1>The Founders' Group Chat</h1>", f"<h1>{S['title']}</h1>")
 resub(r'<p class="lede">.*?</p>', f'<p class="lede">{S["lede"]}</p>')
 resub(r'aria-label="Animated group chat between .*?"', f'aria-label="{S["aria"]}"')
 sub("// ===== The Founders' Group Chat:", f"// ===== {S['title']}:")
+sub('Lines like "left the chat" are interface captions, not quotes.',
+    'Dates, captions under bubbles and lines like "muted the conversation" are interface, not quotes. "Forwarded" marks an older quote placed out of order.')
 
 # cast, phone owner, items
 people = ",\n".join(f'  {k}: {json.dumps(v, ensure_ascii=False)}' for k, v in S["people"].items())
 resub(r"const P = \{\n.*?\n\};\nconst ORDER = \[.*?\];",
       f"const P = {{\n{people},\n}};\nconst ORDER = {json.dumps(S['order'])};\n"
       f"const ME = {json.dumps(S['me'])}, GROUP0 = {json.dumps(S['group'], ensure_ascii=False)}, OPEN = {S['open']};")
-sub('"JA"', "ME", count=7)
 items = ",\n".join("  " + json.dumps(it, ensure_ascii=False) for it in S["items"])
 resub(r"const ITEMS = \[\n.*?\n\];", f"const ITEMS = [\n{items},\n];")
+sub('"JA"', "ME", count=7)
 
 # the first OPEN items are on screen at frame 0 (the thumbnail)
 sub("ITEMS[0].tIn = ITEMS[1].tIn = ITEMS[2].tIn = ITEMS[3].tIn = -10;   // first frame = thumbnail\n  ITEMS[3].receiptAt = 2.0;",
@@ -65,7 +67,7 @@ resub(r"  // group name \(renamed on July 4, 1776\)\n.*?  ctx\.globalAlpha = 1;\
 sub("const r = 35, step = 66, x0 = W / 2 - step * 2.5, cy = 352;",
     "const r = 33, step = 62, x0 = W / 2 - step * (ORDER.length - 1) / 2, cy = 352;")
 sub("const r = 40, step = 62, x0 = W / 2 - step * 2.5;",
-    "const r = 38, step = 60, x0 = W / 2 - step * (ORDER.length - 1) / 2;")
+    "const r = 38, step = 88, x0 = W / 2 - step * (ORDER.length - 1) / 2;")
 sub("let n = 6; for", "let n = ORDER.length; for")
 # a read receipt under the owner's own bubble sits on the right
 sub("text(it.receipt, BL + 4, bb + SRC_GAP + 23 + it.srcLines.length * SRC_LH + 2, C.dim);",
@@ -84,7 +86,7 @@ sub("T = it.tIn + readTime(it.text);",
 sub("typ = Math.min(1.5, 0.5 + 0.011 * len(it.text));", "typ = Math.min(1.1, 0.4 + 0.008 * len(it.text));")
 sub("typ = it.slow ? 2.2 : (same ? 0.5 : 0.7);", "typ = it.slow ? 2.2 : (same ? 0.3 : 0.45);")
 sub("let T = 4.9;", f"let T = {S['hold']};")
-sub("T = it.tIn + (it.big ? 2.5 : 1.1);", "T = it.tIn + (it.big ? 2.6 : 0.85);")
+sub("T = it.tIn + (it.big ? 2.5 : 1.1);", "T = it.tIn + (it.big ? 3.8 : 0.85);")
 sub("0.9 + 0.035 * len(it.text);", "0.6 + 0.03 * len(it.text);")
 sub("if (it.final) T += 2.7;", "if (it.final) T += 1.6;")
 sub("const TOTAL = +(T_END + 4.8).toFixed(2);", "const TOTAL = +(T_END + 4.2).toFixed(2);")
@@ -94,4 +96,7 @@ src = src.replace("__FELL_ITALIC__", b64(f"{fonts}/fell-italic.woff2")).replace(
 src = re.sub(r"<script>.*?</script>", lambda m: "".join(c if ord(c) < 128 else "\\u%04x" % ord(c) for c in m.group(0)), src, flags=re.S)
 src = "".join(c if ord(c) < 128 else "&#x%x;" % ord(c) for c in src)
 open(f"{here}/video.html", "w", encoding="ascii").write(src)
+# the published page also loads Inter for viewers who don't have it installed (the render uses the local copy)
+FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap">'
+open(f"{here}/page.html", "w", encoding="ascii").write(src.replace("</title>", "</title>\n" + FONT, 1))
 print("ok", len(src), "items", len(S["items"]))

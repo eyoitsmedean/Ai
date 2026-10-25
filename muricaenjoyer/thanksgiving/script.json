@@ -1,0 +1,210 @@
+{
+ "title": "The Thanksgiving Group Chat",
+ "title_curly": "The Thanksgiving Group Chat",
+ "years": "1784 – 2026",
+ "lede": "How America got its Thanksgiving, told as a group chat. <strong>Every message is a real quote</strong>, original spelling kept. By <strong>@Muricaenjoyer</strong>.",
+ "aria": "Animated group chat between George Washington, Benjamin Franklin, Thomas Jefferson, Sarah Josepha Hale, Abraham Lincoln, Franklin D. Roosevelt, Congress and George H. W. Bush, from 1784 to 2026. The full transcript is below.",
+ "group": "Thanksgiving",
+ "me": "SH",
+ "open": 4,
+ "hold": 4.2,
+ "people": {
+  "GW": {
+   "name": "George Washington",
+   "ini": "GW",
+   "col": "#3B8A5A",
+   "light": "#86D3A3"
+  },
+  "BF": {
+   "name": "Benjamin Franklin",
+   "ini": "BF",
+   "col": "#BD7A22",
+   "light": "#F2BA6A"
+  },
+  "TJ": {
+   "name": "Thomas Jefferson",
+   "ini": "TJ",
+   "col": "#7A58CC",
+   "light": "#C2A8FF"
+  },
+  "SH": {
+   "name": "Sarah Josepha Hale",
+   "ini": "SH",
+   "col": "#2F6FEA",
+   "light": "#9CC0FF"
+  },
+  "AL": {
+   "name": "Abraham Lincoln",
+   "ini": "AL",
+   "col": "#4E7A8C",
+   "light": "#9FD0E0"
+  },
+  "FR": {
+   "name": "Franklin D. Roosevelt",
+   "ini": "FDR",
+   "col": "#B0459A",
+   "light": "#F09ADF"
+  },
+  "CG": {
+   "name": "Congress",
+   "ini": "US",
+   "col": "#6A6A78",
+   "light": "#C4C4D0"
+  },
+  "GB": {
+   "name": "George H. W. Bush",
+   "ini": "GB",
+   "col": "#BF4545",
+   "light": "#F59393"
+  }
+ },
+ "order": [
+  "GW",
+  "BF",
+  "TJ",
+  "SH",
+  "AL",
+  "FR",
+  "CG",
+  "GB"
+ ],
+ "items": [
+  {
+   "k": "card",
+   "title": "Every message is a real quote.",
+   "body": "Original spelling kept. The source is under each bubble."
+  },
+  {
+   "k": "div",
+   "text": "October 3, 1789"
+  },
+  {
+   "k": "msg",
+   "who": "GW",
+   "text": "…I do recommend and assign Thursday the 26th day of November next…",
+   "src": "Thanksgiving Proclamation · 3 Oct 1789",
+   "url": "https://founders.archives.gov/documents/Washington/05-04-02-0091"
+  },
+  {
+   "k": "msg",
+   "who": "BF",
+   "text": "He is a Bird of bad moral Character.",
+   "src": "Forwarded · 1784 · Letter to his daughter, on the bald eagle",
+   "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327"
+  },
+  {
+   "k": "msg",
+   "who": "BF",
+   "text": "…a much more respectable Bird, and withal a true original Native of America.",
+   "src": "Same letter, on the turkey · 26 Jan 1784",
+   "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327"
+  },
+  {
+   "k": "div",
+   "text": "January 23, 1808"
+  },
+  {
+   "k": "msg",
+   "who": "TJ",
+   "text": "I consider the government of the US. as interdicted by the constitution from intermedling with religious institutions…",
+   "src": "Letter to Rev. Samuel Miller, declining to call a national day of fasting & prayer · 23 Jan 1808",
+   "url": "https://founders.archives.gov/documents/Jefferson/99-01-02-7257"
+  },
+  {
+   "k": "sys",
+   "text": "Thomas Jefferson muted the conversation"
+  },
+  {
+   "k": "div",
+   "text": "September 28, 1863"
+  },
+  {
+   "k": "msg",
+   "who": "SH",
+   "text": "This subject is to have the day of our annual Thanksgiving made a National and fixed Union Festival.",
+   "src": "Letter to Abraham Lincoln, from the editor of Godey’s Lady’s Book · 28 Sep 1863",
+   "url": "https://www.loc.gov/resource/mal.2669900/"
+  },
+  {
+   "k": "msg",
+   "who": "SH",
+   "text": "…For the last fifteen years I have set forth this idea…",
+   "src": "Same letter · 28 Sep 1863",
+   "url": "https://www.loc.gov/resource/mal.2669900/",
+   "receipt": "Read by Abraham Lincoln"
+  },
+  {
+   "k": "div",
+   "text": "October 3, 1863",
+   "sub": "five days later"
+  },
+  {
+   "k": "msg",
+   "who": "AL",
+   "text": "…set apart and observe the last Thursday of November next, as a day of Thanksgiving and Praise…",
+   "src": "Thanksgiving Proclamation, drafted by William Seward · 3 Oct 1863",
+   "url": "https://www.presidency.ucsb.edu/documents/proclamation-106-thanksgiving-day-1863"
+  },
+  {
+   "k": "div",
+   "text": "October 31, 1939"
+  },
+  {
+   "k": "msg",
+   "who": "FR",
+   "text": "…do hereby designate Thursday, the twenty-third of November, 1939, as a day of general thanksgiving.",
+   "src": "Thanksgiving Proclamation, a week earlier than usual · 31 Oct 1939",
+   "url": "https://www.presidency.ucsb.edu/documents/proclamation-2373-thanksgiving-day"
+  },
+  {
+   "k": "sys",
+   "text": "Critics renamed the conversation “Franksgiving”",
+   "rename": "Franksgiving"
+  },
+  {
+   "k": "sys",
+   "text": "Texas, Colorado and Mississippi celebrated both"
+  },
+  {
+   "k": "div",
+   "text": "December 26, 1941"
+  },
+  {
+   "k": "msg",
+   "who": "CG",
+   "text": "…the fourth Thursday of November in each year after the year 1941 be known as Thanksgiving Day…",
+   "src": "Joint resolution, approved 26 Dec 1941",
+   "url": "https://www.govinfo.gov/content/pkg/STATUTE-55/pdf/STATUTE-55-Pg862.pdf"
+  },
+  {
+   "k": "sys",
+   "text": "Congress renamed the conversation “Thanksgiving”",
+   "rename": "Thanksgiving"
+  },
+  {
+   "k": "div",
+   "text": "November 17, 1989"
+  },
+  {
+   "k": "msg",
+   "who": "GB",
+   "text": "…he's granted a Presidential pardon as of right now…",
+   "src": "Remarks on Signing the Thanksgiving Day Proclamation · 17 Nov 1989",
+   "url": "https://bush41library.tamu.edu/archives/public-papers/1213"
+  },
+  {
+   "k": "msg",
+   "who": "BF",
+   "text": "…a little vain & silly, a Bird of Courage…",
+   "src": "Forwarded · 1784 · Letter to his daughter, on the turkey",
+   "url": "https://founders.archives.gov/documents/Franklin/01-41-02-0327",
+   "final": true
+  },
+  {
+   "k": "div",
+   "text": "Thursday, November 26, 2026",
+   "sub": "Washington’s date, 237 years later",
+   "big": true
+  }
+ ]
+}

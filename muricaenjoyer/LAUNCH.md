@@ -1,4 +1,4 @@
-# Two weeks of posts, scheduled in one sitting
+# A month of posts, scheduled in one or two sittings
 
 Built around the rule: one post is one sit, then the phone goes down. Schedule all of it ahead of time in X's post scheduler, so the whole plan costs one sitting. Each post goes out at 8–10 a.m. Eastern. A reply marked "evening" is the only other touch that day, and it's optional.
 
@@ -17,10 +17,17 @@ Built around the rule: one post is one sit, then the phone goes down. Schedule a
 | Fri Nov 6 | Freedom Units launch: share the game link publicly, with a real score from "Copy result" | Game page (share it publicly first) | None |
 | Sat Nov 7 – Sun Nov 8 | Off | | |
 | Mon Nov 9 | Chiricahua's verdict: where America's 64th park would land in The 63 | `the-63/chiricahua/chiricahua-verdict.png`, text in `the-63/chiricahua/post.md` | Method line |
+| Tue Nov 10 – Wed Nov 11 | Marine Corps birthday and Veterans Day. Nothing drafted: if you post, it's in your own words. | | |
+| Thu Nov 12 | Freedom Units teaser 4 | `teasers/q4-question.png` | Evening: `q4-answer.png` |
+| Tue Nov 17 | Freedom Units teaser 5 | `teasers/q5-question.png` | Evening: `q5-answer.png` |
+| Thu Nov 19 | Freedom Units teaser 6 | `teasers/q6-question.png` | Evening: `q6-answer.png` |
+| Wed Nov 25 | The Thanksgiving Group Chat: "The first national Thanksgiving was Thursday, November 26, 1789. Tomorrow is Thursday, November 26." Pin it through the weekend. | `thanksgiving/thanksgiving-4x5.mp4` | The three receipt cards in `thanksgiving/receipts/`, then the chat link, text in `thanksgiving/post.md` |
+| Thu Nov 26 | Thanksgiving. Off. | | |
 
 ## Before scheduling
 
 - Share the game and The 63 pages publicly from each page's Share menu if you'll link them. They're private until you do.
 - Re-read Joey Swoll's latest post the morning the article goes out. See `testosterone/REFRESH-2026-10-24.md` for what changed since the draft.
 - Watch each video once with sound on.
+- Week 3 is deliberately light: three teasers and one big post. Teasers 7–10 stay on the bench.
 - Two big posts a week is plenty. If one takes off, don't chase it. The next scheduled post carries the momentum.

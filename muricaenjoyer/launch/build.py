@@ -16,6 +16,7 @@ ARTICLE = "https://claude.ai/artifact/E6nnge8UAMGReGFRixKkqb"
 THE63 = "https://claude.ai/artifact/Js5RFzV6pZZ1xuC5Gasrfe"
 GAME = "https://claude.ai/artifact/MuZPaW1jvs49jagrUYfUAm"
 CHAT = "https://claude.ai/artifact/QNebUAYTf8zPBpwhrmjBSD"
+TG_CHAT = "https://claude.ai/artifact/4khMniAp2m8NPFWV92UA49"
 
 
 def quoted(md, heading):
@@ -34,6 +35,7 @@ def quoted(md, heading):
 p63 = (ROOT / "the-63/post-text.md").read_text()
 pchir = (ROOT / "the-63/chiricahua/post.md").read_text()
 pfu = (ROOT / "freedom-units/post-text.md").read_text()
+ptg = (ROOT / "thanksgiving/post.md").read_text()
 teasers_md = (ROOT / "freedom-units/teasers/posts.md").read_text()
 TEASERS = {}
 for m in re.finditer(r"## Day (\d+):.*?with `(q\d+)-question.png`\n\n> (.*?)\n\n.*?with `q\d+-answer.png`\n\n> (.*?)\n", teasers_md, re.S):
@@ -81,6 +83,11 @@ for k, t in enumerate(receipt_texts, 1):
     ALT[f"receipt-{k}.png"] = "Quote card. " + t
 s_cards = [asset(f"the-63/s-tier/s{k}.png") for k in range(6, 0, -1)]
 s_cards = [c for c in s_cards if c]
+tg_texts = [quoted(ptg, f"### {k}/") for k in range(1, ptg.count("### ") + 1)]
+tg_cards = [asset(f"thanksgiving/receipts/tg-receipt-{k}.png") for k in range(1, len(tg_texts) + 1)]
+for k, t in enumerate(tg_texts, 1):
+    if tg_cards[k - 1]:
+        ALT[f"tg-receipt-{k}.png"] = "Quote card. " + t
 
 DAYS = [
     dict(date="Mon Oct 26", title="The 63 tier list", pin=True,
@@ -126,10 +133,27 @@ DAYS = [
          post=quoted(pchir, "## Main post"),
          assets=[asset("the-63/chiricahua/chiricahua-verdict.png")],
          reply=quoted(pchir, "## Reply (method)"), reply_note="Right after posting, optional."),
+    dict(date="Tue Nov 10 – Wed Nov 11", off=True,
+         text="Marine Corps birthday and Veterans Day. Nothing drafted here: if you post, it's in your own words."),
+    dict(date="Thu Nov 12", title="Freedom Units teaser 4",
+         post=TEASERS["q4"][0], assets=[asset("freedom-units/teasers/q4-question.png")],
+         reply=TEASERS["q4"][1], reply_assets=[asset("freedom-units/teasers/q4-answer.png")], reply_note="Evening."),
+    dict(date="Tue Nov 17", title="Freedom Units teaser 5",
+         post=TEASERS["q5"][0], assets=[asset("freedom-units/teasers/q5-question.png")],
+         reply=TEASERS["q5"][1], reply_assets=[asset("freedom-units/teasers/q5-answer.png")], reply_note="Evening."),
+    dict(date="Thu Nov 19", title="Freedom Units teaser 6",
+         post=TEASERS["q6"][0], assets=[asset("freedom-units/teasers/q6-question.png")],
+         reply=TEASERS["q6"][1], reply_assets=[asset("freedom-units/teasers/q6-answer.png")], reply_note="Evening."),
+    dict(date="Wed Nov 25", title="The Thanksgiving Group Chat", pin=True,
+         post=quoted(ptg, "## Main post"),
+         assets=[asset("thanksgiving/thanksgiving-4x5.mp4", "video")],
+         thread=tg_texts, thread_assets=tg_cards,
+         note=f"The full chat with every source: {TG_CHAT}. Pin it through the holiday weekend."),
+    dict(date="Thu Nov 26", off=True, text="Thanksgiving. Phone in the bowl."),
 ]
 BENCH = [dict(title=f"Teaser {q[1:]}", post=TEASERS[q][0], reply=TEASERS[q][1],
               assets=[asset(f"freedom-units/teasers/{q}-question.png")],
-              reply_assets=[asset(f"freedom-units/teasers/{q}-answer.png")]) for q in ["q4", "q5", "q6", "q7", "q8", "q9", "q10"]]
+              reply_assets=[asset(f"freedom-units/teasers/{q}-answer.png")]) for q in ["q7", "q8", "q9", "q10"]]
 
 E = html.escape
 
@@ -152,7 +176,7 @@ def textblock(label, text, cls=""):
 
 def day_html(d, i):
     if d.get("off"):
-        return f'<li class="off"><div class="when"><b>{E(d["date"])}</b></div><div class="body"><p>Off. Phone in the bowl.</p></div></li>'
+        return f'<li class="off"><div class="when"><b>{E(d["date"])}</b></div><div class="body"><p>{E(d.get("text", "Off. Phone in the bowl."))}</p></div></li>'
     parts = [f'<h3>{E(d["title"])}{" <span class=pin>Pin it</span>" if d.get("pin") else ""}</h3>']
     parts.append(textblock("Post · 9:00 a.m. ET", d["post"]))
     ms = [media(a) for a in d.get("assets", []) if a]
