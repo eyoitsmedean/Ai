@@ -3120,10 +3120,13 @@ async function sendMsg(preset) {
       signal: ctrl ? ctrl.signal : undefined
     });
     if (!res.ok) {
-      let msg = '';
-      try { msg = (await res.json()).error || ''; } catch (_) {}
-      const e = new Error(msg || 'The Advisor could not answer just now. Please try again.');
-      e.server = true;
+      let body = null;
+      try { body = await res.json(); } catch (_) {}
+      // No API on this host (GitHub Pages, a static mirror, or the offline
+      // worker's 503): the living composer below writes the letter instead.
+      const noApi = res.status === 404 || res.status === 405 || res.status === 501 || !!(body && body.offline);
+      const e = new Error((body && body.error) || 'The Advisor could not answer just now. Please try again.');
+      e.server = !noApi;
       throw e;
     }
     const reader = res.body.getReader();
