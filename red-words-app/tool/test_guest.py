@@ -54,6 +54,8 @@ class GuestLeaf(unittest.TestCase):
         self.assertIn(">Settings<", html)
         self.assertNotIn(">Sit<", html)
         self.assertNotIn(">Seek<", html)
+        css = (GUEST / "guest.css").read_text(encoding="utf-8")
+        self.assertIn("[hidden] { display: none !important; }", css)
 
     def test_js_ask_gates(self):
         js = (GUEST / "guest.js").read_text(encoding="utf-8")
@@ -93,6 +95,18 @@ class GuestLeaf(unittest.TestCase):
             pixels = img.getdata()
             crimson = sum(1 for r, g, b in pixels if r > 100 and r > g + 40 and r > b + 40)
             self.assertGreater(crimson, 200, name)
+
+    def test_one_file_has_no_external_assets(self):
+        html = (GUEST / "RedWords.html").read_text(encoding="utf-8")
+        self.assertIn("Matthew 6:34", html)
+        self.assertIn("anxiety-mt-6-34", html)
+        self.assertIn("data:font/ttf;base64,", html)
+        self.assertNotIn('src="pack.js"', html)
+        self.assertNotIn('href="guest.css"', html)
+        self.assertNotIn("OneDigital", html)
+        self.assertNotIn("http://", html)
+        self.assertNotIn("https://", html)
+        self.assertGreater(len(html), 100_000)
 
     def test_privacy_copies_match(self):
         a = (ROOT / "docs" / "privacy.html").read_text(encoding="utf-8")
