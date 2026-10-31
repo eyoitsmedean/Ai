@@ -27,6 +27,14 @@ Empty `/leaf` stays blank until a sitting is set.
 - Narrator / Paul citations are dropped
 - One `@page` letter sheet; screen chrome hidden in print
 
+## Checks (2026-10-31)
+
+- `npm test` — 75 pass
+- `npm run eval-ask` — 15/15
+- `npm run smoke` — 12/12
+- `npm run qa` — 9/9 including ask → leaf
+- Browser: empty leaf stays blank; shame sitting shows Luke 15, implication, Amen, Print this sheet
+
 ## Not this
 
 Do not publish. Do not store-submit. Folio-after-988 is still Dean’s. Translation lock still unrecorded.
