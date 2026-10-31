@@ -96,6 +96,10 @@ Home widget: Word, citation, thread. Tap opens redwords://today.
 Privacy policy URL: <PASTE>. Same text is in Settings.
 ```
 
+**Screenshots already rendered** (6.7" iPhone, 1290×2796): `guest/store-frames/`. Rebuild with `python3 tool/render_store_frames.py`. Still shoot a device set for 6.1" / iPad / Play tablet.
+
+**Guest leaf (no store account required):** `guest/README.md` — a real person can sit with the locked spine tonight.
+
 **Screenshots to shoot** (6.7" iPhone + 6.1" + iPad; Play phone + 7" tablet):
 
 1. Today — Matthew 6:34, hierarchy visible (Word, citation, knot, reflection, step).

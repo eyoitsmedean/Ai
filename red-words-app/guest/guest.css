@@ -1,0 +1,204 @@
+:root {
+  --paper: #F6F0E6;
+  --crimson: #8C1C24;
+  --charcoal: #1C1816;
+  --ink: #2A2420;
+  --muted: #7A6E5E;
+  --serif: "SourceSerif4", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+}
+
+@font-face {
+  font-family: SourceSerif4;
+  src: url("../fonts/SourceSerif4.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceSerif4;
+  src: url("../fonts/SourceSerif4-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+body.dark {
+  background: var(--charcoal);
+  color: var(--paper);
+}
+body.dark .reflection,
+body.dark .lede,
+body.dark .prompt { color: var(--paper); }
+
+.leaf {
+  min-height: 100dvh;
+  padding: 36px 28px 96px;
+}
+.splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.promise {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--crimson);
+  margin: 22px 0 0;
+}
+.knot { width: 28px; height: 18px; }
+.knot path {
+  fill: none;
+  stroke: var(--crimson);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.word {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1.4;
+  color: var(--crimson);
+  margin: 0 0 16px;
+}
+.citation {
+  margin: 0 0 18px;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  font-weight: 600;
+  color: rgba(140, 28, 36, 0.85);
+  text-transform: uppercase;
+}
+.reflection {
+  margin: 18px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.cue {
+  margin: 28px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+}
+.continuity {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  margin: 0 0 12px;
+}
+.continuity::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--crimson);
+  margin-top: 12px;
+}
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin: 12px 0 18px;
+}
+.prompt {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.lede { line-height: 1.45; }
+.muted { color: var(--muted); line-height: 1.45; }
+.empty {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 30vh;
+}
+.name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  margin: 0 0 8px;
+}
+
+textarea {
+  width: 100%;
+  margin: 18px 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(42, 36, 32, 0.25);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+}
+textarea:focus { outline: none; border-bottom-color: var(--crimson); }
+
+button {
+  appearance: none;
+  background: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  padding: 12px 0;
+}
+.quiet { color: var(--muted); }
+.crimson-text { color: var(--crimson); letter-spacing: 0.4px; }
+.commit {
+  display: block;
+  width: 100%;
+  margin-top: 32px;
+  background: var(--crimson);
+  color: var(--paper);
+  border-radius: 4px;
+  padding: 14px;
+}
+.amen-word {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--crimson);
+}
+.actions { display: flex; gap: 24px; }
+.dark-row { display: flex; gap: 10px; align-items: center; margin: 24px 0; }
+.crisis { line-height: 1.45; }
+#crisis-988 { color: var(--crimson); }
+
+#ask-out .word { font-size: 22px; }
+.stay, .refuse, .crisis-msg { line-height: 1.45; margin-top: 16px; }
+.saved-item { padding: 16px 0; border-bottom: 1px solid rgba(42, 36, 32, 0.1); }
+.saved-item .citation { margin-bottom: 8px; }
+.saved-item .word { font-size: 17px; margin: 0; }
+
+#dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+  background: inherit;
+  border-top: 1px solid rgba(42, 36, 32, 0.08);
+}
+body.dark #dock { border-top-color: rgba(246, 240, 230, 0.08); }
+#dock button { color: var(--muted); letter-spacing: 1.1px; font-size: 11px; }
+#dock button.on { color: var(--crimson); }
+
+#page-step, #page-amen { padding-top: 64px; }
