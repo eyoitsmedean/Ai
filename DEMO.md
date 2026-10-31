@@ -29,6 +29,6 @@ Between guests: Settings → **New reader**, or hit `/?fresh=1` again.
 
 ## After the room
 
-On `/tonight`, write the three lines (what they asked, which saying landed, what you would change). They stay in this browser only.
+On `/tonight`, write the three lines (what they asked, which saying landed, what you would change). They stay in this browser only. A Gospel citation in “which saying” is checked against the catalog; if it seals, the table slip becomes that exact wording. If it does not, the slip stays Matthew 11:28 and says so.
 
 Then, if you want machine checks: `npm test` (API) and `npm run qa` (first session) and `npm run demo` (twenty guests, headless).

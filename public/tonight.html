@@ -91,9 +91,10 @@
     <div class="prior no-print" id="prior"></div>
 
     <div class="slip" id="slip">
-      <p class="kicker">For the table</p>
-      <p class="quote">Come unto me, all ye that labour and are heavy laden, and I will give you rest.</p>
-      <p class="cite">Matthew 11:28</p>
+      <p class="kicker" id="slip-kicker">For the table</p>
+      <p class="quote" id="slip-quote">Come unto me, all ye that labour and are heavy laden, and I will give you rest.</p>
+      <p class="cite" id="slip-cite">Matthew 11:28</p>
+      <p id="slip-status" style="margin-top:14px">The slip stays this saying until a citation in the field above seals. If it is not in the catalog, the words do not change.</p>
       <p style="margin-top:14px">Crisis: call or text <strong>988</strong> (US). This page is not a pastor and not emergency care.</p>
     </div>
     <p class="no-print" style="margin-top:12px"><button type="button" class="ghost" onclick="window.print()">Print the slip</button></p>
@@ -117,10 +118,50 @@
       if (!notes.length) { prior.textContent = ''; return; }
       const last = notes[0];
       prior.textContent = 'Last hour: ' + (last.asked || '') + (last.saying ? ' · ' + last.saying : '') + ' · ' + (last.at || '');
+      if (last.sealed && last.quote && last.verse) {
+        document.getElementById('slip-quote').textContent = last.quote;
+        document.getElementById('slip-cite').textContent = last.verse;
+        document.getElementById('slip-status').textContent = 'Sealed from the catalog on this machine. Not typed by a model.';
+      }
     }
     showPrior();
 
-    document.getElementById('note').addEventListener('submit', (e) => {
+    const SLIP_DEFAULT = {
+      quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+      cite: 'Matthew 11:28',
+    };
+
+    async function sealSaying(raw) {
+      const verse = String(raw || '').trim();
+      const quoteEl = document.getElementById('slip-quote');
+      const citeEl = document.getElementById('slip-cite');
+      const statusEl = document.getElementById('slip-status');
+      if (!verse || /^none$/i.test(verse)) {
+        quoteEl.textContent = SLIP_DEFAULT.quote;
+        citeEl.textContent = SLIP_DEFAULT.cite;
+        statusEl.textContent = 'No saying named. The table slip stays Matthew 11:28.';
+        return { sealed: false };
+      }
+      const res = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ citations: [{ verse: verse, quote: '' }] }),
+      });
+      const data = await res.json();
+      const row = data.results && data.results[0];
+      if (row && row.verified && row.match && row.match.quote) {
+        quoteEl.textContent = row.match.quote;
+        citeEl.textContent = row.match.verse;
+        statusEl.textContent = 'Sealed from the catalog on this machine. Not typed by a model.';
+        return { sealed: true, verse: row.match.verse, quote: row.match.quote };
+      }
+      quoteEl.textContent = SLIP_DEFAULT.quote;
+      citeEl.textContent = SLIP_DEFAULT.cite;
+      statusEl.textContent = 'That citation is not in the sealed catalog. The slip did not invent a verse.';
+      return { sealed: false };
+    }
+
+    document.getElementById('note').addEventListener('submit', async (e) => {
       e.preventDefault();
       const rec = {
         asked: document.getElementById('asked').value.trim(),
@@ -128,10 +169,21 @@
         change: document.getElementById('change').value.trim(),
         at: new Date().toISOString(),
       };
+      let seal = { sealed: false };
+      try {
+        seal = await sealSaying(rec.saying);
+      } catch (_) {
+        document.getElementById('slip-status').textContent = 'The catalog could not be opened. The slip stayed Matthew 11:28.';
+      }
+      rec.sealed = seal.sealed;
+      if (seal.verse) rec.verse = seal.verse;
+      if (seal.quote) rec.quote = seal.quote;
       const notes = loadNotes();
       notes.unshift(rec);
       localStorage.setItem(KEY, JSON.stringify(notes.slice(0, 12)));
-      saved.textContent = 'Kept on this device only. WATCH still holds.';
+      saved.textContent = seal.sealed
+        ? 'Kept on this device. The table slip is the sealed saying.'
+        : 'Kept on this device only. WATCH still holds.';
       showPrior();
     });
 

@@ -110,6 +110,9 @@ async function main() {
     assert(text.includes('988'), 'tonight missing 988');
     assert(text.includes('/?fresh=1'), 'tonight must open a clean page');
     assert(text.includes('rla-tonight-note'), 'tonight must keep three lines locally');
+    assert(text.includes('/api/verify'), 'tonight must seal a named saying');
+    assert(text.includes('id="slip-quote"'), 'tonight slip must be replaceable');
+    assert(text.includes('not in the sealed catalog'), 'tonight must refuse an unknown citation');
     assert(text.includes('Matthew 11:28'), 'slip must quote the flyleaf saying');
     assert(!text.includes('<<<<<<<'), 'conflict markers on tonight');
   });
