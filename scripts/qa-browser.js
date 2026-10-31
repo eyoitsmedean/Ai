@@ -126,6 +126,53 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('a morning sit does not erase last night', async () => {
+    await page.evaluate(() => {
+      const card = document.getElementById('vespers-card');
+      card.hidden = false;
+      if (typeof paintVespers === 'function') paintVespers();
+      document.getElementById('vespers-reply').value = 'the 2am feeding';
+      if (typeof keepVespers === 'function') keepVespers();
+      const evening = JSON.parse(localStorage.getItem('rla-evening'));
+      const y = new Date();
+      y.setDate(y.getDate() - 1);
+      const pad = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      evening.date = pad(y);
+      const today = pad(new Date());
+      evening.until = today;
+      localStorage.setItem('rla-evening', JSON.stringify(evening));
+      localStorage.removeItem('rla-evening-leaf-' + today);
+      rememberSitting({
+        quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+        verse: 'Matthew 11:28',
+        note: 'Morning.',
+        office: 'Sit',
+      });
+    });
+    const leaf = await page.evaluate(() => ({
+      hidden: document.getElementById('epigraph').hidden,
+      kicker: document.getElementById('epigraph-kicker').textContent,
+      note: document.getElementById('epigraph-note').textContent,
+      cite: document.getElementById('epigraph-cite').textContent,
+    }));
+    assert(!leaf.hidden, 'last night’s leaf was hidden');
+    assert(/Last night you laid down/.test(leaf.kicker), 'kicker was ' + leaf.kicker);
+    assert(/2am feeding/.test(leaf.note), 'the sentence was replaced');
+    assert(/KJV$/.test(leaf.cite.trim()), 'cite was ' + leaf.cite);
+    assert(!/Morning/.test(leaf.note), 'the morning sit took the leaf');
+    const journal = await page.evaluate(() => {
+      switchTab('journal');
+      const item = document.querySelector('.journal-item');
+      return item ? item.innerText : '';
+    });
+    assert(/laid down/i.test(journal), 'journal did not name the evening: ' + journal.slice(0, 120));
+    assert(/2am feeding/.test(journal), 'journal lost the sentence');
+    await page.evaluate(() => {
+      if (typeof closeAmen === 'function') closeAmen();
+      switchTab('today');
+    });
+  });
+
   await check('a crisis line on every screen', async () => {
     for (const tab of ['today', 'seek', 'advisor', 'journal']) {
       const shown = await page.evaluate((t) => {
