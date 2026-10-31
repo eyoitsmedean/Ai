@@ -40,27 +40,27 @@
   </style>
 </head>
 <body>
-<main>
-  <p class="eyebrow">Saturday 31 Oct 2026 · October Red ends today · Bearing C5 C6 C7</p>
+<main id="sheet" data-clock="pending">
+  <p class="eyebrow" id="when">Saturday 31 Oct 2026 · October Red ends today · Bearing C5 C6 C7</p>
   <h1>October close.<br><em>November open.</em></h1>
-  <p class="lead">The folio was still talking like 14 September. That is a lie about the calendar. Today is Saturday, 31 October. October is still Red until midnight. November Yellow starts tomorrow only if the household window is Confirmed.</p>
+  <p class="lead" id="lead">The folio was still talking like 14 September. That is a lie about the calendar. Today is Saturday, 31 October. October is still Red until midnight. November Yellow starts tomorrow only if the household window is Confirmed.</p>
   <p class="tiny">Opening this page authorizes nothing. No application, outreach, purchase, or publish.</p>
 
   <p class="zero">$0</p>
   <p>Still what the house hears. No written match. No billed hour. A listing is not a job.</p>
 
   <div class="clock">
-    <div><div class="n">33</div><div class="k">Days 1 Nov → 3 Dec</div></div>
+    <div><div class="n" id="daysLeft">33</div><div class="k" id="daysK">Days 1 Nov → 3 Dec</div></div>
     <div><div class="n">$0</div><div class="k">Grocery until a match</div></div>
     <div><div class="n">HOLD</div><div class="k">Apply stays yours</div></div>
   </div>
 
   <div class="card hold">
-    <p style="margin:0"><strong>Measurable clock (computed 31 Oct 2026).</strong> 1 November through 3 December 2026 inclusive is 33 days. Advent is 29 November — the first of the last five calendar days of the clock (29 Nov–3 Dec inclusive). The 4 September start through today is 58 days used. October billed hours on the card: zero by design. 15 January 2027 is the voucher for any new Sep–Dec 1099. There is none yet.</p>
+    <p style="margin:0" id="clockCard"><strong>Measurable clock (computed 31 Oct 2026).</strong> 1 November through 3 December 2026 inclusive is 33 days. Advent is 29 November — the first of the last five calendar days of the clock (29 Nov–3 Dec inclusive). The 4 September start through today is 58 days used. October billed hours on the card: zero by design. 15 January 2027 is the voucher for any new Sep–Dec 1099. There is none yet.</p>
   </div>
 
   <div class="card rest">
-    <p style="margin:0"><strong>Tonight is still Red.</strong> Do not send an ask on 31 October. Do not apply. Close the month. Stage November. If the window is not Confirmed, November Yellow does not start — rest continues.</p>
+    <p style="margin:0" id="redCard"><strong>Tonight is still Red.</strong> Do not send an ask on 31 October. Do not apply. Close the month. Stage November. If the window is not Confirmed, November Yellow does not start — rest continues.</p>
   </div>
 
   <h2>1 · Close October</h2>
@@ -109,7 +109,7 @@
         <tr><td>Mark five Lamp gates</td><td>Yes. Do not apply.</td></tr>
         <tr><td>Lamp drill (synthetic only)</td><td>Yes. No employer files.</td></tr>
         <tr><td>Name ten humans for Room</td><td>Yes. Do not message them tonight.</td></tr>
-        <tr><td>Walk a public shop for Storefront</td><td>Yes, 0–2 this quarter, $595. Not today — today is still Red.</td></tr>
+        <tr><td>Walk a public shop for Storefront</td><td id="walkNote">Yes, 0–2 this quarter, $595. Not today — today is still Red.</td></tr>
         <tr><td>Apply to Mercor</td><td>HOLD. Packet stays locked.</td></tr>
         <tr><td>Publish Red Letter / Pages</td><td>No. Parked as cash.</td></tr>
       </tbody>
@@ -137,26 +137,64 @@
 
   <p class="tiny noprint">Depth: <a href="keep.html">Keep</a> · <a href="lamp-drill.html">Drill</a> · <a href="apply-packet.html">Apply packet (HOLD)</a> · <a href="index.html">Paper folio</a>. Money SoT: Operator Card v2. This page is not an application.</p>
 </main>
+<script src="clock.js"></script>
 <script>
 function openWindow() {
   const w = document.getElementById("window").value;
   return w === "Confirmed" || w === "Not needed";
 }
+function nowClock() {
+  return window.NinetyClock ? NinetyClock.read(new Date()) : null;
+}
+function paint() {
+  const c = nowClock();
+  if (!c) return c;
+  const sheet = document.getElementById("sheet");
+  sheet.dataset.clock = c.phase;
+  sheet.dataset.days = String(c.daysLeft);
+  sheet.dataset.used = String(c.daysUsed);
+  const phaseBit = c.phase === "red" ? " · October Red" : c.phase === "open" ? " · calendar open" : " · clock ended";
+  document.getElementById("when").textContent = c.label + phaseBit + " · Bearing C5 C6 C7";
+  document.getElementById("daysLeft").textContent = String(c.daysLeft);
+  document.getElementById("daysK").textContent = c.phase === "red" ? "Days 1 Nov → 3 Dec" : c.phase === "open" ? "Days left through 3 Dec" : "Clock ended";
+  document.getElementById("lead").textContent = c.phase === "red"
+    ? "The folio was still talking like 14 September. This page reads the device calendar instead: " + c.label + ". October is still Red until midnight. November Yellow starts 1 Nov only if the household window is Confirmed or Not needed."
+    : c.phase === "open"
+      ? "Device calendar: " + c.label + ". October Red has ended. Yellow is not permission — it starts only if you mark the window Confirmed or Not needed. Apply stays HOLD. Grocery is still $0."
+      : "Device calendar: " + c.label + ". The 3 December clock has ended. Grocery is still $0 until a written match and a billed hour. Apply stays HOLD.";
+  document.getElementById("clockCard").textContent = "Device clock: " + c.label + ". Days on the glass: " + c.daysLeft + ". Days used since 4 Sep: " + c.daysUsed + ". Advent is 29 Nov, the first of the last five calendar days (29 Nov–3 Dec). October billed hours on the card: zero by design. 15 January 2027 is the voucher for any new Sep–Dec 1099. There is none yet.";
+  document.getElementById("redCard").innerHTML = c.phase === "red"
+    ? "<strong>Tonight is still Red.</strong> Do not send an ask on " + c.label + ". Do not apply. Close the month. Stage November. If the window is not Confirmed, November Yellow does not start — rest continues."
+    : c.phase === "open"
+      ? "<strong>Red has ended on the calendar.</strong> Do not apply from this page. Do not send an ask unless the window below is Confirmed or Not needed, and even then this page does not send it. One lane. Eight hours. Clean room."
+      : "<strong>The clock ended 3 Dec.</strong> Do not apply from this page. Grocery is still $0 until a written match and a billed hour.";
+  const walk = document.getElementById("walkNote");
+  if (walk) walk.textContent = c.phase === "red"
+    ? "Yes, 0–2 this quarter, $595. Not today — today is still Red."
+    : "Yes, 0–2 this quarter, $595. Only after the window is open. This page does not send the ask.";
+  return c;
+}
 function sync() {
+  const c = paint();
   const open = openWindow();
+  const red = !c || c.phase === "red";
   document.getElementById("yellowBlock").hidden = !open;
-  document.getElementById("yellowLine").textContent = open
-    ? "Yellow is staged for 1 Nov. Today is still Red. No ask until tomorrow, and no apply until you type Yes."
-    : "Yellow does not start without a Confirmed or Not needed window. Rest is still a finish.";
+  document.getElementById("yellowLine").textContent = !open
+    ? "Yellow does not start without a Confirmed or Not needed window. Rest is still a finish."
+    : red
+      ? "Yellow is staged for 1 Nov. Today is still Red. No ask until tomorrow, and no apply until you type Yes."
+      : "Window is open on the calendar. This page still does not apply and does not send an ask.";
   if (!open) document.getElementById("lane").value = "None — rest first";
+  return c;
 }
 document.getElementById("window").addEventListener("change", sync);
 document.getElementById("write").addEventListener("click", () => {
-  sync();
+  const c = sync();
   const open = openWindow();
+  const red = !c || c.phase === "red";
   const text = [
     "NINETY DAYS · OCTOBER CLOSE · NOVEMBER OPEN",
-    "Written 31 Oct 2026 (Saturday) · stays on this device",
+    "Device date: " + (c ? c.label : "unknown") + " · stays on this device",
     "",
     "New October ask: " + document.getElementById("octAsk").value,
     "Money / no / gate / motion: " + document.getElementById("octResult").value,
@@ -165,8 +203,8 @@ document.getElementById("write").addEventListener("click", () => {
     "November lane: " + (open ? document.getElementById("lane").value : "None — rest first"),
     "Note: " + (document.getElementById("note").value.trim() || "(blank)"),
     "",
-    "Clock: 33 days (1 Nov–3 Dec 2026 inclusive). Grocery: $0. Apply: HOLD.",
-    open ? "Yellow staged for 1 Nov. 31 Oct remains Red. No ask tonight." : "REST CONTINUES. Yellow does not start.",
+    "Clock: " + (c ? c.daysLeft : "?") + " days. Phase: " + (c ? c.phase : "?") + ". Grocery: $0. Apply: HOLD.",
+    !open ? "REST CONTINUES. Yellow does not start." : red ? "Yellow staged. Today remains Red. No ask tonight." : "Calendar is open. This receipt is not permission to apply or send.",
     "This receipt is not an application."
   ].join("\n");
   document.getElementById("receipt").textContent = text;

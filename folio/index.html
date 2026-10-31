@@ -404,7 +404,7 @@
   <div class="shell">
     <nav aria-label="Folio">
       <div class="mark" aria-hidden="true">D</div>
-      <p class="eyebrow">31 Oct · 33 days from 1 Nov</p>
+      <p class="eyebrow" id="folioWhen">31 Oct · 33 days from 1 Nov</p>
       <button class="btn ghost" type="button" id="tocToggle">Contents</button>
       <div class="toc-rest">
       <a class="toc" href="november.html">October close<small>31 Oct · November Yellow</small></a>
@@ -439,14 +439,14 @@
     </nav>
     <main>
       <article class="leaf" id="cover">
-        <p class="eyebrow">A private operating folio · not a second brain · 31 Oct close · 33 days left</p>
+        <p class="eyebrow" id="coverWhen">A private operating folio · not a second brain · 31 Oct close · 33 days left</p>
         <h1>Ninety days.<br><em>One plan.</em></h1>
         <p class="lead">You already have a job, a young family, a truth-first operating system, and a finished product sitting in this repository. You do not need a sixth research shelf. You need one offer that can take money before 3 December — without stealing sleep or contaminating the day job.</p>
         <div class="quarantine">
           <p><strong>Money does not live on the later leaves.</strong> The 4–6 September tables still print Colorado, an 8-week Lamp band, $295 Storefront, and a 20-hour Handoff. Those columns are archived. Current cash is the Operator lock below, <a href="decision-night.html">Decision Night</a>, and the Notion Operator Card. Opening this page authorizes nothing.</p>
         </div>
         <div class="grid-3" style="margin-top:1.4rem">
-          <div class="stat"><div class="n">33</div><div class="k">Days 1 Nov → 3 Dec · 31 Oct is still Red</div></div>
+          <div class="stat"><div class="n" id="folioDays">33</div><div class="k" id="folioDaysK">Days 1 Nov → 3 Dec · 31 Oct is still Red</div></div>
           <div class="stat"><div class="n">$0</div><div class="k">Until a match and a billed hour</div></div>
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
@@ -1516,6 +1516,23 @@ A quiet page for the words Jesus spoke. Free.</div>
         }
       });
     });
+  </script>
+  <script src="clock.js"></script>
+  <script>
+    (function () {
+      if (!window.NinetyClock) return;
+      var c = NinetyClock.read(new Date());
+      var days = document.getElementById("folioDays");
+      var k = document.getElementById("folioDaysK");
+      var eye = document.getElementById("folioWhen");
+      var cover = document.getElementById("coverWhen");
+      if (days) days.textContent = String(c.daysLeft);
+      if (k) k.textContent = c.phase === "red" ? "Days 1 Nov → 3 Dec · still Red" : c.phase === "open" ? "Days left through 3 Dec" : "Clock ended 3 Dec";
+      if (eye) eye.textContent = c.short + " · " + c.daysLeft + (c.phase === "red" ? " days from 1 Nov" : " days left");
+      if (cover) cover.textContent = "A private operating folio · not a second brain · " + c.label;
+      document.documentElement.dataset.folioClock = c.phase;
+      document.documentElement.dataset.folioDays = String(c.daysLeft);
+    })();
   </script>
 </body>
 </html>

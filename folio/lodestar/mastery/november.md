@@ -14,6 +14,7 @@ A tired reader on 31 October can close the month without the folio claiming 14 S
 3. Hide Yellow lanes (`#yellowBlock`) until the window is Confirmed or Not needed.
 4. Write a local receipt to `ninety-days-november-2026-10-31`. Force lane “None — rest first” if the window is closed.
 5. Authorize nothing.
+6. Read the device calendar (`folio/clock.js`). A no-JS fallback may still say 31 Oct. With the script, the glass shows that date only while the device says so.
 
 ## What it must not do
 
