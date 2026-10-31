@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>October close · November Yellow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,650;1,650&family=Instrument+Sans:wght@400;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#f4efe4; --folio:#fbf7ee; --ink:#1b1610; --muted:#7a6e5e; --crimson:#8f1d1d; --gold:#8a6a28; --rule:rgba(27,22,16,.1); }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1rem 4.5rem; }
+    .eyebrow { font-family: "Instrument Sans", sans-serif; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+    h1 { font-family: Fraunces, serif; font-style: italic; font-weight: 650; font-size: 2.3rem; line-height: 1.08; margin: .15rem 0 .7rem; }
+    h1 em { color: var(--crimson); }
+    h2 { font-family: Fraunces, serif; font-size: 1.28rem; margin: 1.45rem 0 .4rem; }
+    .lead { font-size: 1.05rem; }
+    .zero { font-family: Fraunces, serif; font-size: 3.4rem; line-height: 1; color: var(--crimson); margin: .2rem 0 .3rem; }
+    .card { background: var(--folio); border: 1px solid var(--rule); padding: 1rem 1.05rem; margin: .7rem 0; }
+    .hold { border-left: 3px solid var(--crimson); }
+    .rest { background: #1b1610; color: #f4efe4; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { text-align: left; padding: .42rem .3rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    th { font-family: "Instrument Sans", sans-serif; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    label { display: block; margin: .42rem 0; }
+    input, select { width: 100%; padding: .4rem .5rem; border: 1px solid var(--ink); background: var(--folio); font: inherit; }
+    .tiny { font-family: "Instrument Sans", sans-serif; font-size: .78rem; color: var(--muted); }
+    .btn { font-family: "Instrument Sans", sans-serif; appearance: none; border: 1px solid var(--ink); background: var(--ink); color: var(--folio); padding: .55rem .8rem; letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn.ghost { background: transparent; color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    a { color: var(--crimson); }
+    .receipt { white-space: pre-wrap; background: #1b1610; color: #f4efe4; padding: 1rem; font-family: "Instrument Sans", sans-serif; font-size: .88rem; }
+    .clock { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 1rem 0; }
+    .clock div { background: var(--folio); border: 1px solid var(--rule); padding: .7rem .5rem; text-align: center; }
+    .clock .n { font-family: Fraunces, serif; font-size: 1.8rem; line-height: 1; }
+    .clock .k { font-family: "Instrument Sans", sans-serif; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: .3rem; }
+    @media print { .actions, .noprint { display: none !important; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+<main id="sheet" data-clock="pending">
+  <p class="eyebrow" id="when">Saturday 31 Oct 2026 · October Red ends today · Bearing C5 C6 C7</p>
+  <h1>October close.<br><em>November open.</em></h1>
+  <p class="lead" id="lead">The folio was still talking like 14 September. That is a lie about the calendar. Today is Saturday, 31 October. October is still Red until midnight. November Yellow starts tomorrow only if the household window is Confirmed.</p>
+  <p class="tiny">Opening this page authorizes nothing. No application, outreach, purchase, or publish.</p>
+
+  <p class="zero">$0</p>
+  <p>Still what the house hears. No written match. No billed hour. A listing is not a job.</p>
+
+  <div class="clock">
+    <div><div class="n" id="daysLeft">33</div><div class="k" id="daysK">Days 1 Nov → 3 Dec</div></div>
+    <div><div class="n">$0</div><div class="k">Grocery until a match</div></div>
+    <div><div class="n">HOLD</div><div class="k">Apply stays yours</div></div>
+  </div>
+
+  <div class="card hold">
+    <p style="margin:0" id="clockCard"><strong>Measurable clock (computed 31 Oct 2026).</strong> 1 November through 3 December 2026 inclusive is 33 days. Advent is 29 November — the first of the last five calendar days of the clock (29 Nov–3 Dec inclusive). The 4 September start through today is 58 days used. October billed hours on the card: zero by design. 15 January 2027 is the voucher for any new Sep–Dec 1099. There is none yet.</p>
+  </div>
+
+  <div class="card rest">
+    <p style="margin:0" id="redCard"><strong>Tonight is still Red.</strong> Do not send an ask on 31 October. Do not apply. Close the month. Stage November. If the window is not Confirmed, November Yellow does not start — rest continues.</p>
+  </div>
+
+  <h2>1 · Close October</h2>
+  <label>Did you send a new ask in October?
+    <select id="octAsk">
+      <option>Not answered</option>
+      <option>No — Red held</option>
+      <option>Yes — I broke Red</option>
+      <option>I did not open the folio</option>
+    </select>
+  </label>
+  <label>Did money, a dated no, or a blocked gate appear — or only motion?
+    <select id="octResult">
+      <option>Not answered</option>
+      <option>Money</option>
+      <option>A dated no</option>
+      <option>A blocked gate</option>
+      <option>Only motion</option>
+      <option>Nothing — I did not run a lane</option>
+    </select>
+  </label>
+  <label>October disposition
+    <select id="octDisp">
+      <option>Not answered</option>
+      <option>Close Red as designed</option>
+      <option>I owe myself an honest note</option>
+    </select>
+  </label>
+
+  <h2>2 · Window for Yellow</h2>
+  <label>Household window now
+    <select id="window">
+      <option>Not confirmed</option>
+      <option>Confirmed</option>
+      <option>Not needed</option>
+    </select>
+  </label>
+  <p class="tiny" id="yellowLine">Yellow does not start without a Confirmed or Not needed window. Rest is still a finish.</p>
+
+  <div id="yellowBlock" hidden>
+    <h2>3 · Legal November moves</h2>
+    <p>One lane. Eight hours. Clean room. Apply still HOLD until you type Yes on a separate page. Folio stays parked as cash.</p>
+    <table>
+      <thead><tr><th>Move</th><th>Allowed 1 Nov if window is open</th></tr></thead>
+      <tbody>
+        <tr><td>Mark five Lamp gates</td><td>Yes. Do not apply.</td></tr>
+        <tr><td>Lamp drill (synthetic only)</td><td>Yes. No employer files.</td></tr>
+        <tr><td>Name ten humans for Room</td><td>Yes. Do not message them tonight.</td></tr>
+        <tr><td>Walk a public shop for Storefront</td><td id="walkNote">Yes, 0–2 this quarter, $595. Not today — today is still Red.</td></tr>
+        <tr><td>Apply to Mercor</td><td>HOLD. Packet stays locked.</td></tr>
+        <tr><td>Publish Red Letter / Pages</td><td>No. Parked as cash.</td></tr>
+      </tbody>
+    </table>
+    <label>November lane if Yellow starts
+      <select id="lane">
+        <option>None — rest first</option>
+        <option>I Lamp (gates only)</option>
+        <option>II Room (names only)</option>
+        <option>III Handoff (paper)</option>
+        <option>IV Storefront (paper until a walk)</option>
+        <option>V Folio (craft, $0)</option>
+      </select>
+    </label>
+  </div>
+
+  <label>One sentence<input type="text" id="note" placeholder="What October was, or why rest" /></label>
+  <div class="actions noprint">
+    <button class="btn" type="button" id="write">Write the month</button>
+    <button class="btn ghost" type="button" onclick="window.print()">Print</button>
+    <a class="btn ghost" href="house-hears.html">$0 aloud</a>
+    <a class="btn ghost" href="tonight.html">September Tonight</a>
+  </div>
+  <pre class="receipt" id="receipt">The month appears here. It stays on this device.</pre>
+
+  <p class="tiny noprint">Depth: <a href="keep.html">Keep</a> · <a href="lamp-drill.html">Drill</a> · <a href="apply-packet.html">Apply packet (HOLD)</a> · <a href="index.html">Paper folio</a>. Money SoT: Operator Card v2. This page is not an application.</p>
+</main>
+<script src="clock.js"></script>
+<script>
+function openWindow() {
+  const w = document.getElementById("window").value;
+  return w === "Confirmed" || w === "Not needed";
+}
+function nowClock() {
+  return window.NinetyClock ? NinetyClock.read(new Date()) : null;
+}
+function paint() {
+  const c = nowClock();
+  if (!c) return c;
+  const sheet = document.getElementById("sheet");
+  sheet.dataset.clock = c.phase;
+  sheet.dataset.days = String(c.daysLeft);
+  sheet.dataset.used = String(c.daysUsed);
+  const phaseBit = c.phase === "red" ? " · October Red" : c.phase === "open" ? " · calendar open" : " · clock ended";
+  document.getElementById("when").textContent = c.label + phaseBit + " · Bearing C5 C6 C7";
+  document.getElementById("daysLeft").textContent = String(c.daysLeft);
+  document.getElementById("daysK").textContent = c.phase === "red" ? "Days 1 Nov → 3 Dec" : c.phase === "open" ? "Days left through 3 Dec" : "Clock ended";
+  document.getElementById("lead").textContent = c.phase === "red"
+    ? "The folio was still talking like 14 September. This page reads the device calendar instead: " + c.label + ". October is still Red until midnight. November Yellow starts 1 Nov only if the household window is Confirmed or Not needed."
+    : c.phase === "open"
+      ? "Device calendar: " + c.label + ". October Red has ended. Yellow is not permission — it starts only if you mark the window Confirmed or Not needed. Apply stays HOLD. Grocery is still $0."
+      : "Device calendar: " + c.label + ". The 3 December clock has ended. Grocery is still $0 until a written match and a billed hour. Apply stays HOLD.";
+  document.getElementById("clockCard").textContent = "Device clock: " + c.label + ". Days on the glass: " + c.daysLeft + ". Days used since 4 Sep: " + c.daysUsed + ". Advent is 29 Nov, the first of the last five calendar days (29 Nov–3 Dec). October billed hours on the card: zero by design. 15 January 2027 is the voucher for any new Sep–Dec 1099. There is none yet.";
+  document.getElementById("redCard").innerHTML = c.phase === "red"
+    ? "<strong>Tonight is still Red.</strong> Do not send an ask on " + c.label + ". Do not apply. Close the month. Stage November. If the window is not Confirmed, November Yellow does not start — rest continues."
+    : c.phase === "open"
+      ? "<strong>Red has ended on the calendar.</strong> Do not apply from this page. Do not send an ask unless the window below is Confirmed or Not needed, and even then this page does not send it. One lane. Eight hours. Clean room."
+      : "<strong>The clock ended 3 Dec.</strong> Do not apply from this page. Grocery is still $0 until a written match and a billed hour.";
+  const walk = document.getElementById("walkNote");
+  if (walk) walk.textContent = c.phase === "red"
+    ? "Yes, 0–2 this quarter, $595. Not today — today is still Red."
+    : "Yes, 0–2 this quarter, $595. Only after the window is open. This page does not send the ask.";
+  return c;
+}
+function sync() {
+  const c = paint();
+  const open = openWindow();
+  const red = !c || c.phase === "red";
+  document.getElementById("yellowBlock").hidden = !open;
+  document.getElementById("yellowLine").textContent = !open
+    ? "Yellow does not start without a Confirmed or Not needed window. Rest is still a finish."
+    : red
+      ? "Yellow is staged for 1 Nov. Today is still Red. No ask until tomorrow, and no apply until you type Yes."
+      : "Window is open on the calendar. This page still does not apply and does not send an ask.";
+  if (!open) document.getElementById("lane").value = "None — rest first";
+  return c;
+}
+document.getElementById("window").addEventListener("change", sync);
+document.getElementById("write").addEventListener("click", () => {
+  const c = sync();
+  const open = openWindow();
+  const red = !c || c.phase === "red";
+  const text = [
+    "NINETY DAYS · OCTOBER CLOSE · NOVEMBER OPEN",
+    "Device date: " + (c ? c.label : "unknown") + " · stays on this device",
+    "",
+    "New October ask: " + document.getElementById("octAsk").value,
+    "Money / no / gate / motion: " + document.getElementById("octResult").value,
+    "October disposition: " + document.getElementById("octDisp").value,
+    "Household window: " + document.getElementById("window").value,
+    "November lane: " + (open ? document.getElementById("lane").value : "None — rest first"),
+    "Note: " + (document.getElementById("note").value.trim() || "(blank)"),
+    "",
+    "Clock: " + (c ? c.daysLeft : "?") + " days. Phase: " + (c ? c.phase : "?") + ". Grocery: $0. Apply: HOLD.",
+    !open ? "REST CONTINUES. Yellow does not start." : red ? "Yellow staged. Today remains Red. No ask tonight." : "Calendar is open. This receipt is not permission to apply or send.",
+    "This receipt is not an application."
+  ].join("\n");
+  document.getElementById("receipt").textContent = text;
+  try { localStorage.setItem("ninety-days-november-2026-10-31", text); } catch (e) {}
+});
+sync();
+</script>
+</body>
+</html>

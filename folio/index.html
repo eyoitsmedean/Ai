@@ -392,23 +392,24 @@
   <aside class="tonight-dock show" id="tonightDock" aria-label="Tonight">
     <p class="tiny" id="tonightLabel">$0 · window last recorded Not confirmed · apply HOLD</p>
     <ol id="tonightSteps">
+      <li>31 Oct is still Red. Do not send an ask.</li>
       <li>If the window is not Confirmed, rest. That is a finish.</li>
-      <li>If Confirmed, close the week and pick one lane.</li>
       <li>This dock does not copy an ask.</li>
     </ol>
     <div class="actions" style="margin-top:0">
-      <a class="btn" href="tonight.html" id="tonightCopy">Tonight — close and pick</a>
-      <a class="btn ghost" id="tonightJump" href="tonight.html">One door</a>
+      <a class="btn" href="november.html" id="tonightCopy">October close — write the month</a>
+      <a class="btn ghost" id="tonightJump" href="november.html">Current door</a>
     </div>
   </aside>
   <div class="shell">
     <nav aria-label="Folio">
       <div class="mark" aria-hidden="true">D</div>
-      <p class="eyebrow">14 Sep · 80 days after today</p>
+      <p class="eyebrow" id="folioWhen">31 Oct · 33 days from 1 Nov</p>
       <button class="btn ghost" type="button" id="tocToggle">Contents</button>
       <div class="toc-rest">
-      <a class="toc" href="tonight.html">Tonight<small>Close + pick · one door</small></a>
-      <a class="toc" href="week-close.html">Week close<small>14 Sep · Monday</small></a>
+      <a class="toc" href="november.html">October close<small>31 Oct · November Yellow</small></a>
+      <a class="toc" href="tonight.html">Tonight<small>Archive · 14 Sep one-door</small></a>
+      <a class="toc" href="week-close.html">Week close<small>Archive · 14 Sep Monday</small></a>
       <a class="toc" href="decision-night.html">Decision Night<small>Money card</small></a>
       <a class="toc" href="house-hears.html">What the house hears<small>$0</small></a>
       <a class="toc" href="keep.html">Keep model<small>Idaho 1099</small></a>
@@ -438,20 +439,20 @@
     </nav>
     <main>
       <article class="leaf" id="cover">
-        <p class="eyebrow">A private operating folio · not a second brain · Week close 14 Sep</p>
+        <p class="eyebrow" id="coverWhen">A private operating folio · not a second brain · 31 Oct close · 33 days left</p>
         <h1>Ninety days.<br><em>One plan.</em></h1>
         <p class="lead">You already have a job, a young family, a truth-first operating system, and a finished product sitting in this repository. You do not need a sixth research shelf. You need one offer that can take money before 3 December — without stealing sleep or contaminating the day job.</p>
         <div class="quarantine">
           <p><strong>Money does not live on the later leaves.</strong> The 4–6 September tables still print Colorado, an 8-week Lamp band, $295 Storefront, and a 20-hour Handoff. Those columns are archived. Current cash is the Operator lock below, <a href="decision-night.html">Decision Night</a>, and the Notion Operator Card. Opening this page authorizes nothing.</p>
         </div>
         <div class="grid-3" style="margin-top:1.4rem">
-          <div class="stat"><div class="n">80</div><div class="k">Days after today · 15 Sep → 3 Dec</div></div>
+          <div class="stat"><div class="n" id="folioDays">33</div><div class="k" id="folioDaysK">Days 1 Nov → 3 Dec · 31 Oct is still Red</div></div>
           <div class="stat"><div class="n">$0</div><div class="k">Until a match and a billed hour</div></div>
           <div class="stat"><div class="n">8</div><div class="k">Hours / week, hard cap</div></div>
         </div>
         <p class="tiny" style="margin-top:1.2rem">Written 4 September 2026; numbers audited 5 September; run-sprint 11 September (phone, tonight strip, scoreboard lock); Operator lock 11 September. Public copy is family-safe. The private Notion twin carries your real names and page links. See <a href="CANONICAL.md">CANONICAL.md</a>.</p>
         <div class="card hold" id="coverClose" style="margin-top:1.2rem;border-left:3px solid var(--crimson);padding:1rem;background:var(--folio)">
-          <p class="tiny" style="margin-top:0">Write the night here if you opened the folio instead of Tonight. Same receipt. No ask is copied.</p>
+          <p class="tiny" style="margin-top:0">Tonight is 31 October. Write the month on <a href="november.html">October close</a>. The form below is the 14 September archive receipt — it does not pretend that Monday is today.</p>
           <label>Household window now
             <select id="cv-window">
               <option>Not confirmed</option>
@@ -487,7 +488,7 @@
           </label>
           <div class="actions">
             <button class="btn" type="button" id="cv-write">Write the close</button>
-            <a class="btn ghost" href="tonight.html" id="cv-pick">Pick a lane (window must be open)</a>
+            <a class="btn ghost" href="november.html" id="cv-pick">Write the month (31 Oct)</a>
           </div>
           <pre id="cv-receipt" class="tiny" style="white-space:pre-wrap;background:#1b1610;color:#f4efe4;padding:0.8rem;margin:0.8rem 0 0">The close appears here. It stays on this device.</pre>
         </div>
@@ -513,9 +514,10 @@
             </tbody>
           </table>
         </div>
-        <p class="tiny">35% is a household reserve rule, not a filed return. Idaho individual rate 5.3% (statute + 2026 withholding; Year 2026 STC table not on the opened schedule). Not tax advice. Week close is Monday 14 Sep. After today: 80 days. October is Red.</p>
+        <p class="tiny">35% is a household reserve rule, not a filed return. Idaho individual rate 5.3% (statute + 2026 withholding; Year 2026 STC table not on the opened schedule). Not tax advice. Week close was Monday 14 Sep. Remaining 1 Nov–3 Dec inclusive: 33 days. 31 Oct is still Red.</p>
         <div class="actions">
-          <a class="btn" href="tonight.html">Tonight</a>
+          <a class="btn" href="november.html">October close</a>
+          <a class="btn ghost" href="tonight.html">Sep Tonight</a>
           <a class="btn ghost" href="decision-night.html">Decision Night</a>
           <a class="btn ghost" href="https://app.notion.com/p/3d4b7d53f96981c9b00dc0f64a83fd1a">Operator Card v2</a>
         </div>
@@ -1322,7 +1324,7 @@ A quiet page for the words Jesus spoke. Free.</div>
       <article class="leaf" id="sunday">
         <p class="eyebrow">Keep the week small</p>
         <h2>Week close · three minutes</h2>
-        <p>14 Sep 2026 is Monday. Sunday was 13 Sep. The dated close is <a href="week-close.html">week-close.html</a>.</p>
+        <p>14 Sep 2026 is Monday. Sunday was 13 Sep. That dated close is archived at <a href="week-close.html">week-close.html</a>. Tonight is 31 October — write the month on <a href="november.html">november.html</a>.</p>
         <ol>
           <li>Did this folio make the week lighter, or did it become another dashboard?</li>
           <li>Did money, a dated no, or a blocked gate appear — or only motion?</li>
@@ -1444,7 +1446,7 @@ A quiet page for the words Jesus spoke. Free.</div>
       function syncPick() {
         pick.style.pointerEvents = openWin() ? "" : "none";
         pick.style.opacity = openWin() ? "1" : "0.4";
-        pick.textContent = openWin() ? "Pick a lane on Tonight" : "Lanes stay folded until the window is open";
+        pick.textContent = openWin() ? "Write the month on October close" : "Lanes stay folded until the window is open";
       }
       win.addEventListener("change", syncPick);
       document.getElementById("cv-write").addEventListener("click", () => {
@@ -1514,6 +1516,23 @@ A quiet page for the words Jesus spoke. Free.</div>
         }
       });
     });
+  </script>
+  <script src="clock.js"></script>
+  <script>
+    (function () {
+      if (!window.NinetyClock) return;
+      var c = NinetyClock.read(new Date());
+      var days = document.getElementById("folioDays");
+      var k = document.getElementById("folioDaysK");
+      var eye = document.getElementById("folioWhen");
+      var cover = document.getElementById("coverWhen");
+      if (days) days.textContent = String(c.daysLeft);
+      if (k) k.textContent = c.phase === "red" ? "Days 1 Nov → 3 Dec · still Red" : c.phase === "open" ? "Days left through 3 Dec" : "Clock ended 3 Dec";
+      if (eye) eye.textContent = c.short + " · " + c.daysLeft + (c.phase === "red" ? " days from 1 Nov" : " days left");
+      if (cover) cover.textContent = "A private operating folio · not a second brain · " + c.label;
+      document.documentElement.dataset.folioClock = c.phase;
+      document.documentElement.dataset.folioDays = String(c.daysLeft);
+    })();
   </script>
 </body>
 </html>

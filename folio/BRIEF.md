@@ -88,6 +88,8 @@ PROPOSED, Dean to confirm or replace: a Stripe Atlas guide — one decision per 
 | 2026-09-14 | Creative pass from first 10 prompts: one door `folio/tonight.html` (close + pick). Prompt 1 easy/beautiful; prompt 9 best finished product. Old rooms kept. Stale “DEX is the job tonight” retired. | DESIGN CHOICE + Chrome HOLD check | folio/tonight.html; pointers on index / week-close / decision-night |
 | 2026-09-14 | Second pass on first 10: lanes fold until window is open; folio dock no longer copies an ask; cover writes the same close receipt. | DESIGN CHOICE + Chrome click/dump | tonight.html; index cover + tonight-dock |
 | 2026-09-14 | Third pass: sendable Copy buttons write HOLD unless Tonight receipt has window + Yes. Tonight states what the first ten asked vs what is true. | DESIGN CHOICE + logic test | index.html `.copy[data-send]`; tonight.html |
+| 2026-10-31 | Calendar honesty: live first-screens no longer claim 14 Sep / 80 days is today. New door `folio/november.html` — October Red close, November Yellow staged, clock 33 / $0 / HOLD. Yellow lanes hidden until window Confirmed or Not needed. 31 Oct remains Red. No apply, no ask, no Notion send. | VERIFIED weekday + inclusive day counts | folio/november.html; pointers on index / tonight / week-close / decision-night |
+| 2026-10-31 | Device clock. `folio/clock.js` reads the local calendar so the close cannot stay frozen on 31 Oct. 31 Oct is Red / 33 / 58 used. 1 Nov is open / 33. 2 Nov is 32. 4 Dec has ended. Yellow lanes still wait on the window. | VERIFIED by `node --test test/ninety-clock.test.js` | folio/clock.js; november.html; index cover |
 
 ## Open questions (batched; recommended default in parentheses)
 

@@ -1,4 +1,4 @@
-# Alignment Ledger — 14 Sep 2026
+# Alignment Ledger — 31 Oct 2026 (amends 14 Sep)
 
 **Bearing:** C4  
 **Surveyor:** Navigator sequential pass. Opened: `folio/*`, Operator Card, hub fetch from prior cycle, CHARTER v1.
@@ -24,7 +24,9 @@
 | Index tonight-dock copy-ask | C5 C8 | Bad drift → retired | Dock no longer copies Room/Handoff/Storefront asks. Cover writes the close. |
 | Plan-leaf Copy buttons | C5 C8 | Bad drift → gated | Six sendable blocks `data-send="1"`. Clipboard is HOLD until Tonight receipt has window + Yes. Asks remain readable. |
 | “Sunday close 14 Sep” as a *Sunday* | C5 | Bad drift | **Retired the weekday.** Date 14 Sep kept as the close he was told. |
+| Live first-screens still saying 14 Sep / 80 days *is today* | C5 C9 | Bad drift → realigned 31 Oct | Current door is `folio/november.html`. Archive pages labeled. Clock 33 days. |
+| `folio/november.html` | C5 C6 C7 C8 | New (31 Oct) | October close + Yellow staged. Lanes hidden until window open. No ask on 31 Oct. |
 
 ## State of the Project (≤15 lines)
 
-Week 2 is over. Today is Monday 14 Sep 2026 — the close date. Household window last recorded Not confirmed. Apply HOLD. Listings still live. Grocery money is $0. Remaining optional clock: 80 days, of which October is Red. The paper folio is usable if he opens Decision Night or Operator lock first. The five new surfaces are the close ritual, the keep model, a HOLD apply packet, a household $0 page, and a Lamp drill that does not apply. Nothing in this project authorizes an application.
+Today is Saturday 31 Oct 2026. The 14 September week-close is past. Household window last recorded Not confirmed. Apply HOLD. Grocery money is $0. Remaining optional clock: 33 days (1 Nov–3 Dec inclusive). 31 Oct is still Red — no new ask. November Yellow starts tomorrow only if the window is Confirmed or Not needed. Current door: `folio/november.html`. Archive doors stay, labeled as 14 Sep. Listings were last opened 14 Sep and are not re-claimed live tonight. Nothing in this project authorizes an application.
