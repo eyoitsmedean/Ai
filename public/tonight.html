@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F3EC" />
+  <title>Red Letter — First night</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F6F3EC; --ink: #1C1612; --mute: #6A6258; --ink-2: #4A433C;
+      --crimson: #8F1D1D; --rule: rgba(28,22,18,.10); --surface: #FBF8F2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: Figtree, system-ui, sans-serif; }
+    .page { max-width: 36rem; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) 22px 72px; }
+    .kicker { letter-spacing: .2em; text-transform: uppercase; font-size: 11px; color: var(--mute); }
+    h1 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: clamp(28px, 6vw, 40px); letter-spacing: -.03em; margin: 8px 0 12px; }
+    h2 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 22px; margin: 28px 0 8px; }
+    p, li, label { font-family: "Source Serif 4", Georgia, serif; line-height: 1.55; color: var(--ink-2); }
+    a { color: var(--crimson); }
+    .helpline { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0; margin: 16px 0; font-size: 14px; }
+    .chip { display: inline-block; border: 1px solid var(--rule); padding: 4px 8px; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+    .step { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+    .min { color: var(--crimson); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .watch { background: #F3E4DC; padding: 12px 14px; margin: 18px 0; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    button, a.btn {
+      min-height: 44px; padding: 0 16px; border: none; background: var(--crimson); color: #FBF8F2;
+      letter-spacing: .08em; text-transform: uppercase; font-size: 12px; text-decoration: none;
+      display: inline-flex; align-items: center; font-family: Figtree, sans-serif;
+    }
+    button.ghost, a.ghost { background: transparent; color: var(--crimson); border-bottom: 1px solid var(--crimson); padding: 0; min-height: auto; }
+    label { display: block; margin: 14px 0 4px; }
+    textarea, input[type=text] {
+      width: 100%; padding: 10px 8px; border: none; border-bottom: 1px solid rgba(28,22,18,.2);
+      background: transparent; font: inherit; font-size: 16px; color: var(--ink);
+    }
+    #clock { font-family: Fraunces, Georgia, serif; font-size: 42px; letter-spacing: -.03em; margin: 8px 0; }
+    #saved { min-height: 1.4em; color: var(--crimson); font-size: 14px; margin-top: 10px; }
+    .prior { margin-top: 18px; font-size: 14px; color: var(--mute); }
+    .slip {
+      margin-top: 28px; padding: 20px; background: var(--surface); border: 1px solid var(--rule);
+    }
+    .slip .quote { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--crimson); font-size: 22px; line-height: 1.35; margin: 10px 0; }
+    .slip .cite { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+    footer { margin-top: 36px; font-size: 13px; color: var(--mute); line-height: 1.55; }
+    @media print {
+      body { background: white; }
+      .no-print { display: none !important; }
+      .slip { border: 1px solid #1C1612; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <p class="kicker">Host · not a launch</p>
+    <h1>First night</h1>
+    <p class="chip">Eight minutes · one guest · this device</p>
+    <p class="helpline">If they are in danger: stop the hour. <a href="tel:988">988</a> (US) · <a href="https://988lifeline.org/" rel="noreferrer">988lifeline.org</a>. You are the human. The page is not.</p>
+
+    <div class="watch">
+      <p><strong>Before they sit down.</strong> Charge the phone. Open a clean page. Put 988 on the table — print the slip below if you want paper. Do not film them. Do not call it AI Jesus.</p>
+    </div>
+
+    <p class="kicker no-print">Hour</p>
+    <p class="clock no-print" id="clock" aria-live="polite">8:00</p>
+    <div class="row no-print">
+      <button type="button" id="start-hour">Start eight minutes</button>
+      <a class="btn" href="/?fresh=1">Open a clean page</a>
+    </div>
+
+    <div class="step"><p class="min">0–1 · Arrive</p><p>They land on the paper (Matthew 11:28). They pick why they came. They tap <strong>Open the page</strong>. You do not lecture.</p></div>
+    <div class="step"><p class="min">1–4 · Sit</p><p>Read. They may close. They may tap <strong>I’ve sat with it</strong> instead of waiting. If they freeze, point at Close.</p></div>
+    <div class="step"><p class="min">4–6 · Today</p><p>The sentence. Seven beads. <strong>Hear this</strong>, or <strong>Bless someone</strong>. One person, not a feed.</p></div>
+    <div class="step"><p class="min">6–8 · Ask</p><p>Advisor: whatever they are actually carrying. If they type crisis language, 988 must appear. That is the test, not a failure.</p></div>
+
+    <h2 class="no-print">After they leave</h2>
+    <p class="no-print">Three lines. This stays on this browser. It does not publish, email, or start a store.</p>
+    <form id="note" class="no-print">
+      <label for="asked">What they asked</label>
+      <textarea id="asked" required maxlength="400" rows="2" placeholder="One honest sentence."></textarea>
+      <label for="saying">Which saying landed</label>
+      <input id="saying" type="text" maxlength="160" placeholder="John 8:11, or none" />
+      <label for="change">What you would change</label>
+      <textarea id="change" required maxlength="400" rows="2" placeholder="One thing about the page, or the hour."></textarea>
+      <button type="submit" style="margin-top:16px">Keep these three lines</button>
+      <p id="saved"></p>
+    </form>
+    <div class="prior no-print" id="prior"></div>
+
+    <div class="slip" id="slip">
+      <p class="kicker">For the table</p>
+      <p class="quote">Come unto me, all ye that labour and are heavy laden, and I will give you rest.</p>
+      <p class="cite">Matthew 11:28</p>
+      <p style="margin-top:14px">Crisis: call or text <strong>988</strong> (US). This page is not a pastor and not emergency care.</p>
+    </div>
+    <p class="no-print" style="margin-top:12px"><button type="button" class="ghost" onclick="window.print()">Print the slip</button></p>
+
+    <footer>
+      The Quiet Page is <a href="/">the room</a>. Between guests: Settings → New reader, or <a href="/?fresh=1">/?fresh=1</a>.
+      First night is hospitality, not a launch.
+    </footer>
+  </div>
+  <script>
+    const KEY = 'rla-tonight-note';
+    const saved = document.getElementById('saved');
+    const prior = document.getElementById('prior');
+
+    function loadNotes() {
+      try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+      catch (_) { return []; }
+    }
+    function showPrior() {
+      const notes = loadNotes();
+      if (!notes.length) { prior.textContent = ''; return; }
+      const last = notes[0];
+      prior.textContent = 'Last hour: ' + (last.asked || '') + (last.saying ? ' · ' + last.saying : '') + ' · ' + (last.at || '');
+    }
+    showPrior();
+
+    document.getElementById('note').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rec = {
+        asked: document.getElementById('asked').value.trim(),
+        saying: document.getElementById('saying').value.trim(),
+        change: document.getElementById('change').value.trim(),
+        at: new Date().toISOString(),
+      };
+      const notes = loadNotes();
+      notes.unshift(rec);
+      localStorage.setItem(KEY, JSON.stringify(notes.slice(0, 12)));
+      saved.textContent = 'Kept on this device only. WATCH still holds.';
+      showPrior();
+    });
+
+    let t = null;
+    const clock = document.getElementById('clock');
+    document.getElementById('start-hour').addEventListener('click', () => {
+      if (t) return;
+      let left = 8 * 60;
+      t = setInterval(() => {
+        left -= 1;
+        const m = Math.floor(Math.max(left, 0) / 60);
+        const s = String(Math.max(left, 0) % 60).padStart(2, '0');
+        clock.textContent = m + ':' + s;
+        if (left <= 0) {
+          clearInterval(t);
+          t = null;
+          clock.textContent = '0:00';
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

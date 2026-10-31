@@ -2,10 +2,12 @@
 
 The Quiet Page is ready for a real person on a shared phone or laptop.
 
+**Host room:** open **`/tonight`** first. That page is the hour: timer, 988 slip, clean-page button, and the three lines you write after they leave. This file is the same script in prose.
+
 ## Before the first guest
 
 1. Start the server: `npm start`
-2. Open **`http://localhost:3000/?fresh=1`**
+2. Open **`http://localhost:3000/tonight`**, then **Open a clean page** (`/?fresh=1`)
 3. You should see the paper onboarding (Matthew 11:28), not last night’s chat.
 
 Between guests: Settings → **New reader**, or hit `/?fresh=1` again.
@@ -27,4 +29,6 @@ Between guests: Settings → **New reader**, or hit `/?fresh=1` again.
 
 ## After the room
 
-`npm test` (API) and `npm run qa` (first session) and `npm run demo` (twenty guests, headless).
+On `/tonight`, write the three lines (what they asked, which saying landed, what you would change). They stay in this browser only.
+
+Then, if you want machine checks: `npm test` (API) and `npm run qa` (first session) and `npm run demo` (twenty guests, headless).
