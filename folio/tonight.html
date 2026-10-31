@@ -108,6 +108,9 @@
     <h1>Tonight.<br><em>Choose one. Then stop.</em></h1>
     <p>The whole path on a single page: confirm the window, hear the honest number, pick one lane, mark the gates, copy one ask, write the receipt, and close. The seven rooms still exist for depth — this page is so you do not have to open them.</p>
     <p class="tiny">Opening this page authorizes nothing. It runs on this device, makes no network call, and cannot apply, message, buy, publish, or send. Money source of truth: Notion Operator Card&nbsp;v2. Listings rechecked 14&nbsp;Sep&nbsp;2026.</p>
+    <div class="card hold">
+      <p style="margin:0"><strong>This is the 14 September receipt.</strong> On 31 October both listing URLs were opened again. The GTM evaluator page says it is no longer accepting applications. The L&amp;D URL is a standing pool, and $80–$120 was not in that text. The Lamp letter names a role that page does not. Lamp copy stays HOLD. The current door is <a href="november.html">November</a>.</p>
+    </div>
   </header>
 
   <!-- STEP 1 — the gate that governs everything -->
@@ -363,7 +366,7 @@ The ask is not on this page until the window is Confirmed or Not needed, the lan
     // Gates note
     var gn = $("gatesNote");
     if (anyGateBlocked()) { gn.className = "lockbar hold"; gn.textContent = "A gate is Blocked. The Lamp is dead this cycle \u2014 do not apply. Pick another lane or close."; }
-    else if (clear === 5) { gn.className = "lockbar clear"; gn.textContent = "All five gates Clear. The Lamp apply may be authorized \u2014 you still send it, this page does not."; }
+    else if (clear === 5) { gn.className = "lockbar hold"; gn.textContent = "All five gates can be Clear and the Lamp letter still stays HOLD. The listing changed on 31 Oct."; }
     else { gn.className = "lockbar hold"; gn.textContent = clear + " of 5 gates Clear. The Lamp apply stays HOLD."; }
 
     // The one ask + copy lock
@@ -372,6 +375,8 @@ The ask is not on this page until the window is Confirmed or Not needed, the lan
     var canSend = false, reason = "";
     if (!spec || choice === "None tonight") {
       reason = "No lane chosen. Nothing to copy.";
+    } else if (choice === "I Lamp") {
+      reason = "The 14 Sep letter names the L&D Evaluator role. The page opened 31 Oct does not. Copy stays HOLD.";
     } else if (choice === "V Folio") {
       reason = "The Folio is parked. There is no ask to send this quarter.";
     } else if (!wok) {
@@ -391,7 +396,9 @@ The ask is not on this page until the window is Confirmed or Not needed, the lan
       why.textContent = "";
       $("s-lock").className = "lockword clear"; $("s-lock").textContent = "Copy: unlocked";
     } else {
-      ask.textContent = "HOLD \u2014 do not send.\n\nThe ask is not on this page until the window is Confirmed or Not needed, the lane's conditions are met, and authorization is Yes.";
+      ask.textContent = choice === "I Lamp"
+        ? "HOLD \u2014 do not send.\n\nThe September letter is not copied here. It names the L&D Evaluator role. Open November."
+        : "HOLD \u2014 do not send.\n\nThe ask is not on this page until the window is Confirmed or Not needed, the lane's conditions are met, and authorization is Yes.";
       btn.disabled = true; btn.textContent = "Copy stays HOLD";
       lock.className = "lockbar hold"; lock.textContent = "Locked. " + reason;
       why.textContent = "";

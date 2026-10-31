@@ -33,7 +33,7 @@
 <main>
   <p class="eyebrow">Bearing C8 · HOLD · 14 Sep 2026</p>
   <h1>Apply packet.<br><em>Staged, not sent.</em></h1>
-  <p>This page prepares a letter. It does not open Mercor. It does not send mail. Copy stays HOLD until every gate is Clear, the window is Confirmed, and you type Yes.</p>
+  <p>This page no longer prepares a letter. It does not open Mercor. It does not send mail. Copy stays HOLD even if every gate is Clear and you type Yes. The current door is <a href="november.html">November</a>.</p>
 
   <div class="card hold">
     <p style="margin-top:0"><strong>Why grocery is still $0 even if you later apply.</strong> Official Mercor pages (opened 14 Sep): projects can end early; a pause sets the weekly cap to 0; first Stripe payout is held 7 days; Insightful takes periodic screenshots; listing rate may not be the offer. No opened official alternative pays $80–$120 to grade L&amp;D/GTM decks on evenings.</p>
@@ -58,7 +58,7 @@
     <a href="decision-night.html">Decision Night</a>
   </div>
   <pre class="letter" id="letter"></pre>
-  <p class="tiny">Listings (live 14 Sep, not an offer): L&amp;D and GTM at $80–$120/hr. LLM policy: you may not use a model to score or justify.</p>
+  <p class="tiny">14 Sep those URLs printed $80–$120. Re-opened 31 Oct: the GTM evaluator page says it is no longer accepting applications, and the L&amp;D URL is a standing pool whose text did not print that rate. LLM policy: you may not use a model to score or justify.</p>
 </main>
 <script>
 function assembleLetter() {
@@ -66,34 +66,20 @@ function assembleLetter() {
   return "I\u2019m " + verb + " for the Training / Onboarding / L&D Evaluator role. I judge training and GTM artifacts for a living. I can support up to eight hours a week, self-scheduled, on personal equipment. I will complete every evaluation in my own judgment and will not use an LLM to score or justify model output.";
 }
 function locked() {
-  const gates = [1,2,3,4,5].map((n) => document.getElementById("g" + n).value);
-  const blocked = gates.includes("Blocked") || gates.includes("Unmarked") || gates.includes("Unknown");
-  const win = document.getElementById("window").value;
-  const auth = document.getElementById("auth").value === "Yes";
-  const ok = !blocked && (win === "Confirmed" || win === "Not needed") && auth;
   const btn = document.getElementById("copy");
   const why = document.getElementById("why");
   const letter = document.getElementById("letter");
-  if (!ok) {
-    btn.disabled = true;
-    btn.textContent = "Copy stays HOLD";
-    why.textContent = "Locked because a gate is not Clear, the window is not Confirmed, or you have not typed Yes.";
-    letter.textContent = "HOLD — do not send.\n\nThe apply letter is not on this page until every gate is Clear, the window is Confirmed or Not needed, and authorization is Yes.";
-    return;
-  }
-  btn.disabled = false;
-  btn.textContent = "Copy the letter";
-  why.textContent = "Unlocked on this device only. You still send it. This page does not.";
-  letter.textContent = assembleLetter();
+  btn.disabled = true;
+  btn.textContent = "Copy stays HOLD";
+  why.textContent = "Locked on 31 Oct 2026. The September letter names a role the listing no longer uses. Gates cannot open it.";
+  letter.textContent = "HOLD — do not send.\n\nRe-opened 31 Oct 2026. The GTM evaluator page says it is no longer accepting applications. The L&D URL is a standing pool and did not print $80–$120. The September letter is kept in the source and is not shown. Open november.html.";
 }
 ["g1","g2","g3","g4","g5","window","auth"].forEach((id) => {
   document.getElementById(id).addEventListener("change", locked);
 });
-document.getElementById("copy").addEventListener("click", async () => {
+document.getElementById("copy").addEventListener("click", () => {
+  // 31 Oct 2026: the September letter stays in assembleLetter and is never copied.
   if (document.getElementById("copy").disabled) return;
-  await navigator.clipboard.writeText(assembleLetter());
-  document.getElementById("copy").textContent = "Copied";
-  setTimeout(locked, 1200);
 });
 locked();
 </script>
