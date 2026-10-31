@@ -110,8 +110,61 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
   });
 
+  await check('Amen can send the sat word, not the reply', async () => {
+    const amen = await page.evaluate(() => ({
+      send: document.getElementById('amen-actions') && document.getElementById('amen-actions').classList.contains('on'),
+      cite: (document.getElementById('amen-cite') || {}).textContent || '',
+      echo: (document.getElementById('amen-echo') || {}).textContent || '',
+    }));
+    assert(amen.send, 'Amen is missing Send this word');
+    assert(/KJV/i.test(amen.cite), 'Amen cite should name the translation: ' + amen.cite);
+    assert(amen.echo.length > 8, 'Amen has no saying');
+    await page.click('#amen-send');
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 6000 });
+    const card = await page.evaluate(async () => {
+      const texts = [];
+      const orig = CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText = function (t, x, y) {
+        texts.push(String(t));
+        return orig.call(this, t, x, y);
+      };
+      let blob = null;
+      try {
+        blob = await renderShareCard({
+          kicker: 'A blessing',
+          title: (document.getElementById('blessing-note').value.trim() || 'For you'),
+          quote: blessingPick.quote,
+          verse: blessingPick.verse,
+        }, 'parchment');
+      } finally {
+        CanvasRenderingContext2D.prototype.fillText = orig;
+      }
+      return {
+        preview: (document.getElementById('blessing-preview') || {}).innerText || '',
+        note: (document.getElementById('blessing-note') || {}).value || '',
+        listHidden: document.getElementById('blessing-list').hidden,
+        more: !document.getElementById('blessing-more').hidden,
+        lede: (document.getElementById('blessing-lede') || {}).textContent || '',
+        painted: texts.join('\n'),
+        bytes: blob ? blob.size : 0,
+      };
+    });
+    assert(/KJV/i.test(card.preview), 'blessing preview should name the translation');
+    assert(!/\bPeace\./.test(card.preview), 'sit reply leaked onto the blessing card');
+    assert(card.note === '', 'blessing note should start empty, not the sit reply');
+    assert(card.listHidden, 'other sayings should stay out of the way');
+    assert(card.more, 'Choose another saying should be there');
+    assert(/sat with/.test(card.lede), 'lede should name the sat word');
+    assert(card.bytes > 1000, 'card did not paint');
+    assert(/KJV/.test(card.painted), 'painted card should name KJV');
+    assert(card.painted.includes(amen.echo.replace(/[“”"]/g, '').slice(0, 12)), 'painted card should carry the sat saying');
+    assert(!card.painted.includes('Peace.'), 'sit reply was painted onto the card');
+    await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
+    await page.waitForFunction(() => !document.getElementById('blessing-sheet').classList.contains('on'), { timeout: 4000 });
+  });
+
   await check('Today is a folio, not a dashboard', async () => {
-    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
+    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
     const today = await page.evaluate(() => ({
       season: document.documentElement.getAttribute('data-season'),
       seven: document.querySelectorAll('.seven-day').length,
