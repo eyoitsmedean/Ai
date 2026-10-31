@@ -144,6 +144,57 @@ async function main() {
     await page.evaluate(() => switchTab('today'));
   });
 
+  await check('night card is already a saying, with 988', async () => {
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    const res = await page.goto(BASE + '/?card=1', { waitUntil: 'networkidle0' });
+    assert(res && res.ok(), '/?card=1 HTTP ' + (res && res.status()));
+    await page.waitForFunction(() => {
+      const q = document.getElementById('print-quote');
+      return q && q.textContent && q.textContent.length > 12;
+    }, { timeout: 15000 });
+    const card = await page.evaluate(() => ({
+      open: document.body.classList.contains('card-open'),
+      quote: document.getElementById('print-quote').textContent,
+      cite: document.getElementById('print-cite').textContent,
+      help: document.getElementById('print-help').innerText,
+      titleHidden: document.getElementById('onboarding').classList.contains('hidden'),
+      askHim: document.body.innerText.includes('Ask Him'),
+    }));
+    assert(card.open, 'night card did not open');
+    assert(card.titleHidden, 'title page must not block the card');
+    assert(/KJV/.test(card.cite), 'card must name KJV');
+    assert(/988/.test(card.help), 'card must name 988');
+    assert(!card.askHim, 'card must not say Ask Him');
+    assert(
+      /Peace I leave|Come unto me|Take therefore no thought|overcome the world|little flock|little children|comfortless/i.test(card.quote),
+      'card quote is not a night saying: ' + card.quote
+    );
+
+    await page.goto(BASE + '/?card=Matthew%2011:28', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => /Come unto me/i.test(document.getElementById('print-quote').textContent), { timeout: 15000 });
+    const named = await page.evaluate(() => document.getElementById('print-cite').textContent);
+    assert(/Matthew 11:28/.test(named), 'named card cite: ' + named);
+
+    await page.goto(BASE + '/?card=Luke%202:14', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => document.body.classList.contains('card-open'), { timeout: 8000 });
+    const refused = await page.evaluate(() => document.getElementById('print-quote').textContent);
+    assert(!/Glory to God in the highest/i.test(refused), 'angel line opened on the card');
+
+    await page.goto(BASE + '/?card=week', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => document.body.classList.contains('quire-open') && document.querySelectorAll('.quire-leaf').length === 7, { timeout: 15000 });
+    const week = await page.evaluate(() => ({
+      days: [...document.querySelectorAll('.quire-leaf .day')].map((el) => el.textContent),
+      cites: [...document.querySelectorAll('.quire-leaf .cite')].map((el) => el.textContent).join(' '),
+      help: document.querySelector('#print-quire .print-help').innerText,
+    }));
+    assert(/Sunday/.test(week.days[0]) && /Saturday/.test(week.days[6]), 'week days missing');
+    assert(/Matthew 19:14/.test(week.cites), 'children saying missing from the week');
+    assert(/988/.test(week.help), 'week must name 988');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
