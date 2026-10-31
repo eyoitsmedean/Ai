@@ -33,3 +33,24 @@ test('the room never sells and never pretends', () => {
   assert.doesNotMatch(html, /\bPlus\b/, 'no "Plus" tier');
   assert.doesNotMatch(html, /\/week\b|weekly/i, 'never a weekly price');
 });
+
+test('the evening office never closes on tribulation', () => {
+  const fn = html.match(/function vespersSaying\(\) \{[\s\S]*?\n\}/);
+  assert.ok(fn, 'vespersSaying missing');
+  assert.doesNotMatch(fn[0], /dailyData/, 'vespers must not take the morning word');
+  assert.match(fn[0], /VESPERS_FALLBACK/);
+  const block = html.match(/const VESPERS_FALLBACK = \[[\s\S]*?\];/);
+  assert.ok(block, 'evening fallbacks missing');
+  assert.doesNotMatch(block[0], /16:33|tribulation|overcome the world/i);
+  assert.match(block[0], /Matthew 11:28/);
+  assert.match(block[0], /John 14:27/);
+  assert.match(block[0], /Luke 23:46/);
+});
+
+test('last night’s catchword is kept until morning', () => {
+  const remember = html.match(/function rememberSitting\([\s\S]*?\n\}/);
+  assert.ok(remember, 'rememberSitting missing');
+  assert.match(remember[0], /nextCivilStr\(\)/, 'catchword must last into the next civil day');
+  assert.match(html, /Last night you laid down/);
+  assert.match(html, /Earlier you laid down/);
+});

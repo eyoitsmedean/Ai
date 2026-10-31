@@ -2111,9 +2111,9 @@ function vespersPrompt() {
   return VESPERS_PROMPTS[new Date().getDay()];
 }
 function vespersSaying() {
-  if (dailyData && dailyData.word) {
-    return { verse: dailyData.word.verse, quote: dailyData.word.passage };
-  }
+  // Never the morning word. That rotation includes John 16:33.
+  // Empty send already refused tribulation as a last sentence; the evening
+  // office is the same refusal. Come, peace, this day, or into His hands.
   return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
 }
 
@@ -2253,6 +2253,11 @@ function yestStr() {
 function twoAgoStr() {
   const d = new Date();
   d.setDate(d.getDate() - 2);
+  return padDate(d);
+}
+function nextCivilStr() {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
   return padDate(d);
 }
 function weekStartStr() {
@@ -3610,8 +3615,8 @@ function getCatchword() {
 }
 function rememberSitting({ quote, verse, note, office }) {
   const catchword = firstCatchword(note) || firstCatchword(quote);
-  const until = todayStr();
-  lsSet('rla-last-sit', JSON.stringify({ date: until, quote, verse, note, office, catchword }));
+  const until = nextCivilStr();
+  lsSet('rla-last-sit', JSON.stringify({ date: todayStr(), quote, verse, note, office, catchword }));
   if (catchword) lsSet('rla-catchword', JSON.stringify({ word: catchword, until }));
   updateStreak();
   paintCatchword();
@@ -3643,7 +3648,10 @@ function paintEpigraph() {
     return;
   }
   const sameDay = sit.date === todayStr();
-  document.getElementById('epigraph-kicker').textContent = sameDay ? 'Earlier you sat with' : 'Yesterday you sat with';
+  const laid = sit.office === 'Vespers' || sit.office === 'Compline';
+  document.getElementById('epigraph-kicker').textContent = laid
+    ? (sameDay ? 'Earlier you laid down' : 'Last night you laid down')
+    : (sameDay ? 'Earlier you sat with' : 'Yesterday you sat with');
   document.getElementById('epigraph-quote').textContent = '“' + String(sit.quote).replace(/^["“]|["”]$/g, '') + '”';
   document.getElementById('epigraph-note').textContent = sit.note || '';
   document.getElementById('epigraph-cite').textContent = (sit.verse || '') + (sit.catchword ? '  ·  ' + sit.catchword : '');
@@ -3696,7 +3704,7 @@ function keepVespers() {
     body: (note ? note + '\n\n' : '') + saying.quote,
     verse: saying.verse,
   });
-  rememberSitting({ quote: saying.quote, verse: saying.verse, note, office: 'Vespers' });
+  rememberSitting({ quote: saying.quote, verse: saying.verse, note, office: isNightOffice() ? 'Compline' : 'Vespers' });
   showToast('Kept the evening');
   openAmen({ quote: saying.quote, verse: saying.verse, holdMs: 3000 });
 }
