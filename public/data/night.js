@@ -18,5 +18,38 @@
     return days[dailyIndex(date || new Date(), days.length)] || null;
   }
 
-  return { dailyIndex, pickDaily };
+  function dateKey(date) {
+    const d = date || new Date();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+
+  function storageKey(date) {
+    return 'rla-night-' + dateKey(date);
+  }
+
+  /** One sentence, kept on the device. Newlines become a space. */
+  function normalizeLeave(text) {
+    return String(text || '').replace(/\s+/g, ' ').trim().slice(0, 240);
+  }
+
+  /** null = not yet closed. '' = Amen with nothing written. */
+  function readLeave(storage, date) {
+    try {
+      const raw = storage.getItem(storageKey(date));
+      if (raw == null) return null;
+      return normalizeLeave(raw);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeLeave(storage, date, text) {
+    const value = normalizeLeave(text);
+    storage.setItem(storageKey(date), value);
+    return value;
+  }
+
+  return { dailyIndex, pickDaily, dateKey, storageKey, normalizeLeave, readLeave, writeLeave };
 });

@@ -7,7 +7,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 ## The room
 
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
-- **Night leaf** — `/night` (or `night.html`): one sentence, lamp paper, 988. For the hour you are already awake.
+- **Night leaf** — `/night` (or `night.html`): one sentence, lamp paper, 988. Amen keeps one line on this device until the next civil day. Nothing is sent.
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence
 - **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page

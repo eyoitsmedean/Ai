@@ -5,7 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { lookup } = require('../lib/scripture');
 const { dailyForDate } = require('../lib/curated');
-const { dailyIndex, pickDaily } = require('../public/data/night.js');
+const { dailyIndex, pickDaily, dateKey, storageKey, normalizeLeave, readLeave, writeLeave } = require('../public/data/night.js');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'night.html'), 'utf8');
 const index = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
@@ -22,12 +22,17 @@ function loadCurated() {
 
 test('night leaf is a quiet Compline page', () => {
   assert.match(html, /id="night-word"/);
+  assert.match(html, /id="night-leave"/);
+  assert.match(html, /id="night-amen"/);
+  assert.match(html, /Kept on this device\. Not sent\./);
   assert.match(html, /Compline/);
   assert.match(html, /href="tel:988"/);
   assert.match(html, /findahelpline\.com/);
   assert.match(html, /This page is not a person/);
   assert.match(html, / ·  KJV/);
   assert.match(html, /#E8D8B4/, 'lamp paper, not OLED');
+  assert.match(html, /min-height: 48px/);
+  assert.match(html, /\[hidden\] \{ display: none !important; \}/);
   assert.doesNotMatch(html, /Ask Him|AI Jesus|streak|Roumie|The Chosen/i);
   assert.doesNotMatch(html, /Ask the Advisor/);
 });
@@ -70,6 +75,29 @@ test('every bundled night saying is a locked Gospel verse', () => {
   const tonight = pickDaily(curated.daily, new Date(2026, 9, 31, 3));
   assert.ok(tonight.word.passage);
   assert.ok(lookup(tonight.word.verse));
+});
+
+function memory() {
+  const box = new Map();
+  return {
+    getItem: (k) => (box.has(k) ? box.get(k) : null),
+    setItem: (k, v) => box.set(k, String(v)),
+  };
+}
+
+test('a night sentence stays on this device until the next civil day', () => {
+  const store = memory();
+  const tonight = new Date(2026, 9, 31, 3, 12);
+  const morning = new Date(2026, 9, 31, 9, 0);
+  const tomorrow = new Date(2026, 10, 1, 3, 0);
+  assert.equal(readLeave(store, tonight), null);
+  assert.equal(writeLeave(store, tonight, '  She is asleep.\nI am not.  '), 'She is asleep. I am not.');
+  assert.equal(readLeave(store, morning), 'She is asleep. I am not.');
+  assert.equal(readLeave(store, tomorrow), null);
+  assert.equal(storageKey(tonight), 'rla-night-' + dateKey(tonight));
+  assert.equal(writeLeave(store, tonight, ''), '');
+  assert.equal(readLeave(store, tonight), '');
+  assert.equal(normalizeLeave('x'.repeat(300)).length, 240);
 });
 
 test('the API’s word for a civil day is a real saying', () => {
