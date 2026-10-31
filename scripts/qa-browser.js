@@ -184,6 +184,13 @@ async function main() {
     assert(/redemption draweth nigh/i.test(leaf.passage), leaf.passage);
     assert(leaf.lit[0].includes('lit') && /Hope/.test(leaf.lit[0]), 'Hope candle: ' + leaf.lit.join('|'));
     assert(!leaf.lit.slice(1).some((s) => s.includes('lit')), 'too many candles lit: ' + leaf.lit.join('|'));
+    const night = await page.evaluate(() => {
+      const q = document.getElementById('vespers-quote');
+      return { hidden: !q || q.hidden, text: q ? q.textContent : '' };
+    });
+    if (!night.hidden) {
+      assert(/redemption draweth nigh/i.test(night.text), 'compline showed another saying: ' + night.text);
+    }
   });
 
   await check('no page errors', async () => {

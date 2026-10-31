@@ -1091,7 +1091,7 @@ textarea { font-family: var(--body); }
 .wreath { display: flex; gap: 16px; margin: 2px 0 2px; }
 .wreath span { display: flex; flex-direction: column; align-items: center; gap: 5px; font-family: var(--ui); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .wreath i { width: 12px; height: 16px; border-radius: 6px 6px 2px 2px; border: 1px solid var(--rule-2); background: transparent; }
-.wreath span.past i { background: color-mix(in srgb, var(--crimson) 40%, transparent); border-color: var(--crimson); }
+.wreath span.past i { background: color-mix(in srgb, var(--crimson) 55%, var(--paper)); border-color: var(--crimson); }
 .wreath span.lit i { background: var(--crimson); border-color: var(--crimson); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 16%, transparent); }
 .wreath span.lit { color: var(--crimson); }
 
@@ -2123,6 +2123,8 @@ function vespersPrompt() {
   return VESPERS_PROMPTS[new Date().getDay()];
 }
 function vespersSaying() {
+  const hit = typeof adventToday === 'function' ? adventToday() : null;
+  if (hit && hit.entry) return { verse: hit.entry.verse, quote: hit.entry.passage };
   if (dailyData && dailyData.word) {
     return { verse: dailyData.word.verse, quote: dailyData.word.passage };
   }
@@ -3788,8 +3790,13 @@ function paintVespers() {
   document.getElementById('vespers-prompt').textContent = night
     ? 'What will you leave in His hands?'
     : vespersPrompt();
-  document.getElementById('vespers-quote').textContent = saying.quote;
-  document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
+  const quoteEl = document.getElementById('vespers-quote');
+  const citeEl = document.getElementById('vespers-cite');
+  const waiting = typeof adventToday === 'function' && adventToday();
+  quoteEl.hidden = !!waiting;
+  citeEl.hidden = !!waiting;
+  quoteEl.textContent = saying.quote;
+  citeEl.textContent = saying.verse + '  ·  KJV';
 }
 function keepVespers() {
   const saying = vespersSaying();
