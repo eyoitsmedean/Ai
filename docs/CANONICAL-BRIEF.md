@@ -29,7 +29,7 @@ Until that URL is authorized, the five-room folio remains a paper atelier. The o
 
 ## 2. Recovery of the earliest user prompts
 
-This conversation has **eight** user-authored prompts as of 2026-09-14 evening (this prompt is #8). Prompts 9–10 do not exist here. They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata. Other chats’ first-tens are not this brief.
+This conversation has **ten** user-authored prompts as of 2026-10-31 (this prompt is #10). They were read from the run transcript (`role: "user"`), not reconstructed from memory. No per-prompt timestamp field exists on the messages; times below are inferred from nearby run metadata. Other chats’ first-tens are not this brief.
 
 Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-tens. Those are **not** this brief. Do not overwrite them.
 
@@ -43,6 +43,8 @@ Other Cursor chats (Grok iOS, PR 18, masterpiece-protocol) have their own first-
 | 6 | ~2026-09-14 04:02 | “LODESTAR… Intent Charter… five summits… Protect truth + original purpose.” | Charter, align, deepen, summit, prove, ship. Do not rebuild the Charter later; amend it. | Cycle 1: `docs/lodestar/`, `lib/crisis.js`, `eval-ask`, `/gate`, `/hear`, `/ask` stillness. | Folio-after-988 still Dean’s. WATCH stands. |
 | 7 | ~2026-09-14 20:25 | “ATELIER — Useful work, faithfully finished… Recover the user's purpose… A small edit or question deserves direct execution… Create extra projects only when commissioned.” | Recover purpose, build the requested artifact, verify, leave continuity. No new knowledge-base ritual. | Built `GET /desk` (Hear → Record → Ask). Gate draft stays on this device (`rla-gate-record`). | Does not lift WATCH. Folio stays paper. |
 | 8 | ~2026-09-14 20:44 | “You have creative freedom and token freedom to analyze and improve as you see fit, start by reviewing my first 10 prompts for context and guidance” | Review this conversation’s actual prompts, then improve the product. Do not invent missing prompts. | Eight prompts exist here, not ten. Improvement: `/ask` sets the retrieved span of the pack saying; implication is those verses’ stored meaning; print the leaf. | Does not invent prompts 9–10. Does not lift WATCH. Folio-after-988 still Dean’s. |
+| 9 | ~2026-10-31 04:40 | “From Dean: Pick a goal or deliverable based on what you know about me and create it… new branch… draft PR… don't merge, don't push to main, and don't send anything external or spend money.” | One concrete household artifact. Branch + draft PR only. | Built `GET /leaf` — one-sheet sitting quire. | Does not lift WATCH. |
+| 10 | ~2026-10-31 04:55 | “From Dean: Pick a goal or deliverable based on what you know about me and create it. Build on this agent's own work… draft PR at most… keep OneDigital material out… don't invent facts. End with a 3-line summary.” | Finish this agent's own artifact. No merge, no external send, no invented facts. | The leaf quotes one pin verse and stays until the calendar day turns. | Same draft PR. OneDigital is not in this repo. |
 
 **Explicit later amendments (authoritative, opened 2026-09-11 from Dean’s Notion):**
 

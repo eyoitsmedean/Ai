@@ -153,7 +153,7 @@
 
     <footer>
       Internal household screen. Dean records a named public-domain text (WEB or KJV, US) before any public URL.
-      Folio stays paper. If you set <code>API_ACCESS_KEY</code>, this page needs that key too. <a href="/desk">Desk</a> · <a href="/gate">Record</a> · <a href="/hear">Hear</a> · <a href="/">Folio</a>
+      Folio stays paper. If you set <code>API_ACCESS_KEY</code>, this page needs that key too. <a href="/desk">Desk</a> · <a href="/leaf">Leaf</a> · <a href="/gate">Record</a> · <a href="/hear">Hear</a> · <a href="/">Folio</a>
     </footer>
   </main>
   <script>
@@ -166,7 +166,27 @@
     const wordsBlock = document.getElementById('words-block');
     const implyBlock = document.getElementById('imply-block');
 
-    document.getElementById('print-leaf').addEventListener('click', () => window.print());
+    const LEAF_KEY = 'rla-leaf';
+    const LEAF_SESSION = 'rla-leaf-session';
+    function todayStr() {
+      const d = new Date();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    }
+    function saveLeaf(payload, { keep } = {}) {
+      try {
+        if (keep) {
+          localStorage.setItem(LEAF_KEY, JSON.stringify({ ...payload, until: todayStr() }));
+          sessionStorage.removeItem(LEAF_SESSION);
+        } else {
+          sessionStorage.setItem(LEAF_SESSION, JSON.stringify(payload));
+        }
+      } catch (_) {}
+    }
+    document.getElementById('print-leaf').addEventListener('click', () => {
+      window.location.href = '/leaf';
+    });
 
     document.getElementById('q').addEventListener('input', () => {
       document.body.classList.remove('still');
@@ -194,6 +214,14 @@
           words.innerHTML = '';
           document.body.classList.add('still');
           document.getElementById('rest').textContent = 'Stop here. A person, not this page.';
+          saveLeaf({
+            q: q,
+            crisis: true,
+            notice: data.notice || 'Call or text 988.',
+            words: [],
+            implication: '',
+            translation: 'KJV',
+          });
           return;
         }
         document.body.classList.add('still');
@@ -206,6 +234,16 @@
           '<p class="cite">' + escapeHtml(w.verse) + '  ·  ' + escapeHtml(w.translation || 'KJV') + '</p>'
         )).join('') || '<p class="imply">No spoken saying could be sealed for that. Try naming the feeling again.</p>';
         imply.textContent = data.implication || '';
+        const sheet = data.sheet && data.sheet.words && data.sheet.words.length ? data.sheet : null;
+        saveLeaf({
+          q: q,
+          crisis: false,
+          notice: '',
+          words: sheet ? sheet.words : (data.words || []).slice(0, 1),
+          implication: sheet ? (sheet.implication || '') : (data.implication || ''),
+          catchword: sheet ? (sheet.catchword || '') : '',
+          translation: data.translation || 'KJV',
+        }, { keep: true });
       } catch (err) {
         crisisBlock.classList.add('hidden');
         wordsBlock.classList.remove('hidden');
