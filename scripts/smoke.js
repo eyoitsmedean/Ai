@@ -95,6 +95,7 @@ async function main() {
     assert(text.includes('id="amen"'), 'missing Amen');
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
     assert(text.includes('churchYear'), 'missing church year');
+    assert(text.includes('data/watch.js') && text.includes('#streak-num'), 'night still keeps a visible score');
     assert(text.includes('988'), 'missing crisis line');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
     assert(!/Ask <em>Him<\/em>/i.test(text), 'must not pretend the model is Jesus');
