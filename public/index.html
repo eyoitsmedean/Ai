@@ -167,7 +167,29 @@ textarea { font-family: var(--body); }
   transform: translateY(-140%);
 }
 .skip-link:focus { transform: none; }
-.hearing .folio { filter: saturate(.92); }
+/* While the words are being read, the glass rests on night paper.
+   The season and the Lamp come back when the reading stops.
+   Specificity has to beat a season rule and a dark-season rule. */
+html.hearing[data-theme],
+html.hearing[data-theme][data-season] {
+  --paper: #14110D;
+  --paper-2: #1C1813;
+  --folio: #1A1612;
+  --ink: #F3EBDD;
+  --ink-2: #C9BDAA;
+  --ink-3: #8E8272;
+  --ink-4: #6A5F52;
+  --rule: rgba(243, 235, 221, 0.10);
+  --rule-2: rgba(243, 235, 221, 0.16);
+  --crimson: #D15A54;
+  --crimson-deep: #8F1D1D;
+  --crimson-soft: #2A1614;
+  --gold: #C4A35A;
+  --gold-soft: #241E12;
+  --wash: rgba(209, 90, 84, 0.04);
+  --shadow: 0 1px 0 rgba(0,0,0,.2), 0 18px 50px rgba(0,0,0,.28);
+  color-scheme: dark;
+}
 .hear-now {
   font-family: var(--display);
   font-style: italic;
@@ -1573,7 +1595,7 @@ html.sitting .sit-sheet {
         </div>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
-        <p class="hear-now" id="hear-status" hidden>Listening</p>
+        <p class="hear-now" id="hear-status" hidden>The page is resting.</p>
         <div class="actions" style="margin-bottom:22px">
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
         </div>
@@ -3754,14 +3776,92 @@ function amenFromSit() {
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
 }
 
+let hearLock = null;
+let hearLockGen = 0;
+let hearLockPending = false;
+
+function spokenVerse(verse) {
+  const v = String(verse || '').trim();
+  if (!v) return '';
+  return /king james/i.test(v) ? v : v + ', King James Version';
+}
+
+function restThemeColor(on) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+  const lamp = document.documentElement.dataset.theme === 'dark' ? '#14110D' : '#F4EFE4';
+  meta.setAttribute('content', on ? '#14110D' : lamp);
+}
+
+async function holdHearLock() {
+  if (!navigator.wakeLock || hearLock || hearLockPending) return;
+  hearLockPending = true;
+  const gen = hearLockGen;
+  try {
+    const lock = await navigator.wakeLock.request('screen');
+    if (gen !== hearLockGen || !document.documentElement.classList.contains('hearing')) {
+      lock.release().catch(() => {});
+      return;
+    }
+    hearLock = lock;
+    lock.addEventListener('release', () => { if (hearLock === lock) hearLock = null; });
+  } catch (_) {}
+  finally { hearLockPending = false; }
+}
+
+function releaseHearLock() {
+  hearLockGen += 1;
+  const lock = hearLock;
+  hearLock = null;
+  if (lock) lock.release().catch(() => {});
+}
+
+function setHearingSession(title) {
+  const session = navigator.mediaSession;
+  if (!session) return;
+  try {
+    if (window.MediaMetadata) {
+      session.metadata = new MediaMetadata({ title: title || 'The office', artist: 'Red Letter' });
+    }
+    const stop = () => { stopHearOffice(); stopSitListen(); };
+    session.setActionHandler('pause', stop);
+    session.setActionHandler('stop', stop);
+  } catch (_) {}
+}
+
+function clearHearingSession() {
+  const session = navigator.mediaSession;
+  if (!session) return;
+  try { session.metadata = null; } catch (_) {}
+  try { session.setActionHandler('pause', null); } catch (_) {}
+  try { session.setActionHandler('stop', null); } catch (_) {}
+}
+
+function beginRest(title) {
+  document.documentElement.classList.add('hearing');
+  restThemeColor(true);
+  holdHearLock();
+  setHearingSession(title);
+}
+
+function endRest() {
+  if (officeSpeaking || sitSpeaking) return;
+  document.documentElement.classList.remove('hearing');
+  restThemeColor(false);
+  releaseHearLock();
+  clearHearingSession();
+}
+
 function stopSitListen() {
-  if (sitSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
+  const was = sitSpeaking;
   sitSpeaking = false;
+  if (was && window.speechSynthesis) window.speechSynthesis.cancel();
   const btn = document.getElementById('sit-listen');
   if (btn) {
     btn.textContent = 'Listen';
     btn.setAttribute('aria-pressed', 'false');
   }
+  endRest();
 }
 function toggleSitListen() {
   if (!window.speechSynthesis) {
@@ -3771,8 +3871,8 @@ function toggleSitListen() {
   if (sitSpeaking) { stopSitListen(); return; }
   stopHearOffice();
   const quote = (sitPayload && sitPayload.quote) || '';
-  const verse = (sitPayload && sitPayload.verse) || '';
-  sitUtterance = new SpeechSynthesisUtterance((quote + '. ' + verse).replace(/[“”]/g, ''));
+  const verse = spokenVerse(sitPayload && sitPayload.verse);
+  sitUtterance = new SpeechSynthesisUtterance([quote, verse].filter(Boolean).join('. ').replace(/[“”]/g, ''));
   sitUtterance.rate = 0.88;
   sitUtterance.onend = () => stopSitListen();
   sitUtterance.onerror = () => stopSitListen();
@@ -3782,21 +3882,33 @@ function toggleSitListen() {
     btn.textContent = 'Pause';
     btn.setAttribute('aria-pressed', 'true');
   }
-  window.speechSynthesis.speak(sitUtterance);
+  beginRest(verse || 'A saying');
+  try {
+    window.speechSynthesis.speak(sitUtterance);
+  } catch (_) {
+    stopSitListen();
+    showToast('This browser would not speak. The words are still on the page.');
+  }
 }
 
 function stopHearOffice() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  const was = officeSpeaking || sitSpeaking;
   officeSpeaking = false;
   sitSpeaking = false;
-  document.documentElement.classList.remove('hearing');
+  if (was && window.speechSynthesis) window.speechSynthesis.cancel();
   const btn = document.getElementById('hear-office');
   const status = document.getElementById('hear-status');
+  const listen = document.getElementById('sit-listen');
   if (btn) {
     btn.textContent = 'Hear this office';
     btn.setAttribute('aria-pressed', 'false');
   }
+  if (listen) {
+    listen.textContent = 'Listen';
+    listen.setAttribute('aria-pressed', 'false');
+  }
   if (status) status.hidden = true;
+  endRest();
 }
 function officeScript() {
   const parts = [];
@@ -3804,18 +3916,18 @@ function officeScript() {
   if (dailyData && dailyData.affirmation) {
     parts.push(dailyData.affirmation.text);
     parts.push(dailyData.affirmation.quote);
-    parts.push(dailyData.affirmation.verse);
+    parts.push(spokenVerse(dailyData.affirmation.verse));
   }
   if (dailyData && dailyData.word) {
     parts.push(dailyData.word.passage);
-    parts.push(dailyData.word.verse);
+    parts.push(spokenVerse(dailyData.word.verse));
   }
   if (isEveningOffice()) {
     const saying = vespersSaying();
     parts.push(isNightOffice() ? 'Compline.' : 'Vespers.');
     parts.push(document.getElementById('vespers-prompt')?.textContent || vespersPrompt());
     parts.push(saying.quote);
-    parts.push(saying.verse);
+    parts.push(spokenVerse(saying.verse));
   }
   return parts.filter(Boolean).join(' ');
 }
@@ -3829,7 +3941,6 @@ function toggleHearOffice() {
   const text = officeScript();
   if (!text.trim()) { showToast('The office is still being set.'); return; }
   officeSpeaking = true;
-  document.documentElement.classList.add('hearing');
   const btn = document.getElementById('hear-office');
   const status = document.getElementById('hear-status');
   if (btn) {
@@ -3838,14 +3949,23 @@ function toggleHearOffice() {
   }
   if (status) {
     status.hidden = false;
-    status.textContent = 'Listening — the page can rest';
+    status.textContent = 'The page is resting.';
   }
+  beginRest(officeName());
   const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
   utter.rate = 0.88;
   utter.onend = () => { if (officeSpeaking) stopHearOffice(); };
+  utter.onerror = () => { if (officeSpeaking) stopHearOffice(); };
   try {
     window.speechSynthesis.speak(utter);
   } catch (_) {
+    officeSpeaking = false;
+    endRest();
+    if (btn) {
+      btn.textContent = 'Hear this office';
+      btn.setAttribute('aria-pressed', 'false');
+    }
+    if (status) status.hidden = true;
     showToast('This browser would not speak. The office is still on the page.');
   }
 }
@@ -4227,6 +4347,14 @@ function bindRituals() {
   });
   window.addEventListener('online', setOfflineBanner);
   window.addEventListener('offline', setOfflineBanner);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (!document.documentElement.classList.contains('hearing')) return;
+    holdHearLock();
+    try {
+      if (window.speechSynthesis && window.speechSynthesis.paused) window.speechSynthesis.resume();
+    } catch (_) {}
+  });
   setOfflineBanner();
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
   setInterval(checkMorningReminder, 5 * 60 * 1000);
