@@ -1,3 +1,7 @@
+# Red Letter — One verse on the leaf — 2026-10-31
+
+The sheet quotes the pin verse (Luke 15:4, not the coin and the bread). Catchword at the foot. Kept in `localStorage` until the calendar day turns. Crisis stays in the tab only. Same draft branch. Do not merge.
+
 # Red Letter — Household quire — 2026-10-31
 
 `GET /leaf` is one sheet: asked sentence, sealed words, four lines, Amen. Sitting stays in `sessionStorage` (`rla-leaf`). Crisis leaf names 988 and has no Amen. Branch `cursor/household-print-quire-28bf`. Do not merge. Do not publish.

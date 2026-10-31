@@ -167,8 +167,22 @@
     const implyBlock = document.getElementById('imply-block');
 
     const LEAF_KEY = 'rla-leaf';
-    function saveLeaf(payload) {
-      try { sessionStorage.setItem(LEAF_KEY, JSON.stringify(payload)); } catch (_) {}
+    const LEAF_SESSION = 'rla-leaf-session';
+    function todayStr() {
+      const d = new Date();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    }
+    function saveLeaf(payload, { keep } = {}) {
+      try {
+        if (keep) {
+          localStorage.setItem(LEAF_KEY, JSON.stringify({ ...payload, until: todayStr() }));
+          sessionStorage.removeItem(LEAF_SESSION);
+        } else {
+          sessionStorage.setItem(LEAF_SESSION, JSON.stringify(payload));
+        }
+      } catch (_) {}
     }
     document.getElementById('print-leaf').addEventListener('click', () => {
       window.location.href = '/leaf';
@@ -220,14 +234,16 @@
           '<p class="cite">' + escapeHtml(w.verse) + '  ·  ' + escapeHtml(w.translation || 'KJV') + '</p>'
         )).join('') || '<p class="imply">No spoken saying could be sealed for that. Try naming the feeling again.</p>';
         imply.textContent = data.implication || '';
+        const sheet = data.sheet && data.sheet.words && data.sheet.words.length ? data.sheet : null;
         saveLeaf({
           q: q,
           crisis: false,
           notice: '',
-          words: data.words || [],
-          implication: data.implication || '',
+          words: sheet ? sheet.words : (data.words || []).slice(0, 1),
+          implication: sheet ? (sheet.implication || '') : (data.implication || ''),
+          catchword: sheet ? (sheet.catchword || '') : '',
           translation: data.translation || 'KJV',
-        });
+        }, { keep: true });
       } catch (err) {
         crisisBlock.classList.add('hidden');
         wordsBlock.classList.remove('hidden');

@@ -207,9 +207,22 @@ async function main() {
       robots: document.querySelector('meta[name="robots"]')?.content || '',
     }));
     assert(/noindex/.test(leaf.robots), 'leaf must stay unindexed');
-    assert(/Luke 15/i.test(leaf.text), 'leaf missing the sealed saying');
+    assert(/Luke 15:4/i.test(leaf.text), 'leaf missing the pin verse');
+    assert(!/ten pieces of silver/i.test(leaf.text), 'leaf should not carry the next saying');
     assert(/Amen/i.test(leaf.text), 'leaf missing Amen');
     assert(!/Ask Him/i.test(leaf.text), 'leaf must not pretend the model is Jesus');
+    await page.reload({ waitUntil: 'networkidle0' });
+    const kept = await page.evaluate(() => document.body.innerText);
+    assert(/Amen/i.test(kept), 'leaf did not stay on this device');
+    await page.evaluate(() => {
+      const raw = JSON.parse(localStorage.getItem('rla-leaf'));
+      raw.until = '2000-01-01';
+      localStorage.setItem('rla-leaf', JSON.stringify(raw));
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const gone = await page.evaluate(() => document.body.innerText);
+    assert(/Ask from the one-screen/i.test(gone), 'expired leaf should go blank');
+    assert(!/Amen\./.test(gone), 'expired leaf still blessing');
   });
 
   await check('no page errors', async () => {

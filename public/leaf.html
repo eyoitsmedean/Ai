@@ -66,7 +66,11 @@
       font-family: Fraunces, Georgia, serif; font-style: italic;
       font-size: 28px; color: var(--crimson); margin-top: 28px;
     }
-    .cannot { font-size: 13px; line-height: 1.5; color: var(--mute); margin-top: 32px; }
+    .cannot { font-size: 13px; line-height: 1.5; color: var(--mute); margin-top: 28px; }
+    .catch {
+      margin-top: 22px; letter-spacing: .16em; text-transform: uppercase;
+      font-size: 11px; color: var(--mute);
+    }
     .cannot a { color: var(--crimson); }
     .crisis {
       font-family: 'Source Serif 4', Georgia, serif;
@@ -99,7 +103,7 @@
     <div class="mark" aria-hidden="true">R</div>
     <h1>A <em>leaf</em></h1>
     <div id="body">
-      <p class="empty">Ask from the one-screen first. The leaf stays blank until a sitting is set on this device.</p>
+      <p class="empty">Ask from the one-screen first. The leaf stays blank until a sitting is set on this device. It is kept until this day turns.</p>
     </div>
     <div class="screen-only">
       <button class="print" type="button" id="print" hidden>Print this sheet</button>
@@ -131,11 +135,27 @@
       return row;
     }
 
+    function todayStr() {
+      const d = new Date();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    }
+    function readJson(store, key) {
+      try { return JSON.parse(store.getItem(key) || 'null'); } catch (_) { return null; }
+    }
+    const session = readJson(sessionStorage, 'rla-leaf-session');
+    const kept = readJson(localStorage, KEY);
+    const today = todayStr();
     let raw = null;
-    try { raw = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (_) { raw = null; }
+    if (session && session.crisis) raw = session;
+    else if (kept && (!kept.until || kept.until >= today)) raw = kept;
+    else if (kept && kept.until < today) {
+      try { localStorage.removeItem(KEY); } catch (_) {}
+    }
 
     const crisis = raw && raw.crisis === true;
-    const words = crisis ? [] : ((raw && raw.words) || []).map(gospelWord).filter(Boolean).slice(0, 2);
+    const words = crisis ? [] : ((raw && raw.words) || []).map(gospelWord).filter(Boolean).slice(0, 1);
     const asked = raw && String(raw.q || '').trim();
     const printable = crisis ? Boolean(raw.notice) : words.length > 0;
 
@@ -159,7 +179,8 @@
           ? '<p class="kicker">What that might mean today</p><p class="imply" id="imply">' + esc(fourLines(raw.implication)) + '</p>'
           : '') +
         '<p class="amen">Amen.</p>' +
-        '<p class="cannot">This is not a pastor. Quoted speech is King James, public domain in the United States. Nothing on this sheet was invented.</p>';
+        (raw.catchword ? '<p class="catch">— ' + esc(raw.catchword) + '</p>' : '') +
+        '<p class="cannot">This is not a pastor. Quoted speech is King James, public domain in the United States. Nothing on this sheet was invented. Kept on this device until this day turns.</p>';
       printBtn.hidden = false;
     }
 

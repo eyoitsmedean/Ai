@@ -6,9 +6,9 @@
 
 ## What it is
 
-After `/ask` sets a sitting, **Print this leaf** opens `/leaf`: one sheet with the asked sentence, the sealed crimson words, four lines of stored meaning, and Amen. Crisis sittings print 988 and no counsel.
+After `/ask` sets a sitting, **Print this leaf** opens `/leaf`: one sheet with the asked sentence, **one pin verse** (not the wide span), the stored meaning of that verse, a catchword, and Amen. Crisis sittings print 988 and no counsel, and they are not kept.
 
-The sitting stays in `sessionStorage` (`rla-leaf`) on this device. It is not sent anywhere.
+An ordinary sitting stays in `localStorage` (`rla-leaf`) until the calendar day turns — the same rule as the folio catchword. It is not sent anywhere.
 
 ## How to use it
 

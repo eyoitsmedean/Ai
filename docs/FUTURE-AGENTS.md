@@ -13,7 +13,7 @@ Authoritative instructions, in order:
 3. `docs/RESEARCH-AND-GATE.md` — sources, five adjacent topics, human-gate checklist.
 4. This file — how to resume.
 
-This conversation’s user prompts are **nine** as of 2026-10-31 (household quire is #9). Prompt 10 does not exist here. Do not invent a longer history. Do not treat another chat’s first-ten as this one.
+This conversation’s user prompts are **ten** as of 2026-10-31 (the leaf’s pin verse is #10). Do not invent a longer history. Do not treat another chat’s first-ten as this one.
 
 ## What is evidence, interpretation, or approved direction
 

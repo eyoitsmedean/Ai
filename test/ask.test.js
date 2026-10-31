@@ -71,6 +71,15 @@ test('askFor: shame may set the wider retrieved span of the same saying', () => 
   assert.ok(out.words[0].quote.length > 40);
 });
 
+test('askFor: the sheet is the pin verse, not the wide span', () => {
+  const out = askFor('I carry so much shame');
+  assert.equal(out.sheet.words.length, 1);
+  assert.equal(out.sheet.words[0].verse, 'Luke 15:4');
+  assert.doesNotMatch(out.sheet.words[0].quote, /ten pieces of silver|bread of life/i);
+  assert.equal(out.sheet.catchword, 'What');
+  assert.ok(out.words.length >= 1);
+});
+
 test('askFor: fear sets a fear saying, not a comfort dump', () => {
   const out = askFor('I am afraid of the future');
   assert.equal(out.theme, 'Fear');

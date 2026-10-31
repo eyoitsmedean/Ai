@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { isPrintable, normalizeSitting } = require('../lib/leaf');
+const { isPrintable, normalizeSitting, sheetFor } = require('../lib/leaf');
 
 test('normalizeSitting keeps two Gospel sayings and four implication lines', () => {
   const leaf = normalizeSitting({
@@ -47,4 +47,28 @@ test('normalizeSitting crisis leaf has 988 notice and no Amen', () => {
   assert.equal(leaf.amen, false);
   assert.match(leaf.notice, /988/);
   assert.equal(isPrintable(leaf), true);
+});
+
+test('sheetFor keeps one pin verse until the calendar day turns', () => {
+  const now = new Date(2026, 9, 31, 22, 0, 0);
+  const leaf = sheetFor({
+    q: 'I carry so much shame',
+    until: '2026-10-31',
+    words: [
+      { verse: 'Luke 15:4', quote: 'What man of you, having an hundred sheep', translation: 'KJV' },
+      { verse: 'John 6:35', quote: 'I am the bread of life', translation: 'KJV' },
+    ],
+    implication: 'He comes after what is lost.',
+  }, now);
+  assert.equal(leaf.kept, true);
+  assert.equal(leaf.words.length, 1);
+  assert.equal(leaf.words[0].verse, 'Luke 15:4');
+  assert.equal(leaf.catchword, 'What');
+  assert.equal(leaf.amen, true);
+  const gone = sheetFor({
+    until: '2026-10-30',
+    words: [{ verse: 'Luke 15:4', quote: 'What man of you, having an hundred sheep' }],
+  }, now);
+  assert.equal(gone.kept, false);
+  assert.deepEqual(gone.words, []);
 });
