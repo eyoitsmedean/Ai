@@ -4,7 +4,20 @@ Dean: this is the locked product on a cream page. No Flutter, no Xcode, no Play.
 
 Not a second app. Same spine: splash → Word → citation → knot → reflection → One honest step in their own words → optional Amen → “You said you'd ___”. Ask is on-device retrieve. 988 is a phone link.
 
-## Open it
+## One file (AirDrop this)
+
+`RedWords.html` is the same leaf with the pack and the serif inside it. No server. No install.
+
+Rebuild after a pack change:
+
+```bash
+python3 red-words-app/tool/build_guest.py
+python3 red-words-app/tool/build_one_file.py
+```
+
+Open the file in Safari or Chrome. Add to Home Screen if you want it on the phone.
+
+## Open the folder instead
 
 From the repo, on this computer:
 
