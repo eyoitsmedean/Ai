@@ -144,6 +144,55 @@ async function main() {
     await page.evaluate(() => switchTab('today'));
   });
 
+  await check('Advent peek opens the waiting path', async () => {
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.goto(BASE + '/?advent=2026-11-29', { waitUntil: 'networkidle0' });
+    const seen = await page.evaluate(() => ({
+      season: document.documentElement.getAttribute('data-season'),
+      label: document.getElementById('week-ribbon') && document.getElementById('week-ribbon').innerText,
+      cite: null,
+    }));
+    assert(seen.season === 'advent', 'peek should turn the paper Advent, got ' + seen.season);
+    assert(/Advent/i.test(seen.label || ''), 'ribbon missing Advent: ' + (seen.label || ''));
+    assert(/Look Up|Sunday/i.test(seen.label || ''), 'First Sunday missing: ' + (seen.label || ''));
+    assert(!/Ask Him/i.test(seen.label || ''), 'must not say Ask Him');
+    await page.click('.forty-open');
+    await page.waitForSelector('#sit-sheet.on', { timeout: 4000 });
+    const sit = await page.evaluate(() => ({
+      quote: document.getElementById('sit-quote').textContent,
+      cite: document.getElementById('sit-cite').textContent,
+    }));
+    assert(/redemption draweth nigh/i.test(sit.quote), 'wrong First Sunday saying: ' + sit.quote);
+    assert(/Luke 21:28/.test(sit.cite) && /KJV/.test(sit.cite), 'cite must name Luke 21:28 KJV: ' + sit.cite);
+  });
+
+  await check('Advent is one reading and one lit candle', async () => {
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.goto(BASE + '/?advent=2026-11-29', { waitUntil: 'networkidle0' });
+    const leaf = await page.evaluate(() => ({
+      affHidden: document.getElementById('aff-card').hidden,
+      eyebrow: document.querySelector('#word-card .eyebrow').textContent,
+      title: document.getElementById('word-title').textContent,
+      verse: document.getElementById('word-verse').textContent,
+      passage: document.getElementById('word-passage').textContent,
+      lit: [...document.querySelectorAll('.wreath span')].map((s) => s.className + ' ' + s.textContent.trim()),
+    }));
+    assert(leaf.affHidden, 'affirmation still a second reading');
+    assert(leaf.eyebrow === 'The waiting', 'eyebrow ' + leaf.eyebrow);
+    assert(leaf.title === 'Look Up', 'title ' + leaf.title);
+    assert(/Luke 21:28/.test(leaf.verse) && /KJV/.test(leaf.verse), leaf.verse);
+    assert(/redemption draweth nigh/i.test(leaf.passage), leaf.passage);
+    assert(leaf.lit[0].includes('lit') && /Hope/.test(leaf.lit[0]), 'Hope candle: ' + leaf.lit.join('|'));
+    assert(!leaf.lit.slice(1).some((s) => s.includes('lit')), 'too many candles lit: ' + leaf.lit.join('|'));
+    const night = await page.evaluate(() => {
+      const q = document.getElementById('vespers-quote');
+      return { hidden: !q || q.hidden, text: q ? q.textContent : '' };
+    });
+    if (!night.hidden) {
+      assert(/redemption draweth nigh/i.test(night.text), 'compline showed another saying: ' + night.text);
+    }
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

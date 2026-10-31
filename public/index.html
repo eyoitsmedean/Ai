@@ -1077,7 +1077,7 @@ textarea { font-family: var(--body); }
 .seven-day:not(:disabled):hover { color: var(--crimson); }
 .seven-day:disabled { cursor: default; }
 
-/* Forty: the Lent path takes the ribbon's place from Ash Wednesday to Easter. */
+/* Forty and Advent: a named path takes the ribbon's place in its season. */
 .forty { display: flex; flex-direction: column; gap: 10px; margin: 0 0 28px; }
 .forty-kicker { margin: 0; color: var(--ink-3); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 .forty-kicker b { color: var(--crimson); font-weight: 600; }
@@ -1088,6 +1088,12 @@ textarea { font-family: var(--body); }
 .forty-marks i.now { background: var(--crimson); border-color: var(--crimson); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 14%, transparent); }
 .forty-open { align-self: flex-start; background: none; border: none; padding: 0; color: var(--ink); font-family: var(--display); font-size: 1.25rem; text-align: left; cursor: pointer; }
 .forty-open:hover, .forty-open:focus-visible { color: var(--crimson); }
+.wreath { display: flex; gap: 16px; margin: 2px 0 2px; }
+.wreath span { display: flex; flex-direction: column; align-items: center; gap: 5px; font-family: var(--ui); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.wreath i { width: 12px; height: 16px; border-radius: 6px 6px 2px 2px; border: 1px solid var(--rule-2); background: transparent; }
+.wreath span.past i { background: color-mix(in srgb, var(--crimson) 55%, var(--paper)); border-color: var(--crimson); }
+.wreath span.lit i { background: var(--crimson); border-color: var(--crimson); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 16%, transparent); }
+.wreath span.lit { color: var(--crimson); }
 
 .epigraph {
   margin: 0 0 36px;
@@ -1973,6 +1979,7 @@ html.sitting .sit-sheet {
 <script src="data/curated.js"></script>
 <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
+<script src="data/advent.js"></script>
 <script src="data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
@@ -2080,8 +2087,13 @@ function churchYear(date) {
   if (n >= ymdNum(easter) && n <= ymdNum(addDaysLocal(easter, 49))) return seasons.easter;
   return seasons.ordinary;
 }
+function roomDate() {
+  if (typeof ADVENT_PEEK === 'string' && ADVENT_PEEK) return new Date(ADVENT_PEEK + 'T12:00:00');
+  if (typeof LENT_PEEK === 'string' && LENT_PEEK) return new Date(LENT_PEEK + 'T12:00:00');
+  return new Date();
+}
 function applySeason() {
-  currentSeason = churchYear(new Date());
+  currentSeason = churchYear(roomDate());
   if (!document.documentElement.dataset.theme) document.documentElement.dataset.theme = 'light';
   document.documentElement.dataset.season = currentSeason.id;
   const brand = document.getElementById('brand-sub');
@@ -2111,6 +2123,8 @@ function vespersPrompt() {
   return VESPERS_PROMPTS[new Date().getDay()];
 }
 function vespersSaying() {
+  const hit = typeof adventToday === 'function' ? adventToday() : null;
+  if (hit && hit.entry) return { verse: hit.entry.verse, quote: hit.entry.passage };
   if (dailyData && dailyData.word) {
     return { verse: dailyData.word.verse, quote: dailyData.word.passage };
   }
@@ -2133,10 +2147,17 @@ function startNewReader() {
   location.href = './';
 }
 
-// ?lent=2027-03-26 previews a day of Forty; read it before ?fresh=1 clears the query.
+// ?lent=2027-03-26 previews Forty; ?advent=2026-11-29 previews the waiting path.
+// Read them before ?fresh=1 clears the query.
 const LENT_PEEK = (() => {
   try {
     const v = new URLSearchParams(location.search).get('lent');
+    return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  } catch (_) { return null; }
+})();
+const ADVENT_PEEK = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get('advent');
     return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
   } catch (_) { return null; }
 })();
@@ -2337,8 +2358,13 @@ function pathState() {
 }
 function fortyToday() {
   if (typeof window.RLA_fortyFor !== 'function') return null;
-  const date = LENT_PEEK ? new Date(LENT_PEEK + 'T12:00:00') : new Date();
-  return window.RLA_fortyFor(date);
+  const date = LENT_PEEK ? new Date(LENT_PEEK + 'T12:00:00') : (ADVENT_PEEK ? null : new Date());
+  return date ? window.RLA_fortyFor(date) : null;
+}
+function adventToday() {
+  if (typeof window.RLA_adventFor !== 'function') return null;
+  const date = ADVENT_PEEK ? new Date(ADVENT_PEEK + 'T12:00:00') : (LENT_PEEK ? null : new Date());
+  return date ? window.RLA_adventFor(date) : null;
 }
 function paintForty(host, hit) {
   const path = window.RLA_FORTY_PATH || [];
@@ -2357,6 +2383,52 @@ function paintForty(host, hit) {
       '<i class="' + (p.kind !== 'day' ? 'sun ' : '') + (i < hit.offset ? 'past' : i === hit.offset ? 'now' : '') + '"></i>').join('') + '</div>' +
     '<button type="button" class="forty-open">Sit with \u201c' + esc(e.title) + '\u201d</button>';
   host.querySelector('.forty-open').addEventListener('click', () => sitForty(hit));
+}
+function paintAdvent(host, hit) {
+  const path = hit.path || [];
+  const e = hit.entry;
+  const label = e.kind === 'eve'
+    ? '<b>Christmas Eve</b> · the waiting ends at dusk'
+    : e.kind === 'sunday'
+      ? '<b>Advent</b> · Sunday · ' + esc(e.week)
+      : '<b>Advent</b> · Day ' + hit.day + ' of ' + hit.total + ' · ' + esc(e.week);
+  host.className = 'forty';
+  host.removeAttribute('aria-hidden');
+  host.setAttribute('role', 'group');
+  host.setAttribute('aria-label', 'Advent, the waiting path');
+  const weeks = ['Hope', 'Peace', 'Joy', 'Love'];
+  const wi = weeks.indexOf(e.week);
+  host.innerHTML = '<p class="forty-kicker">' + label + '</p>' +
+    '<div class="wreath" aria-label="Advent wreath">' + weeks.map((name, i) =>
+      '<span class="' + (i < wi ? 'past' : i === wi ? 'lit' : '') + '"><i></i>' + esc(name) + '</span>').join('') + '</div>' +
+    '<div class="forty-marks" aria-hidden="true">' + path.map((p, i) =>
+      '<i class="' + (p.kind !== 'day' ? 'sun ' : '') + (i < hit.offset ? 'past' : i === hit.offset ? 'now' : '') + '"></i>').join('') + '</div>' +
+    '<button type="button" class="forty-open">Sit with \u201c' + esc(e.title) + '\u201d</button>';
+  host.querySelector('.forty-open').addEventListener('click', () => sitAdvent(hit));
+}
+function sitAdvent(hit) {
+  const e = hit.entry;
+  sitPayload = {
+    kicker: e.kind === 'eve' ? 'Christmas Eve' : e.kind === 'sunday' ? 'Advent · Sunday' : 'Advent · Day ' + hit.day,
+    title: e.title,
+    quote: e.passage,
+    verse: e.verse,
+    reflection: e.reflection + (e.practice ? ' Today: ' + e.practice : ''),
+    pathIndex: null,
+  };
+  sitStep = 1;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  document.getElementById('sit-kicker').textContent = sitPayload.kicker;
+  document.getElementById('sit-cite').textContent = sitPayload.verse + '  ·  KJV';
+  document.getElementById('sit-quote').textContent = sitPayload.quote;
+  document.getElementById('sit-quote-rest').textContent = sitPayload.quote;
+  const reflectQ = document.getElementById('sit-quote-reflect');
+  if (reflectQ) reflectQ.textContent = sitPayload.quote;
+  const reflect = document.getElementById('sit-reflect');
+  if (reflect) reflect.textContent = sitPayload.reflection;
+  document.getElementById('sit-reply').value = '';
+  showSitStep(1);
 }
 function sitForty(hit) {
   const e = hit.entry;
@@ -2385,6 +2457,8 @@ function sitForty(hit) {
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
+  const advent = adventToday();
+  if (advent) { paintAdvent(host, advent); return; }
   const lent = fortyToday();
   if (lent) { paintForty(host, lent); return; }
   const days = sevenDays();
@@ -2485,7 +2559,8 @@ function updateDateUI() {
     : evening
       ? 'Evening <em>office</em>'
       : 'Today’s <em>light</em>';
-  document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  const shown = (ADVENT_PEEK || LENT_PEEK) ? roomDate() : now;
+  document.getElementById('today-date').textContent = shown.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('vespers-card').hidden = !evening;
   if (evening) paintVespers();
 }
@@ -2514,23 +2589,10 @@ async function loadCurated() {
   return curatedPacks;
 }
 
-async function loadDailyContent() {
-  try {
-    const res = await fetch('api/daily');
-    dailyData = await res.json();
-    if (dailyData.error) throw new Error(dailyData.error);
-  } catch (e) {
-    try {
-      const cur = await loadCurated();
-      const pack = Array.isArray(cur.daily)
-      ? cur.daily[Math.abs(Math.floor((Date.now() / 86400000) % cur.daily.length))]
-      : cur.daily;
-    dailyData = pack;
-    } catch (_) {
-      document.getElementById('aff-skel').innerHTML = '<p class="lede">The morning page could not be fetched. Refresh when you have a connection.</p>';
-      return;
-    }
-  }
+function paintRotation() {
+  document.getElementById('aff-card').hidden = false;
+  const wordEyebrow = document.querySelector('#word-card .eyebrow');
+  if (wordEyebrow) wordEyebrow.textContent = 'Word of the day';
   document.getElementById('aff-text').textContent = dailyData.affirmation.text;
   revealWords(document.getElementById('aff-quote'), dailyData.affirmation.quote);
   document.getElementById('aff-verse').textContent = dailyData.affirmation.verse + '  ·  KJV';
@@ -2546,6 +2608,53 @@ async function loadDailyContent() {
   document.getElementById('word-skel').style.display = 'none';
   document.getElementById('word-content').style.display = 'block';
   if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+}
+function applyAdventLeaf() {
+  const hit = adventToday();
+  if (!hit) return false;
+  const e = hit.entry;
+  const reflection = e.reflection + (e.practice ? ' Today: ' + e.practice : '');
+  dailyData = {
+    advent: true,
+    affirmation: { text: e.title, quote: e.passage, verse: e.verse },
+    word: { theme: e.week, title: e.title, passage: e.passage, verse: e.verse, reflection },
+  };
+  document.getElementById('aff-card').hidden = true;
+  const wordEyebrow = document.querySelector('#word-card .eyebrow');
+  if (wordEyebrow) wordEyebrow.textContent = e.kind === 'eve' ? 'Christmas Eve' : 'The waiting';
+  document.getElementById('word-theme').textContent = e.week;
+  document.getElementById('word-title').textContent = e.title;
+  revealWords(document.getElementById('word-passage'), e.passage);
+  document.getElementById('word-verse').textContent = e.verse + '  ·  KJV';
+  document.getElementById('word-reflection').textContent = reflection;
+  document.getElementById('word-skel').style.display = 'none';
+  document.getElementById('word-content').style.display = 'block';
+  if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
+  return true;
+}
+async function loadDailyContent() {
+  try {
+    const res = await fetch('api/daily');
+    dailyData = await res.json();
+    if (dailyData.error) throw new Error(dailyData.error);
+  } catch (e) {
+    try {
+      const cur = await loadCurated();
+      const pack = Array.isArray(cur.daily)
+      ? cur.daily[Math.abs(Math.floor((Date.now() / 86400000) % cur.daily.length))]
+      : cur.daily;
+    dailyData = pack;
+    } catch (_) {
+      if (!applyAdventLeaf()) {
+        document.getElementById('aff-skel').innerHTML = '<p class="lede">The morning page could not be fetched. Refresh when you have a connection.</p>';
+      } else {
+        paintVespers();
+      }
+      return;
+    }
+  }
+  if (adventToday()) applyAdventLeaf();
+  else paintRotation();
   paintVespers();
   const catchEl = document.getElementById('folio-catch');
   if (catchEl) {
@@ -3681,8 +3790,13 @@ function paintVespers() {
   document.getElementById('vespers-prompt').textContent = night
     ? 'What will you leave in His hands?'
     : vespersPrompt();
-  document.getElementById('vespers-quote').textContent = saying.quote;
-  document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
+  const quoteEl = document.getElementById('vespers-quote');
+  const citeEl = document.getElementById('vespers-cite');
+  const waiting = typeof adventToday === 'function' && adventToday();
+  quoteEl.hidden = !!waiting;
+  citeEl.hidden = !!waiting;
+  quoteEl.textContent = saying.quote;
+  citeEl.textContent = saying.verse + '  ·  KJV';
 }
 function keepVespers() {
   const saying = vespersSaying();
@@ -3801,14 +3915,20 @@ function stopHearOffice() {
 function officeScript() {
   const parts = [];
   parts.push(officeName() + '.');
-  if (dailyData && dailyData.affirmation) {
-    parts.push(dailyData.affirmation.text);
-    parts.push(dailyData.affirmation.quote);
-    parts.push(dailyData.affirmation.verse);
-  }
-  if (dailyData && dailyData.word) {
+  if (dailyData && dailyData.advent && dailyData.word) {
+    parts.push(dailyData.word.title);
     parts.push(dailyData.word.passage);
     parts.push(dailyData.word.verse);
+  } else {
+    if (dailyData && dailyData.affirmation) {
+      parts.push(dailyData.affirmation.text);
+      parts.push(dailyData.affirmation.quote);
+      parts.push(dailyData.affirmation.verse);
+    }
+    if (dailyData && dailyData.word) {
+      parts.push(dailyData.word.passage);
+      parts.push(dailyData.word.verse);
+    }
   }
   if (isEveningOffice()) {
     const saying = vespersSaying();
@@ -3967,6 +4087,7 @@ const COMMANDS = [
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'Advent', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
