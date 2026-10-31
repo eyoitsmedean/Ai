@@ -116,14 +116,14 @@ Home widget: Word, citation, thread. Tap opens redwords://today.
 Privacy policy URL: <PASTE>. Same text is in Settings.
 ```
 
-**Screenshots to shoot** (6.7" iPhone + 6.1" + iPad; Play phone + 7" tablet):
+**Screenshots** — generated pack is in `store/screenshots/` (open `store/index.html`). Real UI, three viewports. Device photography if review asks.
 
-1. Today — Matthew 6:34, hierarchy visible (Word, citation, knot, reflection, step).
-2. After “I’ll do this” — the step committed.
-3. Ask — a retrieve (e.g. “I need peace”) and a stay (e.g. a recipe).
-4. Saved empty (“Nothing kept yet.”) and Saved with one saying.
-5. Settings — Dark saying + Privacy block + 988.
-6. Home screen widget — Word + citation + thread, no badge.
+1. `01_today` — Matthew 6:34, hierarchy visible (Word, citation, knot, reflection, step).
+2. `02_one_honest_step` — the step + “I'll do this”.
+3. `03_ask_retrieve` / `04_ask_stay` — “I need peace” and a recipe stay.
+4. `05_saved_empty` / `06_saved_one` — “Nothing kept yet.” and one saying.
+5. `07_settings` — Dark saying + Privacy block + 988.
+6. `08_home_widget` — Word + citation + thread, no badge.
 
 ## Fail the upload if
 

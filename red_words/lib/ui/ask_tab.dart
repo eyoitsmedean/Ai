@@ -76,6 +76,7 @@ class _AskTabState extends State<AskTab> {
               dark: widget.dark,
               chips: result.chips,
               showStepCue: true,
+              scrollable: false,
             ),
           if (!result.retrieved || result.distress)
             Text(

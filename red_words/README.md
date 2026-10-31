@@ -32,6 +32,8 @@ python3 tool/check_16kb.py build/app/outputs/bundle/release/app-release.aab
 
 First launch opens Matthew 6:34 (`anxiety-mt-6-34`).
 
+Store listing shots (from the running UI): `store/index.html`. Regenerate with `flutter test test/store_screenshots_test.dart`.
+
 ## Android release signing (Dean)
 
 Release is **not** debug-signed. Copy `android/key.properties.example` to `android/key.properties` and point it at the Play upload keystore:

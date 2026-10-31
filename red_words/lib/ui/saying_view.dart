@@ -11,6 +11,7 @@ class SayingView extends StatelessWidget {
     this.chips = const [],
     this.showStepCue = true,
     this.stepCue = 'One honest step',
+    this.scrollable = true,
   });
 
   final Saying saying;
@@ -19,92 +20,97 @@ class SayingView extends StatelessWidget {
   final bool showStepCue;
   final String stepCue;
 
+  /// False when the parent already scrolls (Ask's ListView).
+  final bool scrollable;
+
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final scale = media.textScaler.clamp(minScaleFactor: 1, maxScaleFactor: 2.2);
     final paper = dark ? Brand.charcoal : Brand.paper;
     final ink = dark ? Brand.paper : Brand.ink;
+    final column = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          saying.word,
+          key: const Key('saying-word'),
+          style: const TextStyle(
+            fontFamily: 'serif',
+            fontSize: 26,
+            height: 1.35,
+            color: Brand.crimson,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          saying.citationCaps,
+          key: const Key('saying-citation'),
+          style: TextStyle(
+            fontFamily: 'sans-serif',
+            fontSize: 12,
+            letterSpacing: 1.6,
+            fontWeight: FontWeight.w600,
+            color: Brand.crimson.withValues(alpha: 0.85),
+          ),
+        ),
+        const SizedBox(height: 18),
+        const CrimsonKnot(key: Key('saying-knot')),
+        const SizedBox(height: 18),
+        Text(
+          saying.reflection,
+          key: const Key('saying-reflection'),
+          style: TextStyle(
+            fontFamily: 'sans-serif',
+            fontSize: 16,
+            height: 1.5,
+            color: ink,
+          ),
+        ),
+        if (chips.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Wrap(
+            key: const Key('saying-chips'),
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final chip in chips)
+                Text(
+                  chip,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    letterSpacing: 0.6,
+                    color: Brand.muted,
+                  ),
+                ),
+            ],
+          ),
+        ],
+        if (showStepCue) ...[
+          const SizedBox(height: 28),
+          Text(
+            stepCue,
+            key: const Key('saying-step-cue'),
+            style: const TextStyle(
+              fontFamily: 'sans-serif',
+              fontSize: 13,
+              letterSpacing: 0.8,
+              color: Brand.muted,
+            ),
+          ),
+        ],
+      ],
+    );
+    final padded = Padding(
+      padding: const EdgeInsets.fromLTRB(28, 36, 28, 24),
+      child: column,
+    );
     return MediaQuery(
       data: media.copyWith(textScaler: scale),
       child: ColoredBox(
         color: paper,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(28, 36, 28, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                saying.word,
-                key: const Key('saying-word'),
-                style: TextStyle(
-                  fontFamily: 'serif',
-                  fontSize: 26,
-                  height: 1.35,
-                  color: Brand.crimson,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                saying.citationCaps,
-                key: const Key('saying-citation'),
-                style: TextStyle(
-                  fontFamily: 'sans-serif',
-                  fontSize: 12,
-                  letterSpacing: 1.6,
-                  fontWeight: FontWeight.w600,
-                  color: Brand.crimson.withValues(alpha: 0.85),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const CrimsonKnot(key: Key('saying-knot')),
-              const SizedBox(height: 18),
-              Text(
-                saying.reflection,
-                key: const Key('saying-reflection'),
-                style: TextStyle(
-                  fontFamily: 'sans-serif',
-                  fontSize: 16,
-                  height: 1.5,
-                  color: ink,
-                ),
-              ),
-              if (chips.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                Wrap(
-                  key: const Key('saying-chips'),
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final chip in chips)
-                      Text(
-                        chip,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          letterSpacing: 0.6,
-                          color: Brand.muted,
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-              if (showStepCue) ...[
-                const SizedBox(height: 28),
-                Text(
-                  stepCue,
-                  key: const Key('saying-step-cue'),
-                  style: const TextStyle(
-                    fontFamily: 'sans-serif',
-                    fontSize: 13,
-                    letterSpacing: 0.8,
-                    color: Brand.muted,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
+        child: scrollable ? SingleChildScrollView(child: padded) : padded,
       ),
     );
   }
