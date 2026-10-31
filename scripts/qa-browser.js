@@ -126,6 +126,47 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('the evening you kept is waiting in the morning', async () => {
+    await page.evaluate(() => {
+      const card = document.getElementById('vespers-card');
+      card.hidden = false;
+      if (typeof paintVespers === 'function') paintVespers();
+      document.getElementById('vespers-reply').value = 'the 2am feeding';
+      if (typeof keepVespers === 'function') keepVespers();
+    });
+    const evening = await page.evaluate(() => ({
+      quote: document.getElementById('vespers-quote').textContent,
+      cite: document.getElementById('vespers-cite').textContent,
+    }));
+    assert(evening.quote && evening.quote.length > 8, 'vespers opened without a sentence');
+    assert(!/16:33|tribulation|overcome the world/i.test(evening.quote + evening.cite), 'evening closed on tribulation');
+    await page.evaluate(() => {
+      const sit = JSON.parse(localStorage.getItem('rla-last-sit') || 'null');
+      const y = new Date();
+      y.setDate(y.getDate() - 1);
+      const ymd = y.getFullYear() + '-' + String(y.getMonth() + 1).padStart(2, '0') + '-' + String(y.getDate()).padStart(2, '0');
+      sit.date = ymd;
+      sit.office = 'Vespers';
+      localStorage.setItem('rla-last-sit', JSON.stringify(sit));
+      const t = new Date();
+      const today = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+      localStorage.removeItem('rla-flyleaf-' + today);
+      if (typeof paintEpigraph === 'function') paintEpigraph();
+      if (typeof paintCatchword === 'function') paintCatchword();
+    });
+    const morning = await page.evaluate(() => ({
+      hidden: document.getElementById('epigraph').hidden,
+      kicker: document.getElementById('epigraph-kicker').textContent,
+      note: document.getElementById('epigraph-note').textContent,
+      catchword: document.getElementById('mast-catch').textContent,
+    }));
+    assert(!morning.hidden, 'last night’s leaf was not on Today');
+    assert(/Last night you laid down/.test(morning.kicker), 'kicker was ' + morning.kicker);
+    assert(/2am feeding/.test(morning.note), 'the sentence they laid down is missing');
+    assert(/feeding/i.test(morning.catchword), 'catchword did not last the night');
+    await page.evaluate(() => { if (typeof closeAmen === 'function') closeAmen(); });
+  });
+
   await check('a crisis line on every screen', async () => {
     for (const tab of ['today', 'seek', 'advisor', 'journal']) {
       const shown = await page.evaluate((t) => {
