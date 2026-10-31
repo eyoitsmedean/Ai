@@ -29,7 +29,9 @@ test('a crisis line on every screen', () => {
 test('Amen can send the sat word as a blessing', () => {
   assert.match(html, /id="amen-send"/);
   assert.match(html, /Send this word/);
-  assert.match(html, /What you wrote in Sit stays in the journal/);
+  assert.match(html, /onlyThis: true/);
+  assert.match(html, /id="blessing-more"/);
+  assert.match(html, /The word you just sat with/);
 });
 
 test('the room never sells and never pretends', () => {

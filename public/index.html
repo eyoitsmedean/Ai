@@ -1913,10 +1913,11 @@ html.sitting .sit-sheet {
     <div class="sheet-title" id="blessing-title">Send a blessing</div>
     <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
   </div>
-  <p class="sit-copy">A saying, a short note, and a card. What you wrote in Sit stays in the journal.</p>
+  <p class="sit-copy" id="blessing-lede">A saying, a short note, and a card. What you wrote in Sit stays in the journal.</p>
   <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
   <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="A word for them…"></textarea>
   <div class="blessing-preview" id="blessing-preview"></div>
+  <button class="ghost" type="button" id="blessing-more" hidden onclick="showOtherBlessings()">Choose another saying</button>
   <div id="blessing-list"></div>
   <div class="actions" style="margin-top:18px">
     <button class="cta cta-primary" type="button" onclick="sendBlessing('parchment')">Send the card</button>
@@ -3455,7 +3456,7 @@ async function shareItem(type, style) {
     ? { kicker: 'A blessing', title: (document.getElementById('blessing-note').value.trim() || 'For you'), quote: blessingPick.quote, verse: blessingPick.verse }
     : sharePayload(type);
   if (!payload) return;
-  const text = payload.title + '\n\n' + payload.quote + '\n— ' + payload.verse;
+  const text = payload.title + '\n\n' + payload.quote + '\n— ' + gospelCite(payload.verse);
   try {
     const blob = await renderShareCard(payload, style);
     const file = new File([blob], 'red-letter.png', { type: 'image/png' });
@@ -3776,7 +3777,7 @@ function amenSendBlessing() {
   if (!seed) return;
   const note = document.getElementById('blessing-note');
   if (note) note.value = '';
-  openBlessing({ verse: seed.verse, quote: seed.quote });
+  openBlessing({ verse: seed.verse, quote: seed.quote }, { onlyThis: true });
 }
 function amenFromSit() {
   if (!sitPayload) return;
@@ -3920,16 +3921,37 @@ async function blessingSeeds() {
     return [];
   }
 }
-async function openBlessing(seed) {
+async function openBlessing(seed, opts) {
   closeSit();
   closeSettings();
   closeShareSheet();
-  const picks = await blessingSeeds();
-  if (seed && seed.verse && seed.quote && !picks.some((p) => p.verse === seed.verse)) picks.unshift(seed);
+  const only = !!(opts && opts.onlyThis && seed && seed.verse && seed.quote);
+  const picks = only ? [seed] : await blessingSeeds();
+  if (!only && seed && seed.verse && seed.quote && !picks.some((p) => p.verse === seed.verse)) picks.unshift(seed);
   blessingPick = seed || picks[0] || null;
-  renderBlessingList(picks);
+  const lede = document.getElementById('blessing-lede');
+  const more = document.getElementById('blessing-more');
+  const list = document.getElementById('blessing-list');
+  if (lede) lede.textContent = only
+    ? 'The word you just sat with. What you wrote stays in the journal.'
+    : 'A saying, a short note, and a card. What you wrote in Sit stays in the journal.';
+  if (more) more.hidden = !only;
+  if (list) list.hidden = only;
+  renderBlessingList(only ? [] : picks);
   updateBlessingPreview();
   openSheetChrome('blessing-sheet');
+}
+async function showOtherBlessings() {
+  const seed = blessingPick;
+  const picks = await blessingSeeds();
+  if (seed && seed.verse && seed.quote && !picks.some((p) => p.verse === seed.verse)) picks.unshift(seed);
+  const more = document.getElementById('blessing-more');
+  const list = document.getElementById('blessing-list');
+  const lede = document.getElementById('blessing-lede');
+  if (more) more.hidden = true;
+  if (list) list.hidden = false;
+  if (lede) lede.textContent = 'A saying, a short note, and a card. What you wrote in Sit stays in the journal.';
+  renderBlessingList(picks);
 }
 function closeBlessing() {
   document.getElementById('blessing-sheet').classList.remove('on');
