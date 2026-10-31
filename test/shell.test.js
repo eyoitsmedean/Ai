@@ -33,3 +33,15 @@ test('the room never sells and never pretends', () => {
   assert.doesNotMatch(html, /\bPlus\b/, 'no "Plus" tier');
   assert.doesNotMatch(html, /\/week\b|weekly/i, 'never a weekly price');
 });
+
+test('the morning does not erase the evening', () => {
+  const keep = html.match(/function keepVespers\(\) \{[\s\S]*?\n\}/);
+  assert.ok(keep, 'keepVespers missing');
+  assert.match(keep[0], /rememberEvening\(/);
+  const paint = html.match(/function paintEpigraph\(\) \{[\s\S]*?\n\}/);
+  assert.ok(paint, 'paintEpigraph missing');
+  assert.match(paint[0], /eveningRecord\(\)/);
+  assert.match(paint[0], /Last night you laid down/);
+  assert.match(paint[0], /·  KJV/);
+  assert.match(html, /Laid down/);
+});

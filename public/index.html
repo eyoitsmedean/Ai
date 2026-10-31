@@ -2255,6 +2255,11 @@ function twoAgoStr() {
   d.setDate(d.getDate() - 2);
   return padDate(d);
 }
+function nextCivilStr() {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return padDate(d);
+}
 function weekStartStr() {
   const d = new Date();
   const diff = (d.getDay() + 6) % 7;
@@ -3290,15 +3295,19 @@ function renderJournal() {
   const TYPE_LABELS = { aff: 'Affirmation', word: 'Word', enc: 'Encouragement', chat: 'Letter', lib: 'Saying', sit: 'Sat with' };
   list.innerHTML = items.map(item => {
     const typeKey = item.type || 'chat';
+    const laid = String(item.key || '').indexOf('vespers-') === 0;
     const date = new Date(item.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const title = laid ? (item.note || item.verse || item.title) : item.title;
+    const body = laid ? (item.quote || item.body) : item.body;
+    const verseLine = item.verse ? (item.verse + (laid ? '  ·  KJV' : '')) : '';
     return `<div class="journal-item">
       <button class="journal-delete" onclick="deleteJournalItem('${esc(item.key)}')" aria-label="Remove">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
       </button>
-      <div class="journal-type-row"><span class="badge">${TYPE_LABELS[typeKey] || 'Kept'}</span><span class="journal-date">${date}</span></div>
-      <div class="journal-title">${esc(item.title)}</div>
-      <div class="journal-body">${esc(item.body)}</div>
-      ${item.verse ? '<div class="journal-verse">' + esc(item.verse) + '</div>' : ''}
+      <div class="journal-type-row"><span class="badge">${laid ? 'Laid down' : (TYPE_LABELS[typeKey] || 'Kept')}</span><span class="journal-date">${date}</span></div>
+      <div class="journal-title">${esc(title)}</div>
+      <div class="journal-body">${esc(body)}</div>
+      ${verseLine ? '<div class="journal-verse">' + esc(verseLine) + '</div>' : ''}
     </div>`;
   }).join('');
 }
@@ -3602,11 +3611,18 @@ function firstCatchword(text) {
 function getLastSit() {
   return parseJSON(ls('rla-last-sit'), null);
 }
+function eveningRecord() {
+  const saved = parseJSON(ls('rla-evening'), null);
+  if (!saved || !saved.quote) return null;
+  if (saved.date !== todayStr() && saved.date !== yestStr()) return null;
+  return saved;
+}
 function getCatchword() {
   const saved = parseJSON(ls('rla-catchword'), null);
-  if (!saved || !saved.word) return '';
-  if (saved.until && saved.until < todayStr()) return '';
-  return saved.word;
+  if (saved && saved.word && !(saved.until && saved.until < todayStr())) return saved.word;
+  const evening = eveningRecord();
+  if (evening && evening.catchword && evening.until >= todayStr()) return evening.catchword;
+  return '';
 }
 function rememberSitting({ quote, verse, note, office }) {
   const catchword = firstCatchword(note) || firstCatchword(quote);
@@ -3628,18 +3644,42 @@ function paintCatchword() {
     el.textContent = word ? '— ' + word : '';
   });
 }
+function rememberEvening({ quote, verse, note }) {
+  const catchword = firstCatchword(note) || firstCatchword(quote);
+  lsSet('rla-evening', JSON.stringify({
+    date: todayStr(),
+    quote,
+    verse,
+    note: note || '',
+    catchword,
+    until: nextCivilStr(),
+  }));
+  try { localStorage.removeItem('rla-evening-leaf-' + todayStr()); } catch (_) {}
+}
 function turnFlyleaf() {
-  lsSet('rla-flyleaf-' + todayStr(), '1');
-  const root = document.getElementById('epigraph');
-  if (root) root.hidden = true;
+  const eveningOn = eveningRecord() && ls('rla-evening-leaf-' + todayStr()) !== '1';
+  if (eveningOn) lsSet('rla-evening-leaf-' + todayStr(), '1');
+  else lsSet('rla-flyleaf-' + todayStr(), '1');
+  paintEpigraph();
 }
 function paintEpigraph() {
-  const sit = getLastSit();
   const root = document.getElementById('epigraph');
+  if (!root) return;
+  const evening = eveningRecord();
+  if (evening && ls('rla-evening-leaf-' + todayStr()) !== '1') {
+    const sameDay = evening.date === todayStr();
+    document.getElementById('epigraph-kicker').textContent = sameDay ? 'Earlier you laid down' : 'Last night you laid down';
+    document.getElementById('epigraph-quote').textContent = '“' + String(evening.quote).replace(/^["“]|["”]$/g, '') + '”';
+    document.getElementById('epigraph-note').textContent = evening.note || '';
+    document.getElementById('epigraph-cite').textContent = (evening.verse || '') + '  ·  KJV';
+    root.hidden = false;
+    return;
+  }
+  const sit = getLastSit();
   const turned = ls('rla-flyleaf-' + todayStr()) === '1';
   const fresh = sit && sit.quote && (sit.date === todayStr() || sit.date === yestStr());
-  if (!root || !fresh || turned) {
-    if (root) root.hidden = true;
+  if (!fresh || turned) {
+    root.hidden = true;
     return;
   }
   const sameDay = sit.date === todayStr();
@@ -3692,10 +3732,13 @@ function keepVespers() {
     id: key,
     key,
     type: 'sit',
-    title: saying.verse || 'Vespers',
+    title: note || saying.verse || 'Vespers',
+    note,
+    quote: saying.quote,
     body: (note ? note + '\n\n' : '') + saying.quote,
     verse: saying.verse,
   });
+  rememberEvening({ quote: saying.quote, verse: saying.verse, note });
   rememberSitting({ quote: saying.quote, verse: saying.verse, note, office: 'Vespers' });
   showToast('Kept the evening');
   openAmen({ quote: saying.quote, verse: saying.verse, holdMs: 3000 });
