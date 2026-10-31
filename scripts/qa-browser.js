@@ -69,8 +69,14 @@ async function main() {
     });
     await page.reload({ waitUntil: 'networkidle0' });
 
-    const theme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
-    assert(theme === 'light', 'default theme is ' + theme);
+    const theme = await page.evaluate(() => {
+      const hour = new Date().getHours();
+      const expect = window.RedLetterLamp
+        ? (RedLetterLamp.lampShouldBeDark(localStorage.getItem('rla-dark'), hour) ? 'dark' : 'light')
+        : 'light';
+      return { got: document.documentElement.getAttribute('data-theme'), expect };
+    });
+    assert(theme.got === theme.expect, 'default theme is ' + theme.got + ', expected ' + theme.expect);
     const season = await page.evaluate(() => document.documentElement.getAttribute('data-season'));
     assert(season, 'church year missing');
 
@@ -108,6 +114,22 @@ async function main() {
       if (typeof keepSitReply === 'function') keepSitReply();
     });
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
+  });
+
+  await check('night watch lights the Lamp; day leaves parchment', async () => {
+    const painted = await page.evaluate(() => {
+      localStorage.removeItem('rla-dark');
+      const night = RedLetterLamp.applyLamp(document, null, 3);
+      const nightTheme = document.documentElement.getAttribute('data-theme');
+      const nightColor = document.querySelector('meta[name="theme-color"]').getAttribute('content');
+      const day = RedLetterLamp.applyLamp(document, null, 14);
+      const dayTheme = document.documentElement.getAttribute('data-theme');
+      RedLetterLamp.applyLamp(document, localStorage.getItem('rla-dark'), new Date().getHours());
+      return { night, nightTheme, nightColor, day, dayTheme };
+    });
+    assert(painted.night === true && painted.nightTheme === 'dark', '3am should light the Lamp');
+    assert(painted.nightColor === '#14110D', '3am theme-color should be the void');
+    assert(painted.day === false && painted.dayTheme === 'light', 'afternoon should stay parchment');
   });
 
   await check('Today is a folio, not a dashboard', async () => {

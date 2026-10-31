@@ -1486,6 +1486,14 @@ html.sitting .sit-sheet {
   .sheet-handle { display: block; width: 36px; height: 3px; background: var(--rule-2); margin: 0 auto 18px; }
 }
 </style>
+<script src="data/lamp.js"></script>
+<script>
+(function () {
+  var pref = null;
+  try { pref = localStorage.getItem('rla-dark'); } catch (e) {}
+  if (window.RedLetterLamp) RedLetterLamp.applyLamp(document, pref, new Date().getHours());
+})();
+</script>
 </head>
 <body>
 <a class="skip-link" href="#today-page">Skip to the folio</a>
@@ -1849,7 +1857,7 @@ html.sitting .sit-sheet {
   <div class="setting-row">
     <div>
       <div class="setting-label">Lamp</div>
-      <div class="setting-sub">A darker paper for night</div>
+      <div class="setting-sub">Darker paper after 9. Leave it, or lock parchment / lamp on.</div>
     </div>
     <label class="toggle">
       <input type="checkbox" id="dark-toggle" onchange="toggleDark(this.checked)" />
@@ -2169,6 +2177,14 @@ function setWatch() {
   const h = new Date().getHours();
   const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
   document.documentElement.dataset.watch = watch;
+  paintLamp();
+}
+
+function paintLamp() {
+  if (!window.RedLetterLamp) return;
+  const dark = RedLetterLamp.applyLamp(document, ls('rla-dark'), new Date().getHours());
+  const toggle = document.getElementById('dark-toggle');
+  if (toggle) toggle.checked = dark;
 }
 
 function showNeedStep() {
@@ -3505,9 +3521,8 @@ document.addEventListener('keydown', e => {
 });
 
 function toggleDark(on) {
-  document.documentElement.dataset.theme = on ? 'dark' : 'light';
-  document.querySelector('meta[name="theme-color"]').setAttribute('content', on ? '#14110D' : '#F4EFE4');
   lsSet('rla-dark', on ? '1' : '0');
+  paintLamp();
 }
 function setFs(size) {
   document.documentElement.dataset.fs = size;
@@ -3515,12 +3530,7 @@ function setFs(size) {
   ['sm', 'md', 'lg'].forEach(s => document.getElementById('fs-' + s).classList.toggle('active', s === size));
 }
 function applySettings() {
-  const dark = ls('rla-dark');
-  if (dark !== null) {
-    document.documentElement.dataset.theme = dark === '1' ? 'dark' : 'light';
-    document.getElementById('dark-toggle').checked = dark === '1';
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', dark === '1' ? '#14110D' : '#F4EFE4');
-  }
+  paintLamp();
   const fs = ls('rla-fs') || 'md';
   document.documentElement.dataset.fs = fs;
   ['sm', 'md', 'lg'].forEach(s => {
