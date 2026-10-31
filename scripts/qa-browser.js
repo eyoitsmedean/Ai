@@ -166,6 +166,26 @@ async function main() {
     assert(/Luke 21:28/.test(sit.cite) && /KJV/.test(sit.cite), 'cite must name Luke 21:28 KJV: ' + sit.cite);
   });
 
+  await check('Advent is one reading and one lit candle', async () => {
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.goto(BASE + '/?advent=2026-11-29', { waitUntil: 'networkidle0' });
+    const leaf = await page.evaluate(() => ({
+      affHidden: document.getElementById('aff-card').hidden,
+      eyebrow: document.querySelector('#word-card .eyebrow').textContent,
+      title: document.getElementById('word-title').textContent,
+      verse: document.getElementById('word-verse').textContent,
+      passage: document.getElementById('word-passage').textContent,
+      lit: [...document.querySelectorAll('.wreath span')].map((s) => s.className + ' ' + s.textContent.trim()),
+    }));
+    assert(leaf.affHidden, 'affirmation still a second reading');
+    assert(leaf.eyebrow === 'The waiting', 'eyebrow ' + leaf.eyebrow);
+    assert(leaf.title === 'Look Up', 'title ' + leaf.title);
+    assert(/Luke 21:28/.test(leaf.verse) && /KJV/.test(leaf.verse), leaf.verse);
+    assert(/redemption draweth nigh/i.test(leaf.passage), leaf.passage);
+    assert(leaf.lit[0].includes('lit') && /Hope/.test(leaf.lit[0]), 'Hope candle: ' + leaf.lit.join('|'));
+    assert(!leaf.lit.slice(1).some((s) => s.includes('lit')), 'too many candles lit: ' + leaf.lit.join('|'));
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
