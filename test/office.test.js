@@ -22,12 +22,14 @@ describe('this hour’s saying', () => {
     const day = dailyForDate(morning);
     const am = office.pickOfficeSaying(day, morning);
     const pm = office.pickOfficeSaying(day, vespers);
+    assert.equal(am.card, 'aff');
     assert.equal(am.office, 'Morning');
     assert.equal(am.quote, office.spokenOnly(day.affirmation.quote));
     assert.equal(lookup(am.verse).text, am.quote);
     assert.equal(office.officeScript(day, morning), am.quote);
     assert.notEqual(office.officeScript(day, morning), office.spokenOnly(day.affirmation.text));
     assert.doesNotMatch(office.officeScript(day, morning), /Morning|Afternoon|Vespers|Compline/);
+    assert.equal(pm.card, 'word');
     assert.equal(pm.office, 'Vespers');
     assert.equal(pm.quote, office.spokenOnly(day.word.passage));
     assert.equal(lookup(pm.verse).text, pm.quote);

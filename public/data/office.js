@@ -40,6 +40,7 @@
     var evening = isEveningOffice(d);
     if (evening && daily && daily.word && daily.word.passage) {
       return {
+        card: 'word',
         quote: spokenOnly(daily.word.passage),
         verse: daily.word.verse || '',
         office: officeName(d),
@@ -47,12 +48,13 @@
     }
     if (daily && daily.affirmation && daily.affirmation.quote) {
       return {
+        card: 'aff',
         quote: spokenOnly(daily.affirmation.quote),
         verse: daily.affirmation.verse || '',
         office: officeName(d),
       };
     }
-    return { quote: '', verse: '', office: officeName(d) };
+    return { card: '', quote: '', verse: '', office: officeName(d) };
   }
 
   function officeScript(daily, d) {

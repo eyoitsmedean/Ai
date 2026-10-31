@@ -150,6 +150,9 @@ async function main() {
         hearOffice: (document.getElementById('hear-office') || {}).textContent,
         affHear: !!document.getElementById('aff-hear-btn'),
         wordHear: !!document.getElementById('word-hear-btn'),
+        marked: (document.querySelector('#today-page .this-hour') || {}).id || '',
+        hourShown: !document.getElementById('hour-line').hidden,
+        hourQuote: document.getElementById('hour-quote').textContent,
       };
     });
     assert(heard.affHear && heard.wordHear, 'Hear on the saying cards is missing');
@@ -157,6 +160,13 @@ async function main() {
     assert(heard.script === heard.expected && heard.script.length > 8, 'Hear must be this hour’s saying, got: ' + heard.script);
     assert(!heard.leakedText, 'Hear leaked the pastoral affirmation');
     assert(!heard.leakedReflection, 'Hear leaked the reflection');
+    const evening = await page.evaluate(() => isEveningOffice());
+    assert(heard.marked === (evening ? 'word-card' : 'aff-card'), 'this hour should mark the spoken card, got ' + heard.marked);
+    if (evening) {
+      assert(heard.hourShown && heard.hourQuote === heard.script, 'evening should show the spoken line beside Hear');
+    } else {
+      assert(!heard.hourShown, 'morning already leads with the spoken line');
+    }
   });
 
   await check('a crisis line on every screen', async () => {

@@ -532,6 +532,10 @@ textarea { font-family: var(--body); }
 .today-streak { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 
 .movement { margin-bottom: 48px; }
+.hour-line { margin: 0 0 28px; max-width: 36em; }
+.hour-line[hidden] { display: none; }
+.this-hour { box-shadow: inset 2px 0 0 var(--crimson); padding-left: 14px; }
+.hour-mark[hidden] { display: none; }
 .rule { height: 1px; background: var(--rule); margin: 22px 0; }
 .rule-double { border-top: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); height: 4px; background: none; margin: 28px 0; }
 
@@ -1577,6 +1581,11 @@ html.sitting .sit-sheet {
         <div class="actions" style="margin-bottom:22px">
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this saying</button>
         </div>
+        <div class="hour-line" id="hour-line" hidden>
+          <p class="eyebrow">This hour</p>
+          <p class="red-letter" id="hour-quote"></p>
+          <p class="cite" id="hour-cite"></p>
+        </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
 
         <aside class="epigraph" id="epigraph" hidden>
@@ -1588,6 +1597,7 @@ html.sitting .sit-sheet {
         </aside>
 
         <section class="movement" id="aff-card">
+          <p class="eyebrow hour-mark" id="aff-hour" hidden>This hour</p>
           <p class="eyebrow">Affirmation</p>
           <div id="aff-skel">
             <div class="skel h l"></div><div class="skel m"></div><div class="skel s"></div>
@@ -1607,6 +1617,7 @@ html.sitting .sit-sheet {
         </section>
 
         <section class="movement" id="word-card">
+          <p class="eyebrow hour-mark" id="word-hour" hidden>This hour</p>
           <p class="eyebrow">Word of the day</p>
           <div id="word-skel">
             <div class="skel s"></div><div class="skel h l"></div><div class="skel f"></div><div class="skel m"></div>
@@ -2488,6 +2499,7 @@ function updateDateUI() {
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.getElementById('vespers-card').hidden = !evening;
   if (evening) paintVespers();
+  paintThisHour();
 }
 
 function paintThemeIndex() {
@@ -2547,6 +2559,7 @@ async function loadDailyContent() {
   document.getElementById('word-content').style.display = 'block';
   if (isSaved('word-' + todayStr())) setSaveBtnState('word', true);
   paintVespers();
+  paintThisHour();
   const catchEl = document.getElementById('folio-catch');
   if (catchEl) {
     const word = (getCatchword() || firstCatchword(dailyData.word.passage) || 'Peace');
@@ -3782,6 +3795,30 @@ function stopHearOffice() {
 function officeScript() {
   return RLA_OFFICE.officeScript(dailyData);
 }
+function paintThisHour() {
+  const line = (window.RLA_OFFICE && dailyData) ? RLA_OFFICE.pickOfficeSaying(dailyData) : { card: '', quote: '', verse: '' };
+  ['aff', 'word'].forEach((card) => {
+    const section = document.getElementById(card + '-card');
+    const mark = document.getElementById(card + '-hour');
+    const on = line.card === card && !!line.quote;
+    if (section) section.classList.toggle('this-hour', on);
+    if (mark) mark.hidden = !on;
+  });
+  const host = document.getElementById('hour-line');
+  if (!host) return;
+  const show = line.card === 'word' && !!line.quote;
+  host.hidden = !show;
+  const quote = document.getElementById('hour-quote');
+  const cite = document.getElementById('hour-cite');
+  if (quote) quote.textContent = show ? line.quote : '';
+  if (cite) cite.textContent = show && line.verse ? line.verse + '  ·  KJV' : '';
+}
+function scrollThisHour() {
+  const card = document.querySelector('#today-page .this-hour');
+  if (!card) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  card.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+}
 function sayingForCard(type) {
   if (type === 'aff' && dailyData && dailyData.affirmation) return dailyData.affirmation.quote;
   if (type === 'word' && dailyData && dailyData.word) return dailyData.word.passage;
@@ -3811,7 +3848,10 @@ function speakSaying(type) {
   officeSpeaking = type !== 'sit';
   sitSpeaking = type === 'sit';
   hearTarget = type;
-  if (type === 'office') document.documentElement.classList.add('hearing');
+  if (type === 'office') {
+    document.documentElement.classList.add('hearing');
+    scrollThisHour();
+  }
   if (btn) {
     btn.textContent = 'Pause';
     btn.setAttribute('aria-pressed', 'true');
