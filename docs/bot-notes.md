@@ -1,3 +1,7 @@
+# Red Letter — Household quire — 2026-10-31
+
+`GET /leaf` is one sheet: asked sentence, sealed words, four lines, Amen. Sitting stays in `sessionStorage` (`rla-leaf`). Crisis leaf names 988 and has no Amen. Branch `cursor/household-print-quire-28bf`. Do not merge. Do not publish.
+
 # Red Letter — Ask the saying, print the leaf — 2026-09-14 night
 
 Prompt 8 (creative freedom). This conversation has eight user prompts, not ten. `/ask` now sets the retrieved span of the pack saying and binds implication to those verses. Print this leaf after the page is set. Folio crisis letter unchanged.

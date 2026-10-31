@@ -13,7 +13,7 @@ Authoritative instructions, in order:
 3. `docs/RESEARCH-AND-GATE.md` — sources, five adjacent topics, human-gate checklist.
 4. This file — how to resume.
 
-This conversation’s user prompts are **eight** as of 2026-09-14 evening (creative-freedom is #8). Prompts 9–10 do not exist here. Do not invent a longer history. Do not treat another chat’s first-ten as this one.
+This conversation’s user prompts are **nine** as of 2026-10-31 (household quire is #9). Prompt 10 does not exist here. Do not invent a longer history. Do not treat another chat’s first-ten as this one.
 
 ## What is evidence, interpretation, or approved direction
 
@@ -35,4 +35,4 @@ A short dated note at the top of `docs/bot-notes.md`. Link the commit. Say what 
 
 ## Current next executable step
 
-Open `/desk` after `npm start`. Hear, record on `/gate`, then ask. After the page is set, print the leaf if you want paper. Wait for Dean’s recording before any corpus rebuild. Folio-after-988 is still his call. Do not lift WATCH.
+Open `/ask` after `npm start`, ask something true, then **Print this leaf**. The sheet is `/leaf`. Wait for Dean’s recording before any corpus rebuild. Folio-after-988 is still his call. Do not lift WATCH.

@@ -185,6 +185,33 @@ async function main() {
     assert(/WEBU/.test(kept), 'gate draft did not stay on this device');
   });
 
+  await check('ask then leaf prints Amen and the saying', async () => {
+    await page.goto(BASE + '/leaf', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => { try { sessionStorage.removeItem('rla-leaf'); } catch (_) {} });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const blank = await page.evaluate(() => document.body.innerText);
+    assert(/blank until a sitting|Ask from the one-screen/i.test(blank), 'empty leaf should stay blank');
+    await page.goto(BASE + '/ask', { waitUntil: 'networkidle0' });
+    await page.waitForSelector('#q');
+    await page.evaluate(() => { document.getElementById('q').value = ''; });
+    await page.type('#q', 'I carry so much shame');
+    await page.click('#go');
+    await page.waitForFunction(() => {
+      const btn = document.getElementById('print-leaf');
+      return btn && getComputedStyle(btn).display !== 'none';
+    }, { timeout: 6000 });
+    await page.click('#print-leaf');
+    await page.waitForFunction(() => location.pathname === '/leaf', { timeout: 6000 });
+    const leaf = await page.evaluate(() => ({
+      text: document.body.innerText,
+      robots: document.querySelector('meta[name="robots"]')?.content || '',
+    }));
+    assert(/noindex/.test(leaf.robots), 'leaf must stay unindexed');
+    assert(/Luke 15/i.test(leaf.text), 'leaf missing the sealed saying');
+    assert(/Amen/i.test(leaf.text), 'leaf missing Amen');
+    assert(!/Ask Him/i.test(leaf.text), 'leaf must not pretend the model is Jesus');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });

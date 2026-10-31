@@ -222,4 +222,14 @@ describe('smoke routes', () => {
     assert.match(res.raw, /href="\/ask"/);
     assert.doesNotMatch(res.raw, /Ask Him/i);
   });
+
+  it('serves the household leaf as a watch print sheet', async () => {
+    const res = await request('GET', '/leaf');
+    assert.equal(res.status, 200);
+    assert.match(res.raw, /noindex/);
+    assert.match(res.raw, /rla-leaf/);
+    assert.match(res.raw, /Amen/);
+    assert.match(res.raw, /@page/);
+    assert.doesNotMatch(res.raw, /Ask Him/i);
+  });
 });

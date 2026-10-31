@@ -114,6 +114,13 @@ async function main() {
     assert(!crisis.json.implication, 'crisis must not keep counseling');
   });
 
+  await check('household leaf', async () => {
+    const leaf = await req('/leaf');
+    assert(leaf.res.ok && /noindex/.test(leaf.text), 'leaf missing');
+    assert(/rla-leaf/.test(leaf.text) && /@page/.test(leaf.text), 'leaf is not a print sheet');
+    assert(!/Ask Him/i.test(leaf.text), 'leaf must not pretend the model is Jesus');
+  });
+
   await check('household desk', async () => {
     const desk = await req('/desk');
     assert(desk.res.ok && /noindex/.test(desk.text), 'desk missing');
