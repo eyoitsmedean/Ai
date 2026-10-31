@@ -1202,16 +1202,79 @@ textarea { font-family: var(--body); }
 .folio-turn .ghost[disabled] { opacity: .35; cursor: default; }
 
 .print-folio { display: none; }
+body.card-open .shell,
+body.card-open .titlepage,
+body.card-open .silk,
+body.card-open .offline-banner,
+body.card-open .skip-link { display: none !important; }
+body.card-open .print-folio,
+body.printing .print-folio {
+  display: flex !important;
+  min-height: 100svh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8vh 6vw calc(8vh + env(safe-area-inset-bottom, 0px));
+  background: var(--paper);
+}
+body.card-open .print-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+body.card-open .print-help,
+body.printing .print-help { display: block; margin-top: 22px; max-width: 36ch; font-size: 14px; line-height: 1.55; color: var(--ink-3); }
+body.card-open .print-help a,
+body.printing .print-help a { color: var(--crimson); }
+body.card-open .print-kicker,
+body.printing .print-kicker {
+  margin-bottom: 18px;
+  font-size: 0.72rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+body.card-open .print-mark {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--crimson);
+  font-size: 22px;
+  width: 44px; height: 44px;
+  border: 1px solid var(--crimson);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  margin-bottom: 28px;
+}
+body.card-open .print-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(1.6rem, 6vw, 2.35rem);
+  line-height: 1.35;
+  color: var(--crimson);
+  max-width: 22ch;
+}
+body.card-open .print-cite {
+  margin-top: 22px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+body.card-open .print-foot {
+  margin-top: 36px;
+  font-size: 0.72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
 @media print {
   @page { margin: 22mm 20mm; }
   .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
   .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
   .crisis-modal, .toast, .week-ribbon, .seven, .mode-switch, .nav-btn,
-  .skip-link, .titlepage { display: none !important; }
+  .skip-link, .titlepage, .print-actions { display: none !important; }
   .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
   .folio, body { background: #fff !important; }
   body.printing .shell { display: none !important; }
-  body.printing .print-folio {
+  body.printing .print-folio,
+  body.card-open .print-folio {
     display: flex !important;
     min-height: 90vh;
     flex-direction: column;
@@ -1219,6 +1282,7 @@ textarea { font-family: var(--body); }
     justify-content: center;
     text-align: center;
     padding: 8vh 6vw;
+    background: #fff !important;
   }
   body.printing .print-mark {
     font-family: 'Fraunces', Georgia, serif;
@@ -1252,6 +1316,13 @@ textarea { font-family: var(--body); }
     letter-spacing: .14em;
     text-transform: uppercase;
     color: #8A8074;
+  }
+  body.printing .print-help {
+    margin-top: 28px;
+    font-size: 10pt;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #4A4034;
   }
 }
 
@@ -1621,6 +1692,7 @@ html.sitting .sit-sheet {
               <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('word')">Share card</button>
               <button class="ghost" onclick="sitWith('word')">Sit with this</button>
+              <button class="ghost" type="button" onclick="openNightCard('1')">Night card</button>
             </div>
           </div>
         </section>
@@ -1835,7 +1907,8 @@ html.sitting .sit-sheet {
     <div class="actions" style="margin-top:18px">
       <button class="cta cta-primary" type="button" onclick="keepSitReply()">Keep this sitting</button>
       <button class="ghost" type="button" onclick="amenFromSit()">Amen</button>
-      <button class="ghost" type="button" onclick="printSitting()">Print this leaf</button>
+              <button class="ghost" type="button" onclick="printSitting()">Print this leaf</button>
+              <button class="ghost" type="button" onclick="openNightCard('1')">Night card</button>
       <button class="ghost" type="button" onclick="closeSit()">Leave it on the page</button>
     </div>
   </div>
@@ -1964,12 +2037,20 @@ html.sitting .sit-sheet {
 
 <article class="print-folio" id="print-folio" aria-hidden="true">
   <div class="print-mark">R</div>
+  <p class="print-kicker" id="print-kicker">A card for this night · /?card=1</p>
   <p class="print-quote" id="print-quote"></p>
   <p class="print-cite" id="print-cite"></p>
-  <p class="print-foot" id="print-foot">Red Letter · the words He spoke</p>
+  <p class="print-help" id="print-help">In crisis: <a href="tel:988">988</a> in the United States (call, text, or chat). Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
+  <p class="print-foot" id="print-foot">Red Letter · the words He spoke · KJV</p>
+  <div class="print-actions actions" id="print-actions">
+    <button class="cta cta-primary" type="button" onclick="printSitting()">Print</button>
+    <button class="ghost" type="button" onclick="sitFromCard()">Sit with this</button>
+    <button class="ghost" type="button" onclick="closeNightCard()">The room</button>
+  </div>
 </article>
 
 <script src="data/crisis.js"></script>
+<script src="data/night-card.js"></script>
 <script src="data/curated.js"></script>
 <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
@@ -2145,17 +2226,24 @@ const LENT_PEEK = (() => {
 // Running it mid-script let a returning reader hit "before initialization"
 // errors (chatInput, STOP_WORDS) and lose the rest of start-up.
 function init() {
+  let cardWanted = null;
   try {
     const q = new URLSearchParams(location.search);
     if (q.get('fresh') === '1' || q.get('demo') === '1') {
       clearReaderStorage();
-      history.replaceState({}, '', location.pathname);
+      if (q.get('card') === null) history.replaceState({}, '', location.pathname);
     }
+    cardWanted = q.get('card');
   } catch (_) {}
   setWatch();
   applySeason();
   paintThemeIndex();
   bindRituals();
+  if (cardWanted !== null) {
+    startApp();
+    openNightCard(cardWanted);
+    return;
+  }
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
@@ -3945,14 +4033,69 @@ async function sendBlessing(style) {
   showToast('Blessing ready to send');
 }
 
+let nightCard = null;
+
+function nightCardNow(want) {
+  const pack = window.RLA_NIGHT_CARD;
+  if (!pack) return null;
+  return pack.cardFromRef(want) || pack.cardForDate(new Date());
+}
+
+function fillPrintFolio(card) {
+  if (!card) return;
+  document.getElementById('print-quote').textContent = '“' + String(card.quote || '').replace(/^["“]|["”]$/g, '') + '”';
+  document.getElementById('print-cite').textContent = (card.verse || '') + '  ·  KJV';
+  document.getElementById('print-foot').textContent = 'Red Letter · the words He spoke · KJV';
+}
+
+function openNightCard(want) {
+  const card = nightCardNow(want);
+  if (!card) { showToast('No card for that saying'); return; }
+  nightCard = card;
+  fillPrintFolio(card);
+  closeSit();
+  closeSettings();
+  closeShareSheet();
+  closeBlessing();
+  document.body.classList.add('card-open');
+  document.getElementById('print-folio').setAttribute('aria-hidden', 'false');
+  document.getElementById('app').setAttribute('aria-hidden', 'true');
+}
+
+function closeNightCard() {
+  document.body.classList.remove('card-open');
+  document.getElementById('print-folio').setAttribute('aria-hidden', 'true');
+  document.getElementById('app').removeAttribute('aria-hidden');
+  if (!ls('rla-onboarded')) {
+    document.getElementById('onboarding').classList.remove('hidden');
+    document.getElementById('app').setAttribute('aria-hidden', 'true');
+    document.getElementById('app').inert = true;
+  }
+}
+
+function sitFromCard() {
+  if (!nightCard) nightCard = nightCardNow('1');
+  if (!nightCard) return;
+  sitPayload = {
+    kicker: 'Night card',
+    title: nightCard.verse,
+    quote: nightCard.quote,
+    verse: nightCard.verse,
+    reflection: 'Read it once more. Notice the word that stays.',
+  };
+  sitStep = 1;
+  closeSettings();
+  openSheetChrome('sit-sheet');
+  paintSitPayload(sitPayload);
+  showSitStep(1);
+}
+
 function printSitting() {
-  const p = sitPayload || (dailyData && dailyData.word
+  const p = sitPayload || nightCard || nightCardNow('1') || (dailyData && dailyData.word
     ? { quote: dailyData.word.passage, verse: dailyData.word.verse }
     : null);
   if (!p) { showToast('Nothing to print yet'); return; }
-  document.getElementById('print-quote').textContent = '“' + String(p.quote || '').replace(/^["“]|["”]$/g, '') + '”';
-  document.getElementById('print-cite').textContent = (p.verse || '') + '  ·  KJV';
-  document.getElementById('print-foot').textContent = 'Red Letter · ' + (currentSeason.name || 'the Gospels');
+  fillPrintFolio({ quote: p.quote, verse: p.verse });
   document.body.classList.add('printing');
   window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
   window.print();
@@ -3966,6 +4109,7 @@ const COMMANDS = [
   { label: 'Send a blessing', hint: 'Share', run: () => openBlessing(null) },
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
+  { label: 'Night card', hint: 'Card', run: () => openNightCard('1') },
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },

@@ -7,6 +7,7 @@ Not another Bible app. A daily companion constrained to the red letters of Matth
 ## The room
 
 - **Today** — morning, vespers, or compline; hear the office; a catchword stays until dawn
+- **Night card (`/?card=1`)** — one sealed saying on paper, already chosen for this weekday. Print it. 988 stays on the leaf. Not a launch.
 - **Seek** — twelve encouragement rooms, plus **The letters**: a searchable library of every spoken saying, turned like leaves
 - **Sit** — read a saying, rest one minute while the words arrive, reply with one sentence
 - **Advisor** — a short correspondence that survives the day; scripture is verified against a Gospel corpus before it is written on the page
