@@ -116,7 +116,7 @@ Home widget: Word, citation, thread. Tap opens redwords://today.
 Privacy policy URL: <PASTE>. Same text is in Settings.
 ```
 
-**Screenshots** — generated pack is in `store/screenshots/` (open `store/index.html`). Real UI, three viewports. Device photography if review asks.
+**Screenshots** — `store/screenshots/` (open `store/index.html`). Real UI. Required uploads: `ios61_` (1179×2556) and `ipad_` (2048×2732). Also `ios67_` (1290×2796) and `play_` (1080×1920). Play feature graphic: `store/feature_graphic.png` (1024×500). Sizes checked 2026-10-31 against Apple’s screenshot spec and Play Help 9866151. Device photography if review asks.
 
 1. `01_today` — Matthew 6:34, hierarchy visible (Word, citation, knot, reflection, step).
 2. `02_one_honest_step` — the step + “I'll do this”.

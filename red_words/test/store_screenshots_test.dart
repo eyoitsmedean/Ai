@@ -18,7 +18,17 @@ void main() {
   final pack = ScripturePack.parse(File('assets/sayings.json').readAsStringSync());
   final written = <String>[];
 
-  setUpAll(loadStoreFonts);
+  setUpAll(() async {
+    await loadStoreFonts();
+    final dir = Directory('store/screenshots');
+    if (!dir.existsSync()) return;
+    for (final file in dir.listSync()) {
+      final name = file.uri.pathSegments.last;
+      if (name.startsWith('android_') || name.startsWith('tablet_')) {
+        file.deleteSync();
+      }
+    }
+  });
   setUp(mockWidgetChannel);
 
   Future<void> shot(
@@ -31,6 +41,8 @@ void main() {
       viewportId: view.id,
       sceneId: sceneId,
       pixelRatio: view.pixelRatio,
+      width: (view.size.width * view.pixelRatio).round(),
+      height: (view.size.height * view.pixelRatio).round(),
     );
     expect(file.existsSync(), isTrue, reason: file.path);
     expect(file.lengthSync(), greaterThan(8000), reason: '${file.path} too small');
@@ -161,6 +173,71 @@ void main() {
     });
   }
 
+  testWidgets('Play feature graphic is 1024×500 RGB', (tester) async {
+    const view = StoreViewport(
+      id: 'feature',
+      size: Size(1024, 500),
+      pixelRatio: 1,
+      phoneChrome: false,
+    );
+    await pumpStoreApp(
+      tester,
+      viewport: view,
+      pack: pack,
+      home: ColoredBox(
+        color: Brand.paper,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(56, 40, 56, 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                Brand.name,
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontSize: 54,
+                  color: Brand.crimson,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                pack.first.word,
+                maxLines: 3,
+                style: const TextStyle(
+                  fontFamily: 'serif',
+                  fontSize: 26,
+                  height: 1.3,
+                  color: Brand.ink,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'World English Bible. Gospels only. Offline.',
+                style: TextStyle(
+                  fontFamily: 'sans-serif',
+                  color: Brand.muted,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    final file = await captureStorePng(
+      tester,
+      viewportId: 'feature',
+      sceneId: 'graphic',
+      pixelRatio: 1,
+      width: 1024,
+      height: 500,
+      path: 'store/feature_graphic.png',
+    );
+    expect(file.lengthSync(), greaterThan(8000));
+    written.add(file.path);
+  });
+
   tearDownAll(() {
     if (written.isEmpty) return;
     _writeGallery(written);
@@ -171,9 +248,10 @@ void main() {
 void _writeGallery(List<String> paths) {
   final cards = paths.map((path) {
     final name = path.split('/').last;
+    final src = path.contains('screenshots/') ? 'screenshots/$name' : name;
     return '''
     <figure>
-      <img src="screenshots/$name" alt="$name" />
+      <img src="$src" alt="$name" />
       <figcaption>$name</figcaption>
     </figure>''';
   }).join('\n');

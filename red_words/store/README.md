@@ -6,7 +6,7 @@ Open `store/index.html` locally to review every shot.
 
 ## What you get
 
-8 scenes × 3 viewports = **24 PNGs** in `store/screenshots/`.
+8 scenes × 4 viewports = **32 PNGs** in `store/screenshots/`, plus `store/feature_graphic.png` (Play, 1024×500).
 
 | File suffix | Scene (Gate E) |
 | --- | --- |
@@ -19,11 +19,14 @@ Open `store/index.html` locally to review every shot.
 | `07_settings` | Settings — Dark saying, 988, Privacy |
 | `08_home_widget` | Home widget — Word, citation, thread. No badge. |
 
-| Prefix | Viewport | Pixel size |
-| --- | --- | --- |
-| `ios67_` | iPhone 6.7" logical 430×932 @3 | 1290×2796 |
-| `android_` | Play phone logical 360×800 @3 | 1080×2400 |
-| `tablet_` | 7–8" portrait logical 800×1280 @2 | 1600×2560 |
+| Prefix | Slot | Pixel size | Why this size |
+| --- | --- | --- | --- |
+| `ios67_` | iPhone Dynamic Island, large | 1290×2796 | Accepted large iPhone set |
+| `ios61_` | iPhone Dynamic Island, medium | 1179×2556 | **Required** iPhone set |
+| `ipad_` | iPad 13" slot | 2048×2732 | **Required** because the Xcode target is iPhone and iPad |
+| `play_` | Play phone, 9:16 | 1080×1920 | Recommended portrait size; long side is exactly 2× the short side |
+
+Sizes checked against [Apple screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/) and [Play preview assets](https://support.google.com/googleplay/android-developer/answer/9866151), both retrieved 2026-10-31. Every PNG is 24-bit RGB (no alpha). The previous 1080×2400 phone shots were too tall for Play’s “long side no more than twice the short side” rule and are removed.
 
 Paste-ready listing copy: `LISTING.md`.
 
