@@ -396,6 +396,11 @@ app.get('/welcome', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/tonight', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'tonight.html'));
+});
+
 app.get('/api/health', (_req, res) => {
   const corpus = loadCorpus();
   const chapelLoaded = Boolean(
@@ -614,5 +619,6 @@ app.get('*', (req, res, next) => {
 app.listen(PORT, () => {
   console.log(`R  The Red Letter Advisor → http://localhost:${PORT}`);
   console.log(`   Landing: http://localhost:${PORT}/welcome`);
+  console.log(`   First night: http://localhost:${PORT}/tonight`);
   console.log(`   LLM: ${client ? MODEL : 'living Advisor + curated (no API key)'}`);
 });

@@ -103,6 +103,17 @@ async function main() {
     assert(!/daily_limit|unlock Plus/i.test(body), 'chat must not paywall');
   });
 
+  await check('first night host kit', async () => {
+    const { res, text } = await req('/tonight');
+    assert(res.ok, 'tonight not 200');
+    assert(/First night/.test(text), 'missing First night title');
+    assert(text.includes('988'), 'tonight missing 988');
+    assert(text.includes('/?fresh=1'), 'tonight must open a clean page');
+    assert(text.includes('rla-tonight-note'), 'tonight must keep three lines locally');
+    assert(text.includes('Matthew 11:28'), 'slip must quote the flyleaf saying');
+    assert(!text.includes('<<<<<<<'), 'conflict markers on tonight');
+  });
+
   await check('welcome landing', async () => {
     const { res, text } = await req('/welcome');
     assert(res.ok, 'welcome not 200');
