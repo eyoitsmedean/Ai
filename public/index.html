@@ -3570,7 +3570,7 @@ function formatAI(text) {
             const cl = lines[j].trim();
             if (cl && !/^\*\*/.test(cl) && !/^["“]/.test(cl)) { ctx = cl; j++; }
           }
-          parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) +
+          parts.push('<div class="scripture-block"><div class="scripture-verse">' + esc(verse) + '  ·  KJV' +
             '</div><div class="scripture-quote">' + esc(q) + '</div>' +
             (ctx ? '<div class="scripture-ctx">' + esc(ctx) + '</div>' : '') + '</div>');
           i = j; continue;
@@ -3646,7 +3646,7 @@ function paintEpigraph() {
   document.getElementById('epigraph-kicker').textContent = sameDay ? 'Earlier you sat with' : 'Yesterday you sat with';
   document.getElementById('epigraph-quote').textContent = '“' + String(sit.quote).replace(/^["“]|["”]$/g, '') + '”';
   document.getElementById('epigraph-note').textContent = sit.note || '';
-  document.getElementById('epigraph-cite').textContent = (sit.verse || '') + (sit.catchword ? '  ·  ' + sit.catchword : '');
+  document.getElementById('epigraph-cite').textContent = (sit.verse || '') + '  ·  KJV';
   root.hidden = false;
 }
 function paintQuire(items) {
@@ -3733,7 +3733,7 @@ function openAmen(opts = {}) {
     echo.hidden = !opts.quote;
   }
   if (cite) {
-    cite.textContent = opts.verse || '';
+    cite.textContent = opts.verse ? opts.verse + '  ·  KJV' : '';
     cite.hidden = !opts.verse;
   }
   root.classList.add('on');
@@ -3936,7 +3936,7 @@ function updateBlessingPreview() {
   const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
   preview.innerHTML = (note ? '<div class="blessing-preview-note">' + esc(note) + '</div>' : '') +
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
-    '<div class="cite">' + esc(blessingPick.verse) + '</div>';
+    '<div class="cite">' + esc(blessingPick.verse) + '  ·  KJV</div>';
 }
 async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }
@@ -4145,7 +4145,7 @@ async function sealLetter(bubble) {
   const blocks = [...bubble.querySelectorAll('.scripture-block')];
   if (!blocks.length) return;
   const items = blocks.map((block) => ({
-    verse: (block.querySelector('.scripture-verse') || {}).textContent || '',
+    verse: ((block.querySelector('.scripture-verse') || {}).textContent || '').replace(/\s*·\s*KJV\s*$/, ''),
     quote: (block.querySelector('.scripture-quote') || {}).textContent || '',
   }));
   try {
