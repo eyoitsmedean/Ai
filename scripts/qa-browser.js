@@ -182,6 +182,17 @@ async function main() {
     await page.waitForFunction(() => document.body.classList.contains('card-open'), { timeout: 8000 });
     const refused = await page.evaluate(() => document.getElementById('print-quote').textContent);
     assert(!/Glory to God in the highest/i.test(refused), 'angel line opened on the card');
+
+    await page.goto(BASE + '/?card=week', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => document.body.classList.contains('quire-open') && document.querySelectorAll('.quire-leaf').length === 7, { timeout: 15000 });
+    const week = await page.evaluate(() => ({
+      days: [...document.querySelectorAll('.quire-leaf .day')].map((el) => el.textContent),
+      cites: [...document.querySelectorAll('.quire-leaf .cite')].map((el) => el.textContent).join(' '),
+      help: document.querySelector('#print-quire .print-help').innerText,
+    }));
+    assert(/Sunday/.test(week.days[0]) && /Saturday/.test(week.days[6]), 'week days missing');
+    assert(/Matthew 19:14/.test(week.cites), 'children saying missing from the week');
+    assert(/988/.test(week.help), 'week must name 988');
   });
 
   await check('no page errors', async () => {

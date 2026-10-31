@@ -4,6 +4,8 @@
  * Quotes are His speech only (KJV). Tests seal every line.
  */
 (function (root) {
+  const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
   const CARDS = [
     { verse: 'John 14:27', quote: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.' },
     { verse: 'Matthew 11:28', quote: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
@@ -25,11 +27,24 @@
 
   function cardFromRef(ref) {
     const want = norm(ref);
-    if (!want || want === '1' || want === 'true' || want === 'yes') return null;
+    if (!want || want === '1' || want === 'true' || want === 'yes' || want === 'week') return null;
     return CARDS.find((c) => norm(c.verse) === want) || null;
   }
 
-  const api = { CARDS, cardForDate, cardFromRef };
+  function weekCards() {
+    return CARDS.map((card, i) => ({ day: DAYS[i], verse: card.verse, quote: card.quote }));
+  }
+
+  function dayName(date) {
+    const d = date instanceof Date ? date : new Date();
+    return DAYS[d.getDay()];
+  }
+
+  function wantsWeek(ref) {
+    return /^(week|quire|all)$/i.test(String(ref || '').trim());
+  }
+
+  const api = { DAYS, CARDS, cardForDate, cardFromRef, weekCards, dayName, wantsWeek };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.RLA_NIGHT_CARD = api;
 })(typeof window !== 'undefined' ? window : globalThis);
