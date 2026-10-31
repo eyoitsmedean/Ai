@@ -1315,6 +1315,15 @@ html.sitting .sit-sheet {
   max-width: 28ch;
   margin: 16px auto 0;
 }
+.amen-actions {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+.amen-actions.on { display: flex; }
+.amen-actions .cta, .amen-actions .ghost { min-height: 44px; }
 
 .cmdk {
   position: fixed;
@@ -1904,7 +1913,7 @@ html.sitting .sit-sheet {
     <div class="sheet-title" id="blessing-title">Send a blessing</div>
     <button class="ghost" type="button" onclick="closeBlessing()">Close</button>
   </div>
-  <p class="sit-copy">A saying, a short note, and a card. Nothing else is added.</p>
+  <p class="sit-copy">A saying, a short note, and a card. What you wrote in Sit stays in the journal.</p>
   <label class="sr-only" for="blessing-note">A note to send with the blessing</label>
   <textarea class="sit-reply" id="blessing-note" rows="2" placeholder="A word for them…"></textarea>
   <div class="blessing-preview" id="blessing-preview"></div>
@@ -1940,6 +1949,10 @@ html.sitting .sit-sheet {
     <p class="amen-word">Amen</p>
     <p class="amen-echo" id="amen-echo" hidden></p>
     <p class="cite" id="amen-cite" hidden></p>
+    <div class="amen-actions" id="amen-actions">
+      <button class="cta cta-primary" type="button" id="amen-send" onclick="amenSendBlessing()">Send this word</button>
+      <button class="ghost" type="button" onclick="closeAmen()">Keep it here</button>
+    </div>
   </div>
 </div>
 
@@ -3723,23 +3736,32 @@ function revealWords(el, text) {
   });
 }
 
+let lastAmen = null;
+function gospelCite(verse) {
+  const ref = String(verse || '').trim();
+  if (!ref) return '';
+  return /·\s*(KJV|WEB)\b/i.test(ref) ? ref : ref + '  ·  KJV';
+}
 function openAmen(opts = {}) {
   const root = document.getElementById('amen');
   const echo = document.getElementById('amen-echo');
   const cite = document.getElementById('amen-cite');
+  const actions = document.getElementById('amen-actions');
   if (!root) return;
+  lastAmen = (opts.quote && opts.verse) ? { quote: opts.quote, verse: opts.verse } : null;
   if (echo) {
     echo.textContent = opts.quote ? '“' + String(opts.quote).replace(/^["“]|["”]$/g, '') + '”' : '';
     echo.hidden = !opts.quote;
   }
   if (cite) {
-    cite.textContent = opts.verse || '';
+    cite.textContent = gospelCite(opts.verse);
     cite.hidden = !opts.verse;
   }
+  if (actions) actions.classList.toggle('on', !!lastAmen);
   root.classList.add('on');
   root.setAttribute('aria-hidden', 'false');
   clearTimeout(amenTimer);
-  amenTimer = setTimeout(closeAmen, opts.holdMs || 2800);
+  if (!lastAmen) amenTimer = setTimeout(closeAmen, opts.holdMs || 2800);
 }
 function closeAmen() {
   const root = document.getElementById('amen');
@@ -3747,6 +3769,14 @@ function closeAmen() {
   root.classList.remove('on');
   root.setAttribute('aria-hidden', 'true');
   clearTimeout(amenTimer);
+}
+function amenSendBlessing() {
+  const seed = lastAmen;
+  closeAmen();
+  if (!seed) return;
+  const note = document.getElementById('blessing-note');
+  if (note) note.value = '';
+  openBlessing({ verse: seed.verse, quote: seed.quote });
 }
 function amenFromSit() {
   if (!sitPayload) return;
@@ -3936,7 +3966,7 @@ function updateBlessingPreview() {
   const note = (document.getElementById('blessing-note') && document.getElementById('blessing-note').value.trim()) || '';
   preview.innerHTML = (note ? '<div class="blessing-preview-note">' + esc(note) + '</div>' : '') +
     '<div class="blessing-preview-quote">“' + esc(blessingPick.quote) + '”</div>' +
-    '<div class="cite">' + esc(blessingPick.verse) + '</div>';
+    '<div class="cite">' + esc(gospelCite(blessingPick.verse)) + '</div>';
 }
 async function sendBlessing(style) {
   if (!blessingPick) { showToast('Choose a verse first'); return; }

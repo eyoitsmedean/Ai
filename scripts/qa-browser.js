@@ -110,8 +110,32 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
   });
 
+  await check('Amen can send the sat word, not the reply', async () => {
+    const amen = await page.evaluate(() => ({
+      send: document.getElementById('amen-actions') && document.getElementById('amen-actions').classList.contains('on'),
+      cite: (document.getElementById('amen-cite') || {}).textContent || '',
+      echo: (document.getElementById('amen-echo') || {}).textContent || '',
+    }));
+    assert(amen.send, 'Amen is missing Send this word');
+    assert(/KJV/i.test(amen.cite), 'Amen cite should name the translation: ' + amen.cite);
+    assert(amen.echo.length > 8, 'Amen has no saying');
+    await page.click('#amen-send');
+    await page.waitForSelector('#blessing-sheet.on', { timeout: 6000 });
+    const card = await page.evaluate(() => ({
+      preview: (document.getElementById('blessing-preview') || {}).innerText || '',
+      note: (document.getElementById('blessing-note') || {}).value || '',
+      selected: ((document.querySelector('.blessing-item.selected .blessing-item-cite') || {}).textContent || ''),
+    }));
+    assert(/KJV/i.test(card.preview), 'blessing preview should name the translation');
+    assert(!/\bPeace\./.test(card.preview), 'sit reply leaked onto the blessing card');
+    assert(card.note === '', 'blessing note should start empty, not the sit reply');
+    assert(card.selected && amen.cite.indexOf(card.selected) !== -1, 'blessing should open on the sat verse, got ' + card.selected);
+    await page.evaluate(() => { if (typeof closeBlessing === 'function') closeBlessing(); });
+    await page.waitForFunction(() => !document.getElementById('blessing-sheet').classList.contains('on'), { timeout: 4000 });
+  });
+
   await check('Today is a folio, not a dashboard', async () => {
-    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
+    await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
     const today = await page.evaluate(() => ({
       season: document.documentElement.getAttribute('data-season'),
       seven: document.querySelectorAll('.seven-day').length,

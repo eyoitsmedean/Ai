@@ -26,6 +26,12 @@ test('a crisis line on every screen', () => {
   assert.match(title, /tel:988/, 'title page has no 988');
 });
 
+test('Amen can send the sat word as a blessing', () => {
+  assert.match(html, /id="amen-send"/);
+  assert.match(html, /Send this word/);
+  assert.match(html, /What you wrote in Sit stays in the journal/);
+});
+
 test('the room never sells and never pretends', () => {
   assert.doesNotMatch(html, /Ask Him/, 'never "Ask Him"');
   assert.doesNotMatch(html, /AI Jesus/, 'never "AI Jesus"');
