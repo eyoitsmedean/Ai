@@ -75,7 +75,7 @@
 
   // --- cues (run on normalised, apostrophe-free text) -----------------------
 
-  const P = '(?:pills?|meds|medication|medicine|tablets|tylenol|paracetamol|acetaminophen|ibuprofen|advil|insulin|morphine|opioids?|oxy\\w*|fentanyl|sleeping pills|antidepressants|blood pressure meds|heart pills)';
+  const P = '(?:pills?|meds|medication|medicine|tablets|tylenol|paracetamol|acetaminophen|ibuprofen|advil|insulin|morphine|opioids?|oxy\\w*|fentanyl|sleeping pills|antidepressants|blood pressure meds|heart pills|lithium|seroquel|zoloft|prozac|lexapro|wellbutrin|klonopin|xanax|ativan|valium|lorazepam|benadryl|my meds)';
   const FAMILY = '(?:son|daughter|kid|child|teen|friend|best friend|brother|sister|husband|wife|partner|boyfriend|girlfriend|mom|mother|dad|father|student|roommate|cousin|coworker|grandson|granddaughter|niece|nephew)';
   const ABUSER = '(?:he|she|they|my (?:husband|wife|boyfriend|girlfriend|partner|fiance|ex|ex husband|ex wife|dad|father|mom|mother|stepdad|stepfather|stepmom|stepmother|step dad|brother|sister|uncle|aunt|grandpa|grandfather|cousin|pastor|youth pastor|priest|coach|teacher|boss|son|daughter|roommate)|(?:my )?(?:husbands|wifes|boyfriends|girlfriends|partners|daughters|sons|sisters|moms|dads) (?:boyfriend|girlfriend|husband|wife|partner)|her (?:boyfriend|husband)|his (?:girlfriend|wife))';
   const HIT = '(?:hits|hit|hitting|beats|beat|beating|slaps|slapped|punch(?:es|ed)?|kick(?:s|ed)|chok(?:es|ed)|strangl(?:es|ed)|shov(?:es|ed)|push(?:es|ed)|threw \\w+(?: \\w+)? at|throws \\w+(?: \\w+)? at|burn(?:s|ed)|bit|drag(?:s|ged)|threaten(?:s|ed)|hurts|hurt|abus(?:es|ed)|put (?:his|her|their) hands on)';
@@ -118,7 +118,7 @@
     /\bmight (?:just )?not be here\b/,
     /\b(?:asking|begging|praying for) god to (?:take me|let me die)\b/,
     /\bwaiting to (?:die|stop breathing)\b/,
-    /\bhope (?:i|you) (?:dont|never|do not) wake up\b/,
+    /\bhope (?:i|you) (?:just |simply |never )?(?:dont|never|do not) wake up\b/,
     /\bdont deserve to (?:be here|live|be alive)\b/,
     /\bshould have been me\b/,
     /\bcant (?:go on|keep going|keep living|take (?:it|this) anymore)\b(?! at (?:work|school)| with (?:my|this) (?:boss|job|class))/,
@@ -126,7 +126,7 @@
     /\bwant to be with (?:my )?\w+ again\b.*\b(?:passed|died|gone|heaven)\b/,
     // intent, timing, goodbyes
     /\b(?:end|ending) (?:it|things|everything|it all|my suffering|my pain)(?: tonight| today| soon| now)?\b(?! with (?:him|her|them))/,
-    /\btonight is the night\b(?! (?:we|for|to|of|when|that|i get|my)\b)/,
+    /\btonights? (?:is )?the night\b(?! (?:we|for|to|of|when|that|i get|my)\b)/,
     /\b(?:made|got|have|found) (?:a|my) (?:plan|decision about how this ends|arrangements)\b/,
     /\bmade (?:my|the) arrangements\b/,
     /\bgoing to jump\b/,
@@ -135,14 +135,14 @@
     /\bgoodbye\b.*\b(?:sorry|last|forever|everyone|world)\b/,
     /\b(?:giving|gave|given) (?:away )?(?:my|all my) (?:things|stuff|belongings|dog|cat|pets?) away\b|\bgiving away my (?:things|stuff|belongings)\b|\bgave my (?:dog|cat|things|stuff) away\b/,
     /\bsaying goodbye to (?:everyone|people|everybody)\b/,
-    /\bsaid goodbye to everyone\b/,
+    /\bsaid goodbye to (?:everyone|everybody|all of them|my family)\b/,
     /\blogging off for real\b/,
     /\b(?:accounts|affairs|everything) (?:are|is) (?:settled|in order|written down)\b/,
     // means
     new RegExp(`\\b${P}\\b.*\\b(?:lined up|ready|saved|saved up|stockpil\\w*|counted|in front of me|enough to)\\b`),
-    new RegExp(`\\b(?:saved|saved up|stockpiled|hoarded|counted out) (?:enough |all )?(?:of )?(?:my )?${P}`),
+    new RegExp(`\\b(?:saved|saved up|saving|been saving|saving up|stockpiled|stockpiling|hoarded|hoarding|collecting|counted out) (?:enough |all )?(?:of )?(?:my )?${P}`),
     // A quantity is required: "taking my meds" is ordinary, "took all my meds" is not.
-    new RegExp(`\\b(?:take|taking|took|swallow|swallowed|taken|ate|eaten) (?:all|all of|the whole bottle of|a bottle of|a whole bottle of|a bunch of|too many|\\d+|a handful of|the rest of) (?:my |the |of my |my moms |my dads |of )?(?:${P}|them)\\b`),
+    new RegExp(`\\b(?:take|taking|took|swallow|swallowed|taken|ate|eaten) (?:every|every single|all the|all|all of|the whole bottle of|a bottle of|a whole bottle of|a bunch of|too many|\\d+|a handful of|the rest of) (?:my |the |of my |my moms |my dads |of )?(?:${P}|pill|them)\\b`),
     new RegExp(`\\boverdosed on\\b`),
     /\b(?:ive|i have|i) (?:already )?swallowed them\b/,
     /\boverdos\w*\b(?!.* (?:died|passed))/,
@@ -150,8 +150,8 @@
     /\bhow long does it take to (?:bleed out|die|drown|suffocate)\b/,
     /\bwhat floor\b.*\b(?:work|die|enough)\b/,
     /\bways to (?:die|kill (?:myself|yourself)|end it)\b/,
-    /\b(?:bought|got|have|holding|loaded|cleaning|clean) (?:a|my|the) (?:gun|rope|pistol|rifle|service pistol|shotgun|noose)\b.*\b(?:tonight|looking at it|know what|going to do|every night|in front of me|on the table|ready|loaded)\b/,
-    /\b(?:gun|pistol|rifle|rope|noose)\b.*\b(?:loaded|in front of me|on the table|keep looking at it|tonight)\b/,
+    /^(?!.*\b(?:deer|hunting|hunt|season|elk|duck|turkey|range|target practice)\b).*\b(?:bought|got|have|holding|loaded|cleaning|cleaned|clean) (?:a|my|the) (?:gun|rope|pistol|rifle|service pistol|shotgun|noose)\b.*\b(?:tonight|looking at it|know what|going to do|every night|in front of me|on the table|ready|loaded)\b/,
+    /^(?!.*\b(?:deer|hunting|hunt|season|elk|duck|turkey|range|target practice)\b).*\b(?:gun|pistol|rifle|rope|noose)\b.*\b(?:loaded|in front of me|on the table|keep looking at it|tonight)\b/,
     /\b(?:walk|walking|drive|driving|jump|jumping|step|stepping) (?:into|in front of|off|from) (?:the |a |an )?(?:lake|river|sea|ocean|oncoming traffic|traffic|train|bridge|building|roof|cliff|highway)\b/,
     /\bno guardrail\b/,
     /\bcar running\b.*\bgarage\b|\bgarage\b.*\bcar running\b/,
@@ -159,11 +159,58 @@
     // religious framing
     /\b(?:would|will|does) god (?:still )?forgive (?:me|someone|people|a person) (?:if|who|that) (?:i |they |he |she )?(?:kill|killed|end|ended|take|took|commit)\w*/,
     /\bwhat (?:does|did|would) (?:jesus|god|the bible) (?:say|think) about (?:people who )?(?:kill(?:ing)? (?:themselves|yourself)|end(?:ing)? (?:their|your|my) (?:own )?life|taking (?:their|your|my) (?:own )?life)\b/,
-    /\bpeople who (?:kill themselves|end their (?:own )?lives?|end their life|take their own lives?)\b/,
+    /\bpeople who (?:kill themselves|end their (?:own )?(?:lives?|life)|take their (?:own )?(?:lives?|life))\b/,
     /\b(?:ready|want|going) to (?:meet jesus|see jesus|be with jesus|go home to (?:god|jesus))\b.*\b(?:tonight|today|now|arrangements)\b/,
     /\b(?:the lord|god|jesus) can (?:have|take) me (?:back|home|now)\b/,
     /\bim ready to go home\b/,
     /\bheaven\b.*\b(?:early|got there early|take me)\b/,
+    // oblique: what people write when they never use the word
+    /\bjust know (?:that )?(?:it|this) (?:wasnt|isnt|was not|is not) (?:anyones|anybodys|your|yalls) fault\b/,
+    /\b(?:if (?:i dont|i do not|i never|i die|im gone|im not here)|anything happens to me|when im gone)\b.*\b(?:wasnt|isnt|was not|is not|not) (?:anyones|anybodys|your|yalls) fault\b/,
+    /\b(?:praying|hoping|pray|hope|wishing|wish) (?:that )?(?:the |my )?(?:cancer|tumou?r|illness|disease|heart attack|stroke) (?:comes back|come back|takes me|take me|gets me|kills me|wins)\b/,
+    /\b(?:dont|wont|do not|will not) have to do it myself\b/,
+    /\bhoping\b.{0,40}\b(?:doesnt|dont|never|wont|wouldnt) (?:end|wake up|wake)\b/,
+    /\b(?:22|twenty two) a day\b.*\b(?:im|i am|ill|i will|tomorrow|tonight|me|number)\b/,
+    /\b(?:tomorrow|tonight|soon) (?:im|i am|ill be|i will be) (?:number )?(?:23|twenty three)\b/,
+    /\b(?:looked|looking|look|staring|stare|stared) (?:at|in|into|through) (?:whats in )?(?:the |my |our )?(?:medicine cabinet|pill bottles?|gun safe)\b(?! for\b)/,
+    /\b(?:give|gave|leave|raise) (?:the|my) (?:baby|kids|children|son|daughter)\b.*\b(?:better (?:at it|mother|mom|parent|dad|father|off|than me))\b/,
+    new RegExp(`\\b(?:stop|stopped|quit|quitting|stopping) (?:taking )?my ${P}\\b.*\\b(?:havent told|not told|didnt tell|wont tell|dont tell|no one knows|nobody knows|without telling|hoping|on purpose|let it|ready to go|so i|not going back|point)\\b`),
+    new RegExp(`\\b(?:outlived|ready to go|burden|tired of|done with)\\b.*\\b(?:stop|stopped|quit|quitting) (?:taking )?my ${P}\\b`),
+    /\boutlived my (?:usefulness|purpose|welcome|time)\b/,
+    /\b(?:country|place|clinic|state) where (?:they )?(?:let you|you can|its legal to|it is legal to) (?:choose|die|end it|go peacefully)\b/,
+    /\b(?:looking into|looked into|applying for|apply for|qualify for|signed up for) (?:euthanasia|assisted (?:dying|death)|maid|dignitas)\b/,
+    /\b(?:arm|arms|wrist|wrists|thigh|thighs|leg|legs) (?:wont|will not|doesnt|isnt) stop(?:ping)?(?: bleeding)?\b/,
+    /\bwont stop bleeding\b.*\b(?:dont want|not going|wont|dont) (?:to )?(?:call|tell|go)\b/,
+    /^(?!.*\b(?:wedding|picnic|party|baptism|baptiz\w*|reunion|birthday|vacation|camping|shower|photos?|shoot|meeting|dinner|lunch|breakfast|eat|restaurant|funeral|memorial|burial|garden|tent|moving|recital|game|tournament|trip|retreat|anniversary|propos\w*|house|apartment|school|church plant|blind|deer|hunt\w*|fishing trip)\b).*\b(?:picked|picked out|chose|chosen|found|decided on) (?:the|a|my) (?:spot|place|bridge|tree)\b/,
+    /\b(?:gets|get|will get) better\b.*\b(?:decided to stop|stop waiting|done waiting|not waiting anymore|stopped waiting)\b/,
+    /^(?!.*\b(?:will|estate|insurance|lawyer|attorney|trust fund|deploy\w*|trip|travel\w*|business|work|shift|daycare|babysitter|vacation|surgery|out of town|overseas|at camp)\b).*\b(?:when|after|once|if) (?:im|i am|i was|im ever) (?:not around|no longer around|no longer here|gone)\b(?! (?:to|for|on|at|this|next|until|till|from)\b)/,
+    /\b(?:tired|exhausted) in a way (?:that )?sleep (?:doesnt|dont|wont|cant|does not|will not) fix\b/,
+    /\b(?:dont|do not) want to be (?:fixed|saved|rescued) anymore\b/,
+    /\bis it (?:a sin|wrong|okay|ok) (?:if|to) (?:i |someone |a person )?(?:go|goes|going) home (?:to (?:the lord|god|jesus|heaven) )?(?:early|on purpose|now|tonight|sooner)\b/,
+    /\bgo home to (?:the lord|god|jesus|heaven) (?:early|on purpose|tonight|sooner)\b/,
+    /\bis it (?:a sin|wrong|unforgivable) (?:if|to) (?:i |someone |a person )?(?:end|ends|take|takes|stop|stops|kill|kills|die|dies)\b/,
+    /^(?!.*\b(?:move|moving|trip|wedding|estate sale|divorce|deploy\w*)\b).*\b(?:gave|giving|given) (?:away )?my \w+ to\b.*\b(?:settled|taken care of|in order|wont need|last|goodbye)\b/,
+    /^(?!.*\b(?:move|moving|trip|wedding|vacation|surgery|tax\w*|deploy\w*)\b).*\b(?:have|got|get|getting) everything (?:settled|in order|taken care of)\b/,
+    new RegExp(`\\benough (?:of )?(?:my |the |these |those |his |her )?${P}\\b(?! for (?:the|a|our|my) (?:trip|week|month|vacation))`),
+    /\bgo quiet(?:ly)?\b.*\b(?:pills|meds|for good|forever)\b|\b(?:pills|meds)\b.*\bgo quiet(?:ly)?\b/,
+    /\bworth more dead\b/,
+    /\binsurance\b.*\b(?:if (?:something|anything) (?:happened|happens|were to happen) to me|if i (?:was|were) gone|than (?:with )?me|than i am alive)\b/,
+    /^(?!.*\b(?:cancer|stage \d|terminal|hospice|chemo|diagnos\w*|graduation|wedding|birthday)\b).*\b(?:wrote|written|writing|left) letters? (?:to|for) (?:my|each|everyone)\b.*\b(?:drawer|in case|take care of|one more thing|goodbye|find them|after im)\b/,
+    /\bcut (?:again|deeper)(?: tonight| today| last night)?\b(?! (?:the|my|our|his|her|it|them|costs|back|down)\b)/,
+    /\bdeeper than (?:before|last time|ever)\b.*\b(?:cut|stop|blood)\b|\bcut\b.*\bdeeper than (?:before|last time)\b/,
+    /\bmade my peace\b.*\b(?:goodbye|tonight|ready|last)\b/,
+    /\b(?:this is|this will be|its|pretty sure this is) my last (?:week|day|night|weekend|sunday|christmas|birthday|summer)\b(?! (?:at|of|on|in|before|here|working|with|as|for)\b)/,
+    /\b(?:whats|what is) the point (?:of|in) (?:sticking around|staying around|being here)\b/,
+    /\b(?:god|jesus|the lord|he) (?:to )?(?:will |would )?take me home (?:early|now|tonight|soon|sooner)\b|\btake me home early\b/,
+    /\b(?:sidearm|service weapon|handgun|pistol|gun|rifle)\b.*\bloaded it\b|\bloaded it\b.*\bsitting (?:here )?with it\b|\bsitting (?:here )?with (?:it|the gun|my gun)\b.*\bloaded\b/,
+    /\b(?:looking|look|staring|stare|keep looking) at (?:the|my|a) (?:rope|noose|gun|pistol|rifle|sidearm)\b/,
+    /^(?!.*\b(?:years ago|yrs ago|there was a time|back then|sober \d+|been sober)\b).*\b(?:gun|rifle|pistol|sidearm|shotgun|rope|noose)\b.*\b(?:keep looking at it|keep staring at it|staring at it|sitting (?:here )?with it|in my mouth|to my head|under my chin)\b/,
+    /\b(?:rest|sleep)\b.*\bforever (?:kind|rest|sleep)\b|\bthe forever kind\b/,
+    /\b(?:ready|going|want|wanna) to stop fighting\b(?! (?:with|over|about)\b)(?! for (?!good\b))/,
+    /\blook like an accident\b/,
+    /\bi (?:gave|have given|am giving|been giving) (?:away )?(?:\w+ ){0,4}\b.*\b(?:wont|will not|not going to) (?:be )?need(?:ing)? (?:it|them|any of)\b/,
+    /\b(?:thank you|thanks) for everything\b.*\b(?:take care of|goodbye|not answering|wont answer|sorry for)\b/,
+
   ];
 
   const OTHER_EN = [
@@ -176,11 +223,22 @@
     /\bcoward for not having done it\b/,
     /\bdoesnt want to be alive\b/,
     /\bpasswords\b.*\bin case\b/,
+    /\binsurance\b.*\bthan (?:with )?(?:him|her|them)\b/,
+    /\b(?:he|she|they|my \w+) (?:\w+ ){0,2}gave away\b.*\b(?:wont|will not|isnt going to|not going to) (?:be )?need(?:ing)?\b/,
+    /\b(?:he|she|they|my \w+) bought a (?:gun|rifle|pistol|handgun|rope)\b.*\b(?:doesnt|dont|never|does not) (?:hunt|shoot|own)\b/,
+    /\b(?:died|passed|left)\b.*\b(?:he|she) bought a (?:gun|rifle|pistol|handgun)\b/,
+    new RegExp(`\\b(?:he|she|they|my \\w+) (?:has|have|has been|is|been|keeps) (?:stockpil\\w*|saving|hoarding|collecting) (?:up )?(?:his|her|their) ${P}`),
+    /\b(?:he|she|they) (?:has|have|told me (?:he|she|they) (?:has|have)|said (?:he|she|they) (?:has|have)) a plan\b/,
   ];
 
   const ASSAULT_EN = [
     /\b(?:raped|rape|sexually (?:assaulted|abused)|molested|molests|groped)\b/,
     /\bforced (?:me|her|him) (?:to have sex|into sex|to do (?:sexual|things))\b/,
+    /\bforc(?:es|ed|ing) (?:himself|herself|themselves) on (?:me|her)\b/,
+    /\bmakes me have sex\b|\bmade me have sex\b/,
+    /\b(?:clothes off|naked|undressed|pants off|no clothes)\b.*\b(?:dont remember|cant remember|no memory|blacked out|drugged)\b|\b(?:drugged|roofied|spiked) (?:me|my drink)\b/,
+    /\bi said no\b.*\b(?:didnt stop|kept going|wouldnt stop|did it anyway|kept doing it)\b/,
+    /\b(?:didnt|wouldnt|did not|would not) stop when i (?:said|told him|told her) (?:no|stop|to stop)\b/,
     new RegExp(`\\b${ABUSER} (?:touches|touched|keeps touching) (?:me|her|him)\\b`),
     /\btouches me (?:at night|when|while|and)\b/,
   ];
@@ -198,7 +256,7 @@
     /\bafraid for my life\b/,
     /\b(?:dont|do not|no longer|never) feel safe (?:at home|with (?:him|her|them|my \w+)|in my (?:own )?home|anymore)\b/,
     /\bnot safe (?:at home|with (?:him|her|them)|in my (?:own )?home)\b/,
-    /\b(?:took|takes|hides|hid|destroyed) my (?:passport|phone|keys|car keys|id|documents|money)\b/,
+    /^(?!.*\b(?:beers?|drinks|drunk|drinking|glad (?:he|she|they) did)\b).*\b(?:took|takes|hides|hid|destroyed) my (?:passport|phone|keys|car keys|id|documents|money)\b/,
     /\b(?:wont|will not|doesnt|does not) let me (?:leave|go out|see my|have money|out)\b/,
     /\blocked me (?:in|out)\b/,
     /\bcontrols (?:all )?(?:the |my )?money\b.*\b(?:checks my phone|wont let me|screams|calls me)\b/,
@@ -207,6 +265,14 @@
     /\b(?:want|going|gonna|scared im going|afraid im going|afraid i will|scared i will|about) to (?:hit|hurt|shake|beat|strangle|kill) (?:my )?(?:kid|kids|baby|child|children|son|daughter|wife|husband|partner)\b/,
     /\b(?:i )?(?:hit|pushed|shoved|shook|choked|slapped|beat|kicked) (?:my )?(?:wife|husband|partner|kid|kids|baby|child|son|daughter|girlfriend|boyfriend)\b/,
     /\bit gets physical\b/,
+    /\bkill me and (?:then )?(?:himself|herself|themselves|the kids)\b/,
+    /\bif i (?:ever )?(?:left|leave|try to leave|tried to leave|told|tell)\b.*\b(?:kill me|take the kids|never see (?:them|the kids|my kids)|hurt (?:me|the kids))\b/,
+    /\b(?:stopped|stop|stops|wont|doesnt|never) let(?:ting|s)? me (?:see|go|leave|talk to|have|out)\b/,
+    /\bhands? (?:around|on|over) my (?:neck|throat|mouth)\b/,
+    /\bnext time it (?:wont|will not|isnt going to) be the (?:wall|door|table|dog)\b/,
+    /\bpunch(?:es|ed)? (?:the |a )?(?:wall|door|holes?)\b.*\b(?:my head|my face|next to me|next time|scared)\b/,
+    /\b(?:my ex|he|she|they) (?:\w+ ){0,2}(?:showing up|shows up|showed up) (?:outside|at) (?:my|our|the kids)\b/,
+    /\b(?:my ex|he|she|they) (?:\w+ ){0,2}(?:following me|follows me|stalking|stalks|tracking me|tracks my|tracked my)\b/,
     /\ballowed to (?:beat|hit) (?:my )?(?:kids|children|wife|husband)\b/,
   ];
 
@@ -222,9 +288,15 @@
     /\b(?:hacerme dano|lastimarme|cortarme|autolesion\w*)\b/,
     /\bmejor (?:muerto|muerta)\b/,
     /\bno tengo (?:razon|razones|motivo|motivos) para vivir\b/,
+    /\b(?:pido|pidiendo|ruego|rogando) a dios que me (?:lleve|recoja|lleve ya)\b/,
+    /\bya no aguanto (?:mas|esto|nada)\b/,
     // French, answered with the English notice (findahelpline lists France).
     /\bje veux mourir\b/,
     /\bme suicider\b/,
+  ];
+
+  const OTHER_ES = [
+    /\bmi (?:hijo|hija|esposo|esposa|marido|amigo|amiga|hermano|hermana|papa|mama|novio|novia) (?:\w+ ){0,3}(?:quiere (?:morir\w*|matarse|suicidarse)|se quiere (?:morir|matar)|habla de (?:morir\w*|matarse|suicid\w*))\b/,
   ];
 
   const DANGER_ES = [
@@ -284,7 +356,7 @@
     /\bwould raise (?:them|my kids|him|her) better\b/,
     /\b(?:forgive|into heaven|go to heaven)\b.*\b(?:takes? (?:himself|herself|themselves) out|takes? (?:his|her|their|my) (?:own )?life|kill(?:s|ed)? (?:himself|herself|myself))\b.*\b(?:asking for me|for me|before|if i)\b/,
     /\bwant to go be with (?:him|her|them|my \w+) (?:and (?:jesus|god|the lord)|in heaven|again)\b/,
-    new RegExp(`\\bcounting (?:them|the ${P2}|my ${P2}|the pills|out)\\b`),
+    new RegExp(`^(?!.*\\b(?:organizer|pill ?box|make sure (?:she|he|they) (?:took|takes|take))\\b).*\\bcounting (?:them|the ${P2}|my ${P2}|the pills|out)\\b`),
     new RegExp(`\\bhow (?:much|many) (?:of )?(?:my |the |\\w+ )?${P2} (?:does it take|it takes|it would take|would it take|is too (?:much|many))\\b`),
     /\b(?:hurts the least|least painful|painless way|quickest way to go|fastest way to go)\b/,
     /\b(?:already|just) (?:took|swallowed|taken) (?:them|it all|all of them|all of it|the (?:whole )?(?:bottle|pills))\b|\btook them (?:like )?\d+ minutes ago\b/,
@@ -292,7 +364,7 @@
     new RegExp(`\\b(?:drive|driving|drove|jump|jumping) (?:the truck |the car |my car |my truck )?off (?:the|an|a) ${PLACE}\\b`),
     new RegExp(`\\blooked up the (?:tallest|highest) (?:\\w+ )?${PLACE}\\b`),
     /\bmake it look like an accident\b/,
-    new RegExp(`\\b(?:bought|got|have|loaded|load|cleaning|cleaned) (?:a|my|the|one) (?:${GUN}|round|bullet)\\b.*\\b(?:not for (?:protection|hunting|the range)|sat with it|in my mouth|till sunrise|tonight|looking at it)\\b`),
+    new RegExp(`^(?!.*\\b(?:deer|elk|duck|turkey|hunting) season\\b).*\\b(?:bought|got|have|loaded|load|cleaning|cleaned) (?:a|my|the|one) (?:${GUN}|round|bullet)\\b.*\\b(?:not for (?:protection|hunting|the range)|sat with it|in my mouth|till sunrise|tonight|looking at it)\\b`),
     new RegExp(`\\bloaded (?:the|my|one) (?:${GUN}|round)\\b`),
     /\b(?:one|single) trigger pull\b|\bpull the trigger\b(?! on)|\beat(?:ing)? my gun\b/,
     /\b(?:got|have|bought|tied) (?:the|a) (?:rope|noose)\b(?! for)/,
@@ -395,6 +467,8 @@
     t = t.replace(/\b(?:mom|dad|mother|father|parents|wife|husband|boss|teacher|coach)(?: is| are)? (?:gonna|going to) kill me when (?:she|he|they) (?:sees?|finds? out|hears?)\b/g, ' ');
     t = t.replace(/\bstarv\w* myself of\b/g, ' ');
     if (ILLNESS.test(t)) t = t.replace(/\b(?:might|may|wont|will not) (?:not )?be (?:around|here) (?:much longer|for long)\b/g, ' ');
+    // A Spanish testimony of survival, like the English past-tense guard.
+    t = t.replace(/\bhace \w+ (?:anos|meses) (?:intente|trate de|quise) quitarme la vida\b(?=.*\b(?:hoy estoy bien|me rescato|me salvo|gracias)\b)/g, ' ');
     const hit = (list) => list.some((re) => re.test(t));
     const past = guarded(t);
     // The writer's own life first, then sexual violence, then someone else's
@@ -403,7 +477,7 @@
     if (!past && (hit(SELF_EN) || hit(SELF_EN2))) return { kind: 'self', lang: 'en' };
     if (hit(ASSAULT_ES)) return { kind: 'assault', lang: 'es' };
     if (hit(ASSAULT_EN) || hit(ASSAULT_EN2)) return { kind: 'assault', lang: 'en' };
-    if (!past && hit(OTHER_ES2)) return { kind: 'other', lang: 'es' };
+    if (!past && (hit(OTHER_ES) || hit(OTHER_ES2))) return { kind: 'other', lang: 'es' };
     if (!past && (hit(OTHER_EN) || hit(OTHER_EN2))) return { kind: 'other', lang: 'en' };
     if (hit(DANGER_ES) || hit(DANGER_ES2)) return { kind: 'danger', lang: 'es' };
     if (hit(DANGER_EN) || hit(DANGER_EN2)) return { kind: 'danger', lang: 'en' };
