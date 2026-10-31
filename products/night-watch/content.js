@@ -1,0 +1,248 @@
+/**
+ * The Night Watch: thirty nights of his words for new parents.
+ *
+ * Every `text` is exact KJV from data/gospels-kjv.json and is red letter in
+ * data/spoken-gospels.json; build.js refuses to run otherwise. A "…" marks
+ * words left out. The reflections and prayers are original and are never
+ * presented as his words.
+ */
+module.exports = {
+  title: 'The Night Watch',
+  subtitle: 'Words of Jesus for New Parents, in the Small Hours',
+  compiler: 'Red Letter',
+  year: 2026,
+
+  intro: [
+    'This book is for the hours nobody photographs: the feed at two, the rocking at four, the long walk up and down the hall while the house sleeps and you do not.',
+    'Each night is one page-turn. On the left, a few words Jesus spoke, printed in red the way old Bibles printed them. On the right, a short reflection written for someone holding a baby in the half-dark, and a prayer short enough to say with your eyes closed.',
+    'There is no order you must keep and no night you can fall behind on. If you miss a night, you did not miss it. You were holding a child.',
+    'Read it by the lamp, or by the light of your phone, with one hand. That is how it was written to be read.',
+  ],
+
+  nights: [
+    {
+      title: 'Let them come',
+      cite: 'Mark 10:14',
+      text: 'Suffer the little children to come unto me, and forbid them not: for of such is the kingdom of God.',
+      reflection: 'His friends thought the children were an interruption. Important things were happening, and here came the little ones, loud and sticky and wanting to be held. He was displeased, not with the children, but with the people keeping them away. So this is the first thing to know at two in the morning: the small one in your arms is not an interruption of anything holy. You are not away from the kingdom tonight. You are holding one of the people it belongs to.',
+      prayer: 'Lord, let me see what you see in this small face.',
+    },
+    {
+      title: 'The anguish and the joy',
+      cite: 'John 16:21',
+      text: 'A woman when she is in travail hath sorrow, because her hour is come: but as soon as she is delivered of the child, she remembereth no more the anguish, for joy that a man is born into the world.',
+      reflection: 'He did not pretend that birth is easy. He named the sorrow first, and called it an hour that comes whether anyone is ready or not. Some of the anguish you may remember for a long time, and that is allowed; he was speaking of how joy can outweigh it, not erase it. Tonight the joy may be quiet, buried under tiredness. It is still there. A person has been born into the world, and you were there.',
+      prayer: 'Thank you for this life, and for carrying us both through.',
+    },
+    {
+      title: 'Heavy laden',
+      cite: 'Matthew 11:28',
+      text: 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+      reflection: 'You may not get rest tonight in the way you want it, with a closed door and eight hours. He did not promise that. He promised rest to the ones carrying something heavy, and the invitation is "come", not "fix yourself first". You can come exactly as you are: unshowered, short-tempered, counting the hours since you last slept. The rest he gives can begin in the middle of the work, the way a shoulder rests when someone else takes part of the weight.',
+      prayer: 'I am heavy laden. I am coming as I am.',
+    },
+    {
+      title: 'Rest a while',
+      cite: 'Mark 6:31',
+      text: 'Come ye yourselves apart into a desert place, and rest a while.',
+      reflection: 'The disciples were so busy that they had no time even to eat, and he told them to stop. Not to try harder. To rest a while. When someone offers to hold the baby, let them. When the baby sleeps, you do not have to fold the laundry first. The world will keep coming and going. A while is all he asked for, and a while may be all you can take: twenty minutes, a cup of tea while it is still warm. Take it.',
+      prayer: 'Show me the small rests you are offering me, and help me say yes.',
+    },
+    {
+      title: 'One thing is needful',
+      cite: 'Luke 10:41-42',
+      text: 'Martha, Martha, thou art careful and troubled about many things: But one thing is needful',
+      reflection: 'He said her name twice, gently, the way you say a name to someone who is not listening because they are too busy. Martha was doing good work. She was also anxious about all of it at once. You may have a list running in your head tonight: bottles, appointments, money, the email you did not answer. He does not scold the list. He just reminds you that most of it can wait, and that the thing in front of you now, this child, this hour, is enough.',
+      prayer: 'Quiet the many things. Let me attend to the one.',
+    },
+    {
+      title: 'Sufficient unto the day',
+      cite: 'Matthew 6:34',
+      text: 'Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.',
+      reflection: 'Night is when tomorrow gets loud. Will the baby sleep? Will you manage at work? Is this rash normal? He does not say tomorrow will be easy. He says it will take care of its own worrying, and that today has enough trouble of its own. The hour you are in is hard enough without borrowing from the next one. You only have to get through this feed, this diaper, this lap of the hallway. Tomorrow will come with its own strength.',
+      prayer: 'Give me what I need for this hour, and keep tomorrow for tomorrow.',
+    },
+    {
+      title: 'Your Father feedeth them',
+      cite: 'Matthew 6:26',
+      text: 'Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?',
+      reflection: 'Whether it is a breast or a bottle, you are spending a great part of your days feeding someone who cannot say thank you. It is the oldest work there is. He pointed at the birds and said that God does this work too, feeding those who cannot feed themselves, every day, without being asked twice. You are doing something God does. And you, who are doing the feeding, are not forgotten either. Somebody is watching to see that you are fed.',
+      prayer: 'You feed the birds. Feed me too, and help me feed this child.',
+    },
+    {
+      title: 'The plainest love',
+      cite: 'John 21:15',
+      text: 'Feed my lambs.',
+      reflection: 'After Peter had failed him, Jesus did not ask him to make a speech or prove anything. He asked whether Peter loved him, and then he gave him a job: feed my lambs. Love, in that moment, looked like care for the smallest ones. Tonight love looks the same. Not a feeling, necessarily; you may be too tired to feel much. Just the measured ounces, the burping, the patient wait for one more swallow. It counts. He called it love.',
+      prayer: 'Here is my love tonight, in the plainest work I have.',
+    },
+    {
+      title: 'Every hair',
+      cite: 'Luke 12:7',
+      text: 'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.',
+      reflection: 'You probably know this baby\'s head better than anyone alive: the soft spot, the swirl at the crown, the few fine hairs that catch the light. You have studied it in the dark for hours. That is how closely you are known. Every hair on this small head is counted, and every one on yours. Whatever you are afraid of tonight, you are not a stranger to God, and neither is the child asleep on you.',
+      prayer: 'You know us down to the last hair. Hold what I cannot.',
+    },
+    {
+      title: 'Their angels',
+      cite: 'Matthew 18:10',
+      text: 'Take heed that ye despise not one of these little ones; for I say unto you, That in heaven their angels do always behold the face of my Father which is in heaven.',
+      reflection: 'He spoke as if little ones had a standing appointment in heaven. They are never overlooked there; someone always has the Father\'s attention on their behalf. You may lie awake listening to every breath, afraid of what you might miss. You are not the only one watching. This child is seen, always, by more than you. You can keep watch without having to be the whole of the watch.',
+      prayer: 'I am not the only one watching. Thank you.',
+    },
+    {
+      title: 'Under her wings',
+      cite: 'Matthew 23:37',
+      text: '…how often would I have gathered thy children together, even as a hen gathereth her chickens under her wings',
+      reflection: 'When he looked for a picture of how much he loved a whole city, he chose a mother hen gathering her chicks under her wings. Not a king or a soldier: a hen. The image you are living tonight, a small body pulled close, a blanket tucked around, your arm curved into a shelter, is the image he used for his own love. When you hold this child against you, you are showing what he meant.',
+      prayer: 'Gather us both under your wings tonight.',
+    },
+    {
+      title: 'Good gifts',
+      cite: 'Matthew 7:9-11',
+      text: 'Or what man is there of you, whom if his son ask bread, will he give him a stone? … If ye then, being evil, know how to give good gifts unto your children, how much more shall your Father which is in heaven give good things to them that ask him?',
+      reflection: 'He was honest about parents: we are not perfect. We lose our tempers, we get things wrong. And still, when a hungry child cries, we do not hand them a stone. Something in us rises to give them what they need, even at three in the morning, even when we are empty. He used that instinct, the one you are feeling right now, as a small picture of how God feels about you. How much more.',
+      prayer: 'You are a better parent than I am. Teach me.',
+    },
+    {
+      title: 'A great way off',
+      cite: 'Luke 15:20',
+      text: 'But when he was yet a great way off, his father saw him, and had compassion, and ran, and fell on his neck, and kissed him.',
+      reflection: 'In his story about the lost son, the father is watching the road. He sees his child while he is still a long way off, and he runs. You know that feeling now: the way your whole body turns toward a cry from the next room, before you have decided anything. That is the heart of God in the story Jesus told. Not waiting with folded arms, but running, already moved, already reaching to hold.',
+      prayer: 'You ran to me first. Help me run to them.',
+    },
+    {
+      title: 'On his shoulders',
+      cite: 'Luke 15:5',
+      text: 'And when he hath found it, he layeth it on his shoulders, rejoicing.',
+      reflection: 'The shepherd does not drive the lost sheep home or make it walk. He lifts it onto his shoulders and carries it, and he is glad to. You know this position. The baby on your shoulder, the small weight, your hand patting a slow rhythm on the back. That is the picture he chose of how God carries the lost: on the shoulders, rejoicing. Whatever you are carrying tonight, you are being carried too.',
+      prayer: 'Carry me the way I carry this child.',
+    },
+    {
+      title: 'By name',
+      cite: 'John 10:3',
+      text: 'the sheep hear his voice: and he calleth his own sheep by name',
+      reflection: 'A newborn knows your voice before they know your face. They heard it from inside, muffled, for months. Now they turn toward it, settle at it, stop crying when you speak. That is what he said about his own: they know his voice, and he calls each of them by name. You may still be getting used to saying this child\'s name. He has known it longer. He knows yours too.',
+      prayer: 'Call me by name tonight. I am listening.',
+    },
+    {
+      title: 'When the crying will not stop',
+      cite: 'Mark 4:39',
+      text: 'Peace, be still.',
+      reflection: 'He said these three words to a storm, and it obeyed. You have probably said something like them into a small red face that did not obey at all. Some nights the crying goes on and nothing you try works. That is not failure; storms are like that. While you sway and shush, you can say his words over the child and over yourself. The calm may come to the baby, or it may come first to you.',
+      prayer: 'Peace, be still. In this room, and in me.',
+    },
+    {
+      title: 'Willing and weak',
+      cite: 'Matthew 26:41',
+      text: 'Watch and pray, that ye enter not into temptation: the spirit indeed is willing, but the flesh is weak.',
+      reflection: 'He said this to friends who kept falling asleep when he needed them. He did not call them bad. He said the spirit is willing and the flesh is weak, which is simply true, and especially true at four in the morning. You want to be patient, gentle, awake. Your body has its limits. He understands the difference between what you want and what you can do. Tonight, willing is enough.',
+      prayer: 'My spirit is willing. Hold me up where I am weak.',
+    },
+    {
+      title: 'Alway',
+      cite: 'Matthew 28:20',
+      text: 'lo, I am with you alway, even unto the end of the world.',
+      reflection: 'These were among his last words in Matthew\'s Gospel, and he chose a promise of presence. Not a promise that everything would go well. A promise that he would be there for it, always. Night can be the loneliest part of new parenthood: everyone else asleep, the house dark, you and a small person who cannot talk yet. You are not as alone as it feels. He said always, and he meant the small hours too.',
+      prayer: 'Stay with me in this hour.',
+    },
+    {
+      title: 'Not as the world giveth',
+      cite: 'John 14:27',
+      text: 'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.',
+      reflection: 'The world\'s peace usually depends on things going well: a quiet baby, a good night, a full bank account. His was different. He gave it to friends on the night before the worst day of their lives. It is a peace you can have in the middle of trouble, not only after. Your heart may be troubled tonight for good reasons. He does not shame that. He offers something steadier underneath it.',
+      prayer: 'Give me your peace, the kind that does not wait for quiet.',
+    },
+    {
+      title: 'Comfortless',
+      cite: 'John 14:18',
+      text: 'I will not leave you comfortless: I will come to you.',
+      reflection: 'The old word is "comfortless": without anyone to comfort you. New parents spend their nights comforting someone else, and there can be no one left over to comfort them. He promised not to leave his friends that way. He would come to them. Tonight, as you comfort this child, let yourself be comforted too. Lean back. Breathe out. You do not have to be the only source of comfort in this room.',
+      prayer: 'Come to me, as I go to this child.',
+    },
+    {
+      title: 'An easy yoke',
+      cite: 'Matthew 11:29-30',
+      text: 'Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls. For my yoke is easy, and my burden is light.',
+      reflection: 'A yoke is made for two. It shares the weight between them so that neither has to pull alone. He did not say there would be no burden; he said his would be light, because he carries it with you. There are things you have been pulling alone: the worry, the schedule, the guilt about what you are not doing. You were not meant to carry them by yourself. Learn from him, he said. He is gentle, and lowly in heart.',
+      prayer: 'Share this weight with me. Teach me to be gentle.',
+    },
+    {
+      title: 'Receiveth me',
+      cite: 'Mark 9:37',
+      text: 'Whosoever shall receive one of such children in my name, receiveth me',
+      reflection: 'He put a child in the middle of his arguing disciples, took the child in his arms, and said this. Whoever welcomes a little one like this welcomes him. You have welcomed a child into your home, your arms, your whole life. It has cost you sleep and much more. He says that in welcoming this child you have welcomed him, and that nothing done for the smallest is ever done for no one.',
+      prayer: 'In welcoming this child, let me welcome you.',
+    },
+    {
+      title: 'As little children',
+      cite: 'Matthew 18:3',
+      text: 'Verily I say unto you, Except ye be converted, and become as little children, ye shall not enter into the kingdom of heaven.',
+      reflection: 'Look at how this child receives the world: completely dependent, crying when they need something, falling asleep the moment they feel safe. No pretending, no earning. He said that is the way into the kingdom. You are teaching this child many things. Tonight, let them teach you one: you are allowed to need help, to cry out when you need it, and to rest when you are held.',
+      prayer: 'Make me like this child: trusting, held, unashamed to need you.',
+    },
+    {
+      title: 'The parents who lost him',
+      cite: 'Luke 2:49',
+      text: 'How is it that ye sought me? wist ye not that I must be about my Father\'s business?',
+      reflection: 'These are the earliest words of his that the Gospels record, and he spoke them, at twelve, to his parents. Mary and Joseph had lost him for three days. They searched Jerusalem, frightened, and when they found him his mother said, "thy father and I have sought thee sorrowing." Even the parents of Jesus did not get everything right, and were afraid. If you have made mistakes already, you are in good company. The child was safe in his Father\'s house all along.',
+      prayer: 'When I lose my way as a parent, keep this child safe in your house.',
+    },
+    {
+      title: 'Continue ye in my love',
+      cite: 'John 15:9',
+      text: 'As the Father hath loved me, so have I loved you: continue ye in my love.',
+      reflection: 'He did not say "earn my love" or "win my love". He said continue in it, stay where you already are. The love was there first. You may find yourself loving this child in a way that frightens you a little: how much, how fast, how helplessly. That love did not have to be earned either. The child did nothing but arrive. That is how he says he loves you. Stay there.',
+      prayer: 'Keep me in your love, the way I keep this child in mine.',
+    },
+    {
+      title: 'That your joy might be full',
+      cite: 'John 15:11',
+      text: 'These things have I spoken unto you, that my joy might remain in you, and that your joy might be full.',
+      reflection: 'He wanted joy for his friends, and not a thin version of it. Full joy. In new parenthood joy can come in strange small doses: the milk-drunk face, the first real smile, the weight of a sleeping head. Notice them tonight. They are not small. They are the joy he wanted for you, arriving one at a time between the hard parts. Let your joy be full, even if it is full of very small things.',
+      prayer: 'Let me notice the joy tonight, and keep it.',
+    },
+    {
+      title: 'Ask',
+      cite: 'Matthew 7:7',
+      text: 'Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you:',
+      reflection: 'Most new parents find it hard to ask. To ask a friend to bring dinner. To ask a partner to take the next feed. To ask a doctor a question that might sound foolish. He made asking the beginning of receiving. You are allowed to ask God for sleep, for patience, for help with this specific problem tonight. And you are allowed to ask people. Very often, the answer to a prayer arrives at the door holding a casserole.',
+      prayer: 'Here is what I need tonight. I am asking.',
+    },
+    {
+      title: 'Your joy no man taketh',
+      cite: 'John 16:22',
+      text: 'And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.',
+      reflection: 'Right after he spoke of a mother\'s labour, he said this. Now you have sorrow; but there is a joy coming that no one can take. Some nights in this season are simply sad. You miss sleep, your old life, the person you were before. That grief is real, and he does not hurry you past it. He only promises that it is not the last word, and that the joy waiting on the other side is yours to keep.',
+      prayer: 'Hold my sorrow, and keep my joy safe for me.',
+    },
+    {
+      title: 'How they grow',
+      cite: 'Matthew 6:28-29',
+      text: 'Consider the lilies of the field, how they grow; they toil not, neither do they spin: And yet I say unto you, That even Solomon in all his glory was not arrayed like one of these.',
+      reflection: 'Lilies do not strain to grow. They just do, quietly, in the night, while no one is watching. This child is growing too. Every feed you give in the dark is turning into bone and muscle and length; one morning soon the sleeper will not fit. You do not make them grow by worrying. You feed, you hold, you keep them warm, and God does the growing. Consider how they grow, he said. Tonight, consider this one.',
+      prayer: 'Thank you for growing this child while we sleep.',
+    },
+    {
+      title: 'Morning',
+      cite: 'John 20:21',
+      text: 'Peace be unto you: as my Father hath sent me, even so send I you.',
+      reflection: 'He said this on the evening of the first Easter, to friends who had been hiding behind a locked door. Peace first, and then a sending. The long night ends; it always does. Soon there will be light at the window, and you will be sent into another day of loving this child: tired, yes, but not alone and not without peace. You have kept the night watch. Go gently into the morning.',
+      prayer: 'Thank you for this night. Send me into the morning with your peace.',
+    },
+  ],
+
+  help: {
+    title: 'If the nights get too dark',
+    body: [
+      'Tiredness and tears are part of the first months. But if for more than two weeks you feel hopeless, cannot sleep even when the baby sleeps, feel numb toward your child, or have frightening thoughts, that may be postpartum depression or anxiety. It is common, it happens to fathers too, and it is treatable. It is not a failure of faith.',
+    ],
+    lines: [
+      ['If you are thinking of harming yourself or your baby', 'Call or text 988, the Suicide & Crisis Lifeline. In immediate danger, call 911.'],
+      ['National Maternal Mental Health Hotline', 'Call or text 1-833-852-6262 (1-833-TLC-MAMA). Free, confidential, 24 hours a day, in English and Spanish.'],
+      ['Postpartum Support International HelpLine', 'Call or text 1-800-944-4773 for support and local resources. Volunteers return messages; it is not an emergency line.'],
+      ['Outside the United States', 'Find a helpline near you at findahelpline.com.'],
+    ],
+    foot: 'Tell your doctor, midwife or pastor how you are really doing. Asking for help is one way of being a good parent.',
+  },
+};
