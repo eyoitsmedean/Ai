@@ -16,7 +16,7 @@ Between guests: Room settings → **Begin again**, or hit `/?fresh=1` again.
 | --- | --- | --- |
 | 0–1 | Arrive from `/welcome` or `/?fresh=1`. Acknowledge the crisis line. Turn the page. Pick a need, or take the morning page. | Do not explain “lectio.” |
 | 1–4 | Sit: Read, Reflect, Rest, Respond. They may close. They may skip the quiet minute. | If they freeze, point at Close. |
-| 4–6 | Today: the sentence, Seven Days, **Hear this office**, or a blessing. | The card downloads if the phone will not share. |
+| 4–6 | Today: the sentence, Seven Days, **Hear this saying**, or a blessing. | The card downloads if the phone will not share. |
 | 6–8 | Advisor: “I feel so much shame” or whatever they are actually carrying. | If they type crisis language, 988 must appear. That is the test, not a failure. |
 
 ## Do not

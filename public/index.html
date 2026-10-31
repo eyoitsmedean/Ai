@@ -1575,7 +1575,7 @@ html.sitting .sit-sheet {
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
         <p class="hear-now" id="hear-status" hidden>Listening</p>
         <div class="actions" style="margin-bottom:22px">
-          <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
+          <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this saying</button>
         </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
 
@@ -1598,6 +1598,7 @@ html.sitting .sit-sheet {
             <p class="red-letter" id="aff-quote"></p>
             <p class="cite" id="aff-verse"></p>
             <div class="actions">
+              <button class="ghost" type="button" id="aff-hear-btn" onclick="hearCard('aff')" aria-pressed="false">Hear</button>
               <button class="ghost" id="aff-save-btn" onclick="toggleSave('aff')"><span id="aff-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('aff')">Share card</button>
               <button class="ghost" onclick="sitWith('aff')">Sit with this</button>
@@ -1618,6 +1619,7 @@ html.sitting .sit-sheet {
             <div class="rule"></div>
             <p class="reflection" id="word-reflection"></p>
             <div class="actions">
+              <button class="ghost" type="button" id="word-hear-btn" onclick="hearCard('word')" aria-pressed="false">Hear</button>
               <button class="ghost" id="word-save-btn" onclick="toggleSave('word')"><span id="word-save-label">Keep</span></button>
               <button class="ghost" onclick="openShareSheet('word')">Share card</button>
               <button class="ghost" onclick="sitWith('word')">Sit with this</button>
@@ -1633,6 +1635,7 @@ html.sitting .sit-sheet {
           <label class="sr-only" for="vespers-reply">What you are laying down</label>
           <textarea class="sit-reply" id="vespers-reply" rows="2" placeholder="One thing is enough…"></textarea>
           <div class="actions">
+            <button class="ghost" type="button" id="vespers-hear-btn" onclick="hearCard('vespers')" aria-pressed="false">Hear</button>
             <button class="cta cta-primary" type="button" onclick="keepVespers()">Keep the evening</button>
             <button class="ghost" type="button" onclick="sitWith('vespers')">Sit with this</button>
             <button class="ghost" type="button" onclick="amenVespers()">Amen</button>
@@ -1970,6 +1973,7 @@ html.sitting .sit-sheet {
 </article>
 
 <script src="data/crisis.js"></script>
+<script src="data/office.js"></script>
 <script src="data/curated.js"></script>
 <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
@@ -2025,6 +2029,7 @@ let amenTimer = null;
 let sitUtterance = null;
 let sitSpeaking = false;
 let officeSpeaking = false;
+let hearTarget = null;
 let deferredInstall = null;
 let cmdIndex = 0;
 let cmdFiltered = [];
@@ -2462,18 +2467,13 @@ function markSevenDay(index) {
 }
 
 function isNightOffice() {
-  const h = new Date().getHours();
-  return h >= 21 || h < 6;
+  return RLA_OFFICE.isNightOffice(new Date());
 }
 function isEveningOffice() {
-  const h = new Date().getHours();
-  return h >= 17 || h < 6;
+  return RLA_OFFICE.isEveningOffice(new Date());
 }
 function officeName() {
-  if (isNightOffice()) return 'Compline';
-  if (isEveningOffice()) return 'Vespers';
-  const h = new Date().getHours();
-  return h < 12 ? 'Morning' : 'Afternoon';
+  return RLA_OFFICE.officeName(new Date());
 }
 function updateDateUI() {
   const now = new Date();
@@ -3754,100 +3754,91 @@ function amenFromSit() {
   openAmen({ quote: sitPayload.quote, verse: sitPayload.verse, holdMs: 3200 });
 }
 
-function stopSitListen() {
-  if (sitSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
-  sitSpeaking = false;
-  const btn = document.getElementById('sit-listen');
-  if (btn) {
-    btn.textContent = 'Listen';
+function hearButtons() {
+  return ['hear-office', 'aff-hear-btn', 'word-hear-btn', 'vespers-hear-btn', 'sit-listen']
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+}
+function resetHearButtons() {
+  hearButtons().forEach((btn) => {
+    const idle = btn.id === 'hear-office' ? 'Hear this saying' : btn.id === 'sit-listen' ? 'Listen' : 'Hear';
+    btn.textContent = idle;
     btn.setAttribute('aria-pressed', 'false');
-  }
+  });
 }
-function toggleSitListen() {
-  if (!window.speechSynthesis) {
-    showToast('Listening isn’t available on this device');
-    return;
-  }
-  if (sitSpeaking) { stopSitListen(); return; }
+function stopSitListen() {
   stopHearOffice();
-  const quote = (sitPayload && sitPayload.quote) || '';
-  const verse = (sitPayload && sitPayload.verse) || '';
-  sitUtterance = new SpeechSynthesisUtterance((quote + '. ' + verse).replace(/[“”]/g, ''));
-  sitUtterance.rate = 0.88;
-  sitUtterance.onend = () => stopSitListen();
-  sitUtterance.onerror = () => stopSitListen();
-  sitSpeaking = true;
-  const btn = document.getElementById('sit-listen');
-  if (btn) {
-    btn.textContent = 'Pause';
-    btn.setAttribute('aria-pressed', 'true');
-  }
-  window.speechSynthesis.speak(sitUtterance);
 }
-
 function stopHearOffice() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   officeSpeaking = false;
   sitSpeaking = false;
+  hearTarget = null;
   document.documentElement.classList.remove('hearing');
-  const btn = document.getElementById('hear-office');
   const status = document.getElementById('hear-status');
-  if (btn) {
-    btn.textContent = 'Hear this office';
-    btn.setAttribute('aria-pressed', 'false');
-  }
   if (status) status.hidden = true;
+  resetHearButtons();
 }
 function officeScript() {
-  const parts = [];
-  parts.push(officeName() + '.');
-  if (dailyData && dailyData.affirmation) {
-    parts.push(dailyData.affirmation.text);
-    parts.push(dailyData.affirmation.quote);
-    parts.push(dailyData.affirmation.verse);
-  }
-  if (dailyData && dailyData.word) {
-    parts.push(dailyData.word.passage);
-    parts.push(dailyData.word.verse);
-  }
-  if (isEveningOffice()) {
-    const saying = vespersSaying();
-    parts.push(isNightOffice() ? 'Compline.' : 'Vespers.');
-    parts.push(document.getElementById('vespers-prompt')?.textContent || vespersPrompt());
-    parts.push(saying.quote);
-    parts.push(saying.verse);
-  }
-  return parts.filter(Boolean).join(' ');
+  return RLA_OFFICE.officeScript(dailyData);
 }
-function toggleHearOffice() {
+function sayingForCard(type) {
+  if (type === 'aff' && dailyData && dailyData.affirmation) return dailyData.affirmation.quote;
+  if (type === 'word' && dailyData && dailyData.word) return dailyData.word.passage;
+  if (type === 'vespers') return vespersSaying().quote;
+  if (type === 'sit') return (sitPayload && sitPayload.quote) || '';
+  if (type === 'office') return officeScript();
+  return '';
+}
+function speakSaying(type) {
   if (!window.speechSynthesis) {
     showToast('Listening isn’t available on this device');
     return;
   }
-  if (officeSpeaking) { stopHearOffice(); return; }
-  stopSitListen();
-  const text = officeScript();
-  if (!text.trim()) { showToast('The office is still being set.'); return; }
-  officeSpeaking = true;
-  document.documentElement.classList.add('hearing');
-  const btn = document.getElementById('hear-office');
+  if ((officeSpeaking || sitSpeaking) && hearTarget === type) {
+    stopHearOffice();
+    return;
+  }
+  const text = RLA_OFFICE.spokenOnly(sayingForCard(type));
+  if (!text) {
+    showToast('The saying is still being set.');
+    return;
+  }
+  stopHearOffice();
+  const btnId = type === 'office' ? 'hear-office' : type === 'sit' ? 'sit-listen' : type + '-hear-btn';
+  const btn = document.getElementById(btnId);
   const status = document.getElementById('hear-status');
+  officeSpeaking = type !== 'sit';
+  sitSpeaking = type === 'sit';
+  hearTarget = type;
+  if (type === 'office') document.documentElement.classList.add('hearing');
   if (btn) {
-    btn.textContent = 'Pause the office';
+    btn.textContent = 'Pause';
     btn.setAttribute('aria-pressed', 'true');
   }
-  if (status) {
+  if (status && type === 'office') {
     status.hidden = false;
-    status.textContent = 'Listening — the page can rest';
+    status.textContent = 'Listening';
   }
-  const utter = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
+  const utter = new SpeechSynthesisUtterance(text);
   utter.rate = 0.88;
-  utter.onend = () => { if (officeSpeaking) stopHearOffice(); };
+  utter.onend = () => { if (hearTarget === type) stopHearOffice(); };
+  utter.onerror = () => { if (hearTarget === type) stopHearOffice(); };
   try {
     window.speechSynthesis.speak(utter);
   } catch (_) {
-    showToast('This browser would not speak. The office is still on the page.');
+    showToast('This browser would not speak. The saying is still on the page.');
+    stopHearOffice();
   }
+}
+function hearCard(type) {
+  speakSaying(type);
+}
+function toggleSitListen() {
+  speakSaying('sit');
+}
+function toggleHearOffice() {
+  speakSaying('office');
 }
 
 function paintInstallState() {
@@ -3967,7 +3958,7 @@ const COMMANDS = [
   { label: 'Sit with today’s word', hint: 'Sit', run: () => sitWith('word') },
   { label: 'Print this leaf', hint: 'Print', run: () => printSitting() },
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
-  { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
+  { label: 'Hear this saying', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
