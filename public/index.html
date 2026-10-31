@@ -174,6 +174,13 @@ textarea { font-family: var(--body); }
   color: var(--crimson);
   margin: 0 0 18px;
 }
+.sit-awake {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-3);
+  margin: 0 0 18px;
+}
 
 .grain {
   pointer-events: none;
@@ -1806,6 +1813,7 @@ html.sitting .sit-sheet {
     <span id="sit-mark-3">III Rest</span>
     <span id="sit-mark-4">IV Respond</span>
   </div>
+  <p class="sit-awake" id="sit-awake" hidden>The screen stays lit while you sit.</p>
   <div class="sit-step on" id="sit-step-1">
     <p class="sit-quote" id="sit-quote"></p>
     <p class="cite sit-cite" id="sit-cite"></p>
@@ -1982,6 +1990,7 @@ html.sitting .sit-sheet {
 <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
 <script src="data/paths.js"></script>
+<script src="data/wake.js"></script>
 <script>
 const FREE_CHATS = 5;
 const THEMES = [
@@ -2161,6 +2170,11 @@ function init() {
     }
   } catch (_) {}
   setWatch();
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    const keeper = screenKeeper();
+    if (keeper) keeper.resume().then(paintAwake);
+  });
   applySeason();
   paintThemeIndex();
   bindRituals();
@@ -2903,6 +2917,7 @@ function showSitStep(n) {
     if (mark) mark.classList.toggle('on', i === n);
   });
   document.documentElement.classList.toggle('sitting', n >= 1);
+  if (n >= 1) holdScreen('sit');
 }
 
 function goSitReflect() {
@@ -2989,6 +3004,42 @@ function closeSit() {
   document.documentElement.classList.remove('sitting');
   document.getElementById('sit-sheet').classList.remove('on');
   hideOverlayIfIdle();
+  releaseScreen('sit');
+}
+
+function screenKeeper() {
+  if (!window.RedLetterWake) return null;
+  if (!window.__rlaKeeper) {
+    window.__rlaKeeper = RedLetterWake.createScreenKeeper(navigator.wakeLock);
+  }
+  return window.__rlaKeeper;
+}
+
+function paintAwake(state) {
+  const on = Boolean(state && state.held);
+  document.documentElement.dataset.awake = on ? '1' : '0';
+  const line = document.getElementById('sit-awake');
+  const sitting = document.getElementById('sit-sheet')?.classList.contains('on');
+  if (line) line.hidden = !(on && sitting);
+  const status = document.getElementById('hear-status');
+  if (status && officeSpeaking) {
+    status.hidden = false;
+    status.textContent = on
+      ? 'Listening — the screen stays lit'
+      : 'Listening — the page can rest';
+  }
+}
+
+function holdScreen(reason) {
+  const keeper = screenKeeper();
+  if (!keeper) return Promise.resolve();
+  return keeper.hold(reason).then(paintAwake);
+}
+
+function releaseScreen(reason) {
+  const keeper = screenKeeper();
+  if (!keeper) return Promise.resolve();
+  return keeper.release(reason).then(paintAwake);
 }
 
 let sheetTrigger = null;
@@ -3798,6 +3849,7 @@ function toggleSitListen() {
 function stopHearOffice() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   officeSpeaking = false;
+  releaseScreen('hear');
   sitSpeaking = false;
   document.documentElement.classList.remove('hearing');
   const btn = document.getElementById('hear-office');
@@ -3858,6 +3910,7 @@ function toggleHearOffice() {
   } catch (_) {
     showToast('This browser would not speak. The office is still on the page.');
   }
+  holdScreen('hear');
 }
 
 function paintInstallState() {

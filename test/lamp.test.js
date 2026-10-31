@@ -48,6 +48,6 @@ test('the page loads the Lamp before first paint and the worker keeps it', () =>
   assert.match(html, /RedLetterLamp\.applyLamp/);
   assert.match(html, /Darker paper after 9/);
   assert.match(html, /function paintLamp/);
-  assert.match(sw, /rla-v21/);
+  assert.match(sw, /rla-v22/);
   assert.match(sw, /data\/lamp\.js/);
 });
