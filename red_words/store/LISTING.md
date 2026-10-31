@@ -34,4 +34,4 @@ Home widget: Word, citation, thread. Tap opens redwords://today.
 Privacy policy URL: <PASTE>. Same text is in Settings.
 ```
 
-**Screenshots:** `store/screenshots/` — see README.md.
+**Screenshots:** `store/screenshots/` — upload `ios61_` and `ipad_` to App Store Connect (those two slots are required). Upload `play_` to the Play phone listing. Feature graphic: `store/feature_graphic.png`. See README.md.
