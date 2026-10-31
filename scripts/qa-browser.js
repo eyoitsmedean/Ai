@@ -144,6 +144,28 @@ async function main() {
     await page.evaluate(() => switchTab('today'));
   });
 
+  await check('Advent peek opens the waiting path', async () => {
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.goto(BASE + '/?advent=2026-11-29', { waitUntil: 'networkidle0' });
+    const seen = await page.evaluate(() => ({
+      season: document.documentElement.getAttribute('data-season'),
+      label: document.getElementById('week-ribbon') && document.getElementById('week-ribbon').innerText,
+      cite: null,
+    }));
+    assert(seen.season === 'advent', 'peek should turn the paper Advent, got ' + seen.season);
+    assert(/Advent/i.test(seen.label || ''), 'ribbon missing Advent: ' + (seen.label || ''));
+    assert(/Look Up|Sunday/i.test(seen.label || ''), 'First Sunday missing: ' + (seen.label || ''));
+    assert(!/Ask Him/i.test(seen.label || ''), 'must not say Ask Him');
+    await page.click('.forty-open');
+    await page.waitForSelector('#sit-sheet.on', { timeout: 4000 });
+    const sit = await page.evaluate(() => ({
+      quote: document.getElementById('sit-quote').textContent,
+      cite: document.getElementById('sit-cite').textContent,
+    }));
+    assert(/redemption draweth nigh/i.test(sit.quote), 'wrong First Sunday saying: ' + sit.quote);
+    assert(/Luke 21:28/.test(sit.cite) && /KJV/.test(sit.cite), 'cite must name Luke 21:28 KJV: ' + sit.cite);
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
