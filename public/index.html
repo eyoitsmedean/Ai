@@ -1973,6 +1973,7 @@ html.sitting .sit-sheet {
 <script src="data/curated.js"></script>
 <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
+<script src="data/watch.js"></script>
 <script src="data/paths.js"></script>
 <script>
 const FREE_CHATS = 5;
@@ -2138,6 +2139,17 @@ const LENT_PEEK = (() => {
   try {
     const v = new URLSearchParams(location.search).get('lent');
     return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  } catch (_) { return null; }
+})();
+
+// ?advent=2026-12-03 previews a day of Watch, the Advent path. A date that
+// does not exist (2026-11-31) is ignored rather than blanking Today.
+const ADVENT_PEEK = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get('advent');
+    if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+    const d = new Date(v + 'T12:00:00');
+    return !isNaN(d.getTime()) && padDate(d) === v ? v : null;
   } catch (_) { return null; }
 })();
 
@@ -2361,7 +2373,7 @@ function paintForty(host, hit) {
 function sitForty(hit) {
   const e = hit.entry;
   sitPayload = {
-    kicker: e.kind === 'day' ? 'Forty · Day ' + hit.day : e.kind === 'easter' ? 'Easter' : 'Forty · Sunday',
+    kicker: hit.kicker || (e.kind === 'day' ? 'Forty · Day ' + hit.day : e.kind === 'easter' ? 'Easter' : 'Forty · Sunday'),
     title: e.title,
     quote: e.passage,
     verse: e.verse,
@@ -2382,11 +2394,39 @@ function sitForty(hit) {
   document.getElementById('sit-reply').value = '';
   showSitStep(1);
 }
+function watchToday() {
+  if (typeof window.RLA_watchFor !== 'function') return null;
+  return window.RLA_watchFor(ADVENT_PEEK ? new Date(ADVENT_PEEK + 'T12:00:00') : new Date());
+}
+// Watch: the Advent path takes the ribbon's place from Advent Sunday to Christmas morning.
+function paintWatch(host, hit) {
+  const e = hit.entry;
+  const label = e.kind === 'christmas'
+    ? '<b>Christmas</b> \u00b7 the watch is kept'
+    : e.kind === 'eve'
+      ? '<b>Watch</b> \u00b7 Christmas Eve \u00b7 day ' + hit.day + ' of ' + hit.total
+      : '<b>Watch</b> \u00b7 Day ' + hit.day + ' of ' + hit.total + ' \u00b7 ' + esc(e.week);
+  host.className = 'forty';
+  host.removeAttribute('aria-hidden');
+  host.setAttribute('role', 'group');
+  host.setAttribute('aria-label', 'Watch, the Advent path');
+  host.innerHTML = '<p class="forty-kicker">' + label + '</p>' +
+    '<div class="forty-marks" aria-hidden="true">' + hit.road.map((p, i) =>
+      '<i class="' + (p.kind !== 'day' ? 'sun ' : '') + (i < hit.offset ? 'past' : i === hit.offset ? 'now' : '') + '"></i>').join('') + '</div>' +
+    '<button type="button" class="forty-open">Sit with \u201c' + esc(e.title) + '\u201d</button>';
+  host.querySelector('.forty-open').addEventListener('click', () => sitWatch(hit));
+}
+function sitWatch(hit) {
+  const e = hit.entry;
+  sitForty({ entry: e, day: hit.day, kicker: e.kind === 'christmas' ? 'Christmas' : e.kind === 'eve' ? 'Watch \u00b7 Christmas Eve' : 'Watch \u00b7 Day ' + hit.day });
+}
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
   const lent = fortyToday();
   if (lent) { paintForty(host, lent); return; }
+  const advent = watchToday();
+  if (advent) { paintWatch(host, advent); return; }
   const days = sevenDays();
   if (!days.length) {
     host.className = 'week-ribbon';

@@ -1,6 +1,6 @@
 // Paths are relative to this file, so the same worker runs at the site root
 // (Node server) and under a project path such as /Ai/ (GitHub Pages).
-const CACHE = 'rla-v20';
+const CACHE = 'rla-v21';
 const FONT_CACHE = 'rla-fonts-v1';
 const PRECACHE = [
   './',
@@ -12,6 +12,7 @@ const PRECACHE = [
   'data/crisis.js',
   'data/curated.js',
   'data/forty.js',
+  'data/watch.js',
   'data/paths.js',
   'icon-192.png',
   'icon-512.png',

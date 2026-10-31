@@ -10,6 +10,7 @@ const { lookup, parseAllRefs } = require('../lib/scripture');
 global.window = global.window || {};
 require('../public/data/curated.js');
 require('../public/data/forty.js');
+require('../public/data/watch.js');
 require('../public/data/paths.js');
 window.RLA_CRISIS = require('../public/data/crisis');
 require('../public/data/advisor.js');
@@ -30,6 +31,7 @@ const SOURCES = {
   'public/curated.json': JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'public', 'curated.json'), 'utf8')),
   'public/data/curated.js': window.RLA_CURATED,
   'public/data/forty.js': window.RLA_FORTY_PATH,
+  'public/data/watch.js': window.RLA_WATCH_PATH,
   'public/data/advisor.js (Seven Days)': window.RLA_SEVEN,
   'public/data/crisis.js (safe passages)': [...require('../public/data/crisis').safePassages('self'), ...require('../public/data/crisis').safePassages('danger')],
 };
