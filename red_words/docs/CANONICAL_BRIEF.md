@@ -24,7 +24,7 @@ Recovered from the conversation transcript of [this agent](https://cursor.com/ag
 
 ## Current scope
 
-- `red_words/` on `cursor/red-words-production-d607` ([PR 13](https://github.com/eyoitsmedean/Ai/pull/13)) + Ask rebuild on `cursor/ask-retriever-rebuild-d607` ([PR 36](https://github.com/eyoitsmedean/Ai/pull/36)) + founder recovery (`cursor/founder-recovery-d607`) + CI/privacy/16KB close on `cursor/atelier-ship-close-d607`.
+- Ship line through `cursor/atelier-ship-close-d607` (CI, privacy host, 16 KB). Store screenshot pack on `cursor/store-screenshot-pack-d607`.
 - Identifiers: iOS `com.redwords.redWords`, widget `com.redwords.redWords.RedWordsWidget`, App Group `group.com.redwords.redWords`, URL `redwords://today`, Android `com.redwords.redwords`, label Red Words.
 
 ## Explicit exclusions
