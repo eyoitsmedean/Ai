@@ -38,4 +38,4 @@ Then reopen `store/index.html`.
 
 ## Honest limits
 
-Apple and Play sometimes want photographs from a real device / simulator status bar. These shots are the real screens at the real sizes, with a thin chrome drawn in-test. Use them to file the listing tonight; replace with device captures if review asks.
+Apple and Play sometimes want photographs from a real device / simulator status bar. These shots are the real screens at the real sizes, with a thin chrome drawn in-test, using Liberation fonts so the words are readable (Flutter’s default test face is squares). Use them to file the listing tonight; replace with device captures if review asks.

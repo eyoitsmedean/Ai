@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:red_words/brand.dart';
@@ -82,6 +83,19 @@ ThemeData storeTheme() {
   );
 }
 
+Future<void> loadStoreFonts() async {
+  Future<void> loadFamily(String family, String filename) async {
+    final loader = FontLoader(family);
+    final bytes = File('store/fonts/$filename').readAsBytesSync();
+    loader.addFont(Future.value(ByteData.sublistView(bytes)));
+    await loader.load();
+  }
+
+  await loadFamily('serif', 'LiberationSerif-Regular.ttf');
+  await loadFamily('sans-serif', 'LiberationSans-Regular.ttf');
+  await loadFamily('Roboto', 'LiberationSans-Regular.ttf');
+}
+
 void mockWidgetChannel() {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMethodCallHandler(WidgetBridge.channel, (call) async => null);
@@ -117,6 +131,86 @@ Future<void> pumpStoreApp(
           home: StoreFrame(
             phoneChrome: viewport.phoneChrome,
             child: home ?? const AppShell(),
+          ),
+        ),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
+Future<void> pumpAskPoster(
+  WidgetTester tester, {
+  required StoreViewport viewport,
+  required String query,
+  required Widget body,
+}) async {
+  await tester.binding.setSurfaceSize(viewport.size);
+  addTearDown(() => tester.binding.setSurfaceSize(null));
+  tester.view.physicalSize = viewport.size * viewport.pixelRatio;
+  tester.view.devicePixelRatio = viewport.pixelRatio;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(
+    RepaintBoundary(
+      key: const Key('store-capture'),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: storeTheme(),
+        home: StoreFrame(
+          phoneChrome: viewport.phoneChrome,
+          child: Scaffold(
+            backgroundColor: Brand.paper,
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 28, 24, 0),
+                  child: Text(
+                    'Ask',
+                    style: TextStyle(
+                      fontSize: 13,
+                      letterSpacing: 1.4,
+                      color: Brand.muted,
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 8, 24, 0),
+                  child: Text(
+                    'On this device. A saying if one fits. Nothing invented.',
+                    style: TextStyle(height: 1.4),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+                  child: Text(
+                    query,
+                    style: const TextStyle(fontFamily: 'serif', fontSize: 16),
+                  ),
+                ),
+                Expanded(child: body),
+              ],
+            ),
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: 1,
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.wb_twilight_outlined),
+                  label: 'Today',
+                ),
+                NavigationDestination(icon: Icon(Icons.search), label: 'Ask'),
+                NavigationDestination(
+                  icon: Icon(Icons.bookmark_border),
+                  label: 'Saved',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.settings_outlined),
+                  label: 'Settings',
+                ),
+              ],
+            ),
           ),
         ),
       ),

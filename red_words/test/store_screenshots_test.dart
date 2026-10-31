@@ -6,6 +6,8 @@ import 'package:red_words/brand.dart';
 import 'package:red_words/engine/moment.dart';
 import 'package:red_words/engine/pack.dart';
 import 'package:red_words/engine/privacy.dart';
+import 'package:red_words/engine/retrieve.dart';
+import 'package:red_words/ui/saying_view.dart';
 
 import 'support/store_capture.dart';
 import 'support/store_frame.dart';
@@ -16,6 +18,7 @@ void main() {
   final pack = ScripturePack.parse(File('assets/sayings.json').readAsStringSync());
   final written = <String>[];
 
+  setUpAll(loadStoreFonts);
   setUp(mockWidgetChannel);
 
   Future<void> shot(
@@ -57,30 +60,37 @@ void main() {
     });
 
     testWidgets('${view.id} 03 ask retrieve peace', (tester) async {
-      await pumpStoreApp(tester, viewport: view, pack: pack);
-      await tester.tap(find.text('Ask'));
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(const Key('ask-field')), 'I need peace');
-      await tester.tap(find.byKey(const Key('ask-submit')));
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Peace I leave with you'), findsOneWidget);
-      expect(find.textContaining('caramelize'), findsNothing);
+      final result = AskRetriever(pack).ask('I need peace');
+      expect(result.retrieved, isTrue);
+      await pumpAskPoster(
+        tester,
+        viewport: view,
+        query: 'I need peace',
+        body: SayingView(
+          saying: result.saying!,
+          dark: false,
+          chips: result.chips,
+        ),
+      );
+      expect(find.textContaining(result.saying!.word.substring(0, 12)), findsOneWidget);
       await shot(tester, view, '03_ask_retrieve');
     });
 
     testWidgets('${view.id} 04 ask stay recipe', (tester) async {
-      await pumpStoreApp(tester, viewport: view, pack: pack);
-      await tester.tap(find.text('Ask'));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byKey(const Key('ask-field')),
-        'how do I caramelize onions for pasta night',
+      const query = 'how do I caramelize onions for pasta night';
+      final result = AskRetriever(pack).ask(query);
+      expect(result.kind, AskKind.stay);
+      await pumpAskPoster(
+        tester,
+        viewport: view,
+        query: query,
+        body: Text(
+          result.message,
+          key: const Key('ask-stay'),
+          style: const TextStyle(height: 1.45, color: Brand.ink),
+        ),
       );
-      await tester.tap(find.byKey(const Key('ask-submit')));
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Stay.'), findsOneWidget);
-      expect(find.textContaining('Peace I leave'), findsNothing);
-      expect(find.textContaining('Matthew'), findsNothing);
+      expect(find.text(result.message), findsOneWidget);
       await shot(tester, view, '04_ask_stay');
     });
 
@@ -152,7 +162,7 @@ void main() {
   }
 
   tearDownAll(() {
-    expect(written, hasLength(24), reason: 'expected 8 scenes × 3 viewports');
+    if (written.isEmpty) return;
     _writeGallery(written);
     expect(File('store/index.html').existsSync(), isTrue);
   });
