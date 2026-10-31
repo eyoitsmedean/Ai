@@ -126,6 +126,26 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('night office keeps today’s sitting', async () => {
+    const sit = await page.evaluate(() => JSON.parse(localStorage.getItem('rla-last-sit') || 'null'));
+    assert(sit && sit.quote && sit.verse, 'sitting was not kept');
+    await page.goto(BASE + '/?watch=night', { waitUntil: 'networkidle0' });
+    const card = await page.evaluate(() => ({
+      hidden: document.getElementById('vespers-card').hidden,
+      kicker: document.getElementById('vespers-kicker').textContent,
+      quote: document.getElementById('vespers-quote').textContent,
+      cite: document.getElementById('vespers-cite').textContent,
+      kept: document.getElementById('vespers-kept')?.textContent || '',
+      watch: document.documentElement.getAttribute('data-watch'),
+    }));
+    assert(card.watch === 'night', 'watch peek did not set night');
+    assert(!card.hidden, 'Compline card hidden at night');
+    assert(/word you kept/i.test(card.kicker), 'kicker is ' + card.kicker);
+    assert(card.quote.includes(String(sit.quote).slice(0, 24)), 'night office used a different saying');
+    assert(card.cite.includes(sit.verse), 'night office lost the citation');
+    assert(/sat with this/i.test(card.kept), 'provenance missing');
+  });
+
   await check('a crisis line on every screen', async () => {
     for (const tab of ['today', 'seek', 'advisor', 'journal']) {
       const shown = await page.evaluate((t) => {

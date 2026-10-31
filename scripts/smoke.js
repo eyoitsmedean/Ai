@@ -94,6 +94,8 @@ async function main() {
     assert(text.includes('sit-step-4'), 'missing lectio respond leaf');
     assert(text.includes('id="amen"'), 'missing Amen');
     assert(text.includes('id="epigraph"'), 'missing flyleaf');
+    assert(text.includes('id="vespers-kept"') && text.includes('data/night-watch.js'), 'missing night-watch of the kept word');
+    assert(text.includes('WATCH_PEEK'), 'missing ?watch=night preview');
     assert(text.includes('churchYear'), 'missing church year');
     assert(text.includes('988'), 'missing crisis line');
     assert(!text.includes('<<<<<<<'), 'conflict markers in app');
