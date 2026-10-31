@@ -81,6 +81,15 @@ async function main() {
     assert(/Matthew|John|Luke|Mark/i.test(body), 'fallback should cite a Gospel');
   });
 
+  await check('night leaf', async () => {
+    const { res, text } = await req('/night');
+    assert(res.ok, 'night not 200');
+    assert(text.includes('id="night-word"'), 'missing the Word');
+    assert(text.includes('988'), 'missing crisis line');
+    assert(text.includes('KJV'), 'missing translation');
+    assert(!/Ask Him|AI Jesus|streak/i.test(text), 'night leaf picked up chrome it should not have');
+  });
+
   await check('welcome landing', async () => {
     const { res, text } = await req('/welcome');
     assert(res.ok, 'welcome not 200');

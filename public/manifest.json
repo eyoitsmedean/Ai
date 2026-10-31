@@ -16,5 +16,13 @@
   ],
   "categories": ["lifestyle", "health", "religion"],
   "lang": "en",
-  "dir": "ltr"
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "Night leaf",
+      "short_name": "Night",
+      "description": "Compline. One Gospel sentence.",
+      "url": "./night.html"
+    }
+  ]
 }

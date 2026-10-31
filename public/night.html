@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#E8D8B4" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="Compline. One Gospel sentence for the night." />
+  <title>Night leaf — Red Letter</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,560&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #E8D8B4;
+      --folio: #F0E4C4;
+      --ink: #241C12;
+      --muted: #6E5E48;
+      --crimson: #8F1D1D;
+      --gold: #8A6A28;
+      --rule: rgba(36, 28, 18, 0.14);
+      --silk: #8F1D1D;
+      --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+      --body: "Source Serif 4", Palatino, serif;
+      --ui: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--ui);
+    }
+    body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+    .silk {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--silk); opacity: .72;
+    }
+    .crisis {
+      position: sticky; top: 0; z-index: 2;
+      padding: 12px 22px 12px 26px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      font-size: 13px; line-height: 1.45; color: var(--muted);
+    }
+    .crisis a { color: var(--crimson); }
+    main {
+      min-height: calc(100dvh - 52px);
+      display: flex; flex-direction: column;
+      padding: 28px 28px 36px 32px;
+      max-width: 40rem;
+      margin: 0 auto;
+    }
+    .kicker {
+      font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    h1 {
+      font-family: var(--display); font-weight: 500; font-style: italic;
+      font-size: clamp(32px, 8vw, 44px); margin: 8px 0 28px;
+    }
+    .mark {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid rgba(36, 28, 18, .22);
+      display: grid; place-items: center;
+      font-family: var(--display); font-style: italic; font-size: 22px;
+      color: var(--crimson); margin-bottom: 28px;
+    }
+    .word {
+      font-family: var(--body); font-style: italic;
+      font-size: clamp(22px, 5.4vw, 30px);
+      line-height: 1.45; color: var(--crimson);
+    }
+    .cite {
+      margin-top: 16px; letter-spacing: .14em; font-size: 12px; color: var(--crimson);
+    }
+    .prompt {
+      margin-top: 36px; font-family: var(--body); font-style: italic;
+      font-size: 20px; line-height: 1.5;
+    }
+    .blank {
+      font-family: var(--display); font-style: italic; font-size: 28px;
+    }
+    .foot {
+      margin-top: auto; padding-top: 48px;
+      font-size: 14px; line-height: 1.55; color: var(--muted);
+    }
+    .foot a { color: var(--ink); }
+    @media print {
+      .crisis, .silk, .foot a:last-of-type { display: none; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="silk" aria-hidden="true"></div>
+  <p class="crisis">
+    In crisis: <a href="tel:988">988</a> (U.S., call or text) ·
+    <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.
+    This page is not a person.
+  </p>
+  <main>
+    <p class="kicker" id="office">Compline</p>
+    <h1>Night <em>office</em></h1>
+    <div class="mark" aria-hidden="true">R</div>
+    <p class="word" id="night-word">The page is blank.</p>
+    <p class="cite" id="night-cite"></p>
+    <p class="prompt" id="night-prompt" hidden>What will you leave in His hands?</p>
+    <p class="foot">
+      Software, not a person. Not therapy. The sentence is from Matthew, Mark, Luke, or John.<br />
+      <a href="./">Open the full room</a>
+    </p>
+  </main>
+  <script src="data/curated.js"></script>
+  <script src="data/night.js"></script>
+  <script>
+    (function () {
+      const wordEl = document.getElementById('night-word');
+      const citeEl = document.getElementById('night-cite');
+      const promptEl = document.getElementById('night-prompt');
+
+      function paint(pack) {
+        const word = pack && pack.word;
+        if (!word || !word.passage || !word.verse) {
+          wordEl.classList.add('blank');
+          wordEl.textContent = 'The page is blank.';
+          citeEl.textContent = '';
+          promptEl.hidden = true;
+          return;
+        }
+        wordEl.classList.remove('blank');
+        wordEl.textContent = word.passage;
+        citeEl.textContent = word.verse + '  ·  KJV';
+        promptEl.hidden = false;
+      }
+
+      async function loadPack() {
+        try {
+          const res = await fetch('api/daily');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.word && data.word.passage) return data;
+          }
+        } catch (_) {}
+        try {
+          const res = await fetch('curated.json');
+          if (res.ok) {
+            const cur = await res.json();
+            if (Array.isArray(cur.daily)) return window.RLA_NIGHT.pickDaily(cur.daily, new Date());
+            if (cur.daily && cur.daily.word) return cur.daily;
+          }
+        } catch (_) {}
+        if (window.RLA_CURATED && Array.isArray(window.RLA_CURATED.daily)) {
+          return window.RLA_NIGHT.pickDaily(window.RLA_CURATED.daily, new Date());
+        }
+        return null;
+      }
+
+      loadPack().then(paint);
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      }
+    })();
+  </script>
+</body>
+</html>
