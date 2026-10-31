@@ -1136,6 +1136,13 @@ textarea { font-family: var(--body); }
   padding-top: 8px;
 }
 .vespers[hidden], .feast[hidden] { display: none; }
+.feast-kept {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+}
+.feast-kept[hidden] { display: none; }
 .vespers-prompt {
   font-family: var(--display);
   font-size: clamp(24px, 4vw, 32px);
@@ -1596,6 +1603,7 @@ html.sitting .sit-sheet {
           <h2 class="vespers-prompt" id="feast-prompt">Whom are you keeping in the light?</h2>
           <p class="red-letter" id="feast-quote"></p>
           <p class="cite" id="feast-cite"></p>
+          <p class="feast-kept" id="feast-kept" hidden></p>
           <label class="sr-only" for="feast-reply">The name you are keeping</label>
           <textarea class="sit-reply" id="feast-reply" rows="2" placeholder="One name is enough…"></textarea>
           <div class="actions">
@@ -3761,6 +3769,17 @@ function paintVespers() {
   document.getElementById('vespers-quote').textContent = saying.quote;
   document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
 }
+function feastKept() {
+  return parseJSON(ls('rla-feast-kept'), null);
+}
+function carriedFeastName() {
+  const feast = feastDay(roomNow());
+  const saved = feastKept();
+  if (!feast || !saved || !saved.name) return null;
+  if (saved.date === todayStr()) return { name: saved.name, when: 'today' };
+  if (!feast.vigil && saved.date === yestStr()) return { name: saved.name, when: 'night' };
+  return null;
+}
 function paintFeast() {
   const feast = feastDay(roomNow());
   const card = document.getElementById('feast-card');
@@ -3769,21 +3788,42 @@ function paintFeast() {
   document.getElementById('feast-prompt').textContent = feast.prompt;
   document.getElementById('feast-quote').textContent = feast.quote;
   document.getElementById('feast-cite').textContent = feast.verse + '  ·  KJV';
+  const carried = carriedFeastName();
+  const kept = document.getElementById('feast-kept');
+  const field = document.getElementById('feast-reply');
+  if (field && carried && carried.when === 'today' && !field.value.trim()) field.value = carried.name;
+  if (kept) {
+    kept.hidden = !carried;
+    kept.textContent = !carried
+      ? ''
+      : carried.when === 'night'
+        ? 'Through the night you kept ' + carried.name + '.'
+        : 'You are keeping ' + carried.name + '.';
+  }
 }
 function keepFeast() {
   const feast = feastDay(roomNow());
   if (!feast) return;
   const note = (document.getElementById('feast-reply') && document.getElementById('feast-reply').value.trim()) || '';
+  const name = note.split('\n')[0].trim();
+  if (!name) {
+    showToast('Write one name');
+    const field = document.getElementById('feast-reply');
+    if (field) field.focus();
+    return;
+  }
+  lsSet('rla-feast-kept', JSON.stringify({ date: todayStr(), name: name }));
   const key = 'feast-' + todayStr();
   saveJournalItem({
     id: key,
     key,
     type: 'sit',
     title: feast.verse || feast.runningHead,
-    body: (note ? note + '\n\n' : '') + feast.quote,
+    body: name + '\n\n' + feast.quote,
     verse: feast.verse,
   });
-  rememberSitting({ quote: feast.quote, verse: feast.verse, note, office: feast.runningHead });
+  rememberSitting({ quote: feast.quote, verse: feast.verse, note: name, office: feast.runningHead });
+  paintFeast();
   showToast('Kept the watch');
   openAmen({ quote: feast.quote, verse: feast.verse, holdMs: 3000 });
 }

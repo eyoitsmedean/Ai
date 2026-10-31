@@ -168,6 +168,39 @@ async function main() {
     assert(/988/.test(watch.body), 'crisis line must stay');
   });
 
+  await check('a name kept on the vigil is still there on All Saints', async () => {
+    await page.goto(BASE + '/?date=2026-10-31T22:00:00', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => {
+      localStorage.setItem('rla-onboarded', '1');
+      localStorage.removeItem('rla-feast-kept');
+    });
+    await page.reload({ waitUntil: 'networkidle0' });
+    const empty = await page.evaluate(() => {
+      document.getElementById('feast-reply').value = '   ';
+      keepFeast();
+      return localStorage.getItem('rla-feast-kept');
+    });
+    assert(!empty, 'an empty watch must not invent a name');
+    await page.evaluate(() => {
+      document.getElementById('feast-reply').value = 'Ada';
+      keepFeast();
+    });
+    await page.goto(BASE + '/?date=2026-11-01T09:00:00', { waitUntil: 'networkidle0' });
+    const morning = await page.evaluate(() => ({
+      title: document.getElementById('today-title').innerText,
+      kept: document.getElementById('feast-kept').textContent,
+      hidden: document.getElementById('feast-kept').hidden,
+      season: document.documentElement.getAttribute('data-season'),
+    }));
+    assert(/All Saints/i.test(morning.title), '1 Nov should be the feast');
+    assert(morning.season === 'ordinary', 'feast morning stays Ordinary Time');
+    assert(!morning.hidden, 'the carried name should be visible');
+    assert(morning.kept === 'Through the night you kept Ada.', 'got: ' + morning.kept);
+    await page.goto(BASE + '/?date=2026-11-02T09:00:00', { waitUntil: 'networkidle0' });
+    const after = await page.evaluate(() => document.getElementById('feast-card').hidden);
+    assert(after, 'the watch should close on 2 Nov');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
