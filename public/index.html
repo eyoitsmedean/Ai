@@ -1630,6 +1630,7 @@ html.sitting .sit-sheet {
           <h2 class="vespers-prompt" id="vespers-prompt">What are you laying down?</h2>
           <p class="red-letter" id="vespers-quote"></p>
           <p class="cite" id="vespers-cite"></p>
+          <p class="cite" id="vespers-kept" hidden></p>
           <label class="sr-only" for="vespers-reply">What you are laying down</label>
           <textarea class="sit-reply" id="vespers-reply" rows="2" placeholder="One thing is enough…"></textarea>
           <div class="actions">
@@ -1970,8 +1971,9 @@ html.sitting .sit-sheet {
 </article>
 
 <script src="data/crisis.js"></script>
-<script src="data/curated.js"></script>
-<script src="data/advisor.js"></script>
+  <script src="data/night-watch.js"></script>
+  <script src="data/curated.js"></script>
+  <script src="data/advisor.js"></script>
 <script src="data/forty.js"></script>
 <script src="data/paths.js"></script>
 <script>
@@ -2111,10 +2113,24 @@ function vespersPrompt() {
   return VESPERS_PROMPTS[new Date().getDay()];
 }
 function vespersSaying() {
-  if (dailyData && dailyData.word) {
-    return { verse: dailyData.word.verse, quote: dailyData.word.passage };
+  const daily = dailyData && dailyData.word
+    ? { verse: dailyData.word.verse, quote: dailyData.word.passage }
+    : VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
+  const letter = parseJSON(ls('rla-last-letter'), null);
+  const sit = getLastSit();
+  const crisisKind = letter && letter.crisis ? letter.crisis : null;
+  const unsafe = window.RLA_CRISIS && window.RLA_CRISIS.unsafeSaying;
+  if (window.RLA_NIGHT_WATCH && typeof window.RLA_NIGHT_WATCH.pickNightWatch === 'function') {
+    return window.RLA_NIGHT_WATCH.pickNightWatch({
+      sit,
+      letter,
+      daily,
+      now: new Date(),
+      crisisKind,
+      unsafeSaying: unsafe,
+    });
   }
-  return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
+  return { verse: daily.verse, quote: daily.quote, source: 'daily' };
 }
 
 function clearReaderStorage() {
@@ -2138,6 +2154,13 @@ const LENT_PEEK = (() => {
   try {
     const v = new URLSearchParams(location.search).get('lent');
     return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  } catch (_) { return null; }
+})();
+// ?watch=night lets a reviewer see Compline without waiting for 21:00.
+const WATCH_PEEK = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get('watch');
+    return v === 'night' || v === 'vespers' || v === 'dawn' || v === 'day' ? v : null;
   } catch (_) { return null; }
 })();
 
@@ -2167,7 +2190,7 @@ function init() {
 
 function setWatch() {
   const h = new Date().getHours();
-  const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
+  const watch = WATCH_PEEK || (h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night');
   document.documentElement.dataset.watch = watch;
 }
 
@@ -2462,10 +2485,14 @@ function markSevenDay(index) {
 }
 
 function isNightOffice() {
+  if (WATCH_PEEK === 'night') return true;
+  if (WATCH_PEEK === 'vespers' || WATCH_PEEK === 'dawn' || WATCH_PEEK === 'day') return false;
   const h = new Date().getHours();
   return h >= 21 || h < 6;
 }
 function isEveningOffice() {
+  if (WATCH_PEEK === 'night' || WATCH_PEEK === 'vespers') return true;
+  if (WATCH_PEEK === 'dawn' || WATCH_PEEK === 'day') return false;
   const h = new Date().getHours();
   return h >= 17 || h < 6;
 }
@@ -3176,6 +3203,7 @@ async function sendMsg(preset) {
     persistLetters();
     addSaveToChatBubble(aiBubble, fullText, text);
     sealLetter(aiBubble.bubble, fullText);
+    rememberLetter(fullText, crisis && crisis.kind);
   } catch (err) {
     retract();
     if (timedOut || (err && err.server)) {
@@ -3198,6 +3226,7 @@ async function sendMsg(preset) {
       ].join('\n');
       updateStreamBubble(aiBubble, fallback);
       addSaveToChatBubble(aiBubble, fallback, text);
+      rememberLetter(fallback, crisis && crisis.kind);
     }
   } finally {
     clearTimeout(timer);
@@ -3594,6 +3623,22 @@ function extractFirstVerse(text) {
   return m ? m[0] : '';
 }
 
+function rememberLetter(text, crisisKind) {
+  const extracted = window.RLA_NIGHT_WATCH && window.RLA_NIGHT_WATCH.extractFirstSaying
+    ? window.RLA_NIGHT_WATCH.extractFirstSaying(text)
+    : null;
+  const verse = (extracted && extracted.verse) || extractFirstVerse(text);
+  const quote = extracted && extracted.quote;
+  if (!verse || !quote) return;
+  lsSet('rla-last-letter', JSON.stringify({
+    date: todayStr(),
+    verse,
+    quote,
+    crisis: crisisKind || null,
+  }));
+  if (isEveningOffice()) paintVespers();
+}
+
 const STOP_WORDS = new Set('the a an and or but for with from that this you your i we they to of in on as is be my our not'.split(' '));
 function firstCatchword(text) {
   const words = String(text || '').replace(/[“”"'.,;:!?]/g, '').split(/\s+/).filter(Boolean);
@@ -3616,6 +3661,7 @@ function rememberSitting({ quote, verse, note, office }) {
   updateStreak();
   paintCatchword();
   paintEpigraph();
+  if (isEveningOffice()) paintVespers();
   const catchEl = document.getElementById('folio-catch');
   if (catchEl && catchword) catchEl.textContent = catchword;
 }
@@ -3677,12 +3723,24 @@ function paintVespers() {
   if (!card || card.hidden) return;
   const saying = vespersSaying();
   const night = isNightOffice();
-  document.getElementById('vespers-kicker').textContent = night ? 'Compline' : 'Vespers';
-  document.getElementById('vespers-prompt').textContent = night
-    ? 'What will you leave in His hands?'
-    : vespersPrompt();
+  const kept = saying.source === 'sit' || saying.source === 'letter';
+  document.getElementById('vespers-kicker').textContent = kept
+    ? (night ? 'The word you kept' : 'Still with you')
+    : (night ? 'Compline' : 'Vespers');
+  document.getElementById('vespers-prompt').textContent = kept
+    ? (night ? 'Leave this in His hands tonight.' : 'Lay the day down beside this sentence.')
+    : (night ? 'What will you leave in His hands?' : vespersPrompt());
   document.getElementById('vespers-quote').textContent = saying.quote;
   document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
+  const keptEl = document.getElementById('vespers-kept');
+  if (keptEl) {
+    keptEl.hidden = !kept;
+    keptEl.textContent = saying.source === 'letter'
+      ? 'From the letter you asked today.'
+      : saying.source === 'sit'
+        ? 'You sat with this today.'
+        : '';
+  }
 }
 function keepVespers() {
   const saying = vespersSaying();
