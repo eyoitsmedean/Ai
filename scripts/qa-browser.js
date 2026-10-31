@@ -144,6 +144,47 @@ async function main() {
     await page.evaluate(() => switchTab('today'));
   });
 
+  await check('hearing rests the page, then gives the season back', async () => {
+    const during = await page.evaluate(() => {
+      SpeechSynthesis.prototype.speak = function () {};
+      SpeechSynthesis.prototype.cancel = function () {};
+      document.documentElement.dataset.season = 'christmas';
+      toggleHearOffice();
+      const link = document.querySelector('#today-page a[href="tel:988"]');
+      const linkColor = link ? getComputedStyle(link).color : '';
+      return {
+        hearing: document.documentElement.classList.contains('hearing'),
+        paper: getComputedStyle(document.body).backgroundColor,
+        theme: document.querySelector('meta[name="theme-color"]').getAttribute('content'),
+        status: document.getElementById('hear-status').textContent,
+        pressed: document.getElementById('hear-office').getAttribute('aria-pressed'),
+        spoken: officeScript(),
+        linkColor,
+      };
+    });
+    assert(during.hearing, 'the page did not rest');
+    assert(during.paper === 'rgb(20, 17, 13)', 'paper stayed ' + during.paper);
+    assert(during.theme === '#14110D', 'browser chrome stayed ' + during.theme);
+    assert(/resting/i.test(during.status), 'status was ' + during.status);
+    assert(during.pressed === 'true', 'Hear did not toggle');
+    assert(/King James Version/.test(during.spoken), 'the office did not name the translation');
+    assert(during.linkColor && during.linkColor !== during.paper, 'crisis line disappeared into the paper');
+
+    const after = await page.evaluate(() => {
+      toggleHearOffice();
+      return {
+        hearing: document.documentElement.classList.contains('hearing'),
+        paper: getComputedStyle(document.body).backgroundColor,
+        theme: document.querySelector('meta[name="theme-color"]').getAttribute('content'),
+        pressed: document.getElementById('hear-office').getAttribute('aria-pressed'),
+      };
+    });
+    assert(!after.hearing, 'the page stayed dark');
+    assert(after.paper === 'rgb(247, 240, 226)', 'Christmas paper did not return: ' + after.paper);
+    assert(after.theme === '#F4EFE4', 'browser chrome stayed night');
+    assert(after.pressed === 'false', 'Pause did not release');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
