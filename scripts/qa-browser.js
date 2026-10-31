@@ -132,6 +132,36 @@ async function main() {
     assert(painted.day === false && painted.dayTheme === 'light', 'afternoon should stay parchment');
   });
 
+  await check('the screen stays lit while you sit, and goes dark when you leave', async () => {
+    const result = await page.evaluate(async () => {
+      window.__rlaKeeper = RedLetterWake.createScreenKeeper({
+        async request() {
+          return { addEventListener() {}, async release() {} };
+        },
+      });
+      if (typeof closeSit === 'function') closeSit();
+      sitWith('aff');
+      await new Promise((r) => setTimeout(r, 40));
+      const held = {
+        awake: document.documentElement.dataset.awake,
+        hidden: document.getElementById('sit-awake').hidden,
+        text: document.getElementById('sit-awake').textContent,
+      };
+      closeSit();
+      await new Promise((r) => setTimeout(r, 40));
+      return {
+        held,
+        after: document.documentElement.dataset.awake,
+        lineHidden: document.getElementById('sit-awake').hidden,
+      };
+    });
+    assert(result.held.awake === '1', 'sit did not hold the screen');
+    assert(result.held.hidden === false, 'the lit-screen line stayed hidden');
+    assert(/screen stays lit/.test(result.held.text), result.held.text);
+    assert(result.after === '0', 'leaving the sitting left the screen held');
+    assert(result.lineHidden === true, 'the line stayed after close');
+  });
+
   await check('Today is a folio, not a dashboard', async () => {
     await page.waitForFunction(() => !document.getElementById('amen').classList.contains('on'), { timeout: 6000 });
     const today = await page.evaluate(() => ({
