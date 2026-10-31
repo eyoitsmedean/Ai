@@ -115,6 +115,18 @@ html { -webkit-text-size-adjust: 100%; }
   --wash: rgba(196, 163, 90, 0.10);
   --silk: #C4A35A;
 }
+:root[data-feast="all-saints"] {
+  --wash: rgba(70, 52, 78, 0.08);
+  --silk: #5C4A62;
+}
+:root[data-feast="all-saints"][data-watch="vespers"],
+:root[data-feast="all-saints"][data-watch="night"] {
+  --wash: rgba(70, 52, 78, 0.12);
+}
+:root[data-theme="dark"][data-feast="all-saints"] {
+  --silk: #B5A4C4;
+  --wash: rgba(140, 120, 160, 0.10);
+}
 :root[data-theme="dark"][data-season="advent"] {
   --paper: #121016; --paper-2: #1A1620; --folio: #16131B;
   --crimson: #C989B0; --silk: #C989B0; --gold: #A090B0;
@@ -1123,7 +1135,7 @@ textarea { font-family: var(--body); }
 .vespers {
   padding-top: 8px;
 }
-.vespers[hidden] { display: none; }
+.vespers[hidden], .feast[hidden] { display: none; }
 .vespers-prompt {
   font-family: var(--display);
   font-size: clamp(24px, 4vw, 32px);
@@ -1578,6 +1590,20 @@ html.sitting .sit-sheet {
           <button class="ghost" type="button" id="hear-office" onclick="toggleHearOffice()" aria-pressed="false">Hear this office</button>
         </div>
         <div class="week-ribbon" id="week-ribbon" aria-hidden="true"></div>
+
+        <section class="movement feast" id="feast-card" hidden>
+          <p class="eyebrow" id="feast-kicker">All Saints</p>
+          <h2 class="vespers-prompt" id="feast-prompt">Whom are you keeping in the light?</h2>
+          <p class="red-letter" id="feast-quote"></p>
+          <p class="cite" id="feast-cite"></p>
+          <label class="sr-only" for="feast-reply">The name you are keeping</label>
+          <textarea class="sit-reply" id="feast-reply" rows="2" placeholder="One name is enough…"></textarea>
+          <div class="actions">
+            <button class="cta cta-primary" type="button" onclick="keepFeast()">Keep the watch</button>
+            <button class="ghost" type="button" onclick="sitWith('feast')">Sit with this</button>
+            <button class="ghost" type="button" onclick="amenFeast()">Amen</button>
+          </div>
+        </section>
 
         <aside class="epigraph" id="epigraph" hidden>
           <p class="eyebrow" id="epigraph-kicker">Yesterday you sat with</p>
@@ -2080,16 +2106,50 @@ function churchYear(date) {
   if (n >= ymdNum(easter) && n <= ymdNum(addDaysLocal(easter, 49))) return seasons.easter;
   return seasons.ordinary;
 }
+const ALL_SAINTS_SAYING = {
+  verse: 'John 14:1-2',
+  quote: 'Let not your heart be troubled: ye believe in God, believe also in me. In my Father\'s house are many mansions: if it were not so, I would have told you. I go to prepare a place for you.',
+};
+function feastDay(date) {
+  const d = date instanceof Date ? date : new Date(date || Date.now());
+  if (Number.isNaN(d.getTime())) return null;
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  if (month === 10 && day === 31) {
+    return { id: 'all-saints', vigil: true, name: 'All Hallows', runningHead: 'All Hallows', note: 'The vigil. Keep one name in the light.', prompt: 'Whom are you keeping in the light?', ...ALL_SAINTS_SAYING };
+  }
+  if (month === 11 && day === 1) {
+    return { id: 'all-saints', vigil: false, name: 'All Saints', runningHead: 'All Saints', note: 'A quiet feast. The living and the rest.', prompt: 'Whom are you keeping in the light?', ...ALL_SAINTS_SAYING };
+  }
+  return null;
+}
+const ROOM_PEEK = (() => {
+  try {
+    const v = new URLSearchParams(location.search).get('date');
+    if (!v || !/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?)?$/.test(v)) return null;
+    const iso = v.length === 10 ? v + 'T12:00:00' : v;
+    const parsed = new Date(iso);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  } catch (_) { return null; }
+})();
+function roomNow() {
+  return ROOM_PEEK ? new Date(ROOM_PEEK.getTime()) : new Date();
+}
 function applySeason() {
-  currentSeason = churchYear(new Date());
+  const now = roomNow();
+  currentSeason = churchYear(now);
+  const feast = feastDay(now);
   if (!document.documentElement.dataset.theme) document.documentElement.dataset.theme = 'light';
   document.documentElement.dataset.season = currentSeason.id;
+  if (feast) document.documentElement.dataset.feast = feast.id;
+  else delete document.documentElement.dataset.feast;
+  const head = feast || currentSeason;
   const brand = document.getElementById('brand-sub');
-  if (brand) brand.textContent = currentSeason.runningHead;
+  if (brand) brand.textContent = head.runningHead;
   const folio = document.getElementById('folio-colophon');
-  if (folio) folio.textContent = currentSeason.name + '. Set in the Gospels. Not a person.';
+  if (folio) folio.textContent = head.name + '. Set in the Gospels. Not a person.';
   const sheet = document.getElementById('season-colophon');
-  if (sheet) sheet.textContent = currentSeason.name + '. ' + currentSeason.note + ' Set in Fraunces and Source Serif 4.';
+  if (sheet) sheet.textContent = head.name + '. ' + head.note + ' Set in Fraunces and Source Serif 4.';
 }
 
 const VESPERS_PROMPTS = [
@@ -2108,13 +2168,17 @@ const VESPERS_FALLBACK = [
   { verse: 'Luke 23:46', quote: 'Father, into thy hands I commend my spirit.' },
 ];
 function vespersPrompt() {
-  return VESPERS_PROMPTS[new Date().getDay()];
+  const feast = feastDay(roomNow());
+  if (feast) return feast.prompt;
+  return VESPERS_PROMPTS[roomNow().getDay()];
 }
 function vespersSaying() {
+  const feast = feastDay(roomNow());
+  if (feast) return { verse: feast.verse, quote: feast.quote };
   if (dailyData && dailyData.word) {
     return { verse: dailyData.word.verse, quote: dailyData.word.passage };
   }
-  return VESPERS_FALLBACK[new Date().getDay() % VESPERS_FALLBACK.length];
+  return VESPERS_FALLBACK[roomNow().getDay() % VESPERS_FALLBACK.length];
 }
 
 function clearReaderStorage() {
@@ -2166,7 +2230,7 @@ function init() {
 }
 
 function setWatch() {
-  const h = new Date().getHours();
+  const h = roomNow().getHours();
   const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
   document.documentElement.dataset.watch = watch;
 }
@@ -2243,15 +2307,15 @@ function switchTab(tab) {
 function padDate(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
-function todayStr() { return padDate(new Date()); }
+function todayStr() { return padDate(roomNow()); }
 function yestStr() {
-  const d = new Date();
+  const d = roomNow();
   d.setDate(d.getDate() - 1);
   return padDate(d);
 }
 
 function twoAgoStr() {
-  const d = new Date();
+  const d = roomNow();
   d.setDate(d.getDate() - 2);
   return padDate(d);
 }
@@ -2462,32 +2526,40 @@ function markSevenDay(index) {
 }
 
 function isNightOffice() {
-  const h = new Date().getHours();
+  const h = roomNow().getHours();
   return h >= 21 || h < 6;
 }
 function isEveningOffice() {
-  const h = new Date().getHours();
+  const h = roomNow().getHours();
   return h >= 17 || h < 6;
 }
 function officeName() {
   if (isNightOffice()) return 'Compline';
   if (isEveningOffice()) return 'Vespers';
-  const h = new Date().getHours();
+  const h = roomNow().getHours();
   return h < 12 ? 'Morning' : 'Afternoon';
 }
 function updateDateUI() {
-  const now = new Date();
+  const now = roomNow();
   const evening = isEveningOffice();
   const night = isNightOffice();
-  document.getElementById('today-greeting').textContent = officeName();
-  document.getElementById('today-title').innerHTML = night
-    ? 'Night <em>office</em>'
-    : evening
-      ? 'Evening <em>office</em>'
-      : 'Today’s <em>light</em>';
+  const feast = feastDay(now);
+  document.getElementById('today-greeting').textContent = feast
+    ? (feast.vigil ? 'Vigil' : 'Feast')
+    : officeName();
+  document.getElementById('today-title').innerHTML = feast
+    ? (feast.vigil ? 'All <em>Hallows</em>' : 'All <em>Saints</em>')
+    : night
+      ? 'Night <em>office</em>'
+      : evening
+        ? 'Evening <em>office</em>'
+        : 'Today’s <em>light</em>';
   document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  document.getElementById('vespers-card').hidden = !evening;
-  if (evening) paintVespers();
+  const feastCard = document.getElementById('feast-card');
+  if (feastCard) feastCard.hidden = !feast;
+  if (feast) paintFeast();
+  document.getElementById('vespers-card').hidden = !evening || !!feast;
+  if (evening && !feast) paintVespers();
 }
 
 function paintThemeIndex() {
@@ -2851,6 +2923,11 @@ function sitPayloadFor(type) {
   if (type === 'vespers') {
     const v = vespersSaying();
     return { kicker: officeName() === 'Compline' ? 'Compline' : 'Vespers', title: vespersPrompt(), quote: v.quote, verse: v.verse, reflection: 'Lay the day down beside this sentence.' };
+  }
+  if (type === 'feast') {
+    const feast = feastDay(roomNow());
+    if (!feast) return null;
+    return { kicker: feast.runningHead, title: feast.prompt, quote: feast.quote, verse: feast.verse, reflection: 'Keep one name beside this sentence.' };
   }
   return null;
 }
@@ -3684,6 +3761,37 @@ function paintVespers() {
   document.getElementById('vespers-quote').textContent = saying.quote;
   document.getElementById('vespers-cite').textContent = saying.verse + '  ·  KJV';
 }
+function paintFeast() {
+  const feast = feastDay(roomNow());
+  const card = document.getElementById('feast-card');
+  if (!card || !feast) return;
+  document.getElementById('feast-kicker').textContent = feast.runningHead;
+  document.getElementById('feast-prompt').textContent = feast.prompt;
+  document.getElementById('feast-quote').textContent = feast.quote;
+  document.getElementById('feast-cite').textContent = feast.verse + '  ·  KJV';
+}
+function keepFeast() {
+  const feast = feastDay(roomNow());
+  if (!feast) return;
+  const note = (document.getElementById('feast-reply') && document.getElementById('feast-reply').value.trim()) || '';
+  const key = 'feast-' + todayStr();
+  saveJournalItem({
+    id: key,
+    key,
+    type: 'sit',
+    title: feast.verse || feast.runningHead,
+    body: (note ? note + '\n\n' : '') + feast.quote,
+    verse: feast.verse,
+  });
+  rememberSitting({ quote: feast.quote, verse: feast.verse, note, office: feast.runningHead });
+  showToast('Kept the watch');
+  openAmen({ quote: feast.quote, verse: feast.verse, holdMs: 3000 });
+}
+function amenFeast() {
+  const feast = feastDay(roomNow());
+  if (!feast) return;
+  openAmen({ quote: feast.quote, verse: feast.verse, holdMs: 3200 });
+}
 function keepVespers() {
   const saying = vespersSaying();
   const note = (document.getElementById('vespers-reply') && document.getElementById('vespers-reply').value.trim()) || '';
@@ -3800,7 +3908,13 @@ function stopHearOffice() {
 }
 function officeScript() {
   const parts = [];
-  parts.push(officeName() + '.');
+  const feast = feastDay(roomNow());
+  parts.push((feast ? feast.runningHead : officeName()) + '.');
+  if (feast) {
+    parts.push(feast.prompt);
+    parts.push(feast.quote);
+    parts.push(feast.verse + ' · KJV');
+  }
   if (dailyData && dailyData.affirmation) {
     parts.push(dailyData.affirmation.text);
     parts.push(dailyData.affirmation.quote);
@@ -3810,7 +3924,7 @@ function officeScript() {
     parts.push(dailyData.word.passage);
     parts.push(dailyData.word.verse);
   }
-  if (isEveningOffice()) {
+  if (isEveningOffice() && !feast) {
     const saying = vespersSaying();
     parts.push(isNightOffice() ? 'Compline.' : 'Vespers.');
     parts.push(document.getElementById('vespers-prompt')?.textContent || vespersPrompt());
@@ -3952,7 +4066,8 @@ function printSitting() {
   if (!p) { showToast('Nothing to print yet'); return; }
   document.getElementById('print-quote').textContent = '“' + String(p.quote || '').replace(/^["“]|["”]$/g, '') + '”';
   document.getElementById('print-cite').textContent = (p.verse || '') + '  ·  KJV';
-  document.getElementById('print-foot').textContent = 'Red Letter · ' + (currentSeason.name || 'the Gospels');
+  const feast = feastDay(roomNow());
+  document.getElementById('print-foot').textContent = 'Red Letter · ' + ((feast && feast.name) || currentSeason.name || 'the Gospels');
   document.body.classList.add('printing');
   window.addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
   window.print();
@@ -3969,6 +4084,7 @@ const COMMANDS = [
   { label: 'Seven Days', hint: 'Path', run: () => { switchTab('today'); document.getElementById('week-ribbon')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Hear this office', hint: 'Listen', run: () => toggleHearOffice() },
   { label: 'Open vespers', hint: 'Evening', run: () => { switchTab('today'); document.getElementById('vespers-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  { label: 'All Saints watch', hint: 'Vigil', run: () => { switchTab('today'); document.getElementById('feast-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Yesterday’s sitting', hint: 'Memory', run: () => { switchTab('today'); document.getElementById('epigraph')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
   { label: 'Anxiety & Worry', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Anxiety & Worry'), 80); } },
   { label: 'Grief & Loss', hint: 'Room', run: () => { switchTab('seek'); setTimeout(() => loadEnc('Grief & Loss'), 80); } },

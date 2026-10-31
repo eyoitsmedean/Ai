@@ -144,6 +144,30 @@ async function main() {
     await page.evaluate(() => switchTab('today'));
   });
 
+  await check('All Hallows vigil names the watch and one saying', async () => {
+    await page.goto(BASE + '/?date=2026-10-31T22:00:00', { waitUntil: 'networkidle0' });
+    await page.evaluate(() => localStorage.setItem('rla-onboarded', '1'));
+    await page.reload({ waitUntil: 'networkidle0' });
+    const watch = await page.evaluate(() => ({
+      feast: document.documentElement.getAttribute('data-feast'),
+      season: document.documentElement.getAttribute('data-season'),
+      brand: document.getElementById('brand-sub').textContent,
+      title: document.getElementById('today-title').innerText,
+      hidden: document.getElementById('feast-card').hidden,
+      quote: document.getElementById('feast-quote').textContent,
+      cite: document.getElementById('feast-cite').textContent,
+      body: document.body.innerText,
+    }));
+    assert(watch.feast === 'all-saints', 'feast attr is ' + watch.feast);
+    assert(watch.season === 'ordinary', 'paper should stay Ordinary Time, got ' + watch.season);
+    assert(/All Hallows/i.test(watch.brand + watch.title), 'vigil name missing');
+    assert(!watch.hidden, 'feast leaf should be open on 31 Oct');
+    assert(/Let not your heart be troubled/i.test(watch.quote), 'missing John 14 saying');
+    assert(/John 14:1/i.test(watch.cite) && /KJV/i.test(watch.cite), 'must name the reference and KJV');
+    assert(!/halloween|trick or treat/i.test(watch.body), 'must not dress as Halloween');
+    assert(/988/.test(watch.body), 'crisis line must stay');
+  });
+
   await check('no page errors', async () => {
     assert(consoleErrors.length === 0, consoleErrors.join(' | '));
   });
