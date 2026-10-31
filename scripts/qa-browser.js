@@ -126,6 +126,49 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('Hear this hour speaks only His words', async () => {
+    await page.evaluate(() => switchTab('today'));
+    await page.waitForFunction(() => {
+      const aff = document.getElementById('aff-content');
+      return aff && aff.style.display !== 'none' && typeof officeScript === 'function' && window.RLA_OFFICE;
+    }, { timeout: 8000 });
+    const heard = await page.evaluate(() => {
+      const script = officeScript();
+      const evening = isEveningOffice();
+      const affText = document.getElementById('aff-text').textContent;
+      const reflection = document.getElementById('word-reflection').textContent;
+      const expected = RLA_OFFICE.spokenOnly(
+        evening
+          ? document.getElementById('word-passage').textContent
+          : document.getElementById('aff-quote').textContent
+      );
+      return {
+        script,
+        expected,
+        leakedText: script.indexOf(affText) !== -1,
+        leakedReflection: reflection && script.indexOf(reflection) !== -1,
+        hearOffice: (document.getElementById('hear-office') || {}).textContent,
+        affHear: !!document.getElementById('aff-hear-btn'),
+        wordHear: !!document.getElementById('word-hear-btn'),
+        marked: (document.querySelector('#today-page .this-hour') || {}).id || '',
+        hourShown: !document.getElementById('hour-line').hidden,
+        hourQuote: document.getElementById('hour-quote').textContent,
+      };
+    });
+    assert(heard.affHear && heard.wordHear, 'Hear on the saying cards is missing');
+    assert(/Hear this saying/i.test(heard.hearOffice), 'office Hear label is ' + heard.hearOffice);
+    assert(heard.script === heard.expected && heard.script.length > 8, 'Hear must be this hour’s saying, got: ' + heard.script);
+    assert(!heard.leakedText, 'Hear leaked the pastoral affirmation');
+    assert(!heard.leakedReflection, 'Hear leaked the reflection');
+    const evening = await page.evaluate(() => isEveningOffice());
+    assert(heard.marked === (evening ? 'word-card' : 'aff-card'), 'this hour should mark the spoken card, got ' + heard.marked);
+    if (evening) {
+      assert(heard.hourShown && heard.hourQuote === heard.script, 'evening should show the spoken line beside Hear');
+    } else {
+      assert(!heard.hourShown, 'morning already leads with the spoken line');
+    }
+  });
+
   await check('a crisis line on every screen', async () => {
     for (const tab of ['today', 'seek', 'advisor', 'journal']) {
       const shown = await page.evaluate((t) => {
