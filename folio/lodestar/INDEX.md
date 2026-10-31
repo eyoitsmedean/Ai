@@ -1,7 +1,7 @@
 # Knowledge Base Index — LODESTAR Cycle 1
 
 Home: `folio/lodestar/`  
-Project home: `folio/week-close.html` (today) then `folio/decision-night.html`  
+Project home: `folio/november.html` (31 Oct current door) then archive `folio/tonight.html`  
 Money SoT: Notion Operator Card v2
 
 | ID | Kind | Path | Bearing |
@@ -16,6 +16,7 @@ Money SoT: Notion Operator Card v2
 | Mastery · packet | expand | `mastery/apply-packet.md` | C8 |
 | Mastery · house | expand | `mastery/house-hears.md` | C6 C7 |
 | Mastery · drill | expand | `mastery/lamp-drill.md` | C1 C5 |
+| Mastery · November | expand | `mastery/november.md` | C5 C9 |
 | Candidates | expand | `SUMMITS.md` | C1 |
 | Defects | prove | `DEFECTS.md` | C5 |
 | Ship | ship | `SHIP.md` | all |

@@ -83,4 +83,8 @@ He can pick one plan from five, understand how it makes money in 90 days, and ru
 
 ## Calendar correction (this cycle)
 
-14 Sep 2026 is **Monday** (computed). 11 Sep was Friday. Sunday was **13 Sep**. Prior pages that said “Sunday close 14 Sep” mislabeled the weekday. The close *date* he was given was 14 Sep; the *name* was wrong. Remaining after today: **15 Sep–3 Dec 2026 inclusive = 80 days**.
+14 Sep 2026 is **Monday** (computed). 11 Sep was Friday. Sunday was **13 Sep**. Prior pages that said “Sunday close 14 Sep” mislabeled the weekday. The close *date* he was given was 14 Sep; the *name* was wrong. Remaining after that Monday: **15 Sep–3 Dec 2026 inclusive = 80 days**.
+
+## Calendar amendment (31 Oct 2026)
+
+31 Oct 2026 is **Saturday** (computed). October Red ends at midnight. November Yellow starts **1 Nov only if** the household window is Confirmed or Not needed. Remaining optional clock: **1 Nov–3 Dec 2026 inclusive = 33 days**. 4 Sep–31 Oct inclusive = 58 days used. Advent is 29 Nov (first of the last five calendar days, 29 Nov–3 Dec inclusive). Current door: `folio/november.html`. Archive doors (`tonight.html`, `week-close.html`, `decision-night.html`) must not claim 14 Sep is today.

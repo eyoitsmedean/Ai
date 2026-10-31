@@ -1,6 +1,6 @@
 # Ninety Days · Canonical brief
 
-Version: 2026-09-14 · C3 recovery + LODESTAR calendar correction  
+Version: 2026-10-31 · C9 clock: 33 days from 1 Nov · October close is the current door  
 Owner: Dean  
 Audience: Dean tonight, and the next agent who opens this tree  
 Money source of truth: [Operator Card v2](https://app.notion.com/p/3d4b7d53f96981c9b00dc0f64a83fd1a)  
@@ -77,7 +77,8 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 | Asset | Location | Authority |
 | --- | --- | --- |
 | Money SoT | Notion Operator Card v2 `3d4b7d53f96981c9b00dc0f64a83fd1a` | Cash, calendar, apply HOLD |
-| Tonight (one door) | `folio/tonight.html` | Close + pick. Best finished surface as of 14 Sep evening. |
+| October close (current door) | `folio/november.html` | 31 Oct Red close + November Yellow staged. Clock 33 / $0 / HOLD. |
+| Tonight (one door, archive) | `folio/tonight.html` | Close + pick. Best finished surface as of 14 Sep evening. |
 | Tonight card | `folio/decision-night.html` · Notion [Decision Night · 11 Sep 2026](https://app.notion.com/p/3d8b7d53f96981c18483efcc8ccdcdff) | Local receipt; mirrors the card |
 | Paper folio | `folio/index.html` | Run-of-show, copy, kill rules. Money tables archived. |
 | This brief | `folio/CANONICAL.md` | Recovery + evidence + decisions |
@@ -99,7 +100,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 
 **Acceptance criteria.**
 
-1. A tired reader can open Decision Night or the Operator lock and see $0 first, Idaho, October Red, and tonight’s three moves without doing arithmetic.
+1. A tired reader can open `folio/november.html` and see $0, 33 days (1 Nov–3 Dec), HOLD, and that 31 Oct is still Red — without doing arithmetic. Decision Night and the Operator lock remain the money card.
 2. Every load-bearing claim used for a go/no-go is labeled and, if factual, tied to an opened source or marked unknown.
 3. The paper folio cannot be mistaken for money SoT.
 4. Opening any page still authorizes nothing.
@@ -123,7 +124,7 @@ Recorded on Operator Card v2 (6 Sep; Friday routing updated 11 Sep) and not to b
 | C6 | Room / Handoff / Storefront capacity this quarter | Paper alternatives if Lamp is no. | Card: 0–3 / 0–2 / 0–2. $349 / $1,500@12h / $595. | Ten humans. Twenty asks. Local shops Dean will walk. | Dean lists. | No names → those lanes stay paper. | Strategy |
 | C7 | Is Folio (Red Letter) cash this quarter? | Prevents a mobile-app detour. | Advent 29 Nov 2026 (USCCB / Universalis, prior sessions). Five days at clock end. | Whether Dean wants craft anyway. | None for cash. | Craft yes, groceries no. | Strategy |
 | C8 | Clean room / employer graph | Law 03. Every plan dies if broken. | Oath printed. Mercor listing says work will not involve employer confidential info — that is the vendor’s sentence, not a safe-harbor. | Handbook. | Dean reads it. | Disclosure required → wait. | Dean |
-| C9 | Remaining clock | Stops week-1 language. | After 14 Sep through 3 Dec = 80 days (15 Sep–3 Dec inclusive). Week 1 is over. | Whether the window opens. | Calendar only. | Window closed → unused hours are success. | Ops |
+| C9 | Remaining clock | Stops week-1 and 14-Sep-as-today language. | After 14 Sep through 3 Dec = 80 days (15 Sep–3 Dec inclusive) — true on that Monday. Computed 31 Oct 2026: 1 Nov–3 Dec inclusive = 33 days. 4 Sep–31 Oct inclusive = 58 days used. Advent 29 Nov. 31 Oct is Saturday and still Red. | Whether the window opens 1 Nov. | Calendar only. | Window closed → unused hours are success. | Ops |
 
 **Retired / drift (recorded, not researched further as products).**
 
@@ -289,7 +290,7 @@ Knowledge archive, Notion notes, and PR updates support these. They are not a fo
 
 1. Confirm or close the household window. If not Confirmed, rest. DEX room-inspect is the job.
 2. If Confirmed: mark the five Lamp gates on Decision Night. Do not apply.
-3. Week close 14 Sep (Monday). Three minutes on `folio/week-close.html`. Continue / Park 30 days / Close.
+3. Week close 14 Sep (Monday) is past. Three minutes on `folio/november.html`. Close October. Stage Yellow. Do not apply. Do not send an ask on 31 Oct.
 
 ---
 
