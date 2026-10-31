@@ -187,7 +187,10 @@ async function main() {
 
   await check('ask then leaf prints Amen and the saying', async () => {
     await page.goto(BASE + '/leaf', { waitUntil: 'networkidle0' });
-    await page.evaluate(() => { try { sessionStorage.removeItem('rla-leaf'); } catch (_) {} });
+    await page.evaluate(() => {
+      try { localStorage.removeItem('rla-leaf'); } catch (_) {}
+      try { sessionStorage.removeItem('rla-leaf-session'); } catch (_) {}
+    });
     await page.reload({ waitUntil: 'networkidle0' });
     const blank = await page.evaluate(() => document.body.innerText);
     assert(/blank until a sitting|Ask from the one-screen/i.test(blank), 'empty leaf should stay blank');
