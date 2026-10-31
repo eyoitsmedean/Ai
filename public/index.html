@@ -71,6 +71,9 @@ html { -webkit-text-size-adjust: 100%; }
 :root[data-watch="dawn"] { --wash: rgba(201, 148, 72, 0.09); }
 :root[data-watch="vespers"] { --wash: rgba(92, 40, 40, 0.07); }
 :root[data-watch="night"] { --wash: rgba(20, 16, 12, 0.04); }
+:root[data-watch="night"] #streak-num,
+:root[data-watch="night"] #today-streak-label,
+:root[data-watch="night"] #rail-streak { display: none; }
 :root[data-fs="sm"] { --scale: 0.9; }
 :root[data-fs="lg"] { --scale: 1.12; }
 
@@ -1486,6 +1489,8 @@ html.sitting .sit-sheet {
   .sheet-handle { display: block; width: 36px; height: 3px; background: var(--rule-2); margin: 0 auto 18px; }
 }
 </style>
+<script src="data/watch.js"></script>
+<script>document.documentElement.dataset.watch = window.RLA_WATCH.watchForHour(new Date().getHours());</script>
 </head>
 <body>
 <a class="skip-link" href="#today-page">Skip to the folio</a>
@@ -2167,8 +2172,13 @@ function init() {
 
 function setWatch() {
   const h = new Date().getHours();
-  const watch = h < 6 ? 'night' : h < 11 ? 'dawn' : h < 17 ? 'day' : h < 21 ? 'vespers' : 'night';
+  const watch = window.RLA_WATCH.watchForHour(h);
   document.documentElement.dataset.watch = watch;
+  const scored = window.RLA_WATCH.keepsScore(h);
+  ['streak-num', 'today-streak-label', 'rail-streak'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('aria-hidden', scored ? 'false' : 'true');
+  });
 }
 
 function showNeedStep() {
@@ -2300,7 +2310,9 @@ function updateStreak() {
   else if (state.lastPractice === twoAgo && !state.graceUsed) {
     state.count = (Number(state.count) || 0) + 1;
     state.graceUsed = true;
-    showToast('Grace held your morning — welcome back');
+    if (window.RLA_WATCH.keepsScore(new Date().getHours())) {
+      showToast('Grace held your morning — welcome back');
+    }
   } else {
     state.count = 1;
   }

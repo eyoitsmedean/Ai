@@ -126,6 +126,20 @@ async function main() {
     assert(!today.sitting, 'chrome should return after sit');
   });
 
+  await check('night does not keep score', async () => {
+    await page.evaluate(() => { document.documentElement.dataset.watch = 'night'; });
+    const night = await page.evaluate(() => ({
+      num: getComputedStyle(document.getElementById('streak-num')).display,
+      label: getComputedStyle(document.getElementById('today-streak-label')).display,
+      rail: getComputedStyle(document.getElementById('rail-streak')).display,
+    }));
+    assert(night.num === 'none' && night.label === 'none' && night.rail === 'none', JSON.stringify(night));
+    await page.evaluate(() => { document.documentElement.dataset.watch = 'day'; });
+    const day = await page.evaluate(() => getComputedStyle(document.getElementById('streak-num')).display);
+    assert(day !== 'none', 'the morning score stayed hidden');
+    await page.evaluate(() => { if (typeof setWatch === 'function') setWatch(); });
+  });
+
   await check('a crisis line on every screen', async () => {
     for (const tab of ['today', 'seek', 'advisor', 'journal']) {
       const shown = await page.evaluate((t) => {
