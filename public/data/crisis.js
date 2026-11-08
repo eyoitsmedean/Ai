@@ -39,8 +39,10 @@
   ];
 
   function normalize(text) {
-    // NFKC first, so full-width or styled letters (ｋｉｌｌ, 𝗸𝗶𝗹𝗹) read as plain ones.
+    // Apostrophes go first: NFKC turns ´ into a space plus an accent, which would split "don´t".
+    // Then NFKC, so full-width or styled letters (ｋｉｌｌ, 𝗸𝗶𝗹𝗹) read as plain ones.
     let t = String(text || '')
+      .replace(/[‘’ʼ`´']/g, '')
       .normalize('NFKC')
       .toLowerCase()
       .normalize('NFD')

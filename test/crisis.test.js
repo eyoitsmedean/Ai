@@ -169,6 +169,19 @@ describe('spellings that slip past a filter', () => {
     }
   });
 
+  it('keeps every apostrophe a keyboard can type, so "don´t" still reads as "dont"', () => {
+    for (const t of [
+      'I don´t want to live anymore',
+      'I don´t want to be here anymore',
+      'I don’t want to live anymore',
+      'I donʼt want to be here anymore',
+      'I don`t want to live anymore',
+      'I don＇t want to live anymore',
+    ]) {
+      assert.equal(assessCrisis(t)?.kind, 'self', t);
+    }
+  });
+
   it('stays quiet for the same letters in ordinary sentences', () => {
     for (const t of ['sh00t that was close lol', 'D1 athlete', 'die cast cars', 'the gun show was fun', 'I will use it on myself later, the lotion']) {
       assert.equal(assessCrisis(t), null, t);
