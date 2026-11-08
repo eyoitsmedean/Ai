@@ -27,6 +27,10 @@
     [/\bs\s?u\s?i\s?c\s?i\s?d\s?e\b/g, 'suicide'],
     [/\b(?:sewer ?slide|su+ic+ide|sui?ci?de|suiside|suic?ide|sucide|suicde|suacide)\b/g, 'suicide'],
     [/\bk[!1i|]ll\b/g, 'kill'],
+    // Digits for letters inside the words that matter: su1cide, sh00t, d1e.
+    [/\bs[u0o]+[i1!|]c[i1!|]d[e3]\b/g, 'suicide'],
+    [/\bsh[o0]{2}t\b/g, 'shoot'],
+    [/\bd[i1!|][e3]\b/g, 'die'],
     [/\bmysle?f\b|\bmyslef\b|\bmyelf\b/g, 'myself'],
     [/\bun ?alive\b/g, 'unalive'],
     [/\bmy self\b/g, 'myself'],
@@ -35,7 +39,11 @@
   ];
 
   function normalize(text) {
+    // Apostrophes go first: NFKC turns ´ into a space plus an accent, which would split "don´t".
+    // Then NFKC, so full-width or styled letters (ｋｉｌｌ, 𝗸𝗶𝗹𝗹) read as plain ones.
     let t = String(text || '')
+      .replace(/[‘’ʼ`´']/g, '')
+      .normalize('NFKC')
       .toLowerCase()
       .normalize('NFD')
       .replace(/[̀-ͯ]/g, '')
@@ -312,6 +320,9 @@
     // self harm
     /\bcut myself\b(?! (?:shaving|cooking|chopping|on|with|while|by accident|accidentally|off))/,
     /\b(?:still|i|been|started|stopped) sh\b(?! (?:sh|sh sh))/,
+    // a weapon they have, turned on themselves
+    /\b(?:gun|pistol|rifle|shotgun|revolver|knife|blade)\b.*\b(?:use|turn|point|pointed|aim|aimed) (?:it|that|this|them) on myself\b/,
+    /\b(?:use|using|turn|turning|point|pointing|aim|aiming) (?:the|my|a|his|her|dads|moms|my dads|my moms) (?:gun|pistol|rifle|shotgun|revolver) on myself\b/,
   ];
 
   const OTHER_EN2 = [
