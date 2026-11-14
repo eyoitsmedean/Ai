@@ -26,7 +26,7 @@
     ['sunday', W, 'Watch', 'Mark 13:37',
       'And what I say unto you I say unto all, Watch.',
       'Advent opens with one word, and he addressed it to everyone. To watch is to keep your face turned toward the door, expecting someone kind.',
-      'Light one candle at supper tonight. Let it burn while you eat.'],
+      'Light one candle tonight, or one small lamp. Sit by it for a minute.'],
     ['day', W, 'Ye Know Not When', 'Mark 13:33',
       'Take ye heed, watch and pray: for ye know not when the time is.',
       'He never gave a date. He said watch and pray, and those fit any ordinary Monday.',
@@ -35,14 +35,14 @@
       'And when these things begin to come to pass, then look up, and lift up your heads; for your redemption draweth nigh.',
       'When the world shakes, he says, look up. Fear bends the head down. He asks for the opposite posture.',
       'Step outside, or stand at a window, and look at the sky for one full minute.'],
-    ['day', W, 'Lights Burning', 'Luke 12:35',
-      'Let your loins be girded about, and your lights burning;',
+    ['day', W, 'Lights Burning', 'Luke 12:35–36',
+      'Let your loins be girded about, and your lights burning; And ye yourselves like unto men that wait for their lord, when he will return from the wedding; that when he cometh and knocketh, they may open unto him immediately.',
       'Dressed for work, lamp lit. Waiting for him is something you do with your sleeves rolled up.',
       'Finish one small task you have been putting off.'],
     ['day', W, 'He Will Serve Them', 'Luke 12:37',
       'Blessed are those servants, whom the lord when he cometh shall find watching: verily I say unto you, that he shall gird himself, and make them to sit down to meat, and will come forth and serve them.',
       'In this story the master comes home late, finds his servants awake, and puts on the apron himself. The one we wait for comes to serve.',
-      'Serve someone a meal or a cup of something, unasked.'],
+      'Serve someone today, unasked: a cup of something, a held door, a chore done for them.'],
     ['day', W, 'My Words', 'Mark 13:31',
       'Heaven and earth shall pass away: but my words shall not pass away.',
       'Everything you can see will wear out. He said his words would not. They are worth keeping close.',
@@ -55,7 +55,7 @@
     ['sunday', P, 'Prepare Thy Way', 'Matthew 11:10',
       'For this is he, of whom it is written, Behold, I send my messenger before thy face, which shall prepare thy way before thee.',
       'He was speaking of John the Baptist, the one sent ahead. Someone prepared the way for you too, long before you knew it.',
-      'Light two candles at supper. Thank someone who prepared a way for you. If they are gone, thank God for them by name.'],
+      'Light two candles, or one lamp. Thank someone who prepared a way for you, or thank God for them.'],
     ['day', P, 'A Reed Shaken', 'Matthew 11:7',
       'What went ye out into the wilderness to see? A reed shaken with the wind?',
       'Crowds walked out into the wilderness to hear John, and he did not bend with every wind. Jesus asked them what they had gone out looking for.',
@@ -66,12 +66,12 @@
       'Tell one person what their faithfulness has meant to you.'],
     ['day', P, 'The Least', 'Luke 7:28',
       'For I say unto you, Among those that are born of women there is not a greater prophet than John the Baptist: but he that is least in the kingdom of God is greater than he.',
-      'He praised John as highly as anyone could, then said the least person in the kingdom is greater still. No one in that kingdom has to earn a place near the front.',
+      'He praised John as highly as anyone could, then said the least person in the kingdom of God is greater still. What he was bringing was greater than the greatest prophet before it.',
       'Give your seat, your turn, or your parking space to someone else today.'],
     ['day', P, 'Suffer It to Be So', 'Matthew 3:15',
       'Suffer it to be so now: for thus it becometh us to fulfil all righteousness.',
       'John did not want to baptise him. Jesus asked him to let it happen anyway. These are his first words in Matthew, and they are about stepping into the water with everyone else.',
-      'Say yes to one small thing you would rather someone else did.'],
+      'Take on one small chore you would usually leave for someone else.'],
     ['day', P, 'Within You', 'Luke 17:21',
       'Neither shall they say, Lo here! or, lo there! for, behold, the kingdom of God is within you.',
       'The Pharisees asked him when the kingdom would come. He said no one would be able to point to it, here or there. It was nearer than they thought.',
@@ -79,14 +79,14 @@
     ['day', P, 'A Place for You', 'John 14:2',
       'In my Father\'s house are many mansions: if it were not so, I would have told you. I go to prepare a place for you.',
       'In Advent we make room for him. Here he says he is the one preparing a room, and that his Father\'s house has space to spare.',
-      'Clear one small space, a shelf or a corner of a table, and leave it empty until Christmas.'],
+      'Clear one small space, a shelf, a corner of a table or a pocket of your bag, and leave it empty until Christmas.'],
 
     ['sunday', J, 'Go and Shew John', 'Matthew 11:4–5',
       'Go and shew John again those things which ye do hear and see: The blind receive their sight, and the lame walk, the lepers are cleansed, and the deaf hear, the dead are raised up, and the poor have the gospel preached to them.',
       'John was in prison, asking whether Jesus was the one to come. Jesus did not send an argument. He sent a list of people made well.',
-      'Light three candles at supper. Write down three good things you have seen this year.'],
-    ['day', J, 'Good News to the Poor', 'Luke 4:18',
-      'The Spirit of the Lord is upon me, because he hath anointed me to preach the gospel to the poor; he hath sent me to heal the brokenhearted, to preach deliverance to the captives, and recovering of sight to the blind, to set at liberty them that are bruised,',
+      'Light three candles, or one lamp. Write down three good things you have seen this year.'],
+    ['day', J, 'Good News to the Poor', 'Luke 4:18–19',
+      'The Spirit of the Lord is upon me, because he hath anointed me to preach the gospel to the poor; he hath sent me to heal the brokenhearted, to preach deliverance to the captives, and recovering of sight to the blind, to set at liberty them that are bruised, To preach the acceptable year of the Lord.',
       'In the synagogue of his home town he stood and read these words from Isaiah. The good news starts with the poor, the brokenhearted, the captive, the blind and the bruised.',
       'Give something today to someone who cannot pay you back.'],
     ['day', J, 'This Day', 'Luke 4:21',
@@ -100,7 +100,7 @@
     ['day', J, 'Joy in Heaven', 'Luke 15:7',
       'I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance.',
       'Heaven celebrates the one who comes back. No one is too far gone to be the reason for a party.',
-      'Reach out to someone you have drifted away from.'],
+      'Reach out to someone you have lost touch with and would be safe and glad to see again.'],
     ['day', J, 'No Man Taketh', 'John 16:22',
       'And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.',
       'He said this the night before he died. The sorrow was real and close. So was a joy that no one would be able to take.',
@@ -113,7 +113,7 @@
     ['sunday', C, 'So Loved', 'John 3:16',
       'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.',
       'Christmas in one sentence: love that gave. It comes from the night Nicodemus came to him with questions.',
-      'Light all four candles at supper. Tell someone, near or far, that you love them.'],
+      'Light all four candles, or one lamp. Tell someone, near or far, that you love them.'],
     ['day', C, 'To Seek and to Save', 'Luke 19:10',
       'For the Son of man is come to seek and to save that which was lost.',
       'He said this to Zacchaeus, after inviting himself to his house. He came looking for the lost, and he found one up a tree.',
@@ -129,7 +129,7 @@
     ['day', C, 'More Abundantly', 'John 10:10',
       'I am come that they might have life, and that they might have it more abundantly.',
       'He came for life, and more of it than we manage on our own.',
-      'Rest for an hour today without apologising for it.'],
+      'Rest today for as long as you can, even ten minutes, without apologising for it.'],
     ['day', C, 'I Came Forth', 'John 16:28',
       'I came forth from the Father, and am come into the world: again, I leave the world, and go to the Father.',
       'He told his friends the whole road: from the Father, into the world, and home again. At Christmas we remember the middle step: he came into the world.',
@@ -138,8 +138,8 @@
 
   const EVE = ['eve', 'Christmas Eve', 'A Light into the World', 'John 12:46',
     'I am come a light into the world, that whosoever believeth on me should not abide in darkness.',
-    'Christmas Eve. He says he came as light, so that no one has to stay in the dark. The waiting is almost done.',
-    'Light all four candles tonight. Turn off the other lights and sit by them for a minute.'];
+    'Christmas Eve. He says he came as light, so that whoever believes in him need not stay in the dark. The waiting is almost done.',
+    'Light your candles tonight, or one lamp. Turn off the other lights and sit by it a minute.'];
 
   const CHRISTMAS = ['christmas', 'Christmas', 'To This End Was I Born', 'John 18:37',
     'To this end was I born, and for this cause came I into the world, that I should bear witness unto the truth.',
@@ -173,7 +173,8 @@
   }
 
   function watchFor(date) {
-    const d = date instanceof Date ? date : new Date(date);
+    const ymd = typeof date === 'string' && /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    const d = ymd ? new Date(+ymd[1], ymd[2] - 1, +ymd[3]) : date instanceof Date ? date : new Date(date);
     if (isNaN(d.getTime())) return null;
     const road = watchYear(d.getFullYear());
     const offset = daysBetween(adventSunday(d.getFullYear()), d);

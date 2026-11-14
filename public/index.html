@@ -2404,7 +2404,7 @@ function paintWatch(host, hit) {
   const label = e.kind === 'christmas'
     ? '<b>Christmas</b> \u00b7 the watch is kept'
     : e.kind === 'eve'
-      ? '<b>Watch</b> \u00b7 Christmas Eve \u00b7 day ' + hit.day + ' of ' + hit.total
+      ? '<b>Watch</b> \u00b7 Christmas Eve \u00b7 Day ' + hit.day + ' of ' + hit.total
       : '<b>Watch</b> \u00b7 Day ' + hit.day + ' of ' + hit.total + ' \u00b7 ' + esc(e.week);
   host.className = 'forty';
   host.removeAttribute('aria-hidden');
@@ -2423,9 +2423,11 @@ function sitWatch(hit) {
 function paintSeven() {
   const host = document.getElementById('week-ribbon');
   if (!host) return;
+  // An explicit ?advent= preview beats a real day of Lent.
+  const advent = watchToday();
+  if (advent && ADVENT_PEEK && !LENT_PEEK) { paintWatch(host, advent); return; }
   const lent = fortyToday();
   if (lent) { paintForty(host, lent); return; }
-  const advent = watchToday();
   if (advent) { paintWatch(host, advent); return; }
   const days = sevenDays();
   if (!days.length) {

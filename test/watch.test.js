@@ -67,3 +67,11 @@ describe('Watch, the Advent path', () => {
     }
   });
 });
+
+describe('Watch dates given as text', () => {
+  it('reads YYYY-MM-DD as a local date, not UTC midnight', () => {
+    assert.equal(watchFor('2026-11-29').day, 1);
+    assert.equal(watchFor('2026-12-25').entry.kind, 'christmas');
+    assert.equal(watchFor('2026-11-28'), null);
+  });
+});
