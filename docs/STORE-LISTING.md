@@ -68,20 +68,26 @@ Data Not Collected. Nothing is transmitted off the device. A first-open flag and
 
 Play’s Data safety form is **not required** while the app lives only on the internal testing track. Complete it (all No) before closed, open, or production.
 
-## Screenshots (Dean, on the phone)
+## Screenshots
 
-Apple (fetched 2026-09-11 from [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)): the required iPhone class is **6.9" Display**. Accepted portrait sizes: **1260×2736**, **1290×2796**, **1320×2868**. One to ten images. No alpha. This binary is **iPhone-only** (`TARGETED_DEVICE_FAMILY = 1`). Do not enable iPad in App Store Connect unless you also shoot a 13" set (2064×2752).
+Apple (fetched 2026-09-11 from [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)): the required iPhone class is **6.9" Display**. Accepted portrait sizes: **1260×2736**, **1290×2796**, **1320×2868**. One to ten images. No alpha. This binary is **iPhone-only** (`TARGETED_DEVICE_FAMILY = 1`) and portrait-only. Do not enable iPad in App Store Connect unless you also shoot a 13" set (2064×2752).
 
-Shoot these six, in this order. Caption is for you; do **not** typeset the caption on the screenshot (the rooms already speak):
+Paste-ready strings live in `docs/store/listing.json` (lengths checked by `test/store-listing.test.js`).
 
-1. **Title** — “His words, for this moment.” Turn the page.  
-2. **Today** — the Word, THE CARD, office name.  
-3. **Sit · Rest** — one catchword, chrome gone.  
-4. **Seven Days** — Come through Go.  
-5. **Seek** — the twelve rooms (Guideline 4.2).  
-6. **Home screen** — the **Word** widget. Sentence + citation only.
+Draft frames, rendered by `flutter test --dart-define=STORE_SHOTS=true test/store_frames_test.dart`, are widget-test images at the accepted pixel sizes. They are not photographs of a phone. 988 is in the frame because it is on every leaf. Do not typeset a caption on top.
 
-Play: capture the same six on a current Pixel or equivalent.
+| # | Room | iOS 6.9" (1290×2796) | Play phone (1080×1920) |
+| --- | --- | --- | --- |
+| 1 | Title | `docs/store/ios-6.9/01-title.png` | `docs/store/play-phone/01-title.png` |
+| 2 | Today | `docs/store/ios-6.9/02-today.png` | `docs/store/play-phone/02-today.png` |
+| 3 | Sit · Rest | `docs/store/ios-6.9/03-sit-rest.png` | `docs/store/play-phone/03-sit-rest.png` |
+| 4 | Seven Days | `docs/store/ios-6.9/04-seven.png` | `docs/store/play-phone/04-seven.png` |
+| 5 | Seek | `docs/store/ios-6.9/05-seek.png` | `docs/store/play-phone/05-seek.png` |
+| 6 | Bless | `docs/store/ios-6.9/06-bless.png` | `docs/store/play-phone/06-bless.png` |
+
+Play feature graphic draft (1024×500): `docs/store/play-feature.png`.
+
+**Still a phone.** Shot 6 in the original list is the home-screen **Word** widget (sentence + citation only). This VM cannot capture WidgetKit or an Android home screen. Replace `06-bless` with that home-screen photo before a public listing, or add it as a seventh image and keep Bless.
 
 ## What 4.2 is looking for
 

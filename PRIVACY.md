@@ -18,7 +18,7 @@ Three things, all local, all deletable by removing the app:
 
 ## Crisis note
 
-The About leaf shows the US 988 Suicide & Crisis Lifeline and can open the phone dialer with 988 pre-filled. Red Words does not place the call and does not know whether you did.
+Every leaf shows the US 988 Suicide & Crisis Lifeline and can open the phone dialer with 988 pre-filled. Red Words does not place the call and does not know whether you did.
 
 ## Scripture text
 

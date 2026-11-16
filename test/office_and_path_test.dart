@@ -37,8 +37,15 @@ void main() {
 
   test('Seven Days are seven locked Gospel rooms', () {
     final seven = catalog().seven;
-    expect(seven.map((d) => d.title).toList(),
-        ['Come', 'Peace', 'Light', 'Love', 'Forgive', 'Abide', 'Go']);
+    expect(seven.map((d) => d.title).toList(), [
+      'Come',
+      'Peace',
+      'Light',
+      'Love',
+      'Forgive',
+      'Abide',
+      'Go',
+    ]);
     for (final day in seven) {
       final locked = catalog().lockPath(day);
       expect(locked, isNotNull);
@@ -47,7 +54,9 @@ void main() {
     }
   });
 
-  testWidgets('vespers prompt uses the injected clock, not the wall clock', (tester) async {
+  testWidgets('vespers prompt uses the injected clock, not the wall clock', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       RedWordsApp(
         catalog: catalog(),
@@ -93,7 +102,10 @@ void main() {
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('sit-reply')), findsOneWidget);
-    await tester.enterText(find.byKey(const Key('sit-reply')), 'I will not carry Tuesday on Monday.');
+    await tester.enterText(
+      find.byKey(const Key('sit-reply')),
+      'I will not carry Tuesday on Monday.',
+    );
     await tester.tap(find.text('Amen'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sit'));
@@ -130,31 +142,67 @@ void main() {
     await tester.tap(find.text('Bless'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('blessing-card')), findsOneWidget);
-    final card = tester.widget<Container>(find.byKey(const Key('blessing-card')));
+    final card = tester.widget<Container>(
+      find.byKey(const Key('blessing-card')),
+    );
     expect(card.child, isNotNull);
-    expect(find.descendant(of: find.byKey(const Key('blessing-card')), matching: find.textContaining('Red Words')),
-        findsNothing);
+    expect(
+      find.descendant(
+        of: find.byKey(const Key('blessing-card')),
+        matching: find.textContaining('Red Words'),
+      ),
+      findsNothing,
+    );
   });
 
-  testWidgets('About carries the rights line and the privacy statement in-app', (tester) async {
+  testWidgets(
+    'About carries the rights line and the privacy statement in-app',
+    (tester) async {
+      await tester.pumpWidget(
+        RedWordsApp(
+          catalog: catalog(),
+          now: DateTime(2026, 9, 2, 8),
+          session: SessionStore(opened: true),
+          syncWidget: false,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('About'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('about-rights')), findsOneWidget);
+      expect(find.textContaining('Cambridge University Press'), findsOneWidget);
+      expect(find.byKey(const Key('about-lectio')), findsOneWidget);
+      final list = find.byType(ListView);
+      for (
+        var i = 0;
+        i < 6 && find.byKey(const Key('about-privacy')).evaluate().isEmpty;
+        i++
+      ) {
+        await tester.drag(list, const Offset(0, -280));
+        await tester.pumpAndSettle();
+      }
+      expect(find.byKey(const Key('about-privacy')), findsOneWidget);
+      expect(find.textContaining('collects nothing'), findsOneWidget);
+      expect(find.textContaining('no network'), findsNothing);
+      expect(find.text('988  ·  US call or text'), findsOneWidget);
+    },
+  );
+
+  testWidgets('988 stays on the title leaf and on Today', (tester) async {
     await tester.pumpWidget(
       RedWordsApp(
         catalog: catalog(),
-        now: DateTime(2026, 9, 2, 8),
-        session: SessionStore(opened: true),
+        now: DateTime(2026, 11, 16, 8),
+        session: SessionStore(opened: false),
         syncWidget: false,
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('About'));
+    expect(find.text('Turn the page'), findsOneWidget);
+    expect(find.textContaining('988'), findsOneWidget);
+    await tester.tap(find.text('Turn the page'));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('about-rights')), findsOneWidget);
-    expect(find.textContaining('Cambridge University Press'), findsOneWidget);
-    expect(find.byKey(const Key('about-privacy')), findsOneWidget);
-    expect(find.textContaining('collects nothing'), findsOneWidget);
-    expect(find.textContaining('no network'), findsNothing);
-    expect(find.byKey(const Key('about-lectio')), findsOneWidget);
-    await tester.scrollUntilVisible(find.textContaining('988'), 240);
+    expect(find.byKey(const Key('today-word')), findsOneWidget);
     expect(find.textContaining('988'), findsOneWidget);
   });
 
@@ -178,7 +226,11 @@ void main() {
   });
 
   test('evening paper is a lamp, never a black slab', () {
-    const ordinary = ChurchSeason(id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time');
+    const ordinary = ChurchSeason(
+      id: 'ordinary',
+      name: 'Ordinary Time',
+      runningHead: 'Ordinary Time',
+    );
     const lent = ChurchSeason(id: 'lent', name: 'Lent', runningHead: 'Lent');
     final morning = RedWordsColors.forHour(ordinary, evening: false);
     final vespers = RedWordsColors.forHour(ordinary, evening: true);
@@ -193,7 +245,9 @@ void main() {
     expect(const Color(0xFF000000).computeLuminance(), lessThan(0.01));
   });
 
-  testWidgets('vespers leaf wears lamp paper, not a black slab', (tester) async {
+  testWidgets('vespers leaf wears lamp paper, not a black slab', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       RedWordsApp(
         catalog: catalog(),
@@ -214,7 +268,11 @@ void main() {
     await tester.pumpWidget(
       PaperScope(
         colors: RedWordsColors.ordinary,
-        season: const ChurchSeason(id: 'ordinary', name: 'Ordinary Time', runningHead: 'Ordinary Time'),
+        season: const ChurchSeason(
+          id: 'ordinary',
+          name: 'Ordinary Time',
+          runningHead: 'Ordinary Time',
+        ),
         child: MaterialApp(
           home: Scaffold(
             body: SevenRibbon(
@@ -227,11 +285,17 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(
-      find.descendant(of: find.byKey(const Key('seven-bead-Come')), matching: find.text('C')),
+      find.descendant(
+        of: find.byKey(const Key('seven-bead-Come')),
+        matching: find.text('C'),
+      ),
       findsOneWidget,
     );
     expect(
-      find.descendant(of: find.byKey(const Key('seven-bead-Peace')), matching: find.text('P')),
+      find.descendant(
+        of: find.byKey(const Key('seven-bead-Peace')),
+        matching: find.text('P'),
+      ),
       findsOneWidget,
     );
     await tester.tap(find.byKey(const Key('seven-bead-Come')));
@@ -259,7 +323,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('today-word')), findsOneWidget);
     expect(find.byKey(const Key('path-day')), findsNothing);
-    expect(find.text('One room a morning. A missed day is never a failure.'), findsNothing);
+    expect(
+      find.text('One room a morning. A missed day is never a failure.'),
+      findsNothing,
+    );
   });
 
   testWidgets('Seven list Back stays in Seven', (tester) async {
@@ -279,7 +346,10 @@ void main() {
     expect(find.byKey(const Key('path-day')), findsOneWidget);
     await tester.tap(find.text('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('One room a morning. A missed day is never a failure.'), findsOneWidget);
+    expect(
+      find.text('One room a morning. A missed day is never a failure.'),
+      findsOneWidget,
+    );
     expect(find.byKey(const Key('today-word')), findsNothing);
   });
 }

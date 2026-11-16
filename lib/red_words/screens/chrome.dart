@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme.dart';
 
@@ -17,12 +18,15 @@ class PrinterMark extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: paper.colors.ink.withValues(alpha: 0.22), width: 0.8),
+        border: Border.all(
+          color: paper.colors.ink.withValues(alpha: 0.22),
+          width: 0.8,
+        ),
       ),
       child: Text(
         'R',
         style: TextStyle(
-          fontFamily: 'serif',
+          fontFamily: 'RedWordsSerif',
           fontStyle: FontStyle.italic,
           fontSize: size * 0.48,
           height: 1,
@@ -43,7 +47,10 @@ class SilkRibbon extends StatelessWidget {
       left: 0,
       top: 0,
       bottom: 0,
-      child: Container(width: 4, color: paper.colors.crimson.withValues(alpha: 0.72)),
+      child: Container(
+        width: 4,
+        color: paper.colors.crimson.withValues(alpha: 0.72),
+      ),
     );
   }
 }
@@ -76,6 +83,8 @@ class FolioScaffold extends StatelessWidget {
                 children: [
                   Expanded(child: child),
                   ?footer,
+                  if (footer != null) const SizedBox(height: 10),
+                  const CrisisNote(),
                 ],
               ),
             ),
@@ -103,6 +112,43 @@ class RunningHead extends StatelessWidget {
         color: paper.colors.inkMuted,
       ),
     );
+  }
+}
+
+/// 988 stays on every leaf. The page is not the right room for a crisis.
+class CrisisNote extends StatelessWidget {
+  const CrisisNote({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final paper = PaperScope.of(context);
+    return Column(
+      children: [
+        Text(
+          'If you are in crisis, this page is not the right room.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            height: 1.35,
+            color: paper.colors.inkMuted,
+          ),
+        ),
+        TextButton(
+          onPressed: () => launchDialer('988'),
+          style: TextButton.styleFrom(minimumSize: const Size(48, 40)),
+          child: const Text('988  ·  US call or text'),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> launchDialer(String number) async {
+  try {
+    await const MethodChannel('redwords/links')
+        .invokeMethod<void>('tel', number);
+  } on MissingPluginException {
+    // Tests and hosts without a dialer.
   }
 }
 
@@ -140,7 +186,11 @@ class HomeCard extends StatelessWidget {
       children: [
         Text(
           'THE CARD',
-          style: TextStyle(letterSpacing: 1.6, fontSize: 11, color: paper.colors.gold),
+          style: TextStyle(
+            letterSpacing: 1.6,
+            fontSize: 11,
+            color: paper.colors.gold,
+          ),
         ),
         const SizedBox(height: 10),
         Container(
@@ -158,7 +208,7 @@ class HomeCard extends StatelessWidget {
                 word,
                 key: const Key('home-card-word'),
                 style: TextStyle(
-                  fontFamily: 'serif',
+                  fontFamily: 'RedWordsSerif',
                   fontStyle: FontStyle.italic,
                   fontSize: 16,
                   height: 1.4,
@@ -209,7 +259,7 @@ class WordBlock extends StatelessWidget {
           key: textKey,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: 'serif',
+            fontFamily: 'RedWordsSerif',
             fontStyle: FontStyle.italic,
             fontSize: size,
             height: 1.45,

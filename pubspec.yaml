@@ -1,7 +1,7 @@
 name: red_words
 description: His words, for this moment. Offline-first Red Words — Jesus's speech in the Gospels.
 publish_to: "none"
-version: 0.1.0+6
+version: 0.1.0+7
 
 environment:
   sdk: ^3.13.2
@@ -19,3 +19,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/moments/catalog.json
+  fonts:
+    - family: RedWordsSerif
+      fonts:
+        - asset: assets/fonts/EBGaramond-Regular.ttf
+        - asset: assets/fonts/EBGaramond-Italic.ttf
+          style: italic

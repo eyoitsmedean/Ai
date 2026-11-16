@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../moment/models.dart';
 import '../moment/office.dart';
@@ -18,60 +17,69 @@ class TitlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final paper = PaperScope.of(context);
     return FolioScaffold(
-      footer: Column(
-        children: [
-          Text(
-            'This is not a person, and it is not therapy, medical care, or pastoral counseling.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, height: 1.45, color: paper.colors.inkMuted),
+      footer: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 220, minHeight: 48),
+          child: OutlinedButton(
+            onPressed: onTurn,
+            style: OutlinedButton.styleFrom(
+              foregroundColor: paper.colors.ink,
+              side: BorderSide(color: paper.colors.rule),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+            ),
+            child: const Text('Turn the page'),
           ),
-          const SizedBox(height: 16),
-          Center(
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(minWidth: 220, minHeight: 48),
-              child: OutlinedButton(
-                onPressed: onTurn,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: paper.colors.ink,
-                  side: BorderSide(color: paper.colors.rule),
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                ),
-                child: const Text('Turn the page'),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RunningHead(text: paper.season.runningHead),
+                  const SizedBox(height: 28),
+                  const PrinterMark(size: 52),
+                  const SizedBox(height: 28),
+                  Text(
+                    'His words, for this moment.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'RedWordsSerif',
+                      fontStyle: FontStyle.italic,
+                      fontSize: 32,
+                      height: 1.25,
+                      color: paper.colors.crimson,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'A quiet page for the words Jesus spoke.\nThe Gospels only. Kept on this device.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'RedWordsSerif',
+                      fontSize: 16,
+                      height: 1.55,
+                      color: paper.colors.ink,
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  Text(
+                    'This is not a person, and it is not therapy, medical care, or pastoral counseling.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.45,
+                      color: paper.colors.inkMuted,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          RunningHead(text: paper.season.runningHead),
-          const Spacer(),
-          const PrinterMark(size: 52),
-          const SizedBox(height: 28),
-          Text(
-            'His words, for this moment.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'serif',
-              fontStyle: FontStyle.italic,
-              fontSize: 32,
-              height: 1.25,
-              color: paper.colors.crimson,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'A quiet page for the words Jesus spoke.\nThe Gospels only. Kept on this device.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'serif',
-              fontSize: 16,
-              height: 1.55,
-              color: paper.colors.ink,
-            ),
-          ),
-          const Spacer(),
-        ],
+          );
+        },
       ),
     );
   }
@@ -84,7 +92,6 @@ class EmptyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final paper = PaperScope.of(context);
     return FolioScaffold(
-      footer: const CrisisNote(),
       child: Column(
         children: [
           const RunningHead(text: 'Colophon'),
@@ -94,7 +101,7 @@ class EmptyPage extends StatelessWidget {
             textAlign: TextAlign.center,
             key: const Key('empty-state'),
             style: TextStyle(
-              fontFamily: 'serif',
+              fontFamily: 'RedWordsSerif',
               fontStyle: FontStyle.italic,
               fontSize: 28,
               color: paper.colors.ink,
@@ -105,7 +112,7 @@ class EmptyPage extends StatelessWidget {
             'His words will be here when the book is. Nothing has been invented to fill the silence.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'serif',
+              fontFamily: 'RedWordsSerif',
               fontSize: 16,
               height: 1.55,
               color: paper.colors.inkMuted,
@@ -168,7 +175,11 @@ class TodayPage extends StatelessWidget {
             office.name,
             key: const Key('today-office'),
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, letterSpacing: 1.4, color: paper.colors.gold),
+            style: TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.4,
+              color: paper.colors.gold,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -201,7 +212,7 @@ class TodayPage extends StatelessWidget {
                     moment.reflection,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: 'serif',
+                      fontFamily: 'RedWordsSerif',
                       fontSize: 16,
                       height: 1.6,
                       color: paper.colors.ink,
@@ -213,7 +224,7 @@ class TodayPage extends StatelessWidget {
                       office.vespersPromptOn(now),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'serif',
+                        fontFamily: 'RedWordsSerif',
                         fontStyle: FontStyle.italic,
                         fontSize: 18,
                         color: paper.colors.ink,
@@ -231,7 +242,12 @@ class TodayPage extends StatelessWidget {
 }
 
 class SevenRibbon extends StatelessWidget {
-  const SevenRibbon({super.key, required this.days, this.onOpen, this.onOpenDay});
+  const SevenRibbon({
+    super.key,
+    required this.days,
+    this.onOpen,
+    this.onOpenDay,
+  });
 
   final List<PathDay> days;
   final VoidCallback? onOpen;
@@ -280,7 +296,7 @@ class SevenRibbon extends StatelessWidget {
                         child: Text(
                           day.initial,
                           style: TextStyle(
-                            fontFamily: 'serif',
+                            fontFamily: 'RedWordsSerif',
                             fontStyle: FontStyle.italic,
                             fontSize: 17,
                             height: 1,
@@ -359,24 +375,30 @@ class _SitPageState extends State<SitPage> {
     return FolioScaffold(
       showRibbon: false,
       footer: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextAction(label: 'Back', onPressed: widget.onBack),
-          Row(
-            children: [
-              for (var i = 0; i < leaves.length; i++)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: Text(
-                    leaves[i],
-                    style: TextStyle(
-                      fontSize: 11,
-                      letterSpacing: 0.8,
-                      color: i == leaf ? paper.colors.crimson : paper.colors.inkMuted,
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                children: [
+                  for (var i = 0; i < leaves.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: Text(
+                        leaves[i],
+                        style: TextStyle(
+                          fontSize: 11,
+                          letterSpacing: 0.8,
+                          color: i == leaf
+                              ? paper.colors.crimson
+                              : paper.colors.inkMuted,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-            ],
+                ],
+              ),
+            ),
           ),
           TextAction(
             label: leaf == leaves.length - 1 ? 'Amen' : 'Next',
@@ -411,7 +433,12 @@ class _SitPageState extends State<SitPage> {
           child: Text(
             moment.reflection,
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'serif', fontSize: 20, height: 1.55, color: paper.colors.ink),
+            style: TextStyle(
+              fontFamily: 'RedWordsSerif',
+              fontSize: 20,
+              height: 1.55,
+              color: paper.colors.ink,
+            ),
           ),
         );
       case 2:
@@ -424,7 +451,7 @@ class _SitPageState extends State<SitPage> {
                 key: const Key('sit-rest-word'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'serif',
+                  fontFamily: 'RedWordsSerif',
                   fontStyle: FontStyle.italic,
                   fontSize: 40,
                   color: paper.colors.crimson,
@@ -448,7 +475,12 @@ class _SitPageState extends State<SitPage> {
             Text(
               'One sentence is enough. You do not have to finish the thought.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'serif', fontSize: 16, height: 1.55, color: paper.colors.inkMuted),
+              style: TextStyle(
+                fontFamily: 'RedWordsSerif',
+                fontSize: 16,
+                height: 1.55,
+                color: paper.colors.inkMuted,
+              ),
             ),
             const SizedBox(height: 20),
             TextField(
@@ -467,7 +499,12 @@ class _SitPageState extends State<SitPage> {
                   borderSide: BorderSide(color: paper.colors.crimson),
                 ),
               ),
-              style: TextStyle(fontFamily: 'serif', fontSize: 18, height: 1.5, color: paper.colors.ink),
+              style: TextStyle(
+                fontFamily: 'RedWordsSerif',
+                fontSize: 18,
+                height: 1.5,
+                color: paper.colors.ink,
+              ),
             ),
           ],
         );
@@ -509,7 +546,11 @@ class SeekPage extends StatelessWidget {
           Text(
             'Seek',
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'serif', fontSize: 28, color: paper.colors.ink),
+            style: TextStyle(
+              fontFamily: 'RedWordsSerif',
+              fontSize: 28,
+              color: paper.colors.ink,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -523,9 +564,18 @@ class SeekPage extends StatelessWidget {
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
               leading: Text(
                 (i + 1).toString().padLeft(2, '0'),
-                style: TextStyle(letterSpacing: 1.1, color: paper.colors.inkMuted),
+                style: TextStyle(
+                  letterSpacing: 1.1,
+                  color: paper.colors.inkMuted,
+                ),
               ),
-              title: Text(rooms[i].theme, style: const TextStyle(fontFamily: 'serif', fontSize: 18)),
+              title: Text(
+                rooms[i].theme,
+                style: const TextStyle(
+                  fontFamily: 'RedWordsSerif',
+                  fontSize: 18,
+                ),
+              ),
               subtitle: Text(rooms[i].headline),
               minVerticalPadding: 12,
               onTap: () => onOpen(rooms[i]),
@@ -552,20 +602,34 @@ class RoomPage extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: TextAction(label: 'Back', onPressed: onBack),
           ),
-          Text(room.theme, style: TextStyle(color: paper.colors.gold, letterSpacing: 1.1)),
+          Text(
+            room.theme,
+            style: TextStyle(color: paper.colors.gold, letterSpacing: 1.1),
+          ),
           const SizedBox(height: 8),
           Text(
             room.headline,
-            style: TextStyle(fontFamily: 'serif', fontSize: 26, color: paper.colors.ink),
+            style: TextStyle(
+              fontFamily: 'RedWordsSerif',
+              fontSize: 26,
+              color: paper.colors.ink,
+            ),
           ),
           const SizedBox(height: 16),
-          Text(room.opening, style: const TextStyle(fontFamily: 'serif', height: 1.55, fontSize: 16)),
+          Text(
+            room.opening,
+            style: const TextStyle(
+              fontFamily: 'RedWordsSerif',
+              height: 1.55,
+              fontSize: 16,
+            ),
+          ),
           const SizedBox(height: 24),
           for (final passage in room.passages) ...[
             Text(
               passage.saying.text,
               style: TextStyle(
-                fontFamily: 'serif',
+                fontFamily: 'RedWordsSerif',
                 fontStyle: FontStyle.italic,
                 fontSize: 18,
                 height: 1.45,
@@ -575,15 +639,31 @@ class RoomPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '${passage.saying.citation}  ·  KJV',
-              style: TextStyle(letterSpacing: 1.1, fontSize: 12, color: paper.colors.crimson),
+              style: TextStyle(
+                letterSpacing: 1.1,
+                fontSize: 12,
+                color: paper.colors.crimson,
+              ),
             ),
             const SizedBox(height: 8),
-            Text(passage.context, style: TextStyle(height: 1.5, color: paper.colors.inkMuted)),
+            Text(
+              passage.context,
+              style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
+            ),
             const SizedBox(height: 22),
           ],
-          Text(room.practice, style: const TextStyle(fontFamily: 'serif', height: 1.55)),
+          Text(
+            room.practice,
+            style: const TextStyle(fontFamily: 'RedWordsSerif', height: 1.55),
+          ),
           const SizedBox(height: 16),
-          Text(room.closing, style: TextStyle(fontStyle: FontStyle.italic, color: paper.colors.inkMuted)),
+          Text(
+            room.closing,
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: paper.colors.inkMuted,
+            ),
+          ),
         ],
       ),
     );
@@ -615,7 +695,11 @@ class SevenPage extends StatelessWidget {
           Text(
             'Seven Days',
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'serif', fontSize: 28, color: paper.colors.ink),
+            style: TextStyle(
+              fontFamily: 'RedWordsSerif',
+              fontSize: 28,
+              color: paper.colors.ink,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -629,13 +713,19 @@ class SevenPage extends StatelessWidget {
               leading: Text(
                 day.initial,
                 style: TextStyle(
-                  fontFamily: 'serif',
+                  fontFamily: 'RedWordsSerif',
                   fontStyle: FontStyle.italic,
                   fontSize: 22,
                   color: paper.colors.ink.withValues(alpha: 0.55),
                 ),
               ),
-              title: Text(day.title, style: const TextStyle(fontFamily: 'serif', fontSize: 20)),
+              title: Text(
+                day.title,
+                style: const TextStyle(
+                  fontFamily: 'RedWordsSerif',
+                  fontSize: 20,
+                ),
+              ),
               subtitle: Text(day.word.citation),
               minVerticalPadding: 14,
               onTap: () => onOpen(day),
@@ -669,12 +759,21 @@ class PathDayPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  WordBlock(text: day.word.text, citation: day.word.citation, size: 22),
+                  WordBlock(
+                    text: day.word.text,
+                    citation: day.word.citation,
+                    size: 22,
+                  ),
                   const SizedBox(height: 24),
                   Text(
                     day.reflection,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: 'serif', fontSize: 16, height: 1.6, color: paper.colors.ink),
+                    style: TextStyle(
+                      fontFamily: 'RedWordsSerif',
+                      fontSize: 16,
+                      height: 1.6,
+                      color: paper.colors.ink,
+                    ),
                   ),
                 ],
               ),
@@ -703,7 +802,10 @@ class BlessingPage extends StatelessWidget {
           TextAction(
             label: 'Send',
             onPressed: () => LinkBridge.share(
-              BlessingShare.body(word: moment.word.text, citation: moment.word.citation),
+              BlessingShare.body(
+                word: moment.word.text,
+                citation: moment.word.citation,
+              ),
             ),
           ),
         ],
@@ -713,9 +815,10 @@ class BlessingPage extends StatelessWidget {
           const RunningHead(text: 'A blessing'),
           const SizedBox(height: 24),
           Expanded(
-            child: Center(
+            child: SingleChildScrollView(
               child: Container(
                 key: const Key('blessing-card'),
+                width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(22, 36, 22, 32),
                 decoration: BoxDecoration(
                   color: paper.colors.folio,
@@ -763,7 +866,7 @@ class AboutPage extends StatelessWidget {
             'His words, for this moment.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'serif',
+              fontFamily: 'RedWordsSerif',
               fontStyle: FontStyle.italic,
               fontSize: 26,
               color: paper.colors.crimson,
@@ -772,7 +875,11 @@ class AboutPage extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Red Words keeps the spoken sentences of Jesus from Matthew, Mark, Luke, and John on this device. The home-screen widget is the Word only — no badge, no streak, no name on the card.',
-            style: TextStyle(fontFamily: 'serif', height: 1.55, color: paper.colors.ink),
+            style: TextStyle(
+              fontFamily: 'RedWordsSerif',
+              height: 1.55,
+              color: paper.colors.ink,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
@@ -783,18 +890,30 @@ class AboutPage extends StatelessWidget {
           Text(
             'Sit is inspired by lectio divina — read, reflect, rest, respond. The quiet minute is ours, not a church timer, and not an endorsement.',
             key: const Key('about-lectio'),
-            style: TextStyle(height: 1.5, fontSize: 13, color: paper.colors.inkMuted),
+            style: TextStyle(
+              height: 1.5,
+              fontSize: 13,
+              color: paper.colors.inkMuted,
+            ),
           ),
           const SizedBox(height: 12),
           Text(
             'Rights in the Authorized (King James) Version of the Bible in the United Kingdom are vested in the Crown and administered by the Crown’s patentee, Cambridge University Press.',
             key: const Key('about-rights'),
-            style: TextStyle(height: 1.5, fontSize: 13, color: paper.colors.inkMuted),
+            style: TextStyle(
+              height: 1.5,
+              fontSize: 13,
+              color: paper.colors.inkMuted,
+            ),
           ),
           const SizedBox(height: 20),
           Text(
             'Privacy',
-            style: TextStyle(letterSpacing: 1.4, fontSize: 12, color: paper.colors.gold),
+            style: TextStyle(
+              letterSpacing: 1.4,
+              fontSize: 12,
+              color: paper.colors.gold,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
@@ -802,33 +921,8 @@ class AboutPage extends StatelessWidget {
             key: const Key('about-privacy'),
             style: TextStyle(height: 1.5, color: paper.colors.inkMuted),
           ),
-          const SizedBox(height: 28),
-          const CrisisNote(),
         ],
       ),
-    );
-  }
-}
-
-class CrisisNote extends StatelessWidget {
-  const CrisisNote({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final paper = PaperScope.of(context);
-    return Column(
-      children: [
-        Text(
-          'If you are in crisis, this page is not the right room.',
-          textAlign: TextAlign.center,
-          style: TextStyle(height: 1.45, color: paper.colors.inkMuted),
-        ),
-        const SizedBox(height: 8),
-        TextButton(
-          onPressed: () => launchDialer('988'),
-          child: const Text('988  ·  US call or text'),
-        ),
-      ],
     );
   }
 }
@@ -836,12 +930,4 @@ class CrisisNote extends StatelessWidget {
 String _titleCase(String word) {
   if (word.isEmpty) return word;
   return '${word[0].toUpperCase()}${word.substring(1)}';
-}
-
-Future<void> launchDialer(String number) async {
-  try {
-    await const MethodChannel('redwords/links').invokeMethod<void>('tel', number);
-  } on MissingPluginException {
-    // Tests and hosts without a dialer.
-  }
 }

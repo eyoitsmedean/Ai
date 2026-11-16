@@ -122,7 +122,8 @@ class RedWordsColors {
           rule == other.rule;
 
   @override
-  int get hashCode => Object.hash(paper, folio, ink, inkMuted, crimson, gold, rule);
+  int get hashCode =>
+      Object.hash(paper, folio, ink, inkMuted, crimson, gold, rule);
 }
 
 ThemeData redWordsTheme(ChurchSeason season, {bool evening = false}) {
@@ -150,7 +151,7 @@ ThemeData redWordsTheme(ChurchSeason season, {bool evening = false}) {
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
-        fontFamily: 'serif',
+        fontFamily: 'RedWordsSerif',
         fontSize: 16,
         letterSpacing: 1.4,
         color: colors.inkMuted,

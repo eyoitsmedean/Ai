@@ -106,4 +106,4 @@ A person who wants His words for this hour — not a social graph, not a streak,
 1. Host a public HTTPS privacy URL (Pages after merge, or any host of `PRIVACY.md`).  
 2. Exclude United Kingdom, or email `permissions@cambridge.org`.  
 3. Create a Play upload keystore off git.  
-4. Install Xcode 26 and archive `0.1.0+6`.
+4. Install Xcode 26 and archive `0.1.0+7`. See `SHIP-READINESS.md` for the rest of Dean's list.

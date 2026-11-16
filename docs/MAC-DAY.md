@@ -2,7 +2,7 @@
 
 You are about to put Red Words on a phone. This is the only list you need. Details and failure table live in `TESTFLIGHT.md`. Listing copy lives in `STORE-LISTING.md`.
 
-**Version to upload:** `0.1.0+6` (`pubspec.yaml`). Bump +build if you upload twice.
+**Version to upload:** `0.1.0+7` (`pubspec.yaml`). Bump +build if you upload twice. Remaining accounts, signing, and submission are in `SHIP-READINESS.md`.
 
 ## Before you sit (10 minutes)
 

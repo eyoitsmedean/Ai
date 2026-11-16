@@ -2,7 +2,7 @@
 
 **Purpose.** Get a TestFlight build and a Play internal build onto a phone.  
 **Owner.** Dean. **Status.** Ready to archive. **Updated.** 2026-09-14.  
-**What changed.** Version is `0.1.0+6`. Uploads must be built with **Xcode 26** (iOS 26 SDK) — still required as of 14 Sep 2026. After vespers the paper is a lamp (`#E8D8B4`), never OLED. The Seven ribbon is initials, not dots; Back from a Today tap returns to Today. The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only**. Privacy copy names the share sheet and 988 dialer.
+**What changed.** Version is `0.1.0+7`. Uploads must be built with **Xcode 26** (iOS 26 SDK). After vespers the paper is a lamp (`#E8D8B4`), never OLED. The Seven ribbon is initials, not dots; Back from a Today tap returns to Today. The widget ships the locked seven-slot rotation inside the extension. Sit Rest is a quiet minute without countdown digits. Bless Send is the Word, not the brand. The binary is **iPhone-only** and portrait-only. 988 is on every leaf. `PrivacyInfo.xcprivacy` declares UserDefaults (`CA92.1`) and no tracking. Android `targetSdk` is 36. Privacy copy names the share sheet and 988 dialer. Dean's remaining steps are in `SHIP-READINESS.md`.
 
 No credentials live in this repo. This Linux checkout cannot produce a signed IPA.
 
@@ -19,7 +19,7 @@ No credentials live in this repo. This Linux checkout cannot produce a signed IP
 | Display name | Red Words |
 | iOS floor | 15.0 (Runner and widget) |
 | Device family | iPhone only (`TARGETED_DEVICE_FAMILY = 1`) |
-| Version | `0.1.0+6` in `pubspec.yaml` — bump **+build** on every upload |
+| Version | `0.1.0+7` in `pubspec.yaml` — bump **+build** on every upload |
 | Android applicationId | `com.redwords.red_words` |
 
 ## 1. Once, in Apple Developer

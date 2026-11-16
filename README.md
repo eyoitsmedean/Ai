@@ -8,7 +8,7 @@ This is the existing Ai Gospel / Red Letter corpus. It is not a second app.
 
 ## On a Mac (the ship)
 
-One sitting: **[`docs/MAC-DAY.md`](docs/MAC-DAY.md)**. Version `0.1.0+6`. Archive with **Xcode 26**.
+One sitting: **[`docs/MAC-DAY.md`](docs/MAC-DAY.md)**. Version `0.1.0+7`. What is still Dean's hand is **[`SHIP-READINESS.md`](SHIP-READINESS.md)**. Archive with **Xcode 26**. The book face is EB Garamond (SIL Open Font License, `assets/fonts/OFL.txt`).
 
 - Listing paste: [`docs/STORE-LISTING.md`](docs/STORE-LISTING.md)
 - Runbook: [`TESTFLIGHT.md`](TESTFLIGHT.md)
