@@ -1208,8 +1208,29 @@ body.card-open .silk,
 body.card-open .offline-banner,
 body.card-open .skip-link { display: none !important; }
 body.card-open .print-folio,
+body.card-open .print-quire,
+body.printing .print-folio {
+  --paper: #F4EFE4;
+  --folio: #FBF7EE;
+  --ink: #1B1610;
+  --ink-2: #4A4034;
+  --ink-3: #7A6E5E;
+  --ink-4: #6F6456;
+  --crimson: #8F1D1D;
+  color: var(--ink);
+}
+:root[data-watch="night"] body.card-open .print-folio,
+:root[data-watch="night"] body.card-open .print-quire {
+  --paper: #E8D8B4;
+  --folio: #F3E6C8;
+}
+body.card-open .print-folio:focus,
+body.card-open .print-quire:focus { outline: none; }
+body.card-open .print-folio,
 body.printing .print-folio {
   display: flex !important;
+  position: relative;
+  z-index: 95;
   min-height: 100svh;
   flex-direction: column;
   align-items: center;
@@ -1219,6 +1240,7 @@ body.printing .print-folio {
   background: var(--paper);
 }
 body.card-open .print-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+body.card-open .print-nav { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
 body.card-open .print-help,
 body.printing .print-help { display: block; margin-top: 22px; max-width: 36ch; font-size: 14px; line-height: 1.55; color: var(--ink-3); }
 body.card-open .print-help a,
@@ -1231,7 +1253,8 @@ body.printing .print-kicker {
   text-transform: uppercase;
   color: var(--ink-4);
 }
-body.card-open .print-mark {
+body.card-open .print-mark,
+body.card-open .print-quire .print-mark {
   font-family: var(--display);
   font-style: italic;
   color: var(--crimson);
@@ -1240,7 +1263,7 @@ body.card-open .print-mark {
   border: 1px solid var(--crimson);
   border-radius: 50%;
   display: grid; place-items: center;
-  margin-bottom: 28px;
+  margin: 0 auto 28px;
 }
 body.card-open .print-quote {
   font-family: var(--display);
@@ -1251,6 +1274,7 @@ body.card-open .print-quote {
   max-width: 22ch;
 }
 body.card-open .print-cite {
+  display: block;
   margin-top: 22px;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -1269,10 +1293,13 @@ body.card-open.quire-open .print-folio { display: none !important; }
 body.card-open.quire-open .print-quire,
 body.printing.quire-open .print-quire {
   display: block !important;
+  position: relative;
+  z-index: 95;
   width: min(36rem, calc(100% - 2rem));
   margin: 0 auto;
   padding: 2.4rem 0 4rem;
   background: var(--paper);
+  min-height: 100svh;
 }
 body.card-open.quire-open .quire-lede {
   color: var(--ink-2);
@@ -1288,15 +1315,21 @@ body.card-open.quire-open .quire-leaves { margin-top: 0.4rem; }
   display: block;
   width: 100%;
   text-align: left;
-  border: 0;
-  border-top: 1px dashed rgba(27,22,16,0.16);
-  background: transparent;
+  border: 1px solid rgba(27,22,16,0.12);
+  background: var(--folio);
   color: inherit;
-  padding: 1.05rem 0.15rem;
+  padding: 1.15rem 1.1rem 1rem;
+  margin: 0.7rem 0;
   cursor: pointer;
   font: inherit;
+  border-radius: 2px;
+  box-shadow: var(--shadow);
 }
-.quire-leaf:last-child { border-bottom: 1px dashed rgba(27,22,16,0.16); }
+.quire-leaf .day,
+.quire-leaf .quote,
+.quire-leaf .cite,
+.quire-leaf .help { display: block; }
+.quire-leaf .print-only-mark { display: none; }
 .quire-leaf .day {
   font-family: var(--ui);
   font-size: 0.68rem;
@@ -1310,10 +1343,10 @@ body.card-open.quire-open .quire-leaves { margin-top: 0.4rem; }
   color: var(--crimson);
   font-size: 1.15rem;
   line-height: 1.4;
-  margin-top: 0.35rem;
+  margin-top: 0.45rem;
 }
 .quire-leaf .cite {
-  margin-top: 0.35rem;
+  margin-top: 0.45rem;
   font-family: var(--ui);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
@@ -1321,20 +1354,22 @@ body.card-open.quire-open .quire-leaves { margin-top: 0.4rem; }
   color: var(--ink-3);
 }
 .quire-leaf .help {
-  display: block;
   margin-top: 0.45rem;
   font-family: var(--ui);
   font-size: 0.72rem;
   color: var(--ink-4);
 }
-.quire-leaf.today { background: rgba(143,29,29,0.04); padding-left: 0.7rem; padding-right: 0.7rem; }
+.quire-leaf.today {
+  border-color: rgba(143,29,29,0.28);
+  box-shadow: inset 0 0 0 1px rgba(143,29,29,0.08);
+}
 body.card-open.quire-open .print-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 1.6rem; }
 @media print {
   @page { margin: 22mm 20mm; }
   .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
   .offline-banner, .sheet-overlay, .settings-sheet, .cmdk, .amen,
   .crisis-modal, .toast, .week-ribbon, .seven, .mode-switch, .nav-btn,
-  .skip-link, .titlepage, .print-actions { display: none !important; }
+  .skip-link, .titlepage, .print-actions, .print-nav { display: none !important; }
   .page { position: static !important; opacity: 1 !important; overflow: visible !important; padding: 24px !important; pointer-events: all !important; }
   .folio, body { background: #fff !important; }
   body.printing .shell { display: none !important; }
@@ -1391,7 +1426,10 @@ body.card-open.quire-open .print-actions { display: flex; flex-wrap: wrap; gap: 
   }
   body.printing.quire-open .print-folio { display: none !important; }
   body.printing.quire-open .quire-lede,
-  body.printing.quire-open .print-actions { display: none !important; }
+  body.printing.quire-open .print-actions,
+  body.printing.quire-open .print-quire > .print-mark,
+  body.printing.quire-open .print-quire > .print-kicker,
+  body.printing.quire-open .print-quire > .print-help { display: none !important; }
   body.printing.quire-open .quire-leaf {
     break-after: page;
     page-break-after: always;
@@ -1403,11 +1441,35 @@ body.card-open.quire-open .print-actions { display: flex; flex-wrap: wrap; gap: 
     text-align: center;
     border: 0;
     background: transparent;
+    box-shadow: none;
     padding: 8vh 6vw;
+  }
+  body.printing.quire-open .quire-leaf .print-only-mark {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    margin-bottom: 28px;
+    border: 1px solid #8F1D1D;
+    border-radius: 50%;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    color: #8F1D1D;
+    font-size: 22px;
+  }
+  body.printing.quire-open .quire-leaf .day {
+    margin-bottom: 18px;
+    letter-spacing: .18em;
   }
   body.printing.quire-open .quire-leaf .quote {
     font-size: 22pt;
     max-width: 22ch;
+  }
+  body.printing.quire-open .quire-leaf .cite {
+    margin-top: 22px;
+    letter-spacing: .18em;
+  }
+  body.printing.quire-open .quire-leaf .help {
+    margin-top: 28px;
   }
 }
 
@@ -2120,13 +2182,17 @@ html.sitting .sit-sheet {
 
 <div class="toast" id="toast"></div>
 
-<article class="print-folio" id="print-folio" aria-hidden="true">
-  <div class="print-mark">R</div>
+<article class="print-folio" id="print-folio" aria-hidden="true" role="dialog" aria-labelledby="print-kicker" tabindex="-1">
+  <div class="print-mark" aria-hidden="true">R</div>
   <p class="print-kicker" id="print-kicker">A card for this night · /?card=1</p>
   <p class="print-quote" id="print-quote"></p>
   <p class="print-cite" id="print-cite"></p>
   <p class="print-help" id="print-help">In crisis: <a href="tel:988">988</a> in the United States (call, text, or chat). Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
   <p class="print-foot" id="print-foot">Red Letter · the words He spoke · KJV</p>
+  <div class="print-nav">
+    <button class="ghost" type="button" onclick="turnNightCard(-1)">Earlier</button>
+    <button class="ghost" type="button" onclick="turnNightCard(1)">Later</button>
+  </div>
   <div class="print-actions actions" id="print-actions">
     <button class="cta cta-primary" type="button" onclick="printSitting()">Print</button>
     <button class="ghost" type="button" onclick="sitFromCard()">Sit with this</button>
@@ -2135,9 +2201,9 @@ html.sitting .sit-sheet {
   </div>
 </article>
 
-<article class="print-quire" id="print-quire" aria-hidden="true">
-  <div class="print-mark">R</div>
-  <p class="print-kicker">Seven nights · /?card=week</p>
+<article class="print-quire" id="print-quire" aria-hidden="true" role="dialog" aria-labelledby="quire-kicker" tabindex="-1">
+  <div class="print-mark" aria-hidden="true">R</div>
+  <p class="print-kicker" id="quire-kicker">Seven nights</p>
   <p class="quire-lede">Print once. Cut after each leaf. Tape one where you already stand.</p>
   <p class="print-help">In crisis: <a href="tel:988">988</a> in the United States (call, text, or chat). Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
   <div class="quire-leaves" id="quire-leaves"></div>
@@ -3682,7 +3748,13 @@ document.addEventListener('keydown', e => {
       return;
     }
   }
-  if (e.key === 'Escape') closeSheets();
+  if (e.key === 'Escape') {
+    if (anySheetOn() || document.getElementById('cmdk')?.classList.contains('on')) {
+      closeSheets();
+      e.stopImmediatePropagation();
+    }
+    return;
+  }
   const cmdk = document.getElementById('cmdk');
   if (cmdk && cmdk.classList.contains('on')) {
     if (e.key === 'ArrowDown') { e.preventDefault(); cmdIndex = Math.min(cmdIndex + 1, cmdFiltered.length - 1); syncCmdActive(); }
@@ -4146,8 +4218,17 @@ function fillPrintFolio(card) {
   const named = pack && pack.weekCards().find((c) => c.verse === card.verse);
   document.getElementById('print-quote').textContent = '“' + String(card.quote || '').replace(/^["“]|["”]$/g, '') + '”';
   document.getElementById('print-cite').textContent = (card.verse || '') + '  ·  KJV';
-  document.getElementById('print-kicker').textContent = (named ? named.day + ' · ' : '') + 'a card for this night · /?card=1';
+  document.getElementById('print-kicker').textContent = (named ? named.day + ' · ' : '') + 'a card for this night';
   document.getElementById('print-foot').textContent = 'Red Letter · the words He spoke · KJV';
+}
+
+function syncCardUrl(want) {
+  try {
+    const u = new URL(location.href);
+    if (want == null || want === '') u.searchParams.delete('card');
+    else u.searchParams.set('card', want);
+    history.replaceState({}, '', u.pathname + u.search + u.hash);
+  } catch (_) {}
 }
 
 function paintQuire() {
@@ -4158,6 +4239,7 @@ function paintQuire() {
   leaves.innerHTML = pack.weekCards().map((card) => {
     const on = card.day === today;
     return '<button type="button" class="quire-leaf' + (on ? ' today' : '') + '" data-ref="' + esc(card.verse) + '">' +
+      '<span class="print-only-mark" aria-hidden="true">R</span>' +
       '<span class="day">' + esc(card.day) + (on ? ' · tonight' : '') + '</span>' +
       '<span class="quote">“' + esc(card.quote) + '”</span>' +
       '<span class="cite">' + esc(card.verse) + ' · KJV</span>' +
@@ -4185,6 +4267,9 @@ function openNightQuire() {
   document.getElementById('print-quire').setAttribute('aria-hidden', 'false');
   document.getElementById('print-folio').setAttribute('aria-hidden', 'true');
   document.getElementById('app').setAttribute('aria-hidden', 'true');
+  syncCardUrl('week');
+  const quire = document.getElementById('print-quire');
+  if (quire) quire.focus();
 }
 
 function openNightCard(want) {
@@ -4205,6 +4290,16 @@ function openNightCard(want) {
   document.body.classList.add('card-open');
   document.getElementById('print-folio').setAttribute('aria-hidden', 'false');
   document.getElementById('app').setAttribute('aria-hidden', 'true');
+  syncCardUrl(want === '1' || want === 'true' || want === 'yes' ? '1' : card.verse);
+  document.getElementById('print-folio').focus();
+}
+
+function turnNightCard(delta) {
+  const pack = window.RLA_NIGHT_CARD;
+  if (!pack) return;
+  const from = nightCard && nightCard.verse;
+  const next = pack.neighbor(from, delta);
+  openNightCard(next.verse);
 }
 
 function closeNightCard() {
@@ -4212,6 +4307,7 @@ function closeNightCard() {
   document.body.classList.remove('card-open');
   document.getElementById('print-folio').setAttribute('aria-hidden', 'true');
   document.getElementById('app').removeAttribute('aria-hidden');
+  syncCardUrl(null);
   if (!ls('rla-onboarded')) {
     document.getElementById('onboarding').classList.remove('hidden');
     document.getElementById('app').setAttribute('aria-hidden', 'true');
@@ -4516,9 +4612,21 @@ function bindRituals() {
   const input = document.getElementById('cmdk-input');
   if (input) input.addEventListener('input', () => renderCmdList(input.value));
   document.addEventListener('keydown', (e) => {
-    if (!document.getElementById('lib-folio')?.classList.contains('on')) return;
     const tag = (e.target && e.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (document.body.classList.contains('card-open')) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (anySheetOn()) closeSheets();
+        else closeNightCard();
+        return;
+      }
+      if (!document.body.classList.contains('quire-open')) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); turnNightCard(-1); return; }
+        if (e.key === 'ArrowRight') { e.preventDefault(); turnNightCard(1); return; }
+      }
+    }
+    if (!document.getElementById('lib-folio')?.classList.contains('on')) return;
     if (e.key === 'ArrowLeft') turnLibFolio(-1);
     if (e.key === 'ArrowRight') turnLibFolio(1);
   });

@@ -44,7 +44,19 @@
     return /^(week|quire|all)$/i.test(String(ref || '').trim());
   }
 
-  const api = { DAYS, CARDS, cardForDate, cardFromRef, weekCards, dayName, wantsWeek };
+  function cardAt(index) {
+    const i = ((Number(index) % 7) + 7) % 7;
+    const card = CARDS[i];
+    return { day: DAYS[i], verse: card.verse, quote: card.quote, index: i };
+  }
+
+  function neighbor(verse, delta) {
+    const i = CARDS.findIndex((c) => norm(c.verse) === norm(verse));
+    const from = i < 0 ? new Date().getDay() : i;
+    return cardAt(from + Number(delta || 0));
+  }
+
+  const api = { DAYS, CARDS, cardForDate, cardFromRef, weekCards, dayName, wantsWeek, cardAt, neighbor };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.RLA_NIGHT_CARD = api;
 })(typeof window !== 'undefined' ? window : globalThis);

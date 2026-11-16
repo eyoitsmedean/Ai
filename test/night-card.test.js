@@ -40,6 +40,10 @@ describe('night card', () => {
     assert.deepEqual(week.map((c) => c.day), night.DAYS);
     assert.equal(week[5].verse, 'Matthew 19:14');
     assert.equal(night.dayName(new Date('2026-11-01T08:00:00')), 'Sunday');
+    assert.equal(night.neighbor('John 14:27', 1).verse, 'Matthew 11:28');
+    assert.equal(night.neighbor('John 14:18', 1).verse, 'John 14:27');
+    assert.equal(night.neighbor('John 14:27', -1).verse, 'John 14:18');
+    assert.equal(night.cardAt(5).verse, 'Matthew 19:14');
   });
 
   it('is wired into the folio as a card you can open and print', () => {
@@ -55,6 +59,8 @@ describe('night card', () => {
     assert.match(html, /\?card=week/);
     assert.match(html, /id="print-quire"/);
     assert.match(html, /Print the week/);
+    assert.match(html, /turnNightCard/);
+    assert.match(html, /\.quire-leaf \.day,[\s\S]{0,120}\.quire-leaf \.quote,[\s\S]{0,80}display:\s*block/);
     assert.doesNotMatch(html, /Ask Him/);
   });
 });

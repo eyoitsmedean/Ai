@@ -185,14 +185,29 @@ async function main() {
 
     await page.goto(BASE + '/?card=week', { waitUntil: 'networkidle0' });
     await page.waitForFunction(() => document.body.classList.contains('quire-open') && document.querySelectorAll('.quire-leaf').length === 7, { timeout: 15000 });
-    const week = await page.evaluate(() => ({
-      days: [...document.querySelectorAll('.quire-leaf .day')].map((el) => el.textContent),
-      cites: [...document.querySelectorAll('.quire-leaf .cite')].map((el) => el.textContent).join(' '),
-      help: document.querySelector('#print-quire .print-help').innerText,
-    }));
+    const week = await page.evaluate(() => {
+      const leaf = document.querySelector('.quire-leaf');
+      const q = leaf.querySelector('.quote').getBoundingClientRect();
+      const c = leaf.querySelector('.cite').getBoundingClientRect();
+      const d = leaf.querySelector('.day').getBoundingClientRect();
+      return {
+        days: [...document.querySelectorAll('.quire-leaf .day')].map((el) => el.textContent),
+        cites: [...document.querySelectorAll('.quire-leaf .cite')].map((el) => el.textContent).join(' '),
+        help: document.querySelector('#print-quire .print-help').innerText,
+        stacked: c.top >= q.bottom - 1 && q.top >= d.bottom - 1,
+      };
+    });
     assert(/Sunday/.test(week.days[0]) && /Saturday/.test(week.days[6]), 'week days missing');
     assert(/Matthew 19:14/.test(week.cites), 'children saying missing from the week');
     assert(/988/.test(week.help), 'week must name 988');
+    assert(week.stacked, 'week leaf must stack day, quote, then citation');
+
+    await page.goto(BASE + '/?card=Matthew%2011:28', { waitUntil: 'networkidle0' });
+    await page.waitForFunction(() => /Come unto me/i.test(document.getElementById('print-quote').textContent), { timeout: 8000 });
+    await page.keyboard.press('ArrowRight');
+    await page.waitForFunction(() => /no thought for the morrow/i.test(document.getElementById('print-quote').textContent), { timeout: 8000 });
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !document.body.classList.contains('card-open'), { timeout: 8000 });
   });
 
   await check('no page errors', async () => {
