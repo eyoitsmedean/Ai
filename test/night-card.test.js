@@ -55,8 +55,9 @@ describe('night card', () => {
     assert.match(folio, /href="tel:988"/);
     assert.match(folio, /findahelpline\.com/);
     assert.match(html, /openNightCard/);
-    assert.match(html, /\?card=1/);
-    assert.match(html, /\?card=week/);
+    assert.match(html, /q\.get\('card'\)/);
+    assert.match(html, /openNightCard\('week'\)/);
+    assert.match(html, /syncCardUrl\('week'\)/);
     assert.match(html, /id="print-quire"/);
     assert.match(html, /Print the week/);
     assert.match(html, /turnNightCard/);

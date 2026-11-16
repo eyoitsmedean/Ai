@@ -1239,7 +1239,17 @@ body.printing .print-folio {
   padding: 8vh 6vw calc(8vh + env(safe-area-inset-bottom, 0px));
   background: var(--paper);
 }
-body.card-open .print-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+body.card-open .print-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  justify-items: stretch;
+  max-width: 22rem;
+  width: 100%;
+  margin: 28px auto 0;
+}
+body.card-open .print-actions .cta,
+body.card-open .print-actions .ghost { width: 100%; margin: 0; }
 body.card-open .print-nav { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
 body.card-open .print-help,
 body.printing .print-help { display: block; margin-top: 22px; max-width: 36ch; font-size: 14px; line-height: 1.55; color: var(--ink-3); }
@@ -1363,7 +1373,20 @@ body.card-open.quire-open .quire-leaves { margin-top: 0.4rem; }
   border-color: rgba(143,29,29,0.28);
   box-shadow: inset 0 0 0 1px rgba(143,29,29,0.08);
 }
-body.card-open.quire-open .print-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 1.6rem; }
+.quire-leaf:hover,
+.quire-leaf:focus-visible {
+  border-color: rgba(143,29,29,0.4);
+  outline: none;
+}
+body.card-open.quire-open .print-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+body.card-open.quire-open .print-actions .cta,
+body.card-open.quire-open .print-actions .ghost { width: auto; }
 @media print {
   @page { margin: 22mm 20mm; }
   .grain, .wash, .silk, .rail, .dock, .mast, .composer, .cta-row, .actions,
@@ -2184,7 +2207,7 @@ html.sitting .sit-sheet {
 
 <article class="print-folio" id="print-folio" aria-hidden="true" role="dialog" aria-labelledby="print-kicker" tabindex="-1">
   <div class="print-mark" aria-hidden="true">R</div>
-  <p class="print-kicker" id="print-kicker">A card for this night · /?card=1</p>
+  <p class="print-kicker" id="print-kicker">A card for this night</p>
   <p class="print-quote" id="print-quote"></p>
   <p class="print-cite" id="print-cite"></p>
   <p class="print-help" id="print-help">In crisis: <a href="tel:988">988</a> in the United States (call, text, or chat). Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
