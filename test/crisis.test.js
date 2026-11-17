@@ -254,3 +254,19 @@ describe('death verses after a self-harm disclosure', () => {
     assert.equal(unsafeSaying('self', 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.'), false);
   });
 });
+
+describe('families a second blind set found missing (tuned, Nov 2026)', () => {
+  const { rows } = require('./fixtures/crisis-corpus.json');
+  const fam = rows.filter((r) => /^tuned Nov 17: missed families/.test(r.source));
+
+  it('reaches help for nearly all of them, and alarms on none of their look-alikes', () => {
+    const risky = fam.filter((r) => r.expect === 'crisis' || r.expect === 'danger');
+    const caught = risky.filter((r) => assessCrisis(r.text)).length;
+    assert.ok(risky.length >= 40 && caught / risky.length >= 0.9, `${caught}/${risky.length}`);
+    assert.deepEqual(fam.filter((r) => r.expect === 'none' && assessCrisis(r.text)).map((r) => r.text), []);
+  });
+
+  it('reads a lock-in threat by a drinking partner as danger', () => {
+    assert.equal(assessCrisis('she gets drunk and locks me in and says shell kill me if i call anyone')?.kind, 'danger');
+  });
+});

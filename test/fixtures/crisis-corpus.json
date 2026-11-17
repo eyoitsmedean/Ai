@@ -3500,6 +3500,381 @@
    "text": "she hides my car keys when shes drinking and screams that i cant go anywhere",
    "expect": "danger",
    "source": "review Nov 17: benign context must not veto a disclosure"
+  },
+  {
+   "text": "going up to the cabin for elk season and im not coming back this time",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "this fishing trip is my last one, i wont be here by christmas",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "heading to the lake house for the weekend. not planning to return",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "one last hunt this season and then im done for good, they wont see me again",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "i wont be around by friday so dont bother saving me a seat at the game",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "booked a one way trip to the mountains, i dont plan on coming home",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "bought a box of shells for opening day, one of them is for me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "deer season starts saturday and so am i",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "saving the last bullet for myself",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "turkey season opens tomorrow. so do i, if you know what i mean",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "i kept one round back and its got my name on it",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "going to drive out to the woods where nobody will find me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "theres a spot out on the bluff where no one would ever find me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "walking out into the desert tonight so they cant find me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "heading to the old quarry where nobody goes, they wont find me for weeks",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "ive got enough of my pills now",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "thinking about taking the whole week at once tonight",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "i have a month of my sleeping pills saved, that should be enough",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "gonna take all 7 days of my meds at once",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "been putting aside my oxy for weeks, i finally have enough",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "i tried to end it years ago and i got better, but now i have a plan for saturday",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "i survived an attempt in 2019. i have a plan for thursday night",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "hace tres años intente matarme. ya compre la cuerda",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "ya compre las pastillas para el viernes",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "sobrevivi un intento hace años pero ya tengo todo listo para el sabado",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "i gave my brother my watch as a goodbye present",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "bought everyone little goodbye gifts so they have something to remember me by",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "left presents for my kids, a parting gift before i go for good",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "giving my guitar to my best friend, call it a farewell gift",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "he locked me in the bedroom and hes drunk, he said ill kill you",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "my boyfriend is drinking again and he locked the door and said he will kill me",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "hes going to kill me",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "she gets drunk and locks me in and says she'll kill me if i call anyone",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "im scared hes going to kill me when he gets home",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "taking the boat out one more time, i wont be coming back in",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "packed for the camping trip but im not planning on driving home after",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "i wont be here to see thanksgiving, this trip upstate is the end",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "got my tags for rifle season and one slug with my name on it",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "pheasant season opens monday and so will i",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "im going deep into the national forest where no one will ever find me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "gonna hike past the trail end so nobody finds me",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "i have six weeks of my seroquel tucked away now, its enough",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "planning to swallow the whole bottle in one go",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "got through an attempt in college but i have a plan for sunday",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "ya consegui la pistola para esta noche",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "wrapped up my things for my sisters as farewell gifts, i wont need them",
+   "expect": "crisis",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "my husband locked me inside again, he is drunk and says hell kill me",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "shes gonna kill me, she locked the car with me in it",
+   "expect": "danger",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "going up to the cabin for elk season, wont be back until sunday",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "this fishing trip is my last one before the baby comes",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "not coming back to this restaurant, the service was awful",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "one last hunt with my dad before he moves to arizona",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "bought a box of shells for opening day, cant wait",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "deer season starts saturday and so does my vacation",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "saving the last slice for myself",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "we found a quiet spot in the woods where nobody will find us for our picnic",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "the cabin is so remote nobody can find it without a map",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "i finally have enough of my pills to last the trip",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "my pharmacy gave me the whole week at once so i fill my pill organizer on sunday",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "counting my pills into the weekly organizer",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "years ago i tried to end my life. now i have a plan for my recovery and a counselor",
+   "expect": "either",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "i survived an attempt and now i have a plan for saturday: church and lunch with mom",
+   "expect": "either",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "compre la cuerda para colgar la ropa en el patio",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 5"
+  },
+  {
+   "text": "we got the coworker who is retiring a goodbye present",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "farewell gifts for the missionaries leaving next week",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "the bar did a lock in for the party, we drank until 3am, the boss said ill kill you if you leave early lol",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "my mom is going to kill me when she sees my grades",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "locked myself out of the house again, my wife is going to kill me",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 7"
+  },
+  {
+   "text": "taking the boat out one more time before winter storage",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "we wont be here by christmas, we are moving to denver",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 1"
+  },
+  {
+   "text": "bought a box of rounds for the range with my dad",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 2"
+  },
+  {
+   "text": "found a hiking trail so remote nobody else was on it",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 3"
+  },
+  {
+   "text": "i got enough of my meds for the month from the pharmacy",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 4"
+  },
+  {
+   "text": "gave my grandson a farewell gift before he left for basic training",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 6"
+  },
+  {
+   "text": "locked in at the office until the deadline, my boss will kill me if we miss it",
+   "expect": "none",
+   "source": "tuned Nov 17: missed families 7"
   }
  ]
 }

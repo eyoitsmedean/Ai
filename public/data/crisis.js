@@ -199,7 +199,7 @@
     /\bis it (?:a sin|wrong|unforgivable) (?:if|to) (?:i |someone |a person )?(?:end|ends|take|takes|stop|stops|kill|kills|die|dies)\b/,
     /^(?!.*\b(?:move|moving|trip|wedding|estate sale|divorce|deploy\w*)\b).*\b(?:gave|giving|given) (?:away )?my \w+ to\b.*\b(?:settled|taken care of|in order|wont need|last|goodbye)\b/,
     /^(?!.*\b(?:move|moving|trip|wedding|vacation|surgery|tax\w*|deploy\w*)\b).*\b(?:have|got|get|getting) everything (?:settled|in order|taken care of)\b/,
-    new RegExp(`\\benough (?:of )?(?:my |the |these |those |his |her )?${P}\\b(?! for (?:the|a|our|my) (?:trip|week|month|vacation))`),
+    new RegExp(`\\benough (?:of )?(?:my |the |these |those |his |her )?${P}\\b(?! (?:to last|for (?:the|a|our|my) (?:trip|week|month|vacation)))`),
     /\bgo quiet(?:ly)?\b.*\b(?:pills|meds|for good|forever)\b|\b(?:pills|meds)\b.*\bgo quiet(?:ly)?\b/,
     /\bworth more dead\b/,
     /\binsurance\b.*\b(?:if (?:something|anything) (?:happened|happens|were to happen) to me|if i (?:was|were) gone|than (?:with )?me|than i am alive)\b/,
@@ -441,6 +441,47 @@
 
   const OTHER_ES2 = [/\bse quiere (?:matar|morir)\b/];
 
+  // Families a second blind set found missing (Nov 2026). Each cue is a
+  // pattern (finality + self, concealment + remote place, stockpile +
+  // quantity, a dated plan, means bought), not one sentence.
+  const DAY = '(?:mon|tues|wednes|thurs|fri|satur|sun)day';
+  const SELF_EN3 = [
+    // finality about oneself, often tied to a trip, a hobby or a season
+    /\b(?:im|i am|i|ill|i will|im just) (?:not|never) (?:coming|going|gonna come|going to come) (?:back|home)\b(?! (?:to|until|till|for|before|after|from work|from school)\b)/,
+    /\b(?:dont|do not|not|no) (?:plan(?:ning)?|intend(?:ing)?|plans) (?:on|to) (?:coming back|come back|coming home|come home|going back|go back|returning|return)\b(?! (?:to|until|till|for)\b)/,
+    new RegExp(`(?<!\\b(?:we|they|you|he|she|it|kids|family) )\\b(?:i )?(?:wont|will not|probably wont|might not) be (?:here|around|alive) (?:by|to see|come|after|for) (?:the |this |next )?(?:${DAY}|christmas|thanksgiving|easter|new year\\w*|the weekend|tomorrow|morning|spring|summer|winter|then|the end of)\\b`),
+    /\b(?:wont|will not|will never|never going to|never gonna) (?:ever )?see me again\b/,
+    /\bbefore i (?:go|leave|am gone|m gone|im gone) (?:for good|forever|for the last time)\b/,
+    /\bmy last (?:trip|hunt|ride|drive|cast|season|run|sunset|weekend|christmas)\b.*\b(?:for good|for ever|forever|not coming back|wont be (?:here|around|back)|done with (?:it all|everything|life))\b/,
+    // a round or bullet pointed at oneself
+    /\b(?:rounds?|bullets?|shells?|cartridges?|slugs?)\b.{0,50}\b(?:for me|for myself|(?:has|got|with|have) my name on it)\b/,
+    /\b(?:season|opening day|the hunt)\b.{0,40}\b(?:opens|starts|begins|is)\b.{0,30}\bso (?:am|do|will) i\b/,
+    // concealment: going somewhere no one will find you
+    /(?=.*\b(?:woods|forest|desert|bluff|cliff|quarry|lake|river|mountains?|canyon|field|swamp|middle of nowhere|out there|backcountry|remote|where (?:no ?one|nobody) (?:goes|will look|looks))\b).*\b(?:no ?one|nobody|they|people|anyone|no body)\b(?: \w+){0,2} (?:will|would|wont|cant|can not|could|ever|never)(?: \w+){0,2} (?:find|found) me\b/,
+    // stockpile + quantity, without the word die
+    new RegExp(`(?=.*\\b${P}\\b).*\\b(?:have|got|saved|stashed|collected|finally have|now have)\\b.{0,30}\\benough\\b(?!.{0,25}\\b(?:to last (?:the|a|my|our|until|till|through)|for (?:the|a|our|my) (?:trip|week|month|vacation|refill))\\b)(?! (?:money|time)\\b)`),
+    new RegExp(`\\b(?:take|taking|took|swallow\\w*|down|downing)\\b.{0,40}\\b(?:whole|entire|full|all|every|\\d+ days|a (?:week|month)s?)\\b.{0,40}\\b(?:at once|all at once|in one go|at one time)\\b`),
+    new RegExp(`\\b(?:putting|put|setting|set|squirrel\\w*|stash\\w*|hid\\w*|hoard\\w*) (?:aside |away |back )?(?:some of )?(?:my |his |her )?${P}\\b`),
+    // a dated plan
+    new RegExp(`\\b(?:have|got|made|making) (?:a|the|my) plan (?:for|on) (?:this |next )?(?:${DAY}|tonight|tomorrow|the weekend|friday night)\\b`),
+    // gifts as goodbyes
+    // (only this weak cue steps aside when the gift is for someone else who is leaving)
+    /^(?!.*\b(?:retir\w*|moving away|leaving (?:for|next|on|to)|(?:he|she|they) (?:left|leaves|is leaving|are leaving|went)|missionar\w*|graduat\w*|deploy\w*|basic training|coworker|party|shower|wedding)\b).*\b(?:goodbye|farewell|parting) (?:presents?|gifts?)\b/,
+    /\bsomething to remember me by\b/,
+  ];
+
+  const SELF_ES3 = [
+    /\b(?:ya )?(?:compre|consegui|tengo|traje) (?:la |una |el |un |las |unas )?(?:cuerda|soga|pistola|arma|veneno|navaja)\b(?! para (?:colgar|tender|el patio|el jardin|acampar|el barco|la tienda|el trabajo|cazar)\b)/,
+    new RegExp(`\\b(?:compre|consegui|junte|guarde|ya tengo) (?:las |todas las |unas |suficientes )?pastillas (?:para (?:el |la |esta )?(?:lunes|martes|miercoles|jueves|viernes|sabado|domingo|noche|manana)|suficientes)\\b`),
+    /\b(?:intente (?:matarme|quitarme la vida|suicidarme)|un intento|sobrevivi)\b.*\b(?:tengo un plan|todo (?:listo|preparado) para|ya compre|ya tengo)\b/,
+  ];
+
+  const DANGER_EN3 = [
+    /\b(?:lock|locks|locked|locking) me (?:in|inside|in the \w+)\b/,
+    /\b(?:hell|shell|theyll|he will|she will|they will|hes going to|shes going to|hes gonna|shes gonna|he is going to|she is going to)\s+(?:\w+ )?kill me\b(?! when (?:he|she|they) (?:sees?|finds? out|hears?))/,
+    new RegExp(`\\b${ABUSER} (?:said|says|told me|yelled|screamed|keeps saying|threatened)\\b.{0,20}\\b(?:ill|i will|im going to|im gonna) kill you\\b`),
+  ];
+
   const DANGER_ES2 = [
     /\bme sigue a todos lados\b/,
     /\bme ahorco\b|\bme estrangulo\b/,
@@ -451,7 +492,7 @@
   // Past and recovered: a testimony is not a crisis unless something is
   // happening now. Present-tense markers keep a real disclosure live.
   const RECOVERED = /\b(?:\w+ (?:years?|months?) ago|years? back|used to|in (?:high school|\d+th grade|college)|been clean|im (?:doing )?(?:better|in a good place) now|doing better now|got baptized|testimony|found me in time|god (?:kept|brought|pulled) me|thank god|wanna thank god|want to thank god)\b/;
-  const PRESENT = /\b(?:tonight|right now|rn|again|anymore|these days|lately|this week|keep (?:looking|thinking|counting)|about to|going to|gonna|still (?:want|do|think|cut)|next time)\b/;
+  const PRESENT = /\b(?:tonight|right now|rn|again|anymore|these days|lately|this week|keep (?:looking|thinking|counting)|about to|going to|gonna|still (?:want|do|think|cut)|next time|(?:have|got|made) a plan for|todo listo para|ya compre)\b/;
   // Talking about someone who died by suicide, or a song, is not a disclosure.
   const ABOUT_OTHERS = /\b(?:died|passed) (?:by suicide|that way)\b|\b(?:dad|mom|father|mother|uncle|aunt|friend|brother|sister|cousin|son|daughter|grandpa|grandma)\b.*\b(?:died by|took (?:his|her|their) (?:own )?life|killed (?:himself|herself))\b/;
   const FIRST_PERSON_RISK = /\b(?:for me|i want|i just want|i wanna|i keep|im going|myself|my own life|me too)\b/;
@@ -495,7 +536,7 @@
       t = t.replace(/\btook my (?:car )?keys\b/g, ' ');
     }
     // Checking someone else's pill organizer.
-    if (/\bmake sure (?:she|he|they) (?:took|takes|take|has|had)\b|\b(?:grandmas?|grandpas?|grandmothers?|grandfathers?|moms?|dads?|mothers?|fathers?|her|his|their|the kids|patients?) (?:weekly |daily )?(?:pill ?box|pill organizer|organizer)\b/.test(t) && !selfMark && !/\benough\b/.test(t)) {
+    if (/\binto (?:the|my|her|his) (?:weekly |daily )?(?:pill ?box|pill organizer|organizer)\b|\bmake sure (?:she|he|they) (?:took|takes|take|has|had)\b|\b(?:grandmas?|grandpas?|grandmothers?|grandfathers?|moms?|dads?|mothers?|fathers?|her|his|their|the kids|patients?) (?:weekly |daily )?(?:pill ?box|pill organizer|organizer)\b/.test(t) && !selfMark && !/\benough\b/.test(t)) {
       t = t.replace(/\bcounting\b/g, ' ');
     }
     // A Spanish testimony of survival, like the English past-tense guard,
@@ -507,14 +548,14 @@
     const past = guarded(t);
     // The writer's own life first, then sexual violence, then someone else's
     // life, then other danger. Language follows the words that matched.
-    if (!past && (hit(SELF_ES) || hit(SELF_ES2))) return { kind: 'self', lang: 'es' };
-    if (!past && (hit(SELF_EN) || hit(SELF_EN2))) return { kind: 'self', lang: 'en' };
+    if (!past && (hit(SELF_ES) || hit(SELF_ES2) || hit(SELF_ES3))) return { kind: 'self', lang: 'es' };
+    if (!past && (hit(SELF_EN) || hit(SELF_EN2) || hit(SELF_EN3))) return { kind: 'self', lang: 'en' };
     if (hit(ASSAULT_ES)) return { kind: 'assault', lang: 'es' };
     if (hit(ASSAULT_EN) || hit(ASSAULT_EN2)) return { kind: 'assault', lang: 'en' };
     if (!past && (hit(OTHER_ES) || hit(OTHER_ES2))) return { kind: 'other', lang: 'es' };
     if (!past && (hit(OTHER_EN) || hit(OTHER_EN2))) return { kind: 'other', lang: 'en' };
     if (hit(DANGER_ES) || hit(DANGER_ES2)) return { kind: 'danger', lang: 'es' };
-    if (hit(DANGER_EN) || hit(DANGER_EN2)) return { kind: 'danger', lang: 'en' };
+    if (hit(DANGER_EN) || hit(DANGER_EN2) || hit(DANGER_EN3)) return { kind: 'danger', lang: 'en' };
     return null;
   }
 
