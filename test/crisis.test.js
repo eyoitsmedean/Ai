@@ -222,3 +222,26 @@ describe('spellings that slip past a filter', () => {
     }
   });
 });
+
+describe('benign context never vetoes a disclosure', () => {
+  const { rows } = require('./fixtures/crisis-corpus.json');
+  const probes = rows.filter((r) => /^review Nov 17/.test(r.source));
+
+  it('reaches the right door for every hunting, pill-box, gratitude and drinking probe', () => {
+    assert.ok(probes.length >= 17, 'review probes missing from the corpus');
+    for (const r of probes) {
+      const got = assessCrisis(r.text);
+      const want = r.expect === 'danger' ? ['danger', 'assault'] : ['self', 'other'];
+      assert.ok(got && want.includes(got.kind), `${r.expect}: ${r.text} -> ${JSON.stringify(got)}`);
+    }
+  });
+
+  it('still lets the narrow benign phrases stand', () => {
+    for (const text of [
+      'deer season opens saturday and i cleaned my rifle tonight. any verses about creation',
+      'my friend took my car keys because i had two beers, glad he did',
+      'counting the pills in grandmas weekly organizer to make sure she took them all',
+      'hace cinco años intente quitarme la vida pero Dios me rescato y hoy estoy bien, quiero dar gracias',
+    ]) assert.equal(assessCrisis(text), null, text);
+  });
+});

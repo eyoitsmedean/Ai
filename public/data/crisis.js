@@ -158,8 +158,8 @@
     /\bhow long does it take to (?:bleed out|die|drown|suffocate)\b/,
     /\bwhat floor\b.*\b(?:work|die|enough)\b/,
     /\bways to (?:die|kill (?:myself|yourself)|end it)\b/,
-    /^(?!.*\b(?:deer|hunting|hunt|season|elk|duck|turkey|range|target practice)\b).*\b(?:bought|got|have|holding|loaded|cleaning|cleaned|clean) (?:a|my|the) (?:gun|rope|pistol|rifle|service pistol|shotgun|noose)\b.*\b(?:tonight|looking at it|know what|going to do|every night|in front of me|on the table|ready|loaded)\b/,
-    /^(?!.*\b(?:deer|hunting|hunt|season|elk|duck|turkey|range|target practice)\b).*\b(?:gun|pistol|rifle|rope|noose)\b.*\b(?:loaded|in front of me|on the table|keep looking at it|tonight)\b/,
+    /\b(?:bought|got|have|holding|loaded|cleaning|cleaned|clean) (?:a|my|the) (?:gun|rope|pistol|rifle|service pistol|shotgun|noose)\b.*\b(?:tonight|looking at it|know what|going to do|every night|in front of me|on the table|ready|loaded)\b/,
+    /\b(?:gun|pistol|rifle|rope|noose)\b.*\b(?:loaded|in front of me|on the table|keep looking at it|tonight)\b/,
     /\b(?:walk|walking|drive|driving|jump|jumping|step|stepping) (?:into|in front of|off|from) (?:the |a |an )?(?:lake|river|sea|ocean|oncoming traffic|traffic|train|bridge|building|roof|cliff|highway)\b/,
     /\bno guardrail\b/,
     /\bcar running\b.*\bgarage\b|\bgarage\b.*\bcar running\b/,
@@ -264,7 +264,7 @@
     /\bafraid for my life\b/,
     /\b(?:dont|do not|no longer|never) feel safe (?:at home|with (?:him|her|them|my \w+)|in my (?:own )?home|anymore)\b/,
     /\bnot safe (?:at home|with (?:him|her|them)|in my (?:own )?home)\b/,
-    /^(?!.*\b(?:beers?|drinks|drunk|drinking|glad (?:he|she|they) did)\b).*\b(?:took|takes|hides|hid|destroyed) my (?:passport|phone|keys|car keys|id|documents|money)\b/,
+    /\b(?:took|takes|hides|hid|destroyed) my (?:passport|phone|keys|car keys|id|documents|money)\b/,
     /\b(?:wont|will not|doesnt|does not) let me (?:leave|go out|see my|have money|out)\b/,
     /\blocked me (?:in|out)\b/,
     /\bcontrols (?:all )?(?:the |my )?money\b.*\b(?:checks my phone|wont let me|screams|calls me)\b/,
@@ -364,7 +364,7 @@
     /\bwould raise (?:them|my kids|him|her) better\b/,
     /\b(?:forgive|into heaven|go to heaven)\b.*\b(?:takes? (?:himself|herself|themselves) out|takes? (?:his|her|their|my) (?:own )?life|kill(?:s|ed)? (?:himself|herself|myself))\b.*\b(?:asking for me|for me|before|if i)\b/,
     /\bwant to go be with (?:him|her|them|my \w+) (?:and (?:jesus|god|the lord)|in heaven|again)\b/,
-    new RegExp(`^(?!.*\\b(?:organizer|pill ?box|make sure (?:she|he|they) (?:took|takes|take))\\b).*\\bcounting (?:them|the ${P2}|my ${P2}|the pills|out)\\b`),
+    new RegExp(`\\bcounting (?:them|the ${P2}|my ${P2}|the pills|out)\\b`),
     new RegExp(`\\bhow (?:much|many) (?:of )?(?:my |the |\\w+ )?${P2} (?:does it take|it takes|it would take|would it take|is too (?:much|many))\\b`),
     /\b(?:hurts the least|least painful|painless way|quickest way to go|fastest way to go)\b/,
     /\b(?:already|just) (?:took|swallowed|taken) (?:them|it all|all of them|all of it|the (?:whole )?(?:bottle|pills))\b|\btook them (?:like )?\d+ minutes ago\b/,
@@ -372,7 +372,7 @@
     new RegExp(`\\b(?:drive|driving|drove|jump|jumping) (?:the truck |the car |my car |my truck )?off (?:the|an|a) ${PLACE}\\b`),
     new RegExp(`\\blooked up the (?:tallest|highest) (?:\\w+ )?${PLACE}\\b`),
     /\bmake it look like an accident\b/,
-    new RegExp(`^(?!.*\\b(?:deer|elk|duck|turkey|hunting) season\\b).*\\b(?:bought|got|have|loaded|load|cleaning|cleaned) (?:a|my|the|one) (?:${GUN}|round|bullet)\\b.*\\b(?:not for (?:protection|hunting|the range)|sat with it|in my mouth|till sunrise|tonight|looking at it)\\b`),
+    new RegExp(`\\b(?:bought|got|have|loaded|load|cleaning|cleaned) (?:a|my|the|one) (?:${GUN}|round|bullet)\\b.*\\b(?:not for (?:protection|hunting|the range)|sat with it|in my mouth|till sunrise|tonight|looking at it)\\b`),
     new RegExp(`\\bloaded (?:the|my|one) (?:${GUN}|round)\\b`),
     /\b(?:one|single) trigger pull\b|\bpull the trigger\b(?! on)|\beat(?:ing)? my gun\b/,
     /\b(?:got|have|bought|tied) (?:the|a) (?:rope|noose)\b(?! for)/,
@@ -469,6 +469,12 @@
 
   // --- assess ----------------------------------------------------------------
 
+  // Words that keep a message in crisis whatever benign context sits beside them.
+  const SELF_MARK = /\b(?:for me|on me|on myself|myself|in front of me|on the table|in my mouth|to my head|under my chin|or ever|ever again|anymore|any more|for good|goodbye|not coming back|end (?:it|this|things|my life)|sat with it|sitting with it|looking at it|staring at it|kill\w*|die|dying|dead|suicid\w*|last (?:time|night|hunt|season)|miss me|better off|burden|enough)\b/;
+  const HUNT = /\b(?:deer|elk|duck|turkey|pheasant|dove|goose|bird|hunting) season\b|\btarget practice\b|\bat the range\b|\bgoing hunting\b/;
+  // Being held or controlled: a benign reading of "took my keys" never applies.
+  const CONTROL_MARK = /\b(?:cant|cannot|wont let me|will not let me|not allowed to|dont let me) (?:leave|go|get out|drive|call)\b|\b(?:scared|afraid|locked|threat\w*|hit\w*|hurt\w*|yell\w*|scream\w*)\b|\b(?:he|she|they) (?:was|were|is|are|been) (?:drinking|drunk)\b/;
+
   function assessCrisis(text) {
     let t = normalize(text);
     if (!t.trim()) return null;
@@ -478,8 +484,25 @@
     t = t.replace(/\b(?:mom|dad|mother|father|parents|wife|husband|boss|teacher|coach)(?: is| are)? (?:gonna|going to) kill me when (?:she|he|they) (?:sees?|finds? out|hears?)\b/g, ' ');
     t = t.replace(/\bstarv\w* myself of\b/g, ' ');
     if (ILLNESS.test(t)) t = t.replace(/\b(?:might|may|wont|will not) (?:not )?be (?:around|here) (?:much longer|for long)\b/g, ' ');
-    // A Spanish testimony of survival, like the English past-tense guard.
-    t = t.replace(/\bhace \w+ (?:anos|meses) (?:intente|trate de|quise) quitarme la vida\b(?=.*\b(?:hoy estoy bien|me rescato|me salvo|gracias)\b)/g, ' ');
+    // Benign context is scrubbed narrowly, never by a whole-message veto: a
+    // self-reference, means or intent anywhere in the message keeps every cue.
+    const selfMark = SELF_MARK.test(t);
+    // A hunter readying a rifle for the season ("deer season opens saturday
+    // and i cleaned my rifle tonight"): only the cleaning phrase goes.
+    if (HUNT.test(t) && !selfMark) t = t.replace(/\b(?:clean(?:ed|ing)?|oil(?:ed|ing)?|sight(?:ed|ing)? in) (?:my|the|a|his|her) (?:gun|rifle|shotgun|pistol)(?: tonight)?\b/g, ' ');
+    // A friend taking the writer's keys because the writer had been drinking.
+    if (/\bbecause i (?:had|was|d had|got) (?:\w+ ){0,3}(?:beers?|drinks?|drunk|drinking)\b|\bglad (?:he|she|they) did\b/.test(t) && !selfMark && !CONTROL_MARK.test(t)) {
+      t = t.replace(/\btook my (?:car )?keys\b/g, ' ');
+    }
+    // Checking someone else's pill organizer.
+    if (/\bmake sure (?:she|he|they) (?:took|takes|take|has|had)\b|\b(?:grandmas?|grandpas?|grandmothers?|grandfathers?|moms?|dads?|mothers?|fathers?|her|his|their|the kids|patients?) (?:weekly |daily )?(?:pill ?box|pill organizer|organizer)\b/.test(t) && !selfMark && !/\benough\b/.test(t)) {
+      t = t.replace(/\bcounting\b/g, ' ');
+    }
+    // A Spanish testimony of survival, like the English past-tense guard,
+    // unless the same message turns to doing it again.
+    if (!/\b(?:otra vez|de nuevo|volver a|quiero hacerlo|voy a hacerlo|lo voy a hacer|quiero morir\w*|esta noche)\b/.test(t)) {
+      t = t.replace(/\bhace \w+ (?:anos|meses) (?:intente|trate de|quise) quitarme la vida\b(?=.*\b(?:hoy estoy bien|me rescato|me salvo)\b)/g, ' ');
+    }
     const hit = (list) => list.some((re) => re.test(t));
     const past = guarded(t);
     // The writer's own life first, then sexual violence, then someone else's
