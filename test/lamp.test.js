@@ -48,6 +48,7 @@ test('the page loads the Lamp before first paint and the worker keeps it', () =>
   assert.match(html, /RedLetterLamp\.applyLamp/);
   assert.match(html, /Darker paper after 9/);
   assert.match(html, /function paintLamp/);
-  assert.match(sw, /rla-v22/);
+  // Bumped at least to the version that first precached this file (v22).
+  assert.ok(Number((sw.match(/const CACHE = 'rla-v(\d+)'/) || [])[1]) >= 22, 'CACHE was not bumped');
   assert.match(sw, /data\/lamp\.js/);
 });

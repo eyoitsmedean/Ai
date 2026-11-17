@@ -58,6 +58,7 @@ test('the page asks only while sitting or hearing, and the worker keeps the file
   assert.match(html, /releaseScreen\('sit'\)/);
   assert.match(html, /releaseScreen\('hear'\)/);
   assert.match(html, /Listening — the screen stays lit/);
-  assert.match(sw, /rla-v22/);
+  // Bumped at least to the version that first precached this file (v22).
+  assert.ok(Number((sw.match(/const CACHE = 'rla-v(\d+)'/) || [])[1]) >= 22, 'CACHE was not bumped');
   assert.match(sw, /data\/wake\.js/);
 });
