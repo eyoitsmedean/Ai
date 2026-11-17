@@ -15,6 +15,7 @@ const PRECACHE = [
   'data/watch.js',
   'data/lamp.js',
   'data/wake.js',
+  'data/office.js',
   'data/paths.js',
   'icon-192.png',
   'icon-512.png',
