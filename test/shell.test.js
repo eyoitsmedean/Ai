@@ -33,3 +33,15 @@ test('the room never sells and never pretends', () => {
   assert.doesNotMatch(html, /\bPlus\b/, 'no "Plus" tier');
   assert.doesNotMatch(html, /\/week\b|weekly/i, 'never a weekly price');
 });
+
+test('a crisis line on every sheet that covers the screen, and onboarding keeps it', () => {
+  for (const id of ['sit-sheet', 'blessing-sheet', 'share-sheet']) {
+    const start = html.indexOf(`id="${id}"`);
+    assert.ok(start > 0, `${id} missing`);
+    const markup = html.slice(start, html.indexOf('</aside>', start));
+    assert.match(markup, /href="tel:988"/, `${id} has no 988`);
+    assert.match(markup, /findahelpline\.com/, `${id} has no helpline`);
+  }
+  const need = html.slice(html.indexOf('function showNeedStep'), html.indexOf('function chooseNeed'));
+  assert.doesNotMatch(need, /tp-trust/, 'the need step must not hide the crisis line');
+});
