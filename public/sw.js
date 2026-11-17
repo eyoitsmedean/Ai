@@ -12,6 +12,7 @@ const PRECACHE = [
   'data/crisis.js',
   'data/curated.js',
   'data/forty.js',
+  'data/watch.js',
   'data/paths.js',
   'icon-192.png',
   'icon-512.png',
