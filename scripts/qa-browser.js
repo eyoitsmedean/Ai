@@ -108,6 +108,8 @@ async function main() {
       if (typeof keepSitReply === 'function') keepSitReply();
     });
     await page.waitForFunction(() => document.getElementById('amen').classList.contains('on'), { timeout: 4000 });
+    const amenCite = await page.$eval('#amen-cite', (el) => el.textContent);
+    assert(/KJV$/.test(amenCite), 'Amen cite has no translation: ' + amenCite);
   });
 
   await check('Today is a folio, not a dashboard', async () => {
@@ -124,6 +126,13 @@ async function main() {
     assert(today.silk, 'silk ribbon missing');
     assert(!today.askHim, 'must not pretend the model is Jesus');
     assert(!today.sitting, 'chrome should return after sit');
+    const flyleaf = await page.evaluate(() => {
+      if (typeof paintEpigraph === 'function') paintEpigraph();
+      const el = document.getElementById('epigraph-cite');
+      return { hidden: document.getElementById('epigraph').hidden, cite: el ? el.textContent : '' };
+    });
+    assert(!flyleaf.hidden, 'flyleaf should show the earlier sitting');
+    assert(/^(Matthew|Mark|Luke|John) \d+:\d+(?:[–-]\d+)?  ·  KJV$/.test(flyleaf.cite), 'flyleaf cite is not reference · KJV: ' + flyleaf.cite);
   });
 
   await check('a crisis line on every screen', async () => {
