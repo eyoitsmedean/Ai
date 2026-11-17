@@ -1194,6 +1194,8 @@ textarea { font-family: var(--body); }
 }
 .colophon + .helpline { margin-top: 10px; padding-top: 0; border-top: 0; }
 .sheet-helpline { margin-top: 24px; }
+/* Today grew (the Watch ribbon, This hour, Vespers): 988 also sits in the first screen. */
+.helpline-top { margin: 0 0 14px; padding-top: 0; border-top: 0; }
 .helpline a { color: var(--crimson); }
 
 .quire {
@@ -1514,6 +1516,7 @@ html.sitting .sit-sheet {
   .sheet-handle { display: block; width: 36px; height: 3px; background: var(--rule-2); margin: 0 auto 18px; }
 }
 </style>
+<script src="data/hours.js"></script>
 <script src="data/lamp.js"></script>
 <script>
 (function () {
@@ -1522,7 +1525,6 @@ html.sitting .sit-sheet {
   if (window.RedLetterLamp) RedLetterLamp.applyLamp(document, pref, new Date().getHours());
 })();
 </script>
-<script src="data/hours.js"></script>
 <script>document.documentElement.dataset.watch = window.RLA_HOURS.watchForHour(new Date().getHours());</script>
 </head>
 <body>
@@ -1609,6 +1611,7 @@ html.sitting .sit-sheet {
           <span class="today-date" id="today-date"></span>
           <span class="today-streak" id="today-streak-label"></span>
         </div>
+        <p class="helpline helpline-top">In crisis: <a href="tel:988">988</a> (U.S., call or text) · <a href="https://findahelpline.com" target="_blank" rel="noreferrer">findahelpline.com</a>.</p>
         <p class="eyebrow" id="today-greeting">Morning</p>
         <h1 class="display" id="today-title" style="margin-bottom:20px">Today’s <em>light</em></h1>
         <p class="hear-now" id="hear-status" hidden>Listening</p>
@@ -4455,6 +4458,16 @@ function bindRituals() {
   setOfflineBanner();
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
   setInterval(checkMorningReminder, 5 * 60 * 1000);
+  // A page left open across an hour band or midnight repaints once: the
+  // Lamp, the office, the Vespers saying and what Hear will read stay one.
+  let hourKey = window.RLA_HOURS.watchForHour(new Date().getHours()) + '|' + todayStr();
+  setInterval(() => {
+    const key = window.RLA_HOURS.watchForHour(new Date().getHours()) + '|' + todayStr();
+    if (key === hourKey) return;
+    hourKey = key;
+    setWatch();
+    updateDateUI();
+  }, 30 * 1000);
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstall = e;

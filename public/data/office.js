@@ -7,9 +7,9 @@
  * label, not the hour's name, not a vespers prompt.
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.RLA_OFFICE = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./hours'));
+  else root.RLA_OFFICE = factory(root.RLA_HOURS);
+})(typeof self !== 'undefined' ? self : this, function (HOURS) {
   'use strict';
 
   function hours(d) {
@@ -17,19 +17,15 @@
   }
 
   function isNightOffice(d) {
-    var h = hours(d);
-    return h >= 21 || h < 6;
+    return HOURS.isNightHour(hours(d));
   }
 
   function isEveningOffice(d) {
-    var h = hours(d);
-    return h >= 17 || h < 6;
+    return HOURS.isEveningHour(hours(d));
   }
 
   function officeName(d) {
-    if (isNightOffice(d)) return 'Compline';
-    if (isEveningOffice(d)) return 'Vespers';
-    return hours(d) < 12 ? 'Morning' : 'Afternoon';
+    return HOURS.officeNameForHour(hours(d));
   }
 
   function spokenOnly(text) {

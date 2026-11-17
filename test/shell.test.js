@@ -67,3 +67,11 @@ test('last night’s catchword is kept until morning', () => {
   assert.match(html, /Last night you laid down/);
   assert.match(html, /Earlier you laid down/);
 });
+
+test('Today puts 988 in its first screen, before the readings', () => {
+  const today = html.slice(html.indexOf('id="today-page"'));
+  const line = today.indexOf('helpline-top');
+  assert.ok(line > 0, 'Today has no top helpline');
+  assert.ok(line < today.indexOf('id="week-ribbon"'), 'the top helpline must come before the ribbon and readings');
+  assert.match(today.slice(line, line + 300), /href="tel:988"/);
+});

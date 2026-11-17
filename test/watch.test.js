@@ -75,3 +75,10 @@ describe('Watch dates given as text', () => {
     assert.equal(watchFor('2026-11-28'), null);
   });
 });
+
+describe('Christmas Day reads true at any hour', () => {
+  it('does not call 11pm "Christmas morning"', () => {
+    const christmas = WATCH[WATCH.length - 1];
+    assert.doesNotMatch(christmas.reflection, /morning/i);
+  });
+});

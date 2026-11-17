@@ -6,15 +6,15 @@
  * The server does not need it; tests require the same file.
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.RedLetterLamp = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./hours'));
+  else root.RedLetterLamp = factory(root.RLA_HOURS);
+})(typeof self !== 'undefined' ? self : this, function (HOURS) {
   const PAPER = '#F4EFE4';
   const VOID = '#14110D';
 
+  // The night band comes from hours.js, which the page loads first.
   function isNightHour(hour) {
-    const h = Number(hour);
-    return h < 6 || h >= 21;
+    return HOURS.isNightHour(hour);
   }
 
   function lampShouldBeDark(pref, hour) {

@@ -143,7 +143,7 @@
 
   const CHRISTMAS = ['christmas', 'Christmas', 'To This End Was I Born', 'John 18:37',
     'To this end was I born, and for this cause came I into the world, that I should bear witness unto the truth.',
-    'Christmas morning. The one we watched for has come. Years later, standing before Pilate, he said he was born on purpose.',
+    'Christmas Day. The one we watched for has come. Years later, standing before Pilate, he said he was born on purpose.',
     'Wish a merry Christmas to someone who might not hear it today.'];
 
   const shape = ([kind, week, title, verse, passage, reflection, practice]) => (
