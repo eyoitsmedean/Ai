@@ -537,7 +537,7 @@
 
   // To someone who may end their life: nothing about dying, losing one's life,
   // crosses, graves, mourning, or cutting off a hand.
-  const UNSAFE_SELF = /\b(?:die|dieth|died|dying|death|dead|kill\w*|slay|slain|lose (?:his|her|your|their|my) life|loseth|hate(?:th)? (?:not )?(?:his|her) (?:own )?life|life also|cross|grave|graves|sepulchre|tomb|mourn\w*|perish\w*|cut (?:it|them|him) off|pluck (?:it|them) out|hell|millstone|drowned|gnashing|destroy\w*|blood|bury|buried|burial|body)\b/i;
+  const UNSAFE_SELF = /\b(?:die|dieth|died|dying|death|dead|kill\w*|slay|slain|lose (?:his|her|your|their|my) life|loseth|hate(?:th)? (?:not )?(?:his|her) (?:own )?life|life also|cross|grave|graves|sepulchre|tomb|mourn\w*|perish\w*|cut (?:it|them|him) off|pluck (?:it|them) out|hell|millstone|drowned|gnashing|destroy\w*|blood|bury|buried|burial|body|commend(?:ed)? my spirit)\b/i;
   // To someone being hurt: nothing that tells them to forgive, turn the other
   // cheek, reconcile, stay married, or look at their own fault.
   const UNSAFE_DANGER = /\b(?:enem(?:y|ies)|other (?:cheek|also)|resist not|seventy times|forgive|forgiveth|trespass\w*|his fault|beam|mote|adversary|asunder|put away (?:his|her) (?:wife|husband)|putteth away|joined together|despitefully|smite|smiteth|compel|cloke|judge not|reconciled|agree with|sin no more|condemn)\b/i;

@@ -56,7 +56,8 @@ test('the evening office never closes on tribulation', () => {
   assert.doesNotMatch(block[0], /16:33|tribulation|overcome the world/i);
   assert.match(block[0], /Matthew 11:28/);
   assert.match(block[0], /John 14:27/);
-  assert.match(block[0], /Luke 23:46/);
+  // Luke 23:46 is His word at death; a reader at 3am may be in crisis unsaid.
+  assert.doesNotMatch(block[0], /Luke 23:46|commend my spirit/);
 });
 
 test('last night’s catchword is kept until morning', () => {

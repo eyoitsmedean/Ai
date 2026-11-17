@@ -245,3 +245,12 @@ describe('benign context never vetoes a disclosure', () => {
     ]) assert.equal(assessCrisis(text), null, text);
   });
 });
+
+describe('death verses after a self-harm disclosure', () => {
+  it('holds back Luke 23:46, "into thy hands I commend my spirit"', () => {
+    const { unsafeSaying } = require('../public/data/crisis');
+    assert.equal(unsafeSaying('self', 'Father, into thy hands I commend my spirit.'), true);
+    assert.equal(unsafeSaying('other', 'Father, into thy hands I commend my spirit.'), true);
+    assert.equal(unsafeSaying('self', 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.'), false);
+  });
+});
