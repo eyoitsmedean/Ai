@@ -37,4 +37,21 @@ describe('this hour’s saying', () => {
     assert.notEqual(office.officeScript(day, vespers), office.spokenOnly(day.word.reflection));
     assert.doesNotMatch(office.officeScript(day, vespers), /What are you laying down/);
   });
+
+  it('in the evening, Hear speaks the Vespers saying the page shows, not the morning word', () => {
+    const vespers = new Date(2026, 9, 31, 18, 0, 0);
+    const compline = new Date(2026, 9, 31, 23, 0, 0);
+    const morning = new Date(2026, 9, 31, 9, 0, 0);
+    const day = dailyForDate(morning);
+    const evening = { verse: 'John 14:27', quote: lookup('John 14:27').text };
+    for (const d of [vespers, compline]) {
+      const line = office.pickOfficeSaying(day, d, evening);
+      assert.equal(line.card, 'vespers');
+      assert.equal(line.verse, 'John 14:27');
+      assert.equal(line.quote, office.spokenOnly(evening.quote));
+      assert.equal(lookup(line.verse).text, line.quote);
+      assert.equal(office.officeScript(day, d, evening), line.quote);
+    }
+    assert.equal(office.pickOfficeSaying(day, morning, evening).card, 'aff', 'morning keeps the affirmation');
+  });
 });

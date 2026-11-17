@@ -36,8 +36,19 @@
     return String(text || '').replace(/[“”]/g, '').trim();
   }
 
-  function pickOfficeSaying(daily, d) {
+  // In the evening the office is the Vespers card's saying when the page
+  // passes it (that card never closes the day on tribulation); the day's
+  // word is the fallback when it does not.
+  function pickOfficeSaying(daily, d, eveningSaying) {
     var evening = isEveningOffice(d);
+    if (evening && eveningSaying && eveningSaying.quote) {
+      return {
+        card: 'vespers',
+        quote: spokenOnly(eveningSaying.quote),
+        verse: eveningSaying.verse || '',
+        office: officeName(d),
+      };
+    }
     if (evening && daily && daily.word && daily.word.passage) {
       return {
         card: 'word',
@@ -57,8 +68,8 @@
     return { card: '', quote: '', verse: '', office: officeName(d) };
   }
 
-  function officeScript(daily, d) {
-    return pickOfficeSaying(daily, d).quote;
+  function officeScript(daily, d, eveningSaying) {
+    return pickOfficeSaying(daily, d, eveningSaying).quote;
   }
 
   return {

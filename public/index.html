@@ -3957,11 +3957,11 @@ function stopHearOffice() {
   resetHearButtons();
 }
 function officeScript() {
-  return RLA_OFFICE.officeScript(dailyData);
+  return RLA_OFFICE.officeScript(dailyData, new Date(), vespersSaying());
 }
 function paintThisHour() {
-  const line = (window.RLA_OFFICE && dailyData) ? RLA_OFFICE.pickOfficeSaying(dailyData) : { card: '', quote: '', verse: '' };
-  ['aff', 'word'].forEach((card) => {
+  const line = (window.RLA_OFFICE && dailyData) ? RLA_OFFICE.pickOfficeSaying(dailyData, new Date(), vespersSaying()) : { card: '', quote: '', verse: '' };
+  ['aff', 'word', 'vespers'].forEach((card) => {
     const section = document.getElementById(card + '-card');
     const mark = document.getElementById(card + '-hour');
     const on = line.card === card && !!line.quote;
@@ -3970,7 +3970,7 @@ function paintThisHour() {
   });
   const host = document.getElementById('hour-line');
   if (!host) return;
-  const show = line.card === 'word' && !!line.quote;
+  const show = line.card !== 'aff' && !!line.quote;
   host.hidden = !show;
   const quote = document.getElementById('hour-quote');
   const cite = document.getElementById('hour-cite');

@@ -241,7 +241,7 @@ async function main() {
       const reflection = document.getElementById('word-reflection').textContent;
       const expected = RLA_OFFICE.spokenOnly(
         evening
-          ? document.getElementById('word-passage').textContent
+          ? document.getElementById('vespers-quote').textContent
           : document.getElementById('aff-quote').textContent
       );
       return {
@@ -263,7 +263,7 @@ async function main() {
     assert(!heard.leakedText, 'Hear leaked the pastoral affirmation');
     assert(!heard.leakedReflection, 'Hear leaked the reflection');
     const evening = await page.evaluate(() => isEveningOffice());
-    assert(heard.marked === (evening ? 'word-card' : 'aff-card'), 'this hour should mark the spoken card, got ' + heard.marked);
+    assert(heard.marked === (evening ? 'vespers-card' : 'aff-card'), 'this hour should mark the spoken card, got ' + heard.marked);
     if (evening) {
       assert(heard.hourShown && heard.hourQuote === heard.script, 'evening should show the spoken line beside Hear');
     } else {
