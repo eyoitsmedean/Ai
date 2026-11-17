@@ -152,3 +152,39 @@ describe('pooled crisis corpus (npm run eval:crisis)', () => {
     assert.equal(assessCrisis('my son says he wants to die').kind, 'other');
   });
 });
+
+describe('spellings that slip past a filter', () => {
+  it('reads digits, full-width letters, and a weapon turned on oneself', () => {
+    for (const t of [
+      'su1cide',
+      'i want to commit su1cide',
+      'going to sh00t myself',
+      'I want to d1e',
+      'I want to ｋｉｌｌ myself',
+      'I have a gun and I am going to use it on myself',
+      'gonna use my dads gun on myself',
+      'thinking about turning the pistol on myself',
+    ]) {
+      assert.equal(assessCrisis(t)?.kind, 'self', t);
+    }
+  });
+
+  it('keeps every apostrophe a keyboard can type, so "don´t" still reads as "dont"', () => {
+    for (const t of [
+      'I don´t want to live anymore',
+      'I don´t want to be here anymore',
+      'I don’t want to live anymore',
+      'I donʼt want to be here anymore',
+      'I don`t want to live anymore',
+      'I don＇t want to live anymore',
+    ]) {
+      assert.equal(assessCrisis(t)?.kind, 'self', t);
+    }
+  });
+
+  it('stays quiet for the same letters in ordinary sentences', () => {
+    for (const t of ['sh00t that was close lol', 'D1 athlete', 'die cast cars', 'the gun show was fun', 'I will use it on myself later, the lotion']) {
+      assert.equal(assessCrisis(t), null, t);
+    }
+  });
+});
